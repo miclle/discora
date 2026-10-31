@@ -34,13 +34,53 @@
 
 ## M1：ESP32-S3 / USB Host
 
-- 在独立 5V VBUS 支持下枚举驱动器。
-- 记录设备描述符：VID:PID、USB speed、interface class/subclass/protocol。
-- 仅测试只读命令：INQUIRY、TEST UNIT READY、REQUEST SENSE、READ TOC。
-- 设备无法就绪时保留 sense key/ASC/ASCQ，不要循环无界重试。
-- 测试断开、重新连接、多次进出盘与电源冷启动。
+先按 [组装手册](assembly.md) 确认 Host 数据路径、VBUS 和独立 UART0。2026-10-31 已完成烧录、UART0、[空 Hub 枚举](records/2026-10-31-m1-empty-hub.md)、[光驱三种查询和 61.2 秒连续就绪](records/2026-10-31-m1-optical-probe.md)；首次失败条件见 [首次上板记录](records/2026-10-31-m1-first-boot.md)。下列矩阵仍需逐项保存实测证据，特别是受控重复插拔、真实冷启动和异常恢复。
+
+### 不连接硬件的检查
+
+```bash
+python3 firmware/tests/run_host_tests.py
+cd firmware
+idf.py set-target esp32s3
+idf.py build
+```
+
+主机侧测试使用合成字节序列，包含描述符截断/长度/接口筛选、CBW、CSW、INQUIRY、固定/描述符 sense、TOC 构造/长度/曲目/lead-out、10,000 组输入边界检查，并启用 ASan/UBSan。它不验证实际 USB 传输、Hub、供电、STALL 恢复或断连。
+
+### 实机步骤（准备好设备后）
+
+当前固件执行 INQUIRY、TEST UNIT READY、REQUEST SENSE、READ TOC；音频扇区读取尚未实现。先用无盘状态验证，再插入 Audio CD。
+
+| 场景 | 保存的观察 | 通过条件 / 边界 |
+| --- | --- | --- |
+| 主控空载启动 | 版本、IDF、启动日志、供电 | UART0 出现等待设备日志，无异常重启 |
+| 无盘连接光驱 | VID:PID、Full-Speed、配置、接口、端点/MPS、INQUIRY 原始值/身份 | BOT 查询有效；PDT `0x05`、qualifier 0；不预填 UJ-898 返回值 |
+| 无盘 sense | CSW status、sense key/ASC/ASCQ | 实际返回可解释；如 NOT READY / `3A` 表示无介质，并非协议失败 |
+| 插入 Audio CD | TUR 与后续 sense、命令耗时 | 正确记录就绪或未就绪；TUR 成功不代表读取音轨 |
+| 拔下并重连，至少 10 次 | 断连、device closed、内部 heap、重新枚举结果 | 无崩溃、旧响应串入或持续 heap 下滑；记录每次结果，heap 单值不是无泄漏证明 |
+| 冷启动，至少 5 次 | 主控/光驱上电次序、每次完整日志 | 均能复现识别，或清晰记录失败条件，不掩盖供电问题 |
+| 传输中拔下 | 取消、回调归还、接口释放、重新连接 | 无缓冲误用或异常重启，恢复后重新读取身份 |
+| 超时 / STALL / 无效 CSW（若可复现） | 原始错误、恢复结果、停止查询状态 | 按 ADR-0002 处理；未触发时标“未测试”，不强行干扰硬件制造故障 |
+| Hub 与直连对比（按需要） | Hub 型号、拓扑、枚举日志 | 区分 Hub 与桥接器问题；缺少安全直连供电路径时不临时并接 5V |
+
+固件每 5 秒正常查询一次介质就绪状态；INQUIRY 对特定临时 sense 最多尝试三次。传输异常后只做一次 BOT Reset Recovery，不自动重放命令。每次 USB 传输 3 秒应用层截止时间，Bulk 取消后再等待最多 2 秒；若缓冲未归还或 EP0 控制请求超时，停止探测并拔下设备。等待栈归还所有权不等于继续重试设备命令。
+
+### 日志字段（字段说明，不是成功日志）
+
+- `USB address / VID:PID / speed / config`：USB 枚举结果。
+- `interface / alt / class / subclass / protocol`：包括不支持接口在内的描述符。
+- `BOT interface / IN / OUT / MPS / LUN`：实际选择的传输接口，当前固定 LUN 0。
+- `command / tag / requested / CSW / received / residue / elapsed_ms`：一次命令的传输与状态。
+- `INQUIRY vendor / product / revision / PDT / qualifier`：真实设备身份，日志不输出 USB 序列号。
+- `sense key / ASC / ASCQ`：真实设备错误或介质状态；无合法 sense 不猜测“无盘”。
+
+完整实验日志、备份和构建产物快照保留在被 Git 忽略的 `.local/bench/<实验名称>/`，不得放在 `firmware/build/` 等会被 fullclean 删除的目录；提交前脱敏设备序列号、个人路径等。按下方模板记录板卡、Hub、桥接器、光盘介质、固件源码版本/校验值与结果。
 
 ## M2：CD-DA
+
+- 已实现 READ TOC 格式 0、MSF=0：检查 4 字节头和完整响应的一致性、声明长度、顺序曲目号、ADR、严格递增 LBA 和最终 `0xAA` lead-out；不完整或畸形响应不发布目录。
+- 目录给出的末地址为排他边界；时长由相邻 INDEX 01 起点相减，单位 `MM:SS:FF`（75 帧/秒），可能包含轨间间隙；不是逐采样音频或听感时长的验证。多会话盘、负 LBA、CD-TEXT 未在本轮支持/验收范围。
+- 单张音乐 CD 的 13 条音频轨已 [bench-tested](records/2026-10-31-m2-toc.md)；还需用独立参考目录核对，并测试换盘/无盘/不同介质。
 
 - 在已知音轨上发送 READ CD；记录每个命令的起始 LBA、扇区数、完成时间及错误码。
 - 对 2352 字节扇区数据进行长度和内容校验；测试跨音轨和光驱寻道。

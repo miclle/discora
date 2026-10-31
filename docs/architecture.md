@@ -29,6 +29,16 @@ READ CD  → 2352-byte audio sectors → ring buffer → I²S stereo
 - 不假设桥接器支持每一条 MMC 指令；首先用实际 USB 描述符与设备响应验证。
 - 优先单一驱动访问任务，队列化命令，避免多个任务同时读写设备。
 
+### 当前只读探测实现
+
+`firmware/main/usb_probe.c` 使用一个常驻 Host daemon 和单个 client 任务，串行发送四种查询命令；尚无其他命令生产者，因此不添加命令队列。`probe_protocol.c` 独立承担描述符筛选、CBW 构造及 CSW/INQUIRY/sense 解析，可直接在主机上运行协议测试。
+
+只访问当前配置、alternate setting 0、首个受支持 BOT 接口和 LUN 0。身份确认为可用 CD/DVD 后每 5 秒查询就绪状态；就绪后读取格式 0、MSF=0 的 TOC，先读 4 字节头再按校验长度取完整目录。最多 99 条轨道加 lead-out，共 804 字节；曲目边界和音频/数据标记全部校验后发布。一次介质就绪周期最多尝试三次；TUR 失败或断连后清除目录状态。不发送 READ CD、写入/擦除/退盘命令。开启外部和多级 Hub 配置，现有 UGREEN Hub `05e3:0610` 和光驱桥接器 `13fd:0840` 已完成基础枚举实验。TOC 边界见 [ADR-0003](decisions/0003-formatted-toc-probe.md)。
+
+USB Bulk IN 长度按 MPS 向上对齐，CDB 请求与 CBW 数据长度仍保持精确值。每次传输使用应用层截止时间；取消后等回调归还所有权。未归还的 transfer 不复用，控制超时需要拔下设备。断连后释放接口并关闭 device handle，Host 服务继续等待新设备。恢复策略和限制见 [ADR-0002](decisions/0002-read-only-native-bot-probe.md)。
+
+默认 console 为独立 UART0；主、次 USB console 均关闭，避免与 Host 共用内部 PHY。固件不负责外部 VBUS 开关或 USB-PD 协商。
+
 ## CD-DA 音频
 
 - 44,100 sample/s × 16 bit × 2 = **1,411,200 bit/s**（约 176.4 KB/s）。
@@ -49,8 +59,8 @@ SD / flash ISO or PCM → source reader → buffer → USB BOT
 
 ## 待决策事项
 
-1. 实际 USB 桥接器 VID:PID、接口协议和 MMC 透传能力。
-2. 选用现有 USB Host MSC 扩展，还是独立实现可控 BOT 层。
+1. `13fd:0840` 桥接器已透传基础查询和 READ TOC；READ CD 的兼容性与持续吞吐仍待测。
+2. 已采用原生 USB Host + 独立最小 BOT 层；是否需要扩展命令调度随音频读取结果再评估。
 3. 缓冲空间与 SD 卡传输是否与 USB 带宽/任务调度冲突。
 4. PCM5102A 不需要外部 MCLK 的具体模块接法与时钟精度验证。
 5. 是否需要 PSRAM；初期先不用其承担 USB DMA。
