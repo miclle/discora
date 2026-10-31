@@ -1,0 +1,6 @@
+# Explicit diagnostic only: generated tones, no USB optical commands, boot stopped.
+CONFIG_DISCORA_AUDIO_DIAGNOSTIC=y
+CONFIG_DISCORA_I2S_BCLK=4
+CONFIG_DISCORA_I2S_LRCK=5
+CONFIG_DISCORA_I2S_DATA=6
+CONFIG_DISCORA_CDDA_PROBE=n
