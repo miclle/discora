@@ -16,6 +16,7 @@
 #include "usb/usb_host.h"
 
 #include "probe_protocol.h"
+#include "cdda_bench.h"
 
 #if CONFIG_ESP_CONSOLE_USB_CDC || CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG || CONFIG_ESP_CONSOLE_SECONDARY_USB_SERIAL_JTAG
 #error "Discora Host requires an independent UART console; disable both primary and secondary USB consoles in menuconfig"
@@ -54,6 +55,9 @@ typedef struct {
     bool identified;
     bool toc_valid;
     bool audio_attempted;
+    bool quiet_audio;
+    size_t audio_resume_index;
+    uint32_t audio_resume_lba;
     command_data_t result; // One shared reply buffer; only the serialized client owns it.
     unsigned toc_attempts;
     probe_toc_t toc;
@@ -249,7 +253,7 @@ static command_result_t execute_command(probe_context_t *ctx, probe_command_t co
         ctx->faulted = true;
         return COMMAND_TRANSPORT_ERROR;
     }
-    ESP_LOGI(TAG, "command=%s tag=%" PRIu32 " requested=%u LUN=0",
+    if (!ctx->quiet_audio || command != PROBE_READ_CD) ESP_LOGI(TAG, "command=%s tag=%" PRIu32 " requested=%u LUN=0",
              probe_command_name(command), ctx->tag, (unsigned)requested);
     esp_err_t err = bulk_transfer(ctx, false, cbw, sizeof(cbw), TRANSFER_TIMEOUT_MS);
     if (err != ESP_OK || ctx->transfer->actual_num_bytes != PROBE_CBW_SIZE) {
@@ -301,7 +305,7 @@ static command_result_t execute_command(probe_context_t *ctx, probe_command_t co
         goto transport_error;
     }
     result->size = csw.relevant_size;
-    ESP_LOGI(TAG, "command=%s CSW=%u received=%u residue=%" PRIu32 " elapsed_ms=%" PRIi64,
+    if (!ctx->quiet_audio || command != PROBE_READ_CD || csw.status != 0) ESP_LOGI(TAG, "command=%s CSW=%u received=%u residue=%" PRIu32 " elapsed_ms=%" PRIi64,
              probe_command_name(command), csw.status, (unsigned)received, csw.residue,
              now_ms() - started);
     if (result->size && command != PROBE_READ_CD) {
@@ -427,10 +431,12 @@ static bool read_audio(probe_context_t *ctx, const probe_track_t *track,
 {
     audio_read_t audio = {.track = track, .lba = lba, .sectors = sectors};
     size_t expected = (size_t)sectors * PROBE_CD_SECTOR_SIZE;
-    ESP_LOGI(TAG, "CDDA read track=%u lba=%" PRIu32 " sectors=%u bytes=%u",
+    if (!ctx->quiet_audio) ESP_LOGI(TAG, "CDDA read track=%u lba=%" PRIu32 " sectors=%u bytes=%u",
              track->number, lba, sectors, (unsigned)expected);
     command_result_t status = execute_command(ctx, PROBE_READ_CD, expected, &audio, &ctx->result);
     if (status != COMMAND_PASSED) {
+        ESP_LOGW(TAG, "CDDA failed track=%u lba=%" PRIu32 " sectors=%u result=%d",
+                 track->number, lba, sectors, status);
         if (status == COMMAND_FAILED) {
             probe_sense_t sense;
             request_sense(ctx, &sense);
@@ -467,7 +473,7 @@ static void log_audio_digest(const char *name, const uint8_t digest[32])
     ESP_LOGI(TAG, "CDDA %s SHA256=%s", name, text);
 }
 
-static void probe_audio(probe_context_t *ctx)
+static bool probe_audio(probe_context_t *ctx)
 {
     // One bounded attempt per MCU boot. Re-enumeration must never re-arm a failed read.
     ctx->audio_attempted = true;
@@ -482,7 +488,7 @@ static void probe_audio(probe_context_t *ctx)
     }
     if (!track) {
         ESP_LOGW(TAG, "CDDA probe skipped: no suitable two-channel audio track");
-        return;
+        return false;
     }
     uint32_t lba = track->start_lba;
     if (track->end_lba - lba >= 150 + PROBE_MAX_READ_SECTORS) {
@@ -492,26 +498,26 @@ static void probe_audio(probe_context_t *ctx)
     uint8_t single[32], first[32], chunk[32], repeated[32];
     if (!read_audio(ctx, track, lba, 1) ||
         !audio_digest(ctx, PROBE_CD_SECTOR_SIZE, single)) {
-        return;
+        return false;
     }
     log_audio_digest("single-sector", single);
     if (!read_audio(ctx, track, lba, PROBE_MAX_READ_SECTORS) ||
         !audio_digest(ctx, PROBE_CD_SECTOR_SIZE, first) ||
         !audio_digest(ctx, ctx->result.size, chunk)) {
-        return;
+        return false;
     }
     if (memcmp(single, first, sizeof(single)) != 0) {
         ESP_LOGE(TAG, "CDDA single-vs-batch mismatch; stop before burst test");
-        return;
+        return false;
     }
     if (!read_audio(ctx, track, lba, PROBE_MAX_READ_SECTORS) ||
         !audio_digest(ctx, ctx->result.size, repeated)) {
-        return;
+        return false;
     }
     log_audio_digest("eight-sector", chunk);
     if (memcmp(chunk, repeated, sizeof(chunk)) != 0) {
         ESP_LOGE(TAG, "CDDA repeat mismatch; stop before burst test");
-        return;
+        return false;
     }
     ESP_LOGI(TAG, "CDDA single-vs-batch=match repeated-eight=match (not independent reference validation)");
 
@@ -522,7 +528,7 @@ static void probe_audio(probe_context_t *ctx)
     }
     if (!batches) {
         ESP_LOGI(TAG, "CDDA burst skipped: insufficient remaining track sectors");
-        return;
+        return false;
     }
     size_t bytes = 0, nonzero = 0;
     int64_t started = esp_timer_get_time(), longest_us = 0;
@@ -530,7 +536,7 @@ static void probe_audio(probe_context_t *ctx)
         int64_t command_started = esp_timer_get_time();
         if (!read_audio(ctx, track, next_lba, PROBE_MAX_READ_SECTORS)) {
             ESP_LOGW(TAG, "CDDA burst incomplete completed_batches=%u/%u", i, batches);
-            return;
+            return false;
         }
         int64_t elapsed = esp_timer_get_time() - command_started;
         if (elapsed > longest_us) {
@@ -551,7 +557,32 @@ static void probe_audio(probe_context_t *ctx)
              elapsed_us > 0 ? (int64_t)bytes * 1000000 / elapsed_us : 0, longest_us);
     ESP_LOGI(TAG, "CDDA bounded probe complete; short burst includes logging, no PCM/reference/I2S qualification");
     ESP_LOGI(TAG, "main task stack minimum free=%u bytes", (unsigned)uxTaskGetStackHighWaterMark(NULL));
+    ctx->audio_resume_index = (size_t)(track - ctx->toc.tracks);
+    ctx->audio_resume_lba = next_lba;
+    return true;
 }
+
+#if defined(CONFIG_DISCORA_CDDA_SOAK)
+static bool bench_read(void *arg, const probe_track_t *track, uint32_t lba,
+                        uint8_t sectors, const uint8_t **data, size_t *size)
+{
+    probe_context_t *ctx = arg;
+    if (!read_audio(ctx, track, lba, sectors)) return false;
+    *data = ctx->result.data;
+    *size = ctx->result.size;
+    return true;
+}
+
+static bool bench_service(void *arg, unsigned wait_ms)
+{
+    probe_context_t *ctx = arg;
+    handle_events(ctx, wait_ms);
+    // IDF defaults to 10 ms ticks: a 5 ms wait rounds to zero, so yield at least one tick.
+    if (wait_ms && pdMS_TO_TICKS(wait_ms) == 0) vTaskDelay(1);
+    return !ctx->gone && !ctx->faulted;
+}
+
+#endif
 
 static void poll_ready(probe_context_t *ctx)
 {
@@ -566,7 +597,30 @@ static void poll_ready(probe_context_t *ctx)
             }
         }
         if (CDDA_PROBE_ENABLED && ctx->toc_valid && !ctx->faulted && !ctx->audio_attempted) {
-            probe_audio(ctx);
+            bool sampled = probe_audio(ctx);
+#if defined(CONFIG_DISCORA_CDDA_SOAK)
+            if (sampled) {
+                const cdda_bench_source_t source = {
+                    .context = ctx, .toc = &ctx->toc, .read = bench_read, .service = bench_service,
+                    .resume_index = ctx->audio_resume_index, .resume_lba = ctx->audio_resume_lba,
+                };
+                ctx->quiet_audio = true;
+                #if defined(CONFIG_DISCORA_CDDA_SEEK_BENCH)
+                const bool seeks = true;
+#else
+                const bool seeks = false;
+#endif
+#if defined(CONFIG_DISCORA_CDDA_FULL_TRACK_BENCH)
+                const bool full_track = true;
+#else
+                const bool full_track = false;
+#endif
+                cdda_bench_run(&source, CONFIG_DISCORA_CDDA_SOAK_SECONDS, seeks, full_track);
+                ctx->quiet_audio = false;
+            }
+#else
+            (void)sampled;
+#endif
         }
     } else if (status == COMMAND_FAILED) {
         ctx->toc_valid = false;

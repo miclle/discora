@@ -10,4 +10,34 @@ config DISCORA_CDDA_PROBE
         Leave disabled until the bridge and power path have been checked.
         No audio bytes are logged or written to flash.
 
+config DISCORA_CDDA_SOAK
+    bool "Run seek, full-track and paced-buffer tests after the short probe"
+    depends on DISCORA_CDDA_PROBE
+    default n
+    help
+        One bounded run per MCU boot, no automatic retry. Uses real CD data
+        and a software clocked discard sink, not I2S or audible playback.
+
+config DISCORA_CDDA_SEEK_BENCH
+    bool "Include the 12-position seek experiment"
+    depends on DISCORA_CDDA_SOAK
+    default y
+    help
+        Disable to isolate full-track and paced-buffer tests after a seek fault.
+        A run with this disabled does not qualify seek behavior.
+
+config DISCORA_CDDA_FULL_TRACK_BENCH
+    bool "Include a complete first-track read from INDEX 01"
+    depends on DISCORA_CDDA_SOAK
+    default y
+    help
+        Disable this and seeks to hand off sequentially from the short probe
+        into the paced-buffer phase, without seeking back to an earlier LBA.
+
+config DISCORA_CDDA_SOAK_SECONDS
+    int "Paced-buffer test duration in seconds"
+    depends on DISCORA_CDDA_SOAK
+    range 60 1800
+    default 600
+
 endmenu

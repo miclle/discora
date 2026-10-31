@@ -1,6 +1,6 @@
 # Discora firmware
 
-这是 **M2 CD-DA 只读探测固件**（`0.3.1-cdda-probe`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，256 扇区短突发为 739,858 bytes/s。尚无长时读取、完整重连/冷启动、I²S 或刻录验收，见 [实测记录](../docs/records/2026-10-31-m2-cdda.md)。
+这是 **M2 CD-DA 只读探测固件**（`0.4.2-stream-bench`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，256 扇区短突发为 739,858 bytes/s。600 秒顺序读取及软件缓冲已与电脑完整摘要一致；随机寻道、完整重连/冷启动、I²S 和刻录仍未通过或未实现，见 [长时实测](../docs/records/2026-10-31-m2-stream.md)。
 
 ## 构建
 
@@ -49,7 +49,19 @@ idf.py -p <DISCORA_UART_PORT> flash monitor
 - 只输出元数据、长度、耗时、摘要和统计，不打印 PCM，不存入 Flash。
 - 18,816 字节共享响应位于静态内部 DRAM，USB transfer 另由原生 Host 分配；不放在 task stack，不默认依赖 PSRAM DMA。
 
-边界及首轮失败修正见 [ADR-0004](../docs/decisions/0004-bounded-cdda-probe.md)。短突发速率不代表整张盘稳定播放；环形缓冲和 I²S 尚未实现。
+边界及首轮失败修正见 [ADR-0004](../docs/decisions/0004-bounded-cdda-probe.md)。短突发速率不代表整张盘稳定播放；环形缓冲已有软件消费实测，I²S 尚未实现。
+
+## 长时读取、寻道和缓冲实验
+
+`CONFIG_DISCORA_CDDA_SOAK` 默认关闭，依赖短探测开关；短探测成功才进入扩展阶段。`menuconfig → Discora bench probes` 中可单独选择 12 位置寻道、完整首轨读取，以及 60–1800 秒的软件时钟缓冲测试（默认 600 秒）。每次启动最多一轮，失败后不自动重试；选择未运行的阶段不会获得该阶段验收。
+
+- 寻道：首/末/中间音轨各四个位置，每位置读两次 8 扇区、比较摘要并记录定位耗时。
+- 完整首轨：从 INDEX 01 到排他末地址，按轨道边界拆分 READ CD，记录总字节、耗时、吞吐及全区间摘要。
+- 缓冲：64 扇区 / 150528 字节内部 RAM，先填 48 扇区，再由独立任务按实际单调时钟以 176400 bytes/s 消费真实 PCM。生产/消费端分别 SHA-256，检查完整字节数、欠载、缓冲水位、跨轨次数及调度迟到；这是软件定时丢弃端，不是 I²S。
+- 同时关闭 `Include the 12-position seek experiment` 与 `Include a complete first-track read from INDEX 01` 时，从短探测末尾 LBA 顺序衔接缓冲阶段，不回跳。日志明确 `seeks=not_run full_track=not_run`，不能声称寻道或完整首轨通过。
+- 扩展阶段只每 10 秒输出进度，失败 CSW 和传输错误始终输出。PCM 不打印、不保存。
+
+设计与当前实测边界见 [ADR-0005](../docs/decisions/0005-stream-and-buffer-bench.md) 和 [长时实验记录](../docs/records/2026-10-31-m2-stream.md)。
 
 ## 不连接设备的协议检查
 
@@ -59,12 +71,14 @@ idf.py -p <DISCORA_UART_PORT> flash monitor
 python3 firmware/tests/run_host_tests.py
 ```
 
-测试直接编译固件使用的 `probe_protocol.c`，检查 BOT 字节布局、描述符筛选、CSW 长度/signature/tag/status/residue、INQUIRY、固定/描述符 sense、TOC 命令/长度/曲目/lead-out、READ CD CDB/范围/整数边界和异常输入。输入为合成 fixtures，不是设备日志，不能验证 USB Host 调度或供电。CI 同时运行该测试和 ESP32-S3 构建。
+测试直接编译固件使用的 `probe_protocol.c`，检查 BOT 字节布局、描述符筛选、CSW 长度/signature/tag/status/residue、INQUIRY、固定/描述符 sense、TOC 命令/长度/曲目/lead-out、READ CD CDB/范围/整数边界和异常输入。另验证 20,000 次 PCM 队列操作的回绕、数据顺序及满空边界，以及跨轨游标。输入为合成 fixtures，不是设备日志，不能验证 USB Host 调度或供电。CI 同时运行该测试和 ESP32-S3 构建。
 
 ## 当前模块
 
 - `main.c`：启动探测服务。
 - `usb_probe.c`：原生 Host client/daemon、串行 BOT、恢复与设备生命周期。
 - `probe_protocol.c`：不依赖 ESP-IDF 的只读 CDB/CBW 构造和响应解析。
+- `cdda_bench.c`：寻道、完整首轨和软件时钟缓冲实验。
+- `cdda_cursor.c` / `pcm_buffer.c`：跨轨区间拆分、帧对齐环形队列，直接在主机侧测试。
 
 后续音频工作按实测结果引入 `mmc`、`cdda`、`audio` 的实际接口；本轮不添加 writer 空壳。

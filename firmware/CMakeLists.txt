@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
 
-set(PROJECT_VER "0.3.1-cdda-probe")
+set(PROJECT_VER "0.4.2-stream-bench")
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project(discora)
