@@ -1,4 +1,5 @@
 # Explicit opt-in profile for the passive OTG adapter comparison; never a project default.
+CONFIG_DISCORA_AUDIO_DIAGNOSTIC=n
 CONFIG_DISCORA_CDDA_PROBE=y
 CONFIG_DISCORA_CDDA_SOAK=y
 CONFIG_DISCORA_CDDA_SEEK_BENCH=y

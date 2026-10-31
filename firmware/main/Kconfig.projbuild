@@ -2,6 +2,7 @@ menu "Discora bench probes"
 
 config DISCORA_CDDA_PROBE
     bool "Run one bounded READ CD probe per MCU boot"
+    depends on !DISCORA_AUDIO_DIAGNOSTIC
     default n
     help
         Experimental, read-only CD-DA probe: requires a validated audio TOC.
@@ -48,5 +49,35 @@ config DISCORA_CDDA_SOAK_SECONDS
     depends on DISCORA_CDDA_SOAK
     range 60 1800
     default 600
+
+endmenu
+
+menu "Discora audio diagnostic"
+
+config DISCORA_AUDIO_DIAGNOSTIC
+    bool "Run UART-controlled I2S test tones instead of the USB probe"
+    default n
+    help
+        Standalone generated-tone diagnostic, not CD playback. Boot is stopped.
+        Commands select left/right/stereo/silence and play/pause/stop/status.
+        Disables the USB probe in this mode; do not mix optical bench results.
+
+config DISCORA_I2S_BCLK
+    int "BCLK output GPIO"
+    depends on DISCORA_AUDIO_DIAGNOSTIC
+    range 1 18
+    default 4
+
+config DISCORA_I2S_LRCK
+    int "LRCK/WS output GPIO"
+    depends on DISCORA_AUDIO_DIAGNOSTIC
+    range 1 18
+    default 5
+
+config DISCORA_I2S_DATA
+    int "DAC DIN output GPIO"
+    depends on DISCORA_AUDIO_DIAGNOSTIC
+    range 1 18
+    default 6
 
 endmenu
