@@ -1,6 +1,6 @@
 # Discora firmware
 
-这是 **M2 CD-DA 只读探测固件**（`0.4.3-underrun-bench`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，256 扇区短突发为 739,858 bytes/s。600 秒顺序读取及软件缓冲已与电脑完整摘要一致；随机寻道、完整重连/冷启动、I²S 和刻录仍未通过或未实现，见 [长时实测](../docs/records/2026-10-31-m2-stream.md)。
+这是 **USB 光驱与独立 I²S 诊断固件**（`0.5.0-audio-prep`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，256 扇区短突发为 739,858 bytes/s。600 秒顺序读取及软件缓冲已与电脑完整摘要一致；随机寻道、完整重连/冷启动、I²S 和刻录仍未通过或未实现，见 [长时实测](../docs/records/2026-10-31-m2-stream.md)。
 
 ## 构建
 
@@ -49,7 +49,7 @@ idf.py -p <DISCORA_UART_PORT> flash monitor
 - 只输出元数据、长度、耗时、摘要和统计，不打印 PCM，不存入 Flash。
 - 18,816 字节共享响应位于静态内部 DRAM，USB transfer 另由原生 Host 分配；不放在 task stack，不默认依赖 PSRAM DMA。
 
-边界及首轮失败修正见 [ADR-0004](../docs/decisions/0004-bounded-cdda-probe.md)。短突发速率不代表整张盘稳定播放；环形缓冲已有软件消费实测，I²S 尚未实现。
+边界及首轮失败修正见 [ADR-0004](../docs/decisions/0004-bounded-cdda-probe.md)。短突发速率不代表整张盘稳定播放；环形缓冲已有软件消费实测，I²S 已有独立诊断实现，CD 播放仍待接入。
 
 ## 长时读取、寻道和缓冲实验
 
@@ -77,6 +77,14 @@ python3 firmware/tests/run_host_tests.py
 
 测试直接编译固件使用的 `probe_protocol.c`，检查 BOT 字节布局、描述符筛选、CSW 长度/signature/tag/status/residue、INQUIRY、固定/描述符 sense、TOC 命令/长度/曲目/lead-out、READ CD CDB/范围/整数边界和异常输入。另验证 20,000 次 PCM 队列操作的回绕、数据顺序及满空边界，以及跨轨游标。输入为合成 fixtures，不是设备日志，不能验证 USB Host 调度或供电。CI 同时运行该测试和 ESP32-S3 构建。
 
+## 独立 I²S 测试音诊断
+
+默认关闭的 `CONFIG_DISCORA_AUDIO_DIAGNOSTIC` 选择独立测试音服务，入口不启动 USB 光驱任务；USB bench 开关在此模式不可选。已准备 [i2s-tone.defaults](bench/i2s-tone.defaults)，须用独立 sdkconfig 构建，避免已有配置覆盖 defaults。
+
+上电为 stopped。通过 COM / UART0 115200 发送回车结束的 `left`、`right`、`stereo`、`silence`、`play`、`pause`、`stop`、`status`、`help`。数据为明确标记的合成 PCM，不是光驱响应；没有自动出声。默认 GPIO4 / 5 / 6 分别为 BCLK / LRCK / DATA，目标 44.1 kHz、16-bit stereo、Philips I²S，无 MCLK 输出。
+
+暂停保留尚未提交的软件队列，并关闭/重建 DMA；最多约 40 ms 已排队 DMA 数据会被丢弃，不是采样级无损暂停。CD-DA 源、精确播放位置、EOF drain 和硬件 DMA 欠载计数尚未接入。接线与验收见 [音频输出草案](../docs/audio-output.md)；源码、离线测试及构建证据见 [M3 准备记录](../docs/records/2026-10-31-m3-audio-prep.md)。本轮没有烧录或操作串口/光驱。
+
 ## 当前模块
 
 - `main.c`：启动探测服务。
@@ -84,5 +92,7 @@ python3 firmware/tests/run_host_tests.py
 - `probe_protocol.c`：不依赖 ESP-IDF 的只读 CDB/CBW 构造和响应解析。
 - `cdda_bench.c`：寻道、完整首轨和软件时钟缓冲实验。
 - `cdda_cursor.c` / `pcm_buffer.c`：跨轨区间拆分、帧对齐环形队列，直接在主机侧测试。
+- `audio_core.c` / `test_tone.c`：可离线验证的控制状态机和诊断 PCM。
+- `audio_i2s.c` / `audio_diag.c`：原生 I²S TX 适配、单所有者 UART 测试音服务。
 
 后续音频工作按实测结果引入 `mmc`、`cdda`、`audio` 的实际接口；本轮不添加 writer 空壳。
