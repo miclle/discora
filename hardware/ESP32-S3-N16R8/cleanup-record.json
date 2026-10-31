@@ -1,0 +1,225 @@
+{
+  "date": "2026-10-31",
+  "scope": "hardware/ESP32-S3-N16R8",
+  "authorization": "user_requested_project_only_cleanup",
+  "removed_file_count": 27,
+  "removed_bytes": 100124096,
+  "removed": [
+    {
+      "path": ".DS_Store",
+      "bytes": 6148,
+      "sha256": "f1674add743b0e7c5eb83342bf45cd6a7edea56f62635b75a2c9be9b17c5816c",
+      "reason": "obsolete_local_metadata"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 141,
+      "sha256": "b9fb60d29a27b894e03966b51310f830e961ac67f77265131602d2992dba0ad6",
+      "reason": "obsolete_local_metadata"
+    },
+    {
+      "path": "Arduino IDE软件搭建ESP32开发环境.txt",
+      "bytes": 102,
+      "sha256": "b01ff445e21f446fd093c77b164ddfac6568ea8ef7b655241e8183cb468f704e",
+      "reason": "not_used_by_discora_esp_idf_firmware"
+    },
+    {
+      "path": "ESP32-S3-WROOM系列型号对比.png",
+      "bytes": 257822,
+      "sha256": "bdd94903969150c13b363e8f7cb112ac10b9b7a465c5c1e8c509575525b1a97c",
+      "reason": "promotional_or_generic_comparison_not_needed_for_current_board_reference"
+    },
+    {
+      "path": "ESP32-S3-inch.pdf",
+      "bytes": 116871,
+      "sha256": "8f76f90a5a1a1e201c90101228ca14fcc26d391ab7ad92266fd1393a797a4a18",
+      "reason": "duplicate_mil_dimensions_metric_drawing_retained"
+    },
+    {
+      "path": "ESP32-S3开发板N16R8焊接.rar",
+      "bytes": 48112664,
+      "sha256": "2c4801257d5243b3d709120cb158f3b55952d6c3937d6b0edfc33d9e7e9486d7",
+      "reason": "redundant_vendor_bundle_with_unneeded_tools_and_examples"
+    },
+    {
+      "path": "GENERIC_S3-20220618-v1.19.1.bin",
+      "bytes": 1406576,
+      "sha256": "4393e4032adc7e352b3e3845d3e32ab1acf7774aca0bd5c84f5be041aec9f648",
+      "reason": "not_used_by_discora_esp_idf_firmware"
+    },
+    {
+      "path": "boot-stop-verification.md",
+      "bytes": 3222,
+      "sha256": "420f35f5ab47dfec35856fdb21783cacb0d4a7a0821b851ea7f39bf6fb6c5a40",
+      "reason": "unrelated_project_validation_not_discora_evidence"
+    },
+    {
+      "path": "esp32s3蓝牙wifi代码.rar",
+      "bytes": 2164,
+      "sha256": "e5b2971cfdec7075c91fa145fe2edea145eeda2d20df5f68149019c442863412",
+      "reason": "redundant_vendor_bundle_with_unneeded_tools_and_examples"
+    },
+    {
+      "path": "physical-verification.json",
+      "bytes": 4377,
+      "sha256": "26bfc4fcb68e849d07029cb832a3c6abd46608622622006cb6814848921ecd03",
+      "reason": "unrelated_project_validation_not_discora_evidence"
+    },
+    {
+      "path": "physical-verification.md",
+      "bytes": 8453,
+      "sha256": "d5b3380be14a1e69e4d4d4a27f41b7868aa0c78cc7175d708763a548e467903a",
+      "reason": "unrelated_project_validation_not_discora_evidence"
+    },
+    {
+      "path": "validation-2026-10-23/boot-1.log",
+      "bytes": 4682,
+      "sha256": "493916f0000a09b3536367dfe27b4c39db15b97df9748f85f7ada55e28382c70",
+      "reason": "unrelated_project_validation_not_discora_evidence"
+    },
+    {
+      "path": "validation-2026-10-23/boot-2.log",
+      "bytes": 4682,
+      "sha256": "493916f0000a09b3536367dfe27b4c39db15b97df9748f85f7ada55e28382c70",
+      "reason": "unrelated_project_validation_not_discora_evidence"
+    },
+    {
+      "path": "validation-2026-10-23/boot-3.log",
+      "bytes": 4682,
+      "sha256": "493916f0000a09b3536367dfe27b4c39db15b97df9748f85f7ada55e28382c70",
+      "reason": "unrelated_project_validation_not_discora_evidence"
+    },
+    {
+      "path": "validation-2026-10-23/result.json",
+      "bytes": 5116,
+      "sha256": "7322a258026ba4ab994dee1ca492cb8eaa44a71d08b787809ea62abd7e25c43d",
+      "reason": "unrelated_project_validation_not_discora_evidence"
+    },
+    {
+      "path": "validation-2026-10-24-boot-stop/boot-stop.log",
+      "bytes": 22560,
+      "sha256": "76cf5108a27c686303d555ba7af19f91f93fa6b64b95b6fa6b7e496d999af49a",
+      "reason": "unrelated_project_validation_not_discora_evidence"
+    },
+    {
+      "path": "validation-2026-10-24-boot-stop/capture-result.json",
+      "bytes": 168,
+      "sha256": "38171a76f5aafb50a8daeaf1da65cc209e7e16e2ace85f1a2b0d20534fb04343",
+      "reason": "unrelated_project_validation_not_discora_evidence"
+    },
+    {
+      "path": "validation-2026-10-24-boot-stop/result.json",
+      "bytes": 5213,
+      "sha256": "1b9e38e3942e958fb7474e6d01e8c64cfa3b92ac043bd9429097eeca087caa23",
+      "reason": "unrelated_project_validation_not_discora_evidence"
+    },
+    {
+      "path": "【批量下载】esp32s3蓝牙wifi代码.rar等.zip",
+      "bytes": 49852809,
+      "sha256": "010c836fa79c66068a23c9e640792f0bfa3d28487408ef3251f5a2dc6a43acc2",
+      "reason": "redundant_vendor_bundle_with_unneeded_tools_and_examples"
+    },
+    {
+      "path": "例程/ap.py",
+      "bytes": 865,
+      "sha256": "e7107076800120b9288857a90b1952bec0e182c709a45e62a171acd9bba38f4d",
+      "reason": "not_used_by_discora_esp_idf_firmware"
+    },
+    {
+      "path": "例程/blink-input.py",
+      "bytes": 345,
+      "sha256": "ae700b2a394e19ab2b87b5de62eb21554164bc2ed0c08dee5da566f93800a9aa",
+      "reason": "not_used_by_discora_esp_idf_firmware"
+    },
+    {
+      "path": "例程/boot.py",
+      "bytes": 139,
+      "sha256": "16f5b4bcb120e9a032242b47967e649a0cc577b41939e81ef7d4b4da181bd17f",
+      "reason": "not_used_by_discora_esp_idf_firmware"
+    },
+    {
+      "path": "例程/main.py",
+      "bytes": 905,
+      "sha256": "47cce26bea56fe6363d0a374d2ab2808cc5494ae7b5967adc834b98594cebb51",
+      "reason": "not_used_by_discora_esp_idf_firmware"
+    },
+    {
+      "path": "例程/network.py",
+      "bytes": 389,
+      "sha256": "25e8c08db3b2e934baa5b982991c761451d1fadf523cdf5c4308e81bee0df8d5",
+      "reason": "not_used_by_discora_esp_idf_firmware"
+    },
+    {
+      "path": "例程/socket.py",
+      "bytes": 891,
+      "sha256": "842e602f2fdeb6e8a351737dac44bcb3a080ab3daee8ca2d18294b11c1fd6e36",
+      "reason": "not_used_by_discora_esp_idf_firmware"
+    },
+    {
+      "path": "例程/test-main.py",
+      "bytes": 693,
+      "sha256": "831e30cf0561264b0e0f9395d0c7c1d01ebc438478cff735745937b4cd9b46c1",
+      "reason": "not_used_by_discora_esp_idf_firmware"
+    },
+    {
+      "path": "封面图.jpg",
+      "bytes": 301417,
+      "sha256": "121777b9ec78d6ba3ca0b8949d93dda5681b178f783879f01f135a110946511a",
+      "reason": "promotional_or_generic_comparison_not_needed_for_current_board_reference"
+    }
+  ],
+  "replaced_metadata_before": [
+    {
+      "path": "README.md",
+      "bytes": 9848,
+      "sha256": "d32b9bf6b9bb26b785445aada9153589ba236e79298b806753409d3689c4584d"
+    },
+    {
+      "path": "board-data.json",
+      "bytes": 6286,
+      "sha256": "f9144bb0397310ede43025c8fbc233826ecb579ce289fd7e04bdb9a1c1fb91a0"
+    },
+    {
+      "path": "readback.json",
+      "bytes": 2444,
+      "sha256": "cb6e72a6887e2ff292c518be9aa1d069a8760260de5783add52c9e6d0f307968"
+    }
+  ],
+  "retained_originals": [
+    {
+      "path": "ESP32-S3-Metric.pdf",
+      "bytes": 116018,
+      "sha256": "23098cc8e1195bff1f6040cca85c4e2536a6a7eae21d3bda1c2c2962ec3cbd19"
+    },
+    {
+      "path": "ESP32-S3-SCH-V1.4.pdf",
+      "bytes": 957229,
+      "sha256": "440f8a078c0a43588638b78089e21fa77fcd2ba4a9eb66df8153959fec17c8e8"
+    },
+    {
+      "path": "ESP32-S3-SCH.pdf",
+      "bytes": 944237,
+      "sha256": "750843db4756ef4cd4b3a3497087a1e8e1fc058e4ec29f85ce64e54a290f648f"
+    },
+    {
+      "path": "ESP32-S3-back.jpg",
+      "bytes": 2423370,
+      "sha256": "7018aead0f1cb679d58b84670774446d7e9f3f6957f0390979c1910cb6fd7b42"
+    },
+    {
+      "path": "ESP32-S3-front.jpg",
+      "bytes": 2651598,
+      "sha256": "a295bf8acb5b5748b50087127e12e3db91a6b28f215f524a79b40f9c288d56e6"
+    },
+    {
+      "path": "ESP32-S3开发板.pdf",
+      "bytes": 1663036,
+      "sha256": "8ccabd678b12afbc1f0e2650441d8acfb2e08f34855c032758e69fcda66764c4"
+    }
+  ],
+  "notes": [
+    "Removed files are deleted, not backed up by this cleanup. Hashes are an inventory, not recovery data.",
+    "Supplier PDF and imported reference photo bytes are unchanged.",
+    "No firmware, device access, commit or push performed."
+  ]
+}

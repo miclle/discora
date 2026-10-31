@@ -1,0 +1,53 @@
+{
+  "recorded_on": "2026-10-31",
+  "scope": "retained_original_reference_files",
+  "sources": [
+    {
+      "path": "ESP32-S3-Metric.pdf",
+      "bytes": 116018,
+      "sha256": "23098cc8e1195bff1f6040cca85c4e2536a6a7eae21d3bda1c2c2962ec3cbd19"
+    },
+    {
+      "path": "ESP32-S3-SCH-V1.4.pdf",
+      "bytes": 957229,
+      "sha256": "440f8a078c0a43588638b78089e21fa77fcd2ba4a9eb66df8153959fec17c8e8"
+    },
+    {
+      "path": "ESP32-S3-SCH.pdf",
+      "bytes": 944237,
+      "sha256": "750843db4756ef4cd4b3a3497087a1e8e1fc058e4ec29f85ce64e54a290f648f"
+    },
+    {
+      "path": "ESP32-S3-back.jpg",
+      "bytes": 2423370,
+      "sha256": "7018aead0f1cb679d58b84670774446d7e9f3f6957f0390979c1910cb6fd7b42"
+    },
+    {
+      "path": "ESP32-S3-front.jpg",
+      "bytes": 2651598,
+      "sha256": "a295bf8acb5b5748b50087127e12e3db91a6b28f215f524a79b40f9c288d56e6"
+    },
+    {
+      "path": "ESP32-S3开发板.pdf",
+      "bytes": 1663036,
+      "sha256": "8ccabd678b12afbc1f0e2650441d8acfb2e08f34855c032758e69fcda66764c4"
+    }
+  ],
+  "archive_member_comparison_before_removal": {
+    "archive": "ESP32-S3开发板N16R8焊接.rar",
+    "archive_sha256": "2c4801257d5243b3d709120cb158f3b55952d6c3937d6b0edfc33d9e7e9486d7",
+    "members_matching_retained_files": [
+      "ESP32-S3-SCH-V1.4.pdf",
+      "ESP32-S3-Metric.pdf"
+    ],
+    "method": "bsdtar member bytes compared to retained files",
+    "archive_retained": false
+  },
+  "checks": {
+    "v1_4_schematic_and_metric_rendered": true,
+    "usb_otg_connection": "parallel_to_D2_between_USB2_VBUS_and_board_5V",
+    "physical_revision_identity_verified": false,
+    "source_content_modified": false
+  },
+  "cleanup_record": "cleanup-record.json"
+}
