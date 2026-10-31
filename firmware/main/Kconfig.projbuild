@@ -34,6 +34,15 @@ config DISCORA_CDDA_FULL_TRACK_BENCH
         Disable this and seeks to hand off sequentially from the short probe
         into the paced-buffer phase, without seeking back to an earlier LBA.
 
+config DISCORA_CDDA_UNDERRUN_TEST
+    bool "Negative control: pause producer to force a clock-sink underrun"
+    depends on DISCORA_CDDA_SOAK && !DISCORA_CDDA_SEEK_BENCH && !DISCORA_CDDA_FULL_TRACK_BENCH
+    default n
+    help
+        After two seconds, pause only the producer for 1200 ms. The normal
+        buffer test must fail with one genuine underrun, stop and release
+        the ring. A negative-control PASS is not a streaming PASS.
+
 config DISCORA_CDDA_SOAK_SECONDS
     int "Paced-buffer test duration in seconds"
     depends on DISCORA_CDDA_SOAK

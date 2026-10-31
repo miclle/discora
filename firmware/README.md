@@ -1,6 +1,6 @@
 # Discora firmware
 
-这是 **M2 CD-DA 只读探测固件**（`0.4.2-stream-bench`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，256 扇区短突发为 739,858 bytes/s。600 秒顺序读取及软件缓冲已与电脑完整摘要一致；随机寻道、完整重连/冷启动、I²S 和刻录仍未通过或未实现，见 [长时实测](../docs/records/2026-10-31-m2-stream.md)。
+这是 **M2 CD-DA 只读探测固件**（`0.4.3-underrun-bench`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，256 扇区短突发为 739,858 bytes/s。600 秒顺序读取及软件缓冲已与电脑完整摘要一致；随机寻道、完整重连/冷启动、I²S 和刻录仍未通过或未实现，见 [长时实测](../docs/records/2026-10-31-m2-stream.md)。
 
 ## 构建
 
@@ -62,6 +62,10 @@ idf.py -p <DISCORA_UART_PORT> flash monitor
 - 扩展阶段只每 10 秒输出进度，失败 CSW 和传输错误始终输出。PCM 不打印、不保存。
 
 设计与当前实测边界见 [ADR-0005](../docs/decisions/0005-stream-and-buffer-bench.md) 和 [长时实验记录](../docs/records/2026-10-31-m2-stream.md)。
+
+负向测试开关 `CONFIG_DISCORA_CDDA_UNDERRUN_TEST` 默认关闭：启动消费两秒后计划暂停生产 1200 ms，检查原有欠载/退出路径；negative-control PASS 与正常流 PASS 分开报告。本次在注入前遇到设备离线，未完成欠载验证，见 [负向记录](../docs/records/2026-10-31-m2-underrun.md)。
+
+转接头到货后的 [直连配置](bench/otg-direct.defaults) 已独立构建：寻道和完整首轨开启，软件缓冲 60 秒，负向注入关闭。它不是默认配置，也未完成直连实测；加载 defaults 时须使用独立 sdkconfig，避免已有缓存配置覆盖目标值。
 
 ## 不连接设备的协议检查
 

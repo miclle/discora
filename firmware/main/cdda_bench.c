@@ -5,6 +5,7 @@
 #include <inttypes.h>
 #include <string.h>
 #include "esp_heap_caps.h"
+#include "sdkconfig.h"
 #include "esp_system.h"
 #include "esp_log.h"
 #include "esp_timer.h"
@@ -13,6 +14,12 @@
 #include "mbedtls/sha256.h"
 
 static const char *TAG = "cdda_bench";
+#if defined(CONFIG_DISCORA_CDDA_UNDERRUN_TEST)
+enum { INJECT_UNDERRUN = 1 };
+#else
+enum { INJECT_UNDERRUN = 0 };
+#endif
+
 enum { PCM_RATE = 176400, BUFFER_SECTORS = 64, PREFILL_SECTORS = 48 };
 
 typedef struct {
@@ -194,8 +201,9 @@ static void clock_sink(void *arg)
     }
     if (mbedtls_sha256_finish(&sha, state->digest)) failed = true;
     mbedtls_sha256_free(&sha);
+    unsigned stack_free = uxTaskGetStackHighWaterMark(NULL);
     portENTER_CRITICAL(&stream_lock);
-    state->sink_stack_free = uxTaskGetStackHighWaterMark(NULL);
+    state->sink_stack_free = stack_free;
     state->failed = failed;
     state->done = true; // No access to the ring or state after publishing completion.
     portEXIT_CRITICAL(&stream_lock);
@@ -220,7 +228,8 @@ static bool buffered_bench(const cdda_bench_source_t *s, size_t index, uint32_t 
     mbedtls_sha256_context sha;
     mbedtls_sha256_init(&sha);
     bool ok = mbedtls_sha256_starts(&sha, 0) == 0;
-    bool running = false;
+    bool running = false, injected = false;
+    int64_t pause_until = 0;
     read_stats_t stats = {0};
     int64_t prefill_start = esp_timer_get_time(), next_log = 0;
     size_t previous_index = index;
@@ -233,6 +242,15 @@ static bool buffered_bench(const cdda_bench_source_t *s, size_t index, uint32_t 
         size_t free_bytes = capacity - stream.ring.used;
         portEXIT_CRITICAL(&stream_lock);
         if (done) break;
+        if (INJECT_UNDERRUN && running && !injected && esp_timer_get_time() - stream.start_us >= 2000000) {
+            injected = true;
+            pause_until = esp_timer_get_time() + 1200000;
+            ESP_LOGW(TAG, "negative control: pause producer 1200 ms; expect real clock-sink underrun");
+        }
+        if (injected && esp_timer_get_time() < pause_until) {
+            if (!s->service(s->context, 10)) { ok = false; break; }
+            continue;
+        }
         if (running && esp_timer_get_time() - stream.start_us > ((int64_t)seconds + 35) * 1000000) { ok = false; break; }
         const probe_track_t *part;
         uint32_t lba;
@@ -298,6 +316,14 @@ static bool buffered_bench(const cdda_bench_source_t *s, size_t index, uint32_t 
     bool hash_ok = mbedtls_sha256_finish(&sha, digest) == 0;
     if (!hash_ok) ok = false;
     mbedtls_sha256_free(&sha);
+    if (!joined) {
+        // The consumer can still mutate its counters/digest. Do not read or free them.
+        ESP_LOGE(TAG, "sink did not stop; ring quarantined until reboot (not freed)");
+        return false;
+    }
+    bool negative_pass = INJECT_UNDERRUN && injected && ok && hash_ok && running &&
+                         stream.failed && stream.underruns == 1 && stream.missing > 0 &&
+                         stream.consumed < stream.goal && s->service(s->context, 0);
     ok = ok && joined && running && !stream.failed && !stream.underruns &&
          !cursor.remaining && stream.produced == stream.goal && stream.consumed == stream.goal &&
          memcmp(digest, stream.digest, sizeof(digest)) == 0;
@@ -312,8 +338,11 @@ static bool buffered_bench(const cdda_bench_source_t *s, size_t index, uint32_t 
         if (running) digest_log("buffer consumer", stream.digest);
         heap_caps_free(storage);
         stream.ring.data = NULL;
-    } else {
-        ESP_LOGE(TAG, "sink did not stop; ring quarantined until reboot (not freed)");
+    }
+    if (INJECT_UNDERRUN) {
+        ESP_LOGI(TAG, "negative-control %s underruns=%u missing_bytes=%" PRIu64 " joined=%u ring_released=1; not a normal streaming PASS",
+                 negative_pass ? "PASS" : "FAIL", stream.underruns, stream.missing, joined);
+        return negative_pass;
     }
     return ok;
 }
@@ -321,6 +350,10 @@ static bool buffered_bench(const cdda_bench_source_t *s, size_t index, uint32_t 
 bool cdda_bench_run(const cdda_bench_source_t *s, unsigned seconds, bool include_seeks, bool include_full_track)
 {
     if (!s || !s->toc || !s->read || !s->service) return false;
+    if (INJECT_UNDERRUN && (include_seeks || include_full_track)) {
+        ESP_LOGE(TAG, "negative control requires seeks and full-track stages disabled");
+        return false;
+    }
     size_t first = s->toc->track_count;
     for (size_t i = 0; i < s->toc->track_count; ++i) {
         if (!(s->toc->tracks[i].control & 0x0c)) { first = i; break; }
@@ -337,7 +370,7 @@ bool cdda_bench_run(const cdda_bench_source_t *s, unsigned seconds, bool include
     }
     bool ok = (!include_seeks || seek_bench(s)) &&
               (!include_full_track || full_track_bench(s, first)) && buffered_bench(s, first, start_lba, seconds);
-    ESP_LOGI(TAG, "extended bench %s seeks=%s full_track=%s (software sink only; not I2S playback)",
-             ok ? "complete" : "failed", include_seeks ? "enabled" : "not_run", include_full_track ? "enabled" : "not_run");
+    ESP_LOGI(TAG, "extended bench %s negative_control=%u seeks=%s full_track=%s (software sink only; not I2S playback)",
+             ok ? "complete" : "failed", INJECT_UNDERRUN, include_seeks ? "enabled" : "not_run", include_full_track ? "enabled" : "not_run");
     return ok;
 }
