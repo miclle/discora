@@ -6,6 +6,9 @@ firmware/managed_components/
 firmware/.idf_component_manager/
 firmware/.cache/
 
+# Bench captures and flash backups must survive idf.py fullclean / set-target.
+/.local/bench/
+
 # editor / OS
 .DS_Store
 Thumbs.db

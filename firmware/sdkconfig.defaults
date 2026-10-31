@@ -1,0 +1,8 @@
+# Keep the native USB PHY available for Host. Logging requires UART0 / a separate USB-UART bridge.
+CONFIG_ESP_CONSOLE_UART_DEFAULT=y
+CONFIG_ESP_CONSOLE_SECONDARY_NONE=y
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
+
+# Existing Type-C hubs remain unverified; support their USB 2.0 hub path, including nested hubs.
+CONFIG_USB_HOST_HUBS_SUPPORTED=y
+CONFIG_USB_HOST_HUB_MULTI_LEVEL=y
