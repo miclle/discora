@@ -9,7 +9,10 @@ enum {
     PROBE_CSW_SIZE = 13,
     PROBE_TOC_HEADER_SIZE = 4,
     PROBE_MAX_TRACKS = 99,
-    PROBE_MAX_DATA = PROBE_TOC_HEADER_SIZE + 8 * (PROBE_MAX_TRACKS + 1),
+    PROBE_MAX_TOC_DATA = PROBE_TOC_HEADER_SIZE + 8 * (PROBE_MAX_TRACKS + 1),
+    PROBE_CD_SECTOR_SIZE = 2352,
+    PROBE_MAX_READ_SECTORS = 8,
+    PROBE_MAX_DATA = PROBE_CD_SECTOR_SIZE * PROBE_MAX_READ_SECTORS,
 };
 
 typedef enum {
@@ -17,6 +20,7 @@ typedef enum {
     PROBE_TEST_UNIT_READY,
     PROBE_REQUEST_SENSE,
     PROBE_READ_TOC,
+    PROBE_READ_CD,
 } probe_command_t;
 
 typedef struct {
@@ -73,6 +77,9 @@ const char *probe_command_name(probe_command_t command);
 // No arbitrary CDB or Data-Out API: only the explicit read-only commands, LUN 0.
 bool probe_make_cbw(probe_command_t command, uint8_t subclass, uint32_t tag,
                     size_t data_size, uint8_t out[PROBE_CBW_SIZE]);
+// CD-DA only, 1..8 sectors entirely inside one validated audio track; no cross-track reads.
+bool probe_make_read_cd_cbw(uint8_t subclass, uint32_t tag, const probe_track_t *track,
+                            uint32_t lba, uint8_t sectors, uint8_t out[PROBE_CBW_SIZE]);
 bool probe_parse_csw(const uint8_t *data, size_t size, uint32_t tag,
                      size_t requested, size_t received, probe_csw_t *out);
 bool probe_parse_inquiry(const uint8_t *data, size_t size, probe_inquiry_t *out);

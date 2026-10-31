@@ -1,22 +1,22 @@
 # 当前工程状态
 
-更新时间：2026-10-31（音乐 CD 曲目目录）
+更新时间：2026-10-31（READ CD 小段音频和电脑参考）
 
-证据分层：`planned` 为计划；`implemented` 为源码已实现；`bench-tested` 为在指定硬件上实验过；`verified` 为满足相应验收条件。已完成烧录、UART0、Hub/光驱枚举、三种基础查询的真实返回、61.2 秒连续 13 次 TUR 就绪，以及单张 CD 的 13 轨目录；长时稳定、冷启动与受控重复插拔仍待验收，M0/M1 未整体通过。
+证据分层：`planned` 为计划；`implemented` 为源码已实现；`bench-tested` 为在指定硬件上实验过；`verified` 为满足相应验收条件。已完成烧录、UART0、Hub/光驱枚举、三种基础查询的真实返回、61.2 秒连续 13 次 TUR 就绪，以及单张 CD 的 13 轨目录、READ CD 小片段/短突发与电脑参考对照；长时稳定、冷启动与受控重复插拔仍待验收，M0/M1 未整体通过。
 
 | 事项 | 状态 | 证据 / 备注 |
 | --- | --- | --- |
 | 仓库创建及 Apache-2.0 License | 已存在 | 用户创建仓库时已有 LICENSE |
-| ESP-IDF 固件构建 | 本地构建通过 | v5.4、目标 esp32s3；当前为 0.2.0-toc-probe，278,928 字节，见 M2 记录 |
+| ESP-IDF 固件构建 | 本地构建通过 | v5.4、目标 esp32s3；当前为 0.3.1-cdda-probe；默认关闭 279,472 字节 / 实验开启 291,136 字节，两配置均构建通过 |
 | 烧录 / UART0 启动 | bench-tested | 写入校验通过；45 秒启动采集窗口无异常重启记录，详见首次实测记录 |
 | 初始化 GitHub Actions | 构建成功 | [运行 41173591262](https://github.com/miclle/discora/actions/runs/41173591262)，对应初始化提交 `61b8229`，不是本轮改动的 CI |
-| 本轮 CI 配置 | implemented | 新增主机侧 ASan/UBSan 协议测试；本轮未提交/推送，未触发新 CI |
+| 本轮 CI 配置 | implemented | 新增主机侧 ASan/UBSan 协议测试；本轮已分阶段本地提交，未推送，未触发新 CI |
 | USB Host / BOT 最小探测 | implemented；常规查询 bench-tested | 原生 USB Host、接口筛选、基础查询及 READ TOC 已实测；超时/STALL 故障恢复仍待触发验证 |
 | 空 Hub 枚举 | bench-tested | USB-OTG 桥接后枚举 `05e3:0610`，Full-Speed，class `0x09`；下游未接设备 |
 | UJ-898 在 ESP32-S3 USB Host 枚举 | bench-tested | 桥接器 `13fd:0840`，Full-Speed，class/subclass/protocol `08/02/50`；前期有离线重枚举，原因未定位 |
-| INQUIRY / TEST UNIT READY / REQUEST SENSE | bench-tested | INQUIRY 为 MATSHITA UJ-898 / HC10；sense 有效，后续 61.2 秒连续 13 次 TUR 成功；TOC 另见下一项，PCM 未测试 |
-| READ TOC | bench-tested | 单张音乐 CD 取得 13 条音频轨、116 字节目录，lead-out LBA 252645；独立参考目录核对仍待完成 |
-| CD-DA 2352 字节扇区读取 | 未实现 | 待 M2 |
+| INQUIRY / TEST UNIT READY / REQUEST SENSE | bench-tested | INQUIRY 为 MATSHITA UJ-898 / HC10；sense 有效，后续 61.2 秒连续 13 次 TUR 成功；TOC / READ CD 另见后续项 |
+| READ TOC | bench-tested | 单张音乐 CD 取得 13 条音频轨、116 字节目录，lead-out LBA 252645；逐轨 LBA 和 lead-out 已与 macOS 参考目录一致 |
+| CD-DA 2352 字节扇区读取 | implemented；小片段 bench-tested | 单/8 扇区与电脑 SHA-256 一致；256 扇区短突发 739,858 bytes/s。默认关闭，长时/寻道待测 |
 | I²S 左右双声道输出 | 未实现 | 待 M3 |
 | CD-R / CD-RW 实际刻录 | 未验证 | 存在 USB 带宽和最低写速风险；待 M4 |
 
@@ -43,7 +43,7 @@
 
 后续第三轮只枚举一次光驱，启动后 1.425–62.625 秒连续 13 次 TUR 成功，没有光驱离线、额外 ESP32 启动或 BOT transport error。该短窗口结果与此前失败/准备过程一并保留，详见同一实测记录。
 
-下一项动作：在已确认音频轨边界内实现受限 READ CD，小段 2352 字节扇区读取、长度及参考数据核对，再测持续吞吐；同时保留 M1 受控无盘/有盘、插拔及冷启动验收。按用户要求暂缓双 USB-A 内部测量，供电隔离仍未验证；异常时停止本轮实验。此前不把 M0/M1 标为 VERIFIED。
+下一项动作：扩大持续读取时长和寻道覆盖，设计 USB → PCM 环形缓冲，再验证 I²S 双声道；同时保留 M1 受控无盘/有盘、插拔及冷启动验收。按用户要求暂缓双 USB-A 内部测量，供电隔离仍未验证；异常时停止本轮实验。此前不把 M0/M1 标为 VERIFIED。
 
 ## 原始证据可用性更正
 
@@ -52,3 +52,11 @@ M2 的 `set-target` / fullclean 误删了放在 `firmware/build/` 内的 M1 原�
 ## 2026-10-31：音乐 CD 曲目目录
 
 `0.2.0-toc-probe` 已烧录，写入校验通过，READ TOC 的 4 字节头与 116 字节完整响应均为 CSW=0、residue=0，解析为 13 条音频轨、0 条数据轨，目录时长 56:08:45（分:秒:帧，75 帧/秒）。本轮只读取元数据，不包含 PCM、I²S 或刻录；M2 尚未整体完成。详见 [实测记录](records/2026-10-31-m2-toc.md) 与 [ADR-0003](decisions/0003-formatted-toc-probe.md)。
+
+## 2026-10-31：READ CD 参考对照
+
+首版实验的三次 READ CD 均未取得有效音频，包含自动离线和两次 3 秒截止；这些失败保留。修正后 `0.3.1-cdda-probe`（显式启用实验）首次单扇区读取耗时 3.633 秒并成功，35 条 READ CD 的 CSW 均为 0，累计读取 273 扇区（含重复区间）。单/8 扇区与 macOS 同盘、同位置参考 SHA-256 一致；256 扇区连续短突发为 739,858 bytes/s。当前仅小片段/短突发 bench-tested，不能把它等同于长时播放或完整 M2 VERIFIED。
+
+实验开关默认关闭，每次启动最多一次，重连不会重新触发；音频数据阶段单独采用 30 秒截止。首次 USB 错误根因仍未定位，不因为后续成功而认定电源或桥接器完全合格。详情、版本/配置/最终部署和校验值见 [READ CD 实测](records/2026-10-31-m2-cdda.md) 与 [ADR-0004](decisions/0004-bounded-cdda-probe.md)。
+
+最终开发板为 `0.3.1-cdda-probe` 默认关闭实验配置：30 秒独立采集取得有效 TOC，日志明确 `CDDA probe enabled=0`，READ CD 发送数为 0。开启实验的镜像及成功窗口独立保留。

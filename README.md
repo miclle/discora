@@ -18,7 +18,7 @@
 | ESP32-S3 启动与日志 | M0 基线 | 已完成一次烧录与 UART0 启动实验 |
 | USB Host 识别光驱 | INQUIRY / TEST UNIT READY / REQUEST SENSE | 已识别 UJ-898 / HC10，61.2 秒连续 13 次 TUR 就绪；完整 M1 验收待完成 |
 | 读取音乐 CD 曲目 | READ TOC | bench-tested：本张 CD 取得 13 条音频轨及 LBA；详见实测记录 |
-| CD-DA 数字音频读取 | READ CD | 未实现 |
+| CD-DA 数字音频读取 | READ CD | bench-tested：单/8 扇区与电脑参考摘要一致，256 扇区短突发约 740 KB/s；实验默认关闭 |
 | 双声道模拟音频 | I²S → 立体声 DAC | 未实现 |
 | CD-R/CD-RW 刻录 | 测速、写入、封盘、校验 | 研究目标；可行性待测 |
 | DVD 读取/刻录 | 可选扩展 | 不在首版范围 |
@@ -45,7 +45,7 @@
    idf.py set-target esp32s3
    idf.py build
    ```
-   当前固件执行四种只读查询命令，已加入 READ TOC 曲目目录；尚不读取 PCM 音频、播放或刻录光盘。
+   当前固件默认执行四种只读查询命令；受限 READ CD 实验须手动启用，每次主控启动最多执行一次。尚无 I²S 播放或刻录。详见 [读取实测](docs/records/2026-10-31-m2-cdda.md)。
 4. 按 [组装说明](docs/assembly.md) 核对 OTG、独立 UART0 和 VBUS 电源；准备好后再选择本项目串口执行 `idf.py -p <DISCORA_UART_PORT> flash monitor`。原生 USB 用于 Host 时不能同时当电脑日志口。
 5. 完成 M0/M1 实测后再进入 CD-DA 和 I²S；详见 [路线图](docs/roadmap.md)。离线协议检查：`python3 firmware/tests/run_host_tests.py`。
 
@@ -82,7 +82,7 @@ discora/
 
 Discora explores a **low-cost standalone optical disc controller** built around ESP32-S3. The first goal is to read CD-DA from a USB-attached SATA/ATAPI drive and produce stereo I²S audio without a Linux computer. CD-R/CD-RW writing is a later **unverified research milestone**, subject to USB bridge compatibility and minimum write-speed constraints.
 
-**Status:** flashing, UART0, Full-Speed hub/drive enumeration and read-only BOT queries have been bench-tested with MATSHITA UJ-898 firmware HC10. Thirteen consecutive TEST UNIT READY checks passed over 61.2 seconds; long-running, cold-start and reconnection qualification remain open. Formatted TOC was bench-tested on one music CD (13 audio tracks); CD-DA sector reading, I²S playback and writing are not implemented. See [current evidence](docs/status.md).
+**Status:** flashing, UART0, Full-Speed hub/drive enumeration and read-only BOT queries have been bench-tested with MATSHITA UJ-898 firmware HC10. Thirteen consecutive TEST UNIT READY checks passed over 61.2 seconds; long-running, cold-start and reconnection qualification remain open. Formatted TOC was bench-tested on one music CD (13 audio tracks); A bounded READ CD probe (disabled by default) matched PC reference hashes for one/eight sectors and measured a 256-sector burst at 739,858 bytes/s. Sustained playback, I²S and writing remain unverified or unimplemented. See [current evidence](docs/status.md).
 
 ## License
 

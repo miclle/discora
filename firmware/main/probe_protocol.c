@@ -118,6 +118,7 @@ const char *probe_command_name(probe_command_t command)
     case PROBE_TEST_UNIT_READY: return "TEST UNIT READY";
     case PROBE_REQUEST_SENSE: return "REQUEST SENSE";
     case PROBE_READ_TOC: return "READ TOC";
+    case PROBE_READ_CD: return "READ CD";
     default: return "INVALID";
     }
 }
@@ -137,7 +138,7 @@ bool probe_make_cbw(probe_command_t command, uint8_t subclass, uint32_t tag,
         return false;
     }
     if (command == PROBE_READ_TOC) {
-        if (data_size < PROBE_TOC_HEADER_SIZE || data_size > PROBE_MAX_DATA) {
+        if (data_size < PROBE_TOC_HEADER_SIZE || data_size > PROBE_MAX_TOC_DATA) {
             return false;
         }
     } else if (data_size != probe_data_size(command)) {
@@ -158,6 +159,33 @@ bool probe_make_cbw(probe_command_t command, uint8_t subclass, uint32_t tag,
     } else {
         out[19] = (uint8_t)data_size;
     }
+    return true;
+}
+
+bool probe_make_read_cd_cbw(uint8_t subclass, uint32_t tag, const probe_track_t *track,
+                            uint32_t lba, uint8_t sectors, uint8_t out[PROBE_CBW_SIZE])
+{
+    if (!out || !track || !supported_subclass(subclass) || track->number < 1 ||
+        track->number > PROBE_MAX_TRACKS || (track->control & 0x04) ||
+        track->start_lba >= track->end_lba || track->end_lba > INT32_MAX ||
+        lba < track->start_lba || lba >= track->end_lba || sectors == 0 ||
+        sectors > PROBE_MAX_READ_SECTORS || sectors > track->end_lba - lba) {
+        return false;
+    }
+    memset(out, 0, PROBE_CBW_SIZE);
+    write_le32(out, 0x43425355);
+    write_le32(out + 4, tag);
+    write_le32(out + 8, (uint32_t)sectors * PROBE_CD_SECTOR_SIZE);
+    out[12] = 0x80;
+    out[14] = 12; // READ CD has a native 12-byte CDB for all accepted subclasses.
+    out[15] = 0xbe;
+    out[16] = 0x04; // Expected Sector Type=CD-DA; DAP=0, RelAdr=0.
+    out[17] = (uint8_t)(lba >> 24);
+    out[18] = (uint8_t)(lba >> 16);
+    out[19] = (uint8_t)(lba >> 8);
+    out[20] = (uint8_t)lba;
+    out[23] = sectors; // 24-bit big-endian transfer length, bounded to eight sectors.
+    out[24] = 0x10; // User data only: 2352 bytes/sector, no C2 or sub-channel bytes.
     return true;
 }
 
@@ -223,7 +251,7 @@ bool probe_toc_size_from_header(const uint8_t *data, size_t size, size_t *total_
     }
     size_t reported = ((size_t)data[0] << 8 | data[1]) + 2;
     size_t expected = PROBE_TOC_HEADER_SIZE + 8 * ((size_t)data[3] - data[2] + 2);
-    if (reported != expected || reported > PROBE_MAX_DATA) {
+    if (reported != expected || reported > PROBE_MAX_TOC_DATA) {
         return false;
     }
     *total_size = reported;
