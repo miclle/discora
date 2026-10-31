@@ -35,6 +35,17 @@ def main():
             ], check=True,
         )
         subprocess.run([str(stream)], check=True)
+        audio = Path(temp) / "audio_core_test"
+        subprocess.run(
+            shlex.split(os.environ.get("CC", "cc")) + [
+                "-std=c11", "-Wall", "-Wextra", "-Werror", "-pedantic", "-g",
+                "-fsanitize=address,undefined", "-fno-omit-frame-pointer",
+                "-I", str(firmware / "main"), str(firmware / "main/pcm_buffer.c"),
+                str(firmware / "main/audio_core.c"), str(firmware / "main/test_tone.c"),
+                str(firmware / "tests/audio_core_test.c"), "-o", str(audio),
+            ], check=True,
+        )
+        subprocess.run([str(audio)], check=True)
 
 
 if __name__ == "__main__":
