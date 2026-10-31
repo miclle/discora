@@ -1,22 +1,23 @@
 # 当前工程状态
 
-更新时间：2026-10-31（READ CD 小段音频和电脑参考）
+更新时间：2026-10-31（长时、寻道与缓冲实验）
 
-证据分层：`planned` 为计划；`implemented` 为源码已实现；`bench-tested` 为在指定硬件上实验过；`verified` 为满足相应验收条件。已完成烧录、UART0、Hub/光驱枚举、三种基础查询的真实返回、61.2 秒连续 13 次 TUR 就绪，以及单张 CD 的 13 轨目录、READ CD 小片段/短突发与电脑参考对照；长时稳定、冷启动与受控重复插拔仍待验收，M0/M1 未整体通过。
+证据分层：`planned` 为计划；`implemented` 为源码已实现；`bench-tested` 为在指定硬件上实验过；`verified` 为满足相应验收条件。已完成烧录、UART0、Hub/光驱枚举、三种基础查询的真实返回、61.2 秒连续 13 次 TUR 就绪，以及单张 CD 的 13 轨目录、READ CD 小片段/短突发与电脑参考对照；600 秒顺序窗口已与电脑对照，随机寻道、冷启动与受控重复插拔仍待验收，M0/M1 未整体通过。
 
 | 事项 | 状态 | 证据 / 备注 |
 | --- | --- | --- |
 | 仓库创建及 Apache-2.0 License | 已存在 | 用户创建仓库时已有 LICENSE |
-| ESP-IDF 固件构建 | 本地构建通过 | v5.4、目标 esp32s3；当前为 0.3.1-cdda-probe；默认关闭 279,472 字节 / 实验开启 291,136 字节，两配置均构建通过 |
+| ESP-IDF 固件构建 | 本地构建通过 | v5.4、目标 esp32s3；当前为 0.4.2-stream-bench；默认关闭 279,504 字节 / 顺序缓冲实验 298,272 字节，两配置均构建通过 |
 | 烧录 / UART0 启动 | bench-tested | 写入校验通过；45 秒启动采集窗口无异常重启记录，详见首次实测记录 |
 | 初始化 GitHub Actions | 构建成功 | [运行 41173591262](https://github.com/miclle/discora/actions/runs/41173591262)，对应初始化提交 `61b8229`，不是本轮改动的 CI |
 | 本轮 CI 配置 | implemented | 新增主机侧 ASan/UBSan 协议测试；本轮已分阶段本地提交，未推送，未触发新 CI |
-| USB Host / BOT 最小探测 | implemented；常规查询 bench-tested | 原生 USB Host、接口筛选、基础查询及 READ TOC 已实测；超时/STALL 故障恢复仍待触发验证 |
+| USB Host / BOT 最小探测 | implemented；常规查询 bench-tested | 原生 USB Host、接口筛选、基础查询及 READ TOC 已实测；已观察到超时、Data-In STALL 和一次 Reset Recovery；后续仍有离线，完整恢复验收未通过 |
 | 空 Hub 枚举 | bench-tested | USB-OTG 桥接后枚举 `05e3:0610`，Full-Speed，class `0x09`；下游未接设备 |
 | UJ-898 在 ESP32-S3 USB Host 枚举 | bench-tested | 桥接器 `13fd:0840`，Full-Speed，class/subclass/protocol `08/02/50`；前期有离线重枚举，原因未定位 |
 | INQUIRY / TEST UNIT READY / REQUEST SENSE | bench-tested | INQUIRY 为 MATSHITA UJ-898 / HC10；sense 有效，后续 61.2 秒连续 13 次 TUR 成功；TOC / READ CD 另见后续项 |
 | READ TOC | bench-tested | 单张音乐 CD 取得 13 条音频轨、116 字节目录，lead-out LBA 252645；逐轨 LBA 和 lead-out 已与 macOS 参考目录一致 |
-| CD-DA 2352 字节扇区读取 | implemented；小片段 bench-tested | 单/8 扇区与电脑 SHA-256 一致；256 扇区短突发 739,858 bytes/s。默认关闭，长时/寻道待测 |
+| CD-DA 2352 字节扇区读取 | implemented；顺序窗口 bench-tested | 600 秒、105840000 字节，与电脑完整 SHA-256 一致；随机/回跳失败，默认关闭 |
+| PCM 环形缓冲 | implemented；软件消费 bench-tested | 64 扇区内部 RAM，600 秒 1×，零欠载、两端摘要一致；不是 I²S 验收 |
 | I²S 左右双声道输出 | 未实现 | 待 M3 |
 | CD-R / CD-RW 实际刻录 | 未验证 | 存在 USB 带宽和最低写速风险；待 M4 |
 
@@ -43,7 +44,7 @@
 
 后续第三轮只枚举一次光驱，启动后 1.425–62.625 秒连续 13 次 TUR 成功，没有光驱离线、额外 ESP32 启动或 BOT transport error。该短窗口结果与此前失败/准备过程一并保留，详见同一实测记录。
 
-下一项动作：扩大持续读取时长和寻道覆盖，设计 USB → PCM 环形缓冲，再验证 I²S 双声道；同时保留 M1 受控无盘/有盘、插拔及冷启动验收。按用户要求暂缓双 USB-A 内部测量，供电隔离仍未验证；异常时停止本轮实验。此前不把 M0/M1 标为 VERIFIED。
+下一项动作：取得 OTG 转接头，绕过 Hub 隔离随机/回跳故障；已完成顺序长读及软件环形缓冲，之后再验证 I²S 双声道；同时保留 M1 受控无盘/有盘、插拔及冷启动验收。按用户要求暂缓双 USB-A 内部测量，供电隔离仍未验证；异常时停止本轮实验。此前不把 M0/M1 标为 VERIFIED。
 
 ## 原始证据可用性更正
 
@@ -59,4 +60,14 @@ M2 的 `set-target` / fullclean 误删了放在 `firmware/build/` 内的 M1 原�
 
 实验开关默认关闭，每次启动最多一次，重连不会重新触发；音频数据阶段单独采用 30 秒截止。首次 USB 错误根因仍未定位，不因为后续成功而认定电源或桥接器完全合格。详情、版本/配置/最终部署和校验值见 [READ CD 实测](records/2026-10-31-m2-cdda.md) 与 [ADR-0004](decisions/0004-bounded-cdda-probe.md)。
 
-最终开发板为 `0.3.1-cdda-probe` 默认关闭实验配置：30 秒独立采集取得有效 TOC，日志明确 `CDDA probe enabled=0`，READ CD 发送数为 0。开启实验的镜像及成功窗口独立保留。
+该阶段结束时开发板为 `0.3.1-cdda-probe` 默认关闭实验配置：30 秒独立采集取得有效 TOC，日志明确 `CDDA probe enabled=0`，READ CD 发送数为 0。开启实验的镜像及成功窗口独立保留。
+
+## 2026-10-31：长时、寻道和软件缓冲
+
+`0.4.0` 在第二个寻道位置（轨 13 / LBA 223917）发生 STALL / sense 超时；`0.4.1` 回到首轨 LBA 0 时发生 USB 错误。均保留失败并停止当前轮，没有继续自动重试。
+
+`0.4.2` 显式跳过这两项失败阶段，从短探测末尾 LBA 414 顺序衔接，完成 600 秒 / 45000 扇区 / 105840000 字节，跨到轨 2 / 3，零欠载与缺失。生产端、软件消费端和电脑同区间完整 SHA-256 全部一致。缓冲生产期最低 111460 字节、最长读取 112061 μs，600 秒门槛通过；I²S、随机寻道及完整首轨回读仍未通过。
+
+电脑 High-Speed 路径能读两个失败位置，但这不能单独确定 MCU Full-Speed 失败根因。用户当前没有直连 OTG 转接头；下一项隔离所需设备为 USB-C 公 → USB-A 母 OTG 数据转接头。默认关闭实验的固件已刷回，详见 [长时实测](records/2026-10-31-m2-stream.md) 与 [ADR-0005](decisions/0005-stream-and-buffer-bench.md)。
+
+最终恢复原接线后，`0.4.2-stream-bench` 默认关闭配置的 45 秒采集取得有效 13 轨目录、READ CD 发送数 0，无传输错误。相关实现、测试和文档按阶段本地提交，未推送。

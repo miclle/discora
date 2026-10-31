@@ -18,7 +18,7 @@
 | ESP32-S3 启动与日志 | M0 基线 | 已完成一次烧录与 UART0 启动实验 |
 | USB Host 识别光驱 | INQUIRY / TEST UNIT READY / REQUEST SENSE | 已识别 UJ-898 / HC10，61.2 秒连续 13 次 TUR 就绪；完整 M1 验收待完成 |
 | 读取音乐 CD 曲目 | READ TOC | bench-tested：本张 CD 取得 13 条音频轨及 LBA；详见实测记录 |
-| CD-DA 数字音频读取 | READ CD | bench-tested：单/8 扇区与电脑参考摘要一致，256 扇区短突发约 740 KB/s；实验默认关闭 |
+| CD-DA 数字音频读取 | READ CD | bench-tested：600 秒顺序读取 / 105.84 MB 与电脑完整摘要一致、软件缓冲零欠载；随机寻道未通过，实验默认关闭 |
 | 双声道模拟音频 | I²S → 立体声 DAC | 未实现 |
 | CD-R/CD-RW 刻录 | 测速、写入、封盘、校验 | 研究目标；可行性待测 |
 | DVD 读取/刻录 | 可选扩展 | 不在首版范围 |
@@ -82,7 +82,7 @@ discora/
 
 Discora explores a **low-cost standalone optical disc controller** built around ESP32-S3. The first goal is to read CD-DA from a USB-attached SATA/ATAPI drive and produce stereo I²S audio without a Linux computer. CD-R/CD-RW writing is a later **unverified research milestone**, subject to USB bridge compatibility and minimum write-speed constraints.
 
-**Status:** flashing, UART0, Full-Speed hub/drive enumeration and read-only BOT queries have been bench-tested with MATSHITA UJ-898 firmware HC10. Thirteen consecutive TEST UNIT READY checks passed over 61.2 seconds; long-running, cold-start and reconnection qualification remain open. Formatted TOC was bench-tested on one music CD (13 audio tracks); A bounded READ CD probe (disabled by default) matched PC reference hashes for one/eight sectors and measured a 256-sector burst at 739,858 bytes/s. Sustained playback, I²S and writing remain unverified or unimplemented. See [current evidence](docs/status.md).
+**Status:** flashing, UART0, Full-Speed hub/drive enumeration and read-only BOT queries have been bench-tested with MATSHITA UJ-898 firmware HC10. Thirteen consecutive TEST UNIT READY checks passed over 61.2 seconds; long-running, cold-start and reconnection qualification remain open. Formatted TOC was bench-tested on one music CD (13 audio tracks); A bounded READ CD probe (disabled by default) matched PC reference hashes for one/eight sectors and measured a 256-sector burst at 739,858 bytes/s. A 600-second paced software-buffer run transferred 105.84 MB with zero underruns and a full-window PC hash match. Random seeking failed; I²S playback and writing remain unimplemented. See [current evidence](docs/status.md).
 
 ## License
 
