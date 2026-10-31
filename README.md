@@ -3,7 +3,7 @@
 > **Discora — Bring optical discs back to life.**  
 > 基于 ESP32-S3 的低成本、独立运行、开源光盘播放器与刻录控制器探索项目。
 
-[English summary](#english-summary) · [需求](docs/requirements.md) · [架构](docs/architecture.md) · [硬件](docs/hardware.md) · [验证计划](docs/validation.md) · [路线图](docs/roadmap.md)
+[English summary](#english-summary) · [需求](docs/requirements.md) · [架构](docs/architecture.md) · [硬件](docs/hardware.md) · [组装](docs/assembly.md) · [验证计划](docs/validation.md) · [路线图](docs/roadmap.md)
 
 ## 为什么做 Discora
 
@@ -15,9 +15,9 @@
 
 | 功能 | 目标 | 状态 |
 | --- | --- | --- |
-| ESP32-S3 启动与日志 | M0 基线 | 工程骨架已建立，尚未实机验证 |
-| USB Host 识别光驱 | INQUIRY / TEST UNIT READY | 未实现 |
-| 读取音乐 CD 曲目 | READ TOC | 未实现 |
+| ESP32-S3 启动与日志 | M0 基线 | 已完成一次烧录与 UART0 启动实验 |
+| USB Host 识别光驱 | INQUIRY / TEST UNIT READY / REQUEST SENSE | 已识别 UJ-898 / HC10，61.2 秒连续 13 次 TUR 就绪；完整 M1 验收待完成 |
+| 读取音乐 CD 曲目 | READ TOC | bench-tested：本张 CD 取得 13 条音频轨及 LBA；详见实测记录 |
 | CD-DA 数字音频读取 | READ CD | 未实现 |
 | 双声道模拟音频 | I²S → 立体声 DAC | 未实现 |
 | CD-R/CD-RW 刻录 | 测速、写入、封盘、校验 | 研究目标；可行性待测 |
@@ -44,10 +44,10 @@
    ```bash
    idf.py set-target esp32s3
    idf.py build
-   idf.py -p /dev/ttyUSB0 flash monitor
    ```
-   串口路径随系统及开发板而异。当前固件**只打印启动信息**，不会读取、播放或刻录光盘。
-4. 达到 M0 验收标准后，再依次开发 USB 枚举、SCSI/MMC、CD-DA、I²S 音频；详见 [路线图](docs/roadmap.md)。
+   当前固件执行四种只读查询命令，已加入 READ TOC 曲目目录；尚不读取 PCM 音频、播放或刻录光盘。
+4. 按 [组装说明](docs/assembly.md) 核对 OTG、独立 UART0 和 VBUS 电源；准备好后再选择本项目串口执行 `idf.py -p <DISCORA_UART_PORT> flash monitor`。原生 USB 用于 Host 时不能同时当电脑日志口。
+5. 完成 M0/M1 实测后再进入 CD-DA 和 I²S；详见 [路线图](docs/roadmap.md)。离线协议检查：`python3 firmware/tests/run_host_tests.py`。
 
 ## 技术取舍
 
@@ -68,19 +68,21 @@ discora/
 │   ├── requirements.md         # 目标、非目标、验收
 │   ├── architecture.md         # USB/SCSI/MMC、CD-DA、I²S 设计
 │   ├── hardware.md             # 供电、选型、BOM
+│   ├── assembly.md             # Host / UART0 / Hub 接线与首次上电
 │   ├── validation.md           # 实验步骤与证据要求
 │   ├── roadmap.md              # 分阶段实施计划
 │   ├── research.md             # 参考项目和资料
 │   ├── status.md               # 当前验证状态
+│   ├── records/                # 带日期的软件/硬件验证记录
 │   └── decisions/              # 设计决策记录
-└── firmware/                   # ESP-IDF 最小可构建工程
+└── firmware/                   # ESP-IDF 只读 BOT 探测与主机侧协议测试
 ```
 
 ## English summary
 
 Discora explores a **low-cost standalone optical disc controller** built around ESP32-S3. The first goal is to read CD-DA from a USB-attached SATA/ATAPI drive and produce stereo I²S audio without a Linux computer. CD-R/CD-RW writing is a later **unverified research milestone**, subject to USB bridge compatibility and minimum write-speed constraints.
 
-**Status:** documentation and a boot-only ESP-IDF skeleton; optical-drive features are not implemented.
+**Status:** flashing, UART0, Full-Speed hub/drive enumeration and read-only BOT queries have been bench-tested with MATSHITA UJ-898 firmware HC10. Thirteen consecutive TEST UNIT READY checks passed over 61.2 seconds; long-running, cold-start and reconnection qualification remain open. Formatted TOC was bench-tested on one music CD (13 audio tracks); CD-DA sector reading, I²S playback and writing are not implemented. See [current evidence](docs/status.md).
 
 ## License
 

@@ -15,11 +15,14 @@
 
 ## USB 接线与电源注意
 
+组装拓扑、UART0、Type-C Hub 角色和首次上电顺序见 [M1 组装说明](assembly.md)。用户已有 ESP32-S3、UJ-898、Type-C Hub 和电源；板卡、Hub、桥接器的具体型号与接线仍待确认。
+
 - ESP32-S3 原生 USB OTG D− / D+ 常对应 GPIO19 / GPIO20；必须核对**具体开发板原理图**是否已经连接到板载 USB 接口。
 - USB Host 需要向光驱/桥接器提供合规 **5V VBUS**。不能直接将 USB 光驱挂在 3.3V GPIO 或未经校验的开发板弱供电上。
 - 使用独立供电、带电流余量的 USB 接口或供电 Hub 作为最初的实验路径；保持 USB 数据连接与公共地正确。
 - 上电、吸盘、加速旋转和读盘过程中测量 5V 是否跌落，监控 ESP32-S3 brownout/reboot。
 - 确认桥接器在 Full-Speed 模式下可枚举；检查接口是 BOT (0x50) 还是不受首版支持的 UAS (0x62)。
+- 原生 USB PHY 用于 Host 时，日志走 UART0；如板上没有独立 USB-UART，需要 3.3V 逻辑的外接转接器。PD 供电口不等于 Host 数据口。
 - 音频 L/R 从 DAC 输出；需要驱动 4Ω/8Ω 无源喇叭时增加双声道功放。
 - 光驱电机供电、模拟音频接地布线和功放电源噪声应分别评估。
 
@@ -31,11 +34,11 @@
 
 | 字段 | 记录 |
 | --- | --- |
-| ESP32-S3 开发板与内存规格 | 待测 |
-| ESP-IDF 版本 | 待测 |
-| 光驱固件/型号 | UJ-898（具体固件待测） |
-| 桥接器 VID:PID 与芯片 | 待测 |
-| USB 速度/MSC 协议 | 待测 |
+| ESP32-S3 开发板与内存规格 | 具体板型待确认；目标 COM 读取到 ESP32-S3 rev v0.2、16 MB Flash，芯片报告内置 8 MB PSRAM，PSRAM 未独立测试 |
+| ESP-IDF 版本 | 首次 UART0 启动为 v5.4 |
+| 光驱固件/型号 | INQUIRY 返回 MATSHITA DVD-R UJ-898，固件 HC10 |
+| 桥接器 VID:PID 与芯片 | `13fd:0840`，桥接芯片具体型号待确认；Hub 为 `05e3:0610` |
+| USB 速度/MSC 协议 | 光驱 Full-Speed，interface `08/02/50`（MSC / SFF-8020i / BOT），LUN 0 |
 | 供电电压/最大实测电流 | 待测 |
 | 测试 CD-R/RW 品牌/额定速率 | 待测 |
 | DAC/功放型号 | 待定 |
