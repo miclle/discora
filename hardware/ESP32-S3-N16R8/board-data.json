@@ -1,0 +1,285 @@
+{
+  "recorded_on": "2026-10-31",
+  "project": "Discora",
+  "evidence_level": "supplier_drawings_and_imported_reference_photos_not_complete_physical_acceptance",
+  "board_drawing_title": "ESP32-S3-COREBOARD V1.4",
+  "physical_revision_verified": false,
+  "orientation": "component side facing viewer, antenna up, USB down; J1 left, J2 right; numbered top to bottom",
+  "headers": {
+    "J1": [
+      {
+        "pin": 1,
+        "net": "3V3"
+      },
+      {
+        "pin": 2,
+        "net": "3V3"
+      },
+      {
+        "pin": 3,
+        "net": "CHIP_PU / EN"
+      },
+      {
+        "pin": 4,
+        "net": "GPIO4"
+      },
+      {
+        "pin": 5,
+        "net": "GPIO5"
+      },
+      {
+        "pin": 6,
+        "net": "GPIO6"
+      },
+      {
+        "pin": 7,
+        "net": "GPIO7"
+      },
+      {
+        "pin": 8,
+        "net": "GPIO15"
+      },
+      {
+        "pin": 9,
+        "net": "GPIO16"
+      },
+      {
+        "pin": 10,
+        "net": "GPIO17"
+      },
+      {
+        "pin": 11,
+        "net": "GPIO18"
+      },
+      {
+        "pin": 12,
+        "net": "GPIO8"
+      },
+      {
+        "pin": 13,
+        "net": "GPIO3"
+      },
+      {
+        "pin": 14,
+        "net": "GPIO46"
+      },
+      {
+        "pin": 15,
+        "net": "GPIO9"
+      },
+      {
+        "pin": 16,
+        "net": "GPIO10"
+      },
+      {
+        "pin": 17,
+        "net": "GPIO11"
+      },
+      {
+        "pin": 18,
+        "net": "GPIO12"
+      },
+      {
+        "pin": 19,
+        "net": "GPIO13"
+      },
+      {
+        "pin": 20,
+        "net": "GPIO14"
+      },
+      {
+        "pin": 21,
+        "net": "5Vin"
+      },
+      {
+        "pin": 22,
+        "net": "GND"
+      }
+    ],
+    "J2": [
+      {
+        "pin": 1,
+        "net": "GND"
+      },
+      {
+        "pin": 2,
+        "net": "U0TXD / GPIO43"
+      },
+      {
+        "pin": 3,
+        "net": "U0RXD / GPIO44"
+      },
+      {
+        "pin": 4,
+        "net": "GPIO1"
+      },
+      {
+        "pin": 5,
+        "net": "GPIO2"
+      },
+      {
+        "pin": 6,
+        "net": "GPIO42"
+      },
+      {
+        "pin": 7,
+        "net": "GPIO41"
+      },
+      {
+        "pin": 8,
+        "net": "GPIO40"
+      },
+      {
+        "pin": 9,
+        "net": "GPIO39"
+      },
+      {
+        "pin": 10,
+        "net": "GPIO38"
+      },
+      {
+        "pin": 11,
+        "net": "GPIO37"
+      },
+      {
+        "pin": 12,
+        "net": "GPIO36"
+      },
+      {
+        "pin": 13,
+        "net": "GPIO35"
+      },
+      {
+        "pin": 14,
+        "net": "GPIO0"
+      },
+      {
+        "pin": 15,
+        "net": "GPIO45"
+      },
+      {
+        "pin": 16,
+        "net": "GPIO48"
+      },
+      {
+        "pin": 17,
+        "net": "GPIO47"
+      },
+      {
+        "pin": 18,
+        "net": "GPIO21"
+      },
+      {
+        "pin": 19,
+        "net": "GPIO20"
+      },
+      {
+        "pin": 20,
+        "net": "GPIO19"
+      },
+      {
+        "pin": 21,
+        "net": "GND"
+      },
+      {
+        "pin": 22,
+        "net": "GND"
+      }
+    ]
+  },
+  "memory_nominal": {
+    "flash_mb": 16,
+    "psram_mb": 8,
+    "physical_configuration_verified": false,
+    "note": "N16R8 nominal configuration; Discora device identification evidence lives in docs/records/2026-10-31-m1-first-boot.md"
+  },
+  "gpio_constraints": {
+    "unavailable_psram": [
+      35,
+      36,
+      37
+    ],
+    "strapping_reserved": [
+      0,
+      3,
+      45,
+      46
+    ],
+    "native_usb": [
+      19,
+      20
+    ],
+    "uart_bridge": [
+      43,
+      44
+    ],
+    "onboard_rgb": [
+      48
+    ],
+    "jtag": [
+      39,
+      40,
+      41,
+      42
+    ],
+    "unassigned_candidates": [
+      1,
+      2,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      21,
+      38,
+      47
+    ]
+  },
+  "dimensions_mm": {
+    "pcb_length": 57.15,
+    "pcb_width": 27.94,
+    "length_with_drawn_antenna": 63.39,
+    "header_row_spacing": 25.4,
+    "first_last_pin_spacing": 53.34,
+    "end_pin_to_pcb_edge_rounded": 1.91,
+    "derived_pitch": 2.54,
+    "derived_pin_to_side_edge": 1.27,
+    "derived_antenna_overhang": 6.24,
+    "pcb_thickness": null,
+    "assembled_height": null,
+    "mounting_hole_diameter": null
+  },
+  "dimensions_source": "ESP32-S3-Metric.pdf; supplier nominal and derived dimensions only",
+  "usb_and_power": {
+    "COM": "USB1 -> CH343P schematic bridge -> UART0 GPIO43/44",
+    "USB": "USB2 D- GPIO19, D+ GPIO20",
+    "USB-OTG": "0 ohm branch parallel to D2, connects USB2 VBUS to board 5V; not GPIO3 to ground",
+    "USB-JTAG": "GPIO3 option through R11 10 kohm to VDD33",
+    "IN-OUT": "0 ohm branch parallel to D3 between header 5Vin and board 5V",
+    "physical_power_acceptance": false
+  },
+  "discora_i2s_candidates": {
+    "bclk_gpio": 4,
+    "lrck_gpio": 5,
+    "data_gpio": 6,
+    "status": "implemented_configurable_not_hardware_verified",
+    "reference": "../../docs/audio-output.md"
+  },
+  "reference_photos": {
+    "front": "ESP32-S3-front.jpg",
+    "back": "ESP32-S3-back.jpg",
+    "provenance": "imported_board_reference_photos",
+    "identity_with_current_discora_unit_verified": false
+  },
+  "physical_acceptance": false
+}

@@ -56,7 +56,7 @@ ESP32-S3 原生 USB 通常为 GPIO19（D−）、GPIO20（D+）；默认 UART0 �
 
 对没有独立供电口的 Hub，应先确认上行 VBUS 的实际供电来源。光驱能吸盘只能说明机械部分得到供电；采用分叉 USB 辅助供电线时，还需核对 VBUS 是否隔离或回送，不能仅凭照片推断 Hub 有电或没电。模块上的 `S3-N16R8` 等标识不等于开发板型号；若背面有 `OTG` / `IN-OUT` 等焊盘，须查对应电路后再决定，不能按名称直接短接。
 
-用户提供的 [ESP32-S3-COREBOARD V1.4 原理图](../hardware/ESP32-S3-N16R8/ESP32-S3-SCH-V1.4.pdf) 中，`USB-OTG` 0 Ω 支路与 USB2 的 D2 并联，作用是连接 USB2 VBUS 与板上 5V；它不是 GPIO3 接地配置。目录 README 对这一处的文字摘录与 PDF 不一致，以实际原理图连线为准。`IN-OUT` 则旁路排针 5Vin 的 D3，是不同的支路。上述结论属于图纸核对；实物焊装、载流能力和 Hub 兼容性仍需验证，详细测量及建议操作顺序见 [首次上板记录](records/2026-10-31-m1-first-boot.md)。
+用户提供的 [ESP32-S3-COREBOARD V1.4 原理图](../hardware/ESP32-S3-N16R8/ESP32-S3-SCH-V1.4.pdf) 中，`USB-OTG` 0 Ω 支路与 USB2 的 D2 并联，作用是连接 USB2 VBUS 与板上 5V；它不是 GPIO3 接地配置。旧索引对这一处的错误摘录已在[板卡资料整理](../hardware/ESP32-S3-N16R8/README.md)时纠正，以实际原理图连线为准。`IN-OUT` 则旁路排针 5Vin 的 D3，是不同的支路。上述结论属于图纸核对；实物焊装、载流能力和 Hub 兼容性仍需验证，详细测量及建议操作顺序见 [首次上板记录](records/2026-10-31-m1-first-boot.md)。
 
 ## 电源路径
 
