@@ -84,13 +84,13 @@ ESP32-S3 原生 USB 通常为 GPIO19（D−）、GPIO20（D+）；默认 UART0 �
 idf.py -p <DISCORA_UART_PORT> flash monitor
 ```
 
-先确认启动日志中出现 `Discora M2 TOC read-only probe` 和 `Waiting for USB optical drive`，再接入光驱。日志字段和测试矩阵见 [验证手册](validation.md#m1esp32-s3--usb-host)。本文没有预先填好的设备成功日志。
+先确认启动日志中出现 `Discora M2 CD-DA read-only probe` 和 `Waiting for USB optical drive`，再接入光驱。日志字段和测试矩阵见 [验证手册](validation.md#m1esp32-s3--usb-host)。本文没有预先填好的设备成功日志。
 
 ## 首轮验收顺序
 
 1. 主控空载启动，UART0 持续可用，无重启。
 2. 无盘连接光驱，记录 VID:PID、接口、端点、INQUIRY 型号和固件；合法“无介质” sense 是有效观察。
-3. 插入 Audio CD，观察就绪状态。`medium ready` 只代表 TUR 成功；随后 `TOC validated` 输出曲目目录。两者均不代表 PCM 音频读取或播放通过。
+3. 插入 Audio CD，观察就绪状态。`medium ready` 只代表 TUR 成功；随后 `TOC validated` 输出曲目目录。两者均不代表 PCM 音频读取或播放通过。READ CD 实验默认关闭，启用条件及次数限制见 [固件说明](../firmware/README.md)。
 4. 拔下和重连光驱，观察 device handle 关闭及重新识别。
 5. 冷启动、重复插拔和异常路径按验证手册记录，再决定是否进入 M2。
 

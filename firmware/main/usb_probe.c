@@ -8,9 +8,11 @@
 #include "esp_intr_alloc.h"
 #include "esp_log.h"
 #include "esp_system.h"
+#include "sdkconfig.h"
 #include "esp_timer.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "mbedtls/sha256.h"
 #include "usb/usb_host.h"
 
 #include "probe_protocol.h"
@@ -19,8 +21,25 @@
 #error "Discora Host requires an independent UART console; disable both primary and secondary USB consoles in menuconfig"
 #endif
 
-enum { TRANSFER_TIMEOUT_MS = 3000, CANCEL_TIMEOUT_MS = 2000, POLL_INTERVAL_MS = 5000 };
+#if defined(CONFIG_DISCORA_CDDA_PROBE)
+enum { CDDA_PROBE_ENABLED = 1 };
+#else
+enum { CDDA_PROBE_ENABLED = 0 };
+#endif
+
+enum { TRANSFER_TIMEOUT_MS = 3000, AUDIO_DATA_TIMEOUT_MS = 30000, CANCEL_TIMEOUT_MS = 2000, POLL_INTERVAL_MS = 5000 };
 static const char *TAG = "usb_probe";
+
+typedef struct {
+    uint8_t data[PROBE_MAX_DATA];
+    size_t size;
+} command_data_t;
+
+typedef struct {
+    const probe_track_t *track;
+    uint32_t lba;
+    uint8_t sectors;
+} audio_read_t;
 
 typedef struct {
     usb_host_client_handle_t client;
@@ -34,6 +53,8 @@ typedef struct {
     bool faulted;
     bool identified;
     bool toc_valid;
+    bool audio_attempted;
+    command_data_t result; // One shared reply buffer; only the serialized client owns it.
     unsigned toc_attempts;
     probe_toc_t toc;
     uint32_t tag;
@@ -41,11 +62,6 @@ typedef struct {
 } probe_context_t;
 
 typedef enum { COMMAND_PASSED, COMMAND_FAILED, COMMAND_TRANSPORT_ERROR } command_result_t;
-
-typedef struct {
-    uint8_t data[PROBE_MAX_DATA];
-    size_t size;
-} command_data_t;
 
 static int64_t now_ms(void)
 {
@@ -86,9 +102,9 @@ static void log_usb_error(const char *operation, esp_err_t err)
     }
 }
 
-static esp_err_t wait_transfer(probe_context_t *ctx)
+static esp_err_t wait_transfer(probe_context_t *ctx, unsigned timeout_ms)
 {
-    int64_t deadline = now_ms() + TRANSFER_TIMEOUT_MS;
+    int64_t deadline = now_ms() + timeout_ms;
     while (ctx->in_flight && !ctx->gone && now_ms() < deadline) {
         handle_events(ctx, 20);
     }
@@ -125,7 +141,7 @@ static esp_err_t wait_transfer(probe_context_t *ctx)
     return ESP_OK;
 }
 
-static esp_err_t submit_transfer(probe_context_t *ctx, bool control)
+static esp_err_t submit_transfer(probe_context_t *ctx, bool control, unsigned timeout_ms)
 {
     if (ctx->gone || ctx->in_flight) {
         return ESP_ERR_INVALID_STATE;
@@ -141,10 +157,11 @@ static esp_err_t submit_transfer(probe_context_t *ctx, bool control)
         ctx->in_flight = false;
         return err;
     }
-    return wait_transfer(ctx);
+    return wait_transfer(ctx, timeout_ms);
 }
 
-static esp_err_t bulk_transfer(probe_context_t *ctx, bool in, const uint8_t *out, size_t size)
+static esp_err_t bulk_transfer(probe_context_t *ctx, bool in, const uint8_t *out, size_t size,
+                                unsigned timeout_ms)
 {
     if (ctx->in_flight || ctx->gone) {
         return ESP_ERR_INVALID_STATE;
@@ -162,7 +179,7 @@ static esp_err_t bulk_transfer(probe_context_t *ctx, bool in, const uint8_t *out
     t->bEndpointAddress = in ? ctx->interface.ep_in : ctx->interface.ep_out;
     // IDF requires bulk IN lengths rounded to MPS. CBW/CDB retain the exact wire lengths.
     t->num_bytes = (int)rounded;
-    return submit_transfer(ctx, false);
+    return submit_transfer(ctx, false, timeout_ms);
 }
 
 static esp_err_t control_request(probe_context_t *ctx, uint8_t type, uint8_t request, uint16_t index)
@@ -178,7 +195,7 @@ static esp_err_t control_request(probe_context_t *ctx, uint8_t type, uint8_t req
     t->data_buffer[5] = (uint8_t)(index >> 8);
     t->bEndpointAddress = 0;
     t->num_bytes = 8;
-    return submit_transfer(ctx, true);
+    return submit_transfer(ctx, true, TRANSFER_TIMEOUT_MS);
 }
 
 static esp_err_t clear_halt(probe_context_t *ctx, uint8_t endpoint)
@@ -212,25 +229,35 @@ static void reset_recovery(probe_context_t *ctx)
 }
 
 static command_result_t execute_command(probe_context_t *ctx, probe_command_t command,
-                                         size_t requested, command_data_t *result)
+                                         size_t requested, const audio_read_t *audio, command_data_t *result)
 {
     uint8_t cbw[PROBE_CBW_SIZE];
     size_t received = 0;
     int64_t started = now_ms();
     result->size = 0;
     ++ctx->tag;
-    if (!probe_make_cbw(command, ctx->interface.subclass, ctx->tag, requested, cbw)) {
+    bool valid = requested <= sizeof(result->data);
+    if (command == PROBE_READ_CD) {
+        valid = valid && audio && requested == (size_t)audio->sectors * PROBE_CD_SECTOR_SIZE &&
+                probe_make_read_cd_cbw(ctx->interface.subclass, ctx->tag, audio->track,
+                                       audio->lba, audio->sectors, cbw);
+    } else {
+        valid = valid && !audio &&
+                probe_make_cbw(command, ctx->interface.subclass, ctx->tag, requested, cbw);
+    }
+    if (!valid) {
         ctx->faulted = true;
         return COMMAND_TRANSPORT_ERROR;
     }
     ESP_LOGI(TAG, "command=%s tag=%" PRIu32 " requested=%u LUN=0",
              probe_command_name(command), ctx->tag, (unsigned)requested);
-    esp_err_t err = bulk_transfer(ctx, false, cbw, sizeof(cbw));
+    esp_err_t err = bulk_transfer(ctx, false, cbw, sizeof(cbw), TRANSFER_TIMEOUT_MS);
     if (err != ESP_OK || ctx->transfer->actual_num_bytes != PROBE_CBW_SIZE) {
         goto transport_error;
     }
     if (requested) {
-        err = bulk_transfer(ctx, true, NULL, requested);
+        err = bulk_transfer(ctx, true, NULL, requested,
+                            command == PROBE_READ_CD ? AUDIO_DATA_TIMEOUT_MS : TRANSFER_TIMEOUT_MS);
         if (err != ESP_OK && !(err == ESP_FAIL && ctx->transfer->status == USB_TRANSFER_STATUS_STALL)) {
             goto transport_error;
         }
@@ -249,11 +276,11 @@ static command_result_t execute_command(probe_context_t *ctx, probe_command_t co
             }
         }
     }
-    err = bulk_transfer(ctx, true, NULL, PROBE_CSW_SIZE);
+    err = bulk_transfer(ctx, true, NULL, PROBE_CSW_SIZE, TRANSFER_TIMEOUT_MS);
     if (err == ESP_FAIL && ctx->transfer->status == USB_TRANSFER_STATUS_STALL) {
         err = clear_halt(ctx, ctx->interface.ep_in);
         if (err == ESP_OK) {
-            err = bulk_transfer(ctx, true, NULL, PROBE_CSW_SIZE);
+            err = bulk_transfer(ctx, true, NULL, PROBE_CSW_SIZE, TRANSFER_TIMEOUT_MS);
         }
     }
     if (err != ESP_OK) {
@@ -277,7 +304,7 @@ static command_result_t execute_command(probe_context_t *ctx, probe_command_t co
     ESP_LOGI(TAG, "command=%s CSW=%u received=%u residue=%" PRIu32 " elapsed_ms=%" PRIi64,
              probe_command_name(command), csw.status, (unsigned)received, csw.residue,
              now_ms() - started);
-    if (result->size) {
+    if (result->size && command != PROBE_READ_CD) {
         ESP_LOG_BUFFER_HEX_LEVEL(TAG, result->data, result->size, ESP_LOG_INFO);
     }
     return csw.status == 0 ? COMMAND_PASSED : COMMAND_FAILED;
@@ -293,9 +320,9 @@ transport_error:
 
 static bool request_sense(probe_context_t *ctx, probe_sense_t *sense)
 {
-    command_data_t result;
-    if (execute_command(ctx, PROBE_REQUEST_SENSE, probe_data_size(PROBE_REQUEST_SENSE), &result) != COMMAND_PASSED ||
-        !probe_parse_sense(result.data, result.size, sense)) {
+    command_data_t *result = &ctx->result;
+    if (execute_command(ctx, PROBE_REQUEST_SENSE, probe_data_size(PROBE_REQUEST_SENSE), NULL, result) != COMMAND_PASSED ||
+        !probe_parse_sense(result->data, result->size, sense)) {
         ESP_LOGE(TAG, "REQUEST SENSE failed or malformed; no readiness conclusion");
         ctx->faulted = true;
         return false;
@@ -310,14 +337,14 @@ static bool request_sense(probe_context_t *ctx, probe_sense_t *sense)
 static void identify_drive(probe_context_t *ctx)
 {
     for (unsigned attempt = 1; attempt <= 3 && !ctx->gone; ++attempt) {
-        command_data_t result;
-        command_result_t status = execute_command(ctx, PROBE_INQUIRY, probe_data_size(PROBE_INQUIRY), &result);
+        command_data_t *result = &ctx->result;
+        command_result_t status = execute_command(ctx, PROBE_INQUIRY, probe_data_size(PROBE_INQUIRY), NULL, result);
         if (status == COMMAND_TRANSPORT_ERROR) {
             return;
         }
         if (status == COMMAND_PASSED) {
             probe_inquiry_t identity;
-            if (!probe_parse_inquiry(result.data, result.size, &identity)) {
+            if (!probe_parse_inquiry(result->data, result->size, &identity)) {
                 ESP_LOGE(TAG, "short/malformed standard INQUIRY; stop probing");
                 break;
             }
@@ -347,10 +374,10 @@ static void identify_drive(probe_context_t *ctx)
 
 static void read_toc(probe_context_t *ctx)
 {
-    command_data_t result;
+    command_data_t *result = &ctx->result;
     ++ctx->toc_attempts;
     ESP_LOGI(TAG, "TOC attempt=%u/3 format=0 MSF=0", ctx->toc_attempts);
-    command_result_t status = execute_command(ctx, PROBE_READ_TOC, PROBE_TOC_HEADER_SIZE, &result);
+    command_result_t status = execute_command(ctx, PROBE_READ_TOC, PROBE_TOC_HEADER_SIZE, NULL, result);
     if (status != COMMAND_PASSED) {
         if (status == COMMAND_FAILED) {
             probe_sense_t sense;
@@ -359,14 +386,14 @@ static void read_toc(probe_context_t *ctx)
         return;
     }
     size_t total_size;
-    if (!probe_toc_size_from_header(result.data, result.size, &total_size)) {
+    if (!probe_toc_size_from_header(result->data, result->size, &total_size)) {
         ESP_LOGE(TAG, "invalid TOC header; no track metadata published");
         return;
     }
     uint8_t header[PROBE_TOC_HEADER_SIZE];
-    memcpy(header, result.data, sizeof(header));
+    memcpy(header, result->data, sizeof(header));
     ESP_LOGI(TAG, "TOC header first=%u last=%u total_bytes=%u", header[2], header[3], (unsigned)total_size);
-    status = execute_command(ctx, PROBE_READ_TOC, total_size, &result);
+    status = execute_command(ctx, PROBE_READ_TOC, total_size, NULL, result);
     if (status != COMMAND_PASSED) {
         if (status == COMMAND_FAILED) {
             probe_sense_t sense;
@@ -374,8 +401,8 @@ static void read_toc(probe_context_t *ctx)
         }
         return;
     }
-    if (result.size < sizeof(header) || memcmp(header, result.data, sizeof(header)) != 0 ||
-        !probe_parse_toc(result.data, result.size, &ctx->toc)) {
+    if (result->size < sizeof(header) || memcmp(header, result->data, sizeof(header)) != 0 ||
+        !probe_parse_toc(result->data, result->size, &ctx->toc)) {
         ESP_LOGE(TAG, "TOC truncated, changed or malformed; no track metadata published");
         return;
     }
@@ -395,17 +422,151 @@ static void read_toc(probe_context_t *ctx)
     ESP_LOGI(TAG, "TOC metadata only; PCM audio not read");
 }
 
+static bool read_audio(probe_context_t *ctx, const probe_track_t *track,
+                       uint32_t lba, uint8_t sectors)
+{
+    audio_read_t audio = {.track = track, .lba = lba, .sectors = sectors};
+    size_t expected = (size_t)sectors * PROBE_CD_SECTOR_SIZE;
+    ESP_LOGI(TAG, "CDDA read track=%u lba=%" PRIu32 " sectors=%u bytes=%u",
+             track->number, lba, sectors, (unsigned)expected);
+    command_result_t status = execute_command(ctx, PROBE_READ_CD, expected, &audio, &ctx->result);
+    if (status != COMMAND_PASSED) {
+        if (status == COMMAND_FAILED) {
+            probe_sense_t sense;
+            request_sense(ctx, &sense);
+        }
+        ESP_LOGW(TAG, "CDDA probe stopped; no automatic read retry");
+        return false;
+    }
+    if (ctx->result.size != expected) {
+        ESP_LOGE(TAG, "CDDA incomplete reply expected=%u relevant=%u; probe stopped",
+                 (unsigned)expected, (unsigned)ctx->result.size);
+        return false;
+    }
+    return true;
+}
+
+static bool audio_digest(probe_context_t *ctx, size_t size, uint8_t digest[32])
+{
+    if (mbedtls_sha256(ctx->result.data, size, digest, 0) != 0) {
+        ESP_LOGE(TAG, "CDDA SHA256 failed; probe stopped");
+        return false;
+    }
+    return true;
+}
+
+static void log_audio_digest(const char *name, const uint8_t digest[32])
+{
+    static const char hex[] = "0123456789abcdef";
+    char text[65];
+    for (size_t i = 0; i < 32; ++i) {
+        text[2 * i] = hex[digest[i] >> 4];
+        text[2 * i + 1] = hex[digest[i] & 15];
+    }
+    text[64] = '\0';
+    ESP_LOGI(TAG, "CDDA %s SHA256=%s", name, text);
+}
+
+static void probe_audio(probe_context_t *ctx)
+{
+    // One bounded attempt per MCU boot. Re-enumeration must never re-arm a failed read.
+    ctx->audio_attempted = true;
+    const probe_track_t *track = NULL;
+    for (size_t i = 0; i < ctx->toc.track_count; ++i) {
+        const probe_track_t *candidate = &ctx->toc.tracks[i];
+        if (!(candidate->control & 0x0c) &&
+            candidate->end_lba - candidate->start_lba >= PROBE_MAX_READ_SECTORS) {
+            track = candidate;
+            break;
+        }
+    }
+    if (!track) {
+        ESP_LOGW(TAG, "CDDA probe skipped: no suitable two-channel audio track");
+        return;
+    }
+    uint32_t lba = track->start_lba;
+    if (track->end_lba - lba >= 150 + PROBE_MAX_READ_SECTORS) {
+        lba += 150; // Avoid the initial two seconds of silence when the track is long enough.
+    }
+    ESP_LOGI(TAG, "CDDA bounded probe start control=0x%02x; PCM bytes never logged", track->control);
+    uint8_t single[32], first[32], chunk[32], repeated[32];
+    if (!read_audio(ctx, track, lba, 1) ||
+        !audio_digest(ctx, PROBE_CD_SECTOR_SIZE, single)) {
+        return;
+    }
+    log_audio_digest("single-sector", single);
+    if (!read_audio(ctx, track, lba, PROBE_MAX_READ_SECTORS) ||
+        !audio_digest(ctx, PROBE_CD_SECTOR_SIZE, first) ||
+        !audio_digest(ctx, ctx->result.size, chunk)) {
+        return;
+    }
+    if (memcmp(single, first, sizeof(single)) != 0) {
+        ESP_LOGE(TAG, "CDDA single-vs-batch mismatch; stop before burst test");
+        return;
+    }
+    if (!read_audio(ctx, track, lba, PROBE_MAX_READ_SECTORS) ||
+        !audio_digest(ctx, ctx->result.size, repeated)) {
+        return;
+    }
+    log_audio_digest("eight-sector", chunk);
+    if (memcmp(chunk, repeated, sizeof(chunk)) != 0) {
+        ESP_LOGE(TAG, "CDDA repeat mismatch; stop before burst test");
+        return;
+    }
+    ESP_LOGI(TAG, "CDDA single-vs-batch=match repeated-eight=match (not independent reference validation)");
+
+    uint32_t next_lba = lba + PROBE_MAX_READ_SECTORS;
+    unsigned batches = (track->end_lba - next_lba) / PROBE_MAX_READ_SECTORS;
+    if (batches > 32) {
+        batches = 32;
+    }
+    if (!batches) {
+        ESP_LOGI(TAG, "CDDA burst skipped: insufficient remaining track sectors");
+        return;
+    }
+    size_t bytes = 0, nonzero = 0;
+    int64_t started = esp_timer_get_time(), longest_us = 0;
+    for (unsigned i = 0; i < batches; ++i) {
+        int64_t command_started = esp_timer_get_time();
+        if (!read_audio(ctx, track, next_lba, PROBE_MAX_READ_SECTORS)) {
+            ESP_LOGW(TAG, "CDDA burst incomplete completed_batches=%u/%u", i, batches);
+            return;
+        }
+        int64_t elapsed = esp_timer_get_time() - command_started;
+        if (elapsed > longest_us) {
+            longest_us = elapsed;
+        }
+        for (size_t j = 0; j < ctx->result.size; ++j) {
+            nonzero += ctx->result.data[j] != 0;
+        }
+        bytes += ctx->result.size;
+        next_lba += PROBE_MAX_READ_SECTORS;
+    }
+    int64_t elapsed_us = esp_timer_get_time() - started;
+    ESP_LOGI(TAG, "CDDA burst complete start_lba=%" PRIu32 " end_lba=%" PRIu32
+             " batches=%u sectors=%u bytes=%u nonzero_bytes=%u elapsed_us=%" PRIi64
+             " bytes_per_sec=%" PRIi64 " longest_read_us=%" PRIi64,
+             lba + PROBE_MAX_READ_SECTORS, next_lba, batches, batches * PROBE_MAX_READ_SECTORS,
+             (unsigned)bytes, (unsigned)nonzero, elapsed_us,
+             elapsed_us > 0 ? (int64_t)bytes * 1000000 / elapsed_us : 0, longest_us);
+    ESP_LOGI(TAG, "CDDA bounded probe complete; short burst includes logging, no PCM/reference/I2S qualification");
+    ESP_LOGI(TAG, "main task stack minimum free=%u bytes", (unsigned)uxTaskGetStackHighWaterMark(NULL));
+}
+
 static void poll_ready(probe_context_t *ctx)
 {
-    command_data_t result;
-    command_result_t status = execute_command(ctx, PROBE_TEST_UNIT_READY, probe_data_size(PROBE_TEST_UNIT_READY), &result);
+    command_data_t *result = &ctx->result;
+    command_result_t status = execute_command(ctx, PROBE_TEST_UNIT_READY, probe_data_size(PROBE_TEST_UNIT_READY), NULL, result);
     if (status == COMMAND_PASSED) {
-        ESP_LOGI(TAG, "medium ready (PCM audio not tested)");
+        ESP_LOGI(TAG, "medium ready (not playback verification)");
         if (!ctx->toc_valid && ctx->toc_attempts < 3) {
             read_toc(ctx);
             if (!ctx->toc_valid && ctx->toc_attempts == 3) {
                 ESP_LOGW(TAG, "TOC attempts exhausted; wait for medium-state change or reconnect");
             }
+        }
+        if (CDDA_PROBE_ENABLED && ctx->toc_valid && !ctx->faulted && !ctx->audio_attempted) {
+            probe_audio(ctx);
         }
     } else if (status == COMMAND_FAILED) {
         ctx->toc_valid = false;
@@ -521,10 +682,11 @@ static void host_daemon(void *arg)
 void discora_usb_probe_run(void)
 {
     const esp_app_desc_t *app = esp_app_get_description();
-    ESP_LOGI(TAG, "Discora M2 TOC read-only probe version=%s IDF=%s", app->version, app->idf_ver);
+    ESP_LOGI(TAG, "Discora M2 CD-DA read-only probe version=%s IDF=%s", app->version, app->idf_ver);
     ESP_LOGI(TAG, "Application ELF SHA256:");
     ESP_LOG_BUFFER_HEX_LEVEL(TAG, app->app_elf_sha256, sizeof(app->app_elf_sha256), ESP_LOG_INFO);
-    ESP_LOGI(TAG, "Only INQUIRY / TEST UNIT READY / REQUEST SENSE / READ TOC; no media writes or eject");
+    ESP_LOGI(TAG, "Only INQUIRY / TEST UNIT READY / REQUEST SENSE / READ TOC / bounded READ CD; no media writes or eject");
+    ESP_LOGI(TAG, "CDDA probe enabled=%u; max once per MCU boot, reconnect does not re-arm", CDDA_PROBE_ENABLED);
     ESP_LOGW(TAG, "Native USB PHY is now Host; use independent UART0 for logs. External 5V VBUS required.");
     const usb_host_config_t host_config = {
         .skip_phy_setup = false,
@@ -537,7 +699,8 @@ void discora_usb_probe_run(void)
         return;
     }
 
-    probe_context_t ctx = {0};
+    // Replies can be 18,816 bytes; keep them off the task stack, in internal DRAM.
+    static probe_context_t ctx;
     const usb_host_client_config_t client_config = {
         .is_synchronous = false,
         .max_num_event_msg = 16,

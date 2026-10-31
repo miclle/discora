@@ -1,0 +1,13 @@
+menu "Discora bench probes"
+
+config DISCORA_CDDA_PROBE
+    bool "Run one bounded READ CD probe per MCU boot"
+    default n
+    help
+        Experimental, read-only CD-DA probe: requires a validated audio TOC.
+        Reads 1 sector, 8 sectors twice, then at most 32 batches of 8 sectors.
+        A reconnect or medium-state change does not re-arm the probe.
+        Leave disabled until the bridge and power path have been checked.
+        No audio bytes are logged or written to flash.
+
+endmenu

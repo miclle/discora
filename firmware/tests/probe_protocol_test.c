@@ -84,6 +84,44 @@ static void test_cbw(void)
     assert(!probe_make_cbw(PROBE_READ_TOC, 6, 0, 805, cbw));
 }
 
+static void test_read_cd(void)
+{
+    uint8_t cbw[PROBE_CBW_SIZE];
+    probe_track_t track = {.number = 1, .start_lba = 0x1234560, .end_lba = 0x1234580};
+    assert(probe_make_read_cd_cbw(6, 0x12345678, &track, 0x1234567, 8, cbw));
+    const uint8_t expected[PROBE_CBW_SIZE] = {
+        0x55, 0x53, 0x42, 0x43, 0x78, 0x56, 0x34, 0x12,
+        0x80, 0x49, 0, 0, 0x80, 0, 12,
+        0xbe, 4, 1, 0x23, 0x45, 0x67, 0, 0, 8, 0x10, 0, 0, 0, 0, 0, 0,
+    };
+    assert(memcmp(cbw, expected, sizeof(cbw)) == 0);
+    assert(probe_make_read_cd_cbw(2, 1, &track, track.end_lba - 1, 1, cbw));
+    assert(cbw[8] == 0x30 && cbw[9] == 9 && cbw[14] == 12);
+    assert(probe_make_read_cd_cbw(5, 1, &track, track.end_lba - 8, 8, cbw));
+    assert(!probe_make_read_cd_cbw(4, 1, &track, track.start_lba, 1, cbw));
+    assert(!probe_make_read_cd_cbw(6, 1, NULL, 0, 1, cbw));
+    assert(!probe_make_read_cd_cbw(6, 1, &track, track.start_lba, 1, NULL));
+    assert(!probe_make_read_cd_cbw(6, 1, &track, track.start_lba - 1, 1, cbw));
+    assert(!probe_make_read_cd_cbw(6, 1, &track, track.end_lba, 1, cbw));
+    assert(!probe_make_read_cd_cbw(6, 1, &track, UINT32_MAX, 1, cbw));
+    assert(!probe_make_read_cd_cbw(6, 1, &track, track.end_lba - 1, 2, cbw));
+    assert(!probe_make_read_cd_cbw(6, 1, &track, track.start_lba, 0, cbw));
+    assert(!probe_make_read_cd_cbw(6, 1, &track, track.start_lba, 9, cbw));
+    assert(!probe_make_cbw(PROBE_READ_CD, 6, 1, 2352, cbw)); // Track guard is mandatory.
+    track.control = 4;
+    assert(!probe_make_read_cd_cbw(6, 1, &track, track.start_lba, 1, cbw));
+    track.control = 0;
+    track.number = 0;
+    assert(!probe_make_read_cd_cbw(6, 1, &track, track.start_lba, 1, cbw));
+    track.number = 100;
+    assert(!probe_make_read_cd_cbw(6, 1, &track, track.start_lba, 1, cbw));
+    track.number = 1;
+    track.end_lba = track.start_lba;
+    assert(!probe_make_read_cd_cbw(6, 1, &track, track.start_lba, 1, cbw));
+    track.end_lba = UINT32_MAX;
+    assert(!probe_make_read_cd_cbw(6, 1, &track, track.start_lba, 1, cbw));
+}
+
 static void test_toc(void)
 {
     const uint8_t toc[] = {
@@ -130,7 +168,7 @@ static void test_toc(void)
     assert(!probe_parse_toc(excess, sizeof(excess), &parsed));
 
     // Maximum CD TOC: 99 tracks plus lead-out; preserve data / audio control bits.
-    uint8_t maximum[PROBE_MAX_DATA] = {0};
+    uint8_t maximum[PROBE_MAX_TOC_DATA] = {0};
     maximum[0] = (sizeof(maximum) - 2) >> 8;
     maximum[1] = (sizeof(maximum) - 2) & 0xff;
     maximum[2] = 1;
@@ -264,6 +302,7 @@ int main(void)
     test_csw();
     test_responses();
     test_toc();
+    test_read_cd();
     test_parser_bounds();
     puts("PASS: protocol fixtures, malformed responses and 10000 bounds cases (not hardware tests)");
     return 0;

@@ -20,3 +20,7 @@
 - UJ-898 / HC10 + `13fd:0840` 在单张音乐 CD 上返回有效 116 字节目录，13 条音频轨；[实验记录](../records/2026-10-31-m2-toc.md)。
 - 不覆盖 raw TOC、PMA、ATIP、CD-TEXT、负 LBA、复杂多会话；未确认解析的目录不继续读取音频。READ CD 仍未实现。
 - 依据：T10 MMC-4 rev 5a §6.30、Table 435 / 438（[T10 文档镜像](https://www.13thmonkey.org/documentation/SCSI/mmc4r05a.pdf)）。仅按标准独立实现，未引入第三方源码。
+
+## 后续扩展
+
+以上为 TOC 阶段快照。后续 READ CD 的受限入口、默认关闭开关和每次启动一次的实验策略见 [ADR-0004](0004-bounded-cdda-probe.md)，不以新实现覆盖本阶段的未测边界。

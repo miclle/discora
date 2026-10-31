@@ -6,7 +6,7 @@
 | --- | --- | --- | --- |
 | M0 | ESP-IDF 工程 + Linux 侧光驱预验证 | IN PROGRESS | 初始化 CI 已通过；仍需串口启动、保存 USB 描述符/TOC/CD-DA 提取结果 |
 | M1 | ESP32-S3 USB Host + MSC BOT | IN PROGRESS | 已实测 UJ-898 枚举、INQUIRY / TUR / sense 和 61.2 秒连续就绪；长时稳定、受控插拔/冷启动及异常恢复仍待验收 |
-| M2 | SCSI/MMC CD-DA 读取 | IN PROGRESS | READ TOC 已在单张 CD 实测；READ CD 数据校验、连续吞吐仍待测 |
+| M2 | SCSI/MMC CD-DA 读取 | IN PROGRESS | TOC 与电脑一致，READ CD 单/8 扇区摘要一致及 256 扇区短突发已实测；长时读取/寻道仍待测 |
 | M3 | I²S 立体声播放 | TODO | DAC L/R 正确、完整音轨和整张盘稳定播放 |
 | M4 | CD-R/RW 刻录可行性 | TODO | 通过最低写速/吞吐/桥接兼容性安全门槛；成功刻录并校验测试盘 |
 | M5 | 控制界面与硬件集成 | TODO | 按键/编码器、电源管理、BOM、可复现装配 |
@@ -38,3 +38,9 @@ BOOT → USB ENUM → INQUIRY → READ TOC → READ CD
 
 - 用户确认介质为音乐 CD，已实现并烧录 `0.2.0-toc-probe`，在同一 UJ-898 / HC10 + `13fd:0840` 桥接器上读出 13 条音频轨和 lead-out；[实测记录](records/2026-10-31-m2-toc.md)。
 - 当前只读取目录，尚无 PCM 扇区或 I²S 输出。下一步为受限 READ CD 小段读取、长度和参考数据核对，再测连续吞吐。M1 的受控插拔、冷启动与故障恢复验收仍开放。
+
+## 2026-10-31：M2 小段音频及参考对照
+
+- 已实现默认关闭、每次启动最多一次的 READ CD 实验；35 条命令读取总计 273 扇区（含重复区间），单扇区/8 扇区与 macOS 参考 SHA-256 一致。
+- 256 扇区连续短突发为 739,858 bytes/s；首次单扇区读取需要 3.633 秒。修正音频数据截止时间为 30 秒，保留首次 USB 错误和过短截止时间导致的失败窗口。
+- M2 仍需长时持续读取、跨轨寻道、参考 offset/内容覆盖；M3 环形缓冲与 I²S 尚未实现。详情见 [READ CD 记录](records/2026-10-31-m2-cdda.md)。
