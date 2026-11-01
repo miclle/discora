@@ -46,6 +46,17 @@ def main():
             ], check=True,
         )
         subprocess.run([str(audio)], check=True)
+        recovery = Path(temp) / "cdda_recovery_test"
+        subprocess.run(
+            shlex.split(os.environ.get("CC", "cc")) + [
+                "-std=c11", "-Wall", "-Wextra", "-Werror", "-pedantic", "-g",
+                "-fsanitize=address,undefined", "-fno-omit-frame-pointer",
+                "-I", str(firmware / "main"), str(firmware / "main/cdda_recovery.c"),
+                str(firmware / "tests/cdda_recovery_test.c"), "-o", str(recovery),
+            ], check=True,
+        )
+        subprocess.run([str(recovery)], check=True)
+
 
 
 if __name__ == "__main__":
