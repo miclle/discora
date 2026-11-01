@@ -14,4 +14,4 @@ EOF 50 ms 截止移入适配器，重复 EOF 不延长，停止/关闭清除截�
 
 六组 ASan/UBSan 主机检查包括生产 `audio_i2s.c` + 测试专用 IDF 头与函数替身，没有重写适配器控制流程。覆盖引脚拒绝、创建失败、初始化/查询失败清理、删除失败保留句柄、短 preload、enable 失败、部分 write/错误、disable/delete 失败后重试、暂停后重建、短尾块补零及 EOF 截止边界。另用上一提交的播放器核心运行新用例复现失败，再以当前核心通过。
 
-本地 `.local/bench/2026-11-01-m3-player-tail/` 保存 `before-fix-test.log`、`host-tests.log`、三配置 set-target/build 日志、配置与源码快照/摘要。默认查询、CD 软件时钟、CD I²S 都独立构建；没有把编译或替身结果记为硬件通过。
+本地 `.local/bench/2026-11-01-m3-player-tail/` 保存 `before-fix-test.log`、`host-tests.log`、四配置 set-target/build 日志、配置与源码快照/摘要。默认查询、CD 软件时钟、CD I²S、独立测试音都独立构建；没有把编译或替身结果记为硬件通过。
