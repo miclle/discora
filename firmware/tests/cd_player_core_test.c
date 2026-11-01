@@ -28,14 +28,17 @@ int main(void)
 {
     cd_player_read_t r, old, newer;
     init(); assert(!cd_player_request(&p,&r) && cd_player_play(&p));
-    size_t delivered=0;
+    // 17 sectors produces a 1176-byte final output block (18 sectors did not).
+    p.toc.tracks[0].end_lba=17;
+    size_t delivered=0, tail=0;
     for (unsigned guard=0; guard<100 && p.audio.state!=AUDIO_STOPPED; ++guard) {
-        if (cd_player_request(&p,&r)) { assert(r.lba+r.sectors<=18); complete(&r); }
+        if (cd_player_request(&p,&r)) { assert(r.lba+r.sectors<=17); complete(&r); }
         size_t n=cd_player_take(&p,out,1764);
         for (size_t i=0;i<n;++i) assert(out[i]==(uint8_t)((delivered+i)%251));
-        delivered+=n;
+        delivered+=n; if (n) tail=n;
     }
-    assert(delivered==18*PROBE_CD_SECTOR_SIZE && p.eof && p.audio.state==AUDIO_STOPPED && p.audio.underruns==0);
+    assert(delivered==17*PROBE_CD_SECTOR_SIZE && p.eof && p.audio.state==AUDIO_STOPPED && p.audio.underruns==0);
+    assert(tail==1176 && !cd_player_request(&p,&r));
     assert(cd_player_play(&p) && p.next_lba==0);
     assert(cd_player_request(&p,&old));
     assert(cd_player_select(&p,3) && cd_player_request(&p,&newer));
