@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include "esp_log.h"
 #include "esp_timer.h"
+#include "esp_system.h"
 #if defined(CONFIG_DISCORA_CD_PLAYER_VERIFY)
 #include "mbedtls/sha256.h"
 #endif
@@ -106,6 +107,9 @@ static void status(void)
     bool media = player.media, eof = player.eof, pending = player.pending;
     unsigned track = media ? player.toc.tracks[player.index].number : 0;
     xSemaphoreGive(lock);
+    ESP_LOGI(TAG,"resources heap_free=%lu heap_min=%lu output_stack_min=%u",
+             (unsigned long)esp_get_free_heap_size(), (unsigned long)esp_get_minimum_free_heap_size(),
+             (unsigned)uxTaskGetStackHighWaterMark(NULL));
     ESP_LOGI(TAG, "state=%s sink=%s media=%u track=%u generation=%" PRIu32 " queued=%u delivered=%" PRIu64
              " next_lba=%" PRIu32 " eof=%u pending=%u reads=%" PRIu32 " stale=%" PRIu32 " underruns=%" PRIu32,
              audio_state_name(state), sink, media, track, gen, (unsigned)queued, bytes, lba, eof, pending, reads, stale, underruns);
