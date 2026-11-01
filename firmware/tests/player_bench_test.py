@@ -170,5 +170,48 @@ class I2SEOFTests(unittest.TestCase):
             session.command("status")
 
 
+class SequenceTrace(bench.Bench):
+    def __init__(self, omit_advance=False):
+        super().__init__(None, io.BytesIO(), {"actions": []}, 5)
+        self.started = self.emitted = False
+        self.omit_advance = omit_advance
+        self.commands = []
+        self.lines = ["usb_probe: TOC validated first=1 last=3 tracks=3 lead_out_lba=54"] + [
+            f"usb_probe: TOC track={i} type=audio start_lba={(i-1)*18} end_lba={i*18}" for i in range(1,4)]
+
+    def command(self, command, accepted=True):
+        self.commands.append(command)
+        if command == "play-disc": self.started = True
+        return {"state": "prefill" if self.started and not self.emitted else "stopped",
+                "continuous": "1" if self.started and not self.emitted else "0", "eof": "1" if self.emitted else "0",
+                "track": "3" if self.emitted else "2", "generation": "11" if self.emitted else "10",
+                "delivered": "42336" if self.emitted else "0", "queued": "0", "reads": "6", "underruns": "0"}
+
+    def pump(self, seconds):
+        if not self.started or self.emitted: return
+        self.emitted = True
+        for track, gen in [(2,10),(3,11)]:
+            self.lines += [f"cd_player: verify EOF generation={gen} produced=42336 consumed=42336 expected=42336 tail=1764 match=1",
+                "cd_player: verify source_sha256=" + "ab"*32 + " consumed_sha256=" + "ab"*32,
+                f"cd_player: state=stopped eof=1 generation={gen} track={track} underruns=0"]
+            if track == 2 and not self.omit_advance:
+                self.lines.append("cd_player: sequence advance from=2 to=3 generation=11")
+        self.lines.append("cd_player: sequence complete from=3 to=3 generation=11")
+
+
+class SequenceTests(unittest.TestCase):
+    def test_one_start_without_host_navigation(self):
+        session = SequenceTrace()
+        session.sequence(2)
+        after_start = session.commands[session.commands.index("play-disc")+1:]
+        self.assertTrue(after_start and all(c == "status" for c in after_start))
+        self.assertEqual(len(session.report["tracks"]), 2)
+        self.assertEqual(session.report["final"]["continuous"], "0")
+
+    def test_missing_firmware_advance_rejected(self):
+        with self.assertRaisesRegex(RuntimeError, "automatic track order"):
+            SequenceTrace(True).sequence(2)
+
+
 if __name__ == "__main__":
     unittest.main()

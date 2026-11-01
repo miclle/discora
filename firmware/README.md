@@ -1,6 +1,6 @@
 # Discora firmware
 
-这是 **USB 光驱、CD 控制与独立 I²S 诊断固件**（`0.7.5-eof-report`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，600 秒顺序读取及软件缓冲已与电脑完整摘要一致；寻道仍有失败记录，完整重连/冷启动、I²S 和刻录尚待验收，见 [当前状态](../docs/status.md)。
+这是 **USB 光驱、CD 控制与独立 I²S 诊断固件**（`0.8.0-disc-sequence`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，600 秒顺序读取及软件缓冲已与电脑完整摘要一致；寻道仍有失败记录，完整重连/冷启动、I²S 和刻录尚待验收，见 [当前状态](../docs/status.md)。
 
 ## 构建
 
@@ -126,7 +126,7 @@ python3 firmware/tests/run_host_tests.py
 
 ## CD 源与音频控制层接入
 
-默认关闭的 CD player 模式把真实 READ CD 接入已有音频状态机；上电 stopped，由 UART 控制 play / pause / stop / next / prev / track N。USB 和输出任务分开，停止/换轨的旧代次回复拒绝入队。软件时钟模式已完成 13 轨整盘 / EOF、10 轮控制及受控欠载/源故障，I²S 适配器完成离线检查、构建和空载首轨测试，未连接 DAC；见 [使用说明](../docs/cd-player.md)、[设计边界](../docs/decisions/0008-cd-player-control.md) 与 [实测](../docs/records/2026-11-01-m3-cd-player.md)。
+默认关闭的 CD player 模式把真实 READ CD 接入已有音频状态机；上电 stopped，由 UART 控制 play / play-disc / pause / stop / next / prev / track N。USB 和输出任务分开，停止/换轨的旧代次回复拒绝入队。软件时钟模式已完成 13 轨整盘 / EOF、10 轮控制及受控欠载/源故障，I²S 适配器完成离线检查、构建和空载首轨测试，未连接 DAC；见 [使用说明](../docs/cd-player.md)、[设计边界](../docs/decisions/0008-cd-player-control.md) 与 [实测](../docs/records/2026-11-01-m3-cd-player.md)。
 
 ## 可复用 bench 工具
 
@@ -141,3 +141,5 @@ USB 等待/取消编排由生产 Host 和主机测试共享；长等待、迟到
 CI 现在分别构建默认查询、独立测试音、CD 软件时钟、CD I²S、故障注入五种 profile；每个 job 使用独立 build-ci / sdkconfig.ci，禁用 fail-fast 以保留全部配置结果。本地 v5.4 五配置已通过，不代表已触发远端 CI。
 
 单张 CD 的 13 轨整盘软件时钟实测完成 594221040 字节，各轨两端摘要一致、零欠载；详细版本、范围和恢复证据见 [整盘记录](../docs/records/2026-11-01-m3-whole-disc.md)。没有新增电脑端整盘参考，也不代表整盘 I²S / DAC 输出通过。
+
+0.8.0 的 `play-disc` 显式从当前轨起点连续播放至盘尾，上一轨关闭后 MCU 自行切换，末轨不循环。普通 play 仍为单轨；停止、手动换轨和错误取消连续模式。语义与验收见 [连续播放决策](../docs/decisions/0009-explicit-disc-sequence.md)。

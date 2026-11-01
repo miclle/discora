@@ -17,14 +17,19 @@ bool cd_player_init(cd_player_core_t *p, uint8_t *storage, size_t capacity, size
 void cd_player_stop(cd_player_core_t *p)
 {
     audio_core_stop(&p->audio);
-    p->pending = p->eof = false;
+    p->pending = p->eof = p->continuous = false;
     if (p->media) p->next_lba = p->toc.tracks[p->index].start_lba;
+}
+void cd_player_fault(cd_player_core_t *p)
+{
+    p->continuous = false;
+    audio_core_fault(&p->audio);
 }
 void cd_player_lost(cd_player_core_t *p)
 {
     cd_player_stop(p);
     p->media = false;
-    audio_core_fault(&p->audio);
+    cd_player_fault(p);
 }
 static void select_index(cd_player_core_t *p, size_t index)
 {
@@ -65,13 +70,46 @@ bool cd_player_step(cd_player_core_t *p, int direction)
 bool cd_player_play(cd_player_core_t *p)
 {
     if (!p->media || p->audio.state == AUDIO_FAULT) return false;
+    if (p->continuous && p->eof && !p->audio.pcm.used && p->audio.state == AUDIO_PAUSED) {
+        // Re-enter take(0) so the owner can finish verification before advancing.
+        p->audio.state = AUDIO_PLAYING;
+        return true;
+    }
     if (p->eof && !p->audio.pcm.used) select_index(p, p->index);
     bool ok = audio_core_play(&p->audio);
     // EOF has no producer left to reach the normal prefill threshold.
     if (ok && p->eof && p->audio.pcm.used) p->audio.state = AUDIO_PLAYING;
     return ok;
 }
-bool cd_player_pause(cd_player_core_t *p) { return audio_core_pause(&p->audio); }
+bool cd_player_play_disc(cd_player_core_t *p)
+{
+    if (!p->media || p->audio.state == AUDIO_FAULT) return false;
+    select_index(p, p->index);
+    p->continuous = audio_core_play(&p->audio);
+    return p->continuous;
+}
+bool cd_player_advance(cd_player_core_t *p)
+{
+    if (!p->continuous || !p->media || !p->eof || p->pending || p->audio.pcm.used ||
+        p->audio.state != AUDIO_STOPPED) return false;
+    for (size_t i=p->index+1; i<p->toc.track_count; ++i) {
+        if (eligible(&p->toc.tracks[i])) {
+            select_index(p,i);
+            p->continuous = audio_core_play(&p->audio);
+            return p->continuous;
+        }
+    }
+    p->continuous = false; // Last eligible track: retain its EOF counters, never wrap.
+    return false;
+}
+bool cd_player_pause(cd_player_core_t *p)
+{
+    if (p->continuous && p->eof && p->audio.state == AUDIO_STOPPED) {
+        p->audio.state = AUDIO_PAUSED; // Also allow pause during the owner's EOF drain.
+        return true;
+    }
+    return audio_core_pause(&p->audio);
+}
 bool cd_player_request(cd_player_core_t *p, cd_player_read_t *out)
 {
     if (!p->media || p->pending || p->eof ||
@@ -96,7 +134,7 @@ bool cd_player_complete(cd_player_core_t *p, const cd_player_read_t *r,
     p->pending = false;
     if (!ok || !data || size != (size_t)p->request.sectors * PROBE_CD_SECTOR_SIZE ||
         !audio_core_push(&p->audio, r->generation, data, size)) {
-        audio_core_fault(&p->audio);
+        cd_player_fault(p);
         return false;
     }
     ++p->completed_reads;
@@ -110,5 +148,7 @@ size_t cd_player_take(cd_player_core_t *p, uint8_t *data, size_t wanted)
     if (p->audio.state != AUDIO_PLAYING) return 0;
     if (p->eof && !p->audio.pcm.used) { p->audio.state = AUDIO_STOPPED; return 0; }
     if (p->eof && wanted > p->audio.pcm.used) wanted = p->audio.pcm.used;
-    return audio_core_take(&p->audio, data, wanted) ? wanted : 0;
+    bool ok = audio_core_take(&p->audio, data, wanted);
+    if (p->audio.state == AUDIO_UNDERRUN || p->audio.state == AUDIO_FAULT) p->continuous = false;
+    return ok ? wanted : 0;
 }

@@ -63,7 +63,7 @@ static struct {
     uint32_t generation;
     uint64_t produced, delivered;
     size_t tail;
-    bool initialized, valid, finished;
+    bool initialized, valid, finished, matched;
 } verify;
 static void verify_generation(void)
 {
@@ -98,6 +98,7 @@ static void verify_take(const uint8_t *data, size_t size)
         audio_report(TAG,"verify EOF generation=%" PRIu32 " produced=%" PRIu64 " consumed=%" PRIu64 " expected=%" PRIu64 " tail=%u match=%u",
                  verify.generation, verify.produced, verify.delivered, expected, (unsigned)verify.tail, match);
         audio_report(TAG,"verify source_sha256=%s consumed_sha256=%s scope=software-queue",ah,bh);
+        verify.matched = match;
         verify.finished = true;
     }
 }
@@ -130,7 +131,7 @@ static bool close_output(void)
     if (err != ESP_OK) {
         ESP_LOGE(TAG, "output close failed=%s; handle retained", esp_err_to_name(err));
         xSemaphoreTake(lock, portMAX_DELAY);
-        audio_core_fault(&player.audio);
+        cd_player_fault(&player);
         xSemaphoreGive(lock);
         return false;
     }
@@ -152,15 +153,15 @@ static void status(void)
     uint32_t lba = player.next_lba, reads = player.completed_reads, stale = player.stale_completions;
     size_t queued = player.audio.pcm.used;
     uint64_t bytes = player.audio.dequeued_bytes;
-    bool media = player.media, eof = player.eof, pending = player.pending;
+    bool media = player.media, eof = player.eof, pending = player.pending, continuous = player.continuous;
     unsigned track = media ? player.toc.tracks[player.index].number : 0;
     xSemaphoreGive(lock);
     audio_report(TAG,"resources heap_free=%lu heap_min=%lu output_stack_min=%u report_dropped=%" PRIu32,
              (unsigned long)esp_get_free_heap_size(), (unsigned long)esp_get_minimum_free_heap_size(),
              (unsigned)uxTaskGetStackHighWaterMark(NULL), audio_report_dropped());
     audio_report(TAG, "state=%s sink=%s media=%u track=%u generation=%" PRIu32 " queued=%u delivered=%" PRIu64
-             " next_lba=%" PRIu32 " eof=%u pending=%u reads=%" PRIu32 " stale=%" PRIu32 " underruns=%" PRIu32,
-             audio_state_name(state), sink, media, track, gen, (unsigned)queued, bytes, lba, eof, pending, reads, stale, underruns);
+             " next_lba=%" PRIu32 " eof=%u pending=%u reads=%" PRIu32 " stale=%" PRIu32 " underruns=%" PRIu32 " continuous=%u",
+             audio_state_name(state), sink, media, track, gen, (unsigned)queued, bytes, lba, eof, pending, reads, stale, underruns, continuous);
 }
 static void command(const char *line)
 {
@@ -169,12 +170,12 @@ static void command(const char *line)
 #endif
     if (!strcmp(line, "status")) { status(); return; }
     if (!strcmp(line, "help")) {
-        ESP_LOGI(TAG, "commands: play pause stop next prev track N status help; track/next/prev start selected track; EOF stops");
+        ESP_LOGI(TAG, "commands: play play-disc pause stop next prev track N status help; play-disc starts current track through disc end");
         return;
     }
     unsigned track = 0; char extra;
     bool select = sscanf(line, "track %u %c", &track, &extra) == 1 && track >= 1 && track <= 99;
-    bool known = select || !strcmp(line,"play") || !strcmp(line,"pause") || !strcmp(line,"stop") ||
+    bool known = select || !strcmp(line,"play-disc") || !strcmp(line,"play") || !strcmp(line,"pause") || !strcmp(line,"stop") ||
                  !strcmp(line,"next") || !strcmp(line,"prev");
     if (!known) { ESP_LOGW(TAG,"unknown command; use help"); return; }
     // Only this task owns output; reject invalid commands without discarding DMA.
@@ -182,6 +183,7 @@ static void command(const char *line)
     bool ok = true;
     if (select) ok = cd_player_select(&player, track);
     else if (!strcmp(line,"play")) ok = cd_player_play(&player);
+    else if (!strcmp(line,"play-disc")) ok = cd_player_play_disc(&player);
     else if (!strcmp(line,"pause")) ok = cd_player_pause(&player);
     else if (!strcmp(line,"stop")) cd_player_stop(&player);
     else ok = cd_player_step(&player, !strcmp(line,"next") ? 1 : -1);
@@ -206,6 +208,28 @@ static void poll_commands(void)
         else if (!discard) line[used++] = c;
     }
 }
+static void advance_sequence(void)
+{
+    // Called only by output owner, after any EOF drain and successful channel deletion.
+    if (running) return;
+    xSemaphoreTake(lock, portMAX_DELAY);
+    bool ready = player.continuous && player.media && player.eof && !player.pending &&
+                 !player.audio.pcm.used && player.audio.state == AUDIO_STOPPED;
+    if (!ready) { xSemaphoreGive(lock); return; }
+#if defined(CONFIG_DISCORA_CD_PLAYER_VERIFY)
+    if (!verify.finished || !verify.matched || verify.generation != player.audio.generation) {
+        cd_player_fault(&player); xSemaphoreGive(lock);
+        audio_report(TAG,"sequence stopped: EOF verification failed"); return;
+    }
+#endif
+    unsigned from = player.toc.tracks[player.index].number;
+    bool advanced = cd_player_advance(&player);
+    unsigned to = player.toc.tracks[player.index].number;
+    uint32_t generation = player.audio.generation;
+    xSemaphoreGive(lock);
+    audio_report(TAG,"sequence %s from=%u to=%u generation=%" PRIu32,
+                 advanced ? "advance" : "complete",from,to,generation);
+}
 static void output_task(void *arg)
 {
     (void)arg;
@@ -223,7 +247,11 @@ static void output_task(void *arg)
         if (state == AUDIO_STOPPED && audio_i2s_draining(&output, esp_timer_get_time())) { vTaskDelay(1); continue; }
 #endif
         if (state != AUDIO_PLAYING) {
-            if (running) { close_output(); status(); }
+            if (running) {
+                if (!close_output()) { status(); vTaskDelay(1); continue; }
+                status();
+            }
+            advance_sequence();
             vTaskDelay(1); continue;
         }
         if (!running) next_tick = esp_timer_get_time() + 10000;
@@ -267,7 +295,7 @@ static void output_task(void *arg)
         if (err != ESP_OK) {
             ESP_LOGE(TAG,"output error=%s; explicit stop required",esp_err_to_name(err));
             close_output();
-            xSemaphoreTake(lock, portMAX_DELAY); audio_core_fault(&player.audio); xSemaphoreGive(lock);
+            xSemaphoreTake(lock, portMAX_DELAY); cd_player_fault(&player); xSemaphoreGive(lock);
             status(); continue;
         }
         if (last_pcm) {
@@ -290,7 +318,7 @@ bool discora_cd_player_start(void)
         xTaskCreate(output_task,"cd_output",6144,NULL,3,NULL) != pdPASS) {
         vSemaphoreDelete(lock); lock = NULL; return false;
     }
-    ESP_LOGI(TAG,"CD player boot=stopped sink=%s; UART0 controls; no automatic READ CD; one track then stop",sink);
+    ESP_LOGI(TAG,"CD player boot=stopped sink=%s; UART0 controls; no automatic READ CD; play is single-track, play-disc is explicit",sink);
     return true;
 }
 void discora_cd_player_media(const probe_toc_t *toc)
