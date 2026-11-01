@@ -87,7 +87,7 @@ idf.py -p <DISCORA_UART_PORT> flash monitor
 
 `CONFIG_DISCORA_CDDA_SEEK_WAIT_MS` 默认 0；`CONFIG_DISCORA_CDDA_SEEK_RECOVERY` 默认关闭。恢复要求有效失败 CSW、有效 sense `03/02/00`、连接和 transfer 状态正常、目录有效；预留一次预算后等待 1000 ms 并处理 USB 事件，再用一次 TUR 确认就绪，才重放相同 READ CD。断连、传输故障、就绪失败或其它 sense 都不会触发读取重放，重连不重新给予预算。该预算由所有 READ CD 阶段共享。
 
-日志保留首次失败和 `recovery_reserved` / `recovered`，不能把恢复后完成当作首次无失败通过。先等待再读取的耗时分开记录，预等待不计入 read 延迟。主机测试只覆盖准入判断，实际等待/恢复及最终上板状态见 [实验记录](../docs/records/2026-11-01-m2-seek-recovery.md)，策略边界见 [ADR-0007](../docs/decisions/0007-bounded-seek-recovery.md)。
+日志保留首次失败和 `recovery_reserved` / `recovered`，不能把恢复后完成当作首次无失败通过。先等待再读取的耗时分开记录，预等待不计入 read 延迟。主机测试覆盖准入和共享恢复编排，真实等待/恢复及阶段上板状态见 [实验记录](../docs/records/2026-11-01-m2-seek-recovery.md)，策略边界见 [ADR-0007](../docs/decisions/0007-bounded-seek-recovery.md)。
 
 ## 不连接设备的协议检查
 
@@ -105,7 +105,7 @@ python3 firmware/tests/run_host_tests.py
 
 上电为 stopped。通过 COM / UART0 115200 发送回车结束的 `left`、`right`、`stereo`、`silence`、`play`、`pause`、`stop`、`status`、`help`。数据为明确标记的合成 PCM，不是光驱响应；没有自动出声。默认 GPIO4 / 5 / 6 分别为 BCLK / LRCK / DATA，目标 44.1 kHz、16-bit stereo、Philips I²S，无 MCLK 输出。
 
-暂停保留尚未提交的软件队列，并关闭/重建 DMA；最多约 40 ms 已排队 DMA 数据会被丢弃，不是采样级无损暂停。CD-DA 源、精确播放位置、EOF drain 和硬件 DMA 欠载计数尚未接入。接线与验收见 [音频输出草案](../docs/audio-output.md)；源码、离线测试及构建证据见 [M3 准备记录](../docs/records/2026-10-31-m3-audio-prep.md)。独立 I²S 模式仍未烧录验收。
+暂停保留尚未提交的软件队列，并关闭/重建 DMA；最多约 40 ms 已排队 DMA 数据会被丢弃，不是采样级无损暂停。该独立诊断不使用 CD-DA 源；精确播放位置和硬件 DMA 欠载计数尚未实现。接线与验收见 [音频输出草案](../docs/audio-output.md)；源码、离线测试及构建证据见 [M3 准备记录](../docs/records/2026-10-31-m3-audio-prep.md)。独立 I²S 模式仍未烧录验收。
 
 ## 当前模块
 
@@ -123,4 +123,10 @@ python3 firmware/tests/run_host_tests.py
 
 ## CD 源与音频控制层接入
 
-默认关闭的 CD player 模式把真实 READ CD 接入已有音频状态机；上电 stopped，由 UART 控制 play / pause / stop / next / prev / track N。USB 和输出任务分开，停止/换轨的旧代次回复拒绝入队。软件时钟模式已完成控制及 60.47 秒 1× 连续消费，I²S 模式仅构建；见 [使用说明](../docs/cd-player.md)、[设计边界](../docs/decisions/0008-cd-player-control.md) 与 [实测](../docs/records/2026-11-01-m3-cd-player.md)。
+默认关闭的 CD player 模式把真实 READ CD 接入已有音频状态机；上电 stopped，由 UART 控制 play / pause / stop / next / prev / track N。USB 和输出任务分开，停止/换轨的旧代次回复拒绝入队。软件时钟模式已完成完整首轨 / EOF、10 轮控制及受控欠载/源故障，I²S 适配器完成离线检查及构建；见 [使用说明](../docs/cd-player.md)、[设计边界](../docs/decisions/0008-cd-player-control.md) 与 [实测](../docs/records/2026-11-01-m3-cd-player.md)。
+
+## 可复用 bench 工具
+
+[tools/player_bench.py](tools/player_bench.py) 提供只核对串口身份的 inspect、整轨 EOF、有限轮控制 stress 和一次性 faults 场景。默认不烧录、不主动发送复位脉冲；端口 / VID / PID / 序列号必须一致，输出目录拒绝覆盖，失败也保存报告并释放串口。仅适用于显式部署的 software-clock 播放器；当前板上默认查询固件不能直接运行这些场景。使用和边界见 [工具说明](tools/README.md)。
+
+`python3 firmware/tests/run_host_tests.py` 现在包含六组共享 C 代码的 ASan/UBSan 检查（含 I²S API 替身）；`python3 firmware/tests/player_bench_test.py` 包含串口身份、解析/命令边界、超时与 EOF 报告规则的离线检查，不访问设备。硬件接受情况以 [当前状态](../docs/status.md) 为准。

@@ -17,3 +17,6 @@ Thumbs.db
 *.swp
 *.swo
 *.bak
+
+# Host-side bench tooling bytecode
+/firmware/**/__pycache__/

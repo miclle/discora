@@ -16,6 +16,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Check BOT and SCSI response parsing (ASan / UBSan)
         run: python3 firmware/tests/run_host_tests.py
+      - name: Check bench identity and report rules (offline)
+        run: python3 firmware/tests/player_bench_test.py
 
   build-esp32s3:
     runs-on: ubuntu-latest
