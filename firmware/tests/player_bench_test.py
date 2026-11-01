@@ -132,5 +132,43 @@ class EOFTests(unittest.TestCase):
             session.eof(42336)
 
 
+class I2SEOFTests(unittest.TestCase):
+    def fixture(self):
+        names = ["last_write", "before_verify", "after_verify", "drain_start", "before_close", "closed"]
+        times = [100, 120, 140, 150, 50150, 50170]
+        lines = ["cd_player: eof_trace generation=2 " + " ".join(
+            f"{name}_{k}={v}" for k, v in [("us", times[i]), ("dma", 100+i), ("ovf", 0 if i<4 else 2)])
+            for i, name in enumerate(names)]
+        baseline = {"event_overflows": "0", "pcm_submitted": "0", "opens": "0"}
+        final = {"generation": "2", "event_overflows": "2", "pcm_submitted": "39984", "opens": "1", "closes": "1",
+                 "handle": "0", "tx": "closed", "write_errors": "0", "bad_dma_sizes": "0", "underruns": "0", "report_dropped": "0"}
+        return lines, baseline, final
+
+    def test_drain_overflow_is_preserved(self):
+        lines, before, final = self.fixture()
+        result = bench.i2s_eof_trace(lines, before, final, 39984)
+        self.assertEqual(result["closed_ovf"], "2")
+
+    def test_missing_or_steady_overflow_rejected(self):
+        lines, before, final = self.fixture()
+        for invalid in [lines[:-1], [lines[0].replace("last_write_ovf=0", "last_write_ovf=1")] + lines[1:],
+                        [x.replace("generation=2", "generation=1") for x in lines]]:
+            with self.assertRaises(RuntimeError):
+                bench.i2s_eof_trace(invalid, before, final, 39984)
+        final["pcm_submitted"] = "39980"
+        with self.assertRaises(RuntimeError):
+            bench.i2s_eof_trace(lines, before, final, 39984)
+
+    def test_i2s_requires_explicit_selection_and_counters(self):
+        reply = (b"cd_player: i2s tx=closed handle=0 pcm_submitted=0\n"
+                 b"cd_player: resources report_dropped=0\n"
+                 b"cd_player: state=stopped sink=I2S-unverified generation=2\n")
+        session = bench.Bench(ScriptedSerial(reply), io.BytesIO(), {"actions": []}, 5, "i2s-unloaded")
+        self.assertEqual(session.command("status")["handle"], "0")
+        session.stream.reply = b"cd_player: state=stopped sink=I2S-unverified\n"
+        with self.assertRaisesRegex(RuntimeError, "Missing I2S counters"):
+            session.command("status")
+
+
 if __name__ == "__main__":
     unittest.main()
