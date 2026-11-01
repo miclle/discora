@@ -1,6 +1,6 @@
 # Discora firmware
 
-这是 **USB 光驱与独立 I²S 诊断固件**（`0.5.0-audio-prep`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，256 扇区短突发为 739,858 bytes/s。600 秒顺序读取及软件缓冲已与电脑完整摘要一致；随机寻道、完整重连/冷启动、I²S 和刻录仍未通过或未实现，见 [长时实测](../docs/records/2026-10-31-m2-stream.md)。
+这是 **USB 光驱与独立 I²S 诊断固件**（`0.5.4-seek-offsets`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，600 秒顺序读取及软件缓冲已与电脑完整摘要一致；寻道仍有失败记录，完整重连/冷启动、I²S 和刻录尚待验收，见 [当前状态](../docs/status.md)。
 
 ## 构建
 
@@ -53,7 +53,7 @@ idf.py -p <DISCORA_UART_PORT> flash monitor
 
 ## 长时读取、寻道和缓冲实验
 
-`CONFIG_DISCORA_CDDA_SOAK` 默认关闭，依赖短探测开关；短探测成功才进入扩展阶段。`menuconfig → Discora bench probes` 中可单独选择 12 位置寻道、完整首轨读取，以及 60–1800 秒的软件时钟缓冲测试（默认 600 秒）。每次启动最多一轮，失败后不自动重试；选择未运行的阶段不会获得该阶段验收。
+`CONFIG_DISCORA_CDDA_SOAK` 默认关闭，依赖短探测开关；短探测成功才进入扩展阶段。`menuconfig → Discora bench probes` 中可单独选择 12 位置寻道、完整首轨读取，以及 60–1800 秒的软件时钟缓冲测试（默认 600 秒）。每次启动最多一轮，默认失败后不自动重试；0.5.2 增加单独选择的单次恢复实验，见下文。选择未运行的阶段不会获得该阶段验收。
 
 - 寻道：首/末/中间音轨各四个位置，每位置读两次 8 扇区、比较摘要并记录定位耗时。
 - 完整首轨：从 INDEX 01 到排他末地址，按轨道边界拆分 READ CD，记录总字节、耗时、吞吐及全区间摘要。
@@ -65,7 +65,29 @@ idf.py -p <DISCORA_UART_PORT> flash monitor
 
 负向测试开关 `CONFIG_DISCORA_CDDA_UNDERRUN_TEST` 默认关闭：启动消费两秒后计划暂停生产 1200 ms，检查原有欠载/退出路径；negative-control PASS 与正常流 PASS 分开报告。本次在注入前遇到设备离线，未完成欠载验证，见 [负向记录](../docs/records/2026-10-31-m2-underrun.md)。
 
-转接头到货后的 [直连配置](bench/otg-direct.defaults) 已独立构建：寻道和完整首轨开启，软件缓冲 60 秒，负向注入关闭。它不是默认配置，也未完成直连实测；加载 defaults 时须使用独立 sdkconfig，避免已有缓存配置覆盖目标值。
+[直连配置](bench/otg-direct.defaults) 开启寻道和完整首轨、60 秒软件缓冲，负向注入关闭；0.5.0 的直连曾复现末轨命令失败及 sense 超时，见 [实测](../docs/records/2026-11-01-m2-otg-after-pc.md)。加载 defaults 时须使用独立 sdkconfig，避免已有缓存配置覆盖目标值。
+
+## REQUEST SENSE 超时诊断
+
+`0.5.1` 为 REQUEST SENSE 记录 CBW、DATA、CSW 阶段的结果和累计耗时。实验参数 `CONFIG_DISCORA_SENSE_DATA_TIMEOUT_MS` 默认 3000，仅在 CD-DA 实验开启时可配置到 30000；普通默认固件继续使用 3 秒。超时后仍等待 transfer 归还，未归还时隔离，不增加命令重放。
+
+[sense-diagnostic.defaults](bench/sense-diagnostic.defaults) 沿用直连的同一寻道/整轨/缓冲工作负载，仅把 REQUEST SENSE 数据阶段上限设为 30 秒。CBW、CSW、控制传输仍为 3 秒，READ CD 数据阶段仍为 30 秒。这是诊断参数，不是已证实的修复；若未调用 REQUEST SENSE，成功读取不能归因于该参数。
+
+## 有界多轮寻道
+
+0.5.3 增加 `CONFIG_DISCORA_CDDA_SEEK_ROUNDS`（1–20，默认 1）和 `CONFIG_DISCORA_CDDA_SEEK_ONLY`（默认关闭）。[seek-rounds.defaults](bench/seek-rounds.defaults) 在短探测后最多执行 20 轮，每轮 12 个原有位置，每位置两次 8 扇区读取；不开启完整首轨或缓冲阶段，日志明确 `full_track=not_run buffer=not_run`。它不改变只读命令白名单，最多 480 次逻辑读取，另有短探测和全启动共享的至多一次恢复重放。
+
+每个位置开始前检查 600 秒软截止；正在执行的读取仍按原有 USB / SCSI 截止结束。未完成全部位置即退出时记为失败，不把已通过的部分算作整轮完成。首次无法恢复的错误立即停止，重连不重新开始，恢复预算不会随轮次重置。每个位置记录 round / step / track / LBA；保留重复读取摘要和累计最长耗时。无错误时只能证明该工作负载正常路径，不能宣称错误恢复分支通过。
+
+0.5.4 的 [seek-offsets.defaults](bench/seek-offsets.defaults) 额外启用默认关闭的 `CONFIG_DISCORA_CDDA_SEEK_VARY_OFFSET`。首轮保持原位置，后续轮次把轨内起始偏移加上 `997 × (round - 1)`，对有效 8 扇区起点数量 `span - 7` 取模；结果始终在该轨内。其目的是扩大取样范围，不能据此认定已绕过设备缓存。固定位置和变化位置结果见 [多轮记录](../docs/records/2026-11-01-m2-seek-rounds.md)。
+
+## 寻道等待与单次恢复实验
+
+[seek-wait.defaults](bench/seek-wait.defaults) 在 sense 诊断工作负载上增加每个寻道位置之前 1000 ms 的空闲间隔，不发送 SEEK，不重放失败读取。[seek-recovery.defaults](bench/seek-recovery.defaults) 保留这一间隔，再启用每次 MCU 启动最多一次的恢复机会。两个配置均使用 30 秒 sense 数据截止、12 个寻道位置、完整首轨及 60 秒软件缓冲。[seek-recovery-control.defaults](bench/seek-recovery-control.defaults) 仅取消预先间隔，保留相同恢复预算作为对照。各配置须使用独立 sdkconfig。
+
+`CONFIG_DISCORA_CDDA_SEEK_WAIT_MS` 默认 0；`CONFIG_DISCORA_CDDA_SEEK_RECOVERY` 默认关闭。恢复要求有效失败 CSW、有效 sense `03/02/00`、连接和 transfer 状态正常、目录有效；预留一次预算后等待 1000 ms 并处理 USB 事件，再用一次 TUR 确认就绪，才重放相同 READ CD。断连、传输故障、就绪失败或其它 sense 都不会触发读取重放，重连不重新给予预算。该预算由所有 READ CD 阶段共享。
+
+日志保留首次失败和 `recovery_reserved` / `recovered`，不能把恢复后完成当作首次无失败通过。先等待再读取的耗时分开记录，预等待不计入 read 延迟。主机测试只覆盖准入判断，实际等待/恢复及最终上板状态见 [实验记录](../docs/records/2026-11-01-m2-seek-recovery.md)，策略边界见 [ADR-0007](../docs/decisions/0007-bounded-seek-recovery.md)。
 
 ## 不连接设备的协议检查
 
@@ -83,7 +105,7 @@ python3 firmware/tests/run_host_tests.py
 
 上电为 stopped。通过 COM / UART0 115200 发送回车结束的 `left`、`right`、`stereo`、`silence`、`play`、`pause`、`stop`、`status`、`help`。数据为明确标记的合成 PCM，不是光驱响应；没有自动出声。默认 GPIO4 / 5 / 6 分别为 BCLK / LRCK / DATA，目标 44.1 kHz、16-bit stereo、Philips I²S，无 MCLK 输出。
 
-暂停保留尚未提交的软件队列，并关闭/重建 DMA；最多约 40 ms 已排队 DMA 数据会被丢弃，不是采样级无损暂停。CD-DA 源、精确播放位置、EOF drain 和硬件 DMA 欠载计数尚未接入。接线与验收见 [音频输出草案](../docs/audio-output.md)；源码、离线测试及构建证据见 [M3 准备记录](../docs/records/2026-10-31-m3-audio-prep.md)。本轮没有烧录或操作串口/光驱。
+暂停保留尚未提交的软件队列，并关闭/重建 DMA；最多约 40 ms 已排队 DMA 数据会被丢弃，不是采样级无损暂停。CD-DA 源、精确播放位置、EOF drain 和硬件 DMA 欠载计数尚未接入。接线与验收见 [音频输出草案](../docs/audio-output.md)；源码、离线测试及构建证据见 [M3 准备记录](../docs/records/2026-10-31-m3-audio-prep.md)。独立 I²S 模式仍未烧录验收。
 
 ## 当前模块
 
