@@ -33,6 +33,28 @@ static const char *sink = "software-clock-no-I2S";
 static uint32_t output_generation;
 static bool running;
 static int64_t next_tick;
+#if defined(CONFIG_DISCORA_CD_PLAYER_I2S)
+// Owner-task snapshots only; defer their logs until the channel is closed.
+typedef struct { int64_t us; unsigned dma, overflow; } eof_snapshot_t;
+static struct { uint32_t generation; bool active; eof_snapshot_t point[6]; } eof_trace;
+static void eof_mark(unsigned index)
+{
+    eof_trace.point[index] = (eof_snapshot_t){.us=esp_timer_get_time(),
+        .dma=atomic_load_explicit(&output.dma_blocks,memory_order_relaxed),
+        .overflow=atomic_load_explicit(&output.event_overflows,memory_order_relaxed)};
+}
+static void eof_report(void)
+{
+    static const char *names[] = {"last_write", "before_verify", "after_verify", "drain_start", "before_close", "closed"};
+    for (unsigned i=0; i<6; i+=2) {
+        eof_snapshot_t a=eof_trace.point[i], b=eof_trace.point[i+1];
+        audio_report(TAG,"eof_trace generation=%" PRIu32 " %s_us=%" PRId64 " %s_dma=%u %s_ovf=%u %s_us=%" PRId64 " %s_dma=%u %s_ovf=%u",
+            eof_trace.generation,names[i],a.us,names[i],a.dma,names[i],a.overflow,
+            names[i+1],b.us,names[i+1],b.dma,names[i+1],b.overflow);
+    }
+    eof_trace.active=false;
+}
+#endif
 
 #if defined(CONFIG_DISCORA_CD_PLAYER_VERIFY)
 // Verification only: serialized with the PCM queue; never hash stale source replies.
@@ -73,9 +95,9 @@ static void verify_take(const uint8_t *data, size_t size)
         const probe_track_t *t = &player.toc.tracks[player.index];
         uint64_t expected = (uint64_t)(t->end_lba - t->start_lba) * PROBE_CD_SECTOR_SIZE;
         bool match = verify.valid && verify.produced == expected && verify.delivered == expected && !memcmp(a,b,32);
-        ESP_LOGI(TAG,"verify EOF generation=%" PRIu32 " produced=%" PRIu64 " consumed=%" PRIu64 " expected=%" PRIu64 " tail=%u match=%u",
+        audio_report(TAG,"verify EOF generation=%" PRIu32 " produced=%" PRIu64 " consumed=%" PRIu64 " expected=%" PRIu64 " tail=%u match=%u",
                  verify.generation, verify.produced, verify.delivered, expected, (unsigned)verify.tail, match);
-        ESP_LOGI(TAG,"verify source_sha256=%s consumed_sha256=%s scope=software-queue",ah,bh);
+        audio_report(TAG,"verify source_sha256=%s consumed_sha256=%s scope=software-queue",ah,bh);
         verify.finished = true;
     }
 }
@@ -103,6 +125,7 @@ static bool inject_command(const char *line)
 static bool close_output(void)
 {
 #if defined(CONFIG_DISCORA_CD_PLAYER_I2S)
+    if (eof_trace.active) eof_mark(4);
     esp_err_t err = audio_i2s_close(&output);
     if (err != ESP_OK) {
         ESP_LOGE(TAG, "output close failed=%s; handle retained", esp_err_to_name(err));
@@ -111,6 +134,9 @@ static bool close_output(void)
         xSemaphoreGive(lock);
         return false;
     }
+#endif
+#if defined(CONFIG_DISCORA_CD_PLAYER_I2S)
+    if (eof_trace.active) { eof_mark(5); eof_report(); }
 #endif
     running = false;
     return true;
@@ -211,15 +237,22 @@ static void output_task(void *arg)
 #endif
         xSemaphoreTake(lock, portMAX_DELAY);
         size_t n = cd_player_take(&player, block, wanted);
+#if defined(CONFIG_DISCORA_CD_PLAYER_I2S)
+        if (!n && eof_trace.active) eof_mark(1);
+#endif
 #if defined(CONFIG_DISCORA_CD_PLAYER_VERIFY)
         verify_take(block, n);
+#endif
+#if defined(CONFIG_DISCORA_CD_PLAYER_I2S)
+        if (!n && eof_trace.active) eof_mark(2);
+        bool last_pcm = n && player.eof && !player.audio.pcm.used;
 #endif
         state = player.audio.state;
         bool eof = player.eof;
         xSemaphoreGive(lock);
         if (!n) {
 #if defined(CONFIG_DISCORA_CD_PLAYER_I2S)
-            if (state == AUDIO_STOPPED && eof && running) { audio_i2s_eof(&output, esp_timer_get_time()); continue; }
+            if (state == AUDIO_STOPPED && eof && running) { audio_i2s_eof(&output, esp_timer_get_time()); if (eof_trace.active) eof_mark(3); continue; }
 #else
             (void)eof;
 #endif
@@ -236,6 +269,10 @@ static void output_task(void *arg)
             close_output();
             xSemaphoreTake(lock, portMAX_DELAY); audio_core_fault(&player.audio); xSemaphoreGive(lock);
             status(); continue;
+        }
+        if (last_pcm) {
+            memset(&eof_trace,0,sizeof(eof_trace));
+            eof_trace.active=true; eof_trace.generation=gen; eof_mark(0);
         }
         running = true;
 #else
