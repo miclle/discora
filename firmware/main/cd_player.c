@@ -1,6 +1,7 @@
 #include "sdkconfig.h"
 #if defined(CONFIG_DISCORA_CD_PLAYER)
 #include "cd_player.h"
+#include "track_buttons.h"
 #include "audio_i2s.h"
 #include "audio_i2s_report.h"
 #include <errno.h>
@@ -209,6 +210,18 @@ static void poll_commands(void)
         else if (!discard) line[used++] = c;
     }
 }
+static void poll_track_buttons(void)
+{
+    xSemaphoreTake(lock, portMAX_DELAY);
+    int direction = discora_track_buttons_poll(player.media && player.audio.state != AUDIO_FAULT);
+    bool ok = direction && cd_player_step(&player, direction);
+    xSemaphoreGive(lock);
+    if (!direction) return;
+    // Same transition as UART next/prev; only this task may discard the old DMA.
+    if (ok && !close_output()) { status(); return; }
+    ESP_LOGI(TAG, "button=%s accepted=%u", direction < 0 ? "prev" : "next", ok);
+    status();
+}
 static void advance_sequence(void)
 {
     // Called only by output owner, after any EOF drain and successful channel deletion.
@@ -236,6 +249,7 @@ static void output_task(void *arg)
     (void)arg;
     for (;;) {
         poll_commands();
+        poll_track_buttons();
         xSemaphoreTake(lock, portMAX_DELAY);
         bool media = player.media;
         audio_state_t state = player.audio.state;
@@ -323,6 +337,7 @@ bool discora_cd_player_start(void)
     if (!cd_player_init(&player, storage, sizeof(storage), 48 * PROBE_CD_SECTOR_SIZE)) return false;
     lock = xSemaphoreCreateMutex();
     if (!lock) return false;
+    if (!discora_track_buttons_start()) { vSemaphoreDelete(lock); lock = NULL; return false; }
     int flags = fcntl(STDIN_FILENO, F_GETFL);
     if (flags < 0 || fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK) < 0 ||
         xTaskCreate(output_task,"cd_output",6144,NULL,3,NULL) != pdPASS) {
@@ -335,6 +350,7 @@ void discora_cd_player_media(const probe_toc_t *toc)
 {
     xSemaphoreTake(lock, portMAX_DELAY);
     output_quiescent = false;
+    discora_track_buttons_reset();
     bool ok = cd_player_media(&player, toc);
     xSemaphoreGive(lock);
     ESP_LOGI(TAG,"media published=%u; playback remains stopped",ok);
@@ -343,6 +359,7 @@ void discora_cd_player_unavailable(void)
 {
     xSemaphoreTake(lock, portMAX_DELAY);
     if (player.media) cd_player_lost(&player);
+    discora_track_buttons_reset();
     xSemaphoreGive(lock);
 }
 bool discora_cd_player_quiescent(void)

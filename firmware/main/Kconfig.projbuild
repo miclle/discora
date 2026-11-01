@@ -133,6 +133,17 @@ config DISCORA_CD_PLAYER_FAULT_TEST
         armed once per MCU boot, not rearmed by stop or media changes. No fake
         USB/sense result is logged; this tests software shutdown, not hardware recovery.
 
+config DISCORA_TRACK_BUTTONS
+    bool "Enable previous/next track buttons on GPIO8/GPIO9"
+    depends on DISCORA_CD_PLAYER
+    default y
+    help
+        Normally-open switches from GPIO8 (previous) and GPIO9 (next) to GND.
+        Internal pull-ups, 30 ms debounce, one action per press after release.
+        Same behavior as UART prev/next: start the adjacent supported audio track,
+        no wrap at disc boundaries. No actions without media or while faulted.
+        Holding both buttons suppresses navigation until both are released.
+
 config DISCORA_CD_PLAYER_VERIFY
     bool "Hash accepted and consumed CD PCM for single-track EOF verification"
     depends on DISCORA_CD_PLAYER

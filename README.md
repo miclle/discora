@@ -21,10 +21,13 @@
 | CD-DA 数字音频读取 | READ CD | bench-tested：600 秒顺序读取 / 105.84 MB 与电脑完整摘要一致、软件缓冲零欠载；寻道有成功与失败窗口，稳定性未验收，实验默认关闭 |
 | 双声道模拟音频 | I²S → 立体声 DAC | 独立测试音及 CD 源接入已实现；CD 软件时钟控制/持续消费已实测，真实 I²S / DAC 未验收 |
 | 轻触按键退盘 | GPIO7 → USB 退盘命令 | bench-tested（用户反馈）：默认查询配置按键触发及实际退盘成功；其余场景待验收，见[接线](docs/eject-button.md) |
+| 轻触按键上一曲／下一曲 | GPIO8／GPIO9 → 播放器换轨 | implemented：仅播放器模式启用，首尾不循环；软件时钟播放器已部署，实体换轨未实测，见[接线与配置](docs/track-buttons.md) |
 | CD-R/CD-RW 刻录 | 测速、写入、封盘、校验 | 研究目标；可行性待测 |
 | DVD 读取/刻录 | 可选扩展 | 不在首版范围 |
 
 **请勿把技术可行性推断、其它项目的成果或 Linux 测试结果当作 Discora 的实测结论。**
+
+截至 2026-11-01，板上运行 `0.9.1-track-buttons` **软件时钟播放器**：GPIO8 上一曲、GPIO9 下一曲、GPIO7 退盘；上电停止，**不输出 I²S 或声音**。写入校验、三路 GPIO 初始化及 13 轨目录启动通过，实体换轨仍待测试，见[部署记录](docs/records/2026-11-01-track-buttons-deploy.md)。仓库默认构建仍为查询模式；复现此播放器配置请按[换轨接线与构建说明](docs/track-buttons.md)。
 
 ## 初始实验硬件
 
@@ -46,7 +49,7 @@
    idf.py set-target esp32s3
    idf.py build
    ```
-   当前固件自动执行四种只读查询命令，并默认支持 [GPIO7 轻触按键退盘](docs/eject-button.md)（仅按下触发，默认查询配置已获用户实测成功反馈）；受限 READ CD 实验须手动启用，每次主控启动最多执行一次。可另选独立 [I²S 测试音诊断](docs/audio-output.md) 或默认 stopped 的 [CD 播放控制模式](docs/cd-player.md)；真实 CD 软件消费已实测，DAC 输出尚未验证，刻录未实现。详见 [读取实测](docs/records/2026-10-31-m2-cdda.md)。
+   默认查询配置自动执行四种只读查询命令，并默认支持 [GPIO7 轻触按键退盘](docs/eject-button.md)（仅按下触发，默认查询配置已获用户实测成功反馈）；受限 READ CD 实验须手动启用，每次主控启动最多执行一次。可另选独立 [I²S 测试音诊断](docs/audio-output.md) 或默认 stopped 的 [CD 播放控制模式](docs/cd-player.md)；真实 CD 软件消费已实测，DAC 输出尚未验证，刻录未实现。详见 [读取实测](docs/records/2026-10-31-m2-cdda.md)。
 4. 按 [组装说明](docs/assembly.md) 核对 OTG、独立 UART0 和 VBUS 电源；准备好后再选择本项目串口执行 `idf.py -p <DISCORA_UART_PORT> flash monitor`。原生 USB 用于 Host 时不能同时当电脑日志口。
 5. 完成 M0/M1 实测后再进入 CD-DA 和 I²S；详见 [路线图](docs/roadmap.md)。离线协议检查：`python3 firmware/tests/run_host_tests.py`。
 
@@ -84,6 +87,8 @@ discora/
 Discora explores a **low-cost standalone optical disc controller** built around ESP32-S3. The first goal is to read CD-DA from a USB-attached SATA/ATAPI drive and produce stereo I²S audio without a Linux computer. CD-R/CD-RW writing is a later **unverified research milestone**, subject to USB bridge compatibility and minimum write-speed constraints.
 
 **Status:** flashing, UART0, Full-Speed hub/drive enumeration and read-only BOT queries have been bench-tested with MATSHITA UJ-898 firmware HC10. Thirteen consecutive TEST UNIT READY checks passed over 61.2 seconds; long-running, cold-start and reconnection qualification remain open. Formatted TOC was bench-tested on one music CD (13 audio tracks); A bounded READ CD probe (disabled by default) matched PC reference hashes for one/eight sectors and measured a 256-sector burst at 739,858 bytes/s. A 600-second paced software-buffer run transferred 105.84 MB with zero underruns and a full-window PC hash match. Random seeking failed; A standalone UART-controlled I²S tone diagnostic and playback-control core are implemented and build-tested; The actual CD source is integrated with UART controls and a software-clock sink, including a 60.47-second paced window; the I²S adapter is build-tested only and DAC output remains unverified. Writing is not implemented. See [current evidence](docs/status.md).
+
+The deployed `0.9.1-track-buttons` software-clock player enables previous (GPIO8), next (GPIO9), and eject (GPIO7) buttons, boots stopped, and produces no I²S or audible output. Flash verification, GPIO initialization, and the 13-track TOC passed; physical track-button behavior and eject during playback remain untested. The repository default build remains query mode. See the [deployment record](docs/records/2026-11-01-track-buttons-deploy.md).
 
 ## License
 
