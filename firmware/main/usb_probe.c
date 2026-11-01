@@ -16,7 +16,7 @@
 #include "usb/usb_host.h"
 
 #include "probe_protocol.h"
-#include "cdda_retry.h"
+#include "cdda_recovery.h"
 #include "cdda_bench.h"
 
 #if CONFIG_ESP_CONSOLE_USB_CDC || CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG || CONFIG_ESP_CONSOLE_SECONDARY_USB_SERIAL_JTAG
@@ -63,8 +63,7 @@ typedef struct {
     bool audio_attempted;
     bool quiet_audio;
     unsigned read_failures;
-    unsigned recovery_used; // One reservation per MCU boot; never reset on reconnect.
-    unsigned recovered_reads;
+    cdda_recovery_t recovery; // One budget per MCU boot; never reset on reconnect.
     size_t audio_resume_index;
     uint32_t audio_resume_lba;
     command_data_t result; // One shared reply buffer; only the serialized client owns it.
@@ -450,6 +449,44 @@ static void read_toc(probe_context_t *ctx)
     ESP_LOGI(TAG, "TOC metadata only; PCM audio not read");
 }
 
+#if defined(CONFIG_DISCORA_CDDA_SEEK_RECOVERY)
+typedef struct { probe_context_t *ctx; audio_read_t audio; size_t expected; } recovery_call_t;
+static bool recovery_healthy(void *arg)
+{
+    probe_context_t *ctx = ((recovery_call_t *)arg)->ctx;
+    return !ctx->gone && !ctx->faulted && !ctx->in_flight && ctx->toc_valid;
+}
+static bool recovery_wait(void *arg, unsigned ms)
+{
+    recovery_call_t *call = arg;
+    probe_context_t *ctx = call->ctx;
+    ESP_LOGW(TAG, "seek recovery reserved=%u/1 lba=%" PRIu32 " wait_ms=%u; original failure retained",
+             ctx->recovery.reserved, call->audio.lba, ms);
+    int64_t until = now_ms() + ms;
+    while (recovery_healthy(arg) && now_ms() < until) handle_events(ctx, 20);
+    return recovery_healthy(arg);
+}
+static bool recovery_ready(void *arg)
+{
+    probe_context_t *ctx = ((recovery_call_t *)arg)->ctx;
+    bool ok = execute_command(ctx, PROBE_TEST_UNIT_READY, 0, NULL, &ctx->result) == COMMAND_PASSED;
+    if (!ok) ctx->toc_valid = false;
+    return ok;
+}
+static bool recovery_replay(void *arg)
+{
+    recovery_call_t *call = arg;
+    probe_context_t *ctx = call->ctx;
+    ESP_LOGW(TAG, "seek recovery replay=1/1 track=%u lba=%" PRIu32 " sectors=%u",
+             call->audio.track->number, call->audio.lba, call->audio.sectors);
+    command_result_t status = execute_command(ctx, PROBE_READ_CD, call->expected, &call->audio, &ctx->result);
+    if (status == COMMAND_PASSED && ctx->result.size == call->expected) return true;
+    ++ctx->read_failures;
+    if (status == COMMAND_FAILED) { probe_sense_t sense; request_sense(ctx, &sense); }
+    return false;
+}
+#endif
+
 static bool read_audio(probe_context_t *ctx, const probe_track_t *track,
                        uint32_t lba, uint8_t sectors)
 {
@@ -465,32 +502,17 @@ static bool read_audio(probe_context_t *ctx, const probe_track_t *track,
         probe_sense_t sense = {0};
         bool sense_ok = status == COMMAND_FAILED && request_sense(ctx, &sense);
 #if defined(CONFIG_DISCORA_CDDA_SEEK_RECOVERY)
-        bool healthy = !ctx->gone && !ctx->faulted && !ctx->in_flight && ctx->toc_valid;
-        if (cdda_retry_allowed(sense_ok ? &sense : NULL, ctx->recovery_used, healthy)) {
-            ++ctx->recovery_used;
-            ESP_LOGW(TAG, "seek recovery reserved=%u/1 lba=%" PRIu32 " wait_ms=1000; original failure retained",
-                     ctx->recovery_used, lba);
-            int64_t until = now_ms() + 1000;
-            while (!ctx->gone && !ctx->faulted && now_ms() < until) handle_events(ctx, 20);
-            if (ctx->gone || ctx->faulted || ctx->in_flight) {
-                ESP_LOGW(TAG, "seek recovery aborted: device lost/faulted; no replay");
-            } else if (execute_command(ctx, PROBE_TEST_UNIT_READY, 0, NULL, &ctx->result) != COMMAND_PASSED) {
-                ctx->toc_valid = false;
-                ESP_LOGW(TAG, "seek recovery aborted: not ready; TOC invalidated, no replay");
-            } else {
-                ESP_LOGW(TAG, "seek recovery replay=1/1 track=%u lba=%" PRIu32 " sectors=%u",
-                         track->number, lba, sectors);
-                status = execute_command(ctx, PROBE_READ_CD, expected, &audio, &ctx->result);
-                if (status == COMMAND_PASSED && ctx->result.size == expected) {
-                    ++ctx->recovered_reads;
-                    ESP_LOGW(TAG, "seek recovery succeeded; recovered read, not a clean first attempt");
-                    return true;
-                }
-                ++ctx->read_failures;
-                ESP_LOGW(TAG, "seek recovery failed result=%d; budget exhausted", status);
-                if (status == COMMAND_FAILED) request_sense(ctx, &sense);
-            }
+        recovery_call_t call = {.ctx = ctx, .audio = audio, .expected = expected};
+        const cdda_recovery_ops_t ops = {.context = &call, .healthy = recovery_healthy,
+            .wait = recovery_wait, .ready = recovery_ready, .replay = recovery_replay};
+        cdda_recovery_result_t recovered = cdda_recovery_attempt(&ctx->recovery, sense_ok ? &sense : NULL, &ops);
+        if (recovered == CDDA_RECOVERY_OK) {
+            ESP_LOGW(TAG, "seek recovery succeeded; recovered read, not a clean first attempt");
+            return true;
         }
+        if (recovered == CDDA_RECOVERY_LOST) ESP_LOGW(TAG, "seek recovery aborted: device lost/faulted; no replay");
+        if (recovered == CDDA_RECOVERY_NOT_READY) ESP_LOGW(TAG, "seek recovery aborted: not ready; TOC invalidated, no replay");
+        if (recovered == CDDA_RECOVERY_FAILED) ESP_LOGW(TAG, "seek recovery failed; budget exhausted");
 #else
         (void)sense_ok;
 #endif
@@ -671,7 +693,7 @@ static void poll_ready(probe_context_t *ctx)
                 cdda_bench_run(&source, CONFIG_DISCORA_CDDA_SOAK_SECONDS, seeks, full_track);
                 ctx->quiet_audio = false;
                 ESP_LOGI(TAG, "read outcome failures=%u recovery_reserved=%u recovered=%u",
-                         ctx->read_failures, ctx->recovery_used, ctx->recovered_reads);
+                         ctx->read_failures, ctx->recovery.reserved, ctx->recovery.recovered);
             }
 #else
             (void)sampled;

@@ -1,6 +1,6 @@
 # Discora firmware
 
-这是 **USB 光驱与独立 I²S 诊断固件**（`0.5.4-seek-offsets`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，600 秒顺序读取及软件缓冲已与电脑完整摘要一致；寻道仍有失败记录，完整重连/冷启动、I²S 和刻录尚待验收，见 [当前状态](../docs/status.md)。
+这是 **USB 光驱与独立 I²S 诊断固件**（`0.5.5-recovery-flow`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，600 秒顺序读取及软件缓冲已与电脑完整摘要一致；寻道仍有失败记录，完整重连/冷启动、I²S 和刻录尚待验收，见 [当前状态](../docs/status.md)。
 
 ## 构建
 
@@ -118,3 +118,5 @@ python3 firmware/tests/run_host_tests.py
 - `audio_i2s.c` / `audio_diag.c`：原生 I²S TX 适配、单所有者 UART 测试音服务。
 
 后续音频工作按实测结果引入 `mmc`、`cdda`、`audio` 的实际接口；本轮不添加 writer 空壳。
+
+恢复编排由 `cdda_recovery.c` 供 USB 适配和离线测试共用；等待失联、TUR 失败、重读失败/成功及预算不退款的脚本化测试见 [记录](../docs/records/2026-11-01-m2-recovery-flow.md)，不替代真实光驱恢复验收。
