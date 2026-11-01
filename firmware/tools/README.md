@@ -1,6 +1,6 @@
 # 播放器软件时钟 / I²S 空载 bench
 
-`player_bench.py` 只访问显式指定的 COM，不烧录、不主动发送复位脉冲、不保存 PCM，也不执行机械控制或写盘。部分板卡会在操作系统打开 COM 时复位；工具记录启动日志，并最多等待 45 秒取得目录。它用于已经部署、处于 stopped 的 CD 播放固件；默认仅接受 software-clock，I²S 空载须显式传入 `--sink i2s-unloaded`，仅开放 eof / disc。另一项目的串口不能凭枚举顺序选择。
+`player_bench.py` 只访问显式指定的 COM，不烧录、不主动发送复位脉冲、不保存 PCM，也不执行机械控制或写盘。部分板卡会在操作系统打开 COM 时复位；工具记录启动日志，并最多等待 45 秒取得目录。它用于已经部署、处于 stopped 的 CD 播放固件；默认仅接受 software-clock，I²S 空载须显式传入 `--sink i2s-unloaded`，仅开放 eof / disc / sequence。另一项目的串口不能凭枚举顺序选择。
 
 需要 Python 3 和 pyserial（可使用 ESP-IDF Python 环境）。先从操作系统设备信息取得端口、USB VID/PID、序列号，四者必须完全匹配且唯一；`inspect` 仅核对身份、不打开串口：
 
@@ -58,3 +58,18 @@ python firmware/tools/player_bench.py disc --sink i2s-unloaded \
 ```
 
 除软件摘要 / EOF 检查外，每轨要求提交 PCM 增量等于轨长、只开启一个通道、关闭后计数稳定、写入错误 / 坏 DMA 长度 / 软件欠载 / 报告丢弃为 0。供数阶段事件溢出增量必须为 0；EOF 摘要 / 排空 / 关闭快照保留全部累计值，不要求收尾事件队列溢出为 0。记录的 50 ms 排空等待须在本次有限观测范围 50–100 ms 内结束；这是测试阈值，不是硬实时保证或物理尾音完整性证明。脚本仍逐轨选择，不是固件自主连续播放。
+
+
+## 固件自主序列
+
+0.8.0 及以后可使用 `sequence --start-track N`（默认 1）。先选择并停止，再发送一次 `play-disc`，至完成检查前只有状态查询；必须观察到固件按顺序发出 advance、每轨完整 EOF 和最终 complete。总截止仍为 90 分钟，单轮无自动重试。可使用默认软件时钟或显式 `--sink i2s-unloaded`；后者沿用提交量、阶段快照和通道检查。
+
+```sh
+python firmware/tools/player_bench.py sequence --start-track 12 --sink i2s-unloaded \
+  --port "$DISCORA_PORT" --serial "$DISCORA_SERIAL" --vid 1a86 --pid 55d3 \
+  --output .local/bench/player-sequence-run1
+```
+
+从第 12 轨开始的通过结果只覆盖末两轨自主切换与盘尾停止，不等于从盘头开始的整盘自主播放。`disc` 仍是电脑逐轨调度，两类证据必须分开。
+
+场景完成或失败后的 finally 仍向已识别播放器尽力发送 stop，再关闭串口；这条清理命令不参与自动换轨证据。

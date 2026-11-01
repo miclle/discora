@@ -12,7 +12,7 @@ typedef struct {
     probe_toc_t toc;
     size_t index, prefill;
     uint32_t next_lba, serial, completed_reads, stale_completions;
-    bool media, eof, pending;
+    bool media, eof, pending, continuous;
     cd_player_read_t request;
 } cd_player_core_t;
 // Caller serializes every operation. Requests contain values, never borrowed TOC pointers.
@@ -22,6 +22,11 @@ void cd_player_lost(cd_player_core_t *p);
 bool cd_player_select(cd_player_core_t *p, unsigned track);
 bool cd_player_step(cd_player_core_t *p, int direction);
 bool cd_player_play(cd_player_core_t *p);
+// Restart the selected track, then advance at EOF without wrapping; boot/media never arms this.
+bool cd_player_play_disc(cd_player_core_t *p);
+// Output owner calls only after its adapter is fully closed. Core also requires drained EOF.
+bool cd_player_advance(cd_player_core_t *p);
+void cd_player_fault(cd_player_core_t *p);
 bool cd_player_pause(cd_player_core_t *p);
 void cd_player_stop(cd_player_core_t *p);
 bool cd_player_request(cd_player_core_t *p, cd_player_read_t *request);

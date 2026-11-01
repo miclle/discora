@@ -249,6 +249,70 @@ class Bench:
                 temp.replace(self.report_path)
             print("track complete", track["number"], "hash match", self.report["eof"]["match"], flush=True)
 
+    def sequence(self, start_track):
+        self.pump(.5)
+        toc = observed_toc(self.lines)
+        require(any(t["number"] == start_track for t in toc), "Start track absent")
+        tracks = [t for t in toc if t["number"] >= start_track]
+        self.report["toc"] = toc
+        self.command("track " + str(start_track))
+        self.command("stop")
+        baseline = self.stable(["state", "reads", "queued"], 1)
+        mark = len(self.lines)
+        armed = self.command("play-disc")
+        require(armed.get("continuous") == "1", "Sequence not armed")
+        end = time.monotonic() + sum((t["end"]-t["start"])/75 for t in tracks) + 90
+        progress = time.monotonic() + 30
+        while time.monotonic() < end:
+            self.pump(2)
+            state = self.command("status")
+            require(state["state"] not in ["fault", "underrun"], state)
+            if time.monotonic() >= progress:
+                print("sequence track", state["track"], "bytes", state["delivered"], flush=True)
+                progress = time.monotonic() + 30
+            if state["state"] == "stopped" and state.get("continuous") == "0" and state["eof"] == "1":
+                require(int(state["track"]) == tracks[-1]["number"], "Premature sequence stop")
+                if not self.i2s or state["handle"] == "0": break
+        else:
+            raise RuntimeError("Sequence deadline exceeded")
+        fresh = self.lines[mark:]
+        advances = [fields(x) for x in fresh if "cd_player: sequence advance " in x]
+        require([(int(x["from"]),int(x["to"])) for x in advances] ==
+                [(a["number"],b["number"]) for a,b in zip(tracks,tracks[1:])], "Unexpected automatic track order")
+        require(sum("cd_player: sequence complete " in x for x in fresh) == 1, "Missing sequence completion")
+        summaries = [fields(x) for x in fresh if "cd_player: verify EOF " in x]
+        hashes = [fields(x) for x in fresh if "cd_player: verify source_sha256=" in x]
+        require(len(summaries) == len(hashes) == len(tracks), "Incomplete sequence EOF reports")
+        # Deferred status snapshots retain the old track's closed-output counters.
+        closed, stats, resources = {}, {}, {}
+        for line in fresh:
+            if "cd_player: i2s " in line: stats = fields(line)
+            elif "cd_player: resources " in line: resources = fields(line)
+            elif "cd_player: state=" in line:
+                snap = fields(line)
+                if snap["state"] == "stopped" and snap.get("eof") == "1":
+                    snap.update(stats); snap.update(resources)
+                    if not self.i2s or snap.get("handle") == "0": closed[snap["generation"]] = snap
+        self.report["tracks"] = []
+        for track, eof, digest in zip(tracks, summaries, hashes):
+            expected = (track["end"]-track["start"])*2352
+            require(eof["match"] == "1" and all(int(eof[k]) == expected for k in ["expected", "produced", "consumed"])
+                    and int(eof["tail"]) == (expected % 1764 or 1764), eof)
+            require(len(digest["source_sha256"]) == 64 and digest["source_sha256"] == digest["consumed_sha256"], digest)
+            require(eof["generation"] in closed, "Missing closed-track snapshot")
+            final = closed[eof["generation"]]
+            require(int(final["track"]) == track["number"] and final["underruns"] == "0", final)
+            entry = {"track": track, "eof": eof, "hashes": digest, "final": final}
+            if self.i2s:
+                trace = [x for x in fresh if "cd_player: eof_trace " in x and fields(x)["generation"] == eof["generation"]]
+                entry["i2s_eof"] = i2s_eof_trace(trace, baseline, final, expected)
+            self.report["tracks"].append(entry)
+            baseline = final
+        self.report["advances"] = advances
+        keys = ["reads", "delivered", "queued", "state", "continuous", "generation", "eof"]
+        if self.i2s: keys += ["handle", "dma_blocks", "pcm_submitted", "event_overflows"]
+        self.report["final"] = self.stable(keys, 2)
+
     def faults(self):
         self.command("play")
         self.wait_state("playing")
@@ -275,7 +339,7 @@ class Bench:
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=["inspect", "eof", "disc", "stress", "faults"])
+    parser.add_argument("action", choices=["inspect", "eof", "disc", "sequence", "stress", "faults"])
     parser.add_argument("--sink", choices=["software-clock", "i2s-unloaded"], default="software-clock")
     parser.add_argument("--port", required=True)
     parser.add_argument("--serial", required=True)
@@ -283,9 +347,10 @@ def main():
     parser.add_argument("--pid", type=lambda x: int(x, 16), required=True)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--expected-bytes", type=int)
+    parser.add_argument("--start-track", type=int, choices=range(1,100), default=1)
     parser.add_argument("--rounds", type=int, choices=range(1, 21), default=10)
     args = parser.parse_args()
-    require(args.sink != "i2s-unloaded" or args.action in ["inspect", "eof", "disc"], "Unloaded I2S currently permits eof/disc only")
+    require(args.sink != "i2s-unloaded" or args.action in ["inspect", "eof", "disc", "sequence"], "Unloaded I2S permits eof/disc/sequence only")
     import serial
     from serial.tools import list_ports
     target = identify(list_ports.comports(), args.port, args.serial, args.vid, args.pid)
@@ -308,7 +373,7 @@ def main():
     try:
         stream.open()
         with (args.output / "serial.log").open("wb") as log:
-            bench = Bench(stream, log, report, 5400 if args.action == "disc" else 600, args.sink)
+            bench = Bench(stream, log, report, 5400 if args.action in ["disc", "sequence"] else 600, args.sink)
             bench.report_path = args.output / "report.json"
             bench.pump(.1)
             ready_deadline = time.monotonic() + 45
@@ -323,6 +388,8 @@ def main():
             report["started_scenario"] = True
             if args.action == "disc":
                 bench.disc()
+            elif args.action == "sequence":
+                bench.sequence(args.start_track)
             elif args.action == "eof":
                 bench.eof(args.expected_bytes)
             elif args.action == "stress":
