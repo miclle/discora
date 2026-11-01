@@ -21,6 +21,11 @@ enum { INJECT_UNDERRUN = 0 };
 #endif
 
 enum { PCM_RATE = 176400, BUFFER_SECTORS = 64, PREFILL_SECTORS = 48 };
+#if defined(CONFIG_DISCORA_CDDA_SEEK_ROUNDS)
+enum { SEEK_ROUNDS = CONFIG_DISCORA_CDDA_SEEK_ROUNDS };
+#else
+enum { SEEK_ROUNDS = 1 };
+#endif
 
 typedef struct {
     uint64_t bytes;
@@ -66,7 +71,15 @@ static bool seek_bench(const cdda_bench_source_t *s)
     }
     if (!count) return false;
     read_stats_t stats = {0};
-    for (unsigned i = 0; i < 12; ++i) {
+    const int64_t deadline = esp_timer_get_time() + INT64_C(600000000);
+    ESP_LOGI(TAG, "seek start rounds=%u positions=%u soft_limit_s=600", SEEK_ROUNDS, 12 * SEEK_ROUNDS);
+    for (unsigned step = 0; step < 12 * SEEK_ROUNDS; ++step) {
+        unsigned i = step % 12, round = step / 12 + 1;
+        if (esp_timer_get_time() >= deadline) {
+            ESP_LOGE(TAG, "seek deadline reached completed_positions=%u; incomplete", step);
+            return false;
+        }
+        if (!s->service(s->context, 0)) return false;
         size_t pick = i % 3 == 0 ? 0 : (i % 3 == 1 ? count - 1 : count / 2);
         const probe_track_t *track = &s->toc->tracks[eligible[pick]];
         uint32_t span = track->end_lba - track->start_lba;
@@ -77,8 +90,15 @@ static bool seek_bench(const cdda_bench_source_t *s)
         case 2: lba = track->end_lba - 8; break;
         default: break;
         }
+#if defined(CONFIG_DISCORA_CDDA_SEEK_VARY_OFFSET)
+        // Keep the first-round reference locations and every read inside its track.
+        uint64_t offset = (uint64_t)(lba - track->start_lba) + (uint64_t)(round - 1) * 997;
+        lba = track->start_lba + (uint32_t)(offset % (span - 7));
+#endif
         uint8_t first[32], repeat[32];
         const uint8_t *data;
+        ESP_LOGI(TAG, "seek begin round=%u/%u step=%u/12 track=%u lba=%" PRIu32,
+                 round, SEEK_ROUNDS, i + 1, track->number, lba);
 #if defined(CONFIG_DISCORA_CDDA_SEEK_WAIT_MS) && CONFIG_DISCORA_CDDA_SEEK_WAIT_MS > 0
         ESP_LOGI(TAG, "seek settle step=%u wait_ms=%u", i + 1, CONFIG_DISCORA_CDDA_SEEK_WAIT_MS);
         int64_t until = esp_timer_get_time() + (int64_t)CONFIG_DISCORA_CDDA_SEEK_WAIT_MS * 1000;
@@ -96,12 +116,12 @@ static bool seek_bench(const cdda_bench_source_t *s)
             ESP_LOGE(TAG, "seek repeat mismatch step=%u track=%u lba=%" PRIu32, i, track->number, lba);
             return false;
         }
-        ESP_LOGI(TAG, "seek step=%u/12 track=%u lba=%" PRIu32 " sectors=8 elapsed_us=%" PRIi64 " repeat=match",
-                 i + 1, track->number, lba, seek_us);
+        ESP_LOGI(TAG, "seek round=%u/%u step=%u/12 track=%u lba=%" PRIu32 " sectors=8 elapsed_us=%" PRIi64 " repeat=match",
+                 round, SEEK_ROUNDS, i + 1, track->number, lba, seek_us);
         digest_log("seek sample", first);
     }
-    ESP_LOGI(TAG, "seek complete positions=12 commands=%" PRIu32 " longest_read_us=%" PRIi64,
-             stats.commands, stats.longest_us);
+    ESP_LOGI(TAG, "seek complete rounds=%u positions=%u commands=%" PRIu32 " longest_read_us=%" PRIi64,
+             SEEK_ROUNDS, 12 * SEEK_ROUNDS, stats.commands, stats.longest_us);
     return true;
 }
 
@@ -366,6 +386,14 @@ bool cdda_bench_run(const cdda_bench_source_t *s, unsigned seconds, bool include
         if (!(s->toc->tracks[i].control & 0x0c)) { first = i; break; }
     }
     if (first == s->toc->track_count) return false;
+#if defined(CONFIG_DISCORA_CDDA_SEEK_ONLY)
+    {
+        bool ok = include_seeks && seek_bench(s);
+        ESP_LOGI(TAG, "extended bench %s seek_only=1 full_track=not_run buffer=not_run (not I2S playback)",
+                 ok ? "complete" : "failed");
+        return ok;
+    }
+#endif
     ESP_LOGI(TAG, "extended bench profile seeks=%s full_track=%s paced_seconds=%u",
              include_seeks ? "enabled" : "not_run", include_full_track ? "enabled" : "not_run", seconds);
     uint32_t start_lba = s->toc->tracks[first].start_lba;

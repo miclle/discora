@@ -42,6 +42,29 @@ config DISCORA_CDDA_SEEK_WAIT_MS
     range 0 3000
     default 0
 
+config DISCORA_CDDA_SEEK_ROUNDS
+    int "Number of 12-position seek rounds"
+    depends on DISCORA_CDDA_SEEK_BENCH
+    range 1 20
+    default 1
+    help
+        Stop at the first unrecovered error. Recovery budget is per boot,
+        never per round. A 600 s soft deadline is checked between positions;
+        an in-flight command completes or reaches its normal timeout first.
+
+config DISCORA_CDDA_SEEK_ONLY
+    bool "Stop the extended workload after seeks (no full track or buffer)"
+    depends on DISCORA_CDDA_SEEK_BENCH
+    default n
+
+config DISCORA_CDDA_SEEK_VARY_OFFSET
+    bool "Vary track-relative offsets after the first seek round"
+    depends on DISCORA_CDDA_SEEK_BENCH
+    default n
+    help
+        Add 997 sectors per round modulo the valid eight-sector start range.
+        Deterministic workload expansion, not a guarantee of cache bypass.
+
 config DISCORA_CDDA_SEEK_RECOVERY
     bool "Allow one read recovery per boot for valid sense 03/02/00"
     depends on DISCORA_CDDA_PROBE
@@ -54,7 +77,7 @@ config DISCORA_CDDA_SEEK_RECOVERY
 
 config DISCORA_CDDA_FULL_TRACK_BENCH
     bool "Include a complete first-track read from INDEX 01"
-    depends on DISCORA_CDDA_SOAK
+    depends on DISCORA_CDDA_SOAK && !DISCORA_CDDA_SEEK_ONLY
     default y
     help
         Disable this and seeks to hand off sequentially from the short probe

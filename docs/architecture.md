@@ -35,7 +35,7 @@ READ CD  → 2352-byte audio sectors → ring buffer → I²S stereo
 
 只访问当前配置、alternate setting 0、首个受支持 BOT 接口和 LUN 0。身份确认为可用 CD/DVD 后每 5 秒查询就绪状态；就绪后读取格式 0、MSF=0 的 TOC，先读 4 字节头再按校验长度取完整目录。最多 99 条轨道加 lead-out，共 804 字节；曲目边界和音频/数据标记全部校验后发布。一次介质就绪周期最多尝试三次；TUR 失败或断连后清除目录状态。READ CD 由默认关闭的实验开关控制；不发送写入/擦除/退盘命令。开启外部和多级 Hub 配置，现有 UGREEN Hub `05e3:0610` 和光驱桥接器 `13fd:0840` 已完成基础枚举实验。TOC 边界见 [ADR-0003](decisions/0003-formatted-toc-probe.md)。
 
-USB Bulk IN 长度按 MPS 向上对齐，CDB 请求与 CBW 数据长度仍保持精确值。普通查询/CBW/CSW/控制传输截止时间为 3 秒，READ CD 数据阶段为 30 秒；取消后等回调归还所有权。未归还的 transfer 不复用，控制超时需要拔下设备。断连后释放接口并关闭 device handle，Host 服务继续等待新设备。恢复策略和限制见 [ADR-0002](decisions/0002-read-only-native-bot-probe.md)。
+USB Bulk IN 长度按 MPS 向上对齐，CDB 请求与 CBW 数据长度仍保持精确值。普通查询/CBW/CSW/控制传输截止时间为 3 秒，READ CD 数据阶段为 30 秒；取消后等回调归还所有权。0.5.1 增加 REQUEST SENSE 分阶段日志，实验可将其数据等待单独设为 30 秒，默认仍为 3 秒；有效 sense 已观察到 03/02/00（寻道未完成），尚无稳定修复结论。未归还的 transfer 不复用，控制超时需要拔下设备。断连后释放接口并关闭 device handle，Host 服务继续等待新设备。恢复策略和限制见 [ADR-0002](decisions/0002-read-only-native-bot-probe.md)。0.5.2 新增默认关闭的寻道间隔与有界读取恢复实验：仅对有效 `03/02/00`、仍健康且再次 TUR 就绪的连接，允许每次启动最多一次相同 READ CD 重放。原始失败单独计数，重连不重新授权；详见 [ADR-0007](decisions/0007-bounded-seek-recovery.md)。
 
 默认 console 为独立 UART0；主、次 USB console 均关闭，避免与 Host 共用内部 PHY。固件不负责外部 VBUS 开关或 USB-PD 协商。
 
@@ -45,7 +45,7 @@ USB Bulk IN 长度按 MPS 向上对齐，CDB 请求与 CBW 数据长度仍保持
 
 本张盘的单/8 扇区 SHA-256 与电脑参考一致，256 扇区短突发取得约 740 KB/s。此结果不代替长时读取、跨轨、冷启动或播放验收；已增加内部 RAM 环形缓冲及软件定时消费实验；独立 I²S 测试音适配已实现，CD 音轨到 I²S 的链路尚未接入。
 
-扩展实验由 `cdda_bench.c` 编排，`cdda_cursor.c` 负责连续区间逐轨拆分，`pcm_buffer.c` 是由调用方串行保护的 4 字节帧对齐环形队列。USB client 是唯一命令生产者；独立软件消费任务只访问已复制的 PCM，不触碰 USB handle 或共享响应。64 扇区内部 RAM 缓冲经 48 扇区预填后启动 1× 软件时钟，生产/消费两端分别累计摘要。失败时等待消费端停止后才释放内存；未确认停止则隔离。见 [ADR-0005](decisions/0005-stream-and-buffer-bench.md)。此模型验证传输与缓冲，不替代真实 I²S DMA/时钟。
+扩展实验由 `cdda_bench.c` 编排，`cdda_cursor.c` 负责连续区间逐轨拆分，`pcm_buffer.c` 是由调用方串行保护的 4 字节帧对齐环形队列。USB client 是唯一命令生产者；独立软件消费任务只访问已复制的 PCM，不触碰 USB handle 或共享响应。64 扇区内部 RAM 缓冲经 48 扇区预填后启动 1× 软件时钟，生产/消费两端分别累计摘要。失败时等待消费端停止后才释放内存；未确认停止则隔离。见 [ADR-0005](decisions/0005-stream-and-buffer-bench.md)。此模型验证传输与缓冲，不替代真实 I²S DMA/时钟。可选 seek-only 模式跳过整轨和缓冲，支持最多 20 轮寻道及确定性轨内偏移变化；位置边界检查 600 秒软截止，每次启动的恢复预算不随轮次重置。正常路径通过不等于实际恢复分支验收，见 [多轮记录](records/2026-11-01-m2-seek-rounds.md)。
 
 - 44,100 sample/s × 16 bit × 2 = **1,411,200 bit/s**（约 176.4 KB/s）。
 - 一扇区音频为 **2352 字节**，每秒 75 扇区；留足环形缓冲以应对光驱抖动和 USB 调度。
@@ -73,7 +73,7 @@ SD / flash ISO or PCM → source reader → buffer → USB BOT
 
 ## 待决策事项
 
-1. `13fd:0840` 桥接器已透传基础查询和 READ TOC；READ CD 小片段和短突发已在本组合实测，600 秒 1× 顺序读取已与电脑完整摘要一致；随机寻道和回读 LBA 0 失败，仍待隔离。
+1. `13fd:0840` 桥接器已透传基础查询和 READ TOC；READ CD 小片段和短突发已在本组合实测，600 秒 1× 顺序读取已与电脑完整摘要一致；随机寻道和回读 LBA 0 失败。新 OTG 绕过 Hub 后仍在末轨返回命令失败、REQUEST SENSE 超时，但该窗口没有 USB 断连；错误详情和桥接/Full-Speed/供电条件仍待隔离，见 [直连记录](records/2026-11-01-m2-otg-after-pc.md)。
 2. 已采用原生 USB Host + 独立最小 BOT 层；是否需要扩展命令调度随音频读取结果再评估。
 3. 缓冲空间与 SD 卡传输是否与 USB 带宽/任务调度冲突。
 4. PCM5102A 不需要外部 MCLK 的具体模块接法与时钟精度验证。

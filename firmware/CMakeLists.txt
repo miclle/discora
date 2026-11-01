@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
 
-set(PROJECT_VER "0.5.2-seek-recovery")
+set(PROJECT_VER "0.5.4-seek-offsets")
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project(discora)
