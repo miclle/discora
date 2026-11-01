@@ -80,6 +80,20 @@ def main():
         )
         subprocess.run([str(adapter)], check=True)
 
+        waiting = Path(temp) / "transfer_wait_test"
+        subprocess.run(
+            shlex.split(os.environ.get("CC", "cc")) + [
+                "-std=c11", "-Wall", "-Wextra", "-Werror", "-pedantic", "-g",
+                "-fsanitize=address,undefined", "-fno-omit-frame-pointer",
+                "-I", str(firmware / "main"), str(firmware / "main/transfer_wait.c"),
+                str(firmware / "main/pcm_buffer.c"), str(firmware / "main/audio_core.c"),
+                str(firmware / "main/cd_player_core.c"), str(firmware / "tests/transfer_wait_test.c"),
+                "-o", str(waiting),
+            ], check=True,
+        )
+        subprocess.run([str(waiting)], check=True)
+
+
 
 
 

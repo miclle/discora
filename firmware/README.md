@@ -1,6 +1,6 @@
 # Discora firmware
 
-这是 **USB 光驱、CD 控制与独立 I²S 诊断固件**（`0.7.2-i2s-report`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，600 秒顺序读取及软件缓冲已与电脑完整摘要一致；寻道仍有失败记录，完整重连/冷启动、I²S 和刻录尚待验收，见 [当前状态](../docs/status.md)。
+这是 **USB 光驱、CD 控制与独立 I²S 诊断固件**（`0.7.3-transfer-wait`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，600 秒顺序读取及软件缓冲已与电脑完整摘要一致；寻道仍有失败记录，完整重连/冷启动、I²S 和刻录尚待验收，见 [当前状态](../docs/status.md)。
 
 ## 构建
 
@@ -132,3 +132,5 @@ python3 firmware/tests/run_host_tests.py
 `python3 firmware/tests/run_host_tests.py` 现在包含六组共享 C 代码的 ASan/UBSan 检查（含 I²S API 替身）；`python3 firmware/tests/player_bench_test.py` 包含串口身份、解析/命令边界、超时与 EOF 报告规则的离线检查，不访问设备。硬件接受情况以 [当前状态](../docs/status.md) 为准。
 
 I²S 空载外设的测试音、CD 首轨及日志调度对照见 [记录](../docs/records/2026-11-01-m3-i2s-empty.md)。没有接 DAC，不等于模拟输出验收。
+
+USB 等待/取消编排由生产 Host 和主机测试共享；长等待、迟到回调及 EP0 隔离覆盖见 [记录](../docs/records/2026-11-01-m2-wait-flow.md)，不等于真实设备故障恢复验收。

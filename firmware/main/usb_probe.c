@@ -19,6 +19,7 @@
 #include "cdda_recovery.h"
 #include "cdda_bench.h"
 #include "cd_player.h"
+#include "transfer_wait.h"
 
 #if CONFIG_ESP_CONSOLE_USB_CDC || CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG || CONFIG_ESP_CONSOLE_SECONDARY_USB_SERIAL_JTAG
 #error "Discora Host requires an independent UART console; disable both primary and secondary USB consoles in menuconfig"
@@ -115,35 +116,29 @@ static void log_usb_error(const char *operation, esp_err_t err)
     }
 }
 
+static int64_t wait_now(void *arg) { (void)arg; return now_ms(); }
+static void wait_events(void *arg, unsigned ms) { handle_events(arg, ms); }
+static bool wait_owned(void *arg) { return ((probe_context_t *)arg)->in_flight; }
+static bool wait_gone(void *arg) { return ((probe_context_t *)arg)->gone; }
+static void wait_expired(void *arg, bool disconnected, bool cancellable)
+{
+    probe_context_t *ctx = arg;
+    ESP_LOGW(TAG, "transfer %s ep=0x%02x; cancel and drain before reuse",
+             disconnected ? "disconnected" : "deadline exceeded", ctx->transfer->bEndpointAddress);
+    // EP0 cannot be cancelled by the IDF Host API. Never fabricate ownership return.
+    if (cancellable) {
+        log_usb_error("cancel halt", usb_host_endpoint_halt(ctx->device, ctx->transfer->bEndpointAddress));
+        log_usb_error("cancel flush", usb_host_endpoint_flush(ctx->device, ctx->transfer->bEndpointAddress));
+    }
+}
 static esp_err_t wait_transfer(probe_context_t *ctx, unsigned timeout_ms)
 {
-    int64_t deadline = now_ms() + timeout_ms;
-    while (ctx->in_flight && !ctx->gone && now_ms() < deadline) {
-        handle_events(ctx, 20);
-    }
-    if (ctx->in_flight) {
-        bool disconnected = ctx->gone;
-        ESP_LOGW(TAG, "transfer %s ep=0x%02x; cancel and drain before reuse",
-                 disconnected ? "disconnected" : "deadline exceeded", ctx->transfer->bEndpointAddress);
-        // EP0 cancellation is not exposed by the IDF Host API. Preserve ownership on a
-        // control timeout until unplug returns its callback; never free an in-flight URB.
-        if (ctx->transfer->bEndpointAddress != 0) {
-            esp_err_t err = usb_host_endpoint_halt(ctx->device, ctx->transfer->bEndpointAddress);
-            log_usb_error("cancel halt", err);
-            err = usb_host_endpoint_flush(ctx->device, ctx->transfer->bEndpointAddress);
-            log_usb_error("cancel flush", err);
-        }
-        deadline = now_ms() + CANCEL_TIMEOUT_MS;
-        while (ctx->in_flight && now_ms() < deadline) {
-            handle_events(ctx, 20);
-        }
-        if (ctx->in_flight) {
-            ESP_LOGE(TAG, "transfer still owned by USB stack; probe quarantined, unplug device");
-        }
-        return disconnected ? ESP_ERR_INVALID_STATE : ESP_ERR_TIMEOUT;
-    }
-    if (ctx->gone) {
-        return ESP_ERR_INVALID_STATE;
+    const transfer_wait_ops_t ops = {ctx, wait_now, wait_events, wait_owned, wait_gone, wait_expired};
+    transfer_wait_result_t result = transfer_wait(&ops, timeout_ms, CANCEL_TIMEOUT_MS,
+                                                  ctx->transfer->bEndpointAddress != 0);
+    if (result != TRANSFER_WAIT_COMPLETE) {
+        if (ctx->in_flight) ESP_LOGE(TAG, "transfer still owned by USB stack; probe quarantined, unplug device");
+        return result == TRANSFER_WAIT_DISCONNECTED ? ESP_ERR_INVALID_STATE : ESP_ERR_TIMEOUT;
     }
     if (ctx->transfer->status != USB_TRANSFER_STATUS_COMPLETED) {
         ESP_LOGW(TAG, "USB status=%d ep=0x%02x actual=%d",
