@@ -28,6 +28,27 @@ def require(condition, detail):
         raise RuntimeError(str(detail))
 
 
+def observed_toc(lines):
+    header, tracks = None, []
+    for line in lines:
+        if "usb_probe: TOC validated " in line:
+            header, tracks = fields(line), []
+        elif header is not None and "usb_probe: TOC track=" in line:
+            t = fields(line)
+            require(t.get("type") == "audio", "Whole-disc scenario currently requires all-audio media")
+            tracks.append({"number": int(t["track"]), "start": int(t["start_lba"]), "end": int(t["end_lba"])})
+    require(header is not None and len(tracks) == int(header["tracks"]) and 1 <= len(tracks) <= 99,
+            "Need a complete TOC captured in this session; no stale manifest is used")
+    require(tracks[0]["number"] == int(header["first"]) and tracks[-1]["number"] == int(header["last"])
+            and tracks[-1]["end"] == int(header["lead_out_lba"]), "TOC header mismatch")
+    for i, track in enumerate(tracks):
+        require(8 <= track["end"] - track["start"] <= 75 * 480, track)
+        if i:
+            require(track["number"] == tracks[i-1]["number"] + 1 and track["start"] == tracks[i-1]["end"], "TOC discontinuity")
+    require(sum(t["end"] - t["start"] for t in tracks) <= 75 * 4500, "Disc exceeds bounded workload")
+    return tracks
+
+
 class Bench:
     def __init__(self, stream, log, report, timeout):
         self.stream, self.log, self.report = stream, log, report
@@ -36,6 +57,7 @@ class Bench:
         self.pending = b""
         self.lines = []
         self.recognized = False
+        self.report_path = None
 
     def pump(self, seconds):
         end = time.monotonic() + seconds
@@ -142,10 +164,14 @@ class Bench:
         self.command("play")
         self.wait_state("playing")
         end = time.monotonic() + min(540, expected_bytes / 176400 + 45)
+        next_progress = time.monotonic() + 30
         while time.monotonic() < end:
             self.pump(2)
             state = self.command("status")
             require(state["state"] not in ["fault", "underrun"], state)
+            if time.monotonic() >= next_progress:
+                print("track", state["track"], "bytes", state["delivered"], "/", expected_bytes, flush=True)
+                next_progress = time.monotonic() + 30
             if state["state"] == "stopped" and state["eof"] == "1":
                 break
         else:
@@ -164,6 +190,24 @@ class Bench:
         self.report["eof"] = summary
         self.report["hashes"] = hashes[0]
         self.report["final"] = self.stable(["reads", "delivered", "queued", "state", "generation", "eof"], 2)
+
+    def disc(self):
+        # TOC logging can finish shortly after media is published to the player.
+        self.pump(.5)
+        tracks = observed_toc(self.lines)
+        self.report["toc"] = tracks
+        self.report["tracks"] = []
+        for track in tracks:
+            self.command("track " + str(track["number"]))
+            self.eof((track["end"] - track["start"]) * 2352)
+            require(int(self.report["final"]["track"]) == track["number"], self.report["final"])
+            self.report["tracks"].append({"track": track, "eof": self.report["eof"],
+                                          "hashes": self.report["hashes"], "final": self.report["final"]})
+            if self.report_path is not None:
+                temp = self.report_path.with_suffix(".tmp")
+                temp.write_text(json.dumps(self.report, indent=2) + "\n")
+                temp.replace(self.report_path)
+            print("track complete", track["number"], "hash match", self.report["eof"]["match"], flush=True)
 
     def faults(self):
         self.command("play")
@@ -191,7 +235,7 @@ class Bench:
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=["inspect", "eof", "stress", "faults"])
+    parser.add_argument("action", choices=["inspect", "eof", "disc", "stress", "faults"])
     parser.add_argument("--port", required=True)
     parser.add_argument("--serial", required=True)
     parser.add_argument("--vid", type=lambda x: int(x, 16), required=True)
@@ -222,7 +266,8 @@ def main():
     try:
         stream.open()
         with (args.output / "serial.log").open("wb") as log:
-            bench = Bench(stream, log, report, 600)
+            bench = Bench(stream, log, report, 5400 if args.action == "disc" else 600)
+            bench.report_path = args.output / "report.json"
             bench.pump(.1)
             ready_deadline = time.monotonic() + 45
             while True:
@@ -234,7 +279,9 @@ def main():
                 bench.pump(.5)
             report["boot_observed"] = any("ESP-ROM:" in x for x in bench.lines)
             report["started_scenario"] = True
-            if args.action == "eof":
+            if args.action == "disc":
+                bench.disc()
+            elif args.action == "eof":
                 bench.eof(args.expected_bytes)
             elif args.action == "stress":
                 bench.stress(args.rounds)
