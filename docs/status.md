@@ -1,25 +1,25 @@
 # 当前工程状态
 
-更新时间：2026-11-01（整轨 EOF、控制压力、受控故障与轨尾修复）
+更新时间：2026-11-01（I²S 空载、整盘软件验证、USB 等待与构建矩阵）
 
 证据分层：`planned` 为计划；`implemented` 为源码已实现；`bench-tested` 为在指定硬件上实验过；`verified` 为满足相应验收条件。已完成烧录、UART0、Hub/光驱枚举、三种基础查询的真实返回、61.2 秒连续 13 次 TUR 就绪，以及单张 CD 的 13 轨目录、READ CD 小片段/短突发与电脑参考对照；600 秒顺序窗口已与电脑对照，随机寻道、冷启动与受控重复插拔仍待验收，M0/M1 未整体通过。
 
 | 事项 | 状态 | 证据 / 备注 |
 | --- | --- | --- |
 | 仓库创建及 Apache-2.0 License | 已存在 | 用户创建仓库时已有 LICENSE |
-| ESP-IDF 固件构建 | 本地构建通过 | v5.4、目标 esp32s3；源码 0.6.4-player-tail，默认 / CD 软件时钟 / CD I²S / 独立测试音四配置构建通过；板上保持默认关闭实验的 0.4.3，真实音频未验收 |
+| ESP-IDF 固件构建 | 本地构建通过 | v5.4、目标 esp32s3；源码 0.7.3-transfer-wait，默认 / 测试音 / CD 软件时钟 / CD I²S / 故障注入五配置本地构建通过；整盘实验使用 0.7.2、13 轨软件消费通过；实验后恢复 0.4.3 查询模式，真实音频未验收 |
 | 烧录 / UART0 启动 | bench-tested | 写入校验通过；45 秒启动采集窗口无异常重启记录，详见首次实测记录 |
 | 初始化 GitHub Actions | 构建成功 | [运行 41173591262](https://github.com/miclle/discora/actions/runs/41173591262)，对应初始化提交 `61b8229`，不是本轮改动的 CI |
-| 本轮 CI 配置 | implemented | 新增主机侧 ASan/UBSan 协议测试；本轮已分阶段本地提交，未推送，未触发新 CI |
+| 本轮 CI 配置 | implemented | 八组主机侧 ASan/UBSan 检查、十项 bench 工具检查与五配置构建矩阵；本轮已分阶段本地提交，未推送，未触发新 CI |
 | USB Host / BOT 最小探测 | implemented；常规查询 bench-tested | 原生 USB Host、接口筛选、基础查询及 READ TOC 已实测；已观察到超时、Data-In STALL 和一次 Reset Recovery；后续仍有离线，完整恢复验收未通过 |
 | 空 Hub 枚举 | bench-tested | USB-OTG 桥接后枚举 `05e3:0610`，Full-Speed，class `0x09`；下游未接设备 |
 | UJ-898 在 ESP32-S3 USB Host 枚举 | bench-tested | 桥接器 `13fd:0840`，Full-Speed，class/subclass/protocol `08/02/50`；前期有离线重枚举，原因未定位 |
 | INQUIRY / TEST UNIT READY / REQUEST SENSE | bench-tested | INQUIRY 为 MATSHITA UJ-898 / HC10；sense 有效，后续 61.2 秒连续 13 次 TUR 成功；TOC / READ CD 另见后续项 |
 | READ TOC | bench-tested | 单张音乐 CD 取得 13 条音频轨、116 字节目录，lead-out LBA 252645；逐轨 LBA 和 lead-out 已与 macOS 参考目录一致 |
 | CD-DA 2352 字节扇区读取 | implemented；顺序窗口 bench-tested | 600 秒、105840000 字节，与电脑完整 SHA-256 一致；随机寻道成功与失败并存，恢复路径尚待实测，默认关闭 |
-| PCM 环形缓冲 | implemented；软件消费 bench-tested | 64 扇区内部 RAM，600 秒 1×，零欠载、两端摘要一致；不是 I²S 验收 |
-| I²S 测试音 / 控制核心 | implemented；离线测试/构建通过 | 独立诊断模式、播放/暂停/停止/欠载状态、441 / 882 Hz L/R；未烧录或接 DAC 验收 |
-| CD 源到音频控制 / 输出适配器 | implemented；软件时钟 bench-tested | 完整首轨两端摘要/EOF、10 轮控制和受控欠载/源故障通过；轨尾暂停恢复已修复并离线回归，I²S 适配器离线及构建通过，真实 DAC 未测 |
+| PCM 环形缓冲 | implemented；软件消费 bench-tested | 64 扇区内部 RAM，13 轨 / 594221040 字节逐轨 1× 软件消费，零欠载、各轨两端摘要一致；不是整盘 I²S 验收 |
+| I²S 测试音 / 控制核心 | implemented；空载外设 bench-tested | 441 / 882 Hz L/R、静音、暂停/恢复/停止已上板；延后日志输出后测试音完成事件队列溢出为 0；未接 DAC，未测引脚波形或模拟输出 |
+| CD 源到音频控制 / 输出适配器 | implemented；软件时钟 bench-tested | 完整首轨软件时钟和 I²S 空载两端摘要/EOF 通过；I²S 首轨稳态事件溢出 0、EOF 收尾后 3，不能仅据回调判定 PCM 完整输出；13 轨整盘软件时钟通过，真实 DAC 未测 |
 | CD-R / CD-RW 实际刻录 | 未验证 | 存在 USB 带宽和最低写速风险；待 M4 |
 
 请优先追加**带日期的测试记录**，不要覆盖此前失败证据。运行 CI 的绿灯仅表示在指定 ESP-IDF 环境中成功构建，不代表 USB、音频、刻录功能通过。
@@ -179,6 +179,8 @@ M2 的 `set-target` / fullclean 误删了放在 `firmware/build/` 内的 M1 原�
 
 0.7.3 将原有等待/取消截止提取为生产与测试共享代码，协议/超时策略不变。七组阶段主机检查和五配置本地构建通过，覆盖 30 秒期限、取消后迟到回调、EP0 保留所有权及长等待期间 stop/换轨；见 [记录](records/2026-11-01-m2-wait-flow.md)。整盘实验固定运行 0.7.2，未中途部署这项变更；真实光驱故障恢复仍未验收。
 
+整盘结束后，0.7.3 又完成 6.926 秒正常路径控制回归，39 次 READ CD、1 次旧代次拒收、零欠载/读取错误/离线。实际故障分支没有触发。最后恢复并校验 0.4.3 查询模式，25.044 秒内有效 TOC、5 次 TUR 成功、READ CD 数 0，串口已释放；这是本轮最终板上状态。
+
 ## 2026-11-01：50 万步播放器状态组合
 
 100 个固定种子、每种 5000 步，独立 FIFO 逐字节检查生产环形队列；覆盖 EOF 111 次、合成 fault 4809 次、合成 underrun 328 次，无断言或 sanitizer 错误。八组主机检查通过，未修改生产核心；这些不是实盘故障统计。见 [记录](records/2026-11-01-m3-state-sequences.md)。
@@ -186,3 +188,7 @@ M2 的 `set-target` / fullclean 误删了放在 `firmware/build/` 内的 M1 原�
 ## 2026-11-01：五配置 CI 矩阵
 
 默认、测试音、CD 软件时钟、CD I²S、故障注入五配置在本地 v5.4 全部构建通过，并核对生成配置。CI 工作流已扩展为独立矩阵，未推送、未触发远端执行；见 [记录](records/2026-11-01-build-matrix.md)。
+
+## 2026-11-01：13 轨整盘软件时钟验证
+
+保持现有接线，0.7.2 完成 3416.922 秒单轮场景：13 轨、594221040 字节、31586 次 READ CD，各轨源端与消费端摘要一致，EOF 停止后不追加读取。零欠载、读取错误、超时或离线，所有轨末空闲堆为 161100 字节。没有新增电脑端整盘独立参考，不是整盘 I²S / DAC 或无缝播放验收。恢复 0.4.3 后 25.069 秒取得目录和 5 次 TUR 成功，见 [完整记录](records/2026-11-01-m3-whole-disc.md)。

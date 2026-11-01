@@ -49,7 +49,7 @@ idf.py -p <DISCORA_UART_PORT> flash monitor
 - 只输出元数据、长度、耗时、摘要和统计，不打印 PCM，不存入 Flash。
 - 18,816 字节共享响应位于静态内部 DRAM，USB transfer 另由原生 Host 分配；不放在 task stack，不默认依赖 PSRAM DMA。
 
-边界及首轮失败修正见 [ADR-0004](../docs/decisions/0004-bounded-cdda-probe.md)。短突发速率不代表整张盘稳定播放；环形缓冲已有软件消费实测，I²S 已有独立诊断实现，CD 播放仍待接入。
+边界及首轮失败修正见 [ADR-0004](../docs/decisions/0004-bounded-cdda-probe.md)。短突发速率不代表整张盘稳定播放；环形缓冲已有软件消费实测，真实 CD 源已经接入控制和 I²S 适配器；空载外设首轨通过，DAC 输出仍待验收。
 
 ## 长时读取、寻道和缓冲实验
 
@@ -63,7 +63,7 @@ idf.py -p <DISCORA_UART_PORT> flash monitor
 
 设计与当前实测边界见 [ADR-0005](../docs/decisions/0005-stream-and-buffer-bench.md) 和 [长时实验记录](../docs/records/2026-10-31-m2-stream.md)。
 
-负向测试开关 `CONFIG_DISCORA_CDDA_UNDERRUN_TEST` 默认关闭：启动消费两秒后计划暂停生产 1200 ms，检查原有欠载/退出路径；negative-control PASS 与正常流 PASS 分开报告。本次在注入前遇到设备离线，未完成欠载验证，见 [负向记录](../docs/records/2026-10-31-m2-underrun.md)。
+负向测试开关 `CONFIG_DISCORA_CDDA_UNDERRUN_TEST` 默认关闭：启动消费两秒后计划暂停生产 1200 ms，检查原有欠载/退出路径；negative-control PASS 与正常流 PASS 分开报告。最初在注入前离线的失败保留于 [负向记录](../docs/records/2026-10-31-m2-underrun.md)；后续 OTG 直连已实际触发一次欠载并完成清理，见 [直连负向记录](../docs/records/2026-11-01-m2-underrun-direct.md)。
 
 [直连配置](bench/otg-direct.defaults) 开启寻道和完整首轨、60 秒软件缓冲，负向注入关闭；0.5.0 的直连曾复现末轨命令失败及 sense 超时，见 [实测](../docs/records/2026-11-01-m2-otg-after-pc.md)。加载 defaults 时须使用独立 sdkconfig，避免已有缓存配置覆盖目标值。
 
@@ -105,17 +105,20 @@ python3 firmware/tests/run_host_tests.py
 
 上电为 stopped。通过 COM / UART0 115200 发送回车结束的 `left`、`right`、`stereo`、`silence`、`play`、`pause`、`stop`、`status`、`help`。数据为明确标记的合成 PCM，不是光驱响应；没有自动出声。默认 GPIO4 / 5 / 6 分别为 BCLK / LRCK / DATA，目标 44.1 kHz、16-bit stereo、Philips I²S，无 MCLK 输出。
 
-暂停保留尚未提交的软件队列，并关闭/重建 DMA；最多约 40 ms 已排队 DMA 数据会被丢弃，不是采样级无损暂停。该独立诊断不使用 CD-DA 源；精确播放位置和硬件 DMA 欠载计数尚未实现。接线与验收见 [音频输出草案](../docs/audio-output.md)；源码、离线测试及构建证据见 [M3 准备记录](../docs/records/2026-10-31-m3-audio-prep.md)。独立 I²S 模式仍未烧录验收。
+暂停保留尚未提交的软件队列，并关闭/重建 DMA；最多约 40 ms 已排队 DMA 数据会被丢弃，不是采样级无损暂停。该独立诊断不使用 CD-DA 源；精确播放位置和硬件 DMA 欠载计数尚未实现。接线与验收见 [音频输出草案](../docs/audio-output.md)；源码、离线测试及构建证据见 [M3 准备记录](../docs/records/2026-10-31-m3-audio-prep.md)。独立 I²S 模式已上板做空载测试，真实 DAC / 引脚波形 / 模拟输出尚未验收。
 
 ## 当前模块
 
-- `main.c`：启动探测服务。
+- `main.c`：按互斥配置启动默认探测、测试音或 CD 播放服务。
 - `usb_probe.c`：原生 Host client/daemon、串行 BOT、恢复与设备生命周期。
+- `transfer_wait.c`：生产和离线测试共享的等待、取消排空及所有权观察编排。
 - `probe_protocol.c`：不依赖 ESP-IDF 的只读 CDB/CBW 构造和响应解析。
 - `cdda_bench.c`：寻道、完整首轨和软件时钟缓冲实验。
 - `cdda_cursor.c` / `pcm_buffer.c`：跨轨区间拆分、帧对齐环形队列，直接在主机侧测试。
 - `audio_core.c` / `test_tone.c`：可离线验证的控制状态机和诊断 PCM。
 - `audio_i2s.c` / `audio_diag.c`：原生 I²S TX 适配、单所有者 UART 测试音服务。
+- `audio_report.c`：有界状态报告队列与独立低优先级日志任务。
+- `cd_player_core.c` / `cd_player.c`：CD 轨道/代次控制及输出任务，与 USB 源通过受保护队列衔接。
 
 后续音频工作按实测结果引入 `mmc`、`cdda`、`audio` 的实际接口；本轮不添加 writer 空壳。
 
@@ -123,11 +126,11 @@ python3 firmware/tests/run_host_tests.py
 
 ## CD 源与音频控制层接入
 
-默认关闭的 CD player 模式把真实 READ CD 接入已有音频状态机；上电 stopped，由 UART 控制 play / pause / stop / next / prev / track N。USB 和输出任务分开，停止/换轨的旧代次回复拒绝入队。软件时钟模式已完成完整首轨 / EOF、10 轮控制及受控欠载/源故障，I²S 适配器完成离线检查及构建；见 [使用说明](../docs/cd-player.md)、[设计边界](../docs/decisions/0008-cd-player-control.md) 与 [实测](../docs/records/2026-11-01-m3-cd-player.md)。
+默认关闭的 CD player 模式把真实 READ CD 接入已有音频状态机；上电 stopped，由 UART 控制 play / pause / stop / next / prev / track N。USB 和输出任务分开，停止/换轨的旧代次回复拒绝入队。软件时钟模式已完成 13 轨整盘 / EOF、10 轮控制及受控欠载/源故障，I²S 适配器完成离线检查、构建和空载首轨测试，未连接 DAC；见 [使用说明](../docs/cd-player.md)、[设计边界](../docs/decisions/0008-cd-player-control.md) 与 [实测](../docs/records/2026-11-01-m3-cd-player.md)。
 
 ## 可复用 bench 工具
 
-[tools/player_bench.py](tools/player_bench.py) 提供只核对串口身份的 inspect、整轨 EOF、有限轮控制 stress 和一次性 faults 场景。默认不烧录、不主动发送复位脉冲；端口 / VID / PID / 序列号必须一致，输出目录拒绝覆盖，失败也保存报告并释放串口。仅适用于显式部署的 software-clock 播放器；当前板上默认查询固件不能直接运行这些场景。使用和边界见 [工具说明](tools/README.md)。
+[tools/player_bench.py](tools/player_bench.py) 提供只核对串口身份的 inspect、整轨 eof、逐轨整盘 disc、有限轮控制 stress 和一次性 faults 场景。默认不烧录、不主动发送复位脉冲；端口 / VID / PID / 序列号必须一致，输出目录拒绝覆盖，失败也保存报告并释放串口。仅适用于显式部署的 software-clock 播放器；当前板上默认查询固件不能直接运行这些场景。使用和边界见 [工具说明](tools/README.md)。
 
 `python3 firmware/tests/run_host_tests.py` 现在包含八组共享 C 代码的 ASan/UBSan 检查（含 I²S API 替身）；`python3 firmware/tests/player_bench_test.py` 包含串口身份、解析/命令边界、超时、EOF 报告和本会话 TOC 完整性规则的离线检查，不访问设备。硬件接受情况以 [当前状态](../docs/status.md) 为准。
 
@@ -136,3 +139,5 @@ I²S 空载外设的测试音、CD 首轨及日志调度对照见 [记录](../do
 USB 等待/取消编排由生产 Host 和主机测试共享；长等待、迟到回调及 EP0 隔离覆盖见 [记录](../docs/records/2026-11-01-m2-wait-flow.md)，不等于真实设备故障恢复验收。
 
 CI 现在分别构建默认查询、独立测试音、CD 软件时钟、CD I²S、故障注入五种 profile；每个 job 使用独立 build-ci / sdkconfig.ci，禁用 fail-fast 以保留全部配置结果。本地 v5.4 五配置已通过，不代表已触发远端 CI。
+
+单张 CD 的 13 轨整盘软件时钟实测完成 594221040 字节，各轨两端摘要一致、零欠载；详细版本、范围和恢复证据见 [整盘记录](../docs/records/2026-11-01-m3-whole-disc.md)。没有新增电脑端整盘参考，也不代表整盘 I²S / DAC 输出通过。
