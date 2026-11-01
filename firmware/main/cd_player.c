@@ -10,6 +10,9 @@
 #include <unistd.h>
 #include "esp_log.h"
 #include "esp_timer.h"
+#if defined(CONFIG_DISCORA_CD_PLAYER_VERIFY)
+#include "mbedtls/sha256.h"
+#endif
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
 #include "freertos/task.h"
@@ -28,6 +31,53 @@ static const char *sink = "software-clock-no-I2S";
 static uint32_t output_generation;
 static bool running;
 static int64_t next_tick, drain_until;
+
+#if defined(CONFIG_DISCORA_CD_PLAYER_VERIFY)
+// Verification only: serialized with the PCM queue; never hash stale source replies.
+static struct {
+    mbedtls_sha256_context source, consumed;
+    uint32_t generation;
+    uint64_t produced, delivered;
+    size_t tail;
+    bool initialized, valid, finished;
+} verify;
+static void verify_generation(void)
+{
+    if (verify.initialized && verify.generation == player.audio.generation) return;
+    if (verify.initialized) {
+        mbedtls_sha256_free(&verify.source);
+        mbedtls_sha256_free(&verify.consumed);
+    }
+    memset(&verify, 0, sizeof(verify));
+    mbedtls_sha256_init(&verify.source);
+    mbedtls_sha256_init(&verify.consumed);
+    verify.valid = mbedtls_sha256_starts(&verify.source, 0) == 0;
+    verify.valid &= mbedtls_sha256_starts(&verify.consumed, 0) == 0;
+    verify.generation = player.audio.generation;
+    verify.initialized = true;
+}
+static void verify_take(const uint8_t *data, size_t size)
+{
+    verify_generation();
+    if (size) {
+        verify.valid &= mbedtls_sha256_update(&verify.consumed, data, size) == 0;
+        verify.delivered += size;
+        verify.tail = size;
+    } else if (player.eof && !player.audio.pcm.used && player.audio.state == AUDIO_STOPPED && !verify.finished) {
+        uint8_t a[32], b[32]; char ah[65], bh[65];
+        verify.valid &= mbedtls_sha256_finish(&verify.source, a) == 0;
+        verify.valid &= mbedtls_sha256_finish(&verify.consumed, b) == 0;
+        for (unsigned i = 0; i < 32; ++i) { sprintf(ah + 2*i, "%02x", a[i]); sprintf(bh + 2*i, "%02x", b[i]); }
+        const probe_track_t *t = &player.toc.tracks[player.index];
+        uint64_t expected = (uint64_t)(t->end_lba - t->start_lba) * PROBE_CD_SECTOR_SIZE;
+        bool match = verify.valid && verify.produced == expected && verify.delivered == expected && !memcmp(a,b,32);
+        ESP_LOGI(TAG,"verify EOF generation=%" PRIu32 " produced=%" PRIu64 " consumed=%" PRIu64 " expected=%" PRIu64 " tail=%u match=%u",
+                 verify.generation, verify.produced, verify.delivered, expected, (unsigned)verify.tail, match);
+        ESP_LOGI(TAG,"verify source_sha256=%s consumed_sha256=%s scope=software-queue",ah,bh);
+        verify.finished = true;
+    }
+}
+#endif
 
 static bool close_output(void)
 {
@@ -130,6 +180,9 @@ static void output_task(void *arg)
 #endif
         xSemaphoreTake(lock, portMAX_DELAY);
         size_t n = cd_player_take(&player, block, wanted);
+#if defined(CONFIG_DISCORA_CD_PLAYER_VERIFY)
+        verify_take(block, n);
+#endif
         state = player.audio.state;
         bool eof = player.eof;
         xSemaphoreGive(lock);
@@ -195,6 +248,13 @@ void discora_cd_player_complete(const cd_player_read_t *request, bool ok, const 
 {
     xSemaphoreTake(lock, portMAX_DELAY);
     bool accepted = cd_player_complete(&player,request,ok,data,size);
+#if defined(CONFIG_DISCORA_CD_PLAYER_VERIFY)
+    if (accepted) {
+        verify_generation();
+        verify.valid &= mbedtls_sha256_update(&verify.source, data, size) == 0;
+        verify.produced += size;
+    }
+#endif
     xSemaphoreGive(lock);
     if (!accepted) ESP_LOGW(TAG,"source result rejected generation=%" PRIu32 " lba=%" PRIu32 " ok=%u (stale or fault)",request->generation,request->lba,ok);
 }
