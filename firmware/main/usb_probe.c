@@ -18,6 +18,7 @@
 #include "probe_protocol.h"
 #include "cdda_recovery.h"
 #include "cdda_bench.h"
+#include "cd_player.h"
 
 #if CONFIG_ESP_CONSOLE_USB_CDC || CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG || CONFIG_ESP_CONSOLE_SECONDARY_USB_SERIAL_JTAG
 #error "Discora Host requires an independent UART console; disable both primary and secondary USB consoles in menuconfig"
@@ -434,6 +435,9 @@ static void read_toc(probe_context_t *ctx)
         return;
     }
     ctx->toc_valid = true;
+#if defined(CONFIG_DISCORA_CD_PLAYER)
+    discora_cd_player_media(&ctx->toc);
+#endif
     ESP_LOGI(TAG, "TOC validated first=%u last=%u tracks=%u audio=%u data=%u lead_out_lba=%" PRIu32,
              ctx->toc.first_track, ctx->toc.last_track, ctx->toc.track_count,
              ctx->toc.audio_tracks, ctx->toc.data_tracks, ctx->toc.lead_out_lba);
@@ -701,6 +705,9 @@ static void poll_ready(probe_context_t *ctx)
         }
     } else if (status == COMMAND_FAILED) {
         ctx->toc_valid = false;
+#if defined(CONFIG_DISCORA_CD_PLAYER)
+        discora_cd_player_unavailable();
+#endif
         ctx->toc_attempts = 0;
         probe_sense_t sense;
         request_sense(ctx, &sense);
@@ -818,6 +825,9 @@ void discora_usb_probe_run(void)
     ESP_LOG_BUFFER_HEX_LEVEL(TAG, app->app_elf_sha256, sizeof(app->app_elf_sha256), ESP_LOG_INFO);
     ESP_LOGI(TAG, "Only INQUIRY / TEST UNIT READY / REQUEST SENSE / READ TOC / bounded READ CD; no media writes or eject");
     ESP_LOGI(TAG, "CDDA probe enabled=%u; max once per MCU boot, reconnect does not re-arm", CDDA_PROBE_ENABLED);
+#if defined(CONFIG_DISCORA_CD_PLAYER)
+    if (!discora_cd_player_start()) { ESP_LOGE(TAG, "CD player initialization failed"); return; }
+#endif
     ESP_LOGW(TAG, "Native USB PHY is now Host; use independent UART0 for logs. External 5V VBUS required.");
     const usb_host_config_t host_config = {
         .skip_phy_setup = false,
@@ -847,13 +857,31 @@ void discora_usb_probe_run(void)
     }
     ESP_LOGI(TAG, "Waiting for USB optical drive; readiness polling interval=%d ms", POLL_INTERVAL_MS);
     for (;;) {
+#if defined(CONFIG_DISCORA_CD_PLAYER)
+        handle_events(&ctx, 0);
+#else
         handle_events(&ctx, 100);
+#endif
         if (ctx.device) {
             if (ctx.gone) {
                 close_device(&ctx);
             } else if (!ctx.faulted && ctx.identified && now_ms() >= ctx.next_poll) {
                 poll_ready(&ctx);
             }
+#if defined(CONFIG_DISCORA_CD_PLAYER)
+            if (!ctx.device || ctx.gone || ctx.faulted || !ctx.toc_valid) {
+                discora_cd_player_unavailable();
+            } else {
+                cd_player_read_t request;
+                if (discora_cd_player_request(&request)) {
+                    ctx.quiet_audio = true;
+                    bool ok = read_audio(&ctx, &request.track, request.lba, request.sectors);
+                    ctx.quiet_audio = false;
+                    discora_cd_player_complete(&request, ok, ok ? ctx.result.data : NULL, ok ? ctx.result.size : 0);
+                    if (ctx.gone || ctx.faulted || !ctx.toc_valid) discora_cd_player_unavailable();
+                }
+            }
+#endif
         } else {
             for (unsigned address = 1; address < 128; ++address) {
                 if (ctx.pending[address]) {
@@ -863,5 +891,8 @@ void discora_usb_probe_run(void)
                 }
             }
         }
+#if defined(CONFIG_DISCORA_CD_PLAYER)
+        vTaskDelay(1);
+#endif
     }
 }

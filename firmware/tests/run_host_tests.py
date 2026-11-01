@@ -56,6 +56,18 @@ def main():
             ], check=True,
         )
         subprocess.run([str(recovery)], check=True)
+        player = Path(temp) / "cd_player_core_test"
+        subprocess.run(
+            shlex.split(os.environ.get("CC", "cc")) + [
+                "-std=c11", "-Wall", "-Wextra", "-Werror", "-pedantic", "-g",
+                "-fsanitize=address,undefined", "-fno-omit-frame-pointer",
+                "-I", str(firmware / "main"), str(firmware / "main/pcm_buffer.c"),
+                str(firmware / "main/audio_core.c"), str(firmware / "main/cd_player_core.c"),
+                str(firmware / "tests/cd_player_core_test.c"), "-o", str(player),
+            ], check=True,
+        )
+        subprocess.run([str(player)], check=True)
+
 
 
 
