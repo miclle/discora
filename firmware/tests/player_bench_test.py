@@ -28,6 +28,18 @@ class GuardTests(unittest.TestCase):
                          {"source_sha256": "abc", "consumed_sha256": "abc"})
 
 
+class TOCTests(unittest.TestCase):
+    def test_session_toc(self):
+        lines = ["usb_probe: TOC validated first=1 last=2 tracks=2 audio=2 data=0 lead_out_lba=35",
+                 "usb_probe: TOC track=1 type=audio start_lba=0 end_lba=17",
+                 "usb_probe: TOC track=2 type=audio start_lba=17 end_lba=35"]
+        self.assertEqual(bench.observed_toc(lines)[1], {"number": 2, "start": 17, "end": 35})
+        for invalid in [lines[:-1], lines[:1], [], [lines[0],lines[1],lines[2].replace("type=audio","type=data")],
+                        [lines[0],lines[1],lines[2].replace("start_lba=17","start_lba=18")]]:
+            with self.assertRaises(RuntimeError):
+                bench.observed_toc(invalid)
+
+
 class ScriptedSerial:
     def __init__(self, reply):
         self.reply, self.pending, self.commands = reply, b"", []

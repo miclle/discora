@@ -33,3 +33,15 @@ python firmware/tools/player_bench.py eof \
 离线检查：`python3 firmware/tests/player_bench_test.py`。没有 pyserial 也可运行，不打开任何设备。
 
 实验记录：[整轨](../../docs/records/2026-11-01-m3-player-eof.md)、[10 轮控制](../../docs/records/2026-11-01-m3-player-stress.md)、[受控故障](../../docs/records/2026-11-01-m3-player-faults.md)。整轨最初使用本地部署脚本内的相同验收规则；仓库工具的 EOF 场景随后通过离线 fixture，未单独重跑实盘整轨。压力与故障场景已由仓库工具在实板上执行，工具改动以本地源码快照区分。
+
+## 整盘场景
+
+`disc` 只使用本次串口采集中完整的 `TOC validated` 和逐轨记录，拒绝不完整目录、数据轨或不连续边界，不复用旧目录文件。当前限制为每轨 8 扇区至 480 秒、总音频不超过 75 分钟、整体截止 90 分钟。
+
+```sh
+python firmware/tools/player_bench.py disc \
+  --port "$DISCORA_PORT" --serial "$DISCORA_SERIAL" --vid 1a86 --pid 55d3 \
+  --output .local/bench/player-disc-run1
+```
+
+需要开启摘要的 software-clock 固件。每轨显式选择后，按 1× 软件时钟读至 EOF，检查两端摘要/长度/尾块、轨号、停止后的读取计数；通过后才进入下一轨。每轨完成原子更新 JSON 检查点，整盘通过才置 passed=true；任何实际错误中止本轮，不自动重试。该脚本的逐轨调度不改变固件的“单轨 EOF 停止”语义，不是无缝播放；摘要一致只证明软件队列一致，不是独立电脑内容校验。
