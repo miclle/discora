@@ -6,6 +6,11 @@ static int token, new_error, init_error, info_error, del_error, enable_error, di
 static size_t dma_size=AUDIO_PRELOAD_BYTES, short_load, short_write, loaded_total;
 static uint8_t preload[AUDIO_PRELOAD_BYTES];
 static bool enabled;
+static i2s_event_callbacks_t callbacks;
+static void *callback_user;
+esp_err_t i2s_channel_register_event_callback(i2s_chan_handle_t h, const i2s_event_callbacks_t *c, void *u)
+{ assert(h==&token && !enabled);callbacks=*c;callback_user=u;return ESP_OK; }
+
 esp_err_t i2s_new_channel(const i2s_chan_config_t *c, i2s_chan_handle_t *h, i2s_chan_handle_t *rx)
 {
     assert(!rx && c->dma_desc_num==4 && c->dma_frame_num==441 && c->auto_clear);
@@ -65,5 +70,11 @@ int main(void)
     open_ok(&o);assert(audio_i2s_start(&o,pcm,sizeof(pcm))==ESP_OK);
     audio_i2s_eof(&o,100);assert(audio_i2s_close(&o)==ESP_OK); // Pause/stop bypasses drain.
     assert(!audio_i2s_draining(&o,101));
+    i2s_event_data_t event={.size=1764};
+    assert(!callbacks.on_sent(&token,&event,callback_user));
+    assert(atomic_load(&o.dma_blocks)==1 && atomic_load(&o.unexpected_dma_sizes)==0);
+    event.size=4; callbacks.on_sent(&token,&event,callback_user); callbacks.on_send_q_ovf(&token,&event,callback_user);
+    assert(atomic_load(&o.dma_blocks)==2 && atomic_load(&o.unexpected_dma_sizes)==1 && atomic_load(&o.event_overflows)==1);
+    assert(o.padding_bytes==AUDIO_PRELOAD_BYTES-1176 && o.write_errors>=4);
     puts("PASS: production I2S adapter with fake IDF calls; open/preload/enable/write/close failures and reopen (no hardware)");
 }

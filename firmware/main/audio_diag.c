@@ -1,6 +1,7 @@
 #include "audio_diag.h"
 #include "audio_core.h"
 #include "audio_i2s.h"
+#include "audio_i2s_report.h"
 #include "test_tone.h"
 #include <errno.h>
 #include <fcntl.h>
@@ -23,7 +24,8 @@ static uint8_t preload[AUDIO_PRELOAD_BYTES];
 
 static void status(void)
 {
-    ESP_LOGI(TAG, "state=%s tone=%s tx=%s queued=%u dequeued=%" PRIu64 " generation=%" PRIu32 " underruns=%" PRIu32,
+    audio_i2s_report(TAG, &output);
+    audio_report(TAG, "state=%s tone=%s tx=%s queued=%u dequeued=%" PRIu64 " generation=%" PRIu32 " underruns=%" PRIu32,
              audio_state_name(core.state), test_tone_name(tone.mode), output.running ? "running" : "closed", (unsigned)core.pcm.used,
              core.dequeued_bytes, core.generation, core.underruns);
 }

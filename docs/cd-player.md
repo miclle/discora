@@ -51,3 +51,9 @@ I²S 暂停会丢弃已提交 DMA 数据，可能产生约 40 ms 的跳过；当
 0.6.4 修复 EOF 已读完但剩余队列低于预填门槛时，pause/play 永久停在 prefill 的问题。已知 EOF 的剩余数据可直接恢复消费；I²S 重新打开时允许 4 字节对齐的短预装，真实尾帧后补静音填满 DMA。补齐只用于 EOF 初始预装，不在普通欠载时伪造 PCM，也不计入 CD 字节摘要。
 
 适配器的 50 ms EOF 排空截止已纳入生产代码的离线测试，重复 EOF 不延长截止，stop/关闭会清除截止。假的 IDF 调用验证开通失败、短写、关闭失败保留句柄、重开和尾块；不模拟真实时钟或证明 DMA 已播放完成。见 [轨尾回归与适配器记录](records/2026-11-01-m3-player-tail.md)。
+
+## I²S 运行计数
+
+0.7.2 的 I²S 状态行分别报告 `pcm_submitted`、`padding`、`dma_blocks`、`event_overflows`、`write_errors` 和 opens/closes。PCM 提交量与 DMA 完成量不是同一个计数，自动补零也会完成；事件队列溢出与软件队列 underrun 分开报告。计数跨通道重开累计，32 位回调计数按无符号回绕。
+
+状态打印使用独立低优先级任务和 8 项有界快照队列，音频 owner 不等待串口；`report_dropped` 记录队列满/过长报告。命令语义不变，频繁查询可能丢报告，不能因此宣称音频完整性通过。空载 profile 为 `cd-player-i2s-observe.defaults`，仅增加软件摘要观察，不自动播放。
