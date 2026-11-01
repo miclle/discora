@@ -119,6 +119,8 @@ const char *probe_command_name(probe_command_t command)
     case PROBE_REQUEST_SENSE: return "REQUEST SENSE";
     case PROBE_READ_TOC: return "READ TOC";
     case PROBE_READ_CD: return "READ CD";
+    case PROBE_ALLOW_REMOVAL: return "ALLOW MEDIUM REMOVAL";
+    case PROBE_EJECT: return "START STOP UNIT (eject)";
     default: return "INVALID";
     }
 }
@@ -132,6 +134,8 @@ bool probe_make_cbw(probe_command_t command, uint8_t subclass, uint32_t tag,
     case PROBE_TEST_UNIT_READY: opcode = 0x00; break;
     case PROBE_REQUEST_SENSE: opcode = 0x03; break;
     case PROBE_READ_TOC: opcode = 0x43; break;
+    case PROBE_ALLOW_REMOVAL: opcode = 0x1e; break;
+    case PROBE_EJECT: opcode = 0x1b; break;
     default: return false;
     }
     if (!out || !supported_subclass(subclass)) {
@@ -157,7 +161,8 @@ bool probe_make_cbw(probe_command_t command, uint8_t subclass, uint32_t tag,
         out[22] = (uint8_t)(data_size >> 8);
         out[23] = (uint8_t)data_size;
     } else {
-        out[19] = (uint8_t)data_size;
+        // Eject only: IMMED=0, LoEj=1, Start=0. ALLOW uses Prevent=0.
+        out[19] = command == PROBE_EJECT ? 0x02 : (uint8_t)data_size;
     }
     return true;
 }

@@ -24,6 +24,16 @@ def main():
             check=True,
         )
         subprocess.run([str(binary)], check=True)
+        button = Path(temp) / "eject_button_test"
+        subprocess.run(
+            shlex.split(os.environ.get("CC", "cc")) + [
+                "-std=c11", "-Wall", "-Wextra", "-Werror", "-pedantic", "-g",
+                "-fsanitize=address,undefined", "-fno-omit-frame-pointer",
+                "-I", str(firmware / "main"), str(firmware / "main/eject_button_core.c"),
+                str(firmware / "tests/eject_button_test.c"), "-o", str(button),
+            ], check=True,
+        )
+        subprocess.run([str(button)], check=True)
         stream = Path(temp) / "stream_core_test"
         subprocess.run(
             shlex.split(os.environ.get("CC", "cc")) + [

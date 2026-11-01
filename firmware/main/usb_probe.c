@@ -20,6 +20,7 @@
 #include "cdda_bench.h"
 #include "cd_player.h"
 #include "transfer_wait.h"
+#include "eject_button.h"
 
 #if CONFIG_ESP_CONSOLE_USB_CDC || CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG || CONFIG_ESP_CONSOLE_SECONDARY_USB_SERIAL_JTAG
 #error "Discora Host requires an independent UART console; disable both primary and secondary USB consoles in menuconfig"
@@ -31,7 +32,7 @@ enum { CDDA_PROBE_ENABLED = 1 };
 enum { CDDA_PROBE_ENABLED = 0 };
 #endif
 
-enum { TRANSFER_TIMEOUT_MS = 3000, AUDIO_DATA_TIMEOUT_MS = 30000, CANCEL_TIMEOUT_MS = 2000, POLL_INTERVAL_MS = 5000 };
+enum { TRANSFER_TIMEOUT_MS = 3000, AUDIO_DATA_TIMEOUT_MS = 30000, CANCEL_TIMEOUT_MS = 2000, POLL_INTERVAL_MS = 5000, EJECT_CSW_TIMEOUT_MS = 30000 };
 #if defined(CONFIG_DISCORA_SENSE_DATA_TIMEOUT_MS)
 enum { SENSE_DATA_TIMEOUT_MS = CONFIG_DISCORA_SENSE_DATA_TIMEOUT_MS };
 #else
@@ -100,6 +101,7 @@ static void client_event(const usb_host_client_event_msg_t *event, void *arg)
     } else if (event->event == USB_HOST_CLIENT_EVENT_DEV_GONE &&
                event->dev_gone.dev_hdl == ctx->device) {
         ctx->gone = true;
+        discora_eject_button_enable(false);
     }
 }
 
@@ -295,7 +297,8 @@ static command_result_t execute_command(probe_context_t *ctx, probe_command_t co
             }
         }
     }
-    err = bulk_transfer(ctx, true, NULL, PROBE_CSW_SIZE, TRANSFER_TIMEOUT_MS);
+    err = bulk_transfer(ctx, true, NULL, PROBE_CSW_SIZE,
+                        command == PROBE_EJECT ? EJECT_CSW_TIMEOUT_MS : TRANSFER_TIMEOUT_MS);
     if (command == PROBE_REQUEST_SENSE) {
         ESP_LOGI(TAG, "sense phase=CSW result=%s elapsed_ms=%" PRIi64,
                  esp_err_to_name(err), now_ms() - started);
@@ -303,7 +306,8 @@ static command_result_t execute_command(probe_context_t *ctx, probe_command_t co
     if (err == ESP_FAIL && ctx->transfer->status == USB_TRANSFER_STATUS_STALL) {
         err = clear_halt(ctx, ctx->interface.ep_in);
         if (err == ESP_OK) {
-            err = bulk_transfer(ctx, true, NULL, PROBE_CSW_SIZE, TRANSFER_TIMEOUT_MS);
+            err = bulk_transfer(ctx, true, NULL, PROBE_CSW_SIZE,
+                        command == PROBE_EJECT ? EJECT_CSW_TIMEOUT_MS : TRANSFER_TIMEOUT_MS);
         }
     }
     if (err != ESP_OK) {
@@ -355,6 +359,39 @@ static bool request_sense(probe_context_t *ctx, probe_sense_t *sense)
         ESP_LOGI(TAG, "medium not present (valid device response)");
     }
     return true;
+}
+
+static void eject_disc(probe_context_t *ctx)
+{
+    discora_eject_button_enable(false); // Busy: do not queue a second mechanical action.
+    if (!ctx->device || ctx->gone || ctx->faulted || !ctx->identified || ctx->in_flight) {
+        ESP_LOGW(TAG, "eject rejected: optical drive unavailable; no deferred retry");
+        return;
+    }
+    ctx->toc_valid = false;
+    ctx->toc_attempts = 0;
+#if defined(CONFIG_DISCORA_CD_PLAYER)
+    discora_cd_player_unavailable(); // Invalidates generation and cancels continuous playback.
+    int64_t deadline = now_ms() + 1000;
+    while (!discora_cd_player_quiescent() && !ctx->gone && !ctx->faulted && now_ms() < deadline)
+        handle_events(ctx, 20);
+    if (!discora_cd_player_quiescent() || ctx->gone || ctx->faulted) {
+        ESP_LOGE(TAG, "eject aborted: output did not stop or device unavailable");
+        ctx->next_poll = now_ms() + POLL_INTERVAL_MS;
+        return;
+    }
+#endif
+    command_result_t status = execute_command(ctx, PROBE_ALLOW_REMOVAL, 0, NULL, &ctx->result);
+    if (status == COMMAND_PASSED)
+        status = execute_command(ctx, PROBE_EJECT, 0, NULL, &ctx->result);
+    if (status == COMMAND_FAILED) {
+        probe_sense_t sense;
+        request_sense(ctx, &sense);
+        ESP_LOGW(TAG, "eject sequence rejected by drive; no automatic retry");
+    } else if (status == COMMAND_PASSED) {
+        ESP_LOGI(TAG, "eject command completed; physical disc removal requires observation");
+    }
+    ctx->next_poll = now_ms() + POLL_INTERVAL_MS;
 }
 
 static void identify_drive(probe_context_t *ctx)
@@ -712,6 +749,7 @@ static void poll_ready(probe_context_t *ctx)
 
 static void close_device(probe_context_t *ctx)
 {
+    discora_eject_button_enable(false);
     if (ctx->in_flight) {
         return;
     }
@@ -741,6 +779,7 @@ static void close_device(probe_context_t *ctx)
 
 static void open_device(probe_context_t *ctx, uint8_t address)
 {
+    discora_eject_button_enable(false);
     ctx->gone = false;
     ctx->faulted = false;
     ctx->identified = false;
@@ -815,14 +854,15 @@ static void host_daemon(void *arg)
 void discora_usb_probe_run(void)
 {
     const esp_app_desc_t *app = esp_app_get_description();
-    ESP_LOGI(TAG, "Discora M2 CD-DA read-only probe version=%s IDF=%s", app->version, app->idf_ver);
+    ESP_LOGI(TAG, "Discora optical control version=%s IDF=%s", app->version, app->idf_ver);
     ESP_LOGI(TAG, "Application ELF SHA256:");
     ESP_LOG_BUFFER_HEX_LEVEL(TAG, app->app_elf_sha256, sizeof(app->app_elf_sha256), ESP_LOG_INFO);
-    ESP_LOGI(TAG, "Only INQUIRY / TEST UNIT READY / REQUEST SENSE / READ TOC / bounded READ CD; no media writes or eject");
+    ESP_LOGI(TAG, "Queries / bounded READ CD; no media writes; explicit GPIO allow-removal/eject when enabled");
     ESP_LOGI(TAG, "CDDA probe enabled=%u; max once per MCU boot, reconnect does not re-arm", CDDA_PROBE_ENABLED);
 #if defined(CONFIG_DISCORA_CD_PLAYER)
     if (!discora_cd_player_start()) { ESP_LOGE(TAG, "CD player initialization failed"); return; }
 #endif
+    if (!discora_eject_button_start()) { ESP_LOGE(TAG, "eject button initialization failed"); return; }
     ESP_LOGW(TAG, "Native USB PHY is now Host; use independent UART0 for logs. External 5V VBUS required.");
     const usb_host_config_t host_config = {
         .skip_phy_setup = false,
@@ -857,6 +897,7 @@ void discora_usb_probe_run(void)
 #else
         handle_events(&ctx, 100);
 #endif
+        if (discora_eject_button_take()) eject_disc(&ctx);
         if (ctx.device) {
             if (ctx.gone) {
                 close_device(&ctx);
@@ -886,6 +927,7 @@ void discora_usb_probe_run(void)
                 }
             }
         }
+        discora_eject_button_enable(ctx.device && ctx.identified && !ctx.gone && !ctx.faulted);
 #if defined(CONFIG_DISCORA_CD_PLAYER)
         vTaskDelay(1);
 #endif
