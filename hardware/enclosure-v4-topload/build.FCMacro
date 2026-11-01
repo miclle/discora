@@ -1,0 +1,331 @@
+"""Build the editable Discora V4 top-loading concept in FreeCAD. Units: mm."""
+import os
+from pathlib import Path
+
+import FreeCAD as A
+import FreeCADGui as G
+import Part
+import Sketcher
+from PySide import QtWidgets
+
+V = A.Vector
+X, Y, Z = V(1, 0, 0), V(0, 1, 0), V(0, 0, 1)
+TEAL, BLACK, RUBBER = (0.025, 0.75, 0.72), (0.145, 0.155, 0.17), (0.07, 0.08, 0.09)
+GLASS, PIXEL = (0.045, 0.085, 0.10), (0.85, 0.97, 1.0)
+WHITE, SILVER, PCB, BLUE = (0.94, 0.95, 0.94), (0.70, 0.73, 0.75), (0.14, 0.40, 0.32), (0.12, 0.33, 0.62)
+# The drive face is parallel to XZ and the disc moves vertically behind the handle.
+WIDTH = 160.0
+DRIVE = (128.0, 9.5, 129.0)
+SPEAKER = (16.0, 24.0, 84.0)
+# Two front-facing drivers share one circular grille, but separate rear cavities.
+SPEAKER_CENTER_X, SPEAKER_CENTER_Z = 18.0, 76.0
+PORT_CENTER_Y, PORT_CENTER_Z = 39.0, 95.0
+FRONT_GRILLE_RADIUS = 54.0
+BATTERY = (82.0, 21.0, 22.0)
+SLOT_Y = 68.0
+DRIVE_TOP = 163.5
+# Estimated small monochrome display; no module has been selected.
+DISPLAY_WINDOW = (36.0, 20.0)
+DISPLAY_DECK_Y = 18.0
+DISPLAY_PCB = (38.0, 1.6, 30.0)
+
+
+def build(folder):
+    doc = A.newDocument("DiscoraV4Topload")
+    doc.Label = "Discora V4 · 提手后顶部进碟"
+    visible = []
+
+    def group(name, label):
+        obj = doc.addObject("App::DocumentObjectGroup", name)
+        obj.Label = label
+        return obj
+
+    shell = group("Shell", "01 · PLA 外壳")
+    ui = group("Controls", "02 · 状态屏和操控件")
+    supports = group("Carrier", "03 · PLA 内部支架")
+    hardware = group("Hardware", "04 · 硬件占位（待实测）")
+
+    def finish(obj, name, color, parent):
+        obj.Label = name
+        parent.addObject(obj)
+        obj.ViewObject.ShapeColor = color
+        obj.ViewObject.DisplayMode = "Shaded"
+        visible.append(obj)
+        return obj
+
+    def feature(key, label, shape, color, parent):
+        obj = doc.addObject("Part::Feature", key)
+        obj.Shape = shape
+        return finish(obj, label, color, parent)
+
+    def prism_yz(points, x, width):
+        pts = [V(x, y, z) for y, z in points]
+        return Part.Face(Part.makePolygon(pts + pts[:1])).extrude(X * width)
+
+    def cylinder(radius, height, origin, axis):
+        return Part.makeCylinder(radius, height, V(*origin), axis)
+
+    def box(x, y, z, dx, dy, dz):
+        return Part.makeBox(dx, dy, dz, V(x, y, z))
+
+    def block(key, label, origin, dims, color, parent):
+        obj = doc.addObject("Part::Box", key)
+        obj.Length, obj.Width, obj.Height = dims
+        obj.Placement = A.Placement(V(*origin), A.Rotation())
+        return finish(obj, label, color, parent)
+
+    def obround(origin, along, across, normal, length, width, thickness):
+        c = V(*origin)
+        r = width / 2
+        a, b = c - along * (length / 2 - r), c + along * (length / 2 - r)
+        edges = [Part.makeLine(a + across*r, b + across*r),
+                 Part.Arc(b + across*r, b + along*r, b - across*r).toShape(),
+                 Part.makeLine(b - across*r, a - across*r),
+                 Part.Arc(a - across*r, a - along*r, a + across*r).toShape()]
+        return Part.Face(Part.Wire(edges)).extrude(normal * thickness)
+
+    def display_rect(width, height, radius, y, depth):
+        z = 0.0
+        rect = box(-width/2+radius,y,z-height/2,width-2*radius,depth,height)
+        rect = rect.fuse(box(-width/2,y,z-height/2+radius,width,depth,height-2*radius))
+        corners = [cylinder(radius,depth,(x,y,zz),Y)
+                   for x in (-width/2+radius,width/2-radius)
+                   for zz in (z-height/2+radius,z+height/2-radius)]
+        return rect.multiFuse(corners).removeSplitter()
+
+    def side_capsule(x, y, z, length, width, depth):
+        return obround((x, y, z), Z, Y, X, length, width, depth)
+
+    def native_cut(key, label, base, tool, color, parent):
+        cutter = doc.addObject("Part::Feature", key + "Tool")
+        cutter.Shape = tool
+        cutter.Label = label + " · 刀体"
+        obj = doc.addObject("Part::Cut", key)
+        obj.Base, obj.Tool = base, cutter
+        base.Visibility = cutter.Visibility = False
+        return finish(obj, label, color, parent)
+
+    def raw(key, shape):
+        obj = doc.addObject("Part::Feature", key)
+        obj.Shape = shape
+        return obj
+
+    # An editable sketch drives the continuous front, roof and handle extrusion.
+    profile = [(0,3),(0,163),(38,190),(38,236),(43,236),(43,190),(78,165),
+               (75,163.5),(41.5,187),(39,187),(3,161.5),(3,3)]
+    section = doc.addObject("Sketcher::SketchObject", "FoldSection")
+    section.Label = "壳体 YZ 截面 · 可编辑"
+    section.Placement = A.Placement(V(-WIDTH/2,0,0), A.Rotation(V(1,1,1),120))
+    for a,b in zip(profile, profile[1:] + profile[:1]):
+        section.addGeometry(Part.LineSegment(V(*a,0),V(*b,0)),False)
+    skin = doc.addObject("Part::Extrusion","FoldedSkin")
+    skin.Base, skin.Dir, skin.Solid = section, X*WIDTH, True
+    section.Visibility = False
+    # Round top outer corners on the flange; preserve the crisp shoulder folds.
+    doc.recompute()
+    rounded = []
+    for i, edge in enumerate(skin.Shape.Edges, 1):
+        c = edge.CenterOfMass
+        at_end = abs(abs(c.x)-WIDTH/2) < .01
+        if at_end and abs(c.z-236) < .01:
+            rounded.append((i, 4.0, 4.0))
+        elif at_end and abs(c.y) < .01 and edge.Length > 150:
+            rounded.append((i, 1.6, 1.6))
+    fil = doc.addObject("Part::Fillet","CowlEdges")
+    fil.Base, fil.Edges = skin, rounded
+    skin.Visibility = False
+    skin = fil
+    normal = V(0,-27,38)
+    normal.normalize()
+    def deck(x,y):
+        return V(x,y,163+27*y/38)
+    # Local screen X is horizontal, +Z runs up the slope, +Y points into the case.
+    display_pose=A.Placement(deck(0,DISPLAY_DECK_Y),A.Rotation(Y,normal*-1))
+    screen_cut=display_rect(*DISPLAY_WINDOW,3,-3,9)
+    screen_cut.Placement=display_pose.multiply(screen_cut.Placement)
+    holes = [obround((0,36,213), X,Z,Y,104,29,10),
+             screen_cut,
+             cylinder(FRONT_GRILLE_RADIUS,9,(0,-3,SPEAKER_CENTER_Z),Y),
+             obround((0,SLOT_Y,155),X,Y,Z,124,3.2,45)]
+    for x,y,r in [(-49,18,11.25),(48,18,4.4)]:
+        holes.append(Part.makeCylinder(r,12,deck(x,y)-normal*7,normal))
+    native_cut("Cowl","前壳 · 斜面及一体提手",skin,Part.makeCompound(holes),TEAL,shell)
+
+    # Side openings: recessed capsule inserts with open peripheral air passages.
+    panel_profile = [(3,3),(75,3),(75,163.5),(41.5,187),(39,187),(3,161.5)]
+    cy, cz = PORT_CENTER_Y, PORT_CENTER_Z
+    for right in [False,True]:
+        prefix, label = ("R","右") if right else ("L","左")
+        x = WIDTH/2-3 if right else -WIDTH/2
+        base = raw(prefix+"PanelBlank",prism_yz(panel_profile,x,3))
+        native_cut(prefix+"Panel",label+"侧壳",base,
+                   side_capsule(x-1,cy,cz,91,29,5),BLACK,shell)
+
+    # Build the left port and cavity, then mirror them exactly for the right.
+    ring=side_capsule(-80,cy,cz,90.8,28.8,2.9).cut(side_capsule(-81,cy,cz,84,22,5))
+    tube=side_capsule(-78,cy,cz,84,22,10).cut(side_capsule(-79,cy,cz,80,18,12))
+    inset=side_capsule(-78.5,cy,cz,73,12,1.5)
+    bridge=box(-78,cy-11,cz-1,1,22,2)
+    port=ring.multiFuse([tube,inset,bridge]).removeSplitter()
+    outer=box(-74,3,28,74,28,96).fuse(box(-74,28,28,18,32,117))
+    inner=box(-71.5,2,30.5,70,26.5,91).fuse(box(-71.5,26,30.5,13,31.5,112))
+    cavity=outer.cut(inner).cut(side_capsule(-81,cy,cz,84.2,22.2,13.2)).removeSplitter()
+    mirror=A.Matrix();mirror.A11=-1
+    for right in [False,True]:
+        prefix,label=("R","右") if right else ("L","左")
+        feature(prefix+"Port",label+"侧 · 胶囊导音孔与内凹饰片",port.transformGeometry(mirror) if right else port,BLACK,shell)
+        feature(prefix+"Chamber",label+"声道 · 后腔及侧向通道（未调谐）",cavity.transformGeometry(mirror) if right else cavity,TEAL,supports)
+
+    # Front grille, baffle and two rectangular driver envelopes.
+    zc=SPEAKER_CENTER_Z
+    radius=FRONT_GRILLE_RADIUS
+    bezel=cylinder(radius-.2,2.5,(0,.35,zc),Y).cut(cylinder(radius-1.6,4,(0,-.1,zc),Y))
+    feature("FrontBezel","中央圆形格栅压圈",bezel,RUBBER,shell)
+    grille=cylinder(radius-1.8,1.2,(0,.4,zc),Y)
+    vents=[]
+    for row in range(-18,19):
+        dz=row*2.9
+        for col in range(-18,19):
+            dx=(col+.5*(row%2))*2.9
+            if dx*dx+dz*dz<(radius-3.5)**2:
+                vents.append(cylinder(.94,2,(dx,0,zc+dz),Y))
+    feature("FrontGrille","中央双喇叭 · 通孔圆形护网",grille.cut(Part.makeCompound(vents)),TEAL,shell)
+    depth,width,height=SPEAKER
+    apertures=[]
+    for right in [False,True]:
+        prefix,label=("R","右") if right else ("L","左")
+        cx=SPEAKER_CENTER_X if right else -SPEAKER_CENTER_X
+        sx,sz=cx-width/2,zc-height/2
+        block(prefix+"Driver",label+"声道 · 朝前矩形喇叭包络",(sx,6,sz),(width,depth,height),RUBBER,hardware)
+        frame=box(sx-2,3,sz-2,width+4,depth+5,height+4).cut(
+            box(sx-.2,2.5,sz-.2,width+.4,depth+6,height+.4))
+        feature(prefix+"DriverFrame",label+"前置喇叭安装框",frame,TEAL,supports)
+        apertures.append(box(sx-.2,1,sz-.2,width+.4,3,height+.4))
+    baffle=cylinder(radius-1.7,1.2,(0,1.8,zc),Y).cut(Part.makeCompound(apertures))
+    feature("FrontBaffle","双单元前障板",baffle,RUBBER,supports)
+
+    # Rear cover mates to integral base rails with four screw pilots.
+    rear = prism_yz([(75,3),(78,3),(78,165),(75,163.5)],-80,160)
+    tray = box(-77,3,3,154,72,3)
+    for x in [-72,72]:
+        upright = box(x-4,68,6,8,7,152)
+        for z in [14,150]:
+            rear = rear.cut(cylinder(1.7,5,(x,74,z),Y))
+            upright = upright.cut(cylinder(1.25,6,(x,69.4,z),Y))
+        tray = tray.fuse(upright)
+    feature("Back","后盖 · 四个通孔",rear,BLACK,shell)
+    feature("Base","底架 · 后盖螺钉柱",tray.removeSplitter(),BLACK,shell)
+    feet = [cylinder(4,3,(x,y,0),Z) for x in [-61,61] for y in [11,67]]
+    feature("Feet","四个脚垫",Part.makeCompound(feet),RUBBER,ui)
+
+    ww, wh = DISPLAY_WINDOW
+    feature("Window","斜面状态屏 · 圆角显示窗",display_rect(ww-.4,wh-.4,2.8,.6,2),GLASS,ui)
+    # Raised luminous shapes are a display-content mockup, not printable parts.
+    glyphs=[]
+    def segment(x,z,w,h):
+        glyphs.append(box(x,.4,z,w,.15,h))
+    def digit(x,z,active):
+        segments={'a':(x+.5,z+7,3,.55),'g':(x+.5,z+3.5,3,.55),
+                  'd':(x+.5,z,3,.55),'f':(x,z+4,.55,2.8),
+                  'b':(x+3.5,z+4,.55,2.8),'e':(x,z+.7,.55,2.6),
+                  'c':(x+3.5,z+.7,.55,2.6)}
+        for name in active: segment(*segments[name])
+    digit(-13,-2,'abcdef')
+    digit(-7,-2,'abc')
+    # Play icon, battery outline and volume bars.
+    pts=[V(1,.4,-1),V(1,.4,5),V(5,.4,2)]
+    glyphs.append(Part.Face(Part.makePolygon(pts+[pts[0]])).extrude(Y*.15))
+    bz=1
+    battery=box(8,.4,bz,5,.15,3).cut(box(8.5,.3,bz+.5,4,.4,2))
+    glyphs.extend([battery,box(13,.4,bz+1,.7,.15,1),box(9,.4,bz+.8,2.5,.15,1.4)])
+    for i in range(8): segment(-13+i*3.4,-6,2.3,1.2)
+    feature("StatusArt","显示内容示意 · 曲目 07 / 播放 / 电量 / 音量",Part.makeCompound(glyphs),PIXEL,ui)
+    feature("Keycap","播放键",Part.makeCylinder(11,1.45,deck(-49,18)-normal*.5,normal),TEAL,ui)
+    key_mark=Part.makeBox(1.1,5,.15,V(-.55,-2.5,0))
+    key_mark.Placement=A.Placement(deck(-49,18)+normal*.95,A.Rotation(Z,normal)).multiply(key_mark.Placement)
+    feature("KeyLight","播放键 · 指示灯",key_mark,WHITE,ui)
+    loc = deck(48,18)
+    knob = Part.makeCylinder(11.8,8.2,loc+normal*.45,normal).cut(
+        Part.makeCylinder(5.8,5.3,loc+normal*3.55,normal))
+    feature("Knob","音量旋钮 · 内凹",knob,WHITE,ui)
+    feature("Encoder","编码器包络",Part.makeCylinder(4,5,loc-normal*4.55,normal),SILVER,hardware)
+
+    # Rear vertical drive opens into the slot behind the handle.
+    dw,dt,dh = DRIVE
+    bottom = DRIVE_TOP-dh
+    drive = block("DriveBlank","光驱毛坯",(-dw/2,SLOT_Y-dt/2,bottom),DRIVE,SILVER,hardware)
+    hardware.removeObject(drive)
+    visible.remove(drive)
+    native_cut("Drive","UJ-898 · 竖装向上退碟",drive,
+               box(-61,SLOT_Y-1,bottom+2,122,2,dh),SILVER,hardware)
+    block("Bridge","底部 SATA–USB 桥接占位",(-12,SLOT_Y-5,bottom-24),(24,10,24),PCB,hardware)
+    rail_y=SLOT_Y-dt/2-1.05
+    rail_width=dt+2.1
+    bottom_rail=box(-dw/2-3,rail_y,bottom-2,dw+6,rail_width,2)
+    side_rails=[box(x,rail_y,bottom,3,rail_width,dh) for x in (-dw/2-3,dw/2)]
+    carrier=bottom_rail.multiFuse(side_rails).removeSplitter()
+    carrier=carrier.cut(box(-12.3,SLOT_Y-5.3,bottom-2.5,24.6,10.6,3))
+    feature("DriveCarrier","光驱底托和两侧导轨",carrier,TEAL,supports)
+    # Upper edge follows the existing rear roof's inner plane.
+    def inner_roof(y):
+        return 187-(y-41.5)*23.5/33.5
+    y0,y1=SLOT_Y-2.5,SLOT_Y+2.5
+    guide=prism_yz([(y0,DRIVE_TOP),(y1,DRIVE_TOP),(y1,inner_roof(y1)),(y0,inner_roof(y0))],-63,126)
+    guide=guide.cut(box(-62,SLOT_Y-1.6,DRIVE_TOP-.5,124,3.2,20))
+    feature("SlotGuide","后斜面进碟导向框",guide,TEAL,supports)
+    pw, pt, ph = DISPLAY_PCB
+    block("DisplayPCB","小型单色状态屏 PCB · 预估占位",(-pw/2,7.4,-ph/2),DISPLAY_PCB,PCB,hardware)
+    block("DisplayHeader","状态屏接头 · 预估占位",(-5,9,-14),(10,4,4),RUBBER,hardware)
+    frame=box(-pw/2-3,3.3,-ph/2-3,pw+6,5.7,ph+6).cut(
+        box(-pw/2-.3,2.5,-ph/2-.3,pw+.6,7,ph+.6))
+    seat=box(-pw/2-3,9,-ph/2-3,pw+6,2,ph+6).cut(
+        box(-pw/2+2,8.5,-ph/2+2,pw-4,3,ph-4))
+    frame=frame.fuse(seat).cut(box(-5.3,8.8,-14.3,10.6,4.5,4.6))
+    feature("DisplayCarrier","小状态屏安装座 · 待选型细化",frame.removeSplitter(),TEAL,supports)
+
+    sled = box(-53,42,42,106,2.4,98)
+    for x in (-52,48):
+        sled = sled.fuse(box(x,40,6,4,4.4,36))
+    feature("ElectronicsSled","屏幕后板卡背板及底脚",sled.removeSplitter(),TEAL,supports)
+    for key,label,x,z,w,h in [
+        ("MCU","ESP32-S3 N16R8",-49,57,27.94,63.39),
+        ("DAC","立体声 DAC",-15,81,26,47),("Amp","立体声功放",18,59,32,54)]:
+        block(key,label+" · 占位",(x,39.4,z),(w,1.6,h),PCB,hardware)
+        block(key+"Chip",label+" · 元件高度示意",(x+3,34.4,z+6),(w-6,5,h*.47),
+              SILVER if key=="MCU" else RUBBER,hardware)
+        posts = [cylinder(2,1,(xx,41,zz),Y) for xx in (x+3,x+w-3) for zz in (z+3,z+h-3)]
+        feature(key+"Pads",label+" · 支撑垫示意",Part.makeCompound(posts),TEAL,supports)
+    bx, by, _ = BATTERY
+    block("Battery","可充电电池包 · 占位",(-bx/2,38,8.5),BATTERY,BLUE,hardware)
+    cradle = box(-bx/2-2,36,6,bx+4,by+4,13).cut(box(-bx/2-.3,37.7,8.5,bx+.6,by+.6,20))
+    feature("BatteryCradle","底部电池座",cradle,TEAL,supports)
+
+    # Move the complete display stack together, including the native PCB boxes.
+    for name in ('Window','StatusArt','DisplayPCB','DisplayHeader','DisplayCarrier'):
+        obj=doc.getObject(name)
+        obj.Placement=display_pose.multiply(obj.Placement)
+
+    disc=raw("DiscReference",cylinder(60,1.2,(0,SLOT_Y-.6,196),Y).cut(
+        cylinder(7.5,2,(0,SLOT_Y-1,196),Y)))
+    disc.Label="参考 · 提手后竖直退碟（默认隐藏）"
+    disc.ViewObject.ShapeColor=SILVER
+    disc.ViewObject.DisplayMode="Shaded"
+    disc.Visibility=False
+
+    doc.recompute()
+    for o in visible:
+        o.Visibility = True
+        if o.Shape.isNull() or not o.Shape.isValid() or not o.Shape.Solids:
+            raise RuntimeError("Invalid solid: " + o.Name)
+    G.activeDocument().activeView().setCameraOrientation(A.Rotation(Z,21).multiply(
+        A.Rotation(X,76)).Q)
+    G.activeDocument().activeView().fitAll()
+    doc.recompute()
+    doc.saveAs(str(folder/"Discora-V4-Topload.FCStd"))
+    return doc, visible
+
+
+target = os.environ.get("DISCORA_CAD_OUTPUT") or QtWidgets.QFileDialog.getExistingDirectory(
+    None, "选择 Discora 模型输出目录")
+if target:
+    build(Path(target))
