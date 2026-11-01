@@ -2,6 +2,7 @@
 #if defined(CONFIG_DISCORA_CD_PLAYER)
 #include "cd_player.h"
 #include "audio_i2s.h"
+#include "audio_i2s_report.h"
 #include <errno.h>
 #include <fcntl.h>
 #include <inttypes.h>
@@ -116,6 +117,9 @@ static bool close_output(void)
 }
 static void status(void)
 {
+#if defined(CONFIG_DISCORA_CD_PLAYER_I2S)
+    audio_i2s_report(TAG, &output);
+#endif
     xSemaphoreTake(lock, portMAX_DELAY);
     audio_state_t state = player.audio.state;
     uint32_t gen = player.audio.generation, underruns = player.audio.underruns;
@@ -125,10 +129,10 @@ static void status(void)
     bool media = player.media, eof = player.eof, pending = player.pending;
     unsigned track = media ? player.toc.tracks[player.index].number : 0;
     xSemaphoreGive(lock);
-    ESP_LOGI(TAG,"resources heap_free=%lu heap_min=%lu output_stack_min=%u",
+    audio_report(TAG,"resources heap_free=%lu heap_min=%lu output_stack_min=%u report_dropped=%" PRIu32,
              (unsigned long)esp_get_free_heap_size(), (unsigned long)esp_get_minimum_free_heap_size(),
-             (unsigned)uxTaskGetStackHighWaterMark(NULL));
-    ESP_LOGI(TAG, "state=%s sink=%s media=%u track=%u generation=%" PRIu32 " queued=%u delivered=%" PRIu64
+             (unsigned)uxTaskGetStackHighWaterMark(NULL), audio_report_dropped());
+    audio_report(TAG, "state=%s sink=%s media=%u track=%u generation=%" PRIu32 " queued=%u delivered=%" PRIu64
              " next_lba=%" PRIu32 " eof=%u pending=%u reads=%" PRIu32 " stale=%" PRIu32 " underruns=%" PRIu32,
              audio_state_name(state), sink, media, track, gen, (unsigned)queued, bytes, lba, eof, pending, reads, stale, underruns);
 }

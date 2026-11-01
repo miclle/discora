@@ -23,3 +23,8 @@ esp_err_t i2s_channel_preload_data(i2s_chan_handle_t, const void *, size_t, size
 esp_err_t i2s_channel_enable(i2s_chan_handle_t);
 esp_err_t i2s_channel_disable(i2s_chan_handle_t);
 esp_err_t i2s_channel_write(i2s_chan_handle_t, const void *, size_t, size_t *, unsigned);
+
+typedef struct { size_t size; void *data; } i2s_event_data_t;
+typedef bool (*i2s_isr_callback_t)(i2s_chan_handle_t, i2s_event_data_t *, void *);
+typedef struct { i2s_isr_callback_t on_sent, on_send_q_ovf; } i2s_event_callbacks_t;
+esp_err_t i2s_channel_register_event_callback(i2s_chan_handle_t, const i2s_event_callbacks_t *, void *);

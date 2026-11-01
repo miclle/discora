@@ -1,5 +1,24 @@
 #include "audio_i2s.h"
 
+_Static_assert(ATOMIC_INT_LOCK_FREE == 2, "ISR counters require lock-free unsigned atomics");
+// ISR: counters only. A completion can contain auto-cleared silence, not necessarily PCM.
+static bool sent(i2s_chan_handle_t channel, i2s_event_data_t *event, void *user)
+{
+    (void)channel;
+    audio_i2s_t *out = user;
+    atomic_fetch_add_explicit(&out->dma_blocks, 1, memory_order_relaxed);
+    if (event->size != AUDIO_BLOCK_BYTES)
+        atomic_fetch_add_explicit(&out->unexpected_dma_sizes, 1, memory_order_relaxed);
+    return false;
+}
+static bool overflow(i2s_chan_handle_t channel, i2s_event_data_t *event, void *user)
+{
+    (void)channel; (void)event;
+    audio_i2s_t *out = user;
+    atomic_fetch_add_explicit(&out->event_overflows, 1, memory_order_relaxed);
+    return false;
+}
+
 static bool safe_pin(int pin)
 {
     // Restrict this board's first diagnostic to exposed GPIO1/2/4..18.
@@ -32,7 +51,12 @@ esp_err_t audio_i2s_open(audio_i2s_t *out, int bclk, int lrck, int data)
     i2s_chan_info_t info;
     err = i2s_channel_get_info(out->channel, &info);
     if (err == ESP_OK && info.total_dma_buf_size != AUDIO_PRELOAD_BYTES) err = ESP_ERR_INVALID_SIZE;
+    if (err == ESP_OK) {
+        const i2s_event_callbacks_t callbacks = {.on_sent=sent, .on_send_q_ovf=overflow};
+        err = i2s_channel_register_event_callback(out->channel, &callbacks, out);
+    }
     if (err != ESP_OK) audio_i2s_close(out);
+    else ++out->opens;
     return err;
 }
 
@@ -41,16 +65,20 @@ esp_err_t audio_i2s_start(audio_i2s_t *out, const uint8_t *pcm, size_t size)
     if (!out || !out->channel || out->running || !pcm || !size || size % 4 || size > AUDIO_PRELOAD_BYTES) return ESP_ERR_INVALID_ARG;
     size_t loaded = 0;
     esp_err_t err = i2s_channel_preload_data(out->channel, pcm, size, &loaded);
-    if (err != ESP_OK) return err;
-    if (loaded != size) return ESP_ERR_INVALID_SIZE;
+    out->submitted_pcm += loaded;
+    if (err != ESP_OK) { ++out->write_errors; return err; }
+    if (loaded != size) { ++out->write_errors; return ESP_ERR_INVALID_SIZE; }
     if (size < AUDIO_PRELOAD_BYTES) {
         static const uint8_t silence[AUDIO_PRELOAD_BYTES];
+        loaded = 0;
         err = i2s_channel_preload_data(out->channel, silence, AUDIO_PRELOAD_BYTES - size, &loaded);
-        if (err != ESP_OK) return err;
-        if (loaded != AUDIO_PRELOAD_BYTES - size) return ESP_ERR_INVALID_SIZE;
+        out->padding_bytes += loaded;
+        if (err != ESP_OK) { ++out->write_errors; return err; }
+        if (loaded != AUDIO_PRELOAD_BYTES - size) { ++out->write_errors; return ESP_ERR_INVALID_SIZE; }
     }
     err = i2s_channel_enable(out->channel);
     if (err == ESP_OK) out->running = true;
+    else ++out->write_errors;
     return err;
 }
 
@@ -59,7 +87,9 @@ esp_err_t audio_i2s_write(audio_i2s_t *out, const uint8_t *pcm, size_t size)
     if (!out || !out->running || !pcm || !size || size % 4) return ESP_ERR_INVALID_ARG;
     size_t written = 0;
     esp_err_t err = i2s_channel_write(out->channel, pcm, size, &written, 25);
+    out->submitted_pcm += written;
     if (err == ESP_OK && written != size) err = ESP_ERR_INVALID_SIZE;
+    if (err != ESP_OK) ++out->write_errors;
     return err;
 }
 
@@ -73,7 +103,7 @@ esp_err_t audio_i2s_close(audio_i2s_t *out)
         out->running = false;
     }
     esp_err_t err = i2s_del_channel(out->channel);
-    if (err == ESP_OK) { out->channel = NULL; out->drain_until = 0; }
+    if (err == ESP_OK) { out->channel = NULL; out->drain_until = 0; ++out->closes; }
     return err;
 }
 
