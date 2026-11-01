@@ -21,6 +21,8 @@ typedef enum {
     PROBE_REQUEST_SENSE,
     PROBE_READ_TOC,
     PROBE_READ_CD,
+    PROBE_ALLOW_REMOVAL,
+    PROBE_EJECT,
 } probe_command_t;
 
 typedef struct {
@@ -74,7 +76,7 @@ bool probe_find_interface(const uint8_t *config, size_t size, probe_interface_t 
 size_t probe_data_size(probe_command_t command);
 const char *probe_command_name(probe_command_t command);
 // TOC defaults to its four-byte header; its full length is obtained from that response.
-// No arbitrary CDB or Data-Out API: only the explicit read-only commands, LUN 0.
+// No arbitrary CDB or Data-Out API: only the explicit queries and allow-removal/eject commands, LUN 0.
 bool probe_make_cbw(probe_command_t command, uint8_t subclass, uint32_t tag,
                     size_t data_size, uint8_t out[PROBE_CBW_SIZE]);
 // CD-DA only, 1..8 sectors entirely inside one validated audio track; no cross-track reads.

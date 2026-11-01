@@ -32,6 +32,7 @@ static const char *sink = "software-clock-no-I2S";
 #endif
 static uint32_t output_generation;
 static bool running;
+static bool output_quiescent; // Protected by lock, acknowledged only by output owner.
 static int64_t next_tick;
 #if defined(CONFIG_DISCORA_CD_PLAYER_I2S)
 // Owner-task snapshots only; defer their logs until the channel is closed.
@@ -236,9 +237,18 @@ static void output_task(void *arg)
     for (;;) {
         poll_commands();
         xSemaphoreTake(lock, portMAX_DELAY);
+        bool media = player.media;
         audio_state_t state = player.audio.state;
         uint32_t gen = player.audio.generation;
         xSemaphoreGive(lock);
+        if (!media) {
+            if (close_output()) {
+                xSemaphoreTake(lock, portMAX_DELAY);
+                if (!player.media) output_quiescent = true;
+                xSemaphoreGive(lock);
+            }
+            vTaskDelay(1); continue;
+        }
         if (gen != output_generation) {
             if (!close_output()) { vTaskDelay(1); continue; }
             output_generation = gen;
@@ -324,6 +334,7 @@ bool discora_cd_player_start(void)
 void discora_cd_player_media(const probe_toc_t *toc)
 {
     xSemaphoreTake(lock, portMAX_DELAY);
+    output_quiescent = false;
     bool ok = cd_player_media(&player, toc);
     xSemaphoreGive(lock);
     ESP_LOGI(TAG,"media published=%u; playback remains stopped",ok);
@@ -333,6 +344,13 @@ void discora_cd_player_unavailable(void)
     xSemaphoreTake(lock, portMAX_DELAY);
     if (player.media) cd_player_lost(&player);
     xSemaphoreGive(lock);
+}
+bool discora_cd_player_quiescent(void)
+{
+    xSemaphoreTake(lock, portMAX_DELAY);
+    bool stopped = !player.media && output_quiescent;
+    xSemaphoreGive(lock);
+    return stopped;
 }
 bool discora_cd_player_request(cd_player_read_t *request)
 {

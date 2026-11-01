@@ -29,11 +29,11 @@ READ CD  → 2352-byte audio sectors → ring buffer → I²S stereo
 - 不假设桥接器支持每一条 MMC 指令；首先用实际 USB 描述符与设备响应验证。
 - 优先单一驱动访问任务，队列化命令，避免多个任务同时读写设备。
 
-### 当前只读探测实现
+### 当前查询与退盘实现
 
-`firmware/main/usb_probe.c` 使用一个常驻 Host daemon 和单个 client 任务，默认串行发送四种查询命令，可显式启用受限 READ CD 实验；尚无其他命令生产者，因此不添加命令队列。`probe_protocol.c` 独立承担描述符筛选、CBW 构造及 CSW/INQUIRY/sense 解析，可直接在主机上运行协议测试。
+`firmware/main/usb_probe.c` 使用一个常驻 Host daemon 和单个 client 任务，默认串行发送四种查询命令，可显式启用受限 READ CD 实验；按键任务通过原子单槽投递退盘意图，USB client 仍为唯一命令发送者。`probe_protocol.c` 独立承担描述符筛选、CBW 构造及 CSW/INQUIRY/sense 解析，可直接在主机上运行协议测试。
 
-只访问当前配置、alternate setting 0、首个受支持 BOT 接口和 LUN 0。身份确认为可用 CD/DVD 后每 5 秒查询就绪状态；就绪后读取格式 0、MSF=0 的 TOC，先读 4 字节头再按校验长度取完整目录。最多 99 条轨道加 lead-out，共 804 字节；曲目边界和音频/数据标记全部校验后发布。一次介质就绪周期最多尝试三次；TUR 失败或断连后清除目录状态。READ CD 由默认关闭的实验开关控制；不发送写入/擦除/退盘命令。开启外部和多级 Hub 配置，现有 UGREEN Hub `05e3:0610` 和光驱桥接器 `13fd:0840` 已完成基础枚举实验。TOC 边界见 [ADR-0003](decisions/0003-formatted-toc-probe.md)。
+只访问当前配置、alternate setting 0、首个受支持 BOT 接口和 LUN 0。身份确认为可用 CD/DVD 后每 5 秒查询就绪状态；就绪后读取格式 0、MSF=0 的 TOC，先读 4 字节头再按校验长度取完整目录。最多 99 条轨道加 lead-out，共 804 字节；曲目边界和音频/数据标记全部校验后发布。一次介质就绪周期最多尝试三次；TUR 失败或断连后清除目录状态。READ CD 由默认关闭的实验开关控制；不发送写入/擦除命令；查询和播放器模式默认接受 GPIO7 显式退盘，先允许移除再发送 START STOP UNIT，基本退盘已获用户实测成功反馈，播放中等其余场景未验收，见 [ADR-0010](decisions/0010-gpio-eject-button.md)。开启外部和多级 Hub 配置，现有 UGREEN Hub `05e3:0610` 和光驱桥接器 `13fd:0840` 已完成基础枚举实验。TOC 边界见 [ADR-0003](decisions/0003-formatted-toc-probe.md)。
 
 USB Bulk IN 长度按 MPS 向上对齐，CDB 请求与 CBW 数据长度仍保持精确值。普通查询/CBW/CSW/控制传输截止时间为 3 秒，READ CD 数据阶段为 30 秒；取消后等回调归还所有权。0.5.1 增加 REQUEST SENSE 分阶段日志，实验可将其数据等待单独设为 30 秒，默认仍为 3 秒；有效 sense 已观察到 03/02/00（寻道未完成），尚无稳定修复结论。0.7.3 将等待与取消排空控制提取到生产和离线测试共享的 `transfer_wait.c`，不改变原截止和协议策略。只有完成回调解除所有权；超时后的迟到回调仅归还资源，不把超时改判成功。未归还的 transfer 不复用，控制超时需要拔下设备。断连后释放接口并关闭 device handle，Host 服务继续等待新设备。恢复策略和限制见 [ADR-0002](decisions/0002-read-only-native-bot-probe.md)。0.5.2 新增默认关闭的寻道间隔与有界读取恢复实验：仅对有效 `03/02/00`、仍健康且再次 TUR 就绪的连接，允许每次启动最多一次相同 READ CD 重放。原始失败单独计数，重连不重新授权；详见 [ADR-0007](decisions/0007-bounded-seek-recovery.md)。
 

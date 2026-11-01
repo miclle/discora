@@ -1,3 +1,17 @@
+menu "Discora eject button"
+
+config DISCORA_EJECT_BUTTON
+    bool "Enable active-low eject button on GPIO7"
+    depends on !DISCORA_AUDIO_DIAGNOSTIC && !DISCORA_CDDA_PROBE
+    default y
+    help
+        Wire a normally-open momentary switch between GPIO7 and GND.
+        Internal pull-up, 30 ms debounce, one request per press after release.
+        Available in query and CD player modes; disabled in bounded bench modes.
+        Only an identified, healthy optical drive accepts requests. No auto-eject.
+
+endmenu
+
 menu "Discora bench probes"
 
 config DISCORA_CDDA_PROBE

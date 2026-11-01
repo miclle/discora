@@ -83,6 +83,24 @@ static void test_cbw(void)
     assert(cbw[24] == 0 && cbw[25] == 0 && cbw[26] == 0);
     assert(!probe_make_cbw(PROBE_READ_TOC, 6, 0, 3, cbw));
     assert(!probe_make_cbw(PROBE_READ_TOC, 6, 0, 805, cbw));
+    const uint8_t subclasses[] = {2, 5, 6};
+    for (unsigned i = 0; i < sizeof(subclasses); ++i) {
+        const probe_command_t commands[] = {PROBE_ALLOW_REMOVAL, PROBE_EJECT};
+        for (unsigned j = 0; j < 2; ++j) {
+            uint8_t mechanical[PROBE_CBW_SIZE] = {
+                0x55, 0x53, 0x42, 0x43, 0x78, 0x56, 0x34, 0x12,
+            };
+            mechanical[14] = subclasses[i] == 6 ? 6 : 12;
+            mechanical[15] = j ? 0x1b : 0x1e;
+            mechanical[19] = j ? 2 : 0;
+            assert(probe_data_size(commands[j]) == 0);
+            assert(probe_make_cbw(commands[j], subclasses[i], 0x12345678, 0, cbw));
+            assert(memcmp(cbw, mechanical, sizeof(cbw)) == 0);
+            assert(!probe_make_cbw(commands[j], subclasses[i], 0, 1, cbw));
+            assert(!probe_make_cbw(commands[j], 4, 0, 0, cbw));
+            assert(!probe_make_cbw(commands[j], subclasses[i], 0, 0, NULL));
+        }
+    }
 }
 
 static void test_read_cd(void)

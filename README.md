@@ -20,6 +20,7 @@
 | 读取音乐 CD 曲目 | READ TOC | bench-tested：本张 CD 取得 13 条音频轨及 LBA；详见实测记录 |
 | CD-DA 数字音频读取 | READ CD | bench-tested：600 秒顺序读取 / 105.84 MB 与电脑完整摘要一致、软件缓冲零欠载；寻道有成功与失败窗口，稳定性未验收，实验默认关闭 |
 | 双声道模拟音频 | I²S → 立体声 DAC | 独立测试音及 CD 源接入已实现；CD 软件时钟控制/持续消费已实测，真实 I²S / DAC 未验收 |
+| 轻触按键退盘 | GPIO7 → USB 退盘命令 | bench-tested（用户反馈）：默认查询配置按键触发及实际退盘成功；其余场景待验收，见[接线](docs/eject-button.md) |
 | CD-R/CD-RW 刻录 | 测速、写入、封盘、校验 | 研究目标；可行性待测 |
 | DVD 读取/刻录 | 可选扩展 | 不在首版范围 |
 
@@ -45,7 +46,7 @@
    idf.py set-target esp32s3
    idf.py build
    ```
-   当前固件默认执行四种只读查询命令；受限 READ CD 实验须手动启用，每次主控启动最多执行一次。可另选独立 [I²S 测试音诊断](docs/audio-output.md) 或默认 stopped 的 [CD 播放控制模式](docs/cd-player.md)；真实 CD 软件消费已实测，DAC 输出尚未验证，刻录未实现。详见 [读取实测](docs/records/2026-10-31-m2-cdda.md)。
+   当前固件自动执行四种只读查询命令，并默认支持 [GPIO7 轻触按键退盘](docs/eject-button.md)（仅按下触发，默认查询配置已获用户实测成功反馈）；受限 READ CD 实验须手动启用，每次主控启动最多执行一次。可另选独立 [I²S 测试音诊断](docs/audio-output.md) 或默认 stopped 的 [CD 播放控制模式](docs/cd-player.md)；真实 CD 软件消费已实测，DAC 输出尚未验证，刻录未实现。详见 [读取实测](docs/records/2026-10-31-m2-cdda.md)。
 4. 按 [组装说明](docs/assembly.md) 核对 OTG、独立 UART0 和 VBUS 电源；准备好后再选择本项目串口执行 `idf.py -p <DISCORA_UART_PORT> flash monitor`。原生 USB 用于 Host 时不能同时当电脑日志口。
 5. 完成 M0/M1 实测后再进入 CD-DA 和 I²S；详见 [路线图](docs/roadmap.md)。离线协议检查：`python3 firmware/tests/run_host_tests.py`。
 

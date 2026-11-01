@@ -1,6 +1,6 @@
 # Discora firmware
 
-这是 **USB 光驱、CD 控制与独立 I²S 诊断固件**（`0.8.0-disc-sequence`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，600 秒顺序读取及软件缓冲已与电脑完整摘要一致；寻道仍有失败记录，完整重连/冷启动、I²S 和刻录尚待验收，见 [当前状态](../docs/status.md)。
+这是 **USB 光驱、CD 控制与独立 I²S 诊断固件**（`0.9.0-button-eject`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，600 秒顺序读取及软件缓冲已与电脑完整摘要一致；寻道仍有失败记录，完整重连/冷启动、I²S 和刻录尚待验收，见 [当前状态](../docs/status.md)。
 
 ## 构建
 
@@ -37,7 +37,7 @@ idf.py -p <DISCORA_UART_PORT> flash monitor
 
 普通查询、CBW、CSW 和控制传输截止为 3 秒，READ CD 数据阶段为 30 秒；取消后最多再等待 2 秒。IDF 的 EP0 控制传输没有公开取消接口；控制超时或取消未归还时保留缓冲并隔离设备，须拔下设备。它不是完整的自动恢复驱动。
 
-固件没有写入/擦除/退盘命令，不查询多 LUN，不切换配置或 alternate setting。`medium ready` 只代表就绪；`TOC validated` 只代表本次目录通过解析，均不代表 PCM 读取或播放通过。
+固件没有写入/擦除命令；查询与播放器配置默认启用 GPIO7 轻触按键退盘（仅显式按下触发，默认查询配置已获用户实际退盘成功反馈），详见[接线与验收](../docs/eject-button.md)，不查询多 LUN，不切换配置或 alternate setting。`medium ready` 只代表就绪；`TOC validated` 只代表本次目录通过解析，均不代表 PCM 读取或播放通过。
 
 ## 受限 READ CD 实验
 
@@ -112,7 +112,7 @@ python3 firmware/tests/run_host_tests.py
 - `main.c`：按互斥配置启动默认探测、测试音或 CD 播放服务。
 - `usb_probe.c`：原生 Host client/daemon、串行 BOT、恢复与设备生命周期。
 - `transfer_wait.c`：生产和离线测试共享的等待、取消排空及所有权观察编排。
-- `probe_protocol.c`：不依赖 ESP-IDF 的只读 CDB/CBW 构造和响应解析。
+- `probe_protocol.c`：不依赖 ESP-IDF 的查询、读取及固定退盘 CDB/CBW 构造和响应解析。
 - `cdda_bench.c`：寻道、完整首轨和软件时钟缓冲实验。
 - `cdda_cursor.c` / `pcm_buffer.c`：跨轨区间拆分、帧对齐环形队列，直接在主机侧测试。
 - `audio_core.c` / `test_tone.c`：可离线验证的控制状态机和诊断 PCM。
@@ -143,3 +143,7 @@ CI 现在分别构建默认查询、独立测试音、CD 软件时钟、CD I²S�
 单张 CD 的 13 轨整盘软件时钟实测完成 594221040 字节，各轨两端摘要一致、零欠载；详细版本、范围和恢复证据见 [整盘记录](../docs/records/2026-11-01-m3-whole-disc.md)。没有新增电脑端整盘参考，也不代表整盘 I²S / DAC 输出通过。
 
 0.8.0 的 `play-disc` 显式从当前轨起点连续播放至盘尾，上一轨关闭后 MCU 自行切换，末轨不循环。普通 play 仍为单轨；停止、手动换轨和错误取消连续模式。语义与验收见 [连续播放决策](../docs/decisions/0009-explicit-disc-sequence.md)。
+
+## GPIO7 退盘按键
+
+`CONFIG_DISCORA_EJECT_BUTTON` 默认在查询和 CD 播放器配置开启，在短/长读盘 bench 与测试音配置关闭。常开轻触按键接 GPIO7 与 GND，固件内部上拉，30 ms 消抖、长按不重复、上电须先释放。USB client 等当前命令完成，播放器输出关闭后才执行允许移除与退盘；失败不自动重试。接线、延迟限制和实际退盘验收见[按键说明](../docs/eject-button.md)。默认查询配置已部署为 0.9.0，用户确认基本按键退盘成功；播放中退盘仍待验收。
