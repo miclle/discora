@@ -129,8 +129,10 @@ python3 firmware/tests/run_host_tests.py
 
 [tools/player_bench.py](tools/player_bench.py) 提供只核对串口身份的 inspect、整轨 EOF、有限轮控制 stress 和一次性 faults 场景。默认不烧录、不主动发送复位脉冲；端口 / VID / PID / 序列号必须一致，输出目录拒绝覆盖，失败也保存报告并释放串口。仅适用于显式部署的 software-clock 播放器；当前板上默认查询固件不能直接运行这些场景。使用和边界见 [工具说明](tools/README.md)。
 
-`python3 firmware/tests/run_host_tests.py` 现在包含六组共享 C 代码的 ASan/UBSan 检查（含 I²S API 替身）；`python3 firmware/tests/player_bench_test.py` 包含串口身份、解析/命令边界、超时与 EOF 报告规则的离线检查，不访问设备。硬件接受情况以 [当前状态](../docs/status.md) 为准。
+`python3 firmware/tests/run_host_tests.py` 现在包含八组共享 C 代码的 ASan/UBSan 检查（含 I²S API 替身）；`python3 firmware/tests/player_bench_test.py` 包含串口身份、解析/命令边界、超时、EOF 报告和本会话 TOC 完整性规则的离线检查，不访问设备。硬件接受情况以 [当前状态](../docs/status.md) 为准。
 
 I²S 空载外设的测试音、CD 首轨及日志调度对照见 [记录](../docs/records/2026-11-01-m3-i2s-empty.md)。没有接 DAC，不等于模拟输出验收。
 
 USB 等待/取消编排由生产 Host 和主机测试共享；长等待、迟到回调及 EP0 隔离覆盖见 [记录](../docs/records/2026-11-01-m2-wait-flow.md)，不等于真实设备故障恢复验收。
+
+CI 现在分别构建默认查询、独立测试音、CD 软件时钟、CD I²S、故障注入五种 profile；每个 job 使用独立 build-ci / sdkconfig.ci，禁用 fail-fast 以保留全部配置结果。本地 v5.4 五配置已通过，不代表已触发远端 CI。

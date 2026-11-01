@@ -21,12 +21,30 @@ jobs:
 
   build-esp32s3:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - profile: default
+            defaults: sdkconfig.defaults
+          - profile: tone
+            defaults: sdkconfig.defaults;bench/i2s-tone.defaults
+          - profile: clock
+            defaults: sdkconfig.defaults;bench/cd-player-clock.defaults
+          - profile: i2s
+            defaults: sdkconfig.defaults;bench/cd-player-i2s.defaults
+          - profile: faults
+            defaults: sdkconfig.defaults;bench/cd-player-faults.defaults
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Build ESP-IDF firmware (ESP32-S3)
+      - name: Build ESP32-S3 (${{ matrix.profile }})
         uses: espressif/esp-idf-ci-action@v1
         with:
           esp_idf_version: v5.4
           target: esp32s3
           path: firmware
+          command: >-
+            idf.py -B build-ci -DSDKCONFIG=sdkconfig.ci
+            -DSDKCONFIG_DEFAULTS="${{ matrix.defaults }}" set-target esp32s3 &&
+            idf.py -B build-ci -DSDKCONFIG=sdkconfig.ci build
