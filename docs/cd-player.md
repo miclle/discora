@@ -7,7 +7,7 @@
 | 配置 | 数据源 / 消费端 | 验证状态 |
 | --- | --- | --- |
 | [cd-player-clock.defaults](../firmware/bench/cd-player-clock.defaults) | 真实光驱 → 软件时钟消费 | 13 轨软件时钟及控制已实测；没有声音 |
-| [cd-player-i2s.defaults](../firmware/bench/cd-player-i2s.defaults) | 真实光驱 → I²S 输出适配器 | 空载首轨已上板；未接 DAC、未测引脚波形 |
+| [cd-player-i2s.defaults](../firmware/bench/cd-player-i2s.defaults) | 真实光驱 → I²S 输出适配器 | 13 轨空载整盘已上板；未接 DAC、未测引脚波形 |
 
 使用独立 sdkconfig / build 目录加载配置，避免已有缓存覆盖默认值。播放器与 CDDA bench、独立测试音分开运行；每次部署须确认本项目 COM，不根据端口顺序猜设备。
 
@@ -59,3 +59,5 @@ I²S 暂停会丢弃已提交 DMA 数据，可能产生约 40 ms 的跳过；当
 状态打印使用独立低优先级任务和 8 项有界快照队列，音频 owner 不等待串口；`report_dropped` 记录队列满/过长报告。命令语义不变，频繁查询可能丢报告，不能因此宣称音频完整性通过。空载 profile 为 `cd-player-i2s-observe.defaults`，仅增加软件摘要观察，不自动播放。
 
 0.7.5 将 EOF 摘要也交给报告任务；六个阶段的内存快照只在关闭后输出。首轨对照中，摘要窗口由 18.399 ms 降为 0.713 ms，收尾事件溢出由 3 变为 2，供数阶段为 0；固定 50 ms 排空没有改变。计数和物理边界见 [EOF 阶段记录](records/2026-11-01-m3-eof-phases.md)。
+
+13 轨 I²S 空载整盘已完成，逐轨摘要与软件时钟整盘一致，供数阶段事件溢出为 0、收尾每轨 2 次；详见 [整盘记录](records/2026-11-01-m3-i2s-disc.md)。
