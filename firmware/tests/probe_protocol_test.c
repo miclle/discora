@@ -1,4 +1,5 @@
 #include "probe_protocol.h"
+#include "cdda_retry.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -297,6 +298,14 @@ static void test_parser_bounds(void)
 
 int main(void)
 {
+    probe_sense_t seek = {3, 2, 0};
+    assert(cdda_retry_allowed(&seek, 0, true));
+    assert(!cdda_retry_allowed(NULL, 0, true));
+    assert(!cdda_retry_allowed(&seek, 1, true));
+    assert(!cdda_retry_allowed(&seek, 0, false));
+    const probe_sense_t rejected[] = {{6, 0x28, 0}, {2, 4, 1}, {3, 0x11, 0}, {3, 2, 1}};
+    for (size_t i = 0; i < sizeof(rejected) / sizeof(rejected[0]); ++i)
+        assert(!cdda_retry_allowed(&rejected[i], 0, true));
     test_descriptors();
     test_cbw();
     test_csw();

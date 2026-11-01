@@ -26,3 +26,7 @@
 - 电脑参考经 macOS Audio CD 文件系统读取，已核对 2ch / 16-bit / 44.1 kHz 和 8 扇区长度；该 High-Speed 路径不是 ESP32-S3 Full-Speed 的验收。
 - 原始失败、修正版本和最终上板状态见 [M2 READ CD 记录](../records/2026-10-31-m2-cdda.md)。持续吞吐、读取偏移/字节序、参考音频一致性、换轨和 I²S 仍需相应证据。
 - 规范依据：T10 MMC-4 rev 5a §6.24，Table 349–353（[标准文档镜像](https://www.13thmonkey.org/documentation/SCSI/mmc4r05a.pdf)）。
+
+## 2026-11-01：只读恢复实验的有限例外
+
+0.5.2 新增默认关闭的单次 READ CD 恢复，仅接受有效 `03/02/00` 且设备仍连接、再次 TUR 就绪；传输错误不重放，重连不重置预算。此前无自动重放规则仍适用于默认配置，完整条件见 [ADR-0007](0007-bounded-seek-recovery.md)。
