@@ -41,3 +41,7 @@ I²S 暂停会丢弃已提交 DMA 数据，可能产生约 40 ms 的跳过；当
 `match=1` 只表示该代次源与软件消费顺序/长度相同，不等于独立电脑内容参考匹配，也不代表 I²S 已播放这些字节。
 
 0.6.2 的 `resources` 状态行记录系统空闲/历史最低堆，以及输出任务最低剩余栈（字节）。它们是有限实验中的资源观测，不代表长期泄漏验收或所有任务栈已覆盖。
+
+## 受控故障实验
+
+只有 `cd-player-faults.defaults` 开启 `DISCORA_CD_PLAYER_FAULT_TEST`。播放时 `test delay` 暂停新请求 1200 ms，`test fail` 在下一次请求处注入播放器源失败、不发送该次 USB。两项各每次 MCU 启动最多一次；命令和触发日志均有 TEST 标记，不代表真实光驱错误。欠载显式 play 重缓冲，fault 须 stop 后 play。普通/I²S profile 不开放这些命令，详见 [负向实测](records/2026-11-01-m3-player-faults.md)。

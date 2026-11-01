@@ -80,6 +80,25 @@ static void verify_take(const uint8_t *data, size_t size)
 }
 #endif
 
+#if defined(CONFIG_DISCORA_CD_PLAYER_FAULT_TEST)
+static bool delay_used, failure_used, failure_armed;
+static int64_t delay_until;
+static uint32_t failure_generation;
+static bool inject_command(const char *line)
+{
+    bool delay = !strcmp(line, "test delay"), fail = !strcmp(line, "test fail");
+    if (!delay && !fail) return false;
+    xSemaphoreTake(lock, portMAX_DELAY);
+    bool accepted = player.audio.state == AUDIO_PLAYING && (delay ? !delay_used : !failure_used);
+    if (accepted && delay) { delay_used = true; delay_until = esp_timer_get_time() + 1200000; }
+    if (accepted && fail) { failure_used = failure_armed = true; failure_generation = player.audio.generation; }
+    xSemaphoreGive(lock);
+    ESP_LOGW(TAG,"TEST injection=%s accepted=%u; software-only, once per boot",delay ? "producer-pause-1200ms" : "source-failure-armed",accepted);
+    ESP_LOGI(TAG,"command=%s accepted=%u",line,accepted);
+    return true;
+}
+#endif
+
 static bool close_output(void)
 {
 #if defined(CONFIG_DISCORA_CD_PLAYER_I2S)
@@ -116,6 +135,9 @@ static void status(void)
 }
 static void command(const char *line)
 {
+#if defined(CONFIG_DISCORA_CD_PLAYER_FAULT_TEST)
+    if (inject_command(line)) { status(); return; }
+#endif
     if (!strcmp(line, "status")) { status(); return; }
     if (!strcmp(line, "help")) {
         ESP_LOGI(TAG, "commands: play pause stop next prev track N status help; track/next/prev start selected track; EOF stops");
@@ -245,7 +267,19 @@ void discora_cd_player_unavailable(void)
 bool discora_cd_player_request(cd_player_read_t *request)
 {
     xSemaphoreTake(lock, portMAX_DELAY);
+#if defined(CONFIG_DISCORA_CD_PLAYER_FAULT_TEST)
+    if (esp_timer_get_time() < delay_until) { xSemaphoreGive(lock); return false; }
+#endif
     bool ok = cd_player_request(&player,request);
+#if defined(CONFIG_DISCORA_CD_PLAYER_FAULT_TEST)
+    if (failure_armed && failure_generation != player.audio.generation) failure_armed = false;
+    if (ok && failure_armed) {
+        failure_armed = false;
+        cd_player_complete(&player, request, false, NULL, 0);
+        ESP_LOGW(TAG,"TEST synthetic source failure; no USB request submitted; generation=%" PRIu32,request->generation);
+        ok = false;
+    }
+#endif
     xSemaphoreGive(lock); return ok;
 }
 void discora_cd_player_complete(const cd_player_read_t *request, bool ok, const uint8_t *data, size_t size)

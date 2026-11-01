@@ -110,6 +110,15 @@ config DISCORA_CD_PLAYER
         Real READ CD producer with independent output/control task. Bench probes
         are disabled. Software-clock sink by default; never claim audible output.
 
+config DISCORA_CD_PLAYER_FAULT_TEST
+    bool "Enable single-use software player fault injection commands"
+    depends on DISCORA_CD_PLAYER && !DISCORA_CD_PLAYER_I2S
+    default n
+    help
+        Explicit test delay/test fail commands only while playing. Each can be
+        armed once per MCU boot, not rearmed by stop or media changes. No fake
+        USB/sense result is logged; this tests software shutdown, not hardware recovery.
+
 config DISCORA_CD_PLAYER_VERIFY
     bool "Hash accepted and consumed CD PCM for single-track EOF verification"
     depends on DISCORA_CD_PLAYER
