@@ -1,16 +1,16 @@
 # 当前工程状态
 
-更新时间：2026-11-01（用户实测按键退盘成功）
+更新时间：2026-11-01（换轨播放器已部署，保留退盘）
 
 证据分层：`planned` 为计划；`implemented` 为源码已实现；`bench-tested` 为在指定硬件上实验过；`verified` 为满足相应验收条件。已完成烧录、UART0、Hub/光驱枚举、三种基础查询的真实返回、61.2 秒连续 13 次 TUR 就绪，以及单张 CD 的 13 轨目录、READ CD 小片段/短突发与电脑参考对照；600 秒顺序窗口已与电脑对照，随机寻道、冷启动与受控重复插拔仍待验收，M0/M1 未整体通过。
 
 | 事项 | 状态 | 证据 / 备注 |
 | --- | --- | --- |
 | 仓库创建及 Apache-2.0 License | 已存在 | 用户创建仓库时已有 LICENSE |
-| ESP-IDF 固件构建 | 本地构建通过 | v5.4、目标 esp32s3；源码 0.9.0-button-eject，默认 / CD 软件时钟 / CD I²S / 测试音 / 短探测五配置本地构建通过；0.7.5 的 13 轨 I²S 空载与 0.8.0 的末两轨自主切换通过；当前已部署 0.9.0 查询配置，真实音频未验收 |
-| 烧录 / UART0 启动 | bench-tested | 写入校验通过；45 秒启动采集窗口无异常重启记录，详见首次实测记录 |
+| ESP-IDF 固件构建 | 本地构建通过 | v5.4、目标 esp32s3；源码 0.9.1-track-buttons，默认 / CD 软件时钟 / CD I²S / 测试音四配置本地构建通过；0.7.5 的 13 轨 I²S 空载与 0.8.0 的末两轨自主切换通过；当前已部署 0.9.1 软件时钟播放器（保留退盘），真实音频未验收 |
+| 烧录 / UART0 启动 | bench-tested | 0.9.1 写入及独立读回校验通过；30.001 秒启动采集确认三路 GPIO 和 13 轨目录，无额外复位，见[当前部署](records/2026-11-01-track-buttons-deploy.md) |
 | 初始化 GitHub Actions | 构建成功 | [运行 41173591262](https://github.com/miclle/discora/actions/runs/41173591262)，对应初始化提交 `61b8229`，不是本轮改动的 CI |
-| 本轮 CI 配置 | implemented | 九组主机侧 ASan/UBSan 检查、十五项 bench 工具检查与五配置构建矩阵；本轮已分阶段本地提交，未推送，未触发新 CI |
+| 本轮 CI 配置 | implemented | 主机侧 ASan/UBSan 检查已扩为十组；保留十五项 bench 工具检查与五配置构建矩阵；0.9.1 本地检查通过；远端 CI 结果须以对应提交的运行记录为准 |
 | USB Host / BOT 最小探测 | implemented；常规查询 bench-tested | 原生 USB Host、接口筛选、基础查询及 READ TOC 已实测；已观察到超时、Data-In STALL 和一次 Reset Recovery；后续仍有离线，完整恢复验收未通过 |
 | 空 Hub 枚举 | bench-tested | USB-OTG 桥接后枚举 `05e3:0610`，Full-Speed，class `0x09`；下游未接设备 |
 | UJ-898 在 ESP32-S3 USB Host 枚举 | bench-tested | 桥接器 `13fd:0840`，Full-Speed，class/subclass/protocol `08/02/50`；前期有离线重枚举，原因未定位 |
@@ -20,7 +20,8 @@
 | PCM 环形缓冲 | implemented；软件消费 bench-tested | 64 扇区内部 RAM，13 轨 / 594221040 字节逐轨 1× 软件消费，零欠载、各轨两端摘要一致；不是整盘 I²S 验收 |
 | I²S 测试音 / 控制核心 | implemented；空载外设 bench-tested | 441 / 882 Hz L/R、静音、暂停/恢复/停止已上板；延后日志输出后测试音完成事件队列溢出为 0；未接 DAC，未测引脚波形或模拟输出 |
 | CD 源到音频控制 / 输出适配器 | implemented；软件时钟 bench-tested | 13 轨 I²S 空载通过，供数阶段事件溢出 0、收尾每轨 2 次完整保留；0.8.0 末两轨自主切换/盘尾停止通过，真实 DAC 未测 |
-| GPIO7 轻触按键退盘 | bench-tested（用户反馈，默认查询配置） | 0.9.0 已部署，用户确认按键触发及实际退盘成功；本次动作未采集 CSW，长按/上电按住/播放中等场景待验收，见[记录](records/2026-11-01-button-eject-deploy.md) |
+| GPIO7 轻触按键退盘 | bench-tested（用户反馈，默认查询配置） | 0.9.0 查询配置曾获用户实际退盘反馈，未采集该动作 CSW；当前 0.9.1 播放器保留退盘，初始化通过，实体动作及播放中场景待测，见[记录](records/2026-11-01-button-eject-deploy.md) |
+| GPIO8／GPIO9 上一曲／下一曲 | implemented | 0.9.1 软件时钟播放器已部署，GPIO 初始化和目录启动通过；实体按键换轨及音频未验收，见[说明](track-buttons.md) |
 | CD-R / CD-RW 实际刻录 | 未验证 | 存在 USB 带宽和最低写速风险；待 M4 |
 
 请优先追加**带日期的测试记录**，不要覆盖此前失败证据。运行 CI 的绿灯仅表示在指定 ESP-IDF 环境中成功构建，不代表 USB、音频、刻录功能通过。
@@ -221,3 +222,15 @@ M2 的 `set-target` / fullclean 误删了放在 `firmware/build/` 内的 M1 原�
 ## 2026-11-01：用户确认按键退盘成功
 
 用户在部署后反馈“按键测试成功，退盘也成功了”。GPIO7 按键触发与实际光盘退出更新为 bench-tested（用户实测反馈，默认查询配置）；未新增本次动作的串口日志，不宣称已捕获成功 CSW、时延或重复次数。长按、上电按住、重插盘、异常连接及播放中退盘仍待测试，未标记完整 verified。详见[实测反馈与边界](records/2026-11-01-button-eject-deploy.md)。
+
+## 2026-11-01：GPIO8／GPIO9 实体换轨键
+
+源码更新为 `0.9.1-track-buttons`，仅 CD 播放器模式默认启用 GPIO8 上一曲、GPIO9 下一曲。共享退盘的 30 ms 消抖、上电先释放和长按单次规则；双键抑制，目录／故障期间不保留手势。输出 owner 在原锁内执行已有换轨逻辑，旧队列和在途回复按代次隔离，首尾不循环。
+
+10 组 C ASan/UBSan 检查通过，默认查询／软件时钟／CD I²S／测试音四配置均 set-target 与 build 通过；GPIO8／9 冲突拒绝及关闭换轨键的局部编译通过。未访问设备或烧录，板上仍以 0.9.0 查询／退盘部署记录为准；换轨按键为 implemented，未标 bench-tested／verified。见[软件验证记录](records/2026-11-01-track-buttons.md)和[接线说明](track-buttons.md)。
+
+## 2026-11-01：换轨播放器已部署，退盘保留
+
+用户授权后，在核对唯一 Discora COM、备份并确认原 0.9.0 应用和分区后，仅写入 `0.9.1-track-buttons` software-clock 应用，写入校验及独立 verify_flash 通过。GPIO8 上一曲、GPIO9 下一曲、GPIO7 退盘全部启用；30.001 秒启动窗口取得 UJ-898／HC10、13fd:0840、13 轨目录和 6 次 TUR 成功，保持 stopped，无 READ CD、退盘动作、离线、传输错误或额外复位。
+
+串口已释放，板上保持新播放器，替代此前 0.9.0 查询版部署状态。软件时钟模式不会出声；实体换轨和本版本退盘仍需按键验收，不将启动通过标为完整功能 verified。备份、摘要和日志见[部署记录](records/2026-11-01-track-buttons-deploy.md)。

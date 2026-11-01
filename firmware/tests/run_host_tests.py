@@ -29,11 +29,23 @@ def main():
             shlex.split(os.environ.get("CC", "cc")) + [
                 "-std=c11", "-Wall", "-Wextra", "-Werror", "-pedantic", "-g",
                 "-fsanitize=address,undefined", "-fno-omit-frame-pointer",
-                "-I", str(firmware / "main"), str(firmware / "main/eject_button_core.c"),
+                "-I", str(firmware / "main"), str(firmware / "main/button_core.c"),
                 str(firmware / "tests/eject_button_test.c"), "-o", str(button),
             ], check=True,
         )
         subprocess.run([str(button)], check=True)
+        tracks = Path(temp) / "track_buttons_test"
+        subprocess.run(
+            shlex.split(os.environ.get("CC", "cc")) + [
+                "-std=c11", "-Wall", "-Wextra", "-Werror", "-pedantic", "-g",
+                "-fsanitize=address,undefined", "-fno-omit-frame-pointer",
+                "-I", str(firmware / "main"), str(firmware / "main/button_core.c"),
+                str(firmware / "main/track_buttons_core.c"), str(firmware / "main/pcm_buffer.c"),
+                str(firmware / "main/audio_core.c"), str(firmware / "main/cd_player_core.c"),
+                str(firmware / "tests/track_buttons_test.c"), "-o", str(tracks),
+            ], check=True,
+        )
+        subprocess.run([str(tracks)], check=True)
         stream = Path(temp) / "stream_core_test"
         subprocess.run(
             shlex.split(os.environ.get("CC", "cc")) + [

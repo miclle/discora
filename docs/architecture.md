@@ -83,6 +83,8 @@ SD / flash ISO or PCM → source reader → buffer → USB BOT
 
 `cd_player_core.c` 将音轨选择、单轨读取光标、预填、暂停/停止/换轨及代次检查接到 `audio_core`；`cd_player.c` 独占 UART 和输出适配器，USB client 仍是唯一 SCSI 发送者。请求复制音轨边界及代次，USB 等待不持有播放器锁，完成后仅将当前代次的完整回复复制入队；旧代次返回不能污染新轨。
 
+0.9.1 在播放器模式默认开启 GPIO8／GPIO9 换轨按键。输出 owner 轮询两键，在播放器锁内消抖并执行原有 `cd_player_step`，成功后由同一 owner 关闭旧输出；按键不访问 USB。消抖提取为 `button_core` 与退盘共用，双键互斥、介质失效和 fault 丢弃手势，详见 [ADR-0011](decisions/0011-gpio-track-buttons.md)。
+
 模式默认关闭、启动 stopped，与 bench/测试音互斥。软件时钟模式用真实 CD 数据验证控制和 1× 消费；I²S 模式复用已有适配器，尚未接 DAC。单轨 EOF 停止，暂停可丢弃已提交 DMA，未实现无缝播放或独立硬件 DMA 欠载计数。详见 [ADR-0008](decisions/0008-cd-player-control.md)。
 
 播放器 EOF 诊断可选地对已接受源数据与软件消费分别累计 SHA-256，仅在完整同代次结束时比较字节数/摘要。0.6.4 的轨尾恢复允许不足预填门槛的已知 EOF 队列继续消费；I²S 短预装只在尾帧之后补静音，EOF 50 ms 截止在适配器内管理。离线 fake driver 测试调用实际 `audio_i2s.c`，只替换 ESP-IDF API，不能充当电气/声音验收。

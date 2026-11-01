@@ -1,6 +1,8 @@
 # Discora firmware
 
-这是 **USB 光驱、CD 控制与独立 I²S 诊断固件**（`0.9.0-button-eject`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，600 秒顺序读取及软件缓冲已与电脑完整摘要一致；寻道仍有失败记录，完整重连/冷启动、I²S 和刻录尚待验收，见 [当前状态](../docs/status.md)。
+这是 **USB 光驱、CD 控制与独立 I²S 诊断固件**（`0.9.1-track-buttons`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，600 秒顺序读取及软件缓冲已与电脑完整摘要一致；寻道仍有失败记录，完整重连/冷启动、I²S 和刻录尚待验收，见 [当前状态](../docs/status.md)。
+
+当前板上已部署 **0.9.1 软件时钟播放器**，启用 GPIO8／GPIO9 换轨及 GPIO7 退盘，上电 stopped、不输出声音，见[部署记录](../docs/records/2026-11-01-track-buttons-deploy.md)。下面的默认构建命令生成查询配置；需要保留换轨入口时，使用[播放器独立配置构建命令](../docs/track-buttons.md#配置与操作)，不能直接以默认查询镜像替代。
 
 ## 构建
 
@@ -27,7 +29,7 @@ idf.py -p <DISCORA_UART_PORT> flash monitor
 
 ## 当前行为
 
-1. 启动输出 `Discora M2 CD-DA read-only probe`、应用版本、IDF 版本和 ELF SHA-256，便于关联实测日志。
+1. 启动输出 `Discora optical control version=… IDF=…`、应用版本、IDF 版本和 ELF SHA-256，便于关联实测日志。
 2. 记录 USB VID:PID、速度、接口 class/subclass/protocol；只选 Full-Speed BOT（`0x50`），subclass `0x02` / `0x05` / `0x06`、alternate setting 0。
 3. 记录 Bulk IN/OUT 端点与 MPS；固定 LUN 0，通过 INQUIRY 确认可用 CD/DVD 设备（PDT `0x05`）。不以 VID:PID 单独推断型号。
 4. 每 5 秒执行 TEST UNIT READY，命令失败时发送 REQUEST SENSE；输出真实数据、CSW status/residue、耗时和 sense。无盘是可记录的设备状态，不是假装成功。
@@ -118,6 +120,8 @@ python3 firmware/tests/run_host_tests.py
 - `audio_core.c` / `test_tone.c`：可离线验证的控制状态机和诊断 PCM。
 - `audio_i2s.c` / `audio_diag.c`：原生 I²S TX 适配、单所有者 UART 测试音服务。
 - `audio_report.c`：有界状态报告队列与独立低优先级日志任务。
+- `button_core.c`：退盘与换轨共用的消抖／单次触发核心。
+- `track_buttons_core.c` / `track_buttons.c`：双键手势与 GPIO8／GPIO9 输入，由播放器输出任务轮询。
 - `cd_player_core.c` / `cd_player.c`：CD 轨道/代次控制及输出任务，与 USB 源通过受保护队列衔接。
 
 后续音频工作按实测结果引入 `mmc`、`cdda`、`audio` 的实际接口；本轮不添加 writer 空壳。
@@ -126,19 +130,19 @@ python3 firmware/tests/run_host_tests.py
 
 ## CD 源与音频控制层接入
 
-默认关闭的 CD player 模式把真实 READ CD 接入已有音频状态机；上电 stopped，由 UART 控制 play / play-disc / pause / stop / next / prev / track N。USB 和输出任务分开，停止/换轨的旧代次回复拒绝入队。软件时钟模式已完成 13 轨整盘 / EOF、10 轮控制及受控欠载/源故障，I²S 适配器完成离线检查、构建和空载首轨测试，未连接 DAC；见 [使用说明](../docs/cd-player.md)、[设计边界](../docs/decisions/0008-cd-player-control.md) 与 [实测](../docs/records/2026-11-01-m3-cd-player.md)。
+默认关闭的 CD player 模式把真实 READ CD 接入已有音频状态机；上电 stopped，由 UART 控制 play / play-disc / pause / stop / next / prev / track N；0.9.1 同时提供 GPIO8／GPIO9 的 prev／next 入口。USB 和输出任务分开，停止/换轨的旧代次回复拒绝入队。软件时钟模式已完成 13 轨整盘 / EOF、10 轮控制及受控欠载/源故障，I²S 适配器完成离线检查、构建和空载首轨测试，未连接 DAC；见 [使用说明](../docs/cd-player.md)、[设计边界](../docs/decisions/0008-cd-player-control.md) 与 [实测](../docs/records/2026-11-01-m3-cd-player.md)。
 
 ## 可复用 bench 工具
 
-[tools/player_bench.py](tools/player_bench.py) 提供只核对串口身份的 inspect、整轨 eof、逐轨整盘 disc、有限轮控制 stress 和一次性 faults 场景。默认不烧录、不主动发送复位脉冲；端口 / VID / PID / 序列号必须一致，输出目录拒绝覆盖，失败也保存报告并释放串口。仅适用于显式部署的 software-clock 播放器；当前板上默认查询固件不能直接运行这些场景。使用和边界见 [工具说明](tools/README.md)。
+[tools/player_bench.py](tools/player_bench.py) 提供只核对串口身份的 inspect、整轨 eof、逐轨整盘 disc、有限轮控制 stress 和一次性 faults 场景。默认不烧录、不主动发送复位脉冲；端口 / VID / PID / 序列号必须一致，输出目录拒绝覆盖，失败也保存报告并释放串口。默认适用于显式部署的 software-clock 播放器；`--sink i2s-unloaded` 可用于已部署的 I²S 空载 eof／disc／sequence。当前板上为 0.9.1 software-clock，未启用故障注入，不能运行 faults 场景。使用和边界见 [工具说明](tools/README.md)。
 
-`python3 firmware/tests/run_host_tests.py` 现在包含八组共享 C 代码的 ASan/UBSan 检查（含 I²S API 替身）；`python3 firmware/tests/player_bench_test.py` 包含串口身份、解析/命令边界、超时、EOF 报告和本会话 TOC 完整性规则的离线检查，不访问设备。硬件接受情况以 [当前状态](../docs/status.md) 为准。
+`python3 firmware/tests/run_host_tests.py` 现在包含十组共享 C 代码的 ASan/UBSan 检查（含 I²S API 替身）；`python3 firmware/tests/player_bench_test.py` 包含串口身份、解析/命令边界、超时、EOF 报告和本会话 TOC 完整性规则的离线检查，不访问设备。硬件接受情况以 [当前状态](../docs/status.md) 为准。
 
 I²S 空载外设的测试音、CD 首轨及日志调度对照见 [记录](../docs/records/2026-11-01-m3-i2s-empty.md)。没有接 DAC，不等于模拟输出验收。
 
 USB 等待/取消编排由生产 Host 和主机测试共享；长等待、迟到回调及 EP0 隔离覆盖见 [记录](../docs/records/2026-11-01-m2-wait-flow.md)，不等于真实设备故障恢复验收。
 
-CI 现在分别构建默认查询、独立测试音、CD 软件时钟、CD I²S、故障注入五种 profile；每个 job 使用独立 build-ci / sdkconfig.ci，禁用 fail-fast 以保留全部配置结果。本地 v5.4 五配置已通过，不代表已触发远端 CI。
+CI 现在分别构建默认查询、独立测试音、CD 软件时钟、CD I²S、故障注入五种 profile；每个 job 使用独立 build-ci / sdkconfig.ci，禁用 fail-fast 以保留全部配置结果。此前五配置构建证据见[矩阵记录](../docs/records/2026-11-01-build-matrix.md)；0.9.1 本轮本地完整构建覆盖默认查询、软件时钟、CD I²S 和测试音四配置，未重跑故障注入完整构建；本地结果不代表对应提交的远端 CI 结论。
 
 单张 CD 的 13 轨整盘软件时钟实测完成 594221040 字节，各轨两端摘要一致、零欠载；详细版本、范围和恢复证据见 [整盘记录](../docs/records/2026-11-01-m3-whole-disc.md)。没有新增电脑端整盘参考，也不代表整盘 I²S / DAC 输出通过。
 
@@ -146,4 +150,8 @@ CI 现在分别构建默认查询、独立测试音、CD 软件时钟、CD I²S�
 
 ## GPIO7 退盘按键
 
-`CONFIG_DISCORA_EJECT_BUTTON` 默认在查询和 CD 播放器配置开启，在短/长读盘 bench 与测试音配置关闭。常开轻触按键接 GPIO7 与 GND，固件内部上拉，30 ms 消抖、长按不重复、上电须先释放。USB client 等当前命令完成，播放器输出关闭后才执行允许移除与退盘；失败不自动重试。接线、延迟限制和实际退盘验收见[按键说明](../docs/eject-button.md)。默认查询配置已部署为 0.9.0，用户确认基本按键退盘成功；播放中退盘仍待验收。
+`CONFIG_DISCORA_EJECT_BUTTON` 默认在查询和 CD 播放器配置开启，在短/长读盘 bench 与测试音配置关闭。常开轻触按键接 GPIO7 与 GND，固件内部上拉，30 ms 消抖、长按不重复、上电须先释放。USB client 等当前命令完成，播放器输出关闭后才执行允许移除与退盘；失败不自动重试。接线、延迟限制和实际退盘验收见[按键说明](../docs/eject-button.md)。0.9.0 查询配置曾获用户基本按键退盘成功反馈；当前 0.9.1 软件时钟播放器保留此功能，GPIO7 初始化已确认，本版本实际退盘及播放中退盘仍待验收。
+
+## GPIO8／GPIO9 换轨按键
+
+0.9.1 的 CD 播放器配置默认启用 `CONFIG_DISCORA_TRACK_BUTTONS`，GPIO8 为上一曲、GPIO9 为下一曲，分别用常开按键接 GND。复用退盘的 30 ms 消抖、长按单次和上电先释放规则；两键同时按下须均释放后再操作。输出任务执行原有 prev/next：选择相邻受支持音频轨，从起点开始，首尾不循环，取消连续模式；无盘／fault 不保留动作。默认查询模式不启用换轨键，详见[接线、构建与验收](../docs/track-buttons.md)。已烧录 0.9.1 软件时钟播放器，保留 GPIO7 退盘，启动和目录查询通过；按键换轨尚未实测，见[部署记录](../docs/records/2026-11-01-track-buttons-deploy.md)。

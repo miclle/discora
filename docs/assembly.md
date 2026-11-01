@@ -84,7 +84,7 @@ ESP32-S3 原生 USB 通常为 GPIO19（D−）、GPIO20（D+）；默认 UART0 �
 idf.py -p <DISCORA_UART_PORT> flash monitor
 ```
 
-先确认启动日志中出现 `Discora M2 CD-DA read-only probe` 和 `Waiting for USB optical drive`，再接入光驱。日志字段和测试矩阵见 [验证手册](validation.md#m1esp32-s3--usb-host)。本文没有预先填好的设备成功日志。
+先确认启动日志中出现 `Discora optical control version=… IDF=…` 和 `Waiting for USB optical drive`，再接入光驱。日志字段和测试矩阵见 [验证手册](validation.md#m1esp32-s3--usb-host)。本文没有预先填好的设备成功日志。
 
 ## 首轮验收顺序
 
@@ -96,6 +96,14 @@ idf.py -p <DISCORA_UART_PORT> flash monitor
 
 型号未知或供电路径不明确时，先补充板卡、Hub、桥接器型号再落实物理接线；这不阻碍固件编码和离线构建。
 
-## 轻触退盘按键（GPIO7）
+## 轻触控制按键（GPIO7／8／9）
 
-常开、非自锁轻触按键的一端接 GPIO7，另一端接 GND，内部上拉由 `0.9.0-button-eject` 固件启用。无需接 5V 或另接 3.3V；四脚按键先用通断档找出松开断路、按下导通的两个触点。GPIO7 的供应商图纸位置为 J1-7，实物以丝印为准。默认 I²S 保持 GPIO4/5/6。详细行为、配置和实机验收见[轻触按键退盘](eject-button.md)；查询配置已烧录，用户已确认基本按键触发与实际退盘成功，其余场景待验收，见[部署记录](records/2026-11-01-button-eject-deploy.md)。
+当前已部署 `0.9.1-track-buttons` 软件时钟播放器，保留退盘并启用换轨。每个常开、非自锁按键分别连接对应 GPIO 与 GND，内部上拉由固件启用，无需接 5V 或另接 3.3V。四脚按键先用通断档找出松开断路、按下导通的触点。
+
+| 功能 | GPIO | 供应商图纸位置 | 当前证据 |
+| --- | --- | --- | --- |
+| 退盘 | GPIO7 | J1-7 | 0.9.0 查询配置获用户实际退盘反馈；0.9.1 初始化通过，实际动作待测 |
+| 上一曲 | GPIO8 | J1-12 | 0.9.1 初始化通过，实体换轨待测 |
+| 下一曲 | GPIO9 | J1-15 | 0.9.1 初始化通过，实体换轨待测 |
+
+实物以丝印为准，GPIO 编号不是排针序号；默认 I²S 保持 GPIO4/5/6。软件时钟模式不出声，上电保持停止，可先按下一曲再按上一曲验证；首轨按上一曲无相邻目标，不会开始播放。详细接线、消抖、双键与边界行为见[换轨按键](track-buttons.md)和[退盘按键](eject-button.md)，烧录与启动证据见[部署记录](records/2026-11-01-track-buttons-deploy.md)。
