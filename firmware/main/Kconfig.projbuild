@@ -19,6 +19,15 @@ config DISCORA_CDDA_SOAK
         One bounded run per MCU boot, no automatic retry. Uses real CD data
         and a software clocked discard sink, not I2S or audible playback.
 
+config DISCORA_SENSE_DATA_TIMEOUT_MS
+    int "Diagnostic REQUEST SENSE data-stage timeout (ms)"
+    depends on DISCORA_CDDA_PROBE
+    range 3000 30000
+    default 3000
+    help
+        Changes only REQUEST SENSE Bulk IN data waiting. CBW, CSW and control
+        transfers keep their normal deadline. No command replay is added.
+
 config DISCORA_CDDA_SEEK_BENCH
     bool "Include the 12-position seek experiment"
     depends on DISCORA_CDDA_SOAK

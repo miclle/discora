@@ -23,6 +23,7 @@ M1 需要直接观察 USB 光驱的真实 SCSI 返回值。普通文件系统挂
 
 - 只支持当前配置、首个满足条件的 BOT 接口和 LUN 0；UAS、多 LUN 搜索、切换配置/alternate setting 均未实现。
 - 查询失败不会被转换为“无盘”或“读取成功”。REQUEST SENSE 也失败时停止探测，不递归请求 sense。
+
 - 固件长期保留一个 transfer 供串行复用；每次断连需等待传输归还，释放接口并关闭 device handle。Host daemon/client 为常驻服务。
 - 当前测试验证协议构造、解析与内存边界；USB 调度、Hub、STALL 恢复、断连、供电和真实 sense 仍须实机验收。
 - 官方依据：[USB Host Library v5.4](https://docs.espressif.com/projects/esp-idf/en/v5.4/esp32s3/api-reference/peripherals/usb_host.html)、[USB MSC BOT 1.0](https://www.usb.org/sites/default/files/usbmassbulk_10.pdf)。
@@ -30,3 +31,7 @@ M1 需要直接观察 USB 光驱的真实 SCSI 返回值。普通文件系统挂
 ## 重新评估条件
 
 若实际桥接器必须使用其他配置、接口子类或 LUN，应保留描述符和命令日志后单独扩展；不得绕过身份确认或直接引入刻录命令。
+
+## 2026-11-01：sense 数据截止诊断
+
+在直连路径中已经观察到 READ CD 返回有效失败 CSW，随后 REQUEST SENSE 超时；不能把后者直接作为原始 SCSI 错误。0.5.1 增加 CBW / DATA / CSW 分阶段日志，以及默认 3000 ms、实验可选 30000 ms 的 REQUEST SENSE 数据等待参数。仅改变该 Bulk IN 数据阶段，保留其它截止、所有权和无重放规则。同一工作负载未触发 sense 时，不能以读取成功认定延长截止解决故障。

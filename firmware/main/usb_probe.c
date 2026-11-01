@@ -29,6 +29,11 @@ enum { CDDA_PROBE_ENABLED = 0 };
 #endif
 
 enum { TRANSFER_TIMEOUT_MS = 3000, AUDIO_DATA_TIMEOUT_MS = 30000, CANCEL_TIMEOUT_MS = 2000, POLL_INTERVAL_MS = 5000 };
+#if defined(CONFIG_DISCORA_SENSE_DATA_TIMEOUT_MS)
+enum { SENSE_DATA_TIMEOUT_MS = CONFIG_DISCORA_SENSE_DATA_TIMEOUT_MS };
+#else
+enum { SENSE_DATA_TIMEOUT_MS = TRANSFER_TIMEOUT_MS };
+#endif
 static const char *TAG = "usb_probe";
 
 typedef struct {
@@ -256,12 +261,23 @@ static command_result_t execute_command(probe_context_t *ctx, probe_command_t co
     if (!ctx->quiet_audio || command != PROBE_READ_CD) ESP_LOGI(TAG, "command=%s tag=%" PRIu32 " requested=%u LUN=0",
              probe_command_name(command), ctx->tag, (unsigned)requested);
     esp_err_t err = bulk_transfer(ctx, false, cbw, sizeof(cbw), TRANSFER_TIMEOUT_MS);
+    if (command == PROBE_REQUEST_SENSE) {
+        ESP_LOGI(TAG, "sense phase=CBW result=%s elapsed_ms=%" PRIi64 " owned=%u",
+                 esp_err_to_name(err), now_ms() - started, ctx->in_flight);
+    }
     if (err != ESP_OK || ctx->transfer->actual_num_bytes != PROBE_CBW_SIZE) {
         goto transport_error;
     }
     if (requested) {
+        unsigned data_timeout = command == PROBE_READ_CD ? AUDIO_DATA_TIMEOUT_MS :
+                                command == PROBE_REQUEST_SENSE ? SENSE_DATA_TIMEOUT_MS : TRANSFER_TIMEOUT_MS;
+        if (command == PROBE_REQUEST_SENSE) ESP_LOGI(TAG, "sense phase=DATA deadline_ms=%u", data_timeout);
         err = bulk_transfer(ctx, true, NULL, requested,
-                            command == PROBE_READ_CD ? AUDIO_DATA_TIMEOUT_MS : TRANSFER_TIMEOUT_MS);
+                            data_timeout);
+        if (command == PROBE_REQUEST_SENSE) {
+            ESP_LOGI(TAG, "sense phase=DATA result=%s elapsed_ms=%" PRIi64 " owned=%u",
+                     esp_err_to_name(err), now_ms() - started, ctx->in_flight);
+        }
         if (err != ESP_OK && !(err == ESP_FAIL && ctx->transfer->status == USB_TRANSFER_STATUS_STALL)) {
             goto transport_error;
         }
@@ -281,6 +297,10 @@ static command_result_t execute_command(probe_context_t *ctx, probe_command_t co
         }
     }
     err = bulk_transfer(ctx, true, NULL, PROBE_CSW_SIZE, TRANSFER_TIMEOUT_MS);
+    if (command == PROBE_REQUEST_SENSE) {
+        ESP_LOGI(TAG, "sense phase=CSW result=%s elapsed_ms=%" PRIi64,
+                 esp_err_to_name(err), now_ms() - started);
+    }
     if (err == ESP_FAIL && ctx->transfer->status == USB_TRANSFER_STATUS_STALL) {
         err = clear_halt(ctx, ctx->interface.ep_in);
         if (err == ESP_OK) {
