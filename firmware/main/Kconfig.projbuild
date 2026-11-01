@@ -2,7 +2,7 @@ menu "Discora bench probes"
 
 config DISCORA_CDDA_PROBE
     bool "Run one bounded READ CD probe per MCU boot"
-    depends on !DISCORA_AUDIO_DIAGNOSTIC
+    depends on !DISCORA_AUDIO_DIAGNOSTIC && !DISCORA_CD_PLAYER
     default n
     help
         Experimental, read-only CD-DA probe: requires a validated audio TOC.
@@ -21,7 +21,7 @@ config DISCORA_CDDA_SOAK
 
 config DISCORA_SENSE_DATA_TIMEOUT_MS
     int "Diagnostic REQUEST SENSE data-stage timeout (ms)"
-    depends on DISCORA_CDDA_PROBE
+    depends on DISCORA_CDDA_PROBE || DISCORA_CD_PLAYER
     range 3000 30000
     default 3000
     help
@@ -67,7 +67,7 @@ config DISCORA_CDDA_SEEK_VARY_OFFSET
 
 config DISCORA_CDDA_SEEK_RECOVERY
     bool "Allow one read recovery per boot for valid sense 03/02/00"
-    depends on DISCORA_CDDA_PROBE
+    depends on DISCORA_CDDA_PROBE || DISCORA_CD_PLAYER
     default n
     help
         Reserve one recovery, wait 1000 ms while servicing USB, require TUR
@@ -100,6 +100,26 @@ config DISCORA_CDDA_SOAK_SECONDS
 
 endmenu
 
+menu "Discora CD player"
+
+config DISCORA_CD_PLAYER
+    bool "Enable UART-controlled CD player (boot stopped)"
+    depends on !DISCORA_AUDIO_DIAGNOSTIC
+    default n
+    help
+        Real READ CD producer with independent output/control task. Bench probes
+        are disabled. Software-clock sink by default; never claim audible output.
+
+config DISCORA_CD_PLAYER_I2S
+    bool "Use I2S instead of the software-clock sink"
+    depends on DISCORA_CD_PLAYER
+    default n
+    help
+        Requires a verified DAC board and wiring. This mode is compile-tested
+        until physical output and L/R channels are measured.
+
+endmenu
+
 menu "Discora audio diagnostic"
 
 config DISCORA_AUDIO_DIAGNOSTIC
@@ -112,19 +132,19 @@ config DISCORA_AUDIO_DIAGNOSTIC
 
 config DISCORA_I2S_BCLK
     int "BCLK output GPIO"
-    depends on DISCORA_AUDIO_DIAGNOSTIC
+    depends on DISCORA_AUDIO_DIAGNOSTIC || DISCORA_CD_PLAYER_I2S
     range 1 18
     default 4
 
 config DISCORA_I2S_LRCK
     int "LRCK/WS output GPIO"
-    depends on DISCORA_AUDIO_DIAGNOSTIC
+    depends on DISCORA_AUDIO_DIAGNOSTIC || DISCORA_CD_PLAYER_I2S
     range 1 18
     default 5
 
 config DISCORA_I2S_DATA
     int "DAC DIN output GPIO"
-    depends on DISCORA_AUDIO_DIAGNOSTIC
+    depends on DISCORA_AUDIO_DIAGNOSTIC || DISCORA_CD_PLAYER_I2S
     range 1 18
     default 6
 

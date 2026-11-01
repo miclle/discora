@@ -1,0 +1,7 @@
+#pragma once
+#include "cd_player_core.h"
+bool discora_cd_player_start(void);
+void discora_cd_player_media(const probe_toc_t *toc);
+void discora_cd_player_unavailable(void);
+bool discora_cd_player_request(cd_player_read_t *request);
+void discora_cd_player_complete(const cd_player_read_t *request, bool ok, const uint8_t *data, size_t size);
