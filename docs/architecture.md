@@ -59,7 +59,7 @@ USB Bulk IN 长度按 MPS 向上对齐，CDB 请求与 CBW 数据长度仍保持
 
 `test_tone.c` 生成明确标记的 PCM16LE 左右交织样本，`audio_i2s.c` 通过 IDF v5.4 原生 standard TX 输出，`audio_diag.c` 串行处理 COM 命令、生成和提交 PCM。默认模式仍为 USB probe；测试音模式不启动光驱任务，上电 stopped，显式命令后才开 I²S。
 
-诊断软件队列为 14112 字节（80 ms），DMA 7056 字节（40 ms），与 M2 的 64 扇区缓冲实验是不同配置。暂停/停止删除输出通道以丢弃旧 DMA；暂停保留未提交软件数据，但不保证采样级无损位置，CD EOF / 真实播放位置和 DMA 欠载统计尚未实现。详见 [ADR-0006](decisions/0006-i2s-tone-diagnostic.md)。独立测试音尚未进行 DAC/时钟/模拟输出实测。
+诊断软件队列为 14112 字节（80 ms），DMA 7056 字节（40 ms），与 M2 的 64 扇区缓冲实验是不同配置。暂停/停止删除输出通道以丢弃旧 DMA；暂停保留未提交软件数据，但不保证采样级无损位置，该独立诊断不处理 CD EOF；真实播放位置和 DMA 欠载统计尚未实现。详见 [ADR-0006](decisions/0006-i2s-tone-diagnostic.md)。独立测试音尚未进行 DAC/时钟/模拟输出实测。
 
 ## 刻录通路（研究阶段）
 
@@ -84,3 +84,5 @@ SD / flash ISO or PCM → source reader → buffer → USB BOT
 `cd_player_core.c` 将音轨选择、单轨读取光标、预填、暂停/停止/换轨及代次检查接到 `audio_core`；`cd_player.c` 独占 UART 和输出适配器，USB client 仍是唯一 SCSI 发送者。请求复制音轨边界及代次，USB 等待不持有播放器锁，完成后仅将当前代次的完整回复复制入队；旧代次返回不能污染新轨。
 
 模式默认关闭、启动 stopped，与 bench/测试音互斥。软件时钟模式用真实 CD 数据验证控制和 1× 消费；I²S 模式复用已有适配器，尚未接 DAC。单轨 EOF 停止，暂停可丢弃已提交 DMA，未实现无缝播放或独立硬件 DMA 欠载计数。详见 [ADR-0008](decisions/0008-cd-player-control.md)。
+
+播放器 EOF 诊断可选地对已接受源数据与软件消费分别累计 SHA-256，仅在完整同代次结束时比较字节数/摘要。0.6.4 的轨尾恢复允许不足预填门槛的已知 EOF 队列继续消费；I²S 短预装只在尾帧之后补静音，EOF 50 ms 截止在适配器内管理。离线 fake driver 测试调用实际 `audio_i2s.c`，只替换 ESP-IDF API，不能充当电气/声音验收。

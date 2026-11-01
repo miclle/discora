@@ -66,7 +66,10 @@ bool cd_player_play(cd_player_core_t *p)
 {
     if (!p->media || p->audio.state == AUDIO_FAULT) return false;
     if (p->eof && !p->audio.pcm.used) select_index(p, p->index);
-    return audio_core_play(&p->audio);
+    bool ok = audio_core_play(&p->audio);
+    // EOF has no producer left to reach the normal prefill threshold.
+    if (ok && p->eof && p->audio.pcm.used) p->audio.state = AUDIO_PLAYING;
+    return ok;
 }
 bool cd_player_pause(cd_player_core_t *p) { return audio_core_pause(&p->audio); }
 bool cd_player_request(cd_player_core_t *p, cd_player_read_t *out)
