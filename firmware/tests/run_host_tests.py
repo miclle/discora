@@ -93,6 +93,17 @@ def main():
         )
         subprocess.run([str(waiting)], check=True)
 
+        sequences = Path(temp) / "cd_player_sequence_test"
+        subprocess.run(
+            shlex.split(os.environ.get("CC", "cc")) + [
+                "-std=c11", "-Wall", "-Wextra", "-Werror", "-pedantic", "-g",
+                "-fsanitize=address,undefined", "-fno-omit-frame-pointer",
+                "-I", str(firmware / "main"), str(firmware / "main/pcm_buffer.c"),
+                str(firmware / "main/audio_core.c"), str(firmware / "main/cd_player_core.c"),
+                str(firmware / "tests/cd_player_sequence_test.c"), "-o", str(sequences),
+            ], check=True,
+        )
+        subprocess.run([str(sequences)], check=True)
 
 
 
