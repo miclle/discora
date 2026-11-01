@@ -38,11 +38,17 @@ esp_err_t audio_i2s_open(audio_i2s_t *out, int bclk, int lrck, int data)
 
 esp_err_t audio_i2s_start(audio_i2s_t *out, const uint8_t *pcm, size_t size)
 {
-    if (!out || !out->channel || out->running || !pcm || size != AUDIO_PRELOAD_BYTES) return ESP_ERR_INVALID_ARG;
+    if (!out || !out->channel || out->running || !pcm || !size || size % 4 || size > AUDIO_PRELOAD_BYTES) return ESP_ERR_INVALID_ARG;
     size_t loaded = 0;
     esp_err_t err = i2s_channel_preload_data(out->channel, pcm, size, &loaded);
     if (err != ESP_OK) return err;
     if (loaded != size) return ESP_ERR_INVALID_SIZE;
+    if (size < AUDIO_PRELOAD_BYTES) {
+        static const uint8_t silence[AUDIO_PRELOAD_BYTES];
+        err = i2s_channel_preload_data(out->channel, silence, AUDIO_PRELOAD_BYTES - size, &loaded);
+        if (err != ESP_OK) return err;
+        if (loaded != AUDIO_PRELOAD_BYTES - size) return ESP_ERR_INVALID_SIZE;
+    }
     err = i2s_channel_enable(out->channel);
     if (err == ESP_OK) out->running = true;
     return err;
@@ -67,6 +73,15 @@ esp_err_t audio_i2s_close(audio_i2s_t *out)
         out->running = false;
     }
     esp_err_t err = i2s_del_channel(out->channel);
-    if (err == ESP_OK) out->channel = NULL;
+    if (err == ESP_OK) { out->channel = NULL; out->drain_until = 0; }
     return err;
+}
+
+void audio_i2s_eof(audio_i2s_t *out, int64_t now)
+{
+    if (out && out->running && !out->drain_until) out->drain_until = now + 50000;
+}
+bool audio_i2s_draining(const audio_i2s_t *out, int64_t now)
+{
+    return out && out->running && out->drain_until && now < out->drain_until;
 }

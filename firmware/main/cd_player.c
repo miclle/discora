@@ -31,7 +31,7 @@ static const char *sink = "software-clock-no-I2S";
 #endif
 static uint32_t output_generation;
 static bool running;
-static int64_t next_tick, drain_until;
+static int64_t next_tick;
 
 #if defined(CONFIG_DISCORA_CD_PLAYER_VERIFY)
 // Verification only: serialized with the PCM queue; never hash stale source replies.
@@ -65,7 +65,7 @@ static void verify_take(const uint8_t *data, size_t size)
         verify.delivered += size;
         verify.tail = size;
     } else if (player.eof && !player.audio.pcm.used && player.audio.state == AUDIO_STOPPED && !verify.finished) {
-        uint8_t a[32], b[32]; char ah[65], bh[65];
+        uint8_t a[32] = {0}, b[32] = {0}; char ah[65], bh[65];
         verify.valid &= mbedtls_sha256_finish(&verify.source, a) == 0;
         verify.valid &= mbedtls_sha256_finish(&verify.consumed, b) == 0;
         for (unsigned i = 0; i < 32; ++i) { sprintf(ah + 2*i, "%02x", a[i]); sprintf(bh + 2*i, "%02x", b[i]); }
@@ -112,7 +112,6 @@ static bool close_output(void)
     }
 #endif
     running = false;
-    drain_until = 0;
     return true;
 }
 static void status(void)
@@ -190,7 +189,9 @@ static void output_task(void *arg)
             if (!close_output()) { vTaskDelay(1); continue; }
             output_generation = gen;
         }
-        if (drain_until && state == AUDIO_STOPPED && esp_timer_get_time() < drain_until) { vTaskDelay(1); continue; }
+#if defined(CONFIG_DISCORA_CD_PLAYER_I2S)
+        if (state == AUDIO_STOPPED && audio_i2s_draining(&output, esp_timer_get_time())) { vTaskDelay(1); continue; }
+#endif
         if (state != AUDIO_PLAYING) {
             if (running) { close_output(); status(); }
             vTaskDelay(1); continue;
@@ -214,7 +215,7 @@ static void output_task(void *arg)
         xSemaphoreGive(lock);
         if (!n) {
 #if defined(CONFIG_DISCORA_CD_PLAYER_I2S)
-            if (state == AUDIO_STOPPED && eof && running) { drain_until = esp_timer_get_time() + 50000; continue; }
+            if (state == AUDIO_STOPPED && eof && running) { audio_i2s_eof(&output, esp_timer_get_time()); continue; }
 #else
             (void)eof;
 #endif

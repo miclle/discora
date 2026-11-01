@@ -45,3 +45,9 @@ I²S 暂停会丢弃已提交 DMA 数据，可能产生约 40 ms 的跳过；当
 ## 受控故障实验
 
 只有 `cd-player-faults.defaults` 开启 `DISCORA_CD_PLAYER_FAULT_TEST`。播放时 `test delay` 暂停新请求 1200 ms，`test fail` 在下一次请求处注入播放器源失败、不发送该次 USB。两项各每次 MCU 启动最多一次；命令和触发日志均有 TEST 标记，不代表真实光驱错误。欠载显式 play 重缓冲，fault 须 stop 后 play。普通/I²S profile 不开放这些命令，详见 [负向实测](records/2026-11-01-m3-player-faults.md)。
+
+## 轨尾暂停 / I²S 软件边界
+
+0.6.4 修复 EOF 已读完但剩余队列低于预填门槛时，pause/play 永久停在 prefill 的问题。已知 EOF 的剩余数据可直接恢复消费；I²S 重新打开时允许 4 字节对齐的短预装，真实尾帧后补静音填满 DMA。补齐只用于 EOF 初始预装，不在普通欠载时伪造 PCM，也不计入 CD 字节摘要。
+
+适配器的 50 ms EOF 排空截止已纳入生产代码的离线测试，重复 EOF 不延长截止，stop/关闭会清除截止。假的 IDF 调用验证开通失败、短写、关闭失败保留句柄、重开和尾块；不模拟真实时钟或证明 DMA 已播放完成。见 [轨尾回归与适配器记录](records/2026-11-01-m3-player-tail.md)。

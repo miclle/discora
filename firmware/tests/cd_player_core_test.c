@@ -64,6 +64,17 @@ int main(void)
     cd_player_stop(&p); assert(cd_player_play(&p) && cd_player_request(&p,&old));
     cd_player_lost(&p); assert(!p.media && !cd_player_complete(&p,&old,true,data,sizeof(data)));
     assert(!cd_player_play(&p)); assert(cd_player_media(&p,&toc) && p.audio.state==AUDIO_STOPPED);
+    init(); p.toc.tracks[0].end_lba=17; assert(cd_player_play(&p));
+    for (unsigned guard=0; !p.eof && guard<100; ++guard) {
+        if (cd_player_request(&p,&r)) complete(&r);
+        if (!p.eof) cd_player_take(&p,out,1764);
+    }
+    assert(p.eof);
+    while (p.audio.pcm.used>1764) cd_player_take(&p,out,1764);
+    assert(p.audio.pcm.used==1176 && cd_player_pause(&p));
+    assert(cd_player_play(&p) && p.audio.state==AUDIO_PLAYING);
+    assert(cd_player_take(&p,out,7056)==1176);
+    assert(cd_player_take(&p,out,1764)==0 && p.audio.state==AUDIO_STOPPED);
     puts("PASS: real player core ordering/EOF, partial tail, pause, stop/track stale reads, data-track rejection, explicit underrun restart and media loss (synthetic PCM, no device)");
     return 0;
 }

@@ -68,6 +68,18 @@ def main():
         )
         subprocess.run([str(player)], check=True)
 
+        adapter = Path(temp) / "audio_i2s_test"
+        subprocess.run(
+            shlex.split(os.environ.get("CC", "cc")) + [
+                "-std=c11", "-Wall", "-Wextra", "-Werror", "-pedantic", "-g",
+                "-fsanitize=address,undefined", "-fno-omit-frame-pointer",
+                "-I", str(firmware / "tests/stubs"), "-I", str(firmware / "main"),
+                str(firmware / "main/audio_i2s.c"), str(firmware / "tests/audio_i2s_test.c"),
+                "-o", str(adapter),
+            ], check=True,
+        )
+        subprocess.run([str(adapter)], check=True)
+
 
 
 
