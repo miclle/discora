@@ -79,6 +79,13 @@ static bool seek_bench(const cdda_bench_source_t *s)
         }
         uint8_t first[32], repeat[32];
         const uint8_t *data;
+#if defined(CONFIG_DISCORA_CDDA_SEEK_WAIT_MS) && CONFIG_DISCORA_CDDA_SEEK_WAIT_MS > 0
+        ESP_LOGI(TAG, "seek settle step=%u wait_ms=%u", i + 1, CONFIG_DISCORA_CDDA_SEEK_WAIT_MS);
+        int64_t until = esp_timer_get_time() + (int64_t)CONFIG_DISCORA_CDDA_SEEK_WAIT_MS * 1000;
+        while (esp_timer_get_time() < until) {
+            if (!s->service(s->context, 20)) return false;
+        }
+#endif
         int64_t started = esp_timer_get_time();
         if (!read_chunk(s, track, lba, 8, &data, &stats) ||
             mbedtls_sha256(data, 8 * PROBE_CD_SECTOR_SIZE, first, 0)) return false;

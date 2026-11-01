@@ -16,8 +16,8 @@ config DISCORA_CDDA_SOAK
     depends on DISCORA_CDDA_PROBE
     default n
     help
-        One bounded run per MCU boot, no automatic retry. Uses real CD data
-        and a software clocked discard sink, not I2S or audible playback.
+        One bounded run per MCU boot. Read recovery is separately opt-in.
+        Uses real CD data and a software clocked discard sink, not I2S playback.
 
 config DISCORA_SENSE_DATA_TIMEOUT_MS
     int "Diagnostic REQUEST SENSE data-stage timeout (ms)"
@@ -35,6 +35,22 @@ config DISCORA_CDDA_SEEK_BENCH
     help
         Disable to isolate full-track and paced-buffer tests after a seek fault.
         A run with this disabled does not qualify seek behavior.
+
+config DISCORA_CDDA_SEEK_WAIT_MS
+    int "Quiet wait before each seek position (ms)"
+    depends on DISCORA_CDDA_SEEK_BENCH
+    range 0 3000
+    default 0
+
+config DISCORA_CDDA_SEEK_RECOVERY
+    bool "Allow one read recovery per boot for valid sense 03/02/00"
+    depends on DISCORA_CDDA_PROBE
+    default n
+    help
+        Reserve one recovery, wait 1000 ms while servicing USB, require TUR
+        success, then replay the identical read once. Never replay after
+        disconnect, transport fault, missing sense or medium change.
+        Preserve the original failure and report recovered reads separately.
 
 config DISCORA_CDDA_FULL_TRACK_BENCH
     bool "Include a complete first-track read from INDEX 01"
