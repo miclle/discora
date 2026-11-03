@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Discora 整机接线图</title><style>body{margin:0;background:#f5f5f5;color:#2d3142}main{max-width:1600px;margin:auto}svg{display:block;width:100%;height:auto} @media print{main{max-width:none}}</style></head><body><main><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 2680" role="img" aria-labelledby="discora-wiring-title discora-wiring-desc">
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Discora 整机接线图</title><style>body{margin:0;background:#f5f5f5;color:#2d3142}main{max-width:1600px;margin:auto}svg{display:block;width:100%;height:auto} @media print{main{max-width:none}}</style></head><body><main><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 3160" role="img" aria-labelledby="discora-wiring-title discora-wiring-desc">
 <title id="discora-wiring-title">Discora 整机接线图</title>
-<desc id="discora-wiring-desc">展示光驱、主控、DAC、功放、左右喇叭、三个按键、OLED、电源与调试电脑的模块连接，以及 DAC 引脚和焊桥、OLED 的 GPIO10 SDA／GPIO11 SCL 与 3.3V 四线规划；虚线为待确认连接。</desc>
+<desc id="discora-wiring-desc">展示光驱、主控、DAC、功放、左右喇叭、三个按键、OLED、电源与调试电脑的模块连接，以及 DAC 引脚和焊桥、OLED 的 GPIO10 SDA／GPIO11 SCL 与 3.3V 四线规划；并解释 5Vin、D3 与 IN-OUT 的取电限制；虚线为待确认连接。</desc>
 <defs><style>text{font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif}</style>
 <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#4f5d75"/></marker>
 <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#eb6c36"/></marker>
 <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#2e5aa8"/></marker>
-</defs><rect width="1600" height="2680" fill="#f5f5f5"/>
+</defs><rect width="1600" height="3160" fill="#f5f5f5"/>
 <text x="64" y="64" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">DISCORA / WIRING REFERENCE / 2026-11-04</text>
 <text x="64" y="124" font-size="40" fill="#2d3142" font-weight="600" text-anchor="start">Discora 整机接线图</text>
 <text x="64" y="168" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">模块级方案 · 不按实物比例 · 音频与显示接入待验收 · 不将多个电源输出直接并联</text>
@@ -104,8 +104,8 @@
 <text x="612" y="1196" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">桥接器／光驱</text>
 <text x="612" y="1228" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">核对 VBUS 回送与压降</text>
 <rect x="64" y="1248" width="280" height="80" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
-<text x="84" y="1284" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">稳定 5V 支路</text>
-<text x="84" y="1316" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">共地，正极不并联异源</text>
+<text x="84" y="1284" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">同源稳压 5V 分支</text>
+<text x="84" y="1316" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">5Vin 输出须另核对路径</text>
 <rect x="592" y="1248" width="312" height="80" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
 <text x="612" y="1284" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">PCM5102 VIN</text>
 <text x="612" y="1316" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">确认模块支持 5V 后连接</text>
@@ -119,6 +119,27 @@
 <text x="1060" y="1316" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">不能由 ESP32 板供给功放大电流</text>
 <text x="64" y="1380" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">信号地：ESP32 GND ↔ DAC GND／AGND ↔ 功放输入 GND；USB 保持共地。喇叭 BTL 负端不属于地。</text>
 <text x="64" y="1416" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">光驱与功放大电流各回电源；OLED 的 3.3V 接法见 04。DAC A3V3 不能接 5V 或并联 ESP32 3V3。</text>
+<path d="M64 1464 H1536" fill="none" stroke="#bfc0c0" stroke-width="3"/>
+<text x="64" y="1504" font-size="28" fill="#2d3142" font-weight="600">5Vin 与 IN-OUT：先核对路径，再决定取电</text>
+<text x="64" y="1540" font-size="20" fill="#2d3142" font-weight="400">V1.4 图纸关系；实物版本与旁路状态待核对。箭头表示 D3 正向供电方向。</text>
+<path d="M344 1624 H528 M824 1624 H1040" fill="none" stroke="#4f5d75" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M344 1664 H392 Q400 1664 400 1672 V1752 Q400 1760 408 1760 H528" fill="none" stroke="#4f5d75" stroke-width="3" stroke-dasharray="8 6"/>
+<path d="M824 1760 H968 Q976 1760 976 1752 V1672 Q976 1664 984 1664 H1040" fill="none" stroke="#4f5d75" stroke-width="3" stroke-dasharray="8 6"/>
+<rect x="64" y="1584" width="280" height="96" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
+<text x="84" y="1616" font-size="24" fill="#2d3142" font-weight="600">5Vin 排针</text>
+<text x="84" y="1648" font-size="20" fill="#2d3142" font-weight="400">J1-21：外部输入侧</text>
+<rect x="528" y="1584" width="296" height="80" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
+<text x="548" y="1616" font-size="24" fill="#2d3142" font-weight="600">D3 → 单向供电</text>
+<text x="548" y="1648" font-size="20" fill="#2d3142" font-weight="400">阻止板内反向送至排针</text>
+<rect x="1040" y="1584" width="496" height="96" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
+<text x="1060" y="1616" font-size="24" fill="#2d3142" font-weight="600">板内 5V 电源轨</text>
+<text x="1060" y="1648" font-size="20" fill="#2d3142" font-weight="400">COM USB 经 D1 向此处供电</text>
+<rect x="528" y="1720" width="296" height="80" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
+<text x="548" y="1752" font-size="24" fill="#2d3142" font-weight="600">IN-OUT 并联旁路</text>
+<text x="548" y="1784" font-size="20" fill="#2d3142" font-weight="400">状态未知，不默认接通</text>
+<text x="64" y="1848" font-size="20" fill="#2d3142" font-weight="400">仅 COM USB 供电 + IN-OUT 断开：5Vin 不能默认作输出；DAC 可另取同源稳压 5V 分支。</text>
+<text x="64" y="1884" font-size="20" fill="#2d3142" font-weight="400">不要为取电直接短接 IN-OUT；先测电压、核对回灌。USB-OTG 是 D2 的旁路，与这里不同。</text>
+<g transform="translate(0 480)">
 <path d="M64 1464 H1536" fill="none" stroke="#bfc0c0" stroke-width="3"/>
 <text x="64" y="1496" font-size="24" fill="#eb6c36" font-weight="600" text-anchor="start">03</text>
 <text x="128" y="1496" font-size="28" fill="#2d3142" font-weight="600" text-anchor="start">DAC 逐线连接与背面焊桥</text>
@@ -140,7 +161,7 @@
 <text x="64" y="1876" font-size="24" fill="#2d3142" font-weight="400" text-anchor="start">GND</text>
 <path d="M288 1868 H584" fill="none" stroke="#4f5d75" stroke-width="3"/>
 <text x="624" y="1876" font-size="24" fill="#2d3142" font-weight="400" text-anchor="start">SCK</text>
-<text x="64" y="1932" font-size="24" fill="#2d3142" font-weight="400" text-anchor="start">5V（确认后）</text>
+<text x="64" y="1932" font-size="24" fill="#2d3142" font-weight="400" text-anchor="start">可用 5V 分支</text>
 <path d="M288 1924 H584" fill="none" stroke="#4f5d75" stroke-width="3" stroke-dasharray="8 6"/>
 <text x="624" y="1932" font-size="24" fill="#2d3142" font-weight="400" text-anchor="start">VIN</text>
 <text x="64" y="1996" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">三线 I²S · 44.1 kHz / 16-bit stereo</text>
@@ -205,4 +226,5 @@
 <text x="64" y="2532" font-size="20" fill="#2d3142" font-weight="400">注意：OLED 的 SCL 是 I²C 时钟；PCM5102 的 SCK／LCK 是音频接口，不能混接。</text>
 <path d="M64 2592 H1536" fill="none" stroke="#bfc0c0" stroke-width="3"/>
 <text x="64" y="2632" font-size="20" fill="#2d3142" font-weight="400">依据：供应商模块资料、ESP32 板卡图纸与当前固件。规划不等于已接线、已上电或音频／显示验收。</text>
+</g>
 </svg></main></body></html>
