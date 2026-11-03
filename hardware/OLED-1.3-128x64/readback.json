@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-03",
+  "archive_id": "discora-hardware-2026-11-03",
+  "archived_only_file_count": 1353,
+  "archived_only_bytes": 64059284,
+  "retained_originals": [
+    {
+      "original_path": "01-规格书与控制芯片手册/1.3-ZJY130-2864KSWLG01.pdf",
+      "path": "datasheets/1.3-ZJY130-2864KSWLG01.pdf",
+      "bytes": 880347,
+      "sha256": "7b7a7f6455b4cf61ff2a9a070ef52fe75dd270c69305ba1001e29de73f5ce326"
+    },
+    {
+      "original_path": "01-规格书与控制芯片手册/SH1106.pdf",
+      "path": "datasheets/SH1106.pdf",
+      "bytes": 1538125,
+      "sha256": "cfff58157c9f8caa83c929cee1edb7471e1057393e78c8fabf020759e742c291"
+    },
+    {
+      "original_path": "01-规格书与控制芯片手册/ZJY130I0400WG02.pdf",
+      "path": "datasheets/ZJY130I0400WG02.pdf",
+      "bytes": 1771213,
+      "sha256": "3180a92114a3d9cd54095ccae9790e3e8061650a243bc7679218d531d8157bc5"
+    },
+    {
+      "original_path": "O1CN01AM353R1PcqLFIKQ4j_!!914671862.webp",
+      "path": "oled-module-specifications.webp",
+      "bytes": 133588,
+      "sha256": "55eb11f05a975d79f369ec3789f391e281325f51d994294ad10c665c8949ae22"
+    },
+    {
+      "original_path": "O1CN01c21pWs1PcqL9T2Gbi_!!914671862.webp",
+      "path": "oled-module-interfaces.webp",
+      "bytes": 112116,
+      "sha256": "ca6f68903047a63abb7618cd063a712774c7015bf4067a62adb1ef10a74c712d"
+    },
+    {
+      "original_path": "O1CN01qk9JNI1PcqLFhlH6O_!!914671862.webp",
+      "path": "oled-module-dimensions-wiring.webp",
+      "bytes": 156180,
+      "sha256": "6adb394605cb124c7160bf8bf9fc2c827c520ebc458eb3d7139b901d61673733"
+    }
+  ],
+  "notes": [
+    "Supplier originals retain their original bytes and rights notices.",
+    "Complete originals and per-file manifest are archived outside the repository.",
+    "Archive location is recorded in the cleanup delivery; no personal path is stored here.",
+    "No hardware validation was performed."
+  ],
+  "archive_original_directory": "1.3 Inch OLED"
+}

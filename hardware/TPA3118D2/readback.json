@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-03",
+  "archive_id": "discora-hardware-2026-11-03",
+  "archived_only_file_count": 1,
+  "archived_only_bytes": 169328,
+  "retained_originals": [
+    {
+      "original_path": "O1CN0176SR1v1Lc9LF9IWEY_!!2343631319.jpg",
+      "path": "amplifier-supplier-specifications.jpg",
+      "bytes": 85951,
+      "sha256": "cbeb1184845e1d334fc3b31a1f176b10021b92f643540ce8eae65bfdfaad32df"
+    },
+    {
+      "original_path": "O1CN01BtZe321Lc9LBaFPlU_!!2343631319.jpg",
+      "path": "amplifier-back-dimensions.jpg",
+      "bytes": 70290,
+      "sha256": "df2c6a713ffe6a0f939fd07c6fe32ab2a6fd54292d49f031e1e66f13c31ba166"
+    },
+    {
+      "original_path": "O1CN01VWDuce1Lc9LBAS06O_!!2343631319.jpg",
+      "path": "amplifier-front-connections.jpg",
+      "bytes": 142620,
+      "sha256": "2cf953c61ef80865ae79e8b5dc560db6d42df5c71126828aaa127461eb65d18c"
+    }
+  ],
+  "notes": [
+    "Supplier originals retain their original bytes and rights notices.",
+    "Complete originals and per-file manifest are archived outside the repository.",
+    "Archive location is recorded in the cleanup delivery; no personal path is stored here.",
+    "No hardware validation was performed."
+  ]
+}

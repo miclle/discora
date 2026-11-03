@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-03",
+  "archive_id": "discora-hardware-2026-11-03",
+  "archived_only_file_count": 0,
+  "archived_only_bytes": 0,
+  "retained_originals": [
+    {
+      "original_path": "PCM5102 Specification.pdf",
+      "path": "PCM510xA-SLAS859C-2015.pdf",
+      "bytes": 1538552,
+      "sha256": "aa9aa5c90a57fec386c59165b2ea0ea66a277974c9ce8a05b398cda078ed7cbc"
+    }
+  ],
+  "notes": [
+    "Supplier originals retain their original bytes and rights notices.",
+    "Complete originals and per-file manifest are archived outside the repository.",
+    "Archive location is recorded in the cleanup delivery; no personal path is stored here.",
+    "No hardware validation was performed."
+  ],
+  "archive_original_directory": "PCM5102 DAC"
+}
