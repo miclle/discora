@@ -6,6 +6,11 @@ firmware/managed_components/
 firmware/.idf_component_manager/
 firmware/.cache/
 
+# Local reproduction of the CI build matrix
+/firmware/build-ci/
+/firmware/sdkconfig.ci
+/firmware/sdkconfig.ci.old
+
 # Bench captures and flash backups must survive idf.py fullclean / set-target.
 /.local/bench/
 
@@ -20,3 +25,13 @@ Thumbs.db
 
 # Host-side bench tooling bytecode
 /firmware/**/__pycache__/
+
+# FreeCAD automatic backups; keep the primary .FCStd models
+/hardware/**/*.FCStd[0-9]*
+/hardware/**/*.FCBak
+
+# Local temporary files
+/tmp/
+
+# Project worktrees
+/.worktrees/
