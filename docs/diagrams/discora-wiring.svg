@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 2160" role="img" aria-labelledby="discora-wiring-title discora-wiring-desc">
+<title id="discora-wiring-title">Discora 整机接线与 PCM5102 焊桥</title>
+<desc id="discora-wiring-desc">展示光驱、主控、DAC、功放、左右喇叭、三个按键、待接 OLED、电源与调试电脑的模块连接，以及 GPIO4至6 和背面 1-L、2-L、3-H、4-L 焊桥；虚线为待确认连接。</desc>
+<defs><style>text{font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif}</style>
+<marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#4f5d75"/></marker>
+<marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#eb6c36"/></marker>
+<marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#2e5aa8"/></marker>
+</defs><rect width="1600" height="2160" fill="#f5f5f5"/>
+<text x="64" y="64" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">DISCORA / WIRING REFERENCE / 2026-11-03</text>
+<text x="64" y="124" font-size="40" fill="#2d3142" font-weight="600" text-anchor="start">整机接线与 PCM5102 焊桥</text>
+<text x="64" y="168" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">模块级方案 · 不按实物比例 · 音频接线与声音待验收 · 不将多个电源输出直接并联</text>
+<path d="M64 200 H1536" fill="none" stroke="#bfc0c0" stroke-width="3"/>
+<text x="64" y="232" font-size="24" fill="#eb6c36" font-weight="600" text-anchor="start">01</text>
+<text x="128" y="232" font-size="28" fill="#2d3142" font-weight="600" text-anchor="start">整机信号连接</text>
+<text x="64" y="268" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">实线：接口已定义，非验收结论。虚线：待确认／未接入。线束内信号逐线连接，不是短接。</text>
+<path d="M364 352 H584" fill="none" stroke="#4f5d75" stroke-width="3"/>
+<rect x="415.0" y="312" width="118.1" height="28" fill="#f5f5f5"/>
+<text x="474" y="332" font-size="16" fill="#4f5d75" font-weight="400" text-anchor="middle">COM / UART0</text>
+<path d="M364 500 H584" fill="none" stroke="#4f5d75" stroke-width="3"/>
+<rect x="419.6" y="460" width="108.8" height="28" fill="#f5f5f5"/>
+<text x="474" y="480" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="middle">USB Host</text>
+<path d="M912 400 H1120" fill="none" stroke="#4f5d75" stroke-width="3"/>
+<rect x="944.3" y="360" width="143.4" height="28" fill="#f5f5f5"/>
+<text x="1016" y="380" font-size="16" fill="#4f5d75" font-weight="400" text-anchor="middle">I²S：4 / 5 / 6</text>
+<path d="M1328 464 V560" fill="none" stroke="#4f5d75" stroke-width="3"/>
+<text x="1344" y="508" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">L / R / GND</text>
+<text x="1344" y="536" font-size="16" fill="#4f5d75" font-weight="400" text-anchor="start">3.5mm 或三线</text>
+<path d="M1240 688 V768" fill="none" stroke="#4f5d75" stroke-width="3"/>
+<text x="1136" y="740" font-size="16" fill="#4f5d75" font-weight="400" text-anchor="start">OUTL + / −</text>
+<path d="M1416 688 V768" fill="none" stroke="#4f5d75" stroke-width="3"/>
+<text x="1432" y="740" font-size="16" fill="#4f5d75" font-weight="400" text-anchor="start">OUTR + / −</text>
+<path d="M748 584 V688" fill="none" stroke="#4f5d75" stroke-width="3"/>
+<text x="768" y="636" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO7 / 8 / 9</text>
+<text x="768" y="664" font-size="16" fill="#4f5d75" font-weight="400" text-anchor="start">各经按键到 GND</text>
+<path d="M364 752 H444 Q452 752 452 744 V576 Q452 568 460 568 H584" fill="none" stroke="#4f5d75" stroke-width="3" stroke-dasharray="8 6"/>
+<text x="376" y="704" font-size="16" fill="#4f5d75" font-weight="400" text-anchor="start">I²C 待定</text>
+<rect x="64" y="304" width="300" height="112" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
+<text x="84" y="340" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">调试电脑 → COM</text>
+<text x="84" y="372" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">板载 USB-UART</text>
+<text x="84" y="400" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO43 TX / GPIO44 RX</text>
+<rect x="64" y="448" width="300" height="188" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
+<text x="84" y="484" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">光驱链路（当前直连）</text>
+<text x="84" y="516" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">OTG 转接 ↔ SATA-USB</text>
+<text x="84" y="544" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">桥接器 13fd:0840</text>
+<text x="84" y="572" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">↔ UJ-898 / HC10</text>
+<text x="84" y="600" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">辅助 5V 供电见下方</text>
+<rect x="584" y="320" width="328" height="264" rx="8" fill="#fff7f2" stroke="#eb6c36" stroke-width="2"/>
+<text x="604" y="356" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">ESP32-S3 N16R8</text>
+<text x="604" y="388" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">USB：GPIO19 D− / 20 D+</text>
+<text x="604" y="416" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO4 → BCK</text>
+<text x="604" y="444" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO5 → LCK / LRCK</text>
+<text x="604" y="472" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO6 → DIN</text>
+<text x="604" y="500" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO7 / 8 / 9 → 按键</text>
+<rect x="1120" y="320" width="416" height="144" rx="8" fill="#fff7f2" stroke="#eb6c36" stroke-width="2"/>
+<text x="1140" y="356" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">PCM5102 / PCM5102A</text>
+<text x="1140" y="388" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">VIN：确认支持后接 5V</text>
+<text x="1140" y="416" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">SCK 接地；GND 与主控共地</text>
+<text x="1140" y="444" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">A3V3 不接外部电源</text>
+<rect x="1120" y="560" width="416" height="128" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
+<text x="1140" y="596" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">TPA3118D2 功放</text>
+<text x="1140" y="628" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">INL / INR / GND 或 3.5mm</text>
+<text x="1140" y="656" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">独立电源；从低音量测试</text>
+<rect x="1120" y="768" width="416" height="112" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
+<text x="1140" y="804" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">左喇叭 / 右喇叭（独立两路）</text>
+<text x="1140" y="836" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">各自两线连接对应 BTL 输出</text>
+<text x="1140" y="864" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">L−、R− 不互连、不接 GND</text>
+<rect x="584" y="688" width="328" height="168" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
+<text x="604" y="724" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">三个常开按键</text>
+<text x="604" y="756" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO7：退盘 → GND</text>
+<text x="604" y="784" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO8：上一曲 → GND</text>
+<text x="604" y="812" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO9：下一曲 → GND</text>
+<text x="604" y="840" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">不接 5V；内部上拉</text>
+<rect x="64" y="704" width="300" height="144" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="84" y="740" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">1.3 英寸 OLED · 待接</text>
+<text x="84" y="772" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">VCC / GND / SCL / SDA</text>
+<text x="84" y="800" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">供电、GPIO、地址待确认</text>
+<text x="84" y="828" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">不按虚线直接接线</text>
+<text x="64" y="920" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">备选：Type-C Hub 替代直连拓扑；TPA3116D2 替代首选功放。microSD／编码器仅远期候选，当前不接线。</text>
+<path d="M64 968 H1536" fill="none" stroke="#bfc0c0" stroke-width="3"/>
+<text x="64" y="1000" font-size="24" fill="#eb6c36" font-weight="600" text-anchor="start">02</text>
+<text x="128" y="1000" font-size="28" fill="#2d3142" font-weight="600" text-anchor="start">电源支路与公共地</text>
+<text x="64" y="1036" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">以下是供电规划：电压来源、VIN 规格、DC 插头极性及 USB 回灌必须先确认。</text>
+<path d="M344 1112 H592" fill="none" stroke="#4f5d75" stroke-width="3" stroke-dasharray="8 6"/>
+<rect x="428.0" y="1072" width="80.0" height="28" fill="#f5f5f5"/>
+<text x="468" y="1092" font-size="16" fill="#4f5d75" font-weight="400" text-anchor="middle">入口择一</text>
+<path d="M344 1200 H592" fill="none" stroke="#4f5d75" stroke-width="3" stroke-dasharray="8 6"/>
+<rect x="428.0" y="1160" width="80.0" height="28" fill="#f5f5f5"/>
+<text x="468" y="1180" font-size="16" fill="#4f5d75" font-weight="400" text-anchor="middle">独立支路</text>
+<path d="M344 1288 H592" fill="none" stroke="#4f5d75" stroke-width="3" stroke-dasharray="8 6"/>
+<rect x="428.0" y="1248" width="80.0" height="28" fill="#f5f5f5"/>
+<text x="468" y="1268" font-size="16" fill="#4f5d75" font-weight="400" text-anchor="middle">独立支路</text>
+<rect x="64" y="1072" width="280" height="80" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
+<text x="84" y="1108" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">主控供电入口</text>
+<text x="84" y="1140" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">COM USB 或已核对入口</text>
+<rect x="592" y="1072" width="312" height="80" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
+<text x="612" y="1108" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">ESP32 开发板</text>
+<text x="612" y="1140" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">确认多源供电隔离</text>
+<rect x="64" y="1160" width="280" height="80" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
+<text x="84" y="1196" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">足额 5V 电源</text>
+<text x="84" y="1228" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">现有辅助供电线</text>
+<rect x="592" y="1160" width="312" height="80" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
+<text x="612" y="1196" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">桥接器／光驱</text>
+<text x="612" y="1228" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">核对 VBUS 回送与压降</text>
+<rect x="64" y="1248" width="280" height="80" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
+<text x="84" y="1284" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">稳定 5V 支路</text>
+<text x="84" y="1316" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">共地，正极不并联异源</text>
+<rect x="592" y="1248" width="312" height="80" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
+<text x="612" y="1284" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">PCM5102 VIN</text>
+<text x="612" y="1316" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">确认模块支持 5V 后连接</text>
+<path d="M1288 1168 V1248" fill="none" stroke="#4f5d75" stroke-width="3" stroke-dasharray="8 6"/>
+<text x="1304" y="1212" font-size="16" fill="#4f5d75" font-weight="400" text-anchor="start">按实物定电压／极性</text>
+<rect x="1040" y="1072" width="496" height="96" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
+<text x="1060" y="1108" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">独立功放直流电源</text>
+<text x="1060" y="1140" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">额定电压、电流待定；不默认接 24V</text>
+<rect x="1040" y="1248" width="496" height="80" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
+<text x="1060" y="1284" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">TPA3118D2 DC 输入</text>
+<text x="1060" y="1316" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">不能由 ESP32 板供给功放大电流</text>
+<text x="64" y="1380" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">信号地：ESP32 GND ↔ DAC GND／AGND ↔ 功放输入 GND；USB 保持共地。喇叭 BTL 负端不属于地。</text>
+<text x="64" y="1416" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">光驱与功放大电流各回电源；OLED 暂不供电。DAC A3V3 仅作测量点，不能接 5V 或并联 ESP32 3V3。</text>
+<path d="M64 1464 H1536" fill="none" stroke="#bfc0c0" stroke-width="3"/>
+<text x="64" y="1496" font-size="24" fill="#eb6c36" font-weight="600" text-anchor="start">03</text>
+<text x="128" y="1496" font-size="28" fill="#2d3142" font-weight="600" text-anchor="start">DAC 逐线连接与背面焊桥</text>
+<text x="64" y="1532" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO 为芯片编号，不是排针序号。焊桥与参考背面图同向：输入排针在右，H 在左、L 在右。</text>
+<text x="64" y="1600" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">ESP32-S3／电源</text>
+<text x="624" y="1600" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">PCM5102</text>
+<text x="64" y="1652" font-size="24" fill="#2d3142" font-weight="400" text-anchor="start">GPIO4</text>
+<path d="M288 1644 H584" fill="none" stroke="#4f5d75" stroke-width="3"/>
+<text x="624" y="1652" font-size="24" fill="#2d3142" font-weight="400" text-anchor="start">BCK</text>
+<text x="64" y="1708" font-size="24" fill="#2d3142" font-weight="400" text-anchor="start">GPIO5</text>
+<path d="M288 1700 H584" fill="none" stroke="#4f5d75" stroke-width="3"/>
+<text x="624" y="1708" font-size="24" fill="#2d3142" font-weight="400" text-anchor="start">LCK / LRCK</text>
+<text x="64" y="1764" font-size="24" fill="#2d3142" font-weight="400" text-anchor="start">GPIO6</text>
+<path d="M288 1756 H584" fill="none" stroke="#4f5d75" stroke-width="3"/>
+<text x="624" y="1764" font-size="24" fill="#2d3142" font-weight="400" text-anchor="start">DIN</text>
+<text x="64" y="1820" font-size="24" fill="#2d3142" font-weight="400" text-anchor="start">GND</text>
+<path d="M288 1812 H584" fill="none" stroke="#4f5d75" stroke-width="3"/>
+<text x="624" y="1820" font-size="24" fill="#2d3142" font-weight="400" text-anchor="start">GND</text>
+<text x="64" y="1876" font-size="24" fill="#2d3142" font-weight="400" text-anchor="start">GND</text>
+<path d="M288 1868 H584" fill="none" stroke="#4f5d75" stroke-width="3"/>
+<text x="624" y="1876" font-size="24" fill="#2d3142" font-weight="400" text-anchor="start">SCK</text>
+<text x="64" y="1932" font-size="24" fill="#2d3142" font-weight="400" text-anchor="start">5V（确认后）</text>
+<path d="M288 1924 H584" fill="none" stroke="#4f5d75" stroke-width="3" stroke-dasharray="8 6"/>
+<text x="624" y="1932" font-size="24" fill="#2d3142" font-weight="400" text-anchor="start">VIN</text>
+<text x="64" y="1996" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">三线 I²S · 44.1 kHz / 16-bit stereo</text>
+<text x="64" y="2032" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">目标 BCK 1.4112 MHz；实际时钟、声音尚未验收</text>
+<text x="1000" y="1616" font-size="20" fill="#2d3142" font-weight="600" text-anchor="start">H2 / DEMP → L</text>
+<text x="980" y="1668" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="end">H</text>
+<text x="1168" y="1668" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">L</text>
+<rect x="1000" y="1644" width="32" height="32" rx="8" fill="#ececec" stroke="#bfc0c0" stroke-width="2"/>
+<rect x="1064" y="1644" width="32" height="32" rx="8" fill="#ececec" stroke="#bfc0c0" stroke-width="2"/>
+<rect x="1128" y="1644" width="32" height="32" rx="8" fill="#ececec" stroke="#bfc0c0" stroke-width="2"/>
+<path d="M1080 1660 H1144" stroke="#2d3142" stroke-width="12" stroke-linecap="round"/>
+<text x="1288" y="1616" font-size="20" fill="#2d3142" font-weight="600" text-anchor="start">H1 / FLT → L</text>
+<text x="1268" y="1668" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="end">H</text>
+<text x="1456" y="1668" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">L</text>
+<rect x="1288" y="1644" width="32" height="32" rx="8" fill="#ececec" stroke="#bfc0c0" stroke-width="2"/>
+<rect x="1352" y="1644" width="32" height="32" rx="8" fill="#ececec" stroke="#bfc0c0" stroke-width="2"/>
+<rect x="1416" y="1644" width="32" height="32" rx="8" fill="#ececec" stroke="#bfc0c0" stroke-width="2"/>
+<path d="M1368 1660 H1432" stroke="#2d3142" stroke-width="12" stroke-linecap="round"/>
+<text x="1000" y="1784" font-size="20" fill="#2d3142" font-weight="600" text-anchor="start">H4 / FMT → L</text>
+<text x="980" y="1836" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="end">H</text>
+<text x="1168" y="1836" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">L</text>
+<rect x="1000" y="1812" width="32" height="32" rx="8" fill="#ececec" stroke="#bfc0c0" stroke-width="2"/>
+<rect x="1064" y="1812" width="32" height="32" rx="8" fill="#ececec" stroke="#bfc0c0" stroke-width="2"/>
+<rect x="1128" y="1812" width="32" height="32" rx="8" fill="#ececec" stroke="#bfc0c0" stroke-width="2"/>
+<path d="M1080 1828 H1144" stroke="#2d3142" stroke-width="12" stroke-linecap="round"/>
+<text x="1288" y="1784" font-size="20" fill="#2d3142" font-weight="600" text-anchor="start">H3 / XSMT → H</text>
+<text x="1268" y="1836" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="end">H</text>
+<text x="1456" y="1836" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">L</text>
+<rect x="1288" y="1812" width="32" height="32" rx="8" fill="#ececec" stroke="#bfc0c0" stroke-width="2"/>
+<rect x="1352" y="1812" width="32" height="32" rx="8" fill="#ececec" stroke="#bfc0c0" stroke-width="2"/>
+<rect x="1416" y="1812" width="32" height="32" rx="8" fill="#ececec" stroke="#bfc0c0" stroke-width="2"/>
+<path d="M1304 1828 H1368" stroke="#2d3142" stroke-width="12" stroke-linecap="round"/>
+<text x="1000" y="1924" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">断电焊接；每组只短接中间与一侧</text>
+<text x="1000" y="1960" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">改方向前先去除旧桥；用万用表核对</text>
+<text x="1000" y="1996" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">H3=H 解除静音；H4=L 选择 I²S</text>
+<text x="1000" y="2032" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">正面 SCK 桥确认接地后可替代地线</text>
+<path d="M64 2072 H1536" fill="none" stroke="#bfc0c0" stroke-width="3"/>
+<text x="64" y="2112" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">依据：本地 SLAS859C 手册、模块参考图与当前固件。仅文档设计；没有新增实物接线、上电或声音验收。</text>
+</svg>
