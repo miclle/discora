@@ -17,5 +17,27 @@
     "Archive location is recorded in the cleanup delivery; no personal path is stored here.",
     "No hardware validation was performed."
   ],
-  "archive_original_directory": "PCM5102 DAC"
+  "archive_original_directory": "PCM5102 DAC",
+  "user_supplied_images": {
+    "date": "2026-11-03",
+    "source": "User-provided reference images; original bytes preserved. Not part of the earlier archive.",
+    "files": [
+      {
+        "original_name": "codex-clipboard-d200b794-0042-487f-9c3e-a229093796a4.png",
+        "path": "PCM5102-module-front-dimensions.png",
+        "bytes": 1289819,
+        "sha256": "7a503625c8b1a9dcd59ac086b0077f91adf75b973fb4d366065d23fe4f1c53d4",
+        "width_px": 1772,
+        "height_px": 1176
+      },
+      {
+        "original_name": "codex-clipboard-dfb492ee-88b1-49a6-a2c8-2cf63a66e89b.png",
+        "path": "PCM5102-module-back.png",
+        "bytes": 1028182,
+        "sha256": "ab564f533fd400a41a8931bb1c1c270639428fdc7286dd9de5519cfccc748adb",
+        "width_px": 1842,
+        "height_px": 1098
+      }
+    ]
+  }
 }
