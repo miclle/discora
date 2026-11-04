@@ -46,6 +46,18 @@ def main():
             ], check=True,
         )
         subprocess.run([str(tracks)], check=True)
+        oled = Path(temp) / "oled_panel_test"
+        subprocess.run(
+            shlex.split(os.environ.get("CC", "cc")) + [
+                "-std=c11", "-Wall", "-Wextra", "-Werror", "-pedantic", "-g",
+                "-fsanitize=address,undefined", "-fno-omit-frame-pointer",
+                "-I", str(firmware / "main"), str(firmware / "main/pcm_buffer.c"),
+                str(firmware / "main/audio_core.c"), str(firmware / "main/cd_player_core.c"),
+                str(firmware / "main/oled_panel.c"), str(firmware / "tests/oled_panel_test.c"),
+                "-o", str(oled),
+            ], check=True,
+        )
+        subprocess.run([str(oled)], check=True)
         stream = Path(temp) / "stream_core_test"
         subprocess.run(
             shlex.split(os.environ.get("CC", "cc")) + [

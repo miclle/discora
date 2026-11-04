@@ -1,6 +1,7 @@
 #pragma once
 #include "cd_player_core.h"
 bool discora_cd_player_start(void);
+bool discora_cd_player_snapshot(cd_player_status_t *status);
 void discora_cd_player_media(const probe_toc_t *toc);
 void discora_cd_player_unavailable(void);
 // True only after the output owner closed its adapter with media unavailable.

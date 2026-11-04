@@ -15,6 +15,13 @@ typedef struct {
     bool media, eof, pending, continuous;
     cd_player_read_t request;
 } cd_player_core_t;
+typedef struct {
+    bool media;
+    unsigned track;
+    audio_state_t state;
+} cd_player_status_t;
+// Copy under the same serialization as all other core operations; no borrowed data.
+cd_player_status_t cd_player_snapshot(const cd_player_core_t *p);
 // Caller serializes every operation. Requests contain values, never borrowed TOC pointers.
 bool cd_player_init(cd_player_core_t *p, uint8_t *storage, size_t capacity, size_t prefill);
 bool cd_player_media(cd_player_core_t *p, const probe_toc_t *toc);

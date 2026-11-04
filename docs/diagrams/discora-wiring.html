@@ -52,7 +52,7 @@
 <text x="604" y="444" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO5 → LCK / LRCK</text>
 <text x="604" y="472" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO6 → DIN</text>
 <text x="604" y="500" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO7 / 8 / 9 → 按键</text>
-<text x="604" y="528" font-size="20" fill="#4f5d75">GPIO10 / 11 → OLED（规划）</text>
+<text x="604" y="528" font-size="20" fill="#4f5d75">GPIO10 / 11 → OLED（待验收）</text>
 <rect x="1120" y="320" width="416" height="144" rx="8" fill="#fff7f2" stroke="#eb6c36" stroke-width="2"/>
 <text x="1140" y="356" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">PCM5102 / PCM5102A</text>
 <text x="1140" y="388" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">VIN：确认支持后接 5V</text>
@@ -200,8 +200,8 @@
 <text x="1000" y="2032" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">正面 SCK 桥确认接地后可替代地线</text>
 <path d="M64 2072 H1536" fill="none" stroke="#bfc0c0" stroke-width="3"/>
 <text x="64" y="2112" font-size="24" fill="#2d3142" font-weight="600">04</text>
-<text x="128" y="2112" font-size="28" fill="#2d3142" font-weight="600">1.3 英寸 OLED 四线接线（规划）</text>
-<text x="64" y="2152" font-size="20" fill="#2d3142" font-weight="400">确认模块适用 3.3V、实物 VCC/GND 顺序及上拉电源后连接；当前未实现显示驱动，未实测。</text>
+<text x="128" y="2112" font-size="28" fill="#2d3142" font-weight="600">1.3 英寸 OLED 四线接线（待验收）</text>
+<text x="64" y="2152" font-size="20" fill="#2d3142" font-weight="400">确认模块适用 3.3V、实物 VCC/GND 顺序及上拉电源后连接；SH1106 驱动已实现，未实测。</text>
 <text x="64" y="2224" font-size="24" fill="#2d3142" font-weight="600">ESP32-S3</text>
 <text x="624" y="2224" font-size="24" fill="#2d3142" font-weight="600">OLED 模块</text>
 <text x="64" y="2284" font-size="24" fill="#2d3142" font-weight="400">3V3</text>
@@ -222,7 +222,7 @@
 <text x="1000" y="2364" font-size="20" fill="#2d3142" font-weight="400">SH1106 / SSD1306 以实物为准</text>
 <text x="1000" y="2400" font-size="20" fill="#2d3142" font-weight="400">实际地址待确认；不预设成功通信</text>
 <text x="1000" y="2436" font-size="20" fill="#2d3142" font-weight="400">GPIO10 / 11 是文档规划</text>
-<text x="1000" y="2472" font-size="20" fill="#2d3142" font-weight="400">后续驱动需采用相同引脚配置</text>
+<text x="1000" y="2472" font-size="20" fill="#2d3142" font-weight="400">播放器驱动已采用此引脚配置</text>
 <text x="64" y="2532" font-size="20" fill="#2d3142" font-weight="400">注意：OLED 的 SCL 是 I²C 时钟；PCM5102 的 SCK／LCK 是音频接口，不能混接。</text>
 <path d="M64 2592 H1536" fill="none" stroke="#bfc0c0" stroke-width="3"/>
 <text x="64" y="2632" font-size="20" fill="#2d3142" font-weight="400">依据：供应商模块资料、ESP32 板卡图纸与当前固件。规划不等于已接线、已上电或音频／显示验收。</text>

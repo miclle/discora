@@ -152,6 +152,24 @@ config DISCORA_CD_PLAYER_VERIFY
         Diagnostic overhead under the queue mutex. Logs counts and SHA-256 only;
         no PCM is saved. Verifies the software queue, not audible I2S delivery.
 
+config DISCORA_OLED
+    bool "Show track and state on SH1106 128x64 OLED (GPIO10/11)"
+    depends on DISCORA_CD_PLAYER
+    default y
+    help
+        I2C SDA=GPIO10, SCL=GPIO11, 100 kHz. Requires a 3.3V SH1106 module
+        with external pull-ups to 3.3V. Not an SSD1306 driver.
+        A separate low-priority task refreshes changed screens every 200 ms.
+        Missing display or bus errors disable the UI until reboot, not playback.
+
+config DISCORA_OLED_ADDRESS
+    hex "OLED 7-bit I2C address"
+    depends on DISCORA_OLED
+    range 0x3c 0x3d
+    default 0x3c
+    help
+        Use the module's SA0 setting: 0x3c or 0x3d, not 0x78 or 0x7a.
+
 config DISCORA_CD_PLAYER_I2S
     bool "Use I2S instead of the software-clock sink"
     depends on DISCORA_CD_PLAYER

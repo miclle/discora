@@ -2,6 +2,7 @@
 #if defined(CONFIG_DISCORA_CD_PLAYER)
 #include "cd_player.h"
 #include "track_buttons.h"
+#include "oled_display.h"
 #include "audio_i2s.h"
 #include "audio_i2s_report.h"
 #include <errno.h>
@@ -343,7 +344,15 @@ bool discora_cd_player_start(void)
         xTaskCreate(output_task,"cd_output",6144,NULL,3,NULL) != pdPASS) {
         vSemaphoreDelete(lock); lock = NULL; return false;
     }
+    discora_oled_start(); // Optional UI failure must not prevent playback or USB startup.
     ESP_LOGI(TAG,"CD player boot=stopped sink=%s; UART0 controls; no automatic READ CD; play is single-track, play-disc is explicit",sink);
+    return true;
+}
+bool discora_cd_player_snapshot(cd_player_status_t *status)
+{
+    if (!status || !lock || xSemaphoreTake(lock, pdMS_TO_TICKS(10)) != pdTRUE) return false;
+    *status = cd_player_snapshot(&player);
+    xSemaphoreGive(lock);
     return true;
 }
 void discora_cd_player_media(const probe_toc_t *toc)

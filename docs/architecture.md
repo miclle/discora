@@ -90,3 +90,7 @@ SD / flash ISO or PCM → source reader → buffer → USB BOT
 播放器 EOF 诊断可选地对已接受源数据与软件消费分别累计 SHA-256，仅在完整同代次结束时比较字节数/摘要。0.6.4 的轨尾恢复允许不足预填门槛的已知 EOF 队列继续消费；I²S 短预装只在尾帧之后补静音，EOF 50 ms 截止在适配器内管理。离线 fake driver 测试调用实际 `audio_i2s.c`，只替换 ESP-IDF API，不能充当电气/声音验收。
 
 0.8.0 在控制核心增加显式连续模式，输出 owner 只有在旧轨队列耗尽、EOF 校验完成（启用时）及 I²S 通道成功关闭后，才选择下一受支持音轨并重新预填。play-disc 从当前轨起点到盘尾，不循环；暂停保留模式，停止、手动选择、欠载、fault 和介质失效取消模式。存在轨间间隔，详见 [ADR-0009](decisions/0009-explicit-disc-sequence.md)。
+
+## OLED 状态显示
+
+`oled_display.c` 在播放器启动后运行独立优先级 1 任务，使用 ESP-IDF 原生 I²C master API（GPIO10 SDA／GPIO11 SCL，100 kHz）；默认 SH1106、7-bit 地址 0x3c。每 200 ms 尝试在播放器 mutex 内复制轨号、介质可用性与状态，锁等待最多 10 ms；释放锁后才渲染和通信，USB 与音频 owner 不等待 OLED。`oled_panel.c` 负责本地字形、1024 字节帧和 SH1106 分页／列偏移，不使用第三方显示库。仅变化时刷屏；I²C 单次等待最多 50 ms，失败后尝试灭屏并释放资源，直到重启才重试，播放继续。状态为核心逻辑状态，不代表 DAC 实际声音。查询／测试音模式不初始化 OLED；配置与硬件边界见 [显示说明](oled-display.md)、[ADR-0012](decisions/0012-sh1106-status-display.md)。

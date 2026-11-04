@@ -1,6 +1,13 @@
 #include "cd_player_core.h"
 #include <string.h>
 
+cd_player_status_t cd_player_snapshot(const cd_player_core_t *p)
+{
+    return (cd_player_status_t){.media = p->media,
+        .track = p->media ? p->toc.tracks[p->index].number : 0,
+        .state = p->audio.state};
+}
+
 static bool eligible(const probe_track_t *t)
 {
     return t->number && t->number <= 99 && !(t->control & 0x0c) &&
