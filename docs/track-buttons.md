@@ -1,6 +1,6 @@
 # 上一曲／下一曲轻触按键
 
-固件 `0.9.1-track-buttons` 新增 GPIO8 上一曲、GPIO9 下一曲。状态为 **implemented**；主机检查和配置构建见[验证记录](records/2026-11-01-track-buttons.md)。已烧录 `0.9.1-track-buttons` 软件时钟播放器，GPIO7 退盘保留，三路 GPIO 初始化与 13 轨目录启动通过；实体按键换轨仍未验收。此配置不会出声，见[部署记录](records/2026-11-01-track-buttons-deploy.md)。
+固件 `0.9.1-track-buttons` 新增 GPIO8 上一曲、GPIO9 下一曲。状态为 **implemented**；主机检查和配置构建见[验证记录](records/2026-11-01-track-buttons.md)。当前已部署 `0.10.0-oled` 软件时钟播放器，保留三个按键，初始化及 UART 状态响应通过；本轮 OLED 探测超时、无光驱枚举，实体按键换轨仍未验收。此配置不会出声，见[当前部署记录](records/2026-11-05-oled-deploy.md)。
 
 ## 接线
 

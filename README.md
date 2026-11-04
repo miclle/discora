@@ -28,7 +28,7 @@
 
 **请勿把技术可行性推断、其它项目的成果或 Linux 测试结果当作 Discora 的实测结论。**
 
-截至 2026-11-01，板上运行 `0.9.1-track-buttons` **软件时钟播放器**：GPIO8 上一曲、GPIO9 下一曲、GPIO7 退盘；上电停止，**不输出 I²S 或声音**。写入校验、三路 GPIO 初始化及 13 轨目录启动通过，实体换轨仍待测试，见[部署记录](docs/records/2026-11-01-track-buttons-deploy.md)。仓库默认构建仍为查询模式；复现此播放器配置请按[换轨接线与构建说明](docs/track-buttons.md)。
+截至 2026-11-05，板上运行 `0.10.0-oled` **软件时钟播放器**：GPIO8 上一曲、GPIO9 下一曲、GPIO7 退盘；上电停止，**不输出 I²S 或声音**。写入与独立校验、三路 GPIO 初始化和 UART 状态响应通过；OLED 在 0x3c 探测超时，本次未识别光驱或目录，实屏及按键动作待验收，见[部署记录](docs/records/2026-11-05-oled-deploy.md)。仓库默认构建仍为查询模式；播放器配置见 [OLED 构建说明](docs/oled-display.md)。
 
 ## 初始实验硬件
 
@@ -89,7 +89,7 @@ Discora explores a **low-cost standalone optical disc controller** built around 
 
 **Status:** flashing, UART0, Full-Speed hub/drive enumeration and read-only BOT queries have been bench-tested with MATSHITA UJ-898 firmware HC10. Thirteen consecutive TEST UNIT READY checks passed over 61.2 seconds; long-running, cold-start and reconnection qualification remain open. Formatted TOC was bench-tested on one music CD (13 audio tracks); A bounded READ CD probe (disabled by default) matched PC reference hashes for one/eight sectors and measured a 256-sector burst at 739,858 bytes/s. A 600-second paced software-buffer run transferred 105.84 MB with zero underruns and a full-window PC hash match. Random seeking failed; A standalone UART-controlled I²S tone diagnostic and playback-control core are implemented and build-tested; The actual CD source is integrated with UART controls and a software-clock sink, including a 60.47-second paced window; the I²S adapter is build-tested only and DAC output remains unverified. Writing is not implemented. See [current evidence](docs/status.md).
 
-The deployed `0.9.1-track-buttons` software-clock player enables previous (GPIO8), next (GPIO9), and eject (GPIO7) buttons, boots stopped, and produces no I²S or audible output. Flash verification, GPIO initialization, and the 13-track TOC passed; physical track-button behavior and eject during playback remain untested. The repository default build remains query mode. See the [deployment record](docs/records/2026-11-01-track-buttons-deploy.md).
+The deployed `0.10.0-oled` software-clock player retains previous (GPIO8), next (GPIO9), and eject (GPIO7), boots stopped, and produces no audio. Flash verification, GPIO initialization and UART status response passed. OLED probing at 0x3c timed out; no optical drive or TOC was observed in this boot window. Display and physical button acceptance remain open. The default build remains query mode. See the [deployment record](docs/records/2026-11-05-oled-deploy.md).
 
 ## License
 

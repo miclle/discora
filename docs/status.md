@@ -1,16 +1,16 @@
 # 当前工程状态
 
-更新时间：2026-11-01（换轨播放器已部署，保留退盘）
+更新时间：2026-11-05（0.10.0 OLED 软件时钟播放器已部署；OLED 初始化超时）
 
 证据分层：`planned` 为计划；`implemented` 为源码已实现；`bench-tested` 为在指定硬件上实验过；`verified` 为满足相应验收条件。已完成烧录、UART0、Hub/光驱枚举、三种基础查询的真实返回、61.2 秒连续 13 次 TUR 就绪，以及单张 CD 的 13 轨目录、READ CD 小片段/短突发与电脑参考对照；600 秒顺序窗口已与电脑对照，随机寻道、冷启动与受控重复插拔仍待验收，M0/M1 未整体通过。
 
 | 事项 | 状态 | 证据 / 备注 |
 | --- | --- | --- |
 | 仓库创建及 Apache-2.0 License | 已存在 | 用户创建仓库时已有 LICENSE |
-| ESP-IDF 固件构建 | 本地构建通过 | v5.4、目标 esp32s3；源码 0.9.1-track-buttons，默认 / CD 软件时钟 / CD I²S / 测试音四配置本地构建通过；0.7.5 的 13 轨 I²S 空载与 0.8.0 的末两轨自主切换通过；当前已部署 0.9.1 软件时钟播放器（保留退盘），真实音频未验收 |
-| 烧录 / UART0 启动 | bench-tested | 0.9.1 写入及独立读回校验通过；30.001 秒启动采集确认三路 GPIO 和 13 轨目录，无额外复位，见[当前部署](records/2026-11-01-track-buttons-deploy.md) |
+| ESP-IDF 固件构建 | 本地构建通过 | v5.4、目标 esp32s3；源码 0.10.0-oled，默认 / CD 软件时钟 / CD I²S / 测试音四配置本地构建通过；0.7.5 的 13 轨 I²S 空载与 0.8.0 的末两轨自主切换通过；当前已部署 0.10.0 OLED 软件时钟播放器（保留三个按键），真实音频未验收 |
+| 烧录 / UART0 启动 | bench-tested | 0.10.0 写入及独立校验通过；30.076 秒启动采集确认三路 GPIO，OLED 探测超时且无光驱枚举；后续状态响应正常，见[当前部署](records/2026-11-05-oled-deploy.md) |
 | 初始化 GitHub Actions | 构建成功 | [运行 41173591262](https://github.com/miclle/discora/actions/runs/41173591262)，对应初始化提交 `61b8229`，不是本轮改动的 CI |
-| 本轮 CI 配置 | implemented | 主机侧 ASan/UBSan 检查已扩为十组；保留十五项 bench 工具检查与五配置构建矩阵；0.9.1 本地检查通过；远端 CI 结果须以对应提交的运行记录为准 |
+| 本轮 CI 配置 | implemented | 主机侧 ASan/UBSan 检查已扩为十一组；保留十五项 bench 工具检查与五配置构建矩阵；0.10.0 本地主机检查与四配置构建通过；远端 CI 结果须以对应提交的运行记录为准 |
 | USB Host / BOT 最小探测 | implemented；常规查询 bench-tested | 原生 USB Host、接口筛选、基础查询及 READ TOC 已实测；已观察到超时、Data-In STALL 和一次 Reset Recovery；后续仍有离线，完整恢复验收未通过 |
 | 空 Hub 枚举 | bench-tested | USB-OTG 桥接后枚举 `05e3:0610`，Full-Speed，class `0x09`；下游未接设备 |
 | UJ-898 在 ESP32-S3 USB Host 枚举 | bench-tested | 桥接器 `13fd:0840`，Full-Speed，class/subclass/protocol `08/02/50`；前期有离线重枚举，原因未定位 |
@@ -20,8 +20,9 @@
 | PCM 环形缓冲 | implemented；软件消费 bench-tested | 64 扇区内部 RAM，13 轨 / 594221040 字节逐轨 1× 软件消费，零欠载、各轨两端摘要一致；不是整盘 I²S 验收 |
 | I²S 测试音 / 控制核心 | implemented；空载外设 bench-tested | 441 / 882 Hz L/R、静音、暂停/恢复/停止已上板；延后日志输出后测试音完成事件队列溢出为 0；未接 DAC，未测引脚波形或模拟输出 |
 | CD 源到音频控制 / 输出适配器 | implemented；软件时钟 bench-tested | 13 轨 I²S 空载通过，供数阶段事件溢出 0、收尾每轨 2 次完整保留；0.8.0 末两轨自主切换/盘尾停止通过，真实 DAC 未测 |
-| GPIO7 轻触按键退盘 | bench-tested（用户反馈，默认查询配置） | 0.9.0 查询配置曾获用户实际退盘反馈，未采集该动作 CSW；当前 0.9.1 播放器保留退盘，初始化通过，实体动作及播放中场景待测，见[记录](records/2026-11-01-button-eject-deploy.md) |
-| GPIO8／GPIO9 上一曲／下一曲 | implemented | 0.9.1 软件时钟播放器已部署，GPIO 初始化和目录启动通过；实体按键换轨及音频未验收，见[说明](track-buttons.md) |
+| GPIO7 轻触按键退盘 | bench-tested（用户反馈，默认查询配置） | 0.9.0 查询配置曾获用户实际退盘反馈，未采集该动作 CSW；当前 0.10.0 播放器保留退盘，初始化通过，实体动作及播放中场景待测，见[记录](records/2026-11-01-button-eject-deploy.md) |
+| GPIO8／GPIO9 上一曲／下一曲 | implemented | 0.10.0 软件时钟播放器已部署，GPIO 初始化通过；本轮无目录，实体按键换轨及音频未验收，见[说明](track-buttons.md) |
+| GPIO10／GPIO11 OLED 曲目与状态 | implemented | 0.10.0 SH1106 驱动，播放器模式默认启用；已烧录，0x3c 探测超时，实屏未验收，见[部署记录](records/2026-11-05-oled-deploy.md) |
 | CD-R / CD-RW 实际刻录 | 未验证 | 存在 USB 带宽和最低写速风险；待 M4 |
 
 请优先追加**带日期的测试记录**，不要覆盖此前失败证据。运行 CI 的绿灯仅表示在指定 ESP-IDF 环境中成功构建，不代表 USB、音频、刻录功能通过。
@@ -234,3 +235,15 @@ M2 的 `set-target` / fullclean 误删了放在 `firmware/build/` 内的 M1 原�
 用户授权后，在核对唯一 Discora COM、备份并确认原 0.9.0 应用和分区后，仅写入 `0.9.1-track-buttons` software-clock 应用，写入校验及独立 verify_flash 通过。GPIO8 上一曲、GPIO9 下一曲、GPIO7 退盘全部启用；30.001 秒启动窗口取得 UJ-898／HC10、13fd:0840、13 轨目录和 6 次 TUR 成功，保持 stopped，无 READ CD、退盘动作、离线、传输错误或额外复位。
 
 串口已释放，板上保持新播放器，替代此前 0.9.0 查询版部署状态。软件时钟模式不会出声；实体换轨和本版本退盘仍需按键验收，不将启动通过标为完整功能 verified。备份、摘要和日志见[部署记录](records/2026-11-01-track-buttons-deploy.md)。
+
+## 2026-11-04：OLED 曲目与播放状态
+
+`0.10.0-oled` 在播放器模式默认启用 SH1106 128×64 显示，GPIO10 SDA／GPIO11 SCL，默认 7-bit 0x3c。独立低优先级任务读取加锁快照后在锁外刷屏，显示实际轨号与播放状态；无有效目录清除旧轨号，软件时钟标记 NO AUDIO。通信失败只停止显示，不中止播放器。
+
+11 组 C ASan／UBSan 检查、四配置 set-target／build、六项 I²S 引脚冲突拒绝及 OLED 关闭／0x3d 局部编译检查通过，软件画面已查看。未烧录、未实屏验收，部署记录仍为 0.9.1 软件时钟播放器；详见 [软件验证记录](records/2026-11-04-oled.md) 与 [显示使用说明](oled-display.md)。
+
+## 2026-11-05：OLED 固件已部署，初始化超时
+
+备份并确认原 0.9.1 软件时钟镜像及分区后，仅写入已测试的 0.10.0 clock 应用；写入和独立 verify_flash 通过。三个按键均初始化，播放器上电 stopped、不输出声音。30.076 秒启动窗口无 panic，但 OLED 0x3c 探测返回 ESP_ERR_TIMEOUT，显示任务退出；没有光驱枚举或有效 TOC。
+
+另开 COM 的 8 秒状态采集触发了一次启动，同样出现 OLED 超时，UART status 正常响应 stopped／media=0／track=0，reads 和 underruns 为 0。串口已释放，设备保持新固件。用户随后确认 OLED 尚未接线或未供电，接屏后需重启复测；未进行实体按键或播放验收。详见 [部署与失败证据](records/2026-11-05-oled-deploy.md)。
