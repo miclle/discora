@@ -25,7 +25,7 @@
 
 ## Discora 接线规划
 
-2026-11-04：规划 ESP32-S3 **3V3 → VCC、GND → GND、GPIO11 → SCL、GPIO10 → SDA**。GPIO10／11 已在主控供应商图纸引出，未占用当前音频与按键引脚；接线对应 `implemented` 的 SH1106 驱动，播放器配置默认启用；尚未部署或实屏验收，见 [显示说明](../../docs/oled-display.md)。
+2026-11-04：规划 ESP32-S3 **3V3 → VCC、GND → GND、GPIO11 → SCL、GPIO10 → SDA**。GPIO10／11 已在主控供应商图纸引出，未占用当前音频与按键引脚；接线对应 `implemented` 的 SH1106 驱动，播放器配置默认启用；2026-11-05 已部署，0x3c 探测超时，实屏未验收，见 [显示说明](../../docs/oled-display.md)。
 
 上电前确认模块支持 3.3V、实物 VCC/GND 顺序、板载上拉连接到 3.3V，以及主控供电余量。SDA/SCL 不得上拉到 5V，不能从 DAC 的 A3V3 给屏幕供电。控制器、实际地址和显示效果仍待核对。逐线说明及唯一展示的整机接线图见 [整机文档](../../docs/wiring.md#13-英寸-oled-四线接线implemented实屏待验收)。
 
