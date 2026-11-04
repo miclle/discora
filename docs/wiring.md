@@ -15,7 +15,7 @@
 | PCM5102 模块 | 已到货；参考图芯片标 PCM5102A，实物仍需核对；接线与声音未验收 |
 | TPA3118D2 功放、左右无源喇叭 | 当前首选；喇叭单只标称 4 Ω、10 W、峰值 18 W，见[单元资料](../hardware/Speaker-80x45-4ohm-10W/README.md)；实物接线、供电及匹配待确认，独立功放电源不可省略 |
 | 三个常开按键 | GPIO7 退盘、GPIO8 上一曲、GPIO9 下一曲；退盘在旧查询配置有用户实测反馈，当前播放器全部按键场景未验收 |
-| 1.3 英寸 OLED | 四线接线已规划：GPIO10 SDA、GPIO11 SCL、3.3V VCC、GND；控制器、SKU、实物电平／上拉及地址待确认，驱动未实现 |
+| 1.3 英寸 OLED | GPIO10 SDA、GPIO11 SCL、3.3V VCC、GND；SH1106 驱动 implemented，播放器模式默认开启，实物电平／上拉、控制器和地址仍待验收 |
 | 5V 电源／充电宝、功放电源、调试电脑 | 各支路按下文核对；不把多个电源输出直接并联 |
 | Type-C Hub、TPA3116D2 | 已有备选；Hub 不在当前直连路径中，TPA3116D2 不与首选功放同时连接 |
 | microSD／编码器 | 仅远期候选，当前未定型、不分配引脚、不接线；不属于当前播放接线必需件 |
@@ -98,18 +98,18 @@ OLED 可从开发板 **3V3 → VCC、GND → GND** 取电，前提是屏幕适�
 
 电脑连接板载 COM，经 USB-UART 接 GPIO43 TX／GPIO44 RX，115200 8N1。只有使用外接 3.3V USB-UART 时才手动交叉接 TX/RX，细节见 [组装说明](assembly.md)。电脑仅作调试，不是独立播放依赖，也不能同时成为光驱数据链路的第二个 Host。
 
-## 1.3 英寸 OLED 四线接线（planned）
+## 1.3 英寸 OLED 四线接线（implemented，实屏待验收）
 
-2026-11-04 补充显示屏接线规划，对应图中 04 区。依据供应商四针 IIC 模块资料，使用 3.3V 供电方案；接线前仍需核对所购 SKU 和实物丝印。当前没有显示驱动或实际通信证据。
+2026-11-04 补充显示屏接线规划，对应图中 04 区。依据供应商四针 IIC 模块资料，使用 3.3V 供电方案；接线前仍需核对所购 SKU 和实物丝印。SH1106 驱动已实现，尚无实物通信或显示证据。
 
 | ESP32-S3 | OLED 模块 | 状态／要求 |
 | --- | --- | --- |
 | 3V3 | VCC | 确认模块支持 3.3V、开发板电流余量后接入；不从 DAC A3V3 取电 |
 | GND | GND | 共地 |
-| GPIO11 | SCL | 规划的 I²C 时钟 |
-| GPIO10 | SDA | 规划的 I²C 数据 |
+| GPIO11 | SCL | 已实现的 I²C 时钟 |
+| GPIO10 | SDA | 已实现的 I²C 数据 |
 
-GPIO10／11 在供应商 ESP32 板卡图纸中已引出，当前固件未占用，与 GPIO4–6 音频、GPIO7–9 按键、GPIO19／20 USB 和 GPIO43／44 UART 分开。它们是本次新增的文档规划，不是已生效的固件配置。ESP-IDF 的 I²C SDA/SCL 引脚可以由软件配置，见 [ESP-IDF v5.4 I²C 文档](https://docs.espressif.com/projects/esp-idf/en/v5.4/esp32s3/api-reference/peripherals/i2c.html)。
+GPIO10／11 在供应商 ESP32 板卡图纸中已引出，OLED 驱动已使用，与 GPIO4–6 音频、GPIO7–9 按键、GPIO19／20 USB 和 GPIO43／44 UART 分开。`0.10.0-oled` 在播放器模式默认启用 SH1106 显示；7-bit 地址默认 0x3c、可配置 0x3d，实屏未验收。构建、状态含义与测试见 [OLED 显示说明](oled-display.md)。ESP-IDF 的 I²C SDA/SCL 引脚可以由软件配置，见 [ESP-IDF v5.4 I²C 文档](https://docs.espressif.com/projects/esp-idf/en/v5.4/esp32s3/api-reference/peripherals/i2c.html)。
 
 SDA、SCL 需要上拉到 3.3V；先确认模块是否已有板载上拉及其连接电源，不盲目重复加电阻，不接 5V 上拉。屏幕控制器（SH1106／SSD1306）、地址及初始化序列仍需按实物确认；模块未接入前不改地址焊桥。屏幕 SCL 与 DAC 的 SCK／LCK 属于不同接口，不可相连。参考资料与差异说明见 [OLED 硬件说明](../hardware/OLED-1.3-128x64/README.md)。
 

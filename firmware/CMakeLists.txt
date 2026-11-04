@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
 
-set(PROJECT_VER "0.9.1-track-buttons")
+set(PROJECT_VER "0.10.0-oled")
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project(discora)

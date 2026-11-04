@@ -22,6 +22,7 @@
 | 双声道模拟音频 | I²S → 立体声 DAC | 独立测试音及 CD 源接入已实现；CD 软件时钟控制/持续消费已实测，真实 I²S / DAC 未验收 |
 | 轻触按键退盘 | GPIO7 → USB 退盘命令 | bench-tested（用户反馈）：默认查询配置按键触发及实际退盘成功；其余场景待验收，见[接线](docs/eject-button.md) |
 | 轻触按键上一曲／下一曲 | GPIO8／GPIO9 → 播放器换轨 | implemented：仅播放器模式启用，首尾不循环；软件时钟播放器已部署，实体换轨未实测，见[接线与配置](docs/track-buttons.md) |
+| OLED 曲目与播放状态 | GPIO10 SDA／GPIO11 SCL → SH1106 | implemented：播放器模式默认开启，实屏未验收，见[显示说明](docs/oled-display.md) |
 | CD-R/CD-RW 刻录 | 测速、写入、封盘、校验 | 研究目标；可行性待测 |
 | DVD 读取/刻录 | 可选扩展 | 不在首版范围 |
 
