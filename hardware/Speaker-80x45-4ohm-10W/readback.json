@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-05",
+  "source_url": "https://item.taobao.com/item.htm?id=1021101388923",
+  "user_supplied_images": [
+    {
+      "original_name": "codex-clipboard-d8c3441a-5e33-4551-ac41-2a37cfe8e16c.jpg",
+      "path": "speaker-front.jpg",
+      "bytes": 4114809,
+      "sha256": "c6aed3fd63212809ea57578cbfefa9211518296ba42fc02f255b035e8021e99c"
+    },
+    {
+      "original_name": "codex-clipboard-aac039df-943b-4592-a4e3-1e974002829d.png",
+      "path": "speaker-original-enclosure.png",
+      "bytes": 837889,
+      "sha256": "80532aaea5d7c3de657e384df4557831606c32a6727e68943a18c295573a5ea9"
+    },
+    {
+      "original_name": "codex-clipboard-e38be3a6-c367-4d83-8aa2-9be2927cf28a.png",
+      "path": "speaker-supplier-description.png",
+      "bytes": 658639,
+      "sha256": "1087eaccd116e84443a780fbc951c3e852324158a704f023230931e2a1c2eb3d"
+    }
+  ],
+  "notes": [
+    "用户提供的三张参考图，原始字节保留，未裁剪、缩放或修改。",
+    "商品参数来自用户说明与随附截图，未独立核实在线商品页。",
+    "保留原图及权利标识，不改变第三方资料许可；未执行实物或声学验收。"
+  ]
+}
