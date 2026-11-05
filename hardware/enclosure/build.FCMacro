@@ -19,15 +19,16 @@ DRIVE = (128.0, 9.5, 129.0)
 # User-supplied total envelope, oriented upright: depth, width, height.
 # Frontmost diaphragm to rearmost magnet; mounting plane remains unmeasured.
 SPEAKER = (42.0, 45.0, 80.0)
-CASE_DEPTH = 74.0
-REAR_SHIFT = CASE_DEPTH - 78.0
+CASE_DEPTH = 78.0
 # Two front-facing drivers share one circular grille, but separate rear cavities.
 SPEAKER_CENTER_X, SPEAKER_CENTER_Z = 26.0, 76.0
-PORT_CENTER_Y, PORT_CENTER_Z = 44.0, 80.0
+# Align the side-view vertical port axis with the 38..43 mm handle mid-plane.
+PORT_CENTER_Y, PORT_CENTER_Z = (38.0 + 43.0) / 2, 80.0
 FRONT_GRILLE_RADIUS = 65.0
-BATTERY = (82.0, 21.0, 22.0)
-SLOT_Y = 68.0 + REAR_SHIFT
-DRIVE_TOP = 147.0
+# Supplier image: selected flat 5600 mAh pack, excluding leads/connectors.
+BATTERY = (112.0, 70.0, 20.0)
+SLOT_Y = 65.75
+DRIVE_TOP = 161.0
 # Display mechanical envelope remains provisional; retain the original UI layout.
 DISPLAY_WINDOW = (36.0, 20.0)
 DISPLAY_DECK_Y = 18.0
@@ -36,7 +37,7 @@ DISPLAY_PCB = (38.0, 1.6, 30.0)
 
 def build(folder):
     doc = A.newDocument("DiscoraV4Topload")
-    doc.Label = "Discora V4 · 提手后顶部进碟"
+    doc.Label = "Discora V4 · 三件主要 PLA 结构"
     visible = []
 
     def group(name, label):
@@ -181,7 +182,7 @@ def build(folder):
 
     # Build the left port and cavity, then mirror them exactly for the right.
     left=-WIDTH/2
-    ring=side_capsule(left,cy,cz,73.8,28.8,2.9).cut(side_capsule(left-1,cy,cz,67,22,5))
+    ring=side_capsule(left,cy,cz,73.4,28.4,2.6).cut(side_capsule(left-1,cy,cz,67,22,5))
     tube=side_capsule(left+2,cy,cz,67,22,10).cut(side_capsule(left+1,cy,cz,63,18,12))
     inset=side_capsule(left+1.5,cy,cz,56,12,1.5)
     bridge=box(left+2,cy-11,cz-1,1,22,2)
@@ -189,7 +190,7 @@ def build(folder):
     # Compact symmetric cavities retain the complete driver envelopes.
     outer=box(left+6,3,31.5,WIDTH/2-6,52,89)
     inner=box(left+8.5,2,34,WIDTH/2-10,50.5,84)
-    cavity=outer.cut(inner).cut(side_capsule(left-1,cy,cz,67.2,22.2,13.2)).removeSplitter()
+    cavity=outer.cut(inner).cut(side_capsule(left-1,cy,cz,67.6,22.6,13.2)).removeSplitter()
     left_port = feature("LPort","左侧 · 胶囊导音孔与内凹饰片",port,BLACK,shell)
     mirrored("RPort","右侧 · 导音孔及饰片关联镜像",left_port,BLACK,shell)
     left_chamber = feature("LChamber","左声道 · 后腔及侧向通道（未调谐）",cavity,TEAL,supports)
@@ -198,9 +199,9 @@ def build(folder):
     # Front grille, baffle and two rectangular driver envelopes.
     zc=SPEAKER_CENTER_Z
     radius=FRONT_GRILLE_RADIUS
-    bezel=cylinder(radius-.2,2.5,(0,.35,zc),Y).cut(cylinder(radius-1.6,4,(0,-.1,zc),Y))
+    bezel=cylinder(radius+.25,2.85,(0,0,zc),Y).cut(cylinder(radius-1.9,4,(0,-.1,zc),Y))
     feature("FrontBezel","中央圆形格栅压圈",bezel,RUBBER,shell)
-    grille=cylinder(radius-1.8,1.2,(0,.4,zc),Y)
+    grille=cylinder(radius-1.8,2.0,(0,0,zc),Y)
     vents=[]
     grid_extent = int(radius / 2.9) + 1
     for row in range(-grid_extent,grid_extent+1):
@@ -208,7 +209,7 @@ def build(folder):
         for col in range(-grid_extent,grid_extent+1):
             dx=(col+.5*(row%2))*2.9
             if dx*dx+dz*dz<(radius-3.5)**2:
-                vents.append(cylinder(.94,2,(dx,0,zc+dz),Y))
+                vents.append(cylinder(.94,3,(dx,0,zc+dz),Y))
     feature("FrontGrille","中央双喇叭 · 通孔圆形护网",grille.cut(Part.makeCompound(vents)),TEAL,shell)
     depth,width,height=SPEAKER
     apertures=[]
@@ -224,29 +225,17 @@ def build(folder):
         else:
             mirrored("RDriver","右声道 · 喇叭包络关联镜像",left_driver,RUBBER,hardware)
             mirrored("RDriverFrame","右喇叭预留框 · 关联镜像",left_frame,TEAL,supports)
-        apertures.append(box(sx-.2,1,sz-.2,width+.4,3,height+.4))
-    baffle=cylinder(radius-1.7,1.2,(0,1.8,zc),Y).cut(Part.makeCompound(apertures))
+        apertures.append(box(sx-.2,2.5,sz-.2,width+.4,3,height+.4))
+    baffle=box(-65,3,31.5,130,2,89).cut(Part.makeCompound(apertures))
     feature("FrontBaffle","双单元前障板",baffle,RUBBER,supports)
 
     # Narrow side gaps leave no room for full-height rear screw pillars.
-    # Four symmetric mounts sit below/above the drive instead.
+    # Lower mounts flank the battery; upper mounts sit behind the drive.
     rear=prism_yz([(CASE_DEPTH-3,3),(CASE_DEPTH,3),(CASE_DEPTH,165),
                    (CASE_DEPTH-3,163.5)],-WIDTH/2,WIDTH)
     tray=box(-WIDTH/2+3,3,3,WIDTH-6,CASE_DEPTH-6,3)
-    top_mounts=[]
-    for sign in (-1,1):
-        x=sign*58
-        bottom_mount=box(x-4,CASE_DEPTH-10,6,8,7,8)
-        top_mount=box(-WIDTH/2+3 if sign<0 else 54,CASE_DEPTH-6.5,153,WIDTH/2-57,3.5,8)
-        for z in (10,157):
-            rear=rear.cut(cylinder(1.7,5,(x,CASE_DEPTH-4,z),Y))
-        bottom_mount=bottom_mount.cut(cylinder(1.25,6,(x,CASE_DEPTH-8.6,10),Y))
-        top_mount=top_mount.cut(cylinder(1.25,6,(x,CASE_DEPTH-8.6,157),Y))
-        tray=tray.fuse(bottom_mount)
-        top_mounts.append(top_mount)
-    feature("Back","后盖 · 四个通孔",rear,BLACK,shell)
-    feature("Base","底架 · 下部后盖固定座",tray.removeSplitter(),BLACK,shell)
-    feature("RearTopMount","后盖上部左右固定耳 · 独立件",Part.makeCompound(top_mounts),TEAL,supports)
+    feature("Back","后壳后壁 · 构造源",rear,BLACK,shell)
+    feature("Base","后壳底板 · 构造源",tray,BLACK,shell)
     feet=[cylinder(4,3,(x,y,0),Z) for x in (-55,55) for y in (11,CASE_DEPTH-11)]
     feature("Feet","四个脚垫",Part.makeCompound(feet),RUBBER,ui)
 
@@ -295,13 +284,12 @@ def build(folder):
     visible.remove(drive)
     native_cut("Drive","UJ-898 · 竖装向上退碟",drive,
                box(-61,SLOT_Y-1,bottom+2,122,2,dh),SILVER,hardware)
-    block("Bridge","SATA–USB 桥接转向占位 · 连接方式待核对",(-12,SLOT_Y-26,6),(24,24,10),PCB,hardware)
+    block("Bridge","SATA–USB 桥接转向占位 · 连接方式待核对",(-61,6,124),(10,24,24),PCB,hardware)
     rail_y=SLOT_Y-dt/2-1.05
     rail_width=dt+2.1
-    bottom_rail=box(-dw/2-3,rail_y,bottom-2,dw+6,rail_width,2)
-    side_rails=[box(x,rail_y,bottom,3,rail_width,dh) for x in (-dw/2-3,dw/2)]
+    bottom_rail=box(-68,rail_y,bottom-2,136,CASE_DEPTH-3-rail_y,2)
+    side_rails=[box(x,rail_y,bottom,3.7,CASE_DEPTH-3-rail_y,dh) for x in (-68,64.3)]
     carrier=bottom_rail.multiFuse(side_rails).removeSplitter()
-    carrier=carrier.cut(box(-12.3,SLOT_Y-26.3,bottom-2.5,24.6,24.6,3))
     feature("DriveCarrier","光驱底托和两侧导轨",carrier,TEAL,supports)
     # Upper edge follows the existing rear roof's inner plane.
     def inner_roof(y):
@@ -320,19 +308,22 @@ def build(folder):
     frame=frame.fuse(seat).cut(box(-5.3,8.8,-14.3,10.6,4.5,4.6))
     feature("DisplayCarrier","小状态屏安装座 · 待选型细化",frame.removeSplitter(),TEAL,supports)
 
-    # Amp stays horizontal; MCU uses the space above the lowered drive.
+    # Amp stays horizontal; MCU sits in front of the raised drive.
     # DAC stands on the left side. Only PCB sizes have documentary evidence.
-    lower=box(-36,3,121,72,55,1)
+    lower=box(-51,3,120,102,54,2)
     feet=[box(x,yy,120.5,3,3,.5) for x in (-36,33) for yy in (3,55)]
-    feature("AmpShelf","功放横置托板 · 支撑位置待测",lower.multiFuse(feet),TEAL,supports)
-    feature("ElectronicsSled","光驱上方主控托板",box(-34,31.5,148,68,29,1),TEAL,supports)
+    bridge_shelf=box(-61.5,4,120,25.5,26.5,2)
+    bridge_pads=[cylinder(1.5,2,(x,y,122),Z) for x in (-59,-53) for y in (8,28)]
+    feature("AmpShelf","功放与桥接器托板 · 支撑位置待测",
+            lower.multiFuse(feet+[bridge_shelf]+bridge_pads).removeSplitter(),TEAL,supports)
+    feature("ElectronicsSled","光驱上部前方主控托板",box(-34,30.5,147,68,29,1),TEAL,supports)
     for key,label,x,y,z,w,d,h in [
         ("Amp","TPA3118D2 · PCB 标称 66×53",-33,4,123,66,53,15),
-        ("MCU","ESP32-S3 N16R8 · PCB 63.39×27.94",-31.695,32.56,149.7,63.39,27.94,7)]:
+        ("MCU","ESP32-S3 N16R8 · PCB 63.39×27.94",-31.695,31.56,148.7,63.39,27.94,7)]:
         block(key,label,(x,y,z),(w,d,1.6),PCB,hardware)
         block(key+"Chip",label+" · 全板元件高度预留（未测）",(x,y,z+1.6),(w,d,h),
               SILVER if key=="MCU" else RUBBER,hardware)
-        post_base=122 if key=="Amp" else 149
+        post_base=122 if key=="Amp" else 148
         posts=[cylinder(1.5,z-post_base,(xx,yy,post_base),Z)
                for xx in (x+2,x+w-2) for yy in (y+2,y+d-2)]
         feature(key+"Pads",label+" · 支撑示意（非安装孔位）",Part.makeCompound(posts),TEAL,supports)
@@ -341,14 +332,104 @@ def build(folder):
     posts=[cylinder(1.5,1,(-68,yy,zz),X) for yy in (33,46) for zz in (129,156)]
     feature("DACPads","PCM5102 · 侧壁支撑示意（非安装孔位）",Part.makeCompound(posts),TEAL,supports)
     bx,by,_=BATTERY
-    block("Battery","可充电电池包 · 未定型占位",(-bx/2,6,8),BATTERY,BLUE,hardware)
-    cradle=box(-bx/2-2,4,6,bx+4,by+4,13).cut(box(-bx/2-.3,5.7,8,bx+.6,by+.6,20))
-    feature("BatteryCradle","前下部电池座 · 未定型",cradle,TEAL,supports)
+    block("Battery","5600 mAh 平排电池包 · 商品标称 112×70×20",(-bx/2,4,8),BATTERY,BLUE,hardware)
+    # A centered open-ended tray leaves 1 mm at each side of the pack.
+    # Lead routing and final retention require the physical pack; no invented holes.
+    cradle=box(-bx/2-3,4,6,bx+6,by,2)
+    cradle=cradle.multiFuse([box(x,4,8,2,by,12) for x in (-bx/2-3,bx/2+1)])
+    feature("BatteryCradle","底部平排电池托盘 · 线材与固定方式待实测",cradle.removeSplitter(),TEAL,supports)
 
     # Move the complete display stack together, including the native PCB boxes.
     for name in ('Window','StatusArt','DisplayPCB','DisplayHeader','DisplayCarrier'):
         obj=doc.getObject(name)
         obj.Placement=display_pose.multiply(obj.Placement)
+
+    doc.recompute()
+    # Three connected PLA solids. Construction objects remain editable and hidden.
+    construction=group("Construction", "00 · 隐藏构造源（非独立打印件）")
+    def consolidate(key,label,names,extra,color,parent):
+        members=[doc.getObject(n) for n in names]
+        shape=members[0].Shape.copy().multiFuse([o.Shape for o in members[1:]]+extra).removeSplitter()
+        for obj in members:
+            for g in (shell,ui,supports,hardware):
+                if obj in g.Group:g.removeObject(obj)
+            construction.addObject(obj)
+            if obj in visible:visible.remove(obj)
+            obj.Visibility=False
+        result=feature(key,label,shape,color,parent)
+        result.addProperty("App::PropertyStringList","ConstructionObjects")
+        result.ConstructionObjects=names
+        return result
+
+    # Four front-cover screws; four separate carrier screws exposed after cover removal.
+    front_holes=[];rear_bosses=[];core_tabs=[]
+    for sign in (-1,1):
+        for z in (18,140):
+            x=sign*65
+            boss=box(-68 if sign<0 else 62,3.4,z-4,6,7.6,8)
+            boss=boss.cut(cylinder(1.0,8,(x,3,z),Y))
+            rear_bosses.append(boss)
+            front_holes.extend([cylinder(1.4,4,(x,-.5,z),Y),
+                                Part.makeCone(2.6,1.4,1.2,V(x,0,z),Y)])
+        for z in (27,124):
+            x=sign*64
+            boss=box(-68 if sign<0 else 62,5,23 if z==27 else 120.5,6,7,8 if z==27 else 7.5)
+            rear_bosses.append(boss.cut(cylinder(1.0,8,(x,4.5,z),Y)))
+            tab=box(-67 if sign<0 else 60,3,z-4,7,2,8)
+            if z==27:tab=tab.fuse(box(-67 if sign<0 else 60,3,31,7,2,3))
+            tab=tab.cut(cylinder(1.4,3,(x,2.5,z),Y)).cut(
+                Part.makeCone(2.4,1.4,1,V(x,3,z),Y))
+            core_tabs.append(tab)
+    def source_part(name,shape):
+        obj=raw(name,shape);construction.addObject(obj);obj.Visibility=False
+        return name
+    core_tab_names=[source_part('CarrierTab'+str(i),shape) for i,shape in enumerate(core_tabs)]
+    column_shapes=[box(x,y,121.5,2,3,25.7) for x in (-51,49) for y in (35,53)]
+    column_shapes += [box(x,y,145,17,3,2.5) for x in (-51,34) for y in (35,53)]
+    column_names=[source_part('MCUColumn'+str(i),shape) for i,shape in enumerate(column_shapes)]
+    bridge_shape=box(-22,2,-18,44,1.5,36).cut(box(-18.3,1.5,-10.3,36.6,3,20.6))
+    bridge_shape.Placement=display_pose.multiply(bridge_shape.Placement)
+    display_bridge=source_part('DisplayShellBridge',bridge_shape)
+    front=consolidate("FrontShell","P1 · 一体前壳／提手／护网",
+                      ['Cowl','FrontBezel','FrontGrille','SlotGuide','DisplayCarrier',display_bridge],[],TEAL,shell)
+    front.Shape=front.Shape.cut(Part.makeCompound(front_holes)).removeSplitter()
+    core=consolidate("SpeakerCarrier","P3 · 双声腔／前障板／功放桥接托板",
+                     ['LChamber','RChamber','LDriverFrame','RDriverFrame','FrontBaffle','AmpShelf','AmpPads',
+                      'ElectronicsSled','MCUPads']+core_tab_names+column_names,
+                     [],TEAL,supports)
+    rear=consolidate("RearShell","P2 · 左右侧壁／后壁／底板／电池托盘",
+                     ['LPanel','RPanel','Back','Base','BatteryCradle','DriveCarrier','DACPads'],rear_bosses,BLACK,shell)
+    # Strap slots are outside the 112 mm pack. Straps are removed before sliding the pack out.
+    strap_slots=[box(x,y,2.5,3,8,18) for x in (-61,58) for y in (22,42)]
+    rear.Shape=rear.Shape.cut(Part.makeCompound(strap_slots)).removeSplitter()
+    # The side ports remain two removable inserts: they obstruct front insertion if fixed.
+    # Add flush tabs and accessible M2 countersunk clearance holes; nominal pilot bores.
+    for sign in (-1,1):
+        port=doc.getObject('LPort' if sign<0 else 'RPort')
+        shape=port.Shape.copy()
+        for z in (39,117):
+            tab=box(-71 if sign<0 else 69,cy-4,z-4,2,8,8)
+            # Join the tab to the capsule rim, while keeping its external surface flush.
+            neck=box(-71 if sign<0 else 69,cy-2,z if z==39 else 113,2,4,8)
+            shape=shape.fuse(tab).fuse(neck)
+            axis=X if sign<0 else X*-1
+            origin=V(sign*71,cy,z)
+            shape=shape.cut(Part.makeCylinder(1.1,3,origin-axis*.1,axis))
+            shape=shape.cut(Part.makeCone(2.1,1.1,1,origin,axis))
+            recess=box(-71.1 if sign<0 else 68.7,cy-4.3,z-4.3,2.4,8.6,8.6)
+            rear.Shape=rear.Shape.cut(recess)
+            boss=box(-68.1 if sign<0 else 65.5,cy-4,z-(4 if z==39 else 3),2.6,8,8 if z==39 else 7)
+            boss=boss.cut(Part.makeCylinder(.8,5,origin+axis*2,axis))
+            rear.Shape=rear.Shape.fuse(boss)
+        if sign<0:port.Shape=shape.removeSplitter()
+    rear.Shape=rear.Shape.removeSplitter()
+    # The right port is an editable mirror, so changing its Shape directly would be lost.
+    doc.RPort.Source=doc.LPort
+    doc.recompute()
+    for obj in (front,rear,core):
+        if len(obj.Shape.Solids)!=1:
+            raise RuntimeError(f"{obj.Name}: expected one connected solid, got {len(obj.Shape.Solids)}")
+
 
     disc=raw("DiscReference",cylinder(60,1.2,(0,SLOT_Y-.6,180),Y).cut(
         cylinder(7.5,2,(0,SLOT_Y-1,180),Y)))

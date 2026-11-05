@@ -1,184 +1,144 @@
-"""Reopen the saved model and check static envelope interference in FreeCAD."""
+"""Reopen the saved three-part PLA model and validate static B-rep geometry."""
 import hashlib
 import json
 import os
 from pathlib import Path
-
 import FreeCAD as A
 import Part
 from PySide import QtWidgets
 
 
 def validate(folder):
-    model = folder / 'Discora.FCStd'
-    doc = A.openDocument(str(model))
-    objects = [o for name in ('Shell','Controls','Carrier','Hardware')
-               for o in doc.getObject(name).Group if hasattr(o, 'Shape')]
-    invalid = [o.Name for o in objects if o.Shape.isNull() or not o.Shape.isValid()
-               or not o.Shape.Solids]
-    assert not invalid, invalid
-    tolerance = 0.001
-    def collisions(shape, candidates):
-        found = []
-        for obj in candidates:
-            a, b = shape.BoundBox, obj.Shape.BoundBox
-            if all(min(getattr(a,k+'Max'),getattr(b,k+'Max')) -
-                   max(getattr(a,k+'Min'),getattr(b,k+'Min')) > 1e-7 for k in ('X','Y','Z')):
-                volume = shape.common(obj.Shape).Volume
-                if volume > tolerance:
-                    found.append({'object': obj.Name, 'volume_mm3': volume})
-        return found
-    clashes = []
-    for i, obj in enumerate(objects):
-        for result in collisions(obj.Shape, objects[i+1:]):
-            clashes.append({'first': obj.Name, **result})
-    slot_y = doc.Drive.Shape.BoundBox.Center.y
-    sweep_z=doc.Drive.Shape.BoundBox.ZMin+2
-    sweep = Part.makeBox(120, 1.2, 300, A.Vector(-60, slot_y-.6, sweep_z))
-    drivers = {}
-    for side in ('L', 'R'):
-        bb = doc.getObject(side+'Driver').Shape.BoundBox
-        drivers[side] = {'size_xyz_mm': [bb.XLength, bb.YLength, bb.ZLength],
-                         'center_xyz_mm': list(bb.Center)}
-    paths = {}
-    for side, sign in [('L', -1), ('R', 1)]:
-        points = [(sign*26,52,76),(sign*60,52,76),
-                  (sign*60,52,95),(sign*73,52,95)]
-        segments = []
-        for a,b in zip(points, points[1:]):
-            a,b = A.Vector(*a),A.Vector(*b)
-            segments.append(Part.makeCylinder(.4,(b-a).Length,a,b-a))
-        paths[side] = {'points_mm': points, 'probe_radius_mm': .4,
-                       'clashes': collisions(Part.makeCompound(segments),objects)}
-    mirror = A.Matrix()
-    mirror.A11 = -1
-    symmetry = {}
-    pairs = [('L'+suffix,'R'+suffix) for suffix in
-             ('Panel','Port','Chamber','Driver','DriverFrame')]
-    pairs += [(name,name) for name in ('SymmetricCowl','Window','FrontBezel','FrontGrille',
-                                      'FrontBaffle','Back','Base','Feet','DriveCarrier','RearTopMount')]
-    for left,right in pairs:
-        reflected = doc.getObject(left).Shape.copy()
-        reflected.transformShape(mirror, True)
-        target_shape = doc.getObject(right).Shape
-        difference = reflected.cut(target_shape).Volume + target_shape.cut(reflected).Volume
-        symmetry[left+' / '+right] = difference
-        print('MIRROR',left,right,difference,flush=True)
-    # Check the finished shell too. Exempt only the exact control cutter and
-    # its reflected counterpart, not a broad bounding box around the deck.
-    reflected = doc.Cowl.Shape.copy()
-    reflected.transformShape(mirror, True)
-    reflected_tool = doc.CowlTool.Shape.copy()
-    reflected_tool.transformShape(mirror, True)
-    exceptions = doc.CowlTool.Shape.fuse(reflected_tool)
-    residual = doc.Cowl.Shape.cut(reflected).cut(exceptions).Volume
-    residual += reflected.cut(doc.Cowl.Shape).cut(exceptions).Volume
-    symmetry['Cowl / Cowl (control cutouts excepted)'] = residual
-    mirror_links = {}
-    for suffix in ('Panel','Port','Chamber','Driver','DriverFrame'):
-        obj = doc.getObject('R'+suffix)
-        linked = (obj.TypeId == 'Part::Mirroring' and obj.Source == doc.getObject('L'+suffix)
-                  and obj.Base.Length < 1e-7 and (obj.Normal-A.Vector(1,0,0)).Length < 1e-7)
-        mirror_links[obj.Name] = linked
-    assert all(mirror_links.values()), mirror_links
-    # Design allowances for connectors and the relocated volume-pot harness.
-    keepouts = {}
-    reservations = [
-        ('amp_input',(-48,4,123),(15,53,16.6),('Amp','AmpChip','AmpPads')),
-        ('amp_output',(33,4,123),(15,53,16.6),('Amp','AmpChip','AmpPads')),
-        ('mcu_left',(-36.695,32.56,149.7),(5,27.94,8.6),('MCU','MCUChip','MCUPads')),
-        ('mcu_right',(31.695,32.56,149.7),(5,27.94,8.6),('MCU','MCUChip','MCUPads')),
-        ('dac_input',(-67,31,122),(8.6,17,5),('DAC','DACChip','DACPads')),
-        ('dac_output',(-67,31,158),(8.6,17,10),('DAC','DACChip','DACPads'))]
+    model=folder/'Discora.FCStd';doc=A.openDocument(str(model))
+    objects=[o for g in ('Shell','Controls','Carrier','Hardware') for o in doc.getObject(g).Group]
+    tolerance=.001
+    invalid=[o.Name for o in objects if o.Shape.isNull() or not o.Shape.isValid() or not o.Shape.Solids]
+    assert not invalid,invalid
+    def collisions(shape,candidates):
+        hits=[];a=shape.BoundBox
+        for o in candidates:
+            b=o.Shape.BoundBox
+            if any(min(getattr(a,k+'Max'),getattr(b,k+'Max'))-max(getattr(a,k+'Min'),getattr(b,k+'Min'))<1e-7 for k in 'XYZ'):continue
+            volume=shape.common(o.Shape).Volume
+            if volume>tolerance:hits.append({'object':o.Name,'volume_mm3':volume})
+        return hits
+    clashes=[]
+    for i,o in enumerate(objects):
+        for hit in collisions(o.Shape,objects[i+1:]):clashes.append({'first':o.Name,**hit})
+    print('STATIC_CLASHES',clashes,flush=True)
+    main=['FrontShell','RearShell','SpeakerCarrier']
+    connected={n:len(doc.getObject(n).Shape.Solids) for n in main}
+    assert all(n==1 for n in connected.values()),connected
+    mirror=A.Matrix();mirror.A11=-1
+    def reflected(shape):
+        s=shape.copy();s.transformShape(mirror,True);return s
+    def difference(a,b):return a.cut(b).Volume+b.cut(a).Volume
+    symmetry={}
+    for left,right in [('LPort','RPort'),('LDriver','RDriver'),('LChamber','RChamber'),('LDriverFrame','RDriverFrame'),('Window','Window')]:
+        symmetry[left+' / '+right]=difference(reflected(doc.getObject(left).Shape),doc.getObject(right).Shape)
+    rear=doc.RearShell.Shape
+    exceptions=doc.DACPads.Shape.fuse(reflected(doc.DACPads.Shape))
+    symmetry['RearShell (internal DAC pads excepted)']=difference(rear.cut(exceptions),reflected(rear).cut(exceptions))
+    # The lower speaker structure, including baffle and mounting tabs, is symmetric.
+    low=doc.SpeakerCarrier.Shape.common(Part.makeBox(300,200,220.5,A.Vector(-150,-50,-100)))
+    symmetry['SpeakerCarrier below Z=120.5']=difference(low,reflected(low))
+    exceptions=doc.CowlTool.Shape.fuse(reflected(doc.CowlTool.Shape))
+    front=doc.FrontShell.Shape
+    symmetry['FrontShell (original control cutouts excepted)']=difference(front.cut(exceptions),reflected(front).cut(exceptions))
+    print('SYMMETRY',symmetry,flush=True)
+    links={n:(doc.getObject(n).TypeId=='Part::Mirroring' and doc.getObject(n).Source.Name==n.replace('R','L',1)) for n in ('RPort','RDriver','RChamber','RDriverFrame')}
+    slot_y=doc.Drive.Shape.BoundBox.Center.y
+    sweep=Part.makeBox(120,1.2,300,A.Vector(-60,slot_y-.6,doc.Drive.Shape.BoundBox.ZMin+2))
+    disc=collisions(sweep,objects)
+    # Read alignment from saved geometry, independently of build parameters.
+    handle_y=(doc.FoldSection.Geometry[2].StartPoint.x+doc.FoldSection.Geometry[4].StartPoint.x)/2
+    port_alignment={'handle_center_y_mm':handle_y,
+        'port_center_y_mm':{n:doc.getObject(n).Shape.BoundBox.Center.y for n in ('LPort','RPort')},
+        'shell_opening_center_y_mm':doc.LPanelTool.Shape.BoundBox.Center.y}
+    paths={}
+    for side,sign in [('L',-1),('R',1)]:
+        # Pass behind the driver frame, then turn before entering the shifted tube.
+        air_y=doc.LPort.Shape.BoundBox.Center.y+8
+        points=[(sign*26,52,76),(sign*56,52,76),(sign*56,air_y,76),
+                (sign*56,air_y,95),(sign*73,air_y,95)]
+        parts=[]
+        for a,b in zip(points,points[1:]):
+            a,b=A.Vector(*a),A.Vector(*b);parts.append(Part.makeCylinder(.4,(b-a).Length,a,b-a))
+        paths[side]={'points_mm':points,'probe_radius_mm':.4,'clashes':collisions(Part.makeCompound(parts),objects)}
+    reservations=[
+        ('amp_input',(-48,4,123),(15,53,16.6),('Amp','AmpChip','SpeakerCarrier')),
+        ('amp_output',(33,4,123),(15,53,16.6),('Amp','AmpChip','SpeakerCarrier')),
+        ('mcu_left',(-36.695,31.56,148.7),(5,27.94,8.6),('MCU','MCUChip','SpeakerCarrier')),
+        ('mcu_right',(31.695,31.56,148.7),(5,27.94,8.6),('MCU','MCUChip','SpeakerCarrier')),
+        ('dac_input',(-67,31,122),(8.6,17,5),('DAC','DACChip','RearShell')),
+        ('dac_output',(-67,31,158),(8.6,17,10),('DAC','DACChip','RearShell'))]
+    keepouts={}
+    # Check support structures too, excluding only the original pad solids from
+    # their owners. A whole integrated carrier must not hide connector conflicts.
+    support_free={
+        'SpeakerCarrier':doc.SpeakerCarrier.Shape.cut(doc.AmpPads.Shape).cut(doc.MCUPads.Shape),
+        'RearShell':doc.RearShell.Shape.cut(doc.DACPads.Shape)}
     for name,origin,size,owners in reservations:
         shape=Part.makeBox(*size,A.Vector(*origin))
-        keepouts[name]={'origin_mm':origin,'size_mm':size,
-                       'clashes':collisions(shape,[o for o in objects if o.Name not in owners])}
+        hits=collisions(shape,[o for o in objects if o.Name not in owners])
+        for owner in owners:
+            if owner in support_free:
+                volume=shape.common(support_free[owner]).Volume
+                if volume>tolerance:hits.append({'object':owner,'volume_mm3':volume})
+        keepouts[name]={'origin_mm':origin,'size_mm':size,'clashes':hits}
     harness=Part.makeCylinder(1,12,A.Vector(50,28,136),A.Vector(0,0,1))
-    keepouts['volume_harness']={'radius_mm':1,'origin_mm':[50,28,136],
-                               'height_mm':12,'clashes':collisions(harness,objects)}
+    keepouts['volume_harness']={'radius_mm':1,'origin_mm':[50,28,136],'height_mm':12,'clashes':collisions(harness,objects)}
     clearances={}
-    for first,second in [('LChamber','DriveCarrier'),('RChamber','DriveCarrier'),
-                         ('AmpShelf','Drive'),('ElectronicsSled','Drive'),
-                         ('MCUChip','DisplayCarrier'),('MCUChip','SlotGuide'),
-                         ('DACChip','Keycap'),('Battery','LChamber'),
-                         ('Battery','RChamber')]:
-        distance=doc.getObject(first).Shape.distToShape(doc.getObject(second).Shape)[0]
-        clearances[first+' / '+second]=distance
-    # A limited depth sweep with the fixed upper electronics arrangement.
-    depth=doc.Back.Shape.BoundBox.YMax
-    candidates={}
-    for candidate in (70,72,73,74,76):
-        moving=Part.makeCompound([doc.Drive.Shape,doc.DriveCarrier.Shape])
-        moving.translate(A.Vector(0,candidate-depth,0))
-        fixed=[doc.LChamber,doc.RChamber,doc.Amp,doc.AmpChip,doc.AmpShelf]
-        distances=[moving.distToShape(o.Shape)[0] for o in fixed]
-        overlap=collisions(moving,fixed)
-        candidates[str(candidate)]={'rear_stack_clearance_mm':min(distances),
-                                     'clashes':overlap,
-                                     'meets_1mm_clearance':not overlap and min(distances)>=1-1e-7}
-    widths={}
-    for candidate in (138,140,142,144):
-        wall=Part.makeBox(3,depth-6,160,A.Vector(candidate/2-3,3,3))
-        overlap=wall.common(doc.DriveCarrier.Shape).Volume
-        distance=wall.distToShape(doc.DriveCarrier.Shape)[0]
-        widths[str(candidate)]={'carrier_to_sidewall_mm':distance,
-                                'intersection_mm3':overlap,
-                                'meets_1mm_clearance':overlap<=tolerance and distance>=1-1e-7}
-    handle_probe=Part.makeBox(70,10,14,A.Vector(-35,36,182.5))
-    handle_clashes=collisions(handle_probe,objects)
-    controls={}
-    baseline_path=os.environ.get('DISCORA_CAD_BASELINE')
+    for a,b in [('Battery','FrontShell'),('Battery','SpeakerCarrier'),('MCUChip','FrontShell'),('Bridge','DAC'),('Drive','MCUChip')]:
+        clearances[a+' / '+b]=doc.getObject(a).Shape.distToShape(doc.getObject(b).Shape)[0]
+    battery=doc.Battery.Shape.BoundBox
+    battery_fit={'supplier_size_xyz_mm':[112,70,20],'model_size_xyz_mm':[battery.XLength,battery.YLength,battery.ZLength],
+                 'origin_xyz_mm':[battery.XMin,battery.YMin,battery.ZMin],
+                 'front_inner_wall_gap_mm':battery.YMin-3,'rear_inner_wall_gap_mm':75-battery.YMax,
+                 'cradle_side_gap_mm':1,'lead_and_connector_envelope_verified':False,'retention_verified':False}
+    controls={};baseline_path=os.environ.get('DISCORA_CAD_BASELINE')
     if baseline_path:
         baseline=A.openDocument(baseline_path)
-        for name in ('Window','StatusArt','Keycap','KeyLight','Knob',
-                     'DisplayPCB','DisplayHeader','DisplayCarrier'):
-            old,new=baseline.getObject(name).Shape.copy(),doc.getObject(name).Shape
-            old.translate(A.Vector(0,0,-13))
-            controls[name]=old.cut(new).Volume+new.cut(old).Volume
+        for n in ('Window','StatusArt','Keycap','KeyLight','Knob','DisplayPCB','DisplayHeader','DisplayCarrier'):
+            controls[n]=difference(baseline.getObject(n).Shape,doc.getObject(n).Shape)
         controls['source_model_sha256']=hashlib.sha256(Path(baseline_path).read_bytes()).hexdigest()
         A.closeDocument(baseline.Name)
     bb=Part.makeCompound([o.Shape for o in objects]).BoundBox
-    report = {'date':'2026-11-05','model':model.name,
-              'sha256':hashlib.sha256(model.read_bytes()).hexdigest(),
-              'version':A.Version()[:3], 'items':len(objects),
-              'objects':[o.Name for o in objects], 'invalid':invalid,
-              'intersection_tolerance_mm3':tolerance, 'clashes':clashes,
-              'disc':collisions(sweep,objects),
-              'disc_sweep_mm':{'origin':[-60,slot_y-.6,sweep_z],'size':[120,1.2,300]},
-              'speaker_envelopes':drivers, 'speaker_facing':'-Y',
-              'mirror_plane':'X=0', 'mirror_difference_mm3':symmetry,
-              'native_mirror_links':mirror_links,
-              'symmetry_scope':'Finished shell including handle and centered openings, acoustic parts and centered window. Only the exact original control cutouts are exempt in the shell; control parts and electronics are excluded.',
-              'side_air_paths':paths,
-              'assembly_size_xyz_mm':[bb.XLength,bb.YLength,bb.ZLength],
-              'connector_allowances':keepouts,'key_clearances_mm':clearances,
-              'minimum_design_clearance_mm':1,
-              'limited_depth_sweep_mm':candidates,'limited_width_sweep_mm':widths,
-              'controls_translation_xyz_mm':[0,0,-13],
-              'original_controls_difference_mm3':controls,
-              'handle_opening_mm':[90,16], 'handle_passage_clashes':handle_clashes,
-              'physical_validation':False,'acoustic_tuning_verified':False,
-              'limits':['Speaker mounting plane, holes, terminals and excursion are unmeasured.',
-                        'PCB dimensions are documented; component heights, connectors, potentiometer and battery are unverified design allowances.',
-                        'Geometric air continuity is not an acoustic or sealing test.',
-                        'Rotated SATA-USB bridge connection and cable envelope are unverified; no bridge cable collision check.',
-                        'Reduced handle opening needs ergonomic and strength testing.',
-                        'The old battery placeholder does not model the selected 5600mAh pack or its power modules.']}
+    handle=collisions(Part.makeBox(70,10,14,A.Vector(-35,36,182.5)),objects)
+    report={'date':'2026-11-05','model':model.name,'sha256':hashlib.sha256(model.read_bytes()).hexdigest(),
+        'version':A.Version()[:3],'items':len(objects),'objects':[o.Name for o in objects],
+        'main_pla_parts':connected,'rigid_pla_pieces':['FrontShell','RearShell','SpeakerCarrier','LPort','RPort','Keycap','Knob'],
+        'invalid':invalid,'intersection_tolerance_mm3':tolerance,'clashes':clashes,
+        'assembly_size_xyz_mm':[bb.XLength,bb.YLength,bb.ZLength],
+        'mirror_plane':'X=0','mirror_difference_mm3':symmetry,'native_mirror_links':links,
+        'disc':disc,'disc_sweep_mm':{'origin':[-60,slot_y-.6,34],'size':[120,1.2,300]},
+        'side_port_handle_alignment':port_alignment,'side_air_paths':paths,'connector_allowances':keepouts,'key_clearances_mm':clearances,
+        'battery_fit':battery_fit,'controls_translation_xyz_mm':[0,0,0],
+        'original_controls_difference_mm3':controls,'handle_opening_mm':[90,16],'handle_passage_clashes':handle,
+        'physical_validation':False,'acoustic_tuning_verified':False,
+        'limits':['Speaker mounting plane, actual mounting holes, terminals, gaskets and excursion remain unmeasured.',
+                  'PCB sizes are documented; component heights and connector reservations are provisional.',
+                  'Three main PLA solids and nominal screw/pilot bores do not validate printed strength or screw fit.',
+                  'Separate assembly-path report distinguishes continuous conservative sweeps from sampled cover motion.',
+                  'Battery leads, straps, connectors, bridge cables and power modules are not validated.',
+                  'Side passages remain untuned; geometric continuity is not acoustic validation.']}
     (folder/'validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
-    assert not handle_clashes, handle_clashes
-    assert all(v <= tolerance for v in symmetry.values()), symmetry
-    assert all(not k['clashes'] for k in keepouts.values()), keepouts
-    assert all(v>=1-1e-7 for v in clearances.values()), clearances
-    assert all(v<=tolerance for k,v in controls.items() if k!='source_model_sha256'), controls
-    assert not invalid and not clashes and not report['disc'], report
-    assert all(not p['clashes'] for p in paths.values()), paths
-    assert all(all(abs(a-b)<1e-7 for a,b in zip(d['size_xyz_mm'],[45,42,80])) for d in drivers.values()), drivers
-    print('PASS: saved-model solids, pairwise interference, disc sweep and air paths')
+    assert abs(handle_y-40.5)<1e-7
+    assert all(abs(y-handle_y)<1e-7 for y in port_alignment['port_center_y_mm'].values())
+    assert abs(port_alignment['shell_opening_center_y_mm']-handle_y)<1e-7
+    assert len(objects)==26,len(objects)
+    assert not clashes and not disc and not handle,(clashes,disc,handle)
+    assert all(v<=tolerance for v in symmetry.values()),symmetry
+    assert all(links.values()),links
+    assert all(not p['clashes'] for p in paths.values()),paths
+    assert all(not p['clashes'] for p in keepouts.values()),keepouts
+    assert all(v>=1-1e-7 for v in clearances.values()),clearances
+    assert all(abs(a-b)<1e-7 for a,b in zip(report['assembly_size_xyz_mm'],[142,78,202]))
+    assert all(abs(a-b)<1e-7 for a,b in zip(battery_fit['model_size_xyz_mm'],[112,70,20]))
+    assert all(v<=tolerance for k,v in controls.items() if k!='source_model_sha256'),controls
+    print('PASS: three connected PLA solids, interference, symmetry, disc and air paths',flush=True)
     return doc
 
 
-target = os.environ.get('DISCORA_CAD_OUTPUT') or QtWidgets.QFileDialog.getExistingDirectory(
-    None, '选择 Discora 模型目录进行验证')
-if target:
-    validate(Path(target))
+target=os.environ.get('DISCORA_CAD_OUTPUT') or QtWidgets.QFileDialog.getExistingDirectory(None,'选择 Discora 模型目录进行验证')
+if target:validate(Path(target))

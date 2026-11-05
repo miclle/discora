@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256='150eeae75876a5ee5902df73d2a976904b093a151b048de0ccc697d6eaba24ad'
+MODEL_SHA256='360b79141afac0870da58e5b7ca17ba631e3d888896ddd13e4742edac3664306'
 
 
 def palette_from_build():
@@ -111,9 +111,9 @@ def main():
     assert data['build_sha256']==hashlib.sha256((ROOT/'build.FCMacro').read_bytes()).hexdigest()
     palette=palette_from_build()
     assignments={
-        'TEAL':'Cowl FrontGrille Keycap LChamber RChamber LDriverFrame RDriverFrame RearTopMount DriveCarrier SlotGuide DisplayCarrier AmpShelf ElectronicsSled AmpPads MCUPads DACPads BatteryCradle',
-        'BLACK':'LPanel RPanel LPort RPort Back Base',
-        'RUBBER':'FrontBezel Feet FrontBaffle LDriver RDriver VolumePot DisplayHeader AmpChip DACChip',
+        'TEAL':'FrontShell SpeakerCarrier Keycap',
+        'BLACK':'RearShell LPort RPort',
+        'RUBBER':'Feet LDriver RDriver VolumePot DisplayHeader AmpChip DACChip',
         'GLASS':'Window','PIXEL':'StatusArt','WHITE':'KeyLight Knob',
         'SILVER':'Drive Encoder MCUChip','PCB':'Bridge DisplayPCB Amp MCU DAC','BLUE':'Battery',
     }

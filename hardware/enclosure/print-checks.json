@@ -1,0 +1,239 @@
+{
+  "model_sha256": "360b79141afac0870da58e5b7ca17ba631e3d888896ddd13e4742edac3664306",
+  "freecad_version": [
+    "1",
+    "1",
+    "4"
+  ],
+  "printer_user_description": "Bambu P2SC",
+  "build_volume_mm": [
+    256,
+    256,
+    256
+  ],
+  "primary_nozzle_mm": 0.4,
+  "alternate_nozzle_mm": 0.2,
+  "brim_allowance_mm": 5,
+  "linear_deflection_mm": 0.1,
+  "angular_deflection_rad": 0.35,
+  "physical_print_test": false,
+  "parts": {
+    "FrontShell": {
+      "file": "FrontShell.stl",
+      "size_xyz_mm": [
+        142.00000000000006,
+        199.0,
+        78.00000000000006
+      ],
+      "facets": 212220,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        0.7071067811865475,
+        0.0,
+        0.0,
+        0.7071067811865476
+      ],
+      "stl_sha256": "aa49dfe0fa07c009457654fcfe194e563f09eb7ef0ebef35edc4866a6fecb8d7"
+    },
+    "RearShell": {
+      "file": "RearShell.stl",
+      "size_xyz_mm": [
+        142.0,
+        171.0,
+        75.00000000000006
+      ],
+      "facets": 3210,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        0.7071067811865476,
+        0.0,
+        0.0,
+        -0.7071067811865475
+      ],
+      "stl_sha256": "13dd55e738b5b5e0a317078a968f5289f41fa080e9548ea437be4ef762b9a915"
+    },
+    "SpeakerCarrier": {
+      "file": "SpeakerCarrier.stl",
+      "size_xyz_mm": [
+        134.0,
+        125.69999999999999,
+        56.50000000000003
+      ],
+      "facets": 3452,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        0.7071067811865476,
+        0.0,
+        0.0,
+        -0.7071067811865475
+      ],
+      "stl_sha256": "4e31ce7b83117e36750854e46dc528303fda0af30eab13c79aeb69d3a61f6f63"
+    },
+    "LPort": {
+      "file": "LPort.stl",
+      "size_xyz_mm": [
+        86.0,
+        28.39999999999999,
+        12.000000000000036
+      ],
+      "facets": 1400,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        0.0,
+        -0.7071067811865475,
+        0.0,
+        0.7071067811865476
+      ],
+      "stl_sha256": "6ea44a8ce23003a7e09c71f37ef178398b817cb4c4d6bbd0c65c7564b0906c8e"
+    },
+    "RPort": {
+      "file": "RPort.stl",
+      "size_xyz_mm": [
+        86.0,
+        28.39999999999999,
+        12.000000000000036
+      ],
+      "facets": 1400,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        0.0,
+        0.7071067811865475,
+        -0.0,
+        0.7071067811865476
+      ],
+      "stl_sha256": "a750e9eed7a5ad6821292d7f07a22b6697ce63d681382f6f95c326553485b10b"
+    },
+    "Keycap": {
+      "file": "Keycap.stl",
+      "size_xyz_mm": [
+        22.0,
+        21.99999999999997,
+        1.4500000000000597
+      ],
+      "facets": 140,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "3514598289abd87f60661dd4d98b54274e695d01fe53a1457901d6fc05aa3eaf"
+    },
+    "Knob": {
+      "file": "Knob.stl",
+      "size_xyz_mm": [
+        23.60000000000001,
+        23.600000000000037,
+        8.20000000000006
+      ],
+      "facets": 284,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "49113f6d3aebd2e7bd23fc6cc5d873be39e1faf50eb533a90f5625b7f45d00b9"
+    }
+  },
+  "profile_names": {
+    "machine": "Bambu Lab P2S 0.4 nozzle",
+    "process": "0.20mm Standard @BBL P2S",
+    "filament": "Generic PLA @BBL P2S"
+  },
+  "process_overrides": {
+    "enable_support": "1",
+    "support_type": "tree(auto)",
+    "support_on_build_plate_only": "1",
+    "support_threshold_angle": "30",
+    "support_top_z_distance": "0.2",
+    "wall_loops": "3",
+    "sparse_infill_density": "15%",
+    "sparse_infill_pattern": "gyroid",
+    "brim_type": "outer_only",
+    "brim_width": "5"
+  },
+  "profile_sha256": {
+    "machine": "fbbc467eaed55147d4e21ff1851d76f4fdf6ac10ae8fffda9fc2ae66763325f5",
+    "process": "f181d2705e192b873eda32d5b4fa9f1504289244e40d7d207192b72f001e41e3",
+    "filament": "0328addb8453f889d45190acf23dae336a618d5d4a0e20428188cab5257dccaa"
+  },
+  "plates": {
+    "RearShell": {
+      "parts": [
+        "RearShell"
+      ],
+      "exit_code": 0,
+      "gcode_sha256": "9ae2671e8234cd6f28bd21a8ac9d4d11654712df331cc8d39fbaf476a1e08477",
+      "total_estimated_time": "5h 0m 12s",
+      "filament_g": 180.28,
+      "layers": 375,
+      "vendor_T65535_parser_notice": true
+    },
+    "FrontShell": {
+      "parts": [
+        "FrontShell"
+      ],
+      "exit_code": 0,
+      "gcode_sha256": "661c1d4d48b1310b35af15fdf86b97b69023ce292473d152e83548e632ec160c",
+      "total_estimated_time": "7h 36m 41s",
+      "filament_g": 109.94,
+      "layers": 388,
+      "vendor_T65535_parser_notice": true
+    },
+    "SpeakerCarrier": {
+      "parts": [
+        "SpeakerCarrier"
+      ],
+      "exit_code": 0,
+      "gcode_sha256": "4f2468e3570d2cb21b52eb0a047abb2fea08fb083a29f27fff1007f48ccd2b46",
+      "total_estimated_time": "6h 25m 9s",
+      "filament_g": 158.78,
+      "layers": 282,
+      "vendor_T65535_parser_notice": true
+    },
+    "SmallParts": {
+      "parts": [
+        "LPort",
+        "RPort",
+        "Keycap",
+        "Knob"
+      ],
+      "exit_code": 0,
+      "gcode_sha256": "d61cf21db932c88903d049e9952cdce18e62a3683c13dc44435f76dddeabf7d5",
+      "total_estimated_time": "50m 12s",
+      "filament_g": 17.8,
+      "layers": 60,
+      "vendor_T65535_parser_notice": true
+    }
+  },
+  "printer_profile_mapping": "User P2SC; installed Bambu P2S profile used for local slicing only",
+  "printer_contacted": false,
+  "gcode_execution_validated": false,
+  "slicer_version": "02.08.04.57",
+  "layer_preview_review": {
+    "nominal_print_z_mm": [
+      0.2,
+      2,
+      6,
+      20,
+      50
+    ],
+    "parts": [
+      "FrontShell",
+      "RearShell",
+      "SpeakerCarrier"
+    ],
+    "method": "Local plot of generated extrusion segments; G2/G3 arcs approximated by endpoint chords",
+    "finding": "Grille starts on bed; support exists under shoulder and carrier rear; open assembly faces provide access for removal. Physical removal remains untested."
+  }
+}

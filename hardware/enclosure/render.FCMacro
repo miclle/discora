@@ -4,6 +4,7 @@ from pathlib import Path
 import FreeCAD as A
 import FreeCADGui as G
 import Part
+from pivy import coin  # Register Coin camera wrappers used for export framing.
 from PySide import QtWidgets, QtCore
 
 
@@ -16,10 +17,14 @@ def render(folder):
     camera = view.getCameraOrientation().Q
     view.setCameraType('Orthographic')
     def save(name,rotation):
-        view.setCameraOrientation(rotation.Q)
+        # Set the Coin camera directly to avoid animated intermediate views.
+        view.getCameraNode().orientation.setValue(coin.SbRotation(*rotation.Q))
         G.updateGui(); QtWidgets.QApplication.processEvents()
         loop=QtCore.QEventLoop(); QtCore.QTimer.singleShot(1200,loop.quit); loop.exec_()
         view.fitAll()
+        # Keep margin when the export aspect differs from the GUI viewport.
+        camera_node=view.getCameraNode()
+        camera_node.height.setValue(camera_node.height.getValue()*1.25)
         G.updateGui(); QtWidgets.QApplication.processEvents()
         view.saveImage(str(folder/name),1000,1100,'White')
     front=A.Rotation(A.Vector(1,0,0),90)
@@ -32,7 +37,7 @@ def render(folder):
     doc.DiscReference.Visibility=True
     save('disc-path.png',angle)
     doc.DiscReference.Visibility=False
-    for name in ['Cowl','Window','StatusArt','FrontGrille','FrontBezel','FrontBaffle']:
+    for name in ['FrontShell','Window','StatusArt']:
         doc.getObject(name).Visibility=False
     save('layout.png',angle)
     # Section through the left driver center, viewed from +X, reveals the depth stack.
@@ -51,10 +56,13 @@ def render(folder):
             obj.ViewObject.LineColor=(.12,.15,.17)
     section.recompute()
     section_view=G.activeDocument().activeView()
-    section_view.viewRight()
+    right=A.Rotation(A.Vector(0,0,1),90).multiply(front)
+    section_view.getCameraNode().orientation.setValue(coin.SbRotation(*right.Q))
     G.updateGui()
     loop=QtCore.QEventLoop(); QtCore.QTimer.singleShot(1200,loop.quit); loop.exec_()
     section_view.fitAll()
+    camera_node=section_view.getCameraNode()
+    camera_node.height.setValue(camera_node.height.getValue()*1.25)
     G.updateGui()
     section_view.saveImage(str(folder/'section.png'),1000,1100,'White')
     A.closeDocument(section.Name)

@@ -28,16 +28,16 @@ def bounds(shape):
 def side_profile(doc, source_hash):
     points = [[edge.StartPoint.x, edge.StartPoint.y]
               for edge in doc.FoldSection.Geometry[:7]]
-    assert points == [[0,3],[0,150],[38,177],[38,202],[43,202],[43,177],[74,165]]
+    assert points == [[0,3],[0,150],[38,177],[38,202],[43,202],[43,177],[78,165]]
     feet = doc.Feet.Shape.BoundBox
     shell_bottom = min(doc.getObject(n).Shape.BoundBox.ZMin
-                       for n in ('Cowl','LPanel','RPanel','Back','Base'))
+                       for n in ('FrontShell','RearShell'))
     assert abs(feet.ZMin)<1e-6 and abs(feet.ZMax-shell_bottom)<1e-6
     return dict(sha256=source_hash, units='mm', outer_profile_yz=points,
                 foot_bottom_z=feet.ZMin, shell_bottom_z=shell_bottom,
                 foot_height=feet.ZLength,
                 front_angle_deg=math.degrees(math.atan2(27,38)),
-                rear_angle_deg=math.degrees(math.atan2(12,31)))
+                rear_angle_deg=math.degrees(math.atan2(12,35)))
 
 
 def main():
@@ -147,43 +147,43 @@ def main():
 
     core = groups['Carrier'] + groups['Hardware']
     exploded('exploded-shell',[
-        ('01','前壳与提手',['Cowl'],(0,-100,20)),
-        ('02','左侧壳',['LPanel'],(-90,0,0)),
-        ('03','右侧壳',['RPanel'],(90,0,0)),
-        ('04','左导音孔与饰片',['LPort'],(-155,0,0)),
-        ('05','右导音孔与饰片',['RPort'],(155,0,0)),
-        ('06','格栅压圈',['FrontBezel'],(0,-240,0)),
-        ('07','通孔护网',['FrontGrille'],(0,-180,0)),
-        ('08','后盖',['Back'],(0,140,0)),
-        ('09','底架',['Base'],(0,0,-70)),
-        ('10','四个脚垫',['Feet'],(0,0,-115)),
-        ('11','屏窗与操控件',['Window','StatusArt','Keycap','KeyLight','Knob'],(0,0,90)),
-        ('12','内部组件（见下一页）',core,(0,0,0)),
+        ('01','P1 一体前壳／提手／护网',['FrontShell'],(0,-150,0)),
+        ('02','P2 一体后壳／底板／托盘',['RearShell'],(0,160,0)),
+        ('03','P3 双喇叭与电路板支架',['SpeakerCarrier'],(0,0,0)),
+        ('04','左侧后装导音孔',['LPort'],(-120,0,0)),
+        ('05','右侧后装导音孔',['RPort'],(120,0,0)),
+        ('06','四个软质脚垫',['Feet'],(0,0,-65)),
+        ('07','屏窗与操控件',['Window','StatusArt','Keycap','KeyLight','Knob'],(0,-70,100)),
+        ('08','硬件包络（见右图）',groups['Hardware'],(0,0,0)),
     ],shapes)
     exploded('exploded-core',[
-        ('A','前障板',['FrontBaffle'],(0,-110,0)),
-        ('B','左喇叭及预留框',['LDriver','LDriverFrame'],(-55,-45,0)),
-        ('C','右喇叭及预留框',['RDriver','RDriverFrame'],(55,-45,0)),
-        ('D','左后腔',['LChamber'],(-110,35,0)),
-        ('E','右后腔',['RChamber'],(110,35,0)),
-        ('F','光驱、导轨与碟口导向',['Drive','DriveCarrier','SlotGuide'],(0,120,0)),
-        ('G','功放及托板',['Amp','AmpChip','AmpPads','AmpShelf'],(0,0,65)),
-        ('H','主控及托板',['MCU','MCUChip','MCUPads','ElectronicsSled'],(0,25,135)),
-        ('I','DAC 与侧壁支撑',['DAC','DACChip','DACPads'],(-95,0,100)),
-        ('J','屏幕 PCB、接头及安装座',['DisplayPCB','DisplayHeader','DisplayCarrier'],(-60,-50,140)),
-        ('K','电位器与轴',['VolumePot','Encoder'],(70,-30,100)),
-        ('L','旧电池占位与电池座',['Battery','BatteryCradle'],(0,-20,-65)),
-        ('M','桥接器转向占位',['Bridge'],(100,0,-100)),
-        ('N','后盖上部固定耳',['RearTopMount'],(0,145,80)),
+        ('A','P3 一体支架／前障板',['SpeakerCarrier'],(0,0,0)),
+        ('B','左喇叭包络',['LDriver'],(-50,-55,0)),
+        ('C','右喇叭包络',['RDriver'],(50,-55,0)),
+        ('D','光驱（导轨已并入后壳）',['Drive'],(0,110,0)),
+        ('E','功放 PCB 与元件预留',['Amp','AmpChip'],(0,0,70)),
+        ('F','主控 PCB 与元件预留',['MCU','MCUChip'],(0,25,100)),
+        ('G','DAC PCB 与元件预留',['DAC','DACChip'],(-100,0,65)),
+        ('H','屏幕 PCB 与接头',['DisplayPCB','DisplayHeader'],(-60,-40,130)),
+        ('I','电位器与轴',['VolumePot','Encoder'],(70,-30,90)),
+        ('J','5600 mAh 平排电池',['Battery'],(0,-10,-50)),
+        ('K','桥接器占位',['Bridge'],(180,-30,-140)),
     ],core)
     # Validate critical annotations against the saved B-rep snapshot.
     checks = {
-        'overall_142_74_202': all(abs(a-b)<1e-5 for a,b in zip(data['overall']['size'],(142,74,202))),
+        'overall_142_78_202': all(abs(a-b)<1e-5 for a,b in zip(data['overall']['size'],(142,78,202))),
         'handle_opening_90_16': abs(handle.BoundBox.XLength-90)<1e-5 and abs(handle.BoundBox.ZLength-16)<1e-5,
-        'grille_opening_130': abs(grille.BoundBox.XLength-130)<1e-5,
+        'hidden_grille_cut_130': abs(grille.BoundBox.XLength-130)<1e-5,
         'slot_124_3_2': abs(slot.BoundBox.XLength-124)<1e-5 and abs(slot.BoundBox.YLength-3.2)<1e-5,
         'screen_opening_36_20': abs(local.BoundBox.XLength-36)<1e-5 and abs(local.BoundBox.ZLength-20)<1e-5,
-        '45_finished_objects':len(objects)==45,
+        'battery_112_70_20': all(abs(a-b)<1e-5 for a,b in zip(data['objects']['Battery']['size'],(112,70,20))),
+        'drive_y61_z32': abs(doc.Drive.Shape.BoundBox.YMin-61)<1e-5 and abs(doc.Drive.Shape.BoundBox.ZMin-32)<1e-5,
+        'slot_center_y65_75': abs(slot.BoundBox.Center.y-65.75)<1e-5,
+        'bezel_outer_130_5':abs(doc.FrontBezel.Shape.BoundBox.XLength-130.5)<1e-5,
+        'grille_thickness_2':abs(doc.FrontGrille.Shape.BoundBox.YLength-2)<1e-5,
+        'side_ports_handle_y40_5':all(abs(doc.getObject(n).Shape.BoundBox.Center.y-40.5)<1e-5 for n in ('LPort','RPort','LPanelTool')),
+        '26_finished_objects':len(objects)==26,
+        'three_connected_main_parts':all(len(doc.getObject(n).Shape.Solids)==1 for n in ('FrontShell','RearShell','SpeakerCarrier')),
         'source_unchanged':hashlib.sha256(source.read_bytes()).hexdigest()==source_hash,
     }
     data['checks']=checks
