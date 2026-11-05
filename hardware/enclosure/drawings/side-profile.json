@@ -1,5 +1,5 @@
 {
-  "sha256": "150eeae75876a5ee5902df73d2a976904b093a151b048de0ccc697d6eaba24ad",
+  "sha256": "360b79141afac0870da58e5b7ca17ba631e3d888896ddd13e4742edac3664306",
   "units": "mm",
   "outer_profile_yz": [
     [
@@ -27,7 +27,7 @@
       177.0
     ],
     [
-      74.0,
+      78.0,
       165.0
     ]
   ],
@@ -35,5 +35,5 @@
   "shell_bottom_z": 2.9999999999999996,
   "foot_height": 3.0,
   "front_angle_deg": 35.39479584498706,
-  "rear_angle_deg": 21.161259816828277
+  "rear_angle_deg": 18.924644416051233
 }

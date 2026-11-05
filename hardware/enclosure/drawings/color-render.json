@@ -1,7 +1,7 @@
 {
-  "sha256": "150eeae75876a5ee5902df73d2a976904b093a151b048de0ccc697d6eaba24ad",
-  "build_sha256": "104a72bb2d8b58ed5d8a2b17c47c65b06a2766f52f792ec6665522d918d35aa8",
-  "geometry_sha256": "99a0470634a2fc63e322fa1695df83ebc9693c3d5d743514eb46b3f06fdb1e5d",
+  "sha256": "360b79141afac0870da58e5b7ca17ba631e3d888896ddd13e4742edac3664306",
+  "build_sha256": "a8210d473cf8057f88d5b9d5f71b276774b3e2b06e95631cb5bad3a0f72a3503",
+  "geometry_sha256": "fb036859897b3ed6a20e59e3138c02b533578014d947ae9f9ba9f4aeffee6259",
   "palette": {
     "TEAL": [
       0.025,
@@ -50,12 +50,12 @@
     ]
   },
   "objects": {
-    "Cowl": [
+    "FrontShell": [
       0.025,
       0.75,
       0.72
     ],
-    "FrontGrille": [
+    "SpeakerCarrier": [
       0.025,
       0.75,
       0.72
@@ -65,82 +65,7 @@
       0.75,
       0.72
     ],
-    "LChamber": [
-      0.025,
-      0.75,
-      0.72
-    ],
-    "RChamber": [
-      0.025,
-      0.75,
-      0.72
-    ],
-    "LDriverFrame": [
-      0.025,
-      0.75,
-      0.72
-    ],
-    "RDriverFrame": [
-      0.025,
-      0.75,
-      0.72
-    ],
-    "RearTopMount": [
-      0.025,
-      0.75,
-      0.72
-    ],
-    "DriveCarrier": [
-      0.025,
-      0.75,
-      0.72
-    ],
-    "SlotGuide": [
-      0.025,
-      0.75,
-      0.72
-    ],
-    "DisplayCarrier": [
-      0.025,
-      0.75,
-      0.72
-    ],
-    "AmpShelf": [
-      0.025,
-      0.75,
-      0.72
-    ],
-    "ElectronicsSled": [
-      0.025,
-      0.75,
-      0.72
-    ],
-    "AmpPads": [
-      0.025,
-      0.75,
-      0.72
-    ],
-    "MCUPads": [
-      0.025,
-      0.75,
-      0.72
-    ],
-    "DACPads": [
-      0.025,
-      0.75,
-      0.72
-    ],
-    "BatteryCradle": [
-      0.025,
-      0.75,
-      0.72
-    ],
-    "LPanel": [
-      0.145,
-      0.155,
-      0.17
-    ],
-    "RPanel": [
+    "RearShell": [
       0.145,
       0.155,
       0.17
@@ -155,27 +80,7 @@
       0.155,
       0.17
     ],
-    "Back": [
-      0.145,
-      0.155,
-      0.17
-    ],
-    "Base": [
-      0.145,
-      0.155,
-      0.17
-    ],
-    "FrontBezel": [
-      0.07,
-      0.08,
-      0.09
-    ],
     "Feet": [
-      0.07,
-      0.08,
-      0.09
-    ],
-    "FrontBaffle": [
       0.07,
       0.08,
       0.09
@@ -290,7 +195,7 @@
     "right": {
       "file": "right-color.png",
       "size_px": [
-        889,
+        937,
         2424
       ]
     },
@@ -298,7 +203,7 @@
       "file": "top-color.png",
       "size_px": [
         1705,
-        889
+        937
       ]
     },
     "rear": {
@@ -311,22 +216,22 @@
     "section": {
       "file": "section-color.png",
       "size_px": [
-        889,
+        937,
         2424
       ]
     },
     "exploded-shell": {
       "file": "exploded-shell-color.png",
       "size_px": [
-        4871,
-        4367
+        4141,
+        4123
       ]
     },
     "exploded-core": {
       "file": "exploded-core-color.png",
       "size_px": [
-        3950,
-        4947
+        3298,
+        3957
       ]
     }
   }

@@ -1,0 +1,231 @@
+{
+  "units": "mm",
+  "fasteners_and_straps_removed": true,
+  "cables_disconnected": true,
+  "physical_assembly_test": false,
+  "paths": {
+    "speaker_carrier_front": {
+      "method": "continuous conservative bounding-box sweep per construction component",
+      "translation_xyz_mm": [
+        0,
+        -140,
+        0
+      ],
+      "moving": [
+        "SpeakerCarrier",
+        "LDriver",
+        "RDriver",
+        "Amp",
+        "AmpChip",
+        "Bridge",
+        "MCU",
+        "MCUChip"
+      ],
+      "fixed": [
+        "RearShell",
+        "Feet",
+        "Drive",
+        "DAC",
+        "DACChip",
+        "Battery"
+      ],
+      "prerequisites": [
+        "Front cover removed and its cables disconnected",
+        "Both side-port inserts removed",
+        "Four carrier screws removed"
+      ],
+      "clashes": []
+    },
+    "drive_top": {
+      "method": "continuous conservative bounding-box sweep",
+      "translation_xyz_mm": [
+        0,
+        0,
+        180
+      ],
+      "moving": [
+        "Drive"
+      ],
+      "fixed": [
+        "RearShell",
+        "Battery",
+        "DAC",
+        "DACChip",
+        "Feet"
+      ],
+      "prerequisites": [
+        "Front cover removed",
+        "Speaker carrier removed (not included among fixed objects)",
+        "Bridge cables disconnected"
+      ],
+      "clashes": []
+    },
+    "battery_front": {
+      "method": "continuous conservative bounding-box sweep",
+      "translation_xyz_mm": [
+        0,
+        -150,
+        0
+      ],
+      "moving": [
+        "Battery"
+      ],
+      "fixed": [
+        "RearShell",
+        "SpeakerCarrier",
+        "LDriver",
+        "RDriver",
+        "Drive",
+        "DAC",
+        "DACChip",
+        "Feet"
+      ],
+      "prerequisites": [
+        "Front cover removed",
+        "Battery straps and cables removed"
+      ],
+      "clashes": []
+    },
+    "LPort_outward": {
+      "method": "continuous forward-facing surface extrusion along X",
+      "translation_xyz_mm": [
+        -25,
+        0,
+        0
+      ],
+      "moving": [
+        "LPort"
+      ],
+      "fixed": [
+        "RPort",
+        "FrontShell",
+        "RearShell",
+        "Feet",
+        "Window",
+        "StatusArt",
+        "Keycap",
+        "KeyLight",
+        "Knob",
+        "SpeakerCarrier",
+        "LDriver",
+        "RDriver",
+        "Encoder",
+        "VolumePot",
+        "Drive",
+        "Bridge",
+        "DisplayPCB",
+        "DisplayHeader",
+        "Amp",
+        "AmpChip",
+        "MCU",
+        "MCUChip",
+        "DAC",
+        "DACChip",
+        "Battery"
+      ],
+      "prerequisites": [
+        "Two side-port screws removed"
+      ],
+      "clashes": []
+    },
+    "RPort_outward": {
+      "method": "continuous forward-facing surface extrusion along X",
+      "translation_xyz_mm": [
+        25,
+        0,
+        0
+      ],
+      "moving": [
+        "RPort"
+      ],
+      "fixed": [
+        "LPort",
+        "FrontShell",
+        "RearShell",
+        "Feet",
+        "Window",
+        "StatusArt",
+        "Keycap",
+        "KeyLight",
+        "Knob",
+        "SpeakerCarrier",
+        "LDriver",
+        "RDriver",
+        "Encoder",
+        "VolumePot",
+        "Drive",
+        "Bridge",
+        "DisplayPCB",
+        "DisplayHeader",
+        "Amp",
+        "AmpChip",
+        "MCU",
+        "MCUChip",
+        "DAC",
+        "DACChip",
+        "Battery"
+      ],
+      "prerequisites": [
+        "Two side-port screws removed"
+      ],
+      "clashes": []
+    },
+    "front_cover": {
+      "method": "exact B-rep samples; 0.5 mm lift steps then 1 mm forward steps",
+      "waypoints_xyz_mm": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          40
+        ],
+        [
+          0,
+          -140,
+          40
+        ]
+      ],
+      "moving": [
+        "FrontShell",
+        "Window",
+        "StatusArt",
+        "Keycap",
+        "KeyLight",
+        "Knob",
+        "Encoder",
+        "VolumePot",
+        "DisplayPCB",
+        "DisplayHeader"
+      ],
+      "fixed": [
+        "LPort",
+        "RPort",
+        "RearShell",
+        "Feet",
+        "SpeakerCarrier",
+        "LDriver",
+        "RDriver",
+        "Drive",
+        "Bridge",
+        "Amp",
+        "AmpChip",
+        "MCU",
+        "MCUChip",
+        "DAC",
+        "DACChip",
+        "Battery"
+      ],
+      "prerequisites": [
+        "Four front-cover screws removed",
+        "Control/display cables disconnected"
+      ],
+      "clashes": []
+    }
+  },
+  "all_pass": true,
+  "model_sha256": "360b79141afac0870da58e5b7ca17ba631e3d888896ddd13e4742edac3664306"
+}
