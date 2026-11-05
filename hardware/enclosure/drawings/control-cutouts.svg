@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="112.65mm" height="22.5mm" viewBox="-60.25 -120.21207155201287 112.65 22.5">
+<g   fill="none"
+   stroke="rgb(0, 0, 0)"
+   stroke-linecap="butt"
+   stroke-linejoin="miter"
+   stroke-width="0.18"
+   transform="scale(1, -1)"
+  >
+<path id= "1" d=" M -15 118.962 L 15 118.962 " />
+<path d="M-18 115.962 A3 3 0 0 0 -15 118.962" /><path id= "3" d=" M -15 98.9621 L 15 98.9621 " />
+<path d="M-15 98.9621 A3 3 0 0 0 -18 101.962" /><path d="M18 101.962 A3 3 0 0 0 15 98.9621" /><path id= "6" d=" M -18 101.962 L -18 115.962 " />
+<path id= "7" d=" M 18 101.962 L 18 115.962 " />
+<path d="M15 118.962 A3 3 0 0 0 18 115.962" /><circle cx ="-49" cy ="108.962" r ="11.25" /><circle cx ="48" cy ="108.962" r ="4.4" /></g>
+</svg>
