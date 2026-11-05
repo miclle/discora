@@ -1,0 +1,395 @@
+{
+  "date": "2026-11-05",
+  "model": "Discora.FCStd",
+  "sha256": "150eeae75876a5ee5902df73d2a976904b093a151b048de0ccc697d6eaba24ad",
+  "version": [
+    "1",
+    "1",
+    "4"
+  ],
+  "items": 45,
+  "objects": [
+    "Cowl",
+    "LPanel",
+    "RPanel",
+    "LPort",
+    "RPort",
+    "FrontBezel",
+    "FrontGrille",
+    "Back",
+    "Base",
+    "Feet",
+    "Window",
+    "StatusArt",
+    "Keycap",
+    "KeyLight",
+    "Knob",
+    "LChamber",
+    "RChamber",
+    "LDriverFrame",
+    "RDriverFrame",
+    "FrontBaffle",
+    "RearTopMount",
+    "DriveCarrier",
+    "SlotGuide",
+    "DisplayCarrier",
+    "AmpShelf",
+    "ElectronicsSled",
+    "AmpPads",
+    "MCUPads",
+    "DACPads",
+    "BatteryCradle",
+    "LDriver",
+    "RDriver",
+    "Encoder",
+    "VolumePot",
+    "Drive",
+    "Bridge",
+    "DisplayPCB",
+    "DisplayHeader",
+    "Amp",
+    "AmpChip",
+    "MCU",
+    "MCUChip",
+    "DAC",
+    "DACChip",
+    "Battery"
+  ],
+  "invalid": [],
+  "intersection_tolerance_mm3": 0.001,
+  "clashes": [],
+  "disc": [],
+  "disc_sweep_mm": {
+    "origin": [
+      -60,
+      63.4,
+      20.0
+    ],
+    "size": [
+      120,
+      1.2,
+      300
+    ]
+  },
+  "speaker_envelopes": {
+    "L": {
+      "size_xyz_mm": [
+        45.0,
+        42.0,
+        80.0
+      ],
+      "center_xyz_mm": [
+        -26.0,
+        27.0,
+        76.0
+      ]
+    },
+    "R": {
+      "size_xyz_mm": [
+        45.0,
+        42.0,
+        80.0
+      ],
+      "center_xyz_mm": [
+        26.0,
+        27.0,
+        76.0
+      ]
+    }
+  },
+  "speaker_facing": "-Y",
+  "mirror_plane": "X=0",
+  "mirror_difference_mm3": {
+    "LPanel / RPanel": 0.0,
+    "LPort / RPort": 0.0,
+    "LChamber / RChamber": 0.0,
+    "LDriver / RDriver": 0.0,
+    "LDriverFrame / RDriverFrame": 0.0,
+    "SymmetricCowl / SymmetricCowl": 0.0,
+    "Window / Window": 0.0,
+    "FrontBezel / FrontBezel": 0.0,
+    "FrontGrille / FrontGrille": 0.0,
+    "FrontBaffle / FrontBaffle": 0.0,
+    "Back / Back": 0.0,
+    "Base / Base": 0.0,
+    "Feet / Feet": 0.0,
+    "DriveCarrier / DriveCarrier": 0.0,
+    "RearTopMount / RearTopMount": 0.0,
+    "Cowl / Cowl (control cutouts excepted)": 0.0
+  },
+  "native_mirror_links": {
+    "RPanel": true,
+    "RPort": true,
+    "RChamber": true,
+    "RDriver": true,
+    "RDriverFrame": true
+  },
+  "symmetry_scope": "Finished shell including handle and centered openings, acoustic parts and centered window. Only the exact original control cutouts are exempt in the shell; control parts and electronics are excluded.",
+  "side_air_paths": {
+    "L": {
+      "points_mm": [
+        [
+          -26,
+          52,
+          76
+        ],
+        [
+          -60,
+          52,
+          76
+        ],
+        [
+          -60,
+          52,
+          95
+        ],
+        [
+          -73,
+          52,
+          95
+        ]
+      ],
+      "probe_radius_mm": 0.4,
+      "clashes": []
+    },
+    "R": {
+      "points_mm": [
+        [
+          26,
+          52,
+          76
+        ],
+        [
+          60,
+          52,
+          76
+        ],
+        [
+          60,
+          52,
+          95
+        ],
+        [
+          73,
+          52,
+          95
+        ]
+      ],
+      "probe_radius_mm": 0.4,
+      "clashes": []
+    }
+  },
+  "assembly_size_xyz_mm": [
+    142.00000000000006,
+    74.00000000000001,
+    202.0
+  ],
+  "connector_allowances": {
+    "amp_input": {
+      "origin_mm": [
+        -48,
+        4,
+        123
+      ],
+      "size_mm": [
+        15,
+        53,
+        16.6
+      ],
+      "clashes": []
+    },
+    "amp_output": {
+      "origin_mm": [
+        33,
+        4,
+        123
+      ],
+      "size_mm": [
+        15,
+        53,
+        16.6
+      ],
+      "clashes": []
+    },
+    "mcu_left": {
+      "origin_mm": [
+        -36.695,
+        32.56,
+        149.7
+      ],
+      "size_mm": [
+        5,
+        27.94,
+        8.6
+      ],
+      "clashes": []
+    },
+    "mcu_right": {
+      "origin_mm": [
+        31.695,
+        32.56,
+        149.7
+      ],
+      "size_mm": [
+        5,
+        27.94,
+        8.6
+      ],
+      "clashes": []
+    },
+    "dac_input": {
+      "origin_mm": [
+        -67,
+        31,
+        122
+      ],
+      "size_mm": [
+        8.6,
+        17,
+        5
+      ],
+      "clashes": []
+    },
+    "dac_output": {
+      "origin_mm": [
+        -67,
+        31,
+        158
+      ],
+      "size_mm": [
+        8.6,
+        17,
+        10
+      ],
+      "clashes": []
+    },
+    "volume_harness": {
+      "radius_mm": 1,
+      "origin_mm": [
+        50,
+        28,
+        136
+      ],
+      "height_mm": 12,
+      "clashes": []
+    }
+  },
+  "key_clearances_mm": {
+    "LChamber / DriveCarrier": 3.200000000000003,
+    "RChamber / DriveCarrier": 3.200000000000003,
+    "AmpShelf / Drive": 1.25,
+    "ElectronicsSled / Drive": 1.0,
+    "MCUChip / DisplayCarrier": 1.0929868354701144,
+    "MCUChip / SlotGuide": 1.0,
+    "DACChip / Keycap": 11.002899469270162,
+    "Battery / LChamber": 1.5,
+    "Battery / RChamber": 1.5
+  },
+  "minimum_design_clearance_mm": 1,
+  "limited_depth_sweep_mm": {
+    "70": {
+      "rear_stack_clearance_mm": 0.0,
+      "clashes": [
+        {
+          "object": "LChamber",
+          "volume_mm3": 30.10023056377982
+        },
+        {
+          "object": "RChamber",
+          "volume_mm3": 30.100230563779817
+        },
+        {
+          "object": "Amp",
+          "volume_mm3": 184.79999999999967
+        },
+        {
+          "object": "AmpChip",
+          "volume_mm3": 1732.5
+        },
+        {
+          "object": "AmpShelf",
+          "volume_mm3": 206.25
+        }
+      ],
+      "meets_1mm_clearance": false
+    },
+    "72": {
+      "rear_stack_clearance_mm": 0.0,
+      "clashes": [
+        {
+          "object": "AmpShelf",
+          "volume_mm3": 56.25
+        }
+      ],
+      "meets_1mm_clearance": false
+    },
+    "73": {
+      "rear_stack_clearance_mm": 0.25,
+      "clashes": [],
+      "meets_1mm_clearance": false
+    },
+    "74": {
+      "rear_stack_clearance_mm": 1.25,
+      "clashes": [],
+      "meets_1mm_clearance": true
+    },
+    "76": {
+      "rear_stack_clearance_mm": 3.25,
+      "clashes": [],
+      "meets_1mm_clearance": true
+    }
+  },
+  "limited_width_sweep_mm": {
+    "138": {
+      "carrier_to_sidewall_mm": 0.0,
+      "intersection_mm3": 1519.6000000000056,
+      "meets_1mm_clearance": false
+    },
+    "140": {
+      "carrier_to_sidewall_mm": 0.0,
+      "intersection_mm3": 0.0,
+      "meets_1mm_clearance": false
+    },
+    "142": {
+      "carrier_to_sidewall_mm": 1.0,
+      "intersection_mm3": 0.0,
+      "meets_1mm_clearance": true
+    },
+    "144": {
+      "carrier_to_sidewall_mm": 2.0,
+      "intersection_mm3": 0.0,
+      "meets_1mm_clearance": true
+    }
+  },
+  "controls_translation_xyz_mm": [
+    0,
+    0,
+    -13
+  ],
+  "original_controls_difference_mm3": {
+    "Window": 0.0,
+    "StatusArt": 0.0,
+    "Keycap": 0.0,
+    "KeyLight": 0.0,
+    "Knob": 0.0,
+    "DisplayPCB": 0.0,
+    "DisplayHeader": 0.0,
+    "DisplayCarrier": 0.0,
+    "source_model_sha256": "748a972d0c5af739f37c2d4d957d249e4f9f57197da3cf313114919f9bbcb505"
+  },
+  "handle_opening_mm": [
+    90,
+    16
+  ],
+  "handle_passage_clashes": [],
+  "physical_validation": false,
+  "acoustic_tuning_verified": false,
+  "limits": [
+    "Speaker mounting plane, holes, terminals and excursion are unmeasured.",
+    "PCB dimensions are documented; component heights, connectors, potentiometer and battery are unverified design allowances.",
+    "Geometric air continuity is not an acoustic or sealing test.",
+    "Rotated SATA-USB bridge connection and cable envelope are unverified; no bridge cable collision check.",
+    "Reduced handle opening needs ergonomic and strength testing.",
+    "The old battery placeholder does not model the selected 5600mAh pack or its power modules."
+  ]
+}
