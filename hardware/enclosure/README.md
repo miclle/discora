@@ -4,7 +4,9 @@
 
 外观参考 [CMF Speaker S 官方页面](https://sg.nothing.tech/products/cmf-speaker-s)。该产品官方说明为一个 45 mm 主动单元和两个被动辐射器；本模型采用两个前向主动喇叭与开放侧孔，不是复制其声学方案，也不把 PLA 饰片当作被动辐射器。
 
-打开 [Discora.FCStd](Discora.FCStd) 查看模型。图片均由保存后的实际 CAD 几何渲染：
+打开 [Discora.FCStd](Discora.FCStd) 查看模型。**[彩色整机尺寸与装配图册（5 页 A3 PDF）](drawings/Discora-V4-drawing-book-color.pdf)** 汇总正面、侧面、顶部、背面尺寸、操控开孔真形、两层爆炸图、侧剖和 45 个成品对象清单；基准、证据与更新方法见 [图册说明](../../docs/enclosure-drawings.md)。这是当前概念模型的名义尺寸图，不是生产加工图，仍保留尚未适配所选电池的旧占位。
+
+图片均由保存后的实际 CAD 几何渲染：
 
 - [正面外观](preview.png)
 - [正面正投影 · 对称检查](front.png)

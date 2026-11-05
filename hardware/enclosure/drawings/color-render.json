@@ -1,0 +1,333 @@
+{
+  "sha256": "150eeae75876a5ee5902df73d2a976904b093a151b048de0ccc697d6eaba24ad",
+  "build_sha256": "104a72bb2d8b58ed5d8a2b17c47c65b06a2766f52f792ec6665522d918d35aa8",
+  "geometry_sha256": "99a0470634a2fc63e322fa1695df83ebc9693c3d5d743514eb46b3f06fdb1e5d",
+  "palette": {
+    "TEAL": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "BLACK": [
+      0.145,
+      0.155,
+      0.17
+    ],
+    "RUBBER": [
+      0.07,
+      0.08,
+      0.09
+    ],
+    "GLASS": [
+      0.045,
+      0.085,
+      0.1
+    ],
+    "PIXEL": [
+      0.85,
+      0.97,
+      1.0
+    ],
+    "WHITE": [
+      0.94,
+      0.95,
+      0.94
+    ],
+    "SILVER": [
+      0.7,
+      0.73,
+      0.75
+    ],
+    "PCB": [
+      0.14,
+      0.4,
+      0.32
+    ],
+    "BLUE": [
+      0.12,
+      0.33,
+      0.62
+    ]
+  },
+  "objects": {
+    "Cowl": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "FrontGrille": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "Keycap": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "LChamber": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "RChamber": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "LDriverFrame": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "RDriverFrame": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "RearTopMount": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "DriveCarrier": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "SlotGuide": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "DisplayCarrier": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "AmpShelf": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "ElectronicsSled": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "AmpPads": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "MCUPads": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "DACPads": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "BatteryCradle": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "LPanel": [
+      0.145,
+      0.155,
+      0.17
+    ],
+    "RPanel": [
+      0.145,
+      0.155,
+      0.17
+    ],
+    "LPort": [
+      0.145,
+      0.155,
+      0.17
+    ],
+    "RPort": [
+      0.145,
+      0.155,
+      0.17
+    ],
+    "Back": [
+      0.145,
+      0.155,
+      0.17
+    ],
+    "Base": [
+      0.145,
+      0.155,
+      0.17
+    ],
+    "FrontBezel": [
+      0.07,
+      0.08,
+      0.09
+    ],
+    "Feet": [
+      0.07,
+      0.08,
+      0.09
+    ],
+    "FrontBaffle": [
+      0.07,
+      0.08,
+      0.09
+    ],
+    "LDriver": [
+      0.07,
+      0.08,
+      0.09
+    ],
+    "RDriver": [
+      0.07,
+      0.08,
+      0.09
+    ],
+    "VolumePot": [
+      0.07,
+      0.08,
+      0.09
+    ],
+    "DisplayHeader": [
+      0.07,
+      0.08,
+      0.09
+    ],
+    "AmpChip": [
+      0.07,
+      0.08,
+      0.09
+    ],
+    "DACChip": [
+      0.07,
+      0.08,
+      0.09
+    ],
+    "Window": [
+      0.045,
+      0.085,
+      0.1
+    ],
+    "StatusArt": [
+      0.85,
+      0.97,
+      1.0
+    ],
+    "KeyLight": [
+      0.94,
+      0.95,
+      0.94
+    ],
+    "Knob": [
+      0.94,
+      0.95,
+      0.94
+    ],
+    "Drive": [
+      0.7,
+      0.73,
+      0.75
+    ],
+    "Encoder": [
+      0.7,
+      0.73,
+      0.75
+    ],
+    "MCUChip": [
+      0.7,
+      0.73,
+      0.75
+    ],
+    "Bridge": [
+      0.14,
+      0.4,
+      0.32
+    ],
+    "DisplayPCB": [
+      0.14,
+      0.4,
+      0.32
+    ],
+    "Amp": [
+      0.14,
+      0.4,
+      0.32
+    ],
+    "MCU": [
+      0.14,
+      0.4,
+      0.32
+    ],
+    "DAC": [
+      0.14,
+      0.4,
+      0.32
+    ],
+    "Battery": [
+      0.12,
+      0.33,
+      0.62
+    ]
+  },
+  "tessellation_deflection_mm": 0.05,
+  "pixels_per_mm": 12,
+  "method": "Orthographic planar faces with hole masks and curved-face triangles, per-pixel depth and directional shading; exact HLR edges added in PDF",
+  "outputs": {
+    "front": {
+      "file": "front-color.png",
+      "size_px": [
+        1705,
+        2424
+      ]
+    },
+    "right": {
+      "file": "right-color.png",
+      "size_px": [
+        889,
+        2424
+      ]
+    },
+    "top": {
+      "file": "top-color.png",
+      "size_px": [
+        1705,
+        889
+      ]
+    },
+    "rear": {
+      "file": "rear-color.png",
+      "size_px": [
+        1705,
+        2424
+      ]
+    },
+    "section": {
+      "file": "section-color.png",
+      "size_px": [
+        889,
+        2424
+      ]
+    },
+    "exploded-shell": {
+      "file": "exploded-shell-color.png",
+      "size_px": [
+        4871,
+        4367
+      ]
+    },
+    "exploded-core": {
+      "file": "exploded-core-color.png",
+      "size_px": [
+        3950,
+        4947
+      ]
+    }
+  }
+}
