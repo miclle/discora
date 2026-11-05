@@ -1,0 +1,71 @@
+"""Render review images from the saved FreeCAD model; do not save visibility changes."""
+import os
+from pathlib import Path
+import FreeCAD as A
+import FreeCADGui as G
+import Part
+from PySide import QtWidgets, QtCore
+
+
+def render(folder):
+    doc=A.openDocument(str(folder/'Discora.FCStd'))
+    visibility = {o.Name:o.Visibility for o in doc.Objects}
+    G.updateGui()
+    loop=QtCore.QEventLoop(); QtCore.QTimer.singleShot(1200,loop.quit); loop.exec_()
+    view=G.activeDocument().activeView()
+    camera = view.getCameraOrientation().Q
+    view.setCameraType('Orthographic')
+    def save(name,rotation):
+        view.setCameraOrientation(rotation.Q)
+        G.updateGui(); QtWidgets.QApplication.processEvents()
+        loop=QtCore.QEventLoop(); QtCore.QTimer.singleShot(1200,loop.quit); loop.exec_()
+        view.fitAll()
+        G.updateGui(); QtWidgets.QApplication.processEvents()
+        view.saveImage(str(folder/name),1000,1100,'White')
+    front=A.Rotation(A.Vector(1,0,0),90)
+    angle=A.Rotation(A.Vector(0,0,1),21).multiply(A.Rotation(A.Vector(1,0,0),76))
+    save('preview.png',angle)
+    save('front.png',front)
+    save('controls.png',A.Rotation(A.Vector(1,0,0),48))
+    save('side.png',A.Rotation(A.Vector(0,0,1),90).multiply(front))
+    save('topload.png',A.Rotation(A.Vector(0,0,1),155).multiply(A.Rotation(A.Vector(1,0,0),55)))
+    doc.DiscReference.Visibility=True
+    save('disc-path.png',angle)
+    doc.DiscReference.Visibility=False
+    for name in ['Cowl','Window','StatusArt','FrontGrille','FrontBezel','FrontBaffle']:
+        doc.getObject(name).Visibility=False
+    save('layout.png',angle)
+    # Section through the left driver center, viewed from +X, reveals the depth stack.
+    section=A.newDocument("DiscoraDepthSection")
+    clip=Part.makeBox(74,200,300,A.Vector(-100,-20,-10))
+    for group in ('Shell','Controls','Carrier','Hardware'):
+        for source in doc.getObject(group).Group:
+            if not hasattr(source,'Shape'): continue
+            shape=source.Shape.common(clip)
+            if shape.isNull() or not shape.Solids: continue
+            obj=section.addObject('Part::Feature',source.Name)
+            obj.Shape=shape
+            obj.Label=source.Label
+            obj.ViewObject.ShapeColor=source.ViewObject.ShapeColor
+            obj.ViewObject.DisplayMode='Flat Lines'
+            obj.ViewObject.LineColor=(.12,.15,.17)
+    section.recompute()
+    section_view=G.activeDocument().activeView()
+    section_view.viewRight()
+    G.updateGui()
+    loop=QtCore.QEventLoop(); QtCore.QTimer.singleShot(1200,loop.quit); loop.exec_()
+    section_view.fitAll()
+    G.updateGui()
+    section_view.saveImage(str(folder/'section.png'),1000,1100,'White')
+    A.closeDocument(section.Name)
+    A.setActiveDocument(doc.Name)
+    for name, state in visibility.items():
+        doc.getObject(name).Visibility = state
+    view.setCameraOrientation(camera)
+    print('RENDER_OK')
+
+
+target = os.environ.get('DISCORA_CAD_OUTPUT') or QtWidgets.QFileDialog.getExistingDirectory(
+    None, '选择 Discora 模型目录生成预览')
+if target:
+    render(Path(target))
