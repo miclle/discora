@@ -4,6 +4,8 @@
 
 打开 [Discora.FCStd](Discora.FCStd) 查看模型；唯一的[彩色尺寸与装配图册（5 页 A3）](drawings/Discora-V4-drawing-book-color.pdf)包含双基准高度、侧面斜肩尺寸、彩色爆炸图、侧剖和对象清单。分件取舍见 [ADR-0016](../../docs/decisions/0016-three-part-pla-enclosure.md)，打印姿态、切片与拆装检查见[打印与装配说明](../../docs/enclosure-printing.md)。这是已完成 CAD 和切片检查的原型设计，尚未做实物打印、装配或声学验收。
 
+**2026-11-07 载板布局补充：**[100 × 55 mm 裁剪洞洞板候选](../../docs/perfboard-layout.md)已加入主控、DAC 和两块 DCE001 的包络试算，但尚未写入本模型。当前前壳／屏幕／操控区及上层电子托架仍有碰撞；上移上部组件的试算不是已闭合的新机箱，也不能继承下面的整机、对称或拆装验证。最终载板安装需另行重做上层支架和相应外壳。
+
 ## 分件
 
 | 成品 ID | 合并的功能 | 数量 |

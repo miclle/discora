@@ -1,0 +1,300 @@
+{
+  "revision": "dual-buck-candidate-3",
+  "status": "planned_not_a_cutting_or_drilling_template",
+  "board_size_mm": [
+    100,
+    55,
+    1.6
+  ],
+  "coordinates": "Component side: u right, v toward case front; origin is rear-left board corner. Case X=u-50, Y=59-v, Z=143.6 at board underside.",
+  "case_board_origin_xyz_mm": [
+    -50,
+    59,
+    143.6
+  ],
+  "parts": [
+    {
+      "id": "MCU",
+      "uv_mm": [
+        17.71,
+        1.73
+      ],
+      "size_uv_mm": [
+        63.39,
+        27.94
+      ],
+      "above_board_mm": 17.1,
+      "evidence": "supplier plan dimensions; height allowance = 8.5 socket + 1.6 module PCB + 7 components, unmeasured"
+    },
+    {
+      "id": "DAC",
+      "uv_mm": [
+        6.29,
+        33.87
+      ],
+      "size_uv_mm": [
+        31,
+        17
+      ],
+      "above_board_mm": 17.1,
+      "evidence": "supplier PCB dimensions excluding protruding audio jack; same unmeasured height allowance as MCU"
+    },
+    {
+      "id": "BuckA",
+      "uv_mm": [
+        53,
+        35
+      ],
+      "size_uv_mm": [
+        17.5,
+        12
+      ],
+      "above_board_mm": 7.5,
+      "evidence": "supplier 4.5 module height + 3 insulation/support allowance; pad pitch and wiring unmeasured"
+    },
+    {
+      "id": "BuckB",
+      "uv_mm": [
+        77.5,
+        35
+      ],
+      "size_uv_mm": [
+        17.5,
+        12
+      ],
+      "above_board_mm": 7.5,
+      "evidence": "supplier 4.5 module height + 3 insulation/support allowance; pad pitch and wiring unmeasured"
+    }
+  ],
+  "service_zones": [
+    {
+      "id": "BuckAService",
+      "uv_mm": [
+        49,
+        32
+      ],
+      "size_uv_mm": [
+        25,
+        22
+      ],
+      "above_board_mm": 12,
+      "evidence": "design allowance including BuckA, short leads and support; not a measured connector envelope"
+    },
+    {
+      "id": "BuckBService",
+      "uv_mm": [
+        74.5,
+        32
+      ],
+      "size_uv_mm": [
+        25,
+        22
+      ],
+      "above_board_mm": 12,
+      "evidence": "design allowance including BuckB, short leads and support; not a measured connector envelope"
+    },
+    {
+      "id": "USBService",
+      "uv_mm": [
+        81.1,
+        1.73
+      ],
+      "size_uv_mm": [
+        20,
+        27.94
+      ],
+      "bottom_above_board_mm": 8.5,
+      "above_board_mm": 9,
+      "evidence": "side-entry plug allowance, not the measured existing USB/OTG assembly or bend radius"
+    },
+    {
+      "id": "DACPowerConnector",
+      "uv_mm": [
+        40,
+        40
+      ],
+      "size_uv_mm": [
+        8,
+        12
+      ],
+      "above_board_mm": 12,
+      "evidence": "P1 housing and short lead allowance only; actual connector unmeasured"
+    }
+  ],
+  "underside_wiring_allowance_mm": 2,
+  "clearance_screen_mm": 1,
+  "shell_translation_trials_mm": [
+    0,
+    20,
+    22
+  ],
+  "translated_objects": [
+    "FrontShell",
+    "DisplayPCB",
+    "DisplayHeader",
+    "VolumePot",
+    "Encoder"
+  ],
+  "obstacles": [
+    "FrontShell",
+    "RearShell",
+    "Drive",
+    "Amp",
+    "AmpChip",
+    "Bridge",
+    "DisplayPCB",
+    "DisplayHeader",
+    "VolumePot",
+    "Encoder",
+    "LDriver",
+    "RDriver",
+    "Battery"
+  ],
+  "replaced_objects": [
+    "MCU",
+    "MCUChip",
+    "DAC",
+    "DACChip"
+  ],
+  "support_to_redesign": "SpeakerCarrier upper ElectronicsSled/MCUPads and associated columns; rear-shell DAC pads; verify lower carrier and amplifier supports after rebuild",
+  "limits": [
+    "A translated front shell is only a packaging experiment, not a closed enclosure design or a minimum-height proof.",
+    "Current SpeakerCarrier is reported separately, not accepted as a compatible final support.",
+    "Socket/pad placement, cuts, mounting holes, antenna clearance, DAC jack, connectors, cables, cooling and assembly paths remain unverified.",
+    "Two buck outputs must remain separate; USB VBUS isolation and final DAC power source remain undecided."
+  ],
+  "header_grid": {
+    "origin_uv_mm": [
+      3,
+      3
+    ],
+    "pitch_mm": 2.54,
+    "columns": 38,
+    "rows": 20,
+    "coordinate_status": "User-confirmed silkscreen orientation: component view, top-left origin, X increases right A-Z then A-P; Y increases down A-Z then 1-4. Second X cycle uses subscript 2 in drawings only. Socket positions remain proposed.",
+    "sockets": [
+      {
+        "id": "J1",
+        "start_cr": [
+          10,
+          11
+        ],
+        "count": 22,
+        "direction": "column",
+        "pitch_mm": 2.54
+      },
+      {
+        "id": "J2",
+        "start_cr": [
+          10,
+          1
+        ],
+        "count": 22,
+        "direction": "column",
+        "pitch_mm": 2.54
+      },
+      {
+        "id": "DACInput",
+        "start_cr": [
+          14,
+          14
+        ],
+        "count": 6,
+        "direction": "row",
+        "pitch_mm": 2.54
+      },
+      {
+        "id": "P1",
+        "start_cr": [
+          17,
+          17
+        ],
+        "count": 2,
+        "direction": "row",
+        "pitch_mm": 2.54
+      }
+    ],
+    "placement_basis": [
+      "MCU first-pin offset from antenna end 8.15 mm and side offset 1.27 mm derived from supplier drawing.",
+      "DAC input row assumed 1.27 mm from right edge and centered along 17 mm edge (2.15 mm end margins); actual edge offset unmeasured.",
+      "P1 is a proposed 1x2 connector; housing is only an allowance. DCE001 pads and final mounting holes are not assigned."
+    ],
+    "full_board_x_labels": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+      "Y",
+      "Z",
+      "A₂",
+      "B₂",
+      "C₂",
+      "D₂",
+      "E₂",
+      "F₂",
+      "G₂",
+      "H₂",
+      "I₂",
+      "J₂",
+      "K₂",
+      "L₂",
+      "M₂",
+      "N₂",
+      "O₂",
+      "P₂"
+    ],
+    "full_board_y_labels": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+      "Y",
+      "Z",
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "working_grid_note": "38 by 20 denotes the currently assigned working grid (X=A through L₂, Y=A through T), not the complete 42 by 30 board or a verified cut line."
+  }
+}

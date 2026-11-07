@@ -2,11 +2,13 @@
 
 更新：2026-11-07。整机图采用当前 GPIO15/16/7 音频接法，并附 120 × 80 mm 可拔插洞洞板布局与逐孔接线；不是 PCB 原理图或整机装配验收报告。实线表示接口已有定义，不代表已经接线或实测通过；虚线表示规格、接法或固件尚待确认，不能直接按虚线接电。
 
+**新增机内载板候选：**将 ESP32、DAC 与两块 DCE001 安排在约 **100 × 55 mm** 的可裁剪载板上，USB 朝右、DAC 左前、两路降压右前。见[新版布局图](diagrams/discora-wiring.html#enclosure-layout)和[尺寸／CAD 复核](perfboard-layout.md)。当前机壳与托架仍有碰撞，尚不能裁板定孔；下文原 120 × 80 mm 台架孔位不适用于新候选。
+
 当前台架音频接法为 **GPIO15→BCK、GPIO16→LCK、GPIO7→DIN**，本页总览、洞洞板图和导线表已统一；仓库无叠加配置时仍默认 GPIO4/5/6，不能混用。GPIO7 作 DIN，退盘键必须关闭并断开，当前有声配置也关闭换轨键和 OLED。实测接法见[音频说明](audio-output.md#已通过的接法与默认配置差异)。第 6 轨 USB 失联仍未解决，见[最新记录](records/2026-11-07-full-disc-usb-disconnect.md)；本次载板方案不改变 USB／供电拓扑，也不表示整板已装入机壳。
 
 ![Discora 整机连接、供电支路、PCM5102 焊桥及 OLED 四线接线示意](diagrams/discora-wiring.svg)
 
-[打开可缩放 SVG](diagrams/discora-wiring.svg) · [打开完整 HTML 图稿](diagrams/discora-wiring.html) · [洞洞板逐孔接线](diagrams/discora-wiring.html#perfboard) · [排母孔位图](diagrams/discora-wiring.html#perfboard-layout)
+[打开可缩放 SVG](diagrams/discora-wiring.svg) · [打开完整 HTML 图稿](diagrams/discora-wiring.html) · [洞洞板逐孔接线](diagrams/discora-wiring.html#perfboard) · [新版孔位总图](diagrams/discora-wiring.html#perfboard-layout)
 
 ## 图中范围与状态
 
@@ -41,7 +43,9 @@ DAC 背面保持已验证的 **H1→L、H2→L、H3→H、H4→L**。说明见 [
 
 ## 120 × 80 mm 可拔插洞洞板布局与逐孔接线
 
-[逐孔接线图](diagrams/discora-wiring.html#perfboard) · [排母与接口布局](diagrams/discora-wiring.html#perfboard-layout) · [导线端点表](diagrams/discora-wiring.html#perfboard-wire-list)。观察方向为元件面、ESP32 天线朝上、USB 朝下；DAC 输入排针朝右、音频口朝左。
+本节保留原台架方案；新增双路降压的机内候选另见[布局说明](perfboard-layout.md)，新旧孔位不能混用。新版按左上原点、X 向右／Y 向下的丝印孔号见[孔位总图](diagrams/discora-wiring.html#perfboard-layout)。
+
+[逐孔接线图](diagrams/discora-wiring.html#perfboard) · [历史台架排母与接口布局](diagrams/discora-wiring.html#bench-perfboard-layout) · [导线端点表](diagrams/discora-wiring.html#perfboard-wire-list)。观察方向为元件面、ESP32 天线朝上、USB 朝下；DAC 输入排针朝右、音频口朝左。
 
 - X 从右向左：`4、3、2、1、Z、Y……A`，30 列。
 - Y 从上向下：`A……Z`，再 `A……P`，42 行；图中第二段用 `A₂……P₂` 区分。
@@ -92,7 +96,7 @@ P2 两半按 `1=L、2=AGND、3=R` 配对标记，这是新线束定义，不能�
 
 背面焊接时左右翻板、顶部仍朝上，原 X=4 列在左侧。保留元件面孔身份，不按背面印字重新编号；两面先标记同一个 X=4 / Y=A 孔。
 
-**本布局用于台架载板，不表示能直接装入当前机壳。** 本次未重新运行 CAD 检查；整板、排母高度、P1 外壳、支撑、焊点与线缆包络未纳入完整装配验收。顶部三行空孔也不代表天线射频净空。入壳及最终安装孔须另核对，见[机壳说明](../hardware/enclosure/README.md)。
+**本布局用于原台架载板，不表示能直接装入当前机壳。** 本节 120 × 80 mm 整板未纳入新版 100 × 55 mm 候选的 CAD 包络试算；排母高度、P1 外壳、支撑、焊点与实际线缆仍未完成整机装配验收。顶部三行空孔也不代表天线射频净空。入壳及最终安装孔须另核对，见[机壳说明](../hardware/enclosure/README.md)。
 
 ## DAC、功放与喇叭
 
@@ -133,7 +137,7 @@ DAC 的 A3V3 留空，仅作电压核对点，不接外部 5V，也不并联 ESP
 
 ### 电池双路 5V 降压规划（planned）
 
-2026-11-07 用户选定 **2 块 DCE001 固定 5V 模块**：同一电池保护输出经总开关分至两块输入，A 输出供主控 5Vin／GND，B 输出经独立线束供光驱／桥接器辅助 5V／GND。数量已确认，采购、安装及带载验收未确认；供应商参数与检查步骤见[模块资料](../hardware/DCE001-5V/README.md)，决策见 [ADR-0018](decisions/0018-dual-5v-buck.md)。本节为后续电池接入规划，不改变本文当前台架接线和配图。
+2026-11-07 用户选定 **2 块 DCE001 固定 5V 模块**：同一电池保护输出经总开关分至两块输入，A 输出供主控 5Vin／GND，B 输出经独立线束供光驱／桥接器辅助 5V／GND。数量已确认，采购、安装及带载验收未确认；供应商参数与检查步骤见[模块资料](../hardware/DCE001-5V/README.md)，决策见 [ADR-0018](decisions/0018-dual-5v-buck.md)。本节为后续电池接入规划，不改变当前台架接线；两块模块的机内位置已纳入[新增布局图](diagrams/discora-wiring.html#enclosure-layout)。
 
 模块标称 3A，但不加散热要求在 2A 内，光驱启动／进退碟及长期读盘能力尚未验证。两路共地、正极不并联；接入前须断电核对光驱辅助 5V 与 USB VBUS 的连通性，以及主控 USB-OTG、IN-OUT 和 COM 电源路径，避免经 USB 将两路输出并联。若互通，先确定防回灌／隔离接法并保留有效 VBUS，不能直接沿用现有双头线接入。光驱电流不经主控板，DAC 最终电池支路仍待确认。
 
@@ -185,4 +189,4 @@ SDA、SCL 需要上拉到 3.3V；先确认模块是否已有板载上拉及其�
 
 ## 图稿维护
 
-`diagrams/discora-wiring.html` 为自包含图稿（内联 SVG、无外部图片或脚本），`discora-wiring.svg` 仅保留供 Markdown 展示的整机总览，与 HTML 的第一个 SVG 保持一致。HTML 另含洞洞板逐孔接线与排母孔位两个 SVG，以及导线表和装配说明；维护时同步核对本页的孔位与 W1～W10 端点及 P1／P2 定义。图中焊桥按背面参考图定位，方框不按物理尺寸绘制。待定电源、OLED 实物规格和当前验收状态有新证据后再更新，不用样例值填补实物未知参数。
+`diagrams/discora-wiring.html` 为自包含图稿（内联 SVG、无外部图片或脚本），`discora-wiring.svg` 仅保留供 Markdown 展示的整机总览，与 HTML 的第一个 SVG 保持一致。HTML 另含双路降压机内总览、新版候选孔位总图、原台架逐孔接线与历史排母孔位四个 SVG。默认“孔位总图”指向新版 X/Y 丝印坐标候选，旧图默认折叠。机内候选尺寸与 `hardware/perfboard/layout.json`、[布局说明](perfboard-layout.md)同步；原台架图与本页 W1～W10 及 P1／P2 定义同步，不能跨方案套用孔号。焊桥方框不按物理尺寸，机内候选的模块本体按标称比例画；两者都不替代实测。不用样例值填补实物未知参数。
