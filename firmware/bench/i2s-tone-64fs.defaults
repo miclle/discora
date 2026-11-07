@@ -1,0 +1,3 @@
+# Append after sdkconfig.defaults and bench/i2s-tone.defaults in a fresh config.
+# Diagnostic comparison only; PCM content and amplitude remain unchanged.
+CONFIG_DISCORA_DIAG_I2S_64FS=y

@@ -37,12 +37,14 @@ esp_err_t audio_i2s_open(audio_i2s_t *out, int bclk, int lrck, int data)
     channel.auto_clear = true;
     esp_err_t err = i2s_new_channel(&channel, &out->channel, NULL);
     if (err != ESP_OK) return err;
-    const i2s_std_config_t std = {
+    i2s_std_config_t std = {
         .clk_cfg = I2S_STD_CLK_DEFAULT_CONFIG(44100),
         .slot_cfg = I2S_STD_PHILIPS_SLOT_DEFAULT_CONFIG(I2S_DATA_BIT_WIDTH_16BIT, I2S_SLOT_MODE_STEREO),
         .gpio_cfg = {.mclk = I2S_GPIO_UNUSED, .bclk = bclk, .ws = lrck,
                      .dout = data, .din = I2S_GPIO_UNUSED},
     };
+    std.slot_cfg.slot_bit_width = AUDIO_I2S_SLOT_BITS;
+    std.slot_cfg.ws_width = AUDIO_I2S_SLOT_BITS;
     err = i2s_channel_init_std_mode(out->channel, &std);
     if (err != ESP_OK) {
         if (i2s_del_channel(out->channel) == ESP_OK) out->channel = NULL;

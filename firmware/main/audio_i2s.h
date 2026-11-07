@@ -4,6 +4,15 @@
 #include <stdint.h>
 #include <stdatomic.h>
 #include "driver/i2s_std.h"
+#include "sdkconfig.h"
+
+// PCM in memory stays 16-bit stereo; only the on-wire slot length changes.
+#if defined(CONFIG_DISCORA_AUDIO_DIAGNOSTIC) && defined(CONFIG_DISCORA_DIAG_I2S_64FS)
+#define AUDIO_I2S_SLOT_BITS 32
+#else
+#define AUDIO_I2S_SLOT_BITS 16
+#endif
+#define AUDIO_I2S_NOMINAL_BCLK (44100 * 2 * AUDIO_I2S_SLOT_BITS)
 
 enum { AUDIO_BLOCK_FRAMES = 441, AUDIO_BLOCK_BYTES = 441 * 4,
        AUDIO_DMA_BLOCKS = 4, AUDIO_PRELOAD_BYTES = AUDIO_BLOCK_BYTES * AUDIO_DMA_BLOCKS };
