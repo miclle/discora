@@ -1,6 +1,9 @@
 #include "sdkconfig.h"
 #if defined(CONFIG_DISCORA_CD_PLAYER)
 #include "cd_player.h"
+#include "cd_read_stats.h"
+#include "pcm_gain.h"
+#include "esp_heap_caps.h"
 #include "track_buttons.h"
 #include "oled_display.h"
 #include "audio_i2s.h"
@@ -23,7 +26,15 @@
 
 static const char *TAG = "cd_player";
 static cd_player_core_t player;
+#if defined(CONFIG_DISCORA_CD_PLAYER_PSRAM_BUFFER)
+static uint8_t *storage;
+enum { BUFFER_BYTES = 2 * 1024 * 1024, PREFILL_BYTES = 225 * PROBE_CD_SECTOR_SIZE };
+#else
 static uint8_t storage[64 * PROBE_CD_SECTOR_SIZE];
+enum { BUFFER_BYTES = sizeof(storage), PREFILL_BYTES = 48 * PROBE_CD_SECTOR_SIZE };
+#endif
+static cd_read_stats_t read_stats; // Protected by the player mutex; cumulative since boot.
+static size_t queue_low = BUFFER_BYTES; // Sampled after non-EOF consumption only.
 static uint8_t block[AUDIO_PRELOAD_BYTES]; // Output task only; USB never touches this copy.
 static SemaphoreHandle_t lock;
 #if defined(CONFIG_DISCORA_CD_PLAYER_I2S)
@@ -117,10 +128,12 @@ static bool inject_command(const char *line)
     if (!delay && !fail) return false;
     xSemaphoreTake(lock, portMAX_DELAY);
     bool accepted = player.audio.state == AUDIO_PLAYING && (delay ? !delay_used : !failure_used);
-    if (accepted && delay) { delay_used = true; delay_until = esp_timer_get_time() + 1200000; }
+    if (accepted && delay) { delay_used = true; delay_until = esp_timer_get_time() + (int64_t)CONFIG_DISCORA_CD_PLAYER_TEST_DELAY_MS * 1000; }
     if (accepted && fail) { failure_used = failure_armed = true; failure_generation = player.audio.generation; }
     xSemaphoreGive(lock);
-    ESP_LOGW(TAG,"TEST injection=%s accepted=%u; software-only, once per boot",delay ? "producer-pause-1200ms" : "source-failure-armed",accepted);
+    ESP_LOGW(TAG,"TEST injection=%s accepted=%u delay_ms=%d; software-only, once per boot",
+             delay ? "producer-pause" : "source-failure-armed",accepted,
+             delay ? CONFIG_DISCORA_CD_PLAYER_TEST_DELAY_MS : 0);
     ESP_LOGI(TAG,"command=%s accepted=%u",line,accepted);
     return true;
 }
@@ -158,6 +171,10 @@ static void status(void)
     uint64_t bytes = player.audio.dequeued_bytes;
     bool media = player.media, eof = player.eof, pending = player.pending, continuous = player.continuous;
     unsigned track = media ? player.toc.tracks[player.index].number : 0;
+    cd_read_stats_t timing = read_stats;
+    size_t low = queue_low;
+    uint32_t recoveries = player.auto_recoveries;
+    bool rebuffering = player.rebuffering;
     xSemaphoreGive(lock);
     audio_report(TAG,"resources heap_free=%lu heap_min=%lu output_stack_min=%u report_dropped=%" PRIu32,
              (unsigned long)esp_get_free_heap_size(), (unsigned long)esp_get_minimum_free_heap_size(),
@@ -165,6 +182,15 @@ static void status(void)
     audio_report(TAG, "state=%s sink=%s media=%u track=%u generation=%" PRIu32 " queued=%u delivered=%" PRIu64
              " next_lba=%" PRIu32 " eof=%u pending=%u reads=%" PRIu32 " stale=%" PRIu32 " underruns=%" PRIu32 " continuous=%u",
              audio_state_name(state), sink, media, track, gen, (unsigned)queued, bytes, lba, eof, pending, reads, stale, underruns, continuous);
+    audio_report(TAG, "buffer capacity=%u prefill=%u low=%u rebuffering=%u auto_recoveries=%" PRIu32,
+                 BUFFER_BYTES, PREFILL_BYTES, (unsigned)low, rebuffering, recoveries);
+    audio_report(TAG, "read_timing count=%" PRIu64 " last_us=%" PRIu64 " max_us=%" PRIu64
+                 " avg_us=%" PRIu64 " last_lba=%" PRIu32 " max_lba=%" PRIu32,
+                 timing.count, timing.last_us, timing.max_us,
+                 timing.count ? timing.total_us / timing.count : 0, timing.last_lba, timing.max_lba);
+    audio_report(TAG, "read_timing ge100ms=%" PRIu64 " ge500ms=%" PRIu64 " ge1s=%" PRIu64
+                 " failed=%" PRIu64 " rejected=%" PRIu64,
+                 timing.over_100ms, timing.over_500ms, timing.over_1s, timing.failed, timing.rejected);
 }
 static void command(const char *line)
 {
@@ -276,6 +302,17 @@ static void output_task(void *arg)
                 if (!close_output()) { status(); vTaskDelay(1); continue; }
                 status();
             }
+            if (state == AUDIO_UNDERRUN && !running) {
+                xSemaphoreTake(lock, portMAX_DELAY);
+                bool resumed = cd_player_rebuffer(&player);
+                uint32_t generation = player.audio.generation;
+                xSemaphoreGive(lock);
+                if (resumed) {
+                    audio_report(TAG, "auto rebuffer generation=%" PRIu32 "; cursor and pending read retained", generation);
+                    // The preceding underrun snapshot already reports the counters.
+                    // Do not flood the bounded reporter with a second full snapshot.
+                }
+            }
             advance_sequence();
             vTaskDelay(1); continue;
         }
@@ -290,6 +327,7 @@ static void output_task(void *arg)
 #endif
         xSemaphoreTake(lock, portMAX_DELAY);
         size_t n = cd_player_take(&player, block, wanted);
+        if (!player.eof && player.audio.pcm.used < queue_low) queue_low = player.audio.pcm.used;
 #if defined(CONFIG_DISCORA_CD_PLAYER_I2S)
         if (!n && eof_trace.active) eof_mark(1);
 #endif
@@ -312,6 +350,7 @@ static void output_task(void *arg)
             close_output(); status(); continue;
         }
 #if defined(CONFIG_DISCORA_CD_PLAYER_I2S)
+        pcm_gain(block, n, CONFIG_DISCORA_CD_PLAYER_GAIN_PERCENT);
         esp_err_t err;
         if (!running) {
             err = audio_i2s_open(&output, CONFIG_DISCORA_I2S_BCLK, CONFIG_DISCORA_I2S_LRCK, CONFIG_DISCORA_I2S_DATA);
@@ -335,18 +374,37 @@ static void output_task(void *arg)
 }
 bool discora_cd_player_start(void)
 {
-    if (!cd_player_init(&player, storage, sizeof(storage), 48 * PROBE_CD_SECTOR_SIZE)) return false;
+#if defined(CONFIG_DISCORA_CD_PLAYER_PSRAM_BUFFER)
+    storage = heap_caps_malloc(BUFFER_BYTES, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT);
+    if (!storage) { ESP_LOGE(TAG, "2 MiB PSRAM PCM allocation failed; player not started"); return false; }
+#endif
+    if (!cd_player_init(&player, storage, BUFFER_BYTES, PREFILL_BYTES)) goto fail;
+#if defined(CONFIG_DISCORA_CD_PLAYER_AUTO_RECOVER)
+    player.auto_recover = true;
+#endif
     lock = xSemaphoreCreateMutex();
-    if (!lock) return false;
-    if (!discora_track_buttons_start()) { vSemaphoreDelete(lock); lock = NULL; return false; }
+    if (!lock || !discora_track_buttons_start()) goto fail;
     int flags = fcntl(STDIN_FILENO, F_GETFL);
     if (flags < 0 || fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK) < 0 ||
         xTaskCreate(output_task,"cd_output",6144,NULL,3,NULL) != pdPASS) {
-        vSemaphoreDelete(lock); lock = NULL; return false;
+        goto fail;
     }
+    ESP_LOGI(TAG, "PCM buffer bytes=%u prefill=%u memory=%s auto_recover=%u", BUFFER_BYTES, PREFILL_BYTES,
+#if defined(CONFIG_DISCORA_CD_PLAYER_PSRAM_BUFFER)
+             "PSRAM",
+#else
+             "internal",
+#endif
+             player.auto_recover);
     discora_oled_start(); // Optional UI failure must not prevent playback or USB startup.
     ESP_LOGI(TAG,"CD player boot=stopped sink=%s; UART0 controls; no automatic READ CD; play is single-track, play-disc is explicit",sink);
     return true;
+fail:
+    if (lock) { vSemaphoreDelete(lock); lock = NULL; }
+#if defined(CONFIG_DISCORA_CD_PLAYER_PSRAM_BUFFER)
+    heap_caps_free(storage); storage = NULL;
+#endif
+    return false;
 }
 bool discora_cd_player_snapshot(cd_player_status_t *status)
 {
@@ -396,10 +454,11 @@ bool discora_cd_player_request(cd_player_read_t *request)
 #endif
     xSemaphoreGive(lock); return ok;
 }
-void discora_cd_player_complete(const cd_player_read_t *request, bool ok, const uint8_t *data, size_t size)
+void discora_cd_player_complete(const cd_player_read_t *request, bool ok, const uint8_t *data, size_t size, uint64_t elapsed_us)
 {
     xSemaphoreTake(lock, portMAX_DELAY);
     bool accepted = cd_player_complete(&player,request,ok,data,size);
+    cd_read_stats_record(&read_stats, request->lba, elapsed_us, ok, accepted);
 #if defined(CONFIG_DISCORA_CD_PLAYER_VERIFY)
     if (accepted) {
         verify_generation();

@@ -30,7 +30,9 @@
 
 **2026-11-07：CD → ESP32-S3 → PCM5102A → TPA3118D2 → 双喇叭的基础立体声链路已调通（bench-tested）。** 当前主控 COM 尾号 8636，更换 GPIO7→DAC DIN 的连接后，右声道及双声道低音测试出声；随后第 1 轨原始立体声连续播放约 60 秒，用户确认左右都有清晰音乐、无明显杂音，日志写入错误与软件欠载均为 0。此前 USB 掉线的根因、整轨／整盘及冷启动、重复启停稳定性仍未验收。详见[对照与定位记录](docs/records/2026-11-07-cybertrack-audio-crosscheck.md)，早期失败保留在[无声排查记录](docs/records/2026-11-05-dac-no-sound.md)。
 
-成功实验使用 GPIO15→BCK、GPIO16→LCK、GPIO7→DIN、DAC 模拟输出三线直连功放；仓库默认接线仍是 GPIO4/5/6。板上保留的是临时 CD 诊断候选（25% 数字幅度、60 秒自动停止、按键及 OLED 关闭），这些实验控制尚未合入主固件；不能将默认构建视为该候选。配置差异见[音频输出说明](docs/audio-output.md#已通过的接法与默认配置差异)。借用的 CyberTrack 板原固件及配置已恢复并校验。
+随后旧候选长时播放暴露软件欠载停播。`0.11.0-buffered` 新增可选 **2 MiB PSRAM 队列、3 秒预填、欠载自动恢复和读取耗时统计**，当前 GPIO15/16/7 与 25% 数字幅度已纳入可复现 profile；正常配置不包含故障注入。构建与命令见 [CD 播放说明](docs/cd-player.md)，失败窗口、受控恢复与持续播放证据见[缓冲记录](docs/records/2026-11-07-buffered-playback.md)。
+
+成功实验使用 GPIO15→BCK、GPIO16→LCK、GPIO7→DIN、DAC 模拟输出三线直连功放；仓库默认接线仍是 GPIO4/5/6。PSRAM profile 已包含 25% 数字幅度和关闭按键／OLED 的配置，但不包含早期候选的 60 秒自动停止或 bench 命令。当前部署与运行状态见[状态记录](docs/status.md)，不能将无叠加配置的默认构建视为同一固件。配置差异见[音频输出说明](docs/audio-output.md#已通过的接法与默认配置差异)。借用的 CyberTrack 板原固件及配置已恢复并校验。
 
 ## 初始实验硬件
 
@@ -52,7 +54,7 @@
    idf.py set-target esp32s3
    idf.py build
    ```
-   默认查询配置自动执行四种只读查询命令，并默认支持 [GPIO7 轻触按键退盘](docs/eject-button.md)（仅按下触发，默认查询配置已获用户实测成功反馈）；受限 READ CD 实验须手动启用，每次主控启动最多执行一次。可另选独立 [I²S 测试音诊断](docs/audio-output.md) 或默认 stopped 的 [CD 播放控制模式](docs/cd-player.md)；真实 CD 软件消费已实测，DAC 输出尚未验证，刻录未实现。详见 [读取实测](docs/records/2026-10-31-m2-cdda.md)。
+   默认查询配置自动执行四种只读查询命令，并默认支持 [GPIO7 轻触按键退盘](docs/eject-button.md)（仅按下触发，默认查询配置已获用户实测成功反馈）；受限 READ CD 实验须手动启用，每次主控启动最多执行一次。可另选独立 [I²S 测试音诊断](docs/audio-output.md) 或默认 stopped 的 [CD 播放控制模式](docs/cd-player.md)；真实 CD 软件消费和接 DAC 的短时立体声播放已实测，完整稳定性仍未验收，刻录未实现。详见 [读取实测](docs/records/2026-10-31-m2-cdda.md)。
 4. 按 [组装说明](docs/assembly.md) 核对 OTG、独立 UART0 和 VBUS 电源；准备好后再选择本项目串口执行 `idf.py -p <DISCORA_UART_PORT> flash monitor`。原生 USB 用于 Host 时不能同时当电脑日志口。
 5. 完成 M0/M1 实测后再进入 CD-DA 和 I²S；详见 [路线图](docs/roadmap.md)。离线协议检查：`python3 firmware/tests/run_host_tests.py`。
 

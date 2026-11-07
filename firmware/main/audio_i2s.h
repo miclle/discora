@@ -24,7 +24,7 @@ typedef struct {
     uint32_t opens, closes, write_errors;
     atomic_uint dma_blocks, event_overflows, unexpected_dma_sizes;
 } audio_i2s_t;
-// Zero-initialize the adapter; one task owns it. Pause/stop close and recreate it to discard stale DMA.
+// Zero-initialize the adapter in internal RAM; one task owns it. Pause/stop close and recreate it to discard stale DMA.
 esp_err_t audio_i2s_open(audio_i2s_t *out, int bclk, int lrck, int data);
 esp_err_t audio_i2s_start(audio_i2s_t *out, const uint8_t *pcm, size_t size);
 esp_err_t audio_i2s_write(audio_i2s_t *out, const uint8_t *pcm, size_t size);

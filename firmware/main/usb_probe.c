@@ -911,9 +911,11 @@ void discora_usb_probe_run(void)
                 cd_player_read_t request;
                 if (discora_cd_player_request(&request)) {
                     ctx.quiet_audio = true;
+                    int64_t read_started = esp_timer_get_time();
                     bool ok = read_audio(&ctx, &request.track, request.lba, request.sectors);
+                    uint64_t elapsed_us = (uint64_t)(esp_timer_get_time() - read_started);
                     ctx.quiet_audio = false;
-                    discora_cd_player_complete(&request, ok, ok ? ctx.result.data : NULL, ok ? ctx.result.size : 0);
+                    discora_cd_player_complete(&request, ok, ok ? ctx.result.data : NULL, ok ? ctx.result.size : 0, elapsed_us);
                     if (ctx.gone || ctx.faulted || !ctx.toc_valid) discora_cd_player_unavailable();
                 }
             }

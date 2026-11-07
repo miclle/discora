@@ -1,6 +1,11 @@
 #include "audio_i2s.h"
+#include "esp_memory_utils.h"
 
+#if !defined(CONFIG_STDATOMIC_S32C1I_SPIRAM_WORKAROUND)
 _Static_assert(ATOMIC_INT_LOCK_FREE == 2, "ISR counters require lock-free unsigned atomics");
+#endif
+// IDF's S3 PSRAM workaround dispatches internal-RAM atomics to S32C1I.
+// Keep the adapter in internal RAM even when the PCM queue lives in PSRAM.
 // ISR: counters only. A completion can contain auto-cleared silence, not necessarily PCM.
 static bool sent(i2s_chan_handle_t channel, i2s_event_data_t *event, void *user)
 {
@@ -28,7 +33,7 @@ static bool safe_pin(int pin)
 
 esp_err_t audio_i2s_open(audio_i2s_t *out, int bclk, int lrck, int data)
 {
-    if (!out || !safe_pin(bclk) || !safe_pin(lrck) || !safe_pin(data) ||
+    if (!out || !esp_ptr_internal(out) || !safe_pin(bclk) || !safe_pin(lrck) || !safe_pin(data) ||
         bclk == lrck || bclk == data || lrck == data) return ESP_ERR_INVALID_ARG;
     if (out->channel) return ESP_ERR_INVALID_STATE;
     i2s_chan_config_t channel = I2S_CHANNEL_DEFAULT_CONFIG(I2S_NUM_AUTO, I2S_ROLE_MASTER);

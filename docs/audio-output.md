@@ -58,7 +58,7 @@ GPIO 为 3.3V 逻辑；USB GPIO19／20、COM GPIO43／44、Flash／PSRAM 和启�
 
 本轮保持 Philips I²S、44.1 kHz、PCM16 双声道、16-bit slot、无 MCLK；并非 64fs 对照配置。临时候选关闭退盘键、换轨键和 OLED；GPIO7 已作 DIN，**不能同时接默认 GPIO7 退盘键**。若仅调整仓库 I²S 引脚，应在新的 sdkconfig 中设置 `CONFIG_DISCORA_I2S_BCLK=15`、`CONFIG_DISCORA_I2S_LRCK=16`、`CONFIG_DISCORA_I2S_DATA=7`，并关闭 `CONFIG_DISCORA_EJECT_BUTTON`；这只对齐引脚，不会生成同一实验固件。
 
-成功 CD 候选来自本地独立源码快照：左右各自缩放为 25% 数字幅度，保留原始声道，并在约 60 秒后自动停止。`bench-left/right/stereo` 命令、增益与截止控制未合入仓库主固件；仓库播放器没有这项自动停止保障。本页的标准测试音仍为峰值 4096、左 441 Hz／右 882 Hz，显式 `stop` 停止。实验中 200 Hz 间歇音等同样属于临时程序。
+成功 CD 候选来自本地独立源码快照：左右各自缩放为 25% 数字幅度，保留原始声道，并在约 60 秒后自动停止。`bench-left/right/stereo` 命令与截止控制未合入仓库主固件；0.11.0 新增 `DISCORA_CD_PLAYER_GAIN_PERCENT`（默认 100，PSRAM profile 为 25），仓库播放器没有这项自动停止保障。本页的标准测试音仍为峰值 4096、左 441 Hz／右 882 Hz，显式 `stop` 停止。实验中 200 Hz 间歇音等同样属于临时程序。
 
 定位证据及成功候选摘要见[对照记录](records/2026-11-07-cybertrack-audio-crosscheck.md)。早期 32fs／64fs 均无声、供电／焊桥及万用表结果见[历史排查](records/2026-11-05-dac-no-sound.md)。更换 DIN 连接后恢复声音将问题收窄至原数据连接／接点，不能据此判定两块 DAC 损坏，也未定位此前 USB 掉线原因。
 
@@ -80,3 +80,5 @@ GPIO 为 3.3V 逻辑；USB GPIO19／20、COM GPIO43／44、Flash／PSRAM 和启�
 ## 不接 DAC 的外设测试
 
 0.7.2 增加 I²S 完成块、事件队列溢出、提交 PCM 和补零等独立计数。测试音空载对照发现同步日志会干扰供数窗口；独立低优先级日志任务和优先级调整后，相同序列的溢出由 5 降为 0。DMA 自动补零也会完成，事件队列溢出不是可直接换算的音频欠载计数；这些信息仅用于外设/调度诊断，波形、时钟精度和模拟输出仍待实测。见 [空载记录](records/2026-11-01-m3-i2s-empty.md)。
+
+0.11.0 的 [PSRAM 播放 profile](../firmware/bench/cd-player-psram.defaults) 已包含上述 GPIO15/16/7、25% 幅度和关闭按键／OLED 的配置，另增加 2 MiB 缓冲与欠载自动恢复；它没有 60 秒自动停止或 bench 命令。当前测试与部署见[缓冲记录](records/2026-11-07-buffered-playback.md)。

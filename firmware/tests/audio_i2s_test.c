@@ -6,6 +6,8 @@ static int token, new_error, init_error, info_error, del_error, enable_error, di
 static size_t dma_size=AUDIO_PRELOAD_BYTES, short_load, short_write, loaded_total;
 static uint8_t preload[AUDIO_PRELOAD_BYTES];
 static bool enabled;
+static bool internal = true;
+bool esp_ptr_internal(const void *ptr) { return ptr && internal; }
 static i2s_event_callbacks_t callbacks;
 static void *callback_user;
 esp_err_t i2s_channel_register_event_callback(i2s_chan_handle_t h, const i2s_event_callbacks_t *c, void *u)
@@ -45,6 +47,7 @@ static void open_ok(audio_i2s_t *o) { assert(audio_i2s_open(o,4,5,6)==ESP_OK); }
 int main(void)
 {
     audio_i2s_t o={0}; uint8_t pcm[AUDIO_PRELOAD_BYTES]; memset(pcm,0x5a,sizeof(pcm));
+    internal=false; assert(audio_i2s_open(&o,4,5,6)==ESP_ERR_INVALID_ARG && !o.channel); internal=true;
     assert(audio_i2s_open(&o,19,5,6)==ESP_ERR_INVALID_ARG && !o.channel);
     new_error=ESP_FAIL;assert(audio_i2s_open(&o,4,5,6)==ESP_FAIL && !o.channel);new_error=0;
     init_error=ESP_FAIL;del_error=ESP_FAIL;

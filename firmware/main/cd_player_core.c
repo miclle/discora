@@ -24,12 +24,12 @@ bool cd_player_init(cd_player_core_t *p, uint8_t *storage, size_t capacity, size
 void cd_player_stop(cd_player_core_t *p)
 {
     audio_core_stop(&p->audio);
-    p->pending = p->eof = p->continuous = false;
+    p->pending = p->eof = p->continuous = p->rebuffering = false;
     if (p->media) p->next_lba = p->toc.tracks[p->index].start_lba;
 }
 void cd_player_fault(cd_player_core_t *p)
 {
-    p->continuous = false;
+    p->continuous = p->rebuffering = false;
     audio_core_fault(&p->audio);
 }
 void cd_player_lost(cd_player_core_t *p)
@@ -74,6 +74,22 @@ bool cd_player_step(cd_player_core_t *p, int direction)
         if (eligible(&p->toc.tracks[i])) return cd_player_select(p, p->toc.tracks[i].number);
     return false;
 }
+static void recovered(cd_player_core_t *p)
+{
+    if (p->rebuffering && p->audio.state == AUDIO_PLAYING) {
+        ++p->auto_recoveries;
+        p->rebuffering = false;
+    }
+}
+bool cd_player_rebuffer(cd_player_core_t *p)
+{
+    if (!p->auto_recover || !p->media || p->audio.state != AUDIO_UNDERRUN) return false;
+    p->rebuffering = true;
+    bool ok = audio_core_play(&p->audio);
+    if (ok && p->eof && p->audio.pcm.used) p->audio.state = AUDIO_PLAYING;
+    recovered(p);
+    return ok;
+}
 bool cd_player_play(cd_player_core_t *p)
 {
     if (!p->media || p->audio.state == AUDIO_FAULT) return false;
@@ -115,7 +131,9 @@ bool cd_player_pause(cd_player_core_t *p)
         p->audio.state = AUDIO_PAUSED; // Also allow pause during the owner's EOF drain.
         return true;
     }
-    return audio_core_pause(&p->audio);
+    bool ok = audio_core_pause(&p->audio);
+    if (ok) p->rebuffering = false; // Explicit pause cancels automatic recovery.
+    return ok;
 }
 bool cd_player_request(cd_player_core_t *p, cd_player_read_t *out)
 {
@@ -148,6 +166,7 @@ bool cd_player_complete(cd_player_core_t *p, const cd_player_read_t *r,
     p->next_lba += p->request.sectors;
     p->eof = p->next_lba == p->request.track.end_lba;
     if (p->eof && p->audio.state == AUDIO_PREFILL) p->audio.state = AUDIO_PLAYING;
+    recovered(p);
     return true;
 }
 size_t cd_player_take(cd_player_core_t *p, uint8_t *data, size_t wanted)
@@ -156,6 +175,7 @@ size_t cd_player_take(cd_player_core_t *p, uint8_t *data, size_t wanted)
     if (p->eof && !p->audio.pcm.used) { p->audio.state = AUDIO_STOPPED; return 0; }
     if (p->eof && wanted > p->audio.pcm.used) wanted = p->audio.pcm.used;
     bool ok = audio_core_take(&p->audio, data, wanted);
-    if (p->audio.state == AUDIO_UNDERRUN || p->audio.state == AUDIO_FAULT) p->continuous = false;
+    if ((p->audio.state == AUDIO_UNDERRUN && !p->auto_recover) || p->audio.state == AUDIO_FAULT)
+        p->continuous = false;
     return ok ? wanted : 0;
 }

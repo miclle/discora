@@ -8,10 +8,11 @@
 | --- | --- | --- |
 | [cd-player-clock.defaults](../firmware/bench/cd-player-clock.defaults) | 真实光驱 → 软件时钟消费 | 13 轨软件时钟及控制已实测；没有声音 |
 | [cd-player-i2s.defaults](../firmware/bench/cd-player-i2s.defaults) | 真实光驱 → I²S 输出适配器 | 13 轨空载整盘已上板；临时候选另完成接 DAC 的约 60 秒立体声试听，差异见下文 |
+| [cd-player-psram.defaults](../firmware/bench/cd-player-psram.defaults)（叠加 I²S profile） | 2 MiB PSRAM、自动重缓冲、GPIO15/16/7、25% 数字幅度 | 0.11.0；结果见[缓冲实测记录](records/2026-11-07-buffered-playback.md) |
 
 使用独立 sdkconfig / build 目录加载配置，避免已有缓存覆盖默认值。播放器与 CDDA bench、独立测试音分开运行；每次部署须确认本项目 COM，不根据端口顺序猜设备。
 
-2026-11-07 当前 8636 板的成功试听使用临时诊断候选：GPIO15/16/7、左右各 25% 数字幅度、60 秒自动停止，关闭按键和 OLED。主线播放器未合入这些实验控制，默认 GPIO7 退盘键会与该 DIN 接法冲突。不要把本页标准命令／默认构建当作同一候选；差异见[音频输出说明](audio-output.md#已通过的接法与默认配置差异)，实测见[记录](records/2026-11-07-cybertrack-audio-crosscheck.md)。
+2026-11-07 早期 8636 板的成功试听使用临时诊断候选：GPIO15/16/7、左右各 25% 数字幅度、60 秒自动停止，关闭按键和 OLED。该历史候选的 bench 命令和限时控制仍未合入；0.11.0 已新增可复现的 PSRAM profile 和独立增益选项。默认 GPIO7 退盘键会与该 DIN 接法冲突。不要把本页标准命令／默认构建当作同一候选；差异见[音频输出说明](audio-output.md#已通过的接法与默认配置差异)，实测见[记录](records/2026-11-07-cybertrack-audio-crosscheck.md)。
 
 ## UART0 命令
 
@@ -29,7 +30,7 @@
 | `track 13` | 选择指定轨并开始；非法轨号不影响现有播放 |
 | `status` / `help` | 查看当前状态、轨号、代次、队列、交付量、读取次数和欠载 |
 
-普通 `play` 每次播放一轨，EOF 后停止；0.8.0 的 `play-disc` 显式开启有限连续播放。成功的手动选轨、stop、欠载、fault 或失联均取消连续模式；支持双声道音频轨，至少 8 扇区，不支持数据轨/四声道轨。`next_lba` 是下一次源读取位置，队列中已有预读数据，它不是听觉播放位置。`delivered` 是软件消费/输出提交字节数，停止或换轨后清零；`reads`、`stale`、`underruns` 是当前 MCU 启动累计值。`continuous` 表示连续播放是否仍被授权；`pending` 只描述当前代次，不能据此推断旧 USB 请求已取消。
+普通 `play` 每次播放一轨，EOF 后停止；0.8.0 的 `play-disc` 显式开启有限连续播放。成功的手动选轨、stop、fault 或失联均取消连续模式；欠载默认也取消，开启 0.11.0 自动恢复选项时保留；支持双声道音频轨，至少 8 扇区，不支持数据轨/四声道轨。`next_lba` 是下一次源读取位置，队列中已有预读数据，它不是听觉播放位置。`delivered` 是软件消费/输出提交字节数，停止或换轨后清零；`reads`、`stale`、`underruns` 是当前 MCU 启动累计值。`continuous` 表示连续播放是否仍被授权；`pending` 只描述当前代次，不能据此推断旧 USB 请求已取消。
 
 暂停或停止会响应控制，但不会强制取消底层正在等待的 USB 命令；换轨后等待旧请求返回再发新请求，USB 截止仍适用。源失败或介质失效停止输出，重新枚举不自动开始音频。
 
@@ -49,7 +50,7 @@ I²S 暂停会丢弃已提交 DMA 数据，可能产生约 40 ms 的跳过；当
 
 ## 受控故障实验
 
-只有 `cd-player-faults.defaults` 开启 `DISCORA_CD_PLAYER_FAULT_TEST`。播放时 `test delay` 暂停新请求 1200 ms，`test fail` 在下一次请求处注入播放器源失败、不发送该次 USB。两项各每次 MCU 启动最多一次；命令和触发日志均有 TEST 标记，不代表真实光驱错误。欠载显式 play 重缓冲，fault 须 stop 后 play。普通/I²S profile 不开放这些命令，详见 [负向实测](records/2026-11-01-m3-player-faults.md)。
+`DISCORA_CD_PLAYER_FAULT_TEST` 默认关闭，`cd-player-faults.defaults` 显式开启；0.11.0 也允许单独叠加到 I²S 实验。播放时 `test delay` 按 `DISCORA_CD_PLAYER_TEST_DELAY_MS` 暂停新请求（默认 1200 ms，可设 100～30000 ms），`test fail` 在下一次请求处注入播放器源失败、不发送该次 USB。两项各每次 MCU 启动最多一次；命令和触发日志均有 TEST 标记，不代表真实光驱错误。未开启自动恢复时，欠载须显式 play；fault 始终须 stop 后 play。正常 PSRAM/I²S profile 不开放这些命令，详见 [负向实测](records/2026-11-01-m3-player-faults.md)。
 
 ## 轨尾暂停 / I²S 软件边界
 
@@ -61,7 +62,7 @@ I²S 暂停会丢弃已提交 DMA 数据，可能产生约 40 ms 的跳过；当
 
 0.7.2 的 I²S 状态行分别报告 `pcm_submitted`、`padding`、`dma_blocks`、`event_overflows`、`write_errors` 和 opens/closes。PCM 提交量与 DMA 完成量不是同一个计数，自动补零也会完成；事件队列溢出与软件队列 underrun 分开报告。计数跨通道重开累计，32 位回调计数按无符号回绕。
 
-状态打印使用独立低优先级任务和 8 项有界快照队列，音频 owner 不等待串口；`report_dropped` 记录队列满/过长报告。命令语义不变，频繁查询可能丢报告，不能因此宣称音频完整性通过。空载 profile 为 `cd-player-i2s-observe.defaults`，仅增加软件摘要观察，不自动播放。
+状态打印使用独立低优先级任务和 16 项有界快照队列（0.11.0 扩容，原为 8 项），音频 owner 不等待串口；`report_dropped` 记录队列满/过长报告。命令语义不变，频繁查询可能丢报告，不能因此宣称音频完整性通过。空载 profile 为 `cd-player-i2s-observe.defaults`，仅增加软件摘要观察，不自动播放。
 
 0.7.5 将 EOF 摘要也交给报告任务；六个阶段的内存快照只在关闭后输出。首轨对照中，摘要窗口由 18.399 ms 降为 0.713 ms，收尾事件溢出由 3 变为 2，供数阶段为 0；固定 50 ms 排空没有改变。计数和物理边界见 [EOF 阶段记录](records/2026-11-01-m3-eof-phases.md)。
 
@@ -72,3 +73,35 @@ I²S 暂停会丢弃已提交 DMA 数据，可能产生约 40 ms 的跳过；当
 ## 轻触按键退盘
 
 0.9.0 在播放器中默认启用 GPIO7 常开按键到 GND，接线见[按键说明](eject-button.md)。稳定按下后由 USB client 在当前命令结束时处理，先失效介质、清空队列和取消连续模式，等待输出 owner 成功关闭 I²S，再执行允许移除/退盘。重新检测目录后保持 stopped。长按不重复、上电按住不触发；默认查询配置的基本按键退盘已获用户实测成功反馈；本节的播放中停止输出与退盘流程仍未上板验收。
+
+## 2 MiB 缓冲与欠载自动恢复（0.11.0）
+
+在全新构建目录中按顺序叠加配置：
+
+```sh
+cd firmware
+idf.py -B build-psram -DSDKCONFIG=sdkconfig.psram \
+  -DSDKCONFIG_DEFAULTS="sdkconfig.defaults;bench/cd-player-i2s.defaults;bench/cd-player-psram.defaults" set-target esp32s3
+idf.py -B build-psram -DSDKCONFIG=sdkconfig.psram build
+```
+
+此 profile 面向已确认的 16 MiB Flash / 8 MiB Octal PSRAM 主控，启用 PSRAM 80 MHz 和启动内存测试，关闭按键及 OLED，保留当前 GPIO15→BCK、GPIO16→LRCK、GPIO7→DIN 接法。上电仍为 stopped；发送 `play-disc` 后开始，不自动循环整盘。
+
+- `DISCORA_CD_PLAYER_PSRAM_BUFFER`：仅软件 PCM 队列使用 2097152 字节 PSRAM，约可容纳 11.89 秒 CD-DA；225 扇区／529200 字节（3 秒）预填后开始。分配失败明确拒绝启动，不悄悄降级。USB 响应、USB DMA、I²S DMA 和输出适配器保留内部 RAM。
+- `DISCORA_CD_PLAYER_AUTO_RECOVER`：输出 owner 成功关闭 I²S 后，将 underrun 转为 prefill，保留 generation、源读取位置、队列和在途请求；达到预填量后自动继续。EOF 剩余数据不足门槛时直接输出尾部。显式暂停、停止、换轨，以及真实源失败、介质失效或 I²S 错误会阻止此次恢复。重连不自动播放。
+- `DISCORA_CD_PLAYER_GAIN_PERCENT`：对左右 PCM16 样本分别缩放，默认 100，此 profile 为 25；不混音、不改变源端摘要。
+
+自动恢复避免欠载后永久停住，不能补回已经发生的静音间隙。关闭通道可能丢弃最多约 40 ms 已提交 DMA 数据，不保证采样连续或无缝恢复；大缓冲也不能解决持续低于 176400 bytes/s 的供数或真实 USB 掉线。
+
+`status` 新增以下累计观测（MCU 重启清零）：
+
+| 字段 | 含义 |
+| --- | --- |
+| `buffer capacity/prefill/low` | 容量、预填门槛、非 EOF 消费后采样的最低软件队列字节数；不包含 DMA |
+| `rebuffering/auto_recoveries` | 当前是否自动补缓冲；补足后进入 playing 的次数，不等于已经听到声音 |
+| `read_timing count/last_us/max_us/avg_us` | 已完成 `read_audio` 调用的端到端耗时，含配置允许的恢复等待；不是单个 USB 传输阶段计时 |
+| `last_lba/max_lba` | 最近／最长一次读取的起始 LBA |
+| `ge100ms/ge500ms/ge1s` | 耗时达到对应阈值的次数，包含关系而非互斥分桶 |
+| `failed/rejected` | 源调用失败次数／播放器拒收次数（包括旧代次）；两者可能重叠 |
+
+未完成的在途读取尚不进入耗时统计。按状态快照汇总输出，不逐次打印 READ CD 时间；建议以数秒间隔查询。I²S `event_overflows` 是驱动完成事件队列溢出，与软件 PCM 欠载分别记录。设计见 [ADR-0017](decisions/0017-psram-rebuffer.md)。
