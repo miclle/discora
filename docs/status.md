@@ -1,8 +1,20 @@
 # 当前工程状态
 
-更新时间：2026-11-07（换 DIN 连接后原始立体声 CD 约 60 秒试听成功）
+更新时间：2026-11-07（连续播放失联分析与 USB 分层诊断）
+
+本地变更已按播放器、USB 诊断、对照实验分组审查，各组独立快照验证通过；范围与剩余限制见[审查和交付记录](records/2026-11-07-buffer-usb-review.md)。远端 CI 以对应提交运行结果为准。
 
 ## 当前音频结论
+
+0.11.0 已部署 2 MiB PSRAM 队列、3 秒预填和欠载自动恢复。受控 15 秒供数暂停恢复通过；初始跨曲窗口通过；随后持续观察至约 55 分钟，第 13 轨后段发生 USB 失联并重新枚举，播放停止，整盘稳定性未通过。前 12 轨完整结束，软件欠载、读取／写入失败和报告丢失均为 0；4 次播放中秒级慢读取被缓冲覆盖，24 次完成事件溢出均在轨尾。当前停止、I²S 关闭、串口释放。详见[实现记录](records/2026-11-07-buffered-playback.md)和[完整日志分析](records/2026-11-07-buffered-continuous-log-review.md)。
+
+随后部署 0.11.1 USB 诊断版，短测再次失联：根端口先出现 DISCONNECTION，约 23 ms 后应用才尝试 BOT reset；约 1.32 秒后重新连接。该次中断不是缓冲欠载，也不是应用先执行 BOT reset；电源、USB 信号和桥接器／光驱内部行为仍未区分，不认定两次故障必然同因。详见[诊断记录](records/2026-11-07-usb-disconnect-diagnostics.md)。
+
+更换光驱独立电源后，约 37 秒的准备阶段又观察到 3 次根端口 DISCONNECTION；尚未发送播放命令，READ CD / I²S opens 均为 0，整盘对照未能启动。已停止播放尝试、释放串口；新电源确认为充电宝 USB-A 口直供、无 PD 诱骗板或降压板；负载端供电与 USB 连接路径的根因仍未确定，见同一[诊断记录](records/2026-11-07-usb-disconnect-diagnostics.md#更换光驱独立电源后的对照)。
+
+后续改接 Mac、保持充电宝供电：最初未枚举，失败窗口保留；用户报告识别恢复后，在 480 Mb/s High-Speed 下完成 13 轨／594221040 字节顺序读取，用时 215.762 秒，读取错误为 0，400 次 USB 采样实例不变，3 个历史样本摘要匹配。读取已结束。这不是 56 分钟实时播放，也不能将 Mac 与 S3 的速率、VBUS／接地条件差异忽略后直接归因于固件，详见[整盘对照](records/2026-11-07-usb-disconnect-diagnostics.md#mac-识别恢复后的整盘只读对照)。
+
+仅枚举／查询 A/B 诊断的热机与用户报告完全断电 10 秒后的窗口均完成：先零 BOT 命令 120 秒，再查询 120 秒，无 USB 失联。冷启动共 28 条查询，首次 TUR 返回复位后状态 `06/29/00`，随后就绪并取得目录，27 个 CSW=0；READ CD 和 I²S opens 均为 0。0.11.3 零等待冷启动查询也完整运行 120.009964 秒，28 条查询、27 个 CSW=0，首次 TUR 同为 `06/29/00`，取得 13 轨目录，无 USB 失联；该轮以 COMPLETE 结束并释放串口。两种启动策略均未复现，无证据支持固定两分钟等待，后续关闭 I²S 的约 10 分钟持续 READ CD 也通过：5750 次读取、两次跨曲，无 USB 失联、读取失败或欠载，见[读取对照](records/2026-11-07-usb-read-clock-comparison.md)。同源码恢复 I²S 的 601.404 秒窗口也完成：5749 次读取、两次跨曲，无 USB 失联、欠载或写入错误；4 次完成事件队列溢出均定位在 EOF 排空，用户早期反馈左右清晰。当前有声配置已停止，长时失联未标为修复，见[启动查询记录](records/2026-11-07-usb-enum-query-comparison.md)与[并排对照](records/2026-11-07-usb-read-clock-comparison.md)。
 
 CD → ESP32-S3 → PCM5102A → TPA3118D2 → 双喇叭已完成短时立体声实测，状态为 **bench-tested**。当前主控 COM 尾号 8636，接线 GPIO15/16/7；改用已验证的线连接 GPIO7→DAC DIN 后，右声道低音对应正确，双声道低音清晰且响度接近，第 1 轨原始立体声约 60 秒左右连续清晰、无明显杂音。
 
@@ -10,28 +22,28 @@ CD → ESP32-S3 → PCM5102A → TPA3118D2 → 双喇叭已完成短时立体声
 | --- | --- |
 | DIN 数据路径 | DAC DIN 接点回读两次为 0，上游 GPIO7 有约 44.1k 次上升沿/秒；同一测量线回环 GPIO7→GPIO4 后计数一致。更换 DIN 连接后恢复声音，范围收窄至原连接／接点，未区分线芯、端子或焊点 |
 | 原始立体声 CD | 60010 ms、10592820 字节、570 次读取；写入错误、软件欠载、stale 均为 0；本轮一次初始枚举，播放期间未掉线；用户听感通过 |
-| 稳定性 | 前一轮约 4.7 秒后 USB 掉线；根因未定位，完整曲目／整盘、冷启动与重复启停未验收 |
-| 当前部署 | 临时原始立体声 CD 诊断候选，25% 数字幅度、60 秒自动停止，结束为 stopped；GPIO4 留空，按键及 OLED 关闭；原 0.10.0-oled 应用备份保留，未恢复到当前板 |
+| 稳定性 | 旧连续候选约 35 分钟后软件欠载，续播轨 9 再次欠载；0.11.0 首轮 READ CD 又遇 USB 失联，失败均保留。大缓冲及软件自动恢复不能代替 USB 稳定性验收 |
+| 当前部署 | 0.11.3-usb-ab 源码的 I²S 对照配置（app `301f3cf4…`），GPIO15/16/7、25% 数字幅度，A/B 关闭，2 MiB PSRAM、自动恢复保留；约 601 秒有声对照已完成，stopped、I²S closed、串口释放；两种模式均无失联或欠载，有声轨尾排空出现 4 次完成事件队列溢出，见[读取对照](records/2026-11-07-usb-read-clock-comparison.md) |
 | 借用设备 | CyberTrack 原固件及配置已恢复，完整 Flash 与基线校验一致 |
 
-完整设备、日志与失败窗口见[对照记录](records/2026-11-07-cybertrack-audio-crosscheck.md)；此前无声排查见[历史记录](records/2026-11-05-dac-no-sound.md)。当前 GPIO15/16/7 与仓库默认 GPIO4/5/6、临时诊断与主固件的区别见[配置说明](audio-output.md#已通过的接法与默认配置差异)。本轮不是整机装配、音质指标或 M0–M3 全部验收。
+完整设备、日志与失败窗口见[对照记录](records/2026-11-07-cybertrack-audio-crosscheck.md)；此前无声排查见[历史记录](records/2026-11-05-dac-no-sound.md)。当前 GPIO15/16/7 已有显式 PSRAM profile，仓库无叠加时仍默认 GPIO4/5/6；区别见[配置说明](audio-output.md#已通过的接法与默认配置差异)。本轮不是整机装配、音质指标或 M0–M3 全部验收。
 
 证据分层：`planned` 为计划；`implemented` 为源码已实现；`bench-tested` 为在指定硬件上实验过；`verified` 为满足相应验收条件。已完成烧录、UART0、Hub/光驱枚举、三种基础查询的真实返回、61.2 秒连续 13 次 TUR 就绪，以及单张 CD 的 13 轨目录、READ CD 小片段/短突发与电脑参考对照；600 秒顺序窗口已与电脑对照，随机寻道、冷启动与受控重复插拔仍待验收，M0/M1 未整体通过。
 
 | 事项 | 状态 | 证据 / 备注 |
 | --- | --- | --- |
 | 仓库创建及 Apache-2.0 License | 已存在 | 用户创建仓库时已有 LICENSE |
-| ESP-IDF 固件构建 | 本地构建通过 | 本轮 ESP-IDF v5.4、esp32s3，默认 / 64fs + PCNT / CD I²S 三配置 set-target 与 build 通过；不等同于板上临时候选，见[交付验证](records/2026-11-07-audio-delivery.md) |
-| 烧录 / UART0 启动 | bench-tested | 当前 8636 板临时 CD 候选写入及独立校验通过；此前 OLED 部署与超时见[历史记录](records/2026-11-05-oled-deploy.md) |
+| ESP-IDF 固件构建 | 本地构建通过 | 0.11.3 的同源码 I²S／软件时钟 USB 读取、0 秒／120 秒 A/B 配置通过 ESP-IDF v5.4 set-target / build；0.11.2 默认查询和 A/B 历史构建通过；0.11.1 三配置历史构建通过；0.11.0 四配置历史结果保留；此前音频交付见[记录](records/2026-11-07-audio-delivery.md) |
+| 烧录 / UART0 启动 | bench-tested | 当前 8636 板 0.11.3 I²S USB 对照应用写入及独立校验、PSRAM 初始化通过；此前 OLED 部署与超时见[历史记录](records/2026-11-05-oled-deploy.md) |
 | 初始化 GitHub Actions | 构建成功 | [运行 41173591262](https://github.com/miclle/discora/actions/runs/41173591262)，对应初始化提交 `61b8229`，不是本轮改动的 CI |
-| 本轮 CI 配置 | implemented | 主机 ASan/UBSan 与 15 项 bench 工具检查本地通过；六配置矩阵包含新增 64fs + PCNT；远端结果以对应提交运行记录为准 |
+| 本轮 CI 配置 | implemented | 主机 ASan/UBSan 与 15 项工具检查通过；新增 PSRAM、USB 诊断、两种查询等待及无声读取构建 profile；远端 CI 结果须按对应提交单独核对 |
 | USB Host / BOT 最小探测 | implemented；常规查询 bench-tested | 原生 USB Host、接口筛选、基础查询及 READ TOC 已实测；已观察到超时、Data-In STALL 和一次 Reset Recovery；后续仍有离线，完整恢复验收未通过 |
 | 空 Hub 枚举 | bench-tested | USB-OTG 桥接后枚举 `05e3:0610`，Full-Speed，class `0x09`；下游未接设备 |
 | UJ-898 在 ESP32-S3 USB Host 枚举 | bench-tested | 桥接器 `13fd:0840`，Full-Speed，class/subclass/protocol `08/02/50`；前期有离线重枚举，原因未定位 |
 | INQUIRY / TEST UNIT READY / REQUEST SENSE | bench-tested | INQUIRY 为 MATSHITA UJ-898 / HC10；sense 有效，后续 61.2 秒连续 13 次 TUR 成功；TOC / READ CD 另见后续项 |
 | READ TOC | bench-tested | 单张音乐 CD 取得 13 条音频轨、116 字节目录，lead-out LBA 252645；逐轨 LBA 和 lead-out 已与 macOS 参考目录一致 |
 | CD-DA 2352 字节扇区读取 | implemented；顺序窗口 bench-tested | 600 秒、105840000 字节，与电脑完整 SHA-256 一致；随机寻道成功与失败并存，恢复路径尚待实测，默认关闭 |
-| PCM 环形缓冲 | implemented；软件消费 bench-tested | 64 扇区内部 RAM，13 轨 / 594221040 字节逐轨 1× 软件消费，零欠载、各轨两端摘要一致；不是整盘 I²S 验收 |
+| PCM 环形缓冲 | implemented；受控恢复 bench-tested | 0.11.0 可选 2 MiB PSRAM、3 秒预填、自动重缓冲及读取耗时统计。既有 64 扇区内部配置保留；不同配置及窗口不合并为整盘有声验收 |
 | I²S 测试音 / 控制核心 | implemented；接 DAC 试听 bench-tested | 独立左右测试音、双声道低音已获听感确认；MCU 及 DAC 排针时钟计数有记录，不能替代波形幅度、边沿或独立频率精度验收 |
 | CD 源到音频控制 / 输出适配器 | implemented；短时立体声 bench-tested | PCM5102A + TPA3118D2 原始立体声 CD 约 60 秒两边连续清晰；13 轨 I²S 空载是此前单独结果，不能合并为整盘有声验收 |
 | GPIO7 轻触按键退盘 | bench-tested（历史默认查询配置） | 0.9.0 曾获实际退盘反馈；当前音频实验 GPIO7 用于 DIN，退盘键关闭，不能同时接入，见[记录](records/2026-11-01-button-eject-deploy.md) |

@@ -23,6 +23,15 @@
 #include "eject_button.h"
 #include "usb_trace.h"
 #include "audio_report.h"
+#if defined(CONFIG_DISCORA_USB_ENUM_QUERY_TEST)
+#include <stdatomic.h>
+#include "usb_ab_test.h"
+static atomic_bool ab_cancel_requested;
+void discora_usb_probe_cancel_test(void)
+{
+    atomic_store_explicit(&ab_cancel_requested, true, memory_order_relaxed);
+}
+#endif
 
 #if CONFIG_ESP_CONSOLE_USB_CDC || CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG || CONFIG_ESP_CONSOLE_SECONDARY_USB_SERIAL_JTAG
 #error "Discora Host requires an independent UART console; disable both primary and secondary USB consoles in menuconfig"
@@ -76,6 +85,11 @@ typedef struct {
     probe_toc_t toc;
     uint32_t tag;
     int64_t next_poll;
+#if defined(CONFIG_DISCORA_USB_ENUM_QUERY_TEST)
+    usb_ab_test_t ab;
+    int64_t ab_next_report_us;
+    usb_ab_phase_t ab_reported_phase;
+#endif
 #if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
     usb_trace_t trace, gone_trace;
     uint32_t device_epoch, disconnects;
@@ -177,6 +191,9 @@ static void client_event(const usb_host_client_event_msg_t *event, void *arg)
     } else if (event->event == USB_HOST_CLIENT_EVENT_DEV_GONE &&
                event->dev_gone.dev_hdl == ctx->device) {
         ctx->gone = true;
+#if defined(CONFIG_DISCORA_USB_ENUM_QUERY_TEST)
+        usb_ab_fail(&ctx->ab);
+#endif
 #if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
         ctx->gone_us=esp_timer_get_time();
         ctx->gone_service_gap_us=ctx->service_gap_us;
@@ -351,6 +368,15 @@ static void reset_recovery(probe_context_t *ctx)
 static command_result_t execute_command(probe_context_t *ctx, probe_command_t command,
                                          size_t requested, const audio_read_t *audio, command_data_t *result)
 {
+#if defined(CONFIG_DISCORA_USB_ENUM_QUERY_TEST)
+    if (atomic_load_explicit(&ab_cancel_requested, memory_order_relaxed) ||
+        !usb_ab_command_allowed(&ctx->ab, command)) {
+        result->size = 0;
+        ESP_LOGW("usb_diag", "ab blocked op=%s phase=%s; no CBW sent",
+                 probe_command_name(command), usb_ab_name(ctx->ab.phase));
+        return COMMAND_TRANSPORT_ERROR;
+    }
+#endif
     uint8_t cbw[PROBE_CBW_SIZE];
     size_t received = 0;
     int64_t started = now_ms();
@@ -490,6 +516,7 @@ static bool request_sense(probe_context_t *ctx, probe_sense_t *sense)
     return true;
 }
 
+#if !defined(CONFIG_DISCORA_USB_ENUM_QUERY_TEST)
 static void eject_disc(probe_context_t *ctx)
 {
     discora_eject_button_enable(false); // Busy: do not queue a second mechanical action.
@@ -523,6 +550,7 @@ static void eject_disc(probe_context_t *ctx)
     ctx->next_poll = now_ms() + POLL_INTERVAL_MS;
 }
 
+#endif
 static void identify_drive(probe_context_t *ctx)
 {
     for (unsigned attempt = 1; attempt <= 3 && !ctx->gone; ++attempt) {
@@ -981,10 +1009,54 @@ static void open_device(probe_context_t *ctx, uint8_t address)
     ESP_LOGI(TAG, "BOT interface=%u IN=0x%02x MPS=%u OUT=0x%02x MPS=%u LUN=0",
              ctx->interface.number, ctx->interface.ep_in, ctx->interface.mps_in,
              ctx->interface.ep_out, ctx->interface.mps_out);
+#if defined(CONFIG_DISCORA_USB_ENUM_QUERY_TEST)
+    if (device_desc->idVendor == 0x13fd && device_desc->idProduct == 0x0840)
+        usb_ab_attach(&ctx->ab, esp_timer_get_time());
+    else {
+        ESP_LOGW("usb_diag", "ab unexpected VID:PID; no BOT queries permitted");
+        usb_ab_fail(&ctx->ab);
+    }
+#else
     identify_drive(ctx);
+#endif
     ctx->next_poll = 0;
 }
 
+#if defined(CONFIG_DISCORA_USB_ENUM_QUERY_TEST)
+static void run_ab_test(probe_context_t *ctx)
+{
+    usb_ab_phase_t previous = ctx->ab.phase;
+    // Never advance to queries after loss, even when the 120s boundary coincides.
+    if (ctx->gone || ctx->faulted) usb_ab_fail(&ctx->ab);
+    usb_ab_tick(&ctx->ab, esp_timer_get_time(),
+                atomic_load_explicit(&ab_cancel_requested, memory_order_relaxed),
+                INT64_C(1000000) * CONFIG_DISCORA_USB_ENUM_WAIT_SECONDS);
+    if (ctx->ab.phase == USB_AB_QUERIES && previous != USB_AB_QUERIES) {
+        audio_report("usb_diag", "ab transition=queries observed_us=%" PRId64
+            " epoch=%" PRIu32 " addr=%u commands_before=%" PRIu32,
+            esp_timer_get_time(), ctx->device_epoch, ctx->device_address, ctx->tag);
+        if (!ctx->device || !ctx->claimed) usb_ab_fail(&ctx->ab);
+        else {
+            identify_drive(ctx);
+            if (!ctx->identified || ctx->gone || ctx->faulted) usb_ab_fail(&ctx->ab);
+        }
+    }
+    if (ctx->ab.phase == USB_AB_QUERIES && ctx->identified && now_ms() >= ctx->next_poll)
+        poll_ready(ctx);
+    if (ctx->gone || ctx->faulted) usb_ab_fail(&ctx->ab);
+    int64_t now = esp_timer_get_time();
+    if (ctx->ab.phase != ctx->ab_reported_phase || now >= ctx->ab_next_report_us) {
+        ctx->ab_reported_phase = ctx->ab.phase;
+        ctx->ab_next_report_us = now + 5000000;
+        audio_report("usb_diag", "ab phase=%s failed_in=%s observed_us=%" PRId64
+            " phase_start_us=%" PRId64 " epoch=%" PRIu32 " addr=%u connected=%u"
+            " commands=%" PRIu32 " owned=%u report_dropped=%" PRIu32,
+            usb_ab_name(ctx->ab.phase), usb_ab_name(ctx->ab.failed_in), now,
+            ctx->ab.phase_start_us, ctx->device_epoch, ctx->device_address,
+            ctx->device && !ctx->gone, ctx->tag, ctx->in_flight, audio_report_dropped());
+    }
+}
+#endif
 
 static void host_daemon(void *arg)
 {
@@ -1014,6 +1086,10 @@ void discora_usb_probe_run(void)
     ESP_LOG_BUFFER_HEX_LEVEL(TAG, app->app_elf_sha256, sizeof(app->app_elf_sha256), ESP_LOG_INFO);
     ESP_LOGI(TAG, "Queries / bounded READ CD; no media writes; explicit GPIO allow-removal/eject when enabled");
     ESP_LOGI(TAG, "CDDA probe enabled=%u; max once per MCU boot, reconnect does not re-arm", CDDA_PROBE_ENABLED);
+#if defined(CONFIG_DISCORA_USB_ENUM_QUERY_TEST)
+    ESP_LOGI("usb_diag", "ab enabled enum_seconds=%d query_seconds=120 target=13fd:0840; no playback; stop cancels until reboot",
+             CONFIG_DISCORA_USB_ENUM_WAIT_SECONDS);
+#endif
 #if defined(CONFIG_DISCORA_CD_PLAYER)
     if (!discora_cd_player_start()) { ESP_LOGE(TAG, "CD player initialization failed"); return; }
 #endif
@@ -1052,14 +1128,20 @@ void discora_usb_probe_run(void)
 #else
         handle_events(&ctx, 100);
 #endif
+#if defined(CONFIG_DISCORA_USB_ENUM_QUERY_TEST)
+        run_ab_test(&ctx);
+#else
         if (discora_eject_button_take()) eject_disc(&ctx);
+#endif
         if (ctx.device) {
             if (ctx.gone) {
                 close_device(&ctx, "DEV_GONE");
             }
+#if !defined(CONFIG_DISCORA_USB_ENUM_QUERY_TEST)
             else if (!ctx.faulted && ctx.identified && now_ms() >= ctx.next_poll) {
                 poll_ready(&ctx);
             }
+#endif
 #if defined(CONFIG_DISCORA_CD_PLAYER)
             if (!ctx.device || ctx.gone || ctx.faulted || !ctx.toc_valid) {
                 discora_cd_player_unavailable();
@@ -1085,7 +1167,9 @@ void discora_usb_probe_run(void)
                 }
             }
         }
+#if !defined(CONFIG_DISCORA_USB_ENUM_QUERY_TEST)
         discora_eject_button_enable(ctx.device && ctx.identified && !ctx.gone && !ctx.faulted);
+#endif
 #if defined(CONFIG_DISCORA_CD_PLAYER)
         vTaskDelay(1);
 #endif

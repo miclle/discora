@@ -1,0 +1,4 @@
+# Append after cd-player-i2s, cd-player-psram and usb-diagnostics profiles.
+# One 120s enum-only / 120s query observation per boot. No audio or eject.
+CONFIG_DISCORA_USB_ENUM_QUERY_TEST=y
+CONFIG_DISCORA_USB_ENUM_WAIT_SECONDS=120

@@ -1,0 +1,3 @@
+# Append AFTER usb-enum-query.defaults; only remove the intentional startup wait.
+# Query window, command allowlist, no-playback and terminal-state rules are unchanged.
+CONFIG_DISCORA_USB_ENUM_WAIT_SECONDS=0

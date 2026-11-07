@@ -12,6 +12,7 @@ def main():
     firmware = Path(__file__).resolve().parents[1]
     with tempfile.TemporaryDirectory(prefix="discora-protocol-") as temp:
         for name, sources, flags in [
+            ("usb_ab", ["tests/usb_ab_test.c"], []),
             ("usb_trace", ["tests/usb_trace_test.c"], []),
             ("usb_trace_port", ["main/usb_trace_port.c", "tests/usb_trace_port_test.c"],
              ["-DCONFIG_DISCORA_USB_DIAGNOSTICS=1"]),
