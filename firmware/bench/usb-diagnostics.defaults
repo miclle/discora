@@ -1,0 +1,3 @@
+# Append to an existing query/player profile. Read-only observations; no fault injection.
+# Uses an ESP-IDF 5.4 private HCD symbol through a checked linker wrapper.
+CONFIG_DISCORA_USB_DIAGNOSTICS=y

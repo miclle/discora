@@ -8,3 +8,5 @@ void discora_cd_player_unavailable(void);
 bool discora_cd_player_quiescent(void);
 bool discora_cd_player_request(cd_player_read_t *request);
 void discora_cd_player_complete(const cd_player_read_t *request, bool ok, const uint8_t *data, size_t size, uint64_t elapsed_us);
+
+void discora_cd_player_report_source_event(const char *event, int64_t event_us);

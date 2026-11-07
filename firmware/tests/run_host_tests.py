@@ -11,6 +11,22 @@ import tempfile
 def main():
     firmware = Path(__file__).resolve().parents[1]
     with tempfile.TemporaryDirectory(prefix="discora-protocol-") as temp:
+        for name, sources, flags in [
+            ("usb_trace", ["tests/usb_trace_test.c"], []),
+            ("usb_trace_port", ["main/usb_trace_port.c", "tests/usb_trace_port_test.c"],
+             ["-DCONFIG_DISCORA_USB_DIAGNOSTICS=1"]),
+        ]:
+            diagnostic = Path(temp) / name
+            subprocess.run(
+                shlex.split(os.environ.get("CC", "cc")) + flags + [
+                    "-std=c11", "-Wall", "-Wextra", "-Werror", "-pedantic", "-g",
+                    "-fsanitize=address,undefined", "-fno-omit-frame-pointer",
+                    "-I", str(firmware / "tests/stubs"), "-I", str(firmware / "main"),
+                ] + [str(firmware / source) for source in sources] + ["-o", str(diagnostic)],
+                check=True,
+            )
+            subprocess.run([str(diagnostic)], check=True)
+
         binary = Path(temp) / "probe_protocol_test"
         subprocess.run(
             shlex.split(os.environ.get("CC", "cc"))

@@ -422,6 +422,26 @@ void discora_cd_player_media(const probe_toc_t *toc)
     xSemaphoreGive(lock);
     ESP_LOGI(TAG,"media published=%u; playback remains stopped",ok);
 }
+#if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
+void discora_cd_player_report_source_event(const char *event, int64_t event_us)
+{
+    if (!lock || xSemaphoreTake(lock, pdMS_TO_TICKS(10)) != pdTRUE) {
+        audio_report("usb_diag", "player event=%s event_us=%" PRId64 " snapshot=unavailable", event, event_us);
+        return;
+    }
+    audio_state_t state=player.audio.state;
+    uint32_t gen=player.audio.generation, lba=player.next_lba, underruns=player.audio.underruns;
+    size_t queued=player.audio.pcm.used;
+    bool media=player.media, pending=player.pending, continuous=player.continuous;
+    unsigned track=media ? player.toc.tracks[player.index].number : 0;
+    int64_t sampled=esp_timer_get_time();
+    xSemaphoreGive(lock);
+    audio_report("usb_diag", "player event=%s event_us=%" PRId64 " sampled_us=%" PRId64
+        " state=%s media=%u track=%u generation=%" PRIu32 " queued=%u next_lba=%" PRIu32
+        " pending=%u continuous=%u underruns=%" PRIu32,
+        event,event_us,sampled,audio_state_name(state),media,track,gen,(unsigned)queued,lba,pending,continuous,underruns);
+}
+#endif
 void discora_cd_player_unavailable(void)
 {
     xSemaphoreTake(lock, portMAX_DELAY);

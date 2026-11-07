@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
 
-set(PROJECT_VER "0.11.0-buffered")
+set(PROJECT_VER "0.11.1-usb-diag")
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project(discora)
