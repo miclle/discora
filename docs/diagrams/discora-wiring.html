@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="zh-CN">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Discora 整机接线与洞洞板装配图</title><style>body{margin:0;background:#f5f5f5;color:#2d3142;font-family:"PingFang SC","Noto Sans CJK SC",sans-serif;line-height:1.8}main{max-width:1400px;margin:32px auto;padding:0 24px}h1{font-size:32px;line-height:1.3}h2{font-size:26px;margin-top:48px}h3{font-size:21px;margin-top:32px}p{max-width:1000px}a{color:#2e5aa8}nav{display:flex;gap:12px 24px;flex-wrap:wrap;padding:16px 0;border-block:1px solid #bfc0c0}section,details,h3{scroll-margin-top:24px}.eyebrow,.muted,footer{color:#4f5d75}.eyebrow{font-size:13px;letter-spacing:.08em}.verdict{border-left:4px solid #eb6c36;padding:16px 24px;background:#fff;margin:24px 0}.figure-scroll,.table-scroll{overflow-x:auto}svg{display:block;width:100%;height:auto}.perfboard-figure{min-width:1040px}#overview svg{min-width:1000px}table{border-collapse:collapse;width:100%;min-width:640px;margin:20px 0}th,td{text-align:left;vertical-align:top;border-bottom:1px solid #bfc0c0;padding:12px}th{background:#ececec}details{margin-top:32px;border-top:1px solid #bfc0c0;padding-top:20px}summary{cursor:pointer;font-weight:600}footer{border-top:1px solid #bfc0c0;margin-top:36px;padding:16px 0;font-size:14px}@media print{main{max-width:none;margin:0;padding:0}nav{display:none}.figure-scroll,.table-scroll{overflow:visible}.perfboard-figure,#overview svg,table{min-width:0}section{break-before:page}h2,h3,summary{break-after:avoid}tr{break-inside:avoid}}</style></head>
+<title>Discora 整机接线与洞洞板装配图</title><style>body{margin:0;background:#f5f5f5;color:#2d3142;font-family:"PingFang SC","Noto Sans CJK SC",sans-serif;line-height:1.8}main{max-width:1400px;margin:32px auto;padding:0 24px}h1{font-size:32px;line-height:1.3}h2{font-size:26px;margin-top:48px}h3{font-size:21px;margin-top:32px}p{max-width:1000px}a{color:#2e5aa8}nav{display:flex;gap:12px 24px;flex-wrap:wrap;padding:16px 0;border-block:1px solid #bfc0c0}section,details,h3{scroll-margin-top:24px}.eyebrow,.muted,footer{color:#4f5d75}.eyebrow{font-size:13px;letter-spacing:.08em}.verdict{border-left:4px solid #eb6c36;padding:16px 24px;background:#fff;margin:24px 0}.figure-scroll,.table-scroll{overflow-x:auto}svg{display:block;width:100%;height:auto}.perfboard-figure{min-width:1040px}#perfboard-layout .perfboard-figure{min-width:1400px}#overview svg{min-width:1000px}table{border-collapse:collapse;width:100%;min-width:640px;margin:20px 0}th,td{text-align:left;vertical-align:top;border-bottom:1px solid #bfc0c0;padding:12px}th{background:#ececec}details{margin-top:32px;border-top:1px solid #bfc0c0;padding-top:20px}summary{cursor:pointer;font-weight:600}footer{border-top:1px solid #bfc0c0;margin-top:36px;padding:16px 0;font-size:14px}@media print{main{max-width:none;margin:0;padding:0}nav{display:none}.figure-scroll,.table-scroll{overflow:visible}.perfboard-figure,#overview svg,table{min-width:0}section{break-before:page}h2,h3,summary{break-after:avoid}tr{break-inside:avoid}}</style></head>
 <body><main>
 <header><p class="eyebrow">DISCORA / WIRING &amp; PERFBOARD / 2026-11-07</p>
 <h1>整机接线与洞洞板装配图</h1>
-<p>当前音频接法为 GPIO15/16/7，已通过台架立体声播放；本版把它落实到可拔插洞洞板。USB 长时稳定性仍未通过，供电与 USB 路径保留拆换；整板机内安装未验收。</p>
-<nav aria-label="图稿导航"><a href="#overview">整机连接</a><a href="#perfboard">逐孔接线</a><a href="#perfboard-layout">排母孔位</a><a href="#perfboard-wire-list">导线端点表</a><a href="../wiring.md">接线说明</a></nav></header>
+<p>当前音频接法为 GPIO15/16/7，已通过台架立体声播放；原台架孔位继续保留；本版新增含两块 DCE001 的 100 × 55 mm 机内载板候选。USB 长时稳定性仍未通过，供电与 USB 路径保留拆换；整板机内安装未验收。</p>
+<nav aria-label="图稿导航"><a href="#enclosure-layout">新增双路降压布局</a><a href="#overview">台架整机连接</a><a href="#perfboard">历史台架接线</a><a href="#perfboard-layout">新版孔位总图</a><a href="#perfboard-wire-list">历史导线端点</a><a href="../wiring.md">接线说明</a></nav></header>
 <section id="overview"><h2>01 · 整机连接与供电</h2>
 <p>模块级总览。框内信号逐线连接，不表示短接；虚线支路须先确认规格。<a href="discora-wiring.svg">单独打开整机总览 SVG</a>。</p>
 <div class="figure-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 3160" role="img" aria-labelledby="discora-wiring-title discora-wiring-desc">
@@ -238,7 +238,1555 @@
 <text x="64" y="2632" font-size="20" fill="#2d3142" font-weight="400">依据：供应商模块资料、ESP32 板卡图纸与当前固件。规划不等于已接线、已上电或音频／显示验收。</text>
 </g>
 </svg></div></section>
-<section id="perfboard"><h2>02 · GPIO15/16/7 可拔插洞洞板</h2>
+<section id="enclosure-layout"><h2>02 · 机内裁剪载板：ESP32＋DAC＋双路降压</h2>
+<p>新增两块 <a href="../../hardware/DCE001-5V/README.md">DCE001 固定 5V 模块</a>，分别供主控和光驱；每块供应商标称 17.5 × 12 × 4.5 mm。候选板由约 90 × 55 mm 调整为 <strong>100 × 55 mm</strong>，功放仍单独固定。<a href="../perfboard-layout.md">完整布局尺寸、接线边界与 CAD 试算</a>。</p>
+<div class="verdict"><strong>这是新的机内安装候选，当前机壳尚不能直接安装。</strong> 原 120 × 80 mm 台架孔位保留在下一节；本候选需要重新布置排母。尚未确定裁剪线、固定孔和 DCE001 半孔针序，不按本图直接裁板或接电。</div>
+<div class="figure-scroll"><svg class="perfboard-figure" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 800" role="img" aria-labelledby="dual-buck-layout-title dual-buck-layout-desc">
+<title id="dual-buck-layout-title">100 × 55 mm 洞洞板：主控、DAC 与两块 DCE001</title>
+<desc id="dual-buck-layout-desc">元件面候选布局：主控后排、USB 朝右，DAC 左前，两块 DCE001 右前；模块本体按标称尺寸画，虚线为插头和引线预留，未通过当前机箱装配。</desc>
+<defs>
+<style>.pb-text{font-family:Geist,"PingFang SC",sans-serif;fill:#2d3142}.pb-sub{font-size:20px;fill:#4f5d75}.pb-head{font-size:28px;font-weight:600}</style>
+</defs>
+<rect width="1440" height="800" fill="#f5f5f5"/>
+<text x="40" y="48" class="pb-text pb-head" text-anchor="start">单块可裁剪载板 · 双路 5V 分区</text>
+<text x="40" y="88" class="pb-text pb-sub" text-anchor="start">PLANNED / 模块本体按比例；不是裁剪、钻孔或半孔针序模板</text>
+<path d="M88 160 V140 H888 V160 M88 140 V128 M888 140 V128" fill="none" stroke="#4f5d75" stroke-width="2"/>
+<text x="488" y="128" class="pb-text pb-sub" text-anchor="middle">100 mm</text>
+<rect x="88.00" y="180.00" width="800.00" height="440.00" rx="4" fill="#ececec" stroke="#4f5d75" stroke-width="2" data-board-width="100" data-board-depth="55"/>
+<rect x="480.00" y="436.00" width="200.00" height="176.00" rx="4" fill="#f5f5f5" stroke="#7a8399" stroke-width="2" stroke-dasharray="8 6" data-zone="BuckAService"/>
+<rect x="684.00" y="436.00" width="200.00" height="176.00" rx="4" fill="#f5f5f5" stroke="#7a8399" stroke-width="2" stroke-dasharray="8 6" data-zone="BuckBService"/>
+<rect x="736.80" y="193.84" width="160.00" height="223.52" rx="4" fill="#f5f5f5" stroke="#7a8399" stroke-width="2" stroke-dasharray="8 6" data-zone="USBService"/>
+<rect x="229.68" y="193.84" width="507.12" height="223.52" rx="4" fill="#fff" stroke="#4f5d75" stroke-width="2" data-module="MCU" data-u="17.71" data-v="1.73" data-width="63.39" data-depth="27.94"/>
+<rect x="138.32" y="450.96" width="248.00" height="136.00" rx="4" fill="#fff" stroke="#4f5d75" stroke-width="2" data-module="DAC" data-u="6.29" data-v="33.87" data-width="31" data-depth="17"/>
+<rect x="512.00" y="460.00" width="140.00" height="96.00" rx="4" fill="#fff4ed" stroke="#eb6c36" stroke-width="2" data-module="BuckA" data-u="53.00" data-v="35.00" data-width="17.5" data-depth="12"/>
+<rect x="708.00" y="460.00" width="140.00" height="96.00" rx="4" fill="#fff4ed" stroke="#eb6c36" stroke-width="2" data-module="BuckB" data-u="77.50" data-v="35.00" data-width="17.5" data-depth="12"/>
+<rect x="229.68" y="193.84" width="49.92" height="223.52" rx="4" fill="#ececec" stroke="#bfc0c0" stroke-width="2" />
+<text x="256" y="292" class="pb-text pb-sub" text-anchor="middle">天</text>
+<text x="256" y="324" class="pb-text pb-sub" text-anchor="middle">线</text>
+<text x="504" y="280" class="pb-text pb-head" text-anchor="middle">ESP32-S3</text>
+<text x="504" y="324" class="pb-text pb-sub" text-anchor="middle">63.39 × 27.94 mm</text>
+<text x="504" y="368" class="pb-text pb-sub" text-anchor="middle">两条可拔排母 · USB 朝右</text>
+<text x="820" y="280" class="pb-text pb-head" text-anchor="middle">USB</text>
+<text x="820" y="324" class="pb-text pb-sub" text-anchor="middle">插拔通道</text>
+<text x="820" y="368" class="pb-text pb-sub" text-anchor="middle">20 mm</text>
+<text x="260" y="500" class="pb-text pb-head" text-anchor="middle">PCM5102</text>
+<text x="260" y="540" class="pb-text pb-sub" text-anchor="middle">31 × 17 mm</text>
+<text x="260" y="576" class="pb-text pb-sub" text-anchor="middle">音频向左离板</text>
+<text x="582" y="488" class="pb-text pb-sub" text-anchor="middle">DCE001 A</text>
+<text x="582" y="520" class="pb-text pb-sub" text-anchor="middle">主控 5V</text>
+<text x="582" y="548" class="pb-text pb-sub" text-anchor="middle">17.5 × 12</text>
+<text x="778" y="488" class="pb-text pb-sub" text-anchor="middle">DCE001 B</text>
+<text x="778" y="520" class="pb-text pb-sub" text-anchor="middle">光驱 5V</text>
+<text x="778" y="548" class="pb-text pb-sub" text-anchor="middle">17.5 × 12</text>
+<text x="582" y="592" class="pb-text pb-sub" text-anchor="middle">25 × 22 预留区</text>
+<text x="778" y="592" class="pb-text pb-sub" text-anchor="middle">25 × 22 预留区</text>
+<path d="M908 180 H928 V620 H908 M928 180 H940 M928 620 H940" fill="none" stroke="#4f5d75" stroke-width="2"/>
+<text x="944" y="392" class="pb-text pb-sub" text-anchor="start">55</text>
+<text x="944" y="420" class="pb-text pb-sub" text-anchor="start">mm</text>
+<text x="88" y="656" class="pb-text pb-sub" text-anchor="start">↑ 机身后方／光驱　　　↓ 机身前方／屏幕</text>
+<text x="1020" y="208" class="pb-text pb-head" text-anchor="start">两块模块，各供一路</text>
+<text x="1020" y="252" class="pb-text pb-sub" text-anchor="start">A → 主控 5Vin / GND</text>
+<text x="1020" y="292" class="pb-text pb-sub" text-anchor="start">B → 光驱辅助 5V / GND</text>
+<text x="1020" y="340" class="pb-text pb-sub" text-anchor="start">两路 OUT+ 不并联</text>
+<text x="1020" y="380" class="pb-text pb-sub" text-anchor="start">USB VBUS 防回灌接法待定</text>
+<text x="1020" y="420" class="pb-text pb-sub" text-anchor="start">DAC 保留独立 5V 入口</text>
+<text x="1020" y="484" class="pb-text pb-head" text-anchor="start">机箱现状：不能直接装</text>
+<text x="1020" y="528" class="pb-text pb-sub" text-anchor="start">须重做上层托架与顶部空间</text>
+<text x="1020" y="568" class="pb-text pb-sub" text-anchor="start">半孔针序、接头、固定点待测</text>
+<text x="1020" y="608" class="pb-text pb-sub" text-anchor="start">功放与桥接器仍分别固定</text>
+<path d="M40 688 H1400" stroke="#bfc0c0"/>
+<text x="40" y="724" class="pb-text pb-sub" text-anchor="start">实框：模块标称包络　　虚框：设计预留（不是实测插头）　　橙色：新增两路降压模块</text>
+<text x="40" y="764" class="pb-text pb-sub" text-anchor="start">本图坐标 u/v 不对应原板丝印；不沿用旧台架 Q／1／N 列孔位，先保留整板。</text>
+</svg></div>
+<details open id="perfboard-layout"><summary>孔位总图：新版排母、可拔电源入口、双降压与 USB 留空区</summary>
+<p><strong>按你确认的元件面方向：左上为原点，X 向右是 A～Z、再 A～P；Y 向下是 A～Z、再 1～4。</strong> 第二段 X 字母仅在图中加下标 ₂ 区分，实物仍印普通字母。下图展示完整 42 × 30 孔阵列；右侧放大 DAC 与 P1，表格统一按（X，Y）读孔。排母位置仍为待试插候选。</p>
+<div class="figure-scroll"><svg class="perfboard-figure" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1640 1180" role="img" aria-labelledby="candidate-holes-title candidate-holes-desc">
+<title id="candidate-holes-title">新版孔位总图：按原板 X/Y 丝印定位</title>
+<desc id="candidate-holes-desc">左上为原点，X 向右为 A 到 Z 再 A 到 P，第二段用下标 2 区分；Y 向下为 A 到 Z 再 1 到 4。主控排母位于 Y=A 和 K、X=J 到第二段 E；DAC 位于 X=N、Y=N 到 S；P1 位于 X=Q、Y=Q 和 R。展示完整 42 列 30 行与针脚放大标注。</desc>
+<defs><style>.ch{font-family:Geist,"PingFang SC",sans-serif;fill:#2d3142}.ch-title{font-size:28px;font-weight:600}.ch-body{font-size:22px}.ch-small{font-size:18px;fill:#4f5d75}.ch-axis{font-size:16px;fill:#4f5d75;text-anchor:middle}.ch-pin{font-size:16px;fill:#4f5d75}</style></defs>
+<rect width="1640" height="1180" fill="#f5f5f5"/>
+<text x="40.00" y="48.00" class="ch ch-title" text-anchor="start">孔位总图 · 按板上字母找孔</text>
+<text x="40.00" y="88.00" class="ch ch-body" text-anchor="start">元件面，左上为原点。X 向右：A～Z，再 A～P；Y 向下：A～Z，再 1～4。</text>
+<text x="40.00" y="124.00" class="ch ch-small" text-anchor="start">第二段 X 字母在图中写成 A₂～P₂，仅用于区分；实物仍印 A～P。模块位置为待试插的安装候选。</text>
+<rect x="60" y="198" width="1044" height="734" rx="8" fill="#e6e7e9" stroke="#bfc0c0" stroke-width="2"/>
+<rect x="78" y="198" width="912" height="480" fill="#fff"/>
+<path d="M702 148 V180" stroke="#4f5d75" stroke-width="2"/>
+<text x="390.00" y="162.00" class="ch ch-small" text-anchor="middle">X：第一段 A～Z →</text>
+<text x="900.00" y="162.00" class="ch ch-small" text-anchor="middle">第二段 A～P →</text>
+<text x="90.00" y="190.00" class="ch ch-axis" text-anchor="start">A</text>
+<text x="114.00" y="190.00" class="ch ch-axis" text-anchor="start">B</text>
+<text x="138.00" y="190.00" class="ch ch-axis" text-anchor="start">C</text>
+<text x="162.00" y="190.00" class="ch ch-axis" text-anchor="start">D</text>
+<text x="186.00" y="190.00" class="ch ch-axis" text-anchor="start">E</text>
+<text x="210.00" y="190.00" class="ch ch-axis" text-anchor="start">F</text>
+<text x="234.00" y="190.00" class="ch ch-axis" text-anchor="start">G</text>
+<text x="258.00" y="190.00" class="ch ch-axis" text-anchor="start">H</text>
+<text x="282.00" y="190.00" class="ch ch-axis" text-anchor="start">I</text>
+<text x="306.00" y="190.00" class="ch ch-axis" text-anchor="start">J</text>
+<text x="330.00" y="190.00" class="ch ch-axis" text-anchor="start">K</text>
+<text x="354.00" y="190.00" class="ch ch-axis" text-anchor="start">L</text>
+<text x="378.00" y="190.00" class="ch ch-axis" text-anchor="start">M</text>
+<text x="402.00" y="190.00" class="ch ch-axis" text-anchor="start">N</text>
+<text x="426.00" y="190.00" class="ch ch-axis" text-anchor="start">O</text>
+<text x="450.00" y="190.00" class="ch ch-axis" text-anchor="start">P</text>
+<text x="474.00" y="190.00" class="ch ch-axis" text-anchor="start">Q</text>
+<text x="498.00" y="190.00" class="ch ch-axis" text-anchor="start">R</text>
+<text x="522.00" y="190.00" class="ch ch-axis" text-anchor="start">S</text>
+<text x="546.00" y="190.00" class="ch ch-axis" text-anchor="start">T</text>
+<text x="570.00" y="190.00" class="ch ch-axis" text-anchor="start">U</text>
+<text x="594.00" y="190.00" class="ch ch-axis" text-anchor="start">V</text>
+<text x="618.00" y="190.00" class="ch ch-axis" text-anchor="start">W</text>
+<text x="642.00" y="190.00" class="ch ch-axis" text-anchor="start">X</text>
+<text x="666.00" y="190.00" class="ch ch-axis" text-anchor="start">Y</text>
+<text x="690.00" y="190.00" class="ch ch-axis" text-anchor="start">Z</text>
+<text x="714.00" y="190.00" class="ch ch-axis" text-anchor="start">A₂</text>
+<text x="738.00" y="190.00" class="ch ch-axis" text-anchor="start">B₂</text>
+<text x="762.00" y="190.00" class="ch ch-axis" text-anchor="start">C₂</text>
+<text x="786.00" y="190.00" class="ch ch-axis" text-anchor="start">D₂</text>
+<text x="810.00" y="190.00" class="ch ch-axis" text-anchor="start">E₂</text>
+<text x="834.00" y="190.00" class="ch ch-axis" text-anchor="start">F₂</text>
+<text x="858.00" y="190.00" class="ch ch-axis" text-anchor="start">G₂</text>
+<text x="882.00" y="190.00" class="ch ch-axis" text-anchor="start">H₂</text>
+<text x="906.00" y="190.00" class="ch ch-axis" text-anchor="start">I₂</text>
+<text x="930.00" y="190.00" class="ch ch-axis" text-anchor="start">J₂</text>
+<text x="954.00" y="190.00" class="ch ch-axis" text-anchor="start">K₂</text>
+<text x="978.00" y="190.00" class="ch ch-axis" text-anchor="start">L₂</text>
+<text x="1002.00" y="190.00" class="ch ch-axis" text-anchor="start">M₂</text>
+<text x="1026.00" y="190.00" class="ch ch-axis" text-anchor="start">N₂</text>
+<text x="1050.00" y="190.00" class="ch ch-axis" text-anchor="start">O₂</text>
+<text x="1074.00" y="190.00" class="ch ch-axis" text-anchor="start">P₂</text>
+<text x="40.00" y="217.00" class="ch ch-axis" text-anchor="start">A</text>
+<text x="40.00" y="241.00" class="ch ch-axis" text-anchor="start">B</text>
+<text x="40.00" y="265.00" class="ch ch-axis" text-anchor="start">C</text>
+<text x="40.00" y="289.00" class="ch ch-axis" text-anchor="start">D</text>
+<text x="40.00" y="313.00" class="ch ch-axis" text-anchor="start">E</text>
+<text x="40.00" y="337.00" class="ch ch-axis" text-anchor="start">F</text>
+<text x="40.00" y="361.00" class="ch ch-axis" text-anchor="start">G</text>
+<text x="40.00" y="385.00" class="ch ch-axis" text-anchor="start">H</text>
+<text x="40.00" y="409.00" class="ch ch-axis" text-anchor="start">I</text>
+<text x="40.00" y="433.00" class="ch ch-axis" text-anchor="start">J</text>
+<text x="40.00" y="457.00" class="ch ch-axis" text-anchor="start">K</text>
+<text x="40.00" y="481.00" class="ch ch-axis" text-anchor="start">L</text>
+<text x="40.00" y="505.00" class="ch ch-axis" text-anchor="start">M</text>
+<text x="40.00" y="529.00" class="ch ch-axis" text-anchor="start">N</text>
+<text x="40.00" y="553.00" class="ch ch-axis" text-anchor="start">O</text>
+<text x="40.00" y="577.00" class="ch ch-axis" text-anchor="start">P</text>
+<text x="40.00" y="601.00" class="ch ch-axis" text-anchor="start">Q</text>
+<text x="40.00" y="625.00" class="ch ch-axis" text-anchor="start">R</text>
+<text x="40.00" y="649.00" class="ch ch-axis" text-anchor="start">S</text>
+<text x="40.00" y="673.00" class="ch ch-axis" text-anchor="start">T</text>
+<text x="40.00" y="697.00" class="ch ch-axis" text-anchor="start">U</text>
+<text x="40.00" y="721.00" class="ch ch-axis" text-anchor="start">V</text>
+<text x="40.00" y="745.00" class="ch ch-axis" text-anchor="start">W</text>
+<text x="40.00" y="769.00" class="ch ch-axis" text-anchor="start">X</text>
+<text x="40.00" y="793.00" class="ch ch-axis" text-anchor="start">Y</text>
+<text x="40.00" y="817.00" class="ch ch-axis" text-anchor="start">Z</text>
+<text x="40.00" y="841.00" class="ch ch-axis" text-anchor="start">1</text>
+<text x="40.00" y="865.00" class="ch ch-axis" text-anchor="start">2</text>
+<text x="40.00" y="889.00" class="ch ch-axis" text-anchor="start">3</text>
+<text x="40.00" y="913.00" class="ch ch-axis" text-anchor="start">4</text>
+<text x="40.00" y="170.00" class="ch ch-small" text-anchor="middle">Y ↓</text>
+<circle cx="90" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A/Y=A" data-index-x="1" data-index-y="1"/>
+<circle cx="90" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A/Y=B" data-index-x="1" data-index-y="2"/>
+<circle cx="90" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A/Y=C" data-index-x="1" data-index-y="3"/>
+<circle cx="90" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A/Y=D" data-index-x="1" data-index-y="4"/>
+<circle cx="90" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A/Y=E" data-index-x="1" data-index-y="5"/>
+<circle cx="90" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A/Y=F" data-index-x="1" data-index-y="6"/>
+<circle cx="90" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A/Y=G" data-index-x="1" data-index-y="7"/>
+<circle cx="90" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A/Y=H" data-index-x="1" data-index-y="8"/>
+<circle cx="90" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A/Y=I" data-index-x="1" data-index-y="9"/>
+<circle cx="90" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A/Y=J" data-index-x="1" data-index-y="10"/>
+<circle cx="90" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A/Y=K" data-index-x="1" data-index-y="11"/>
+<circle cx="90" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A/Y=L" data-index-x="1" data-index-y="12"/>
+<circle cx="90" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A/Y=M" data-index-x="1" data-index-y="13"/>
+<circle cx="90" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A/Y=N" data-index-x="1" data-index-y="14"/>
+<circle cx="90" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A/Y=O" data-index-x="1" data-index-y="15"/>
+<circle cx="90" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A/Y=P" data-index-x="1" data-index-y="16"/>
+<circle cx="90" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A/Y=Q" data-index-x="1" data-index-y="17"/>
+<circle cx="90" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A/Y=R" data-index-x="1" data-index-y="18"/>
+<circle cx="90" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A/Y=S" data-index-x="1" data-index-y="19"/>
+<circle cx="90" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A/Y=T" data-index-x="1" data-index-y="20"/>
+<circle cx="90" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=A/Y=U" data-index-x="1" data-index-y="21"/>
+<circle cx="90" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=A/Y=V" data-index-x="1" data-index-y="22"/>
+<circle cx="90" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=A/Y=W" data-index-x="1" data-index-y="23"/>
+<circle cx="90" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=A/Y=X" data-index-x="1" data-index-y="24"/>
+<circle cx="90" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=A/Y=Y" data-index-x="1" data-index-y="25"/>
+<circle cx="90" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=A/Y=Z" data-index-x="1" data-index-y="26"/>
+<circle cx="90" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=A/Y=1" data-index-x="1" data-index-y="27"/>
+<circle cx="90" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=A/Y=2" data-index-x="1" data-index-y="28"/>
+<circle cx="90" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=A/Y=3" data-index-x="1" data-index-y="29"/>
+<circle cx="90" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=A/Y=4" data-index-x="1" data-index-y="30"/>
+<circle cx="114" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B/Y=A" data-index-x="2" data-index-y="1"/>
+<circle cx="114" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B/Y=B" data-index-x="2" data-index-y="2"/>
+<circle cx="114" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B/Y=C" data-index-x="2" data-index-y="3"/>
+<circle cx="114" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B/Y=D" data-index-x="2" data-index-y="4"/>
+<circle cx="114" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B/Y=E" data-index-x="2" data-index-y="5"/>
+<circle cx="114" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B/Y=F" data-index-x="2" data-index-y="6"/>
+<circle cx="114" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B/Y=G" data-index-x="2" data-index-y="7"/>
+<circle cx="114" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B/Y=H" data-index-x="2" data-index-y="8"/>
+<circle cx="114" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B/Y=I" data-index-x="2" data-index-y="9"/>
+<circle cx="114" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B/Y=J" data-index-x="2" data-index-y="10"/>
+<circle cx="114" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B/Y=K" data-index-x="2" data-index-y="11"/>
+<circle cx="114" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B/Y=L" data-index-x="2" data-index-y="12"/>
+<circle cx="114" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B/Y=M" data-index-x="2" data-index-y="13"/>
+<circle cx="114" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B/Y=N" data-index-x="2" data-index-y="14"/>
+<circle cx="114" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B/Y=O" data-index-x="2" data-index-y="15"/>
+<circle cx="114" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B/Y=P" data-index-x="2" data-index-y="16"/>
+<circle cx="114" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B/Y=Q" data-index-x="2" data-index-y="17"/>
+<circle cx="114" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B/Y=R" data-index-x="2" data-index-y="18"/>
+<circle cx="114" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B/Y=S" data-index-x="2" data-index-y="19"/>
+<circle cx="114" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B/Y=T" data-index-x="2" data-index-y="20"/>
+<circle cx="114" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=B/Y=U" data-index-x="2" data-index-y="21"/>
+<circle cx="114" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=B/Y=V" data-index-x="2" data-index-y="22"/>
+<circle cx="114" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=B/Y=W" data-index-x="2" data-index-y="23"/>
+<circle cx="114" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=B/Y=X" data-index-x="2" data-index-y="24"/>
+<circle cx="114" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=B/Y=Y" data-index-x="2" data-index-y="25"/>
+<circle cx="114" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=B/Y=Z" data-index-x="2" data-index-y="26"/>
+<circle cx="114" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=B/Y=1" data-index-x="2" data-index-y="27"/>
+<circle cx="114" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=B/Y=2" data-index-x="2" data-index-y="28"/>
+<circle cx="114" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=B/Y=3" data-index-x="2" data-index-y="29"/>
+<circle cx="114" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=B/Y=4" data-index-x="2" data-index-y="30"/>
+<circle cx="138" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C/Y=A" data-index-x="3" data-index-y="1"/>
+<circle cx="138" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C/Y=B" data-index-x="3" data-index-y="2"/>
+<circle cx="138" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C/Y=C" data-index-x="3" data-index-y="3"/>
+<circle cx="138" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C/Y=D" data-index-x="3" data-index-y="4"/>
+<circle cx="138" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C/Y=E" data-index-x="3" data-index-y="5"/>
+<circle cx="138" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C/Y=F" data-index-x="3" data-index-y="6"/>
+<circle cx="138" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C/Y=G" data-index-x="3" data-index-y="7"/>
+<circle cx="138" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C/Y=H" data-index-x="3" data-index-y="8"/>
+<circle cx="138" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C/Y=I" data-index-x="3" data-index-y="9"/>
+<circle cx="138" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C/Y=J" data-index-x="3" data-index-y="10"/>
+<circle cx="138" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C/Y=K" data-index-x="3" data-index-y="11"/>
+<circle cx="138" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C/Y=L" data-index-x="3" data-index-y="12"/>
+<circle cx="138" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C/Y=M" data-index-x="3" data-index-y="13"/>
+<circle cx="138" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C/Y=N" data-index-x="3" data-index-y="14"/>
+<circle cx="138" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C/Y=O" data-index-x="3" data-index-y="15"/>
+<circle cx="138" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C/Y=P" data-index-x="3" data-index-y="16"/>
+<circle cx="138" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C/Y=Q" data-index-x="3" data-index-y="17"/>
+<circle cx="138" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C/Y=R" data-index-x="3" data-index-y="18"/>
+<circle cx="138" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C/Y=S" data-index-x="3" data-index-y="19"/>
+<circle cx="138" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C/Y=T" data-index-x="3" data-index-y="20"/>
+<circle cx="138" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=C/Y=U" data-index-x="3" data-index-y="21"/>
+<circle cx="138" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=C/Y=V" data-index-x="3" data-index-y="22"/>
+<circle cx="138" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=C/Y=W" data-index-x="3" data-index-y="23"/>
+<circle cx="138" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=C/Y=X" data-index-x="3" data-index-y="24"/>
+<circle cx="138" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=C/Y=Y" data-index-x="3" data-index-y="25"/>
+<circle cx="138" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=C/Y=Z" data-index-x="3" data-index-y="26"/>
+<circle cx="138" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=C/Y=1" data-index-x="3" data-index-y="27"/>
+<circle cx="138" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=C/Y=2" data-index-x="3" data-index-y="28"/>
+<circle cx="138" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=C/Y=3" data-index-x="3" data-index-y="29"/>
+<circle cx="138" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=C/Y=4" data-index-x="3" data-index-y="30"/>
+<circle cx="162" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D/Y=A" data-index-x="4" data-index-y="1"/>
+<circle cx="162" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D/Y=B" data-index-x="4" data-index-y="2"/>
+<circle cx="162" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D/Y=C" data-index-x="4" data-index-y="3"/>
+<circle cx="162" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D/Y=D" data-index-x="4" data-index-y="4"/>
+<circle cx="162" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D/Y=E" data-index-x="4" data-index-y="5"/>
+<circle cx="162" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D/Y=F" data-index-x="4" data-index-y="6"/>
+<circle cx="162" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D/Y=G" data-index-x="4" data-index-y="7"/>
+<circle cx="162" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D/Y=H" data-index-x="4" data-index-y="8"/>
+<circle cx="162" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D/Y=I" data-index-x="4" data-index-y="9"/>
+<circle cx="162" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D/Y=J" data-index-x="4" data-index-y="10"/>
+<circle cx="162" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D/Y=K" data-index-x="4" data-index-y="11"/>
+<circle cx="162" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D/Y=L" data-index-x="4" data-index-y="12"/>
+<circle cx="162" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D/Y=M" data-index-x="4" data-index-y="13"/>
+<circle cx="162" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D/Y=N" data-index-x="4" data-index-y="14"/>
+<circle cx="162" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D/Y=O" data-index-x="4" data-index-y="15"/>
+<circle cx="162" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D/Y=P" data-index-x="4" data-index-y="16"/>
+<circle cx="162" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D/Y=Q" data-index-x="4" data-index-y="17"/>
+<circle cx="162" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D/Y=R" data-index-x="4" data-index-y="18"/>
+<circle cx="162" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D/Y=S" data-index-x="4" data-index-y="19"/>
+<circle cx="162" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D/Y=T" data-index-x="4" data-index-y="20"/>
+<circle cx="162" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=D/Y=U" data-index-x="4" data-index-y="21"/>
+<circle cx="162" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=D/Y=V" data-index-x="4" data-index-y="22"/>
+<circle cx="162" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=D/Y=W" data-index-x="4" data-index-y="23"/>
+<circle cx="162" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=D/Y=X" data-index-x="4" data-index-y="24"/>
+<circle cx="162" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=D/Y=Y" data-index-x="4" data-index-y="25"/>
+<circle cx="162" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=D/Y=Z" data-index-x="4" data-index-y="26"/>
+<circle cx="162" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=D/Y=1" data-index-x="4" data-index-y="27"/>
+<circle cx="162" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=D/Y=2" data-index-x="4" data-index-y="28"/>
+<circle cx="162" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=D/Y=3" data-index-x="4" data-index-y="29"/>
+<circle cx="162" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=D/Y=4" data-index-x="4" data-index-y="30"/>
+<circle cx="186" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E/Y=A" data-index-x="5" data-index-y="1"/>
+<circle cx="186" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E/Y=B" data-index-x="5" data-index-y="2"/>
+<circle cx="186" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E/Y=C" data-index-x="5" data-index-y="3"/>
+<circle cx="186" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E/Y=D" data-index-x="5" data-index-y="4"/>
+<circle cx="186" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E/Y=E" data-index-x="5" data-index-y="5"/>
+<circle cx="186" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E/Y=F" data-index-x="5" data-index-y="6"/>
+<circle cx="186" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E/Y=G" data-index-x="5" data-index-y="7"/>
+<circle cx="186" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E/Y=H" data-index-x="5" data-index-y="8"/>
+<circle cx="186" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E/Y=I" data-index-x="5" data-index-y="9"/>
+<circle cx="186" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E/Y=J" data-index-x="5" data-index-y="10"/>
+<circle cx="186" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E/Y=K" data-index-x="5" data-index-y="11"/>
+<circle cx="186" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E/Y=L" data-index-x="5" data-index-y="12"/>
+<circle cx="186" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E/Y=M" data-index-x="5" data-index-y="13"/>
+<circle cx="186" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E/Y=N" data-index-x="5" data-index-y="14"/>
+<circle cx="186" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E/Y=O" data-index-x="5" data-index-y="15"/>
+<circle cx="186" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E/Y=P" data-index-x="5" data-index-y="16"/>
+<circle cx="186" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E/Y=Q" data-index-x="5" data-index-y="17"/>
+<circle cx="186" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E/Y=R" data-index-x="5" data-index-y="18"/>
+<circle cx="186" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E/Y=S" data-index-x="5" data-index-y="19"/>
+<circle cx="186" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E/Y=T" data-index-x="5" data-index-y="20"/>
+<circle cx="186" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=E/Y=U" data-index-x="5" data-index-y="21"/>
+<circle cx="186" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=E/Y=V" data-index-x="5" data-index-y="22"/>
+<circle cx="186" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=E/Y=W" data-index-x="5" data-index-y="23"/>
+<circle cx="186" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=E/Y=X" data-index-x="5" data-index-y="24"/>
+<circle cx="186" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=E/Y=Y" data-index-x="5" data-index-y="25"/>
+<circle cx="186" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=E/Y=Z" data-index-x="5" data-index-y="26"/>
+<circle cx="186" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=E/Y=1" data-index-x="5" data-index-y="27"/>
+<circle cx="186" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=E/Y=2" data-index-x="5" data-index-y="28"/>
+<circle cx="186" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=E/Y=3" data-index-x="5" data-index-y="29"/>
+<circle cx="186" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=E/Y=4" data-index-x="5" data-index-y="30"/>
+<circle cx="210" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F/Y=A" data-index-x="6" data-index-y="1"/>
+<circle cx="210" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F/Y=B" data-index-x="6" data-index-y="2"/>
+<circle cx="210" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F/Y=C" data-index-x="6" data-index-y="3"/>
+<circle cx="210" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F/Y=D" data-index-x="6" data-index-y="4"/>
+<circle cx="210" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F/Y=E" data-index-x="6" data-index-y="5"/>
+<circle cx="210" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F/Y=F" data-index-x="6" data-index-y="6"/>
+<circle cx="210" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F/Y=G" data-index-x="6" data-index-y="7"/>
+<circle cx="210" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F/Y=H" data-index-x="6" data-index-y="8"/>
+<circle cx="210" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F/Y=I" data-index-x="6" data-index-y="9"/>
+<circle cx="210" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F/Y=J" data-index-x="6" data-index-y="10"/>
+<circle cx="210" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F/Y=K" data-index-x="6" data-index-y="11"/>
+<circle cx="210" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F/Y=L" data-index-x="6" data-index-y="12"/>
+<circle cx="210" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F/Y=M" data-index-x="6" data-index-y="13"/>
+<circle cx="210" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F/Y=N" data-index-x="6" data-index-y="14"/>
+<circle cx="210" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F/Y=O" data-index-x="6" data-index-y="15"/>
+<circle cx="210" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F/Y=P" data-index-x="6" data-index-y="16"/>
+<circle cx="210" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F/Y=Q" data-index-x="6" data-index-y="17"/>
+<circle cx="210" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F/Y=R" data-index-x="6" data-index-y="18"/>
+<circle cx="210" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F/Y=S" data-index-x="6" data-index-y="19"/>
+<circle cx="210" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F/Y=T" data-index-x="6" data-index-y="20"/>
+<circle cx="210" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=F/Y=U" data-index-x="6" data-index-y="21"/>
+<circle cx="210" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=F/Y=V" data-index-x="6" data-index-y="22"/>
+<circle cx="210" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=F/Y=W" data-index-x="6" data-index-y="23"/>
+<circle cx="210" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=F/Y=X" data-index-x="6" data-index-y="24"/>
+<circle cx="210" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=F/Y=Y" data-index-x="6" data-index-y="25"/>
+<circle cx="210" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=F/Y=Z" data-index-x="6" data-index-y="26"/>
+<circle cx="210" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=F/Y=1" data-index-x="6" data-index-y="27"/>
+<circle cx="210" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=F/Y=2" data-index-x="6" data-index-y="28"/>
+<circle cx="210" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=F/Y=3" data-index-x="6" data-index-y="29"/>
+<circle cx="210" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=F/Y=4" data-index-x="6" data-index-y="30"/>
+<circle cx="234" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G/Y=A" data-index-x="7" data-index-y="1"/>
+<circle cx="234" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G/Y=B" data-index-x="7" data-index-y="2"/>
+<circle cx="234" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G/Y=C" data-index-x="7" data-index-y="3"/>
+<circle cx="234" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G/Y=D" data-index-x="7" data-index-y="4"/>
+<circle cx="234" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G/Y=E" data-index-x="7" data-index-y="5"/>
+<circle cx="234" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G/Y=F" data-index-x="7" data-index-y="6"/>
+<circle cx="234" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G/Y=G" data-index-x="7" data-index-y="7"/>
+<circle cx="234" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G/Y=H" data-index-x="7" data-index-y="8"/>
+<circle cx="234" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G/Y=I" data-index-x="7" data-index-y="9"/>
+<circle cx="234" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G/Y=J" data-index-x="7" data-index-y="10"/>
+<circle cx="234" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G/Y=K" data-index-x="7" data-index-y="11"/>
+<circle cx="234" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G/Y=L" data-index-x="7" data-index-y="12"/>
+<circle cx="234" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G/Y=M" data-index-x="7" data-index-y="13"/>
+<circle cx="234" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G/Y=N" data-index-x="7" data-index-y="14"/>
+<circle cx="234" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G/Y=O" data-index-x="7" data-index-y="15"/>
+<circle cx="234" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G/Y=P" data-index-x="7" data-index-y="16"/>
+<circle cx="234" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G/Y=Q" data-index-x="7" data-index-y="17"/>
+<circle cx="234" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G/Y=R" data-index-x="7" data-index-y="18"/>
+<circle cx="234" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G/Y=S" data-index-x="7" data-index-y="19"/>
+<circle cx="234" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G/Y=T" data-index-x="7" data-index-y="20"/>
+<circle cx="234" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=G/Y=U" data-index-x="7" data-index-y="21"/>
+<circle cx="234" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=G/Y=V" data-index-x="7" data-index-y="22"/>
+<circle cx="234" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=G/Y=W" data-index-x="7" data-index-y="23"/>
+<circle cx="234" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=G/Y=X" data-index-x="7" data-index-y="24"/>
+<circle cx="234" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=G/Y=Y" data-index-x="7" data-index-y="25"/>
+<circle cx="234" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=G/Y=Z" data-index-x="7" data-index-y="26"/>
+<circle cx="234" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=G/Y=1" data-index-x="7" data-index-y="27"/>
+<circle cx="234" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=G/Y=2" data-index-x="7" data-index-y="28"/>
+<circle cx="234" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=G/Y=3" data-index-x="7" data-index-y="29"/>
+<circle cx="234" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=G/Y=4" data-index-x="7" data-index-y="30"/>
+<circle cx="258" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H/Y=A" data-index-x="8" data-index-y="1"/>
+<circle cx="258" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H/Y=B" data-index-x="8" data-index-y="2"/>
+<circle cx="258" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H/Y=C" data-index-x="8" data-index-y="3"/>
+<circle cx="258" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H/Y=D" data-index-x="8" data-index-y="4"/>
+<circle cx="258" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H/Y=E" data-index-x="8" data-index-y="5"/>
+<circle cx="258" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H/Y=F" data-index-x="8" data-index-y="6"/>
+<circle cx="258" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H/Y=G" data-index-x="8" data-index-y="7"/>
+<circle cx="258" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H/Y=H" data-index-x="8" data-index-y="8"/>
+<circle cx="258" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H/Y=I" data-index-x="8" data-index-y="9"/>
+<circle cx="258" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H/Y=J" data-index-x="8" data-index-y="10"/>
+<circle cx="258" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H/Y=K" data-index-x="8" data-index-y="11"/>
+<circle cx="258" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H/Y=L" data-index-x="8" data-index-y="12"/>
+<circle cx="258" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H/Y=M" data-index-x="8" data-index-y="13"/>
+<circle cx="258" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H/Y=N" data-index-x="8" data-index-y="14"/>
+<circle cx="258" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H/Y=O" data-index-x="8" data-index-y="15"/>
+<circle cx="258" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H/Y=P" data-index-x="8" data-index-y="16"/>
+<circle cx="258" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H/Y=Q" data-index-x="8" data-index-y="17"/>
+<circle cx="258" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H/Y=R" data-index-x="8" data-index-y="18"/>
+<circle cx="258" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H/Y=S" data-index-x="8" data-index-y="19"/>
+<circle cx="258" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H/Y=T" data-index-x="8" data-index-y="20"/>
+<circle cx="258" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=H/Y=U" data-index-x="8" data-index-y="21"/>
+<circle cx="258" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=H/Y=V" data-index-x="8" data-index-y="22"/>
+<circle cx="258" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=H/Y=W" data-index-x="8" data-index-y="23"/>
+<circle cx="258" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=H/Y=X" data-index-x="8" data-index-y="24"/>
+<circle cx="258" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=H/Y=Y" data-index-x="8" data-index-y="25"/>
+<circle cx="258" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=H/Y=Z" data-index-x="8" data-index-y="26"/>
+<circle cx="258" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=H/Y=1" data-index-x="8" data-index-y="27"/>
+<circle cx="258" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=H/Y=2" data-index-x="8" data-index-y="28"/>
+<circle cx="258" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=H/Y=3" data-index-x="8" data-index-y="29"/>
+<circle cx="258" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=H/Y=4" data-index-x="8" data-index-y="30"/>
+<circle cx="282" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I/Y=A" data-index-x="9" data-index-y="1"/>
+<circle cx="282" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I/Y=B" data-index-x="9" data-index-y="2"/>
+<circle cx="282" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I/Y=C" data-index-x="9" data-index-y="3"/>
+<circle cx="282" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I/Y=D" data-index-x="9" data-index-y="4"/>
+<circle cx="282" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I/Y=E" data-index-x="9" data-index-y="5"/>
+<circle cx="282" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I/Y=F" data-index-x="9" data-index-y="6"/>
+<circle cx="282" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I/Y=G" data-index-x="9" data-index-y="7"/>
+<circle cx="282" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I/Y=H" data-index-x="9" data-index-y="8"/>
+<circle cx="282" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I/Y=I" data-index-x="9" data-index-y="9"/>
+<circle cx="282" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I/Y=J" data-index-x="9" data-index-y="10"/>
+<circle cx="282" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I/Y=K" data-index-x="9" data-index-y="11"/>
+<circle cx="282" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I/Y=L" data-index-x="9" data-index-y="12"/>
+<circle cx="282" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I/Y=M" data-index-x="9" data-index-y="13"/>
+<circle cx="282" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I/Y=N" data-index-x="9" data-index-y="14"/>
+<circle cx="282" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I/Y=O" data-index-x="9" data-index-y="15"/>
+<circle cx="282" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I/Y=P" data-index-x="9" data-index-y="16"/>
+<circle cx="282" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I/Y=Q" data-index-x="9" data-index-y="17"/>
+<circle cx="282" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I/Y=R" data-index-x="9" data-index-y="18"/>
+<circle cx="282" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I/Y=S" data-index-x="9" data-index-y="19"/>
+<circle cx="282" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I/Y=T" data-index-x="9" data-index-y="20"/>
+<circle cx="282" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=I/Y=U" data-index-x="9" data-index-y="21"/>
+<circle cx="282" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=I/Y=V" data-index-x="9" data-index-y="22"/>
+<circle cx="282" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=I/Y=W" data-index-x="9" data-index-y="23"/>
+<circle cx="282" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=I/Y=X" data-index-x="9" data-index-y="24"/>
+<circle cx="282" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=I/Y=Y" data-index-x="9" data-index-y="25"/>
+<circle cx="282" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=I/Y=Z" data-index-x="9" data-index-y="26"/>
+<circle cx="282" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=I/Y=1" data-index-x="9" data-index-y="27"/>
+<circle cx="282" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=I/Y=2" data-index-x="9" data-index-y="28"/>
+<circle cx="282" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=I/Y=3" data-index-x="9" data-index-y="29"/>
+<circle cx="282" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=I/Y=4" data-index-x="9" data-index-y="30"/>
+<circle cx="306" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J/Y=A" data-index-x="10" data-index-y="1"/>
+<circle cx="306" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J/Y=B" data-index-x="10" data-index-y="2"/>
+<circle cx="306" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J/Y=C" data-index-x="10" data-index-y="3"/>
+<circle cx="306" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J/Y=D" data-index-x="10" data-index-y="4"/>
+<circle cx="306" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J/Y=E" data-index-x="10" data-index-y="5"/>
+<circle cx="306" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J/Y=F" data-index-x="10" data-index-y="6"/>
+<circle cx="306" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J/Y=G" data-index-x="10" data-index-y="7"/>
+<circle cx="306" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J/Y=H" data-index-x="10" data-index-y="8"/>
+<circle cx="306" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J/Y=I" data-index-x="10" data-index-y="9"/>
+<circle cx="306" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J/Y=J" data-index-x="10" data-index-y="10"/>
+<circle cx="306" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J/Y=K" data-index-x="10" data-index-y="11"/>
+<circle cx="306" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J/Y=L" data-index-x="10" data-index-y="12"/>
+<circle cx="306" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J/Y=M" data-index-x="10" data-index-y="13"/>
+<circle cx="306" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J/Y=N" data-index-x="10" data-index-y="14"/>
+<circle cx="306" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J/Y=O" data-index-x="10" data-index-y="15"/>
+<circle cx="306" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J/Y=P" data-index-x="10" data-index-y="16"/>
+<circle cx="306" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J/Y=Q" data-index-x="10" data-index-y="17"/>
+<circle cx="306" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J/Y=R" data-index-x="10" data-index-y="18"/>
+<circle cx="306" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J/Y=S" data-index-x="10" data-index-y="19"/>
+<circle cx="306" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J/Y=T" data-index-x="10" data-index-y="20"/>
+<circle cx="306" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=J/Y=U" data-index-x="10" data-index-y="21"/>
+<circle cx="306" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=J/Y=V" data-index-x="10" data-index-y="22"/>
+<circle cx="306" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=J/Y=W" data-index-x="10" data-index-y="23"/>
+<circle cx="306" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=J/Y=X" data-index-x="10" data-index-y="24"/>
+<circle cx="306" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=J/Y=Y" data-index-x="10" data-index-y="25"/>
+<circle cx="306" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=J/Y=Z" data-index-x="10" data-index-y="26"/>
+<circle cx="306" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=J/Y=1" data-index-x="10" data-index-y="27"/>
+<circle cx="306" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=J/Y=2" data-index-x="10" data-index-y="28"/>
+<circle cx="306" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=J/Y=3" data-index-x="10" data-index-y="29"/>
+<circle cx="306" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=J/Y=4" data-index-x="10" data-index-y="30"/>
+<circle cx="330" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K/Y=A" data-index-x="11" data-index-y="1"/>
+<circle cx="330" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K/Y=B" data-index-x="11" data-index-y="2"/>
+<circle cx="330" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K/Y=C" data-index-x="11" data-index-y="3"/>
+<circle cx="330" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K/Y=D" data-index-x="11" data-index-y="4"/>
+<circle cx="330" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K/Y=E" data-index-x="11" data-index-y="5"/>
+<circle cx="330" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K/Y=F" data-index-x="11" data-index-y="6"/>
+<circle cx="330" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K/Y=G" data-index-x="11" data-index-y="7"/>
+<circle cx="330" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K/Y=H" data-index-x="11" data-index-y="8"/>
+<circle cx="330" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K/Y=I" data-index-x="11" data-index-y="9"/>
+<circle cx="330" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K/Y=J" data-index-x="11" data-index-y="10"/>
+<circle cx="330" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K/Y=K" data-index-x="11" data-index-y="11"/>
+<circle cx="330" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K/Y=L" data-index-x="11" data-index-y="12"/>
+<circle cx="330" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K/Y=M" data-index-x="11" data-index-y="13"/>
+<circle cx="330" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K/Y=N" data-index-x="11" data-index-y="14"/>
+<circle cx="330" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K/Y=O" data-index-x="11" data-index-y="15"/>
+<circle cx="330" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K/Y=P" data-index-x="11" data-index-y="16"/>
+<circle cx="330" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K/Y=Q" data-index-x="11" data-index-y="17"/>
+<circle cx="330" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K/Y=R" data-index-x="11" data-index-y="18"/>
+<circle cx="330" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K/Y=S" data-index-x="11" data-index-y="19"/>
+<circle cx="330" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K/Y=T" data-index-x="11" data-index-y="20"/>
+<circle cx="330" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=K/Y=U" data-index-x="11" data-index-y="21"/>
+<circle cx="330" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=K/Y=V" data-index-x="11" data-index-y="22"/>
+<circle cx="330" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=K/Y=W" data-index-x="11" data-index-y="23"/>
+<circle cx="330" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=K/Y=X" data-index-x="11" data-index-y="24"/>
+<circle cx="330" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=K/Y=Y" data-index-x="11" data-index-y="25"/>
+<circle cx="330" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=K/Y=Z" data-index-x="11" data-index-y="26"/>
+<circle cx="330" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=K/Y=1" data-index-x="11" data-index-y="27"/>
+<circle cx="330" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=K/Y=2" data-index-x="11" data-index-y="28"/>
+<circle cx="330" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=K/Y=3" data-index-x="11" data-index-y="29"/>
+<circle cx="330" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=K/Y=4" data-index-x="11" data-index-y="30"/>
+<circle cx="354" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L/Y=A" data-index-x="12" data-index-y="1"/>
+<circle cx="354" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L/Y=B" data-index-x="12" data-index-y="2"/>
+<circle cx="354" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L/Y=C" data-index-x="12" data-index-y="3"/>
+<circle cx="354" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L/Y=D" data-index-x="12" data-index-y="4"/>
+<circle cx="354" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L/Y=E" data-index-x="12" data-index-y="5"/>
+<circle cx="354" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L/Y=F" data-index-x="12" data-index-y="6"/>
+<circle cx="354" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L/Y=G" data-index-x="12" data-index-y="7"/>
+<circle cx="354" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L/Y=H" data-index-x="12" data-index-y="8"/>
+<circle cx="354" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L/Y=I" data-index-x="12" data-index-y="9"/>
+<circle cx="354" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L/Y=J" data-index-x="12" data-index-y="10"/>
+<circle cx="354" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L/Y=K" data-index-x="12" data-index-y="11"/>
+<circle cx="354" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L/Y=L" data-index-x="12" data-index-y="12"/>
+<circle cx="354" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L/Y=M" data-index-x="12" data-index-y="13"/>
+<circle cx="354" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L/Y=N" data-index-x="12" data-index-y="14"/>
+<circle cx="354" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L/Y=O" data-index-x="12" data-index-y="15"/>
+<circle cx="354" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L/Y=P" data-index-x="12" data-index-y="16"/>
+<circle cx="354" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L/Y=Q" data-index-x="12" data-index-y="17"/>
+<circle cx="354" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L/Y=R" data-index-x="12" data-index-y="18"/>
+<circle cx="354" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L/Y=S" data-index-x="12" data-index-y="19"/>
+<circle cx="354" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L/Y=T" data-index-x="12" data-index-y="20"/>
+<circle cx="354" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=L/Y=U" data-index-x="12" data-index-y="21"/>
+<circle cx="354" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=L/Y=V" data-index-x="12" data-index-y="22"/>
+<circle cx="354" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=L/Y=W" data-index-x="12" data-index-y="23"/>
+<circle cx="354" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=L/Y=X" data-index-x="12" data-index-y="24"/>
+<circle cx="354" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=L/Y=Y" data-index-x="12" data-index-y="25"/>
+<circle cx="354" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=L/Y=Z" data-index-x="12" data-index-y="26"/>
+<circle cx="354" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=L/Y=1" data-index-x="12" data-index-y="27"/>
+<circle cx="354" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=L/Y=2" data-index-x="12" data-index-y="28"/>
+<circle cx="354" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=L/Y=3" data-index-x="12" data-index-y="29"/>
+<circle cx="354" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=L/Y=4" data-index-x="12" data-index-y="30"/>
+<circle cx="378" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=M/Y=A" data-index-x="13" data-index-y="1"/>
+<circle cx="378" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=M/Y=B" data-index-x="13" data-index-y="2"/>
+<circle cx="378" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=M/Y=C" data-index-x="13" data-index-y="3"/>
+<circle cx="378" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=M/Y=D" data-index-x="13" data-index-y="4"/>
+<circle cx="378" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=M/Y=E" data-index-x="13" data-index-y="5"/>
+<circle cx="378" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=M/Y=F" data-index-x="13" data-index-y="6"/>
+<circle cx="378" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=M/Y=G" data-index-x="13" data-index-y="7"/>
+<circle cx="378" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=M/Y=H" data-index-x="13" data-index-y="8"/>
+<circle cx="378" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=M/Y=I" data-index-x="13" data-index-y="9"/>
+<circle cx="378" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=M/Y=J" data-index-x="13" data-index-y="10"/>
+<circle cx="378" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=M/Y=K" data-index-x="13" data-index-y="11"/>
+<circle cx="378" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=M/Y=L" data-index-x="13" data-index-y="12"/>
+<circle cx="378" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=M/Y=M" data-index-x="13" data-index-y="13"/>
+<circle cx="378" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=M/Y=N" data-index-x="13" data-index-y="14"/>
+<circle cx="378" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=M/Y=O" data-index-x="13" data-index-y="15"/>
+<circle cx="378" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=M/Y=P" data-index-x="13" data-index-y="16"/>
+<circle cx="378" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=M/Y=Q" data-index-x="13" data-index-y="17"/>
+<circle cx="378" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=M/Y=R" data-index-x="13" data-index-y="18"/>
+<circle cx="378" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=M/Y=S" data-index-x="13" data-index-y="19"/>
+<circle cx="378" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=M/Y=T" data-index-x="13" data-index-y="20"/>
+<circle cx="378" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M/Y=U" data-index-x="13" data-index-y="21"/>
+<circle cx="378" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M/Y=V" data-index-x="13" data-index-y="22"/>
+<circle cx="378" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M/Y=W" data-index-x="13" data-index-y="23"/>
+<circle cx="378" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M/Y=X" data-index-x="13" data-index-y="24"/>
+<circle cx="378" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M/Y=Y" data-index-x="13" data-index-y="25"/>
+<circle cx="378" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M/Y=Z" data-index-x="13" data-index-y="26"/>
+<circle cx="378" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M/Y=1" data-index-x="13" data-index-y="27"/>
+<circle cx="378" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M/Y=2" data-index-x="13" data-index-y="28"/>
+<circle cx="378" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M/Y=3" data-index-x="13" data-index-y="29"/>
+<circle cx="378" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M/Y=4" data-index-x="13" data-index-y="30"/>
+<circle cx="402" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=N/Y=A" data-index-x="14" data-index-y="1"/>
+<circle cx="402" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=N/Y=B" data-index-x="14" data-index-y="2"/>
+<circle cx="402" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=N/Y=C" data-index-x="14" data-index-y="3"/>
+<circle cx="402" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=N/Y=D" data-index-x="14" data-index-y="4"/>
+<circle cx="402" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=N/Y=E" data-index-x="14" data-index-y="5"/>
+<circle cx="402" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=N/Y=F" data-index-x="14" data-index-y="6"/>
+<circle cx="402" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=N/Y=G" data-index-x="14" data-index-y="7"/>
+<circle cx="402" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=N/Y=H" data-index-x="14" data-index-y="8"/>
+<circle cx="402" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=N/Y=I" data-index-x="14" data-index-y="9"/>
+<circle cx="402" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=N/Y=J" data-index-x="14" data-index-y="10"/>
+<circle cx="402" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=N/Y=K" data-index-x="14" data-index-y="11"/>
+<circle cx="402" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=N/Y=L" data-index-x="14" data-index-y="12"/>
+<circle cx="402" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=N/Y=M" data-index-x="14" data-index-y="13"/>
+<circle cx="402" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=N/Y=N" data-index-x="14" data-index-y="14"/>
+<circle cx="402" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=N/Y=O" data-index-x="14" data-index-y="15"/>
+<circle cx="402" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=N/Y=P" data-index-x="14" data-index-y="16"/>
+<circle cx="402" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=N/Y=Q" data-index-x="14" data-index-y="17"/>
+<circle cx="402" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=N/Y=R" data-index-x="14" data-index-y="18"/>
+<circle cx="402" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=N/Y=S" data-index-x="14" data-index-y="19"/>
+<circle cx="402" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=N/Y=T" data-index-x="14" data-index-y="20"/>
+<circle cx="402" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N/Y=U" data-index-x="14" data-index-y="21"/>
+<circle cx="402" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N/Y=V" data-index-x="14" data-index-y="22"/>
+<circle cx="402" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N/Y=W" data-index-x="14" data-index-y="23"/>
+<circle cx="402" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N/Y=X" data-index-x="14" data-index-y="24"/>
+<circle cx="402" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N/Y=Y" data-index-x="14" data-index-y="25"/>
+<circle cx="402" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N/Y=Z" data-index-x="14" data-index-y="26"/>
+<circle cx="402" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N/Y=1" data-index-x="14" data-index-y="27"/>
+<circle cx="402" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N/Y=2" data-index-x="14" data-index-y="28"/>
+<circle cx="402" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N/Y=3" data-index-x="14" data-index-y="29"/>
+<circle cx="402" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N/Y=4" data-index-x="14" data-index-y="30"/>
+<circle cx="426" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=O/Y=A" data-index-x="15" data-index-y="1"/>
+<circle cx="426" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=O/Y=B" data-index-x="15" data-index-y="2"/>
+<circle cx="426" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=O/Y=C" data-index-x="15" data-index-y="3"/>
+<circle cx="426" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=O/Y=D" data-index-x="15" data-index-y="4"/>
+<circle cx="426" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=O/Y=E" data-index-x="15" data-index-y="5"/>
+<circle cx="426" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=O/Y=F" data-index-x="15" data-index-y="6"/>
+<circle cx="426" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=O/Y=G" data-index-x="15" data-index-y="7"/>
+<circle cx="426" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=O/Y=H" data-index-x="15" data-index-y="8"/>
+<circle cx="426" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=O/Y=I" data-index-x="15" data-index-y="9"/>
+<circle cx="426" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=O/Y=J" data-index-x="15" data-index-y="10"/>
+<circle cx="426" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=O/Y=K" data-index-x="15" data-index-y="11"/>
+<circle cx="426" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=O/Y=L" data-index-x="15" data-index-y="12"/>
+<circle cx="426" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=O/Y=M" data-index-x="15" data-index-y="13"/>
+<circle cx="426" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=O/Y=N" data-index-x="15" data-index-y="14"/>
+<circle cx="426" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=O/Y=O" data-index-x="15" data-index-y="15"/>
+<circle cx="426" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=O/Y=P" data-index-x="15" data-index-y="16"/>
+<circle cx="426" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=O/Y=Q" data-index-x="15" data-index-y="17"/>
+<circle cx="426" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=O/Y=R" data-index-x="15" data-index-y="18"/>
+<circle cx="426" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=O/Y=S" data-index-x="15" data-index-y="19"/>
+<circle cx="426" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=O/Y=T" data-index-x="15" data-index-y="20"/>
+<circle cx="426" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O/Y=U" data-index-x="15" data-index-y="21"/>
+<circle cx="426" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O/Y=V" data-index-x="15" data-index-y="22"/>
+<circle cx="426" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O/Y=W" data-index-x="15" data-index-y="23"/>
+<circle cx="426" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O/Y=X" data-index-x="15" data-index-y="24"/>
+<circle cx="426" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O/Y=Y" data-index-x="15" data-index-y="25"/>
+<circle cx="426" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O/Y=Z" data-index-x="15" data-index-y="26"/>
+<circle cx="426" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O/Y=1" data-index-x="15" data-index-y="27"/>
+<circle cx="426" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O/Y=2" data-index-x="15" data-index-y="28"/>
+<circle cx="426" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O/Y=3" data-index-x="15" data-index-y="29"/>
+<circle cx="426" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O/Y=4" data-index-x="15" data-index-y="30"/>
+<circle cx="450" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=P/Y=A" data-index-x="16" data-index-y="1"/>
+<circle cx="450" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=P/Y=B" data-index-x="16" data-index-y="2"/>
+<circle cx="450" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=P/Y=C" data-index-x="16" data-index-y="3"/>
+<circle cx="450" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=P/Y=D" data-index-x="16" data-index-y="4"/>
+<circle cx="450" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=P/Y=E" data-index-x="16" data-index-y="5"/>
+<circle cx="450" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=P/Y=F" data-index-x="16" data-index-y="6"/>
+<circle cx="450" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=P/Y=G" data-index-x="16" data-index-y="7"/>
+<circle cx="450" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=P/Y=H" data-index-x="16" data-index-y="8"/>
+<circle cx="450" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=P/Y=I" data-index-x="16" data-index-y="9"/>
+<circle cx="450" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=P/Y=J" data-index-x="16" data-index-y="10"/>
+<circle cx="450" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=P/Y=K" data-index-x="16" data-index-y="11"/>
+<circle cx="450" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=P/Y=L" data-index-x="16" data-index-y="12"/>
+<circle cx="450" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=P/Y=M" data-index-x="16" data-index-y="13"/>
+<circle cx="450" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=P/Y=N" data-index-x="16" data-index-y="14"/>
+<circle cx="450" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=P/Y=O" data-index-x="16" data-index-y="15"/>
+<circle cx="450" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=P/Y=P" data-index-x="16" data-index-y="16"/>
+<circle cx="450" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=P/Y=Q" data-index-x="16" data-index-y="17"/>
+<circle cx="450" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=P/Y=R" data-index-x="16" data-index-y="18"/>
+<circle cx="450" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=P/Y=S" data-index-x="16" data-index-y="19"/>
+<circle cx="450" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=P/Y=T" data-index-x="16" data-index-y="20"/>
+<circle cx="450" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P/Y=U" data-index-x="16" data-index-y="21"/>
+<circle cx="450" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P/Y=V" data-index-x="16" data-index-y="22"/>
+<circle cx="450" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P/Y=W" data-index-x="16" data-index-y="23"/>
+<circle cx="450" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P/Y=X" data-index-x="16" data-index-y="24"/>
+<circle cx="450" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P/Y=Y" data-index-x="16" data-index-y="25"/>
+<circle cx="450" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P/Y=Z" data-index-x="16" data-index-y="26"/>
+<circle cx="450" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P/Y=1" data-index-x="16" data-index-y="27"/>
+<circle cx="450" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P/Y=2" data-index-x="16" data-index-y="28"/>
+<circle cx="450" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P/Y=3" data-index-x="16" data-index-y="29"/>
+<circle cx="450" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P/Y=4" data-index-x="16" data-index-y="30"/>
+<circle cx="474" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Q/Y=A" data-index-x="17" data-index-y="1"/>
+<circle cx="474" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Q/Y=B" data-index-x="17" data-index-y="2"/>
+<circle cx="474" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Q/Y=C" data-index-x="17" data-index-y="3"/>
+<circle cx="474" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Q/Y=D" data-index-x="17" data-index-y="4"/>
+<circle cx="474" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Q/Y=E" data-index-x="17" data-index-y="5"/>
+<circle cx="474" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Q/Y=F" data-index-x="17" data-index-y="6"/>
+<circle cx="474" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Q/Y=G" data-index-x="17" data-index-y="7"/>
+<circle cx="474" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Q/Y=H" data-index-x="17" data-index-y="8"/>
+<circle cx="474" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Q/Y=I" data-index-x="17" data-index-y="9"/>
+<circle cx="474" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Q/Y=J" data-index-x="17" data-index-y="10"/>
+<circle cx="474" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Q/Y=K" data-index-x="17" data-index-y="11"/>
+<circle cx="474" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Q/Y=L" data-index-x="17" data-index-y="12"/>
+<circle cx="474" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Q/Y=M" data-index-x="17" data-index-y="13"/>
+<circle cx="474" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Q/Y=N" data-index-x="17" data-index-y="14"/>
+<circle cx="474" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Q/Y=O" data-index-x="17" data-index-y="15"/>
+<circle cx="474" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Q/Y=P" data-index-x="17" data-index-y="16"/>
+<circle cx="474" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Q/Y=Q" data-index-x="17" data-index-y="17"/>
+<circle cx="474" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Q/Y=R" data-index-x="17" data-index-y="18"/>
+<circle cx="474" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Q/Y=S" data-index-x="17" data-index-y="19"/>
+<circle cx="474" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Q/Y=T" data-index-x="17" data-index-y="20"/>
+<circle cx="474" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Q/Y=U" data-index-x="17" data-index-y="21"/>
+<circle cx="474" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Q/Y=V" data-index-x="17" data-index-y="22"/>
+<circle cx="474" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Q/Y=W" data-index-x="17" data-index-y="23"/>
+<circle cx="474" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Q/Y=X" data-index-x="17" data-index-y="24"/>
+<circle cx="474" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Q/Y=Y" data-index-x="17" data-index-y="25"/>
+<circle cx="474" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Q/Y=Z" data-index-x="17" data-index-y="26"/>
+<circle cx="474" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Q/Y=1" data-index-x="17" data-index-y="27"/>
+<circle cx="474" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Q/Y=2" data-index-x="17" data-index-y="28"/>
+<circle cx="474" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Q/Y=3" data-index-x="17" data-index-y="29"/>
+<circle cx="474" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Q/Y=4" data-index-x="17" data-index-y="30"/>
+<circle cx="498" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=R/Y=A" data-index-x="18" data-index-y="1"/>
+<circle cx="498" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=R/Y=B" data-index-x="18" data-index-y="2"/>
+<circle cx="498" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=R/Y=C" data-index-x="18" data-index-y="3"/>
+<circle cx="498" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=R/Y=D" data-index-x="18" data-index-y="4"/>
+<circle cx="498" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=R/Y=E" data-index-x="18" data-index-y="5"/>
+<circle cx="498" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=R/Y=F" data-index-x="18" data-index-y="6"/>
+<circle cx="498" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=R/Y=G" data-index-x="18" data-index-y="7"/>
+<circle cx="498" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=R/Y=H" data-index-x="18" data-index-y="8"/>
+<circle cx="498" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=R/Y=I" data-index-x="18" data-index-y="9"/>
+<circle cx="498" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=R/Y=J" data-index-x="18" data-index-y="10"/>
+<circle cx="498" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=R/Y=K" data-index-x="18" data-index-y="11"/>
+<circle cx="498" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=R/Y=L" data-index-x="18" data-index-y="12"/>
+<circle cx="498" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=R/Y=M" data-index-x="18" data-index-y="13"/>
+<circle cx="498" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=R/Y=N" data-index-x="18" data-index-y="14"/>
+<circle cx="498" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=R/Y=O" data-index-x="18" data-index-y="15"/>
+<circle cx="498" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=R/Y=P" data-index-x="18" data-index-y="16"/>
+<circle cx="498" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=R/Y=Q" data-index-x="18" data-index-y="17"/>
+<circle cx="498" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=R/Y=R" data-index-x="18" data-index-y="18"/>
+<circle cx="498" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=R/Y=S" data-index-x="18" data-index-y="19"/>
+<circle cx="498" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=R/Y=T" data-index-x="18" data-index-y="20"/>
+<circle cx="498" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=R/Y=U" data-index-x="18" data-index-y="21"/>
+<circle cx="498" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=R/Y=V" data-index-x="18" data-index-y="22"/>
+<circle cx="498" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=R/Y=W" data-index-x="18" data-index-y="23"/>
+<circle cx="498" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=R/Y=X" data-index-x="18" data-index-y="24"/>
+<circle cx="498" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=R/Y=Y" data-index-x="18" data-index-y="25"/>
+<circle cx="498" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=R/Y=Z" data-index-x="18" data-index-y="26"/>
+<circle cx="498" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=R/Y=1" data-index-x="18" data-index-y="27"/>
+<circle cx="498" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=R/Y=2" data-index-x="18" data-index-y="28"/>
+<circle cx="498" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=R/Y=3" data-index-x="18" data-index-y="29"/>
+<circle cx="498" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=R/Y=4" data-index-x="18" data-index-y="30"/>
+<circle cx="522" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=S/Y=A" data-index-x="19" data-index-y="1"/>
+<circle cx="522" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=S/Y=B" data-index-x="19" data-index-y="2"/>
+<circle cx="522" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=S/Y=C" data-index-x="19" data-index-y="3"/>
+<circle cx="522" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=S/Y=D" data-index-x="19" data-index-y="4"/>
+<circle cx="522" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=S/Y=E" data-index-x="19" data-index-y="5"/>
+<circle cx="522" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=S/Y=F" data-index-x="19" data-index-y="6"/>
+<circle cx="522" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=S/Y=G" data-index-x="19" data-index-y="7"/>
+<circle cx="522" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=S/Y=H" data-index-x="19" data-index-y="8"/>
+<circle cx="522" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=S/Y=I" data-index-x="19" data-index-y="9"/>
+<circle cx="522" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=S/Y=J" data-index-x="19" data-index-y="10"/>
+<circle cx="522" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=S/Y=K" data-index-x="19" data-index-y="11"/>
+<circle cx="522" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=S/Y=L" data-index-x="19" data-index-y="12"/>
+<circle cx="522" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=S/Y=M" data-index-x="19" data-index-y="13"/>
+<circle cx="522" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=S/Y=N" data-index-x="19" data-index-y="14"/>
+<circle cx="522" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=S/Y=O" data-index-x="19" data-index-y="15"/>
+<circle cx="522" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=S/Y=P" data-index-x="19" data-index-y="16"/>
+<circle cx="522" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=S/Y=Q" data-index-x="19" data-index-y="17"/>
+<circle cx="522" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=S/Y=R" data-index-x="19" data-index-y="18"/>
+<circle cx="522" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=S/Y=S" data-index-x="19" data-index-y="19"/>
+<circle cx="522" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=S/Y=T" data-index-x="19" data-index-y="20"/>
+<circle cx="522" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=S/Y=U" data-index-x="19" data-index-y="21"/>
+<circle cx="522" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=S/Y=V" data-index-x="19" data-index-y="22"/>
+<circle cx="522" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=S/Y=W" data-index-x="19" data-index-y="23"/>
+<circle cx="522" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=S/Y=X" data-index-x="19" data-index-y="24"/>
+<circle cx="522" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=S/Y=Y" data-index-x="19" data-index-y="25"/>
+<circle cx="522" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=S/Y=Z" data-index-x="19" data-index-y="26"/>
+<circle cx="522" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=S/Y=1" data-index-x="19" data-index-y="27"/>
+<circle cx="522" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=S/Y=2" data-index-x="19" data-index-y="28"/>
+<circle cx="522" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=S/Y=3" data-index-x="19" data-index-y="29"/>
+<circle cx="522" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=S/Y=4" data-index-x="19" data-index-y="30"/>
+<circle cx="546" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=T/Y=A" data-index-x="20" data-index-y="1"/>
+<circle cx="546" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=T/Y=B" data-index-x="20" data-index-y="2"/>
+<circle cx="546" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=T/Y=C" data-index-x="20" data-index-y="3"/>
+<circle cx="546" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=T/Y=D" data-index-x="20" data-index-y="4"/>
+<circle cx="546" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=T/Y=E" data-index-x="20" data-index-y="5"/>
+<circle cx="546" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=T/Y=F" data-index-x="20" data-index-y="6"/>
+<circle cx="546" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=T/Y=G" data-index-x="20" data-index-y="7"/>
+<circle cx="546" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=T/Y=H" data-index-x="20" data-index-y="8"/>
+<circle cx="546" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=T/Y=I" data-index-x="20" data-index-y="9"/>
+<circle cx="546" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=T/Y=J" data-index-x="20" data-index-y="10"/>
+<circle cx="546" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=T/Y=K" data-index-x="20" data-index-y="11"/>
+<circle cx="546" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=T/Y=L" data-index-x="20" data-index-y="12"/>
+<circle cx="546" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=T/Y=M" data-index-x="20" data-index-y="13"/>
+<circle cx="546" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=T/Y=N" data-index-x="20" data-index-y="14"/>
+<circle cx="546" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=T/Y=O" data-index-x="20" data-index-y="15"/>
+<circle cx="546" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=T/Y=P" data-index-x="20" data-index-y="16"/>
+<circle cx="546" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=T/Y=Q" data-index-x="20" data-index-y="17"/>
+<circle cx="546" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=T/Y=R" data-index-x="20" data-index-y="18"/>
+<circle cx="546" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=T/Y=S" data-index-x="20" data-index-y="19"/>
+<circle cx="546" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=T/Y=T" data-index-x="20" data-index-y="20"/>
+<circle cx="546" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=T/Y=U" data-index-x="20" data-index-y="21"/>
+<circle cx="546" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=T/Y=V" data-index-x="20" data-index-y="22"/>
+<circle cx="546" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=T/Y=W" data-index-x="20" data-index-y="23"/>
+<circle cx="546" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=T/Y=X" data-index-x="20" data-index-y="24"/>
+<circle cx="546" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=T/Y=Y" data-index-x="20" data-index-y="25"/>
+<circle cx="546" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=T/Y=Z" data-index-x="20" data-index-y="26"/>
+<circle cx="546" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=T/Y=1" data-index-x="20" data-index-y="27"/>
+<circle cx="546" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=T/Y=2" data-index-x="20" data-index-y="28"/>
+<circle cx="546" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=T/Y=3" data-index-x="20" data-index-y="29"/>
+<circle cx="546" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=T/Y=4" data-index-x="20" data-index-y="30"/>
+<circle cx="570" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=U/Y=A" data-index-x="21" data-index-y="1"/>
+<circle cx="570" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=U/Y=B" data-index-x="21" data-index-y="2"/>
+<circle cx="570" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=U/Y=C" data-index-x="21" data-index-y="3"/>
+<circle cx="570" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=U/Y=D" data-index-x="21" data-index-y="4"/>
+<circle cx="570" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=U/Y=E" data-index-x="21" data-index-y="5"/>
+<circle cx="570" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=U/Y=F" data-index-x="21" data-index-y="6"/>
+<circle cx="570" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=U/Y=G" data-index-x="21" data-index-y="7"/>
+<circle cx="570" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=U/Y=H" data-index-x="21" data-index-y="8"/>
+<circle cx="570" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=U/Y=I" data-index-x="21" data-index-y="9"/>
+<circle cx="570" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=U/Y=J" data-index-x="21" data-index-y="10"/>
+<circle cx="570" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=U/Y=K" data-index-x="21" data-index-y="11"/>
+<circle cx="570" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=U/Y=L" data-index-x="21" data-index-y="12"/>
+<circle cx="570" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=U/Y=M" data-index-x="21" data-index-y="13"/>
+<circle cx="570" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=U/Y=N" data-index-x="21" data-index-y="14"/>
+<circle cx="570" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=U/Y=O" data-index-x="21" data-index-y="15"/>
+<circle cx="570" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=U/Y=P" data-index-x="21" data-index-y="16"/>
+<circle cx="570" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=U/Y=Q" data-index-x="21" data-index-y="17"/>
+<circle cx="570" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=U/Y=R" data-index-x="21" data-index-y="18"/>
+<circle cx="570" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=U/Y=S" data-index-x="21" data-index-y="19"/>
+<circle cx="570" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=U/Y=T" data-index-x="21" data-index-y="20"/>
+<circle cx="570" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=U/Y=U" data-index-x="21" data-index-y="21"/>
+<circle cx="570" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=U/Y=V" data-index-x="21" data-index-y="22"/>
+<circle cx="570" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=U/Y=W" data-index-x="21" data-index-y="23"/>
+<circle cx="570" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=U/Y=X" data-index-x="21" data-index-y="24"/>
+<circle cx="570" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=U/Y=Y" data-index-x="21" data-index-y="25"/>
+<circle cx="570" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=U/Y=Z" data-index-x="21" data-index-y="26"/>
+<circle cx="570" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=U/Y=1" data-index-x="21" data-index-y="27"/>
+<circle cx="570" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=U/Y=2" data-index-x="21" data-index-y="28"/>
+<circle cx="570" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=U/Y=3" data-index-x="21" data-index-y="29"/>
+<circle cx="570" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=U/Y=4" data-index-x="21" data-index-y="30"/>
+<circle cx="594" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=V/Y=A" data-index-x="22" data-index-y="1"/>
+<circle cx="594" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=V/Y=B" data-index-x="22" data-index-y="2"/>
+<circle cx="594" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=V/Y=C" data-index-x="22" data-index-y="3"/>
+<circle cx="594" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=V/Y=D" data-index-x="22" data-index-y="4"/>
+<circle cx="594" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=V/Y=E" data-index-x="22" data-index-y="5"/>
+<circle cx="594" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=V/Y=F" data-index-x="22" data-index-y="6"/>
+<circle cx="594" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=V/Y=G" data-index-x="22" data-index-y="7"/>
+<circle cx="594" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=V/Y=H" data-index-x="22" data-index-y="8"/>
+<circle cx="594" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=V/Y=I" data-index-x="22" data-index-y="9"/>
+<circle cx="594" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=V/Y=J" data-index-x="22" data-index-y="10"/>
+<circle cx="594" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=V/Y=K" data-index-x="22" data-index-y="11"/>
+<circle cx="594" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=V/Y=L" data-index-x="22" data-index-y="12"/>
+<circle cx="594" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=V/Y=M" data-index-x="22" data-index-y="13"/>
+<circle cx="594" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=V/Y=N" data-index-x="22" data-index-y="14"/>
+<circle cx="594" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=V/Y=O" data-index-x="22" data-index-y="15"/>
+<circle cx="594" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=V/Y=P" data-index-x="22" data-index-y="16"/>
+<circle cx="594" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=V/Y=Q" data-index-x="22" data-index-y="17"/>
+<circle cx="594" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=V/Y=R" data-index-x="22" data-index-y="18"/>
+<circle cx="594" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=V/Y=S" data-index-x="22" data-index-y="19"/>
+<circle cx="594" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=V/Y=T" data-index-x="22" data-index-y="20"/>
+<circle cx="594" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=V/Y=U" data-index-x="22" data-index-y="21"/>
+<circle cx="594" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=V/Y=V" data-index-x="22" data-index-y="22"/>
+<circle cx="594" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=V/Y=W" data-index-x="22" data-index-y="23"/>
+<circle cx="594" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=V/Y=X" data-index-x="22" data-index-y="24"/>
+<circle cx="594" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=V/Y=Y" data-index-x="22" data-index-y="25"/>
+<circle cx="594" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=V/Y=Z" data-index-x="22" data-index-y="26"/>
+<circle cx="594" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=V/Y=1" data-index-x="22" data-index-y="27"/>
+<circle cx="594" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=V/Y=2" data-index-x="22" data-index-y="28"/>
+<circle cx="594" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=V/Y=3" data-index-x="22" data-index-y="29"/>
+<circle cx="594" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=V/Y=4" data-index-x="22" data-index-y="30"/>
+<circle cx="618" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=W/Y=A" data-index-x="23" data-index-y="1"/>
+<circle cx="618" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=W/Y=B" data-index-x="23" data-index-y="2"/>
+<circle cx="618" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=W/Y=C" data-index-x="23" data-index-y="3"/>
+<circle cx="618" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=W/Y=D" data-index-x="23" data-index-y="4"/>
+<circle cx="618" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=W/Y=E" data-index-x="23" data-index-y="5"/>
+<circle cx="618" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=W/Y=F" data-index-x="23" data-index-y="6"/>
+<circle cx="618" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=W/Y=G" data-index-x="23" data-index-y="7"/>
+<circle cx="618" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=W/Y=H" data-index-x="23" data-index-y="8"/>
+<circle cx="618" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=W/Y=I" data-index-x="23" data-index-y="9"/>
+<circle cx="618" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=W/Y=J" data-index-x="23" data-index-y="10"/>
+<circle cx="618" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=W/Y=K" data-index-x="23" data-index-y="11"/>
+<circle cx="618" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=W/Y=L" data-index-x="23" data-index-y="12"/>
+<circle cx="618" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=W/Y=M" data-index-x="23" data-index-y="13"/>
+<circle cx="618" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=W/Y=N" data-index-x="23" data-index-y="14"/>
+<circle cx="618" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=W/Y=O" data-index-x="23" data-index-y="15"/>
+<circle cx="618" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=W/Y=P" data-index-x="23" data-index-y="16"/>
+<circle cx="618" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=W/Y=Q" data-index-x="23" data-index-y="17"/>
+<circle cx="618" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=W/Y=R" data-index-x="23" data-index-y="18"/>
+<circle cx="618" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=W/Y=S" data-index-x="23" data-index-y="19"/>
+<circle cx="618" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=W/Y=T" data-index-x="23" data-index-y="20"/>
+<circle cx="618" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=W/Y=U" data-index-x="23" data-index-y="21"/>
+<circle cx="618" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=W/Y=V" data-index-x="23" data-index-y="22"/>
+<circle cx="618" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=W/Y=W" data-index-x="23" data-index-y="23"/>
+<circle cx="618" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=W/Y=X" data-index-x="23" data-index-y="24"/>
+<circle cx="618" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=W/Y=Y" data-index-x="23" data-index-y="25"/>
+<circle cx="618" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=W/Y=Z" data-index-x="23" data-index-y="26"/>
+<circle cx="618" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=W/Y=1" data-index-x="23" data-index-y="27"/>
+<circle cx="618" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=W/Y=2" data-index-x="23" data-index-y="28"/>
+<circle cx="618" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=W/Y=3" data-index-x="23" data-index-y="29"/>
+<circle cx="618" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=W/Y=4" data-index-x="23" data-index-y="30"/>
+<circle cx="642" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=X/Y=A" data-index-x="24" data-index-y="1"/>
+<circle cx="642" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=X/Y=B" data-index-x="24" data-index-y="2"/>
+<circle cx="642" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=X/Y=C" data-index-x="24" data-index-y="3"/>
+<circle cx="642" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=X/Y=D" data-index-x="24" data-index-y="4"/>
+<circle cx="642" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=X/Y=E" data-index-x="24" data-index-y="5"/>
+<circle cx="642" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=X/Y=F" data-index-x="24" data-index-y="6"/>
+<circle cx="642" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=X/Y=G" data-index-x="24" data-index-y="7"/>
+<circle cx="642" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=X/Y=H" data-index-x="24" data-index-y="8"/>
+<circle cx="642" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=X/Y=I" data-index-x="24" data-index-y="9"/>
+<circle cx="642" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=X/Y=J" data-index-x="24" data-index-y="10"/>
+<circle cx="642" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=X/Y=K" data-index-x="24" data-index-y="11"/>
+<circle cx="642" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=X/Y=L" data-index-x="24" data-index-y="12"/>
+<circle cx="642" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=X/Y=M" data-index-x="24" data-index-y="13"/>
+<circle cx="642" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=X/Y=N" data-index-x="24" data-index-y="14"/>
+<circle cx="642" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=X/Y=O" data-index-x="24" data-index-y="15"/>
+<circle cx="642" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=X/Y=P" data-index-x="24" data-index-y="16"/>
+<circle cx="642" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=X/Y=Q" data-index-x="24" data-index-y="17"/>
+<circle cx="642" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=X/Y=R" data-index-x="24" data-index-y="18"/>
+<circle cx="642" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=X/Y=S" data-index-x="24" data-index-y="19"/>
+<circle cx="642" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=X/Y=T" data-index-x="24" data-index-y="20"/>
+<circle cx="642" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=X/Y=U" data-index-x="24" data-index-y="21"/>
+<circle cx="642" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=X/Y=V" data-index-x="24" data-index-y="22"/>
+<circle cx="642" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=X/Y=W" data-index-x="24" data-index-y="23"/>
+<circle cx="642" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=X/Y=X" data-index-x="24" data-index-y="24"/>
+<circle cx="642" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=X/Y=Y" data-index-x="24" data-index-y="25"/>
+<circle cx="642" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=X/Y=Z" data-index-x="24" data-index-y="26"/>
+<circle cx="642" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=X/Y=1" data-index-x="24" data-index-y="27"/>
+<circle cx="642" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=X/Y=2" data-index-x="24" data-index-y="28"/>
+<circle cx="642" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=X/Y=3" data-index-x="24" data-index-y="29"/>
+<circle cx="642" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=X/Y=4" data-index-x="24" data-index-y="30"/>
+<circle cx="666" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Y/Y=A" data-index-x="25" data-index-y="1"/>
+<circle cx="666" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Y/Y=B" data-index-x="25" data-index-y="2"/>
+<circle cx="666" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Y/Y=C" data-index-x="25" data-index-y="3"/>
+<circle cx="666" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Y/Y=D" data-index-x="25" data-index-y="4"/>
+<circle cx="666" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Y/Y=E" data-index-x="25" data-index-y="5"/>
+<circle cx="666" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Y/Y=F" data-index-x="25" data-index-y="6"/>
+<circle cx="666" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Y/Y=G" data-index-x="25" data-index-y="7"/>
+<circle cx="666" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Y/Y=H" data-index-x="25" data-index-y="8"/>
+<circle cx="666" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Y/Y=I" data-index-x="25" data-index-y="9"/>
+<circle cx="666" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Y/Y=J" data-index-x="25" data-index-y="10"/>
+<circle cx="666" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Y/Y=K" data-index-x="25" data-index-y="11"/>
+<circle cx="666" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Y/Y=L" data-index-x="25" data-index-y="12"/>
+<circle cx="666" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Y/Y=M" data-index-x="25" data-index-y="13"/>
+<circle cx="666" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Y/Y=N" data-index-x="25" data-index-y="14"/>
+<circle cx="666" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Y/Y=O" data-index-x="25" data-index-y="15"/>
+<circle cx="666" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Y/Y=P" data-index-x="25" data-index-y="16"/>
+<circle cx="666" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Y/Y=Q" data-index-x="25" data-index-y="17"/>
+<circle cx="666" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Y/Y=R" data-index-x="25" data-index-y="18"/>
+<circle cx="666" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Y/Y=S" data-index-x="25" data-index-y="19"/>
+<circle cx="666" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Y/Y=T" data-index-x="25" data-index-y="20"/>
+<circle cx="666" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Y/Y=U" data-index-x="25" data-index-y="21"/>
+<circle cx="666" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Y/Y=V" data-index-x="25" data-index-y="22"/>
+<circle cx="666" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Y/Y=W" data-index-x="25" data-index-y="23"/>
+<circle cx="666" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Y/Y=X" data-index-x="25" data-index-y="24"/>
+<circle cx="666" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Y/Y=Y" data-index-x="25" data-index-y="25"/>
+<circle cx="666" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Y/Y=Z" data-index-x="25" data-index-y="26"/>
+<circle cx="666" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Y/Y=1" data-index-x="25" data-index-y="27"/>
+<circle cx="666" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Y/Y=2" data-index-x="25" data-index-y="28"/>
+<circle cx="666" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Y/Y=3" data-index-x="25" data-index-y="29"/>
+<circle cx="666" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Y/Y=4" data-index-x="25" data-index-y="30"/>
+<circle cx="690" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Z/Y=A" data-index-x="26" data-index-y="1"/>
+<circle cx="690" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Z/Y=B" data-index-x="26" data-index-y="2"/>
+<circle cx="690" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Z/Y=C" data-index-x="26" data-index-y="3"/>
+<circle cx="690" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Z/Y=D" data-index-x="26" data-index-y="4"/>
+<circle cx="690" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Z/Y=E" data-index-x="26" data-index-y="5"/>
+<circle cx="690" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Z/Y=F" data-index-x="26" data-index-y="6"/>
+<circle cx="690" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Z/Y=G" data-index-x="26" data-index-y="7"/>
+<circle cx="690" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Z/Y=H" data-index-x="26" data-index-y="8"/>
+<circle cx="690" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Z/Y=I" data-index-x="26" data-index-y="9"/>
+<circle cx="690" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Z/Y=J" data-index-x="26" data-index-y="10"/>
+<circle cx="690" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Z/Y=K" data-index-x="26" data-index-y="11"/>
+<circle cx="690" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Z/Y=L" data-index-x="26" data-index-y="12"/>
+<circle cx="690" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Z/Y=M" data-index-x="26" data-index-y="13"/>
+<circle cx="690" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Z/Y=N" data-index-x="26" data-index-y="14"/>
+<circle cx="690" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Z/Y=O" data-index-x="26" data-index-y="15"/>
+<circle cx="690" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Z/Y=P" data-index-x="26" data-index-y="16"/>
+<circle cx="690" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Z/Y=Q" data-index-x="26" data-index-y="17"/>
+<circle cx="690" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Z/Y=R" data-index-x="26" data-index-y="18"/>
+<circle cx="690" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Z/Y=S" data-index-x="26" data-index-y="19"/>
+<circle cx="690" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=Z/Y=T" data-index-x="26" data-index-y="20"/>
+<circle cx="690" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Z/Y=U" data-index-x="26" data-index-y="21"/>
+<circle cx="690" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Z/Y=V" data-index-x="26" data-index-y="22"/>
+<circle cx="690" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Z/Y=W" data-index-x="26" data-index-y="23"/>
+<circle cx="690" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Z/Y=X" data-index-x="26" data-index-y="24"/>
+<circle cx="690" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Z/Y=Y" data-index-x="26" data-index-y="25"/>
+<circle cx="690" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Z/Y=Z" data-index-x="26" data-index-y="26"/>
+<circle cx="690" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Z/Y=1" data-index-x="26" data-index-y="27"/>
+<circle cx="690" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Z/Y=2" data-index-x="26" data-index-y="28"/>
+<circle cx="690" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Z/Y=3" data-index-x="26" data-index-y="29"/>
+<circle cx="690" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=Z/Y=4" data-index-x="26" data-index-y="30"/>
+<circle cx="714" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A₂/Y=A" data-index-x="27" data-index-y="1"/>
+<circle cx="714" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A₂/Y=B" data-index-x="27" data-index-y="2"/>
+<circle cx="714" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A₂/Y=C" data-index-x="27" data-index-y="3"/>
+<circle cx="714" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A₂/Y=D" data-index-x="27" data-index-y="4"/>
+<circle cx="714" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A₂/Y=E" data-index-x="27" data-index-y="5"/>
+<circle cx="714" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A₂/Y=F" data-index-x="27" data-index-y="6"/>
+<circle cx="714" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A₂/Y=G" data-index-x="27" data-index-y="7"/>
+<circle cx="714" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A₂/Y=H" data-index-x="27" data-index-y="8"/>
+<circle cx="714" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A₂/Y=I" data-index-x="27" data-index-y="9"/>
+<circle cx="714" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A₂/Y=J" data-index-x="27" data-index-y="10"/>
+<circle cx="714" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A₂/Y=K" data-index-x="27" data-index-y="11"/>
+<circle cx="714" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A₂/Y=L" data-index-x="27" data-index-y="12"/>
+<circle cx="714" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A₂/Y=M" data-index-x="27" data-index-y="13"/>
+<circle cx="714" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A₂/Y=N" data-index-x="27" data-index-y="14"/>
+<circle cx="714" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A₂/Y=O" data-index-x="27" data-index-y="15"/>
+<circle cx="714" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A₂/Y=P" data-index-x="27" data-index-y="16"/>
+<circle cx="714" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A₂/Y=Q" data-index-x="27" data-index-y="17"/>
+<circle cx="714" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A₂/Y=R" data-index-x="27" data-index-y="18"/>
+<circle cx="714" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A₂/Y=S" data-index-x="27" data-index-y="19"/>
+<circle cx="714" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=A₂/Y=T" data-index-x="27" data-index-y="20"/>
+<circle cx="714" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=A₂/Y=U" data-index-x="27" data-index-y="21"/>
+<circle cx="714" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=A₂/Y=V" data-index-x="27" data-index-y="22"/>
+<circle cx="714" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=A₂/Y=W" data-index-x="27" data-index-y="23"/>
+<circle cx="714" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=A₂/Y=X" data-index-x="27" data-index-y="24"/>
+<circle cx="714" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=A₂/Y=Y" data-index-x="27" data-index-y="25"/>
+<circle cx="714" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=A₂/Y=Z" data-index-x="27" data-index-y="26"/>
+<circle cx="714" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=A₂/Y=1" data-index-x="27" data-index-y="27"/>
+<circle cx="714" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=A₂/Y=2" data-index-x="27" data-index-y="28"/>
+<circle cx="714" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=A₂/Y=3" data-index-x="27" data-index-y="29"/>
+<circle cx="714" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=A₂/Y=4" data-index-x="27" data-index-y="30"/>
+<circle cx="738" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B₂/Y=A" data-index-x="28" data-index-y="1"/>
+<circle cx="738" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B₂/Y=B" data-index-x="28" data-index-y="2"/>
+<circle cx="738" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B₂/Y=C" data-index-x="28" data-index-y="3"/>
+<circle cx="738" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B₂/Y=D" data-index-x="28" data-index-y="4"/>
+<circle cx="738" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B₂/Y=E" data-index-x="28" data-index-y="5"/>
+<circle cx="738" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B₂/Y=F" data-index-x="28" data-index-y="6"/>
+<circle cx="738" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B₂/Y=G" data-index-x="28" data-index-y="7"/>
+<circle cx="738" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B₂/Y=H" data-index-x="28" data-index-y="8"/>
+<circle cx="738" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B₂/Y=I" data-index-x="28" data-index-y="9"/>
+<circle cx="738" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B₂/Y=J" data-index-x="28" data-index-y="10"/>
+<circle cx="738" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B₂/Y=K" data-index-x="28" data-index-y="11"/>
+<circle cx="738" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B₂/Y=L" data-index-x="28" data-index-y="12"/>
+<circle cx="738" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B₂/Y=M" data-index-x="28" data-index-y="13"/>
+<circle cx="738" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B₂/Y=N" data-index-x="28" data-index-y="14"/>
+<circle cx="738" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B₂/Y=O" data-index-x="28" data-index-y="15"/>
+<circle cx="738" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B₂/Y=P" data-index-x="28" data-index-y="16"/>
+<circle cx="738" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B₂/Y=Q" data-index-x="28" data-index-y="17"/>
+<circle cx="738" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B₂/Y=R" data-index-x="28" data-index-y="18"/>
+<circle cx="738" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B₂/Y=S" data-index-x="28" data-index-y="19"/>
+<circle cx="738" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=B₂/Y=T" data-index-x="28" data-index-y="20"/>
+<circle cx="738" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=B₂/Y=U" data-index-x="28" data-index-y="21"/>
+<circle cx="738" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=B₂/Y=V" data-index-x="28" data-index-y="22"/>
+<circle cx="738" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=B₂/Y=W" data-index-x="28" data-index-y="23"/>
+<circle cx="738" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=B₂/Y=X" data-index-x="28" data-index-y="24"/>
+<circle cx="738" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=B₂/Y=Y" data-index-x="28" data-index-y="25"/>
+<circle cx="738" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=B₂/Y=Z" data-index-x="28" data-index-y="26"/>
+<circle cx="738" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=B₂/Y=1" data-index-x="28" data-index-y="27"/>
+<circle cx="738" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=B₂/Y=2" data-index-x="28" data-index-y="28"/>
+<circle cx="738" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=B₂/Y=3" data-index-x="28" data-index-y="29"/>
+<circle cx="738" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=B₂/Y=4" data-index-x="28" data-index-y="30"/>
+<circle cx="762" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C₂/Y=A" data-index-x="29" data-index-y="1"/>
+<circle cx="762" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C₂/Y=B" data-index-x="29" data-index-y="2"/>
+<circle cx="762" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C₂/Y=C" data-index-x="29" data-index-y="3"/>
+<circle cx="762" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C₂/Y=D" data-index-x="29" data-index-y="4"/>
+<circle cx="762" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C₂/Y=E" data-index-x="29" data-index-y="5"/>
+<circle cx="762" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C₂/Y=F" data-index-x="29" data-index-y="6"/>
+<circle cx="762" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C₂/Y=G" data-index-x="29" data-index-y="7"/>
+<circle cx="762" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C₂/Y=H" data-index-x="29" data-index-y="8"/>
+<circle cx="762" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C₂/Y=I" data-index-x="29" data-index-y="9"/>
+<circle cx="762" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C₂/Y=J" data-index-x="29" data-index-y="10"/>
+<circle cx="762" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C₂/Y=K" data-index-x="29" data-index-y="11"/>
+<circle cx="762" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C₂/Y=L" data-index-x="29" data-index-y="12"/>
+<circle cx="762" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C₂/Y=M" data-index-x="29" data-index-y="13"/>
+<circle cx="762" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C₂/Y=N" data-index-x="29" data-index-y="14"/>
+<circle cx="762" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C₂/Y=O" data-index-x="29" data-index-y="15"/>
+<circle cx="762" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C₂/Y=P" data-index-x="29" data-index-y="16"/>
+<circle cx="762" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C₂/Y=Q" data-index-x="29" data-index-y="17"/>
+<circle cx="762" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C₂/Y=R" data-index-x="29" data-index-y="18"/>
+<circle cx="762" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C₂/Y=S" data-index-x="29" data-index-y="19"/>
+<circle cx="762" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=C₂/Y=T" data-index-x="29" data-index-y="20"/>
+<circle cx="762" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=C₂/Y=U" data-index-x="29" data-index-y="21"/>
+<circle cx="762" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=C₂/Y=V" data-index-x="29" data-index-y="22"/>
+<circle cx="762" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=C₂/Y=W" data-index-x="29" data-index-y="23"/>
+<circle cx="762" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=C₂/Y=X" data-index-x="29" data-index-y="24"/>
+<circle cx="762" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=C₂/Y=Y" data-index-x="29" data-index-y="25"/>
+<circle cx="762" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=C₂/Y=Z" data-index-x="29" data-index-y="26"/>
+<circle cx="762" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=C₂/Y=1" data-index-x="29" data-index-y="27"/>
+<circle cx="762" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=C₂/Y=2" data-index-x="29" data-index-y="28"/>
+<circle cx="762" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=C₂/Y=3" data-index-x="29" data-index-y="29"/>
+<circle cx="762" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=C₂/Y=4" data-index-x="29" data-index-y="30"/>
+<circle cx="786" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D₂/Y=A" data-index-x="30" data-index-y="1"/>
+<circle cx="786" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D₂/Y=B" data-index-x="30" data-index-y="2"/>
+<circle cx="786" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D₂/Y=C" data-index-x="30" data-index-y="3"/>
+<circle cx="786" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D₂/Y=D" data-index-x="30" data-index-y="4"/>
+<circle cx="786" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D₂/Y=E" data-index-x="30" data-index-y="5"/>
+<circle cx="786" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D₂/Y=F" data-index-x="30" data-index-y="6"/>
+<circle cx="786" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D₂/Y=G" data-index-x="30" data-index-y="7"/>
+<circle cx="786" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D₂/Y=H" data-index-x="30" data-index-y="8"/>
+<circle cx="786" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D₂/Y=I" data-index-x="30" data-index-y="9"/>
+<circle cx="786" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D₂/Y=J" data-index-x="30" data-index-y="10"/>
+<circle cx="786" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D₂/Y=K" data-index-x="30" data-index-y="11"/>
+<circle cx="786" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D₂/Y=L" data-index-x="30" data-index-y="12"/>
+<circle cx="786" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D₂/Y=M" data-index-x="30" data-index-y="13"/>
+<circle cx="786" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D₂/Y=N" data-index-x="30" data-index-y="14"/>
+<circle cx="786" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D₂/Y=O" data-index-x="30" data-index-y="15"/>
+<circle cx="786" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D₂/Y=P" data-index-x="30" data-index-y="16"/>
+<circle cx="786" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D₂/Y=Q" data-index-x="30" data-index-y="17"/>
+<circle cx="786" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D₂/Y=R" data-index-x="30" data-index-y="18"/>
+<circle cx="786" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D₂/Y=S" data-index-x="30" data-index-y="19"/>
+<circle cx="786" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=D₂/Y=T" data-index-x="30" data-index-y="20"/>
+<circle cx="786" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=D₂/Y=U" data-index-x="30" data-index-y="21"/>
+<circle cx="786" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=D₂/Y=V" data-index-x="30" data-index-y="22"/>
+<circle cx="786" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=D₂/Y=W" data-index-x="30" data-index-y="23"/>
+<circle cx="786" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=D₂/Y=X" data-index-x="30" data-index-y="24"/>
+<circle cx="786" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=D₂/Y=Y" data-index-x="30" data-index-y="25"/>
+<circle cx="786" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=D₂/Y=Z" data-index-x="30" data-index-y="26"/>
+<circle cx="786" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=D₂/Y=1" data-index-x="30" data-index-y="27"/>
+<circle cx="786" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=D₂/Y=2" data-index-x="30" data-index-y="28"/>
+<circle cx="786" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=D₂/Y=3" data-index-x="30" data-index-y="29"/>
+<circle cx="786" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=D₂/Y=4" data-index-x="30" data-index-y="30"/>
+<circle cx="810" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E₂/Y=A" data-index-x="31" data-index-y="1"/>
+<circle cx="810" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E₂/Y=B" data-index-x="31" data-index-y="2"/>
+<circle cx="810" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E₂/Y=C" data-index-x="31" data-index-y="3"/>
+<circle cx="810" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E₂/Y=D" data-index-x="31" data-index-y="4"/>
+<circle cx="810" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E₂/Y=E" data-index-x="31" data-index-y="5"/>
+<circle cx="810" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E₂/Y=F" data-index-x="31" data-index-y="6"/>
+<circle cx="810" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E₂/Y=G" data-index-x="31" data-index-y="7"/>
+<circle cx="810" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E₂/Y=H" data-index-x="31" data-index-y="8"/>
+<circle cx="810" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E₂/Y=I" data-index-x="31" data-index-y="9"/>
+<circle cx="810" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E₂/Y=J" data-index-x="31" data-index-y="10"/>
+<circle cx="810" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E₂/Y=K" data-index-x="31" data-index-y="11"/>
+<circle cx="810" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E₂/Y=L" data-index-x="31" data-index-y="12"/>
+<circle cx="810" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E₂/Y=M" data-index-x="31" data-index-y="13"/>
+<circle cx="810" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E₂/Y=N" data-index-x="31" data-index-y="14"/>
+<circle cx="810" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E₂/Y=O" data-index-x="31" data-index-y="15"/>
+<circle cx="810" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E₂/Y=P" data-index-x="31" data-index-y="16"/>
+<circle cx="810" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E₂/Y=Q" data-index-x="31" data-index-y="17"/>
+<circle cx="810" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E₂/Y=R" data-index-x="31" data-index-y="18"/>
+<circle cx="810" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E₂/Y=S" data-index-x="31" data-index-y="19"/>
+<circle cx="810" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=E₂/Y=T" data-index-x="31" data-index-y="20"/>
+<circle cx="810" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=E₂/Y=U" data-index-x="31" data-index-y="21"/>
+<circle cx="810" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=E₂/Y=V" data-index-x="31" data-index-y="22"/>
+<circle cx="810" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=E₂/Y=W" data-index-x="31" data-index-y="23"/>
+<circle cx="810" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=E₂/Y=X" data-index-x="31" data-index-y="24"/>
+<circle cx="810" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=E₂/Y=Y" data-index-x="31" data-index-y="25"/>
+<circle cx="810" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=E₂/Y=Z" data-index-x="31" data-index-y="26"/>
+<circle cx="810" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=E₂/Y=1" data-index-x="31" data-index-y="27"/>
+<circle cx="810" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=E₂/Y=2" data-index-x="31" data-index-y="28"/>
+<circle cx="810" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=E₂/Y=3" data-index-x="31" data-index-y="29"/>
+<circle cx="810" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=E₂/Y=4" data-index-x="31" data-index-y="30"/>
+<circle cx="834" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F₂/Y=A" data-index-x="32" data-index-y="1"/>
+<circle cx="834" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F₂/Y=B" data-index-x="32" data-index-y="2"/>
+<circle cx="834" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F₂/Y=C" data-index-x="32" data-index-y="3"/>
+<circle cx="834" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F₂/Y=D" data-index-x="32" data-index-y="4"/>
+<circle cx="834" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F₂/Y=E" data-index-x="32" data-index-y="5"/>
+<circle cx="834" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F₂/Y=F" data-index-x="32" data-index-y="6"/>
+<circle cx="834" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F₂/Y=G" data-index-x="32" data-index-y="7"/>
+<circle cx="834" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F₂/Y=H" data-index-x="32" data-index-y="8"/>
+<circle cx="834" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F₂/Y=I" data-index-x="32" data-index-y="9"/>
+<circle cx="834" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F₂/Y=J" data-index-x="32" data-index-y="10"/>
+<circle cx="834" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F₂/Y=K" data-index-x="32" data-index-y="11"/>
+<circle cx="834" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F₂/Y=L" data-index-x="32" data-index-y="12"/>
+<circle cx="834" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F₂/Y=M" data-index-x="32" data-index-y="13"/>
+<circle cx="834" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F₂/Y=N" data-index-x="32" data-index-y="14"/>
+<circle cx="834" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F₂/Y=O" data-index-x="32" data-index-y="15"/>
+<circle cx="834" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F₂/Y=P" data-index-x="32" data-index-y="16"/>
+<circle cx="834" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F₂/Y=Q" data-index-x="32" data-index-y="17"/>
+<circle cx="834" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F₂/Y=R" data-index-x="32" data-index-y="18"/>
+<circle cx="834" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F₂/Y=S" data-index-x="32" data-index-y="19"/>
+<circle cx="834" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=F₂/Y=T" data-index-x="32" data-index-y="20"/>
+<circle cx="834" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=F₂/Y=U" data-index-x="32" data-index-y="21"/>
+<circle cx="834" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=F₂/Y=V" data-index-x="32" data-index-y="22"/>
+<circle cx="834" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=F₂/Y=W" data-index-x="32" data-index-y="23"/>
+<circle cx="834" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=F₂/Y=X" data-index-x="32" data-index-y="24"/>
+<circle cx="834" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=F₂/Y=Y" data-index-x="32" data-index-y="25"/>
+<circle cx="834" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=F₂/Y=Z" data-index-x="32" data-index-y="26"/>
+<circle cx="834" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=F₂/Y=1" data-index-x="32" data-index-y="27"/>
+<circle cx="834" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=F₂/Y=2" data-index-x="32" data-index-y="28"/>
+<circle cx="834" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=F₂/Y=3" data-index-x="32" data-index-y="29"/>
+<circle cx="834" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=F₂/Y=4" data-index-x="32" data-index-y="30"/>
+<circle cx="858" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G₂/Y=A" data-index-x="33" data-index-y="1"/>
+<circle cx="858" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G₂/Y=B" data-index-x="33" data-index-y="2"/>
+<circle cx="858" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G₂/Y=C" data-index-x="33" data-index-y="3"/>
+<circle cx="858" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G₂/Y=D" data-index-x="33" data-index-y="4"/>
+<circle cx="858" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G₂/Y=E" data-index-x="33" data-index-y="5"/>
+<circle cx="858" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G₂/Y=F" data-index-x="33" data-index-y="6"/>
+<circle cx="858" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G₂/Y=G" data-index-x="33" data-index-y="7"/>
+<circle cx="858" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G₂/Y=H" data-index-x="33" data-index-y="8"/>
+<circle cx="858" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G₂/Y=I" data-index-x="33" data-index-y="9"/>
+<circle cx="858" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G₂/Y=J" data-index-x="33" data-index-y="10"/>
+<circle cx="858" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G₂/Y=K" data-index-x="33" data-index-y="11"/>
+<circle cx="858" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G₂/Y=L" data-index-x="33" data-index-y="12"/>
+<circle cx="858" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G₂/Y=M" data-index-x="33" data-index-y="13"/>
+<circle cx="858" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G₂/Y=N" data-index-x="33" data-index-y="14"/>
+<circle cx="858" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G₂/Y=O" data-index-x="33" data-index-y="15"/>
+<circle cx="858" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G₂/Y=P" data-index-x="33" data-index-y="16"/>
+<circle cx="858" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G₂/Y=Q" data-index-x="33" data-index-y="17"/>
+<circle cx="858" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G₂/Y=R" data-index-x="33" data-index-y="18"/>
+<circle cx="858" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G₂/Y=S" data-index-x="33" data-index-y="19"/>
+<circle cx="858" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=G₂/Y=T" data-index-x="33" data-index-y="20"/>
+<circle cx="858" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=G₂/Y=U" data-index-x="33" data-index-y="21"/>
+<circle cx="858" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=G₂/Y=V" data-index-x="33" data-index-y="22"/>
+<circle cx="858" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=G₂/Y=W" data-index-x="33" data-index-y="23"/>
+<circle cx="858" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=G₂/Y=X" data-index-x="33" data-index-y="24"/>
+<circle cx="858" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=G₂/Y=Y" data-index-x="33" data-index-y="25"/>
+<circle cx="858" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=G₂/Y=Z" data-index-x="33" data-index-y="26"/>
+<circle cx="858" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=G₂/Y=1" data-index-x="33" data-index-y="27"/>
+<circle cx="858" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=G₂/Y=2" data-index-x="33" data-index-y="28"/>
+<circle cx="858" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=G₂/Y=3" data-index-x="33" data-index-y="29"/>
+<circle cx="858" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=G₂/Y=4" data-index-x="33" data-index-y="30"/>
+<circle cx="882" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H₂/Y=A" data-index-x="34" data-index-y="1"/>
+<circle cx="882" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H₂/Y=B" data-index-x="34" data-index-y="2"/>
+<circle cx="882" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H₂/Y=C" data-index-x="34" data-index-y="3"/>
+<circle cx="882" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H₂/Y=D" data-index-x="34" data-index-y="4"/>
+<circle cx="882" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H₂/Y=E" data-index-x="34" data-index-y="5"/>
+<circle cx="882" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H₂/Y=F" data-index-x="34" data-index-y="6"/>
+<circle cx="882" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H₂/Y=G" data-index-x="34" data-index-y="7"/>
+<circle cx="882" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H₂/Y=H" data-index-x="34" data-index-y="8"/>
+<circle cx="882" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H₂/Y=I" data-index-x="34" data-index-y="9"/>
+<circle cx="882" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H₂/Y=J" data-index-x="34" data-index-y="10"/>
+<circle cx="882" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H₂/Y=K" data-index-x="34" data-index-y="11"/>
+<circle cx="882" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H₂/Y=L" data-index-x="34" data-index-y="12"/>
+<circle cx="882" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H₂/Y=M" data-index-x="34" data-index-y="13"/>
+<circle cx="882" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H₂/Y=N" data-index-x="34" data-index-y="14"/>
+<circle cx="882" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H₂/Y=O" data-index-x="34" data-index-y="15"/>
+<circle cx="882" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H₂/Y=P" data-index-x="34" data-index-y="16"/>
+<circle cx="882" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H₂/Y=Q" data-index-x="34" data-index-y="17"/>
+<circle cx="882" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H₂/Y=R" data-index-x="34" data-index-y="18"/>
+<circle cx="882" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H₂/Y=S" data-index-x="34" data-index-y="19"/>
+<circle cx="882" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=H₂/Y=T" data-index-x="34" data-index-y="20"/>
+<circle cx="882" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=H₂/Y=U" data-index-x="34" data-index-y="21"/>
+<circle cx="882" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=H₂/Y=V" data-index-x="34" data-index-y="22"/>
+<circle cx="882" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=H₂/Y=W" data-index-x="34" data-index-y="23"/>
+<circle cx="882" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=H₂/Y=X" data-index-x="34" data-index-y="24"/>
+<circle cx="882" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=H₂/Y=Y" data-index-x="34" data-index-y="25"/>
+<circle cx="882" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=H₂/Y=Z" data-index-x="34" data-index-y="26"/>
+<circle cx="882" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=H₂/Y=1" data-index-x="34" data-index-y="27"/>
+<circle cx="882" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=H₂/Y=2" data-index-x="34" data-index-y="28"/>
+<circle cx="882" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=H₂/Y=3" data-index-x="34" data-index-y="29"/>
+<circle cx="882" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=H₂/Y=4" data-index-x="34" data-index-y="30"/>
+<circle cx="906" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I₂/Y=A" data-index-x="35" data-index-y="1"/>
+<circle cx="906" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I₂/Y=B" data-index-x="35" data-index-y="2"/>
+<circle cx="906" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I₂/Y=C" data-index-x="35" data-index-y="3"/>
+<circle cx="906" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I₂/Y=D" data-index-x="35" data-index-y="4"/>
+<circle cx="906" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I₂/Y=E" data-index-x="35" data-index-y="5"/>
+<circle cx="906" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I₂/Y=F" data-index-x="35" data-index-y="6"/>
+<circle cx="906" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I₂/Y=G" data-index-x="35" data-index-y="7"/>
+<circle cx="906" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I₂/Y=H" data-index-x="35" data-index-y="8"/>
+<circle cx="906" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I₂/Y=I" data-index-x="35" data-index-y="9"/>
+<circle cx="906" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I₂/Y=J" data-index-x="35" data-index-y="10"/>
+<circle cx="906" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I₂/Y=K" data-index-x="35" data-index-y="11"/>
+<circle cx="906" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I₂/Y=L" data-index-x="35" data-index-y="12"/>
+<circle cx="906" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I₂/Y=M" data-index-x="35" data-index-y="13"/>
+<circle cx="906" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I₂/Y=N" data-index-x="35" data-index-y="14"/>
+<circle cx="906" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I₂/Y=O" data-index-x="35" data-index-y="15"/>
+<circle cx="906" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I₂/Y=P" data-index-x="35" data-index-y="16"/>
+<circle cx="906" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I₂/Y=Q" data-index-x="35" data-index-y="17"/>
+<circle cx="906" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I₂/Y=R" data-index-x="35" data-index-y="18"/>
+<circle cx="906" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I₂/Y=S" data-index-x="35" data-index-y="19"/>
+<circle cx="906" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=I₂/Y=T" data-index-x="35" data-index-y="20"/>
+<circle cx="906" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=I₂/Y=U" data-index-x="35" data-index-y="21"/>
+<circle cx="906" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=I₂/Y=V" data-index-x="35" data-index-y="22"/>
+<circle cx="906" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=I₂/Y=W" data-index-x="35" data-index-y="23"/>
+<circle cx="906" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=I₂/Y=X" data-index-x="35" data-index-y="24"/>
+<circle cx="906" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=I₂/Y=Y" data-index-x="35" data-index-y="25"/>
+<circle cx="906" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=I₂/Y=Z" data-index-x="35" data-index-y="26"/>
+<circle cx="906" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=I₂/Y=1" data-index-x="35" data-index-y="27"/>
+<circle cx="906" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=I₂/Y=2" data-index-x="35" data-index-y="28"/>
+<circle cx="906" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=I₂/Y=3" data-index-x="35" data-index-y="29"/>
+<circle cx="906" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=I₂/Y=4" data-index-x="35" data-index-y="30"/>
+<circle cx="930" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J₂/Y=A" data-index-x="36" data-index-y="1"/>
+<circle cx="930" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J₂/Y=B" data-index-x="36" data-index-y="2"/>
+<circle cx="930" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J₂/Y=C" data-index-x="36" data-index-y="3"/>
+<circle cx="930" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J₂/Y=D" data-index-x="36" data-index-y="4"/>
+<circle cx="930" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J₂/Y=E" data-index-x="36" data-index-y="5"/>
+<circle cx="930" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J₂/Y=F" data-index-x="36" data-index-y="6"/>
+<circle cx="930" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J₂/Y=G" data-index-x="36" data-index-y="7"/>
+<circle cx="930" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J₂/Y=H" data-index-x="36" data-index-y="8"/>
+<circle cx="930" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J₂/Y=I" data-index-x="36" data-index-y="9"/>
+<circle cx="930" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J₂/Y=J" data-index-x="36" data-index-y="10"/>
+<circle cx="930" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J₂/Y=K" data-index-x="36" data-index-y="11"/>
+<circle cx="930" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J₂/Y=L" data-index-x="36" data-index-y="12"/>
+<circle cx="930" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J₂/Y=M" data-index-x="36" data-index-y="13"/>
+<circle cx="930" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J₂/Y=N" data-index-x="36" data-index-y="14"/>
+<circle cx="930" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J₂/Y=O" data-index-x="36" data-index-y="15"/>
+<circle cx="930" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J₂/Y=P" data-index-x="36" data-index-y="16"/>
+<circle cx="930" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J₂/Y=Q" data-index-x="36" data-index-y="17"/>
+<circle cx="930" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J₂/Y=R" data-index-x="36" data-index-y="18"/>
+<circle cx="930" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J₂/Y=S" data-index-x="36" data-index-y="19"/>
+<circle cx="930" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=J₂/Y=T" data-index-x="36" data-index-y="20"/>
+<circle cx="930" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=J₂/Y=U" data-index-x="36" data-index-y="21"/>
+<circle cx="930" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=J₂/Y=V" data-index-x="36" data-index-y="22"/>
+<circle cx="930" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=J₂/Y=W" data-index-x="36" data-index-y="23"/>
+<circle cx="930" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=J₂/Y=X" data-index-x="36" data-index-y="24"/>
+<circle cx="930" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=J₂/Y=Y" data-index-x="36" data-index-y="25"/>
+<circle cx="930" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=J₂/Y=Z" data-index-x="36" data-index-y="26"/>
+<circle cx="930" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=J₂/Y=1" data-index-x="36" data-index-y="27"/>
+<circle cx="930" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=J₂/Y=2" data-index-x="36" data-index-y="28"/>
+<circle cx="930" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=J₂/Y=3" data-index-x="36" data-index-y="29"/>
+<circle cx="930" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=J₂/Y=4" data-index-x="36" data-index-y="30"/>
+<circle cx="954" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K₂/Y=A" data-index-x="37" data-index-y="1"/>
+<circle cx="954" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K₂/Y=B" data-index-x="37" data-index-y="2"/>
+<circle cx="954" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K₂/Y=C" data-index-x="37" data-index-y="3"/>
+<circle cx="954" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K₂/Y=D" data-index-x="37" data-index-y="4"/>
+<circle cx="954" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K₂/Y=E" data-index-x="37" data-index-y="5"/>
+<circle cx="954" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K₂/Y=F" data-index-x="37" data-index-y="6"/>
+<circle cx="954" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K₂/Y=G" data-index-x="37" data-index-y="7"/>
+<circle cx="954" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K₂/Y=H" data-index-x="37" data-index-y="8"/>
+<circle cx="954" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K₂/Y=I" data-index-x="37" data-index-y="9"/>
+<circle cx="954" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K₂/Y=J" data-index-x="37" data-index-y="10"/>
+<circle cx="954" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K₂/Y=K" data-index-x="37" data-index-y="11"/>
+<circle cx="954" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K₂/Y=L" data-index-x="37" data-index-y="12"/>
+<circle cx="954" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K₂/Y=M" data-index-x="37" data-index-y="13"/>
+<circle cx="954" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K₂/Y=N" data-index-x="37" data-index-y="14"/>
+<circle cx="954" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K₂/Y=O" data-index-x="37" data-index-y="15"/>
+<circle cx="954" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K₂/Y=P" data-index-x="37" data-index-y="16"/>
+<circle cx="954" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K₂/Y=Q" data-index-x="37" data-index-y="17"/>
+<circle cx="954" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K₂/Y=R" data-index-x="37" data-index-y="18"/>
+<circle cx="954" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K₂/Y=S" data-index-x="37" data-index-y="19"/>
+<circle cx="954" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=K₂/Y=T" data-index-x="37" data-index-y="20"/>
+<circle cx="954" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=K₂/Y=U" data-index-x="37" data-index-y="21"/>
+<circle cx="954" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=K₂/Y=V" data-index-x="37" data-index-y="22"/>
+<circle cx="954" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=K₂/Y=W" data-index-x="37" data-index-y="23"/>
+<circle cx="954" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=K₂/Y=X" data-index-x="37" data-index-y="24"/>
+<circle cx="954" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=K₂/Y=Y" data-index-x="37" data-index-y="25"/>
+<circle cx="954" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=K₂/Y=Z" data-index-x="37" data-index-y="26"/>
+<circle cx="954" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=K₂/Y=1" data-index-x="37" data-index-y="27"/>
+<circle cx="954" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=K₂/Y=2" data-index-x="37" data-index-y="28"/>
+<circle cx="954" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=K₂/Y=3" data-index-x="37" data-index-y="29"/>
+<circle cx="954" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=K₂/Y=4" data-index-x="37" data-index-y="30"/>
+<circle cx="978" cy="210" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L₂/Y=A" data-index-x="38" data-index-y="1"/>
+<circle cx="978" cy="234" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L₂/Y=B" data-index-x="38" data-index-y="2"/>
+<circle cx="978" cy="258" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L₂/Y=C" data-index-x="38" data-index-y="3"/>
+<circle cx="978" cy="282" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L₂/Y=D" data-index-x="38" data-index-y="4"/>
+<circle cx="978" cy="306" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L₂/Y=E" data-index-x="38" data-index-y="5"/>
+<circle cx="978" cy="330" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L₂/Y=F" data-index-x="38" data-index-y="6"/>
+<circle cx="978" cy="354" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L₂/Y=G" data-index-x="38" data-index-y="7"/>
+<circle cx="978" cy="378" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L₂/Y=H" data-index-x="38" data-index-y="8"/>
+<circle cx="978" cy="402" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L₂/Y=I" data-index-x="38" data-index-y="9"/>
+<circle cx="978" cy="426" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L₂/Y=J" data-index-x="38" data-index-y="10"/>
+<circle cx="978" cy="450" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L₂/Y=K" data-index-x="38" data-index-y="11"/>
+<circle cx="978" cy="474" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L₂/Y=L" data-index-x="38" data-index-y="12"/>
+<circle cx="978" cy="498" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L₂/Y=M" data-index-x="38" data-index-y="13"/>
+<circle cx="978" cy="522" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L₂/Y=N" data-index-x="38" data-index-y="14"/>
+<circle cx="978" cy="546" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L₂/Y=O" data-index-x="38" data-index-y="15"/>
+<circle cx="978" cy="570" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L₂/Y=P" data-index-x="38" data-index-y="16"/>
+<circle cx="978" cy="594" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L₂/Y=Q" data-index-x="38" data-index-y="17"/>
+<circle cx="978" cy="618" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L₂/Y=R" data-index-x="38" data-index-y="18"/>
+<circle cx="978" cy="642" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L₂/Y=S" data-index-x="38" data-index-y="19"/>
+<circle cx="978" cy="666" r="2.7" fill="none" stroke="#9fa6b0" data-board-hole="X=L₂/Y=T" data-index-x="38" data-index-y="20"/>
+<circle cx="978" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=L₂/Y=U" data-index-x="38" data-index-y="21"/>
+<circle cx="978" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=L₂/Y=V" data-index-x="38" data-index-y="22"/>
+<circle cx="978" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=L₂/Y=W" data-index-x="38" data-index-y="23"/>
+<circle cx="978" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=L₂/Y=X" data-index-x="38" data-index-y="24"/>
+<circle cx="978" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=L₂/Y=Y" data-index-x="38" data-index-y="25"/>
+<circle cx="978" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=L₂/Y=Z" data-index-x="38" data-index-y="26"/>
+<circle cx="978" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=L₂/Y=1" data-index-x="38" data-index-y="27"/>
+<circle cx="978" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=L₂/Y=2" data-index-x="38" data-index-y="28"/>
+<circle cx="978" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=L₂/Y=3" data-index-x="38" data-index-y="29"/>
+<circle cx="978" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=L₂/Y=4" data-index-x="38" data-index-y="30"/>
+<circle cx="1002" cy="210" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=A" data-index-x="39" data-index-y="1"/>
+<circle cx="1002" cy="234" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=B" data-index-x="39" data-index-y="2"/>
+<circle cx="1002" cy="258" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=C" data-index-x="39" data-index-y="3"/>
+<circle cx="1002" cy="282" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=D" data-index-x="39" data-index-y="4"/>
+<circle cx="1002" cy="306" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=E" data-index-x="39" data-index-y="5"/>
+<circle cx="1002" cy="330" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=F" data-index-x="39" data-index-y="6"/>
+<circle cx="1002" cy="354" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=G" data-index-x="39" data-index-y="7"/>
+<circle cx="1002" cy="378" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=H" data-index-x="39" data-index-y="8"/>
+<circle cx="1002" cy="402" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=I" data-index-x="39" data-index-y="9"/>
+<circle cx="1002" cy="426" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=J" data-index-x="39" data-index-y="10"/>
+<circle cx="1002" cy="450" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=K" data-index-x="39" data-index-y="11"/>
+<circle cx="1002" cy="474" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=L" data-index-x="39" data-index-y="12"/>
+<circle cx="1002" cy="498" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=M" data-index-x="39" data-index-y="13"/>
+<circle cx="1002" cy="522" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=N" data-index-x="39" data-index-y="14"/>
+<circle cx="1002" cy="546" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=O" data-index-x="39" data-index-y="15"/>
+<circle cx="1002" cy="570" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=P" data-index-x="39" data-index-y="16"/>
+<circle cx="1002" cy="594" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=Q" data-index-x="39" data-index-y="17"/>
+<circle cx="1002" cy="618" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=R" data-index-x="39" data-index-y="18"/>
+<circle cx="1002" cy="642" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=S" data-index-x="39" data-index-y="19"/>
+<circle cx="1002" cy="666" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=T" data-index-x="39" data-index-y="20"/>
+<circle cx="1002" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=U" data-index-x="39" data-index-y="21"/>
+<circle cx="1002" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=V" data-index-x="39" data-index-y="22"/>
+<circle cx="1002" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=W" data-index-x="39" data-index-y="23"/>
+<circle cx="1002" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=X" data-index-x="39" data-index-y="24"/>
+<circle cx="1002" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=Y" data-index-x="39" data-index-y="25"/>
+<circle cx="1002" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=Z" data-index-x="39" data-index-y="26"/>
+<circle cx="1002" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=1" data-index-x="39" data-index-y="27"/>
+<circle cx="1002" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=2" data-index-x="39" data-index-y="28"/>
+<circle cx="1002" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=3" data-index-x="39" data-index-y="29"/>
+<circle cx="1002" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=M₂/Y=4" data-index-x="39" data-index-y="30"/>
+<circle cx="1026" cy="210" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=A" data-index-x="40" data-index-y="1"/>
+<circle cx="1026" cy="234" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=B" data-index-x="40" data-index-y="2"/>
+<circle cx="1026" cy="258" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=C" data-index-x="40" data-index-y="3"/>
+<circle cx="1026" cy="282" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=D" data-index-x="40" data-index-y="4"/>
+<circle cx="1026" cy="306" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=E" data-index-x="40" data-index-y="5"/>
+<circle cx="1026" cy="330" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=F" data-index-x="40" data-index-y="6"/>
+<circle cx="1026" cy="354" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=G" data-index-x="40" data-index-y="7"/>
+<circle cx="1026" cy="378" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=H" data-index-x="40" data-index-y="8"/>
+<circle cx="1026" cy="402" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=I" data-index-x="40" data-index-y="9"/>
+<circle cx="1026" cy="426" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=J" data-index-x="40" data-index-y="10"/>
+<circle cx="1026" cy="450" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=K" data-index-x="40" data-index-y="11"/>
+<circle cx="1026" cy="474" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=L" data-index-x="40" data-index-y="12"/>
+<circle cx="1026" cy="498" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=M" data-index-x="40" data-index-y="13"/>
+<circle cx="1026" cy="522" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=N" data-index-x="40" data-index-y="14"/>
+<circle cx="1026" cy="546" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=O" data-index-x="40" data-index-y="15"/>
+<circle cx="1026" cy="570" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=P" data-index-x="40" data-index-y="16"/>
+<circle cx="1026" cy="594" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=Q" data-index-x="40" data-index-y="17"/>
+<circle cx="1026" cy="618" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=R" data-index-x="40" data-index-y="18"/>
+<circle cx="1026" cy="642" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=S" data-index-x="40" data-index-y="19"/>
+<circle cx="1026" cy="666" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=T" data-index-x="40" data-index-y="20"/>
+<circle cx="1026" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=U" data-index-x="40" data-index-y="21"/>
+<circle cx="1026" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=V" data-index-x="40" data-index-y="22"/>
+<circle cx="1026" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=W" data-index-x="40" data-index-y="23"/>
+<circle cx="1026" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=X" data-index-x="40" data-index-y="24"/>
+<circle cx="1026" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=Y" data-index-x="40" data-index-y="25"/>
+<circle cx="1026" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=Z" data-index-x="40" data-index-y="26"/>
+<circle cx="1026" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=1" data-index-x="40" data-index-y="27"/>
+<circle cx="1026" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=2" data-index-x="40" data-index-y="28"/>
+<circle cx="1026" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=3" data-index-x="40" data-index-y="29"/>
+<circle cx="1026" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=N₂/Y=4" data-index-x="40" data-index-y="30"/>
+<circle cx="1050" cy="210" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=A" data-index-x="41" data-index-y="1"/>
+<circle cx="1050" cy="234" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=B" data-index-x="41" data-index-y="2"/>
+<circle cx="1050" cy="258" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=C" data-index-x="41" data-index-y="3"/>
+<circle cx="1050" cy="282" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=D" data-index-x="41" data-index-y="4"/>
+<circle cx="1050" cy="306" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=E" data-index-x="41" data-index-y="5"/>
+<circle cx="1050" cy="330" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=F" data-index-x="41" data-index-y="6"/>
+<circle cx="1050" cy="354" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=G" data-index-x="41" data-index-y="7"/>
+<circle cx="1050" cy="378" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=H" data-index-x="41" data-index-y="8"/>
+<circle cx="1050" cy="402" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=I" data-index-x="41" data-index-y="9"/>
+<circle cx="1050" cy="426" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=J" data-index-x="41" data-index-y="10"/>
+<circle cx="1050" cy="450" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=K" data-index-x="41" data-index-y="11"/>
+<circle cx="1050" cy="474" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=L" data-index-x="41" data-index-y="12"/>
+<circle cx="1050" cy="498" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=M" data-index-x="41" data-index-y="13"/>
+<circle cx="1050" cy="522" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=N" data-index-x="41" data-index-y="14"/>
+<circle cx="1050" cy="546" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=O" data-index-x="41" data-index-y="15"/>
+<circle cx="1050" cy="570" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=P" data-index-x="41" data-index-y="16"/>
+<circle cx="1050" cy="594" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=Q" data-index-x="41" data-index-y="17"/>
+<circle cx="1050" cy="618" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=R" data-index-x="41" data-index-y="18"/>
+<circle cx="1050" cy="642" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=S" data-index-x="41" data-index-y="19"/>
+<circle cx="1050" cy="666" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=T" data-index-x="41" data-index-y="20"/>
+<circle cx="1050" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=U" data-index-x="41" data-index-y="21"/>
+<circle cx="1050" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=V" data-index-x="41" data-index-y="22"/>
+<circle cx="1050" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=W" data-index-x="41" data-index-y="23"/>
+<circle cx="1050" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=X" data-index-x="41" data-index-y="24"/>
+<circle cx="1050" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=Y" data-index-x="41" data-index-y="25"/>
+<circle cx="1050" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=Z" data-index-x="41" data-index-y="26"/>
+<circle cx="1050" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=1" data-index-x="41" data-index-y="27"/>
+<circle cx="1050" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=2" data-index-x="41" data-index-y="28"/>
+<circle cx="1050" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=3" data-index-x="41" data-index-y="29"/>
+<circle cx="1050" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=O₂/Y=4" data-index-x="41" data-index-y="30"/>
+<circle cx="1074" cy="210" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=A" data-index-x="42" data-index-y="1"/>
+<circle cx="1074" cy="234" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=B" data-index-x="42" data-index-y="2"/>
+<circle cx="1074" cy="258" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=C" data-index-x="42" data-index-y="3"/>
+<circle cx="1074" cy="282" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=D" data-index-x="42" data-index-y="4"/>
+<circle cx="1074" cy="306" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=E" data-index-x="42" data-index-y="5"/>
+<circle cx="1074" cy="330" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=F" data-index-x="42" data-index-y="6"/>
+<circle cx="1074" cy="354" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=G" data-index-x="42" data-index-y="7"/>
+<circle cx="1074" cy="378" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=H" data-index-x="42" data-index-y="8"/>
+<circle cx="1074" cy="402" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=I" data-index-x="42" data-index-y="9"/>
+<circle cx="1074" cy="426" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=J" data-index-x="42" data-index-y="10"/>
+<circle cx="1074" cy="450" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=K" data-index-x="42" data-index-y="11"/>
+<circle cx="1074" cy="474" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=L" data-index-x="42" data-index-y="12"/>
+<circle cx="1074" cy="498" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=M" data-index-x="42" data-index-y="13"/>
+<circle cx="1074" cy="522" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=N" data-index-x="42" data-index-y="14"/>
+<circle cx="1074" cy="546" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=O" data-index-x="42" data-index-y="15"/>
+<circle cx="1074" cy="570" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=P" data-index-x="42" data-index-y="16"/>
+<circle cx="1074" cy="594" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=Q" data-index-x="42" data-index-y="17"/>
+<circle cx="1074" cy="618" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=R" data-index-x="42" data-index-y="18"/>
+<circle cx="1074" cy="642" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=S" data-index-x="42" data-index-y="19"/>
+<circle cx="1074" cy="666" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=T" data-index-x="42" data-index-y="20"/>
+<circle cx="1074" cy="690" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=U" data-index-x="42" data-index-y="21"/>
+<circle cx="1074" cy="714" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=V" data-index-x="42" data-index-y="22"/>
+<circle cx="1074" cy="738" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=W" data-index-x="42" data-index-y="23"/>
+<circle cx="1074" cy="762" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=X" data-index-x="42" data-index-y="24"/>
+<circle cx="1074" cy="786" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=Y" data-index-x="42" data-index-y="25"/>
+<circle cx="1074" cy="810" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=Z" data-index-x="42" data-index-y="26"/>
+<circle cx="1074" cy="834" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=1" data-index-x="42" data-index-y="27"/>
+<circle cx="1074" cy="858" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=2" data-index-x="42" data-index-y="28"/>
+<circle cx="1074" cy="882" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=3" data-index-x="42" data-index-y="29"/>
+<circle cx="1074" cy="906" r="2.7" fill="none" stroke="#c1c4ca" data-board-hole="X=P₂/Y=4" data-index-x="42" data-index-y="30"/>
+<rect x="524.65" y="484.02" width="236.22" height="207.87" rx="5" fill="#f5f5f5" stroke="#7a8399" stroke-width="2" stroke-dasharray="8 6" />
+<rect x="765.59" y="484.02" width="236.22" height="207.87" rx="5" fill="#f5f5f5" stroke="#7a8399" stroke-width="2" stroke-dasharray="8 6" />
+<rect x="827.95" y="198.00" width="188.98" height="264.00" rx="5" fill="#f5f5f5" stroke="#7a8399" stroke-width="2" stroke-dasharray="8 6" />
+<rect x="439.61" y="559.61" width="75.59" height="113.39" rx="5" fill="#f5f5f5" stroke="#7a8399" stroke-width="2" stroke-dasharray="8 6" />
+<rect x="228.99" y="198.00" width="598.96" height="264.00" rx="5" fill="#fff" stroke="#4f5d75" stroke-width="2" stroke-dasharray="8 4" data-candidate-module="MCU"/>
+<rect x="121.09" y="501.69" width="292.91" height="160.63" rx="5" fill="#fff" stroke="#4f5d75" stroke-width="2" stroke-dasharray="8 4" data-candidate-module="DAC"/>
+<rect x="562.44" y="512.36" width="165.35" height="113.39" rx="5" fill="#fff4ed" stroke="#eb6c36" stroke-width="2" data-candidate-module="BuckA"/>
+<rect x="793.94" y="512.36" width="165.35" height="113.39" rx="5" fill="#fff4ed" stroke="#eb6c36" stroke-width="2" data-candidate-module="BuckB"/>
+<rect x="228.99" y="198.00" width="58.96" height="264.00" rx="5" fill="#ececec" stroke="#bfc0c0" stroke-width="2" />
+<rect x="296" y="440" width="524" height="20" rx="3" fill="#2d3142"/>
+<circle cx="306" cy="450" r="6" fill="#fff" data-socket="J1" data-pin="1" data-hole="X=J/Y=K"><title>J1 pin 1: X=J/Y=K</title></circle>
+<text x="306.00" y="430.00" class="ch ch-pin" text-anchor="middle">1</text>
+<circle cx="330" cy="450" r="6" fill="#fff" data-socket="J1" data-pin="2" data-hole="X=K/Y=K"><title>J1 pin 2: X=K/Y=K</title></circle>
+<circle cx="354" cy="450" r="6" fill="#fff" data-socket="J1" data-pin="3" data-hole="X=L/Y=K"><title>J1 pin 3: X=L/Y=K</title></circle>
+<circle cx="378" cy="450" r="6" fill="#fff" data-socket="J1" data-pin="4" data-hole="X=M/Y=K"><title>J1 pin 4: X=M/Y=K</title></circle>
+<circle cx="402" cy="450" r="6" fill="#fff" data-socket="J1" data-pin="5" data-hole="X=N/Y=K"><title>J1 pin 5: X=N/Y=K</title></circle>
+<circle cx="426" cy="450" r="6" fill="#fff" data-socket="J1" data-pin="6" data-hole="X=O/Y=K"><title>J1 pin 6: X=O/Y=K</title></circle>
+<circle cx="450" cy="450" r="6" fill="#6a95d8" data-socket="J1" data-pin="7" data-hole="X=P/Y=K"><title>J1 pin 7: X=P/Y=K</title></circle>
+<circle cx="474" cy="450" r="6" fill="#6a95d8" data-socket="J1" data-pin="8" data-hole="X=Q/Y=K"><title>J1 pin 8: X=Q/Y=K</title></circle>
+<circle cx="498" cy="450" r="6" fill="#6a95d8" data-socket="J1" data-pin="9" data-hole="X=R/Y=K"><title>J1 pin 9: X=R/Y=K</title></circle>
+<circle cx="522" cy="450" r="6" fill="#fff" data-socket="J1" data-pin="10" data-hole="X=S/Y=K"><title>J1 pin 10: X=S/Y=K</title></circle>
+<circle cx="546" cy="450" r="6" fill="#fff" data-socket="J1" data-pin="11" data-hole="X=T/Y=K"><title>J1 pin 11: X=T/Y=K</title></circle>
+<circle cx="570" cy="450" r="6" fill="#fff" data-socket="J1" data-pin="12" data-hole="X=U/Y=K"><title>J1 pin 12: X=U/Y=K</title></circle>
+<circle cx="594" cy="450" r="6" fill="#fff" data-socket="J1" data-pin="13" data-hole="X=V/Y=K"><title>J1 pin 13: X=V/Y=K</title></circle>
+<circle cx="618" cy="450" r="6" fill="#fff" data-socket="J1" data-pin="14" data-hole="X=W/Y=K"><title>J1 pin 14: X=W/Y=K</title></circle>
+<circle cx="642" cy="450" r="6" fill="#fff" data-socket="J1" data-pin="15" data-hole="X=X/Y=K"><title>J1 pin 15: X=X/Y=K</title></circle>
+<circle cx="666" cy="450" r="6" fill="#fff" data-socket="J1" data-pin="16" data-hole="X=Y/Y=K"><title>J1 pin 16: X=Y/Y=K</title></circle>
+<circle cx="690" cy="450" r="6" fill="#fff" data-socket="J1" data-pin="17" data-hole="X=Z/Y=K"><title>J1 pin 17: X=Z/Y=K</title></circle>
+<circle cx="714" cy="450" r="6" fill="#fff" data-socket="J1" data-pin="18" data-hole="X=A₂/Y=K"><title>J1 pin 18: X=A₂/Y=K</title></circle>
+<circle cx="738" cy="450" r="6" fill="#fff" data-socket="J1" data-pin="19" data-hole="X=B₂/Y=K"><title>J1 pin 19: X=B₂/Y=K</title></circle>
+<circle cx="762" cy="450" r="6" fill="#fff" data-socket="J1" data-pin="20" data-hole="X=C₂/Y=K"><title>J1 pin 20: X=C₂/Y=K</title></circle>
+<circle cx="786" cy="450" r="6" fill="#fff" data-socket="J1" data-pin="21" data-hole="X=D₂/Y=K"><title>J1 pin 21: X=D₂/Y=K</title></circle>
+<circle cx="810" cy="450" r="6" fill="#fff" data-socket="J1" data-pin="22" data-hole="X=E₂/Y=K"><title>J1 pin 22: X=E₂/Y=K</title></circle>
+<text x="810.00" y="430.00" class="ch ch-pin" text-anchor="middle">22</text>
+<rect x="296" y="200" width="524" height="20" rx="3" fill="#2d3142"/>
+<circle cx="306" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="1" data-hole="X=J/Y=A"><title>J2 pin 1: X=J/Y=A</title></circle>
+<text x="306.00" y="238.00" class="ch ch-pin" text-anchor="middle">1</text>
+<circle cx="330" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="2" data-hole="X=K/Y=A"><title>J2 pin 2: X=K/Y=A</title></circle>
+<circle cx="354" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="3" data-hole="X=L/Y=A"><title>J2 pin 3: X=L/Y=A</title></circle>
+<circle cx="378" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="4" data-hole="X=M/Y=A"><title>J2 pin 4: X=M/Y=A</title></circle>
+<circle cx="402" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="5" data-hole="X=N/Y=A"><title>J2 pin 5: X=N/Y=A</title></circle>
+<circle cx="426" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="6" data-hole="X=O/Y=A"><title>J2 pin 6: X=O/Y=A</title></circle>
+<circle cx="450" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="7" data-hole="X=P/Y=A"><title>J2 pin 7: X=P/Y=A</title></circle>
+<circle cx="474" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="8" data-hole="X=Q/Y=A"><title>J2 pin 8: X=Q/Y=A</title></circle>
+<circle cx="498" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="9" data-hole="X=R/Y=A"><title>J2 pin 9: X=R/Y=A</title></circle>
+<circle cx="522" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="10" data-hole="X=S/Y=A"><title>J2 pin 10: X=S/Y=A</title></circle>
+<circle cx="546" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="11" data-hole="X=T/Y=A"><title>J2 pin 11: X=T/Y=A</title></circle>
+<circle cx="570" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="12" data-hole="X=U/Y=A"><title>J2 pin 12: X=U/Y=A</title></circle>
+<circle cx="594" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="13" data-hole="X=V/Y=A"><title>J2 pin 13: X=V/Y=A</title></circle>
+<circle cx="618" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="14" data-hole="X=W/Y=A"><title>J2 pin 14: X=W/Y=A</title></circle>
+<circle cx="642" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="15" data-hole="X=X/Y=A"><title>J2 pin 15: X=X/Y=A</title></circle>
+<circle cx="666" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="16" data-hole="X=Y/Y=A"><title>J2 pin 16: X=Y/Y=A</title></circle>
+<circle cx="690" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="17" data-hole="X=Z/Y=A"><title>J2 pin 17: X=Z/Y=A</title></circle>
+<circle cx="714" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="18" data-hole="X=A₂/Y=A"><title>J2 pin 18: X=A₂/Y=A</title></circle>
+<circle cx="738" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="19" data-hole="X=B₂/Y=A"><title>J2 pin 19: X=B₂/Y=A</title></circle>
+<circle cx="762" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="20" data-hole="X=C₂/Y=A"><title>J2 pin 20: X=C₂/Y=A</title></circle>
+<circle cx="786" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="21" data-hole="X=D₂/Y=A"><title>J2 pin 21: X=D₂/Y=A</title></circle>
+<circle cx="810" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="22" data-hole="X=E₂/Y=A"><title>J2 pin 22: X=E₂/Y=A</title></circle>
+<text x="810.00" y="238.00" class="ch ch-pin" text-anchor="middle">22</text>
+<rect x="392" y="512" width="20" height="140" rx="3" fill="#2d3142"/>
+<circle cx="402" cy="522" r="6" fill="#fff" data-socket="DACInput" data-pin="1" data-hole="X=N/Y=N"><title>DACInput pin 1: X=N/Y=N</title></circle>
+<circle cx="402" cy="546" r="6" fill="#fff" data-socket="DACInput" data-pin="2" data-hole="X=N/Y=O"><title>DACInput pin 2: X=N/Y=O</title></circle>
+<circle cx="402" cy="570" r="6" fill="#fff" data-socket="DACInput" data-pin="3" data-hole="X=N/Y=P"><title>DACInput pin 3: X=N/Y=P</title></circle>
+<circle cx="402" cy="594" r="6" fill="#fff" data-socket="DACInput" data-pin="4" data-hole="X=N/Y=Q"><title>DACInput pin 4: X=N/Y=Q</title></circle>
+<circle cx="402" cy="618" r="6" fill="#fff" data-socket="DACInput" data-pin="5" data-hole="X=N/Y=R"><title>DACInput pin 5: X=N/Y=R</title></circle>
+<circle cx="402" cy="642" r="6" fill="#fff" data-socket="DACInput" data-pin="6" data-hole="X=N/Y=S"><title>DACInput pin 6: X=N/Y=S</title></circle>
+<rect x="464" y="584" width="20" height="44" rx="3" fill="#2d3142"/>
+<circle cx="474" cy="594" r="6" fill="#fff" data-socket="P1" data-pin="1" data-hole="X=Q/Y=Q"><title>P1 pin 1: X=Q/Y=Q</title></circle>
+<circle cx="474" cy="618" r="6" fill="#fff" data-socket="P1" data-pin="2" data-hole="X=Q/Y=R"><title>P1 pin 2: X=Q/Y=R</title></circle>
+<text x="562.00" y="252.00" class="ch ch-small" text-anchor="middle">J2 后排 · Y=A · X=J → E₂</text>
+<text x="560.00" y="320.00" class="ch ch-title" text-anchor="middle">ESP32-S3</text>
+<text x="258.00" y="338.00" class="ch ch-small" text-anchor="middle">天线</text>
+<text x="560.00" y="416.00" class="ch ch-small" text-anchor="middle">J1 前排 · Y=K · X=J → E₂</text>
+<text x="552.00" y="366.00" class="ch ch-small" text-anchor="middle">蓝色孔 GPIO7 / 15 / 16：X=P / Q / R，Y=K</text>
+<text x="942.00" y="308.00" class="ch ch-title" text-anchor="middle">USB</text>
+<text x="942.00" y="350.00" class="ch ch-small" text-anchor="middle">插头、弯线留空</text>
+<text x="256.00" y="548.00" class="ch ch-title" text-anchor="middle">PCM5102</text>
+<text x="256.00" y="588.00" class="ch ch-small" text-anchor="middle">输入排母在右</text>
+<text x="256.00" y="628.00" class="ch ch-small" text-anchor="middle">X=N，Y=N～S</text>
+<text x="474.00" y="546.00" class="ch ch-small" text-anchor="middle">P1</text>
+<text x="474.00" y="684.00" class="ch ch-small" text-anchor="middle">DAC 5V</text>
+<text x="645.12" y="546.00" class="ch ch-title" text-anchor="middle">降压 A</text>
+<text x="645.12" y="578.00" class="ch ch-body" text-anchor="middle">主控 5V</text>
+<text x="645.12" y="610.00" class="ch ch-small" text-anchor="middle">半孔位置待测</text>
+<text x="645.12" y="684.00" class="ch ch-small" text-anchor="middle">支撑／短引线预留</text>
+<text x="876.61" y="546.00" class="ch ch-title" text-anchor="middle">降压 B</text>
+<text x="876.61" y="578.00" class="ch ch-body" text-anchor="middle">光驱 5V</text>
+<text x="876.61" y="610.00" class="ch ch-small" text-anchor="middle">半孔位置待测</text>
+<text x="876.61" y="684.00" class="ch ch-small" text-anchor="middle">支撑／短引线预留</text>
+<text x="1180.00" y="210.00" class="ch ch-title" text-anchor="start">针脚放大对照</text>
+<text x="1180.00" y="252.00" class="ch ch-small" text-anchor="start">坐标统一写成（X，Y）</text>
+<text x="1180.00" y="302.00" class="ch ch-title" text-anchor="start">DAC 六针排母</text>
+<rect x="1194" y="326" width="28" height="290" rx="4" fill="#2d3142"/>
+<circle cx="1208" cy="346" r="7" fill="#fff"/>
+<text x="1244.00" y="353.00" class="ch ch-body" text-anchor="start">（N，N）  VIN · +5V</text>
+<circle cx="1208" cy="396" r="7" fill="#fff"/>
+<text x="1244.00" y="403.00" class="ch ch-body" text-anchor="start">（N，O）  GND</text>
+<circle cx="1208" cy="446" r="7" fill="#fff"/>
+<text x="1244.00" y="453.00" class="ch ch-body" text-anchor="start">（N，P）  LCK</text>
+<circle cx="1208" cy="496" r="7" fill="#fff"/>
+<text x="1244.00" y="503.00" class="ch ch-body" text-anchor="start">（N，Q）  DIN</text>
+<circle cx="1208" cy="546" r="7" fill="#fff"/>
+<text x="1244.00" y="553.00" class="ch ch-body" text-anchor="start">（N，R）  BCK</text>
+<circle cx="1208" cy="596" r="7" fill="#fff"/>
+<text x="1244.00" y="603.00" class="ch ch-body" text-anchor="start">（N，S）  SCK · 接 GND</text>
+<text x="1180.00" y="678.00" class="ch ch-title" text-anchor="start">P1 · DAC 独立电源</text>
+<rect x="1194" y="704" width="28" height="90" rx="4" fill="#2d3142"/>
+<circle cx="1208" cy="724" r="7" fill="#fff"/>
+<text x="1244.00" y="731.00" class="ch ch-body" text-anchor="start">（Q，Q）  +5V</text>
+<circle cx="1208" cy="774" r="7" fill="#fff"/>
+<text x="1244.00" y="781.00" class="ch ch-body" text-anchor="start">（Q，R）  GND</text>
+<text x="1180.00" y="850.00" class="ch ch-small" text-anchor="start">主控首针在左，末针在右。</text>
+<text x="1180.00" y="886.00" class="ch ch-small" text-anchor="start">两路降压 OUT+ 不并联。</text>
+<path d="M40 970 H1600" stroke="#bfc0c0"/>
+<text x="40.00" y="1008.00" class="ch ch-body" text-anchor="start">完整 42 列 × 30 行。淡色孔仅作整板坐标参考，本方案未分配；空白区域不是裁剪指示。</text>
+<text x="40.00" y="1048.00" class="ch ch-body" text-anchor="start">读图：先在上边找到 X 字母，再沿左边 Y 字母所在行找交点。第二段字母必须带“第二段”或下标。</text>
+<text x="40.00" y="1088.00" class="ch ch-small" text-anchor="start">排母深色孔为拟焊位置；背面焊接仍按同一个孔的 X/Y 身份定位，不能翻面后重新编号。</text>
+<text x="40.00" y="1128.00" class="ch ch-small" text-anchor="start">几何与供电限制不变：当前机壳尚不能直接安装，DAC 排针边距、DCE001 半孔及安装孔仍待确认。</text>
+</svg></div>
+<div class="table-scroll"><table><thead><tr><th>新候选连接</th><th>主控／入口孔（X / Y）</th><th>DAC 孔（X / Y）</th></tr></thead><tbody>
+<tr><td>BCK</td><td>GPIO15 / J1-8：X=Q / Y=K</td><td>X=N / Y=R</td></tr>
+<tr><td>LCK</td><td>GPIO16 / J1-9：X=R / Y=K</td><td>X=N / Y=P</td></tr>
+<tr><td>DIN</td><td>GPIO7 / J1-7：X=P / Y=K</td><td>X=N / Y=Q</td></tr>
+<tr><td>公共地</td><td>GND / J2-1：X=J / Y=A</td><td>X=N / Y=O</td></tr>
+<tr><td>SCK 接地</td><td>DAC SCK：X=N / Y=S</td><td>DAC GND：X=N / Y=O</td></tr>
+<tr><td>DAC 独立 +5V</td><td>P1-1：X=Q / Y=Q</td><td>VIN：X=N / Y=N</td></tr>
+<tr><td>DAC 电源 GND</td><td>P1-2：X=Q / Y=R</td><td>GND：X=N / Y=O</td></tr>
+</tbody></table></div>
+<p>P1 只接原 DAC 独立 5V；不因增加两块降压模块而把 DAC 自动并入 A。新表是候选逐孔对应，尚未画出背面线束路径；旧台架 W1～W10 孔号不能套用。<a href="../perfboard-layout.md#候选排母落孔">坐标依据与尺寸</a> · <a href="#bench-perfboard-layout">展开历史台架孔位参考</a>。</p>
+</details>
+<div class="table-scroll"><table><thead><tr><th>部件／区域</th><th>候选安排</th><th>安装与走线要求</th></tr></thead><tbody>
+<tr><td>ESP32 后排</td><td>USB 朝右、天线朝左；20 mm 插头通道</td><td>保留两排可拔排母、BOOT／RST 操作；实际插头、天线净空和下方铜皮待核对</td></tr>
+<tr><td>DAC 左前</td><td>与 A 本体相隔约 15.7 mm；模拟线向左离板</td><td>可拔排母＋绝缘支撑；保留原独立 5V 入口和音频线束，最终电池供电归属待定</td></tr>
+<tr><td>DCE001 A／B 右前</td><td>本体相隔 7 mm；各留 25 × 22 mm 支撑／引线区</td><td>半孔不等于 2.54 mm 排针；按实物丝印焊短线，绝缘压持并留可拔线束，不在模块上钻孔</td></tr>
+<tr><td>电池与光驱线束</td><td>输入在板外经总开关分支；B 沿右前缘离板</td><td>电机回路不走主控／DAC 信号地或洞洞板焊锡桥；两路 OUT+ 不直接或经 VBUS 并联</td></tr>
+</tbody></table></div>
+<p><strong>几何复核：</strong>四个模块标称平面包络不重叠、未超出载板。按暂定排母、支撑与线束包络，现有机箱有碰撞；把前壳及显示／操控组件临时上移 20／22 mm 后，对所列保留部件无碰撞且净距不小于 1 mm，但旧电子托架仍碰撞，必须重做。临时平移不构成闭合机壳设计，也不证明最终只需加高 20 mm。<a href="../../hardware/perfboard/analysis.json">查看计算结果</a>。</p>
+<p>两块降压模块按供应商自然散热要求在 2A 内评估，封闭机壳温升与光驱启动峰值未测。USB VBUS／COM 防回灌、充电管理和功放稳压尚未定型；图中分区不意味着现有 USB 失联已经解决。</p>
+</section>
+<section id="perfboard"><h2>03 · 原台架 GPIO15/16/7 可拔插洞洞板</h2>
+<p><strong>本节仅对应原 120 × 80 mm 台架板。</strong> 上方 100 × 55 mm 机内候选不沿用本节孔位或裁剪尺寸。</p>
 <p>沿用 120 × 80 mm、30 列 × 42 行的洞洞板与原三条排母位置。ESP32 和 DAC 插在排母上；只焊载板侧导线。光驱、功放及电源模块保持板外，USB 继续使用板载接口与现有 USB 线。</p>
 <div class="verdict"><strong>当前接法：</strong>GPIO15→BCK、GPIO16→LCK、GPIO7→DIN。GPIO7 不接退盘键；GPIO4 留空，不再接临时测量线。当前有声配置关闭按键和 OLED，默认 GPIO4/5/6 固件不能直接用于本图。</div>
 <p>图中 Y 均为第一段 A～Z；第二段 A₂～P₂ 只作位置参考。实心长焊盘不计入圆孔行列，也不默认作为公共电源轨。</p>
@@ -283,7 +1831,7 @@
 <text x="48" y="1020" class="wm-note">图按元件面原孔坐标表达；翻到背面左右镜像，原 X=4 列在左侧，不按背面印字重新编号。</text>
 <text x="48" y="1052" class="wm-note">不要连接 ESP32 5Vin → DAC VIN；不要把 SCK 接 BCK。DAC 焊桥仍须为 1-L、2-L、3-H、4-L，并核对实物。</text>
 </svg></div>
-<details open id="perfboard-layout"><summary>孔位总图：排母、可拔电源入口与 USB 留空区</summary><div class="figure-scroll"><svg class="perfboard-figure" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1280" role="img" aria-labelledby="hole-map-title hole-map-desc"><title id="hole-map-title">可拔插洞洞板布局与 GPIO15/16/7 孔位</title><desc id="hole-map-desc">元件面俯视。ESP32 左右排母 X=Q 和 1、Y=D至Y；DAC 排母 X=N、Y=G至L。GPIO7 在 Q/J，GPIO15 在 Q/K，GPIO16 在 Q/L。P1 电源插头占 N/S 和 N/T。USB 下方及左下扩展区留空，光驱和功放在板外。</desc><defs><style>svg.perfboard-figure text{font-family:"PingFang SC",sans-serif;fill:#2d3142}.num{font-family:monospace;font-size:12px;text-anchor:middle}.sub{font-size:16px;fill:#4f5d75}.big{font-size:24px;font-weight:600}.body{font-size:20px}.strong{font-weight:600}</style></defs>
+<details id="bench-perfboard-layout"><summary>历史台架参考：120 × 80 mm 原板孔位（不适用新版载板）</summary><div class="figure-scroll"><svg class="perfboard-figure" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1280" role="img" aria-labelledby="hole-map-title hole-map-desc"><title id="hole-map-title">可拔插洞洞板布局与 GPIO15/16/7 孔位</title><desc id="hole-map-desc">元件面俯视。ESP32 左右排母 X=Q 和 1、Y=D至Y；DAC 排母 X=N、Y=G至L。GPIO7 在 Q/J，GPIO15 在 Q/K，GPIO16 在 Q/L。P1 电源插头占 N/S 和 N/T。USB 下方及左下扩展区留空，光驱和功放在板外。</desc><defs><style>svg.perfboard-figure text{font-family:"PingFang SC",sans-serif;fill:#2d3142}.num{font-family:monospace;font-size:12px;text-anchor:middle}.sub{font-size:16px;fill:#4f5d75}.big{font-size:24px;font-weight:600}.body{font-size:20px}.strong{font-weight:600}</style></defs>
 <rect x="0" y="0" width="1400" height="1280" rx="8" fill="#f5f5f5" stroke="none"/>
 <text x="40" y="44" class="sub" >DISCORA / REVISION 6 / 元件面 · 2.54 mm 孔距</text>
 <text x="40" y="88" class="big" >排母固定在载板，模块与外接线束可拔出</text>
@@ -1680,7 +3228,7 @@
 <text x="64" y="1116" class="body" >上、下短边 80 mm；长边 120 mm。保留原丝印坐标，图不作 1:1 模板。</text>
 <path d="M40 1144 H1360" stroke="#bfc0c0"/>
 <text x="40" y="1180" class="body" >深色：排母 / P1　　橙色：DAC 排母　　蓝 / 绿 / 紫：BCK / LCK / DIN</text>
-<text x="40" y="1220" class="sub" >本次只更新台架载板。插头外壳、支撑、天线净空及整板入壳仍需实物 / CAD 核对。</text>
+<text x="40" y="1220" class="sub" >此旧图仅对应台架载板。插头外壳、支撑、天线净空及整板入壳仍需实物 / CAD 核对。</text>
 <text x="40" y="1252" class="sub" >孔位按已有供应商针序推导；焊接前以模块丝印试插，不把 GPIO 编号当作排针序号。</text>
 </svg></div></details>
 <h3 id="perfboard-wire-list">逐根导线清单（元件面坐标）</h3>
@@ -1715,7 +3263,7 @@
 <p><strong>扩展预留：</strong>左下区域先留空；按键、OLED、供电转换模块不在本次新增接线范围。顶部三行空孔可能被天线端投影覆盖，不代表已满足射频净空。</p>
 <h3>装配边界与依据</h3>
 <p>GPIO15/16/7 音频连接已通过台架播放，USB 长时仍有失联；本图不把载板装配当作 USB 故障修复。供应商 V1.4 图纸和参考照片给出 J1-7/8/9 对应 GPIO7/15/16；从排母首孔 Y=D 推导为 J/K/L，仍以手边模块丝印试插定位。</p>
-<p>本版没有重新运行 CAD 整机装配检查。现有机壳模型没有包含这整块 120 × 80 mm 载板及排母、P1、插头和线束包络，不能据此认定可直接装入机壳，也不据此钻最终安装孔。</p>
+<p>本节原台架板未纳入本次机内候选的 CAD 包络试算。现有机壳模型没有包含这整块 120 × 80 mm 载板及排母、P1、插头和线束包络，不能据此认定可直接装入机壳，也不据此钻最终安装孔。</p>
 <p><a href="../../hardware/ESP32-S3-N16R8/README.md">板卡针序资料</a> · <a href="../../hardware/PCM5102-DAC/README.md">DAC 焊桥与电源</a> · <a href="../audio-output.md#已通过的接法与默认配置差异">当前音频配置</a> · <a href="../status.md">实测状态</a> · <a href="../../hardware/enclosure/README.md">整机装配边界</a></p>
-</section><footer>维护入口：docs/diagrams/discora-wiring.html。孔位与 docs/wiring.md 同步；图稿更新不表示已焊接、烧录或通过整机装配验收。</footer>
+</section><footer>维护入口：docs/diagrams/discora-wiring.html。原台架孔位与 docs/wiring.md 同步；机内候选见 docs/perfboard-layout.md；图稿更新不表示已焊接、烧录或通过整机装配验收。</footer>
 </main></body></html>

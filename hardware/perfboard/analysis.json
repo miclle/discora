@@ -1,0 +1,270 @@
+{
+  "revision": "dual-buck-candidate-3",
+  "model": "../enclosure/Discora.FCStd",
+  "model_sha256": "360b79141afac0870da58e5b7ca17ba631e3d888896ddd13e4742edac3664306",
+  "layout_sha256": "940a1043ae4667ae852502dbed5693ab7935af34fe11c627bc9c0e4c2bb2ab23",
+  "freecad_version": [
+    "1",
+    "1",
+    "4"
+  ],
+  "nominal_parts_outside_board": [],
+  "planar_part_gaps": [
+    {
+      "pair": [
+        "MCU",
+        "DAC"
+      ],
+      "gap_mm": 4.2
+    },
+    {
+      "pair": [
+        "MCU",
+        "BuckA"
+      ],
+      "gap_mm": 5.33
+    },
+    {
+      "pair": [
+        "MCU",
+        "BuckB"
+      ],
+      "gap_mm": 5.33
+    },
+    {
+      "pair": [
+        "DAC",
+        "BuckA"
+      ],
+      "gap_mm": 15.71
+    },
+    {
+      "pair": [
+        "DAC",
+        "BuckB"
+      ],
+      "gap_mm": 40.21
+    },
+    {
+      "pair": [
+        "BuckA",
+        "BuckB"
+      ],
+      "gap_mm": 7.0
+    }
+  ],
+  "trials": [
+    {
+      "upper_translation_mm": 0,
+      "clashes": [
+        {
+          "pair": [
+            "Board",
+            "FrontShell"
+          ],
+          "mm3": 149.586
+        },
+        {
+          "pair": [
+            "Board",
+            "DisplayHeader"
+          ],
+          "mm3": 13.207
+        },
+        {
+          "pair": [
+            "UndersideWiring",
+            "FrontShell"
+          ],
+          "mm3": 1.925
+        },
+        {
+          "pair": [
+            "MCU",
+            "FrontShell"
+          ],
+          "mm3": 184.82
+        },
+        {
+          "pair": [
+            "MCU",
+            "DisplayPCB"
+          ],
+          "mm3": 159.492
+        },
+        {
+          "pair": [
+            "DAC",
+            "FrontShell"
+          ],
+          "mm3": 1619.991
+        },
+        {
+          "pair": [
+            "DAC",
+            "DisplayPCB"
+          ],
+          "mm3": 180.349
+        },
+        {
+          "pair": [
+            "BuckA",
+            "FrontShell"
+          ],
+          "mm3": 135.991
+        },
+        {
+          "pair": [
+            "BuckA",
+            "DisplayPCB"
+          ],
+          "mm3": 187.083
+        },
+        {
+          "pair": [
+            "BuckA",
+            "DisplayHeader"
+          ],
+          "mm3": 29.274
+        },
+        {
+          "pair": [
+            "BuckB",
+            "VolumePot"
+          ],
+          "mm3": 135.855
+        },
+        {
+          "pair": [
+            "BuckAService",
+            "FrontShell"
+          ],
+          "mm3": 1529.523
+        },
+        {
+          "pair": [
+            "BuckAService",
+            "DisplayPCB"
+          ],
+          "mm3": 540.497
+        },
+        {
+          "pair": [
+            "BuckAService",
+            "DisplayHeader"
+          ],
+          "mm3": 88.076
+        },
+        {
+          "pair": [
+            "BuckBService",
+            "FrontShell"
+          ],
+          "mm3": 702.083
+        },
+        {
+          "pair": [
+            "BuckBService",
+            "VolumePot"
+          ],
+          "mm3": 830.331
+        },
+        {
+          "pair": [
+            "BuckBService",
+            "Encoder"
+          ],
+          "mm3": 0.493
+        },
+        {
+          "pair": [
+            "USBService",
+            "VolumePot"
+          ],
+          "mm3": 98.11
+        },
+        {
+          "pair": [
+            "DACPowerConnector",
+            "FrontShell"
+          ],
+          "mm3": 271.107
+        },
+        {
+          "pair": [
+            "DACPowerConnector",
+            "DisplayPCB"
+          ],
+          "mm3": 133.125
+        },
+        {
+          "pair": [
+            "DACPowerConnector",
+            "DisplayHeader"
+          ],
+          "mm3": 44.038
+        }
+      ],
+      "below_clearance_screen": [
+        {
+          "pair": [
+            "Board",
+            "VolumePot"
+          ],
+          "gap_mm": 0.044
+        },
+        {
+          "pair": [
+            "UndersideWiring",
+            "DisplayHeader"
+          ],
+          "gap_mm": 0.483
+        }
+      ]
+    },
+    {
+      "upper_translation_mm": 20,
+      "clashes": [],
+      "below_clearance_screen": []
+    },
+    {
+      "upper_translation_mm": 22,
+      "clashes": [],
+      "below_clearance_screen": []
+    }
+  ],
+  "current_support_check": {
+    "clashes": [
+      {
+        "pair": [
+          "Board",
+          "SpeakerCarrier"
+        ],
+        "mm3": 55.2
+      },
+      {
+        "pair": [
+          "UndersideWiring",
+          "SpeakerCarrier"
+        ],
+        "mm3": 24.0
+      },
+      {
+        "pair": [
+          "MCU",
+          "SpeakerCarrier"
+        ],
+        "mm3": 1710.776
+      }
+    ],
+    "below_clearance_screen": []
+  },
+  "limits": [
+    "A translated front shell is only a packaging experiment, not a closed enclosure design or a minimum-height proof.",
+    "Current SpeakerCarrier is reported separately, not accepted as a compatible final support.",
+    "Socket/pad placement, cuts, mounting holes, antenna clearance, DAC jack, connectors, cables, cooling and assembly paths remain unverified.",
+    "Two buck outputs must remain separate; USB VBUS isolation and final DAC power source remain undecided."
+  ],
+  "physical_validation": false,
+  "complete_enclosure_validation": false
+}
