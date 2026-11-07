@@ -19,7 +19,7 @@
 | USB Host 识别光驱 | INQUIRY / TEST UNIT READY / REQUEST SENSE | 已识别 UJ-898 / HC10，61.2 秒连续 13 次 TUR 就绪；完整 M1 验收待完成 |
 | 读取音乐 CD 曲目 | READ TOC | bench-tested：本张 CD 取得 13 条音频轨及 LBA；详见实测记录 |
 | CD-DA 数字音频读取 | READ CD | bench-tested：600 秒顺序读取 / 105.84 MB 与电脑完整摘要一致、软件缓冲零欠载；寻道有成功与失败窗口，稳定性未验收，实验默认关闭 |
-| 双声道模拟音频 | I²S → 立体声 DAC | 独立测试音及 CD 源接入已实现；CD 软件时钟控制/持续消费已实测，真实 I²S / DAC 未验收 |
+| 双声道模拟音频 | I²S → 立体声 DAC | bench-tested：当前 GPIO15/16/7、PCM5102A 与原功放完成约 60 秒原始立体声 CD，用户确认两边清晰；完整稳定性未验收 |
 | 轻触按键退盘 | GPIO7 → USB 退盘命令 | bench-tested（用户反馈）：默认查询配置按键触发及实际退盘成功；其余场景待验收，见[接线](docs/eject-button.md) |
 | 轻触按键上一曲／下一曲 | GPIO8／GPIO9 → 播放器换轨 | implemented：仅播放器模式启用，首尾不循环；软件时钟播放器已部署，实体换轨未实测，见[接线与配置](docs/track-buttons.md) |
 | OLED 曲目与播放状态 | GPIO10 SDA／GPIO11 SCL → SH1106 | implemented：播放器模式默认开启，实屏未验收，见[显示说明](docs/oled-display.md) |
@@ -28,14 +28,16 @@
 
 **请勿把技术可行性推断、其它项目的成果或 Linux 测试结果当作 Discora 的实测结论。**
 
-截至 2026-11-05，板上运行 `0.10.0-oled` **软件时钟播放器**：GPIO8 上一曲、GPIO9 下一曲、GPIO7 退盘；上电停止，**不输出 I²S 或声音**。写入与独立校验、三路 GPIO 初始化和 UART 状态响应通过；OLED 在 0x3c 探测超时，本次未识别光驱或目录，实屏及按键动作待验收，见[部署记录](docs/records/2026-11-05-oled-deploy.md)。仓库默认构建仍为查询模式；播放器配置见 [OLED 构建说明](docs/oled-display.md)。
+**2026-11-07：CD → ESP32-S3 → PCM5102A → TPA3118D2 → 双喇叭的基础立体声链路已调通（bench-tested）。** 当前主控 COM 尾号 8636，更换 GPIO7→DAC DIN 的连接后，右声道及双声道低音测试出声；随后第 1 轨原始立体声连续播放约 60 秒，用户确认左右都有清晰音乐、无明显杂音，日志写入错误与软件欠载均为 0。此前 USB 掉线的根因、整轨／整盘及冷启动、重复启停稳定性仍未验收。详见[对照与定位记录](docs/records/2026-11-07-cybertrack-audio-crosscheck.md)，早期失败保留在[无声排查记录](docs/records/2026-11-05-dac-no-sound.md)。
+
+成功实验使用 GPIO15→BCK、GPIO16→LCK、GPIO7→DIN、DAC 模拟输出三线直连功放；仓库默认接线仍是 GPIO4/5/6。板上保留的是临时 CD 诊断候选（25% 数字幅度、60 秒自动停止、按键及 OLED 关闭），这些实验控制尚未合入主固件；不能将默认构建视为该候选。配置差异见[音频输出说明](docs/audio-output.md#已通过的接法与默认配置差异)。借用的 CyberTrack 板原固件及配置已恢复并校验。
 
 ## 初始实验硬件
 
 - **主控**：ESP32-S3（具有可用 USB OTG/Host 引脚的开发板）。
 - **首个目标光驱**：MacBook Pro 13-inch (Mid 2010) 拆机 **MATSHITA DVD-R UJ-898**，SATA/ATAPI 接口。
 - **桥接**：现有 SATA → USB 适配器。必须验证 USB Mass Storage BOT 与 MMC 命令透传。
-- **音频**：支持 I²S 的双声道 DAC（候选 PCM5102A）；可连接有源音箱或另加立体声功放。
+- **音频**：PCM5102A I²S 双声道 DAC；已与 TPA3118D2 功放及双喇叭完成上述短时试听。
 - **供电**：光驱独立、足额的 5V 供电支路；主控与光驱共地，不让开发板 GPIO 或微弱 USB 输出直接负担光驱电机电流。
 - **刻录输入**：以后可选 SD 卡上的 ISO / PCM 数据；当前未定型。
 
