@@ -7,13 +7,15 @@
 | 配置 | 数据源 / 消费端 | 验证状态 |
 | --- | --- | --- |
 | [cd-player-clock.defaults](../firmware/bench/cd-player-clock.defaults) | 真实光驱 → 软件时钟消费 | 13 轨软件时钟及控制已实测；没有声音 |
-| [cd-player-i2s.defaults](../firmware/bench/cd-player-i2s.defaults) | 真实光驱 → I²S 输出适配器 | 13 轨空载整盘已上板；未接 DAC、未测引脚波形 |
+| [cd-player-i2s.defaults](../firmware/bench/cd-player-i2s.defaults) | 真实光驱 → I²S 输出适配器 | 13 轨空载整盘已上板；临时候选另完成接 DAC 的约 60 秒立体声试听，差异见下文 |
 
 使用独立 sdkconfig / build 目录加载配置，避免已有缓存覆盖默认值。播放器与 CDDA bench、独立测试音分开运行；每次部署须确认本项目 COM，不根据端口顺序猜设备。
 
+2026-11-07 当前 8636 板的成功试听使用临时诊断候选：GPIO15/16/7、左右各 25% 数字幅度、60 秒自动停止，关闭按键和 OLED。主线播放器未合入这些实验控制，默认 GPIO7 退盘键会与该 DIN 接法冲突。不要把本页标准命令／默认构建当作同一候选；差异见[音频输出说明](audio-output.md#已通过的接法与默认配置差异)，实测见[记录](records/2026-11-07-cybertrack-audio-crosscheck.md)。
+
 ## UART0 命令
 
-0.9.1 的播放器模式默认支持 GPIO8 上一曲／GPIO9 下一曲，行为与下表 `prev` / `next` 一致；接线、配置和待完成的实机验收见[换轨按键](track-buttons.md)。当前已部署 0.9.1 软件时钟播放器，保留 GPIO7 退盘；启动与目录查询通过，按键动作待验收，见[部署记录](records/2026-11-01-track-buttons-deploy.md)。
+0.9.1 的播放器模式默认支持 GPIO8 上一曲／GPIO9 下一曲，行为与下表 `prev` / `next` 一致；接线、配置和待完成的实机验收见[换轨按键](track-buttons.md)。此前已部署 0.9.1 软件时钟播放器，保留 GPIO7 退盘；当时启动与目录查询通过，按键动作待验收，见[历史部署记录](records/2026-11-01-track-buttons-deploy.md)。
 
 串口为 115200，命令以回车结束。首次有效目录到来后保持 stopped。
 

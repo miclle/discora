@@ -2,6 +2,8 @@
 
 更新：2026-11-05。整机图为模块级接线方案，并附 120 × 80 mm 洞洞板排母布局与逐孔接线；不是 PCB 原理图或接线验收报告。实线表示接口已有定义，不代表已经接线或实测通过；虚线表示规格、接法或固件尚待确认，不能直接按虚线接电。
 
+2026-11-07 实测补充：PCM5102A 与 TPA3118D2 已完成约 60 秒原始立体声 CD 试听。该实验使用 **GPIO15/16/7**，本页图稿及洞洞板方案仍使用仓库默认 **GPIO4/5/6**，不能混接；实验 GPIO7 作 DIN 时退盘键必须关闭并断开。实测接法及固件差异见[音频输出说明](audio-output.md#已通过的接法与默认配置差异)。图稿布局与整机装配仍未因本次台架试听获得验收。
+
 ![Discora 整机连接、供电支路、PCM5102 焊桥及 OLED 四线接线示意](diagrams/discora-wiring.svg)
 
 [打开可缩放 SVG](diagrams/discora-wiring.svg) · [打开完整 HTML 图稿](diagrams/discora-wiring.html) · [洞洞板逐孔接线](diagrams/discora-wiring.html#perfboard) · [排母孔位图](diagrams/discora-wiring.html#perfboard-layout)
@@ -12,8 +14,8 @@
 | --- | --- |
 | ESP32-S3 N16R8 开发板 | 主控；COM 接电脑调试，原生 USB 接光驱；[板卡资料](../hardware/ESP32-S3-N16R8/README.md) |
 | USB-C 公／USB-A 母 OTG 转接、SATA-USB 桥接器、UJ-898 | 按最近直连实验路径绘制；桥接器 VID:PID 为 `13fd:0840`，具体芯片未知；光驱固件 HC10 |
-| PCM5102 模块 | 已到货；参考图芯片标 PCM5102A，实物仍需核对；接线与声音未验收 |
-| TPA3118D2 功放、左右无源喇叭 | 当前首选；喇叭单只标称 4 Ω、10 W、峰值 18 W，见[单元资料](../hardware/Speaker-80x45-4ohm-10W/README.md)；实物接线、供电及匹配待确认，独立功放电源不可省略 |
+| PCM5102 模块 | 已到货；PCM5102A 按上述实验接法短时试听通过，图中默认接法未获本轮验收 |
+| TPA3118D2 功放、左右无源喇叭 | 当前首选；喇叭单只标称 4 Ω、10 W、峰值 18 W，见[单元资料](../hardware/Speaker-80x45-4ohm-10W/README.md)；上述台架组合短时试听通过，额定功率、热与整机匹配未验收，独立功放电源不可省略 |
 | 三个常开按键 | GPIO7 退盘、GPIO8 上一曲、GPIO9 下一曲；退盘在旧查询配置有用户实测反馈，当前播放器全部按键场景未验收 |
 | 1.3 英寸 OLED | GPIO10 SDA、GPIO11 SCL、3.3V VCC、GND；SH1106 驱动 implemented，播放器模式默认开启，实物电平／上拉、控制器和地址仍待验收 |
 | 5V 电源／充电宝、功放电源、调试电脑 | 各支路按下文核对；不把多个电源输出直接并联 |

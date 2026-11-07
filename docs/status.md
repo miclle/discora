@@ -1,16 +1,30 @@
 # 当前工程状态
 
-更新时间：2026-11-05（0.10.0 OLED 软件时钟播放器已部署；OLED 初始化超时）
+更新时间：2026-11-07（换 DIN 连接后原始立体声 CD 约 60 秒试听成功）
+
+## 当前音频结论
+
+CD → ESP32-S3 → PCM5102A → TPA3118D2 → 双喇叭已完成短时立体声实测，状态为 **bench-tested**。当前主控 COM 尾号 8636，接线 GPIO15/16/7；改用已验证的线连接 GPIO7→DAC DIN 后，右声道低音对应正确，双声道低音清晰且响度接近，第 1 轨原始立体声约 60 秒左右连续清晰、无明显杂音。
+
+| 本轮证据 | 结果与边界 |
+| --- | --- |
+| DIN 数据路径 | DAC DIN 接点回读两次为 0，上游 GPIO7 有约 44.1k 次上升沿/秒；同一测量线回环 GPIO7→GPIO4 后计数一致。更换 DIN 连接后恢复声音，范围收窄至原连接／接点，未区分线芯、端子或焊点 |
+| 原始立体声 CD | 60010 ms、10592820 字节、570 次读取；写入错误、软件欠载、stale 均为 0；本轮一次初始枚举，播放期间未掉线；用户听感通过 |
+| 稳定性 | 前一轮约 4.7 秒后 USB 掉线；根因未定位，完整曲目／整盘、冷启动与重复启停未验收 |
+| 当前部署 | 临时原始立体声 CD 诊断候选，25% 数字幅度、60 秒自动停止，结束为 stopped；GPIO4 留空，按键及 OLED 关闭；原 0.10.0-oled 应用备份保留，未恢复到当前板 |
+| 借用设备 | CyberTrack 原固件及配置已恢复，完整 Flash 与基线校验一致 |
+
+完整设备、日志与失败窗口见[对照记录](records/2026-11-07-cybertrack-audio-crosscheck.md)；此前无声排查见[历史记录](records/2026-11-05-dac-no-sound.md)。当前 GPIO15/16/7 与仓库默认 GPIO4/5/6、临时诊断与主固件的区别见[配置说明](audio-output.md#已通过的接法与默认配置差异)。本轮不是整机装配、音质指标或 M0–M3 全部验收。
 
 证据分层：`planned` 为计划；`implemented` 为源码已实现；`bench-tested` 为在指定硬件上实验过；`verified` 为满足相应验收条件。已完成烧录、UART0、Hub/光驱枚举、三种基础查询的真实返回、61.2 秒连续 13 次 TUR 就绪，以及单张 CD 的 13 轨目录、READ CD 小片段/短突发与电脑参考对照；600 秒顺序窗口已与电脑对照，随机寻道、冷启动与受控重复插拔仍待验收，M0/M1 未整体通过。
 
 | 事项 | 状态 | 证据 / 备注 |
 | --- | --- | --- |
 | 仓库创建及 Apache-2.0 License | 已存在 | 用户创建仓库时已有 LICENSE |
-| ESP-IDF 固件构建 | 本地构建通过 | v5.4、目标 esp32s3；源码 0.10.0-oled，默认 / CD 软件时钟 / CD I²S / 测试音四配置本地构建通过；0.7.5 的 13 轨 I²S 空载与 0.8.0 的末两轨自主切换通过；当前已部署 0.10.0 OLED 软件时钟播放器（保留三个按键），真实音频未验收 |
-| 烧录 / UART0 启动 | bench-tested | 0.10.0 写入及独立校验通过；30.076 秒启动采集确认三路 GPIO，OLED 探测超时且无光驱枚举；后续状态响应正常，见[当前部署](records/2026-11-05-oled-deploy.md) |
+| ESP-IDF 固件构建 | 本地构建通过 | 本轮 ESP-IDF v5.4、esp32s3，默认 / 64fs + PCNT / CD I²S 三配置 set-target 与 build 通过；不等同于板上临时候选，见[交付验证](records/2026-11-07-audio-delivery.md) |
+| 烧录 / UART0 启动 | bench-tested | 当前 8636 板临时 CD 候选写入及独立校验通过；此前 OLED 部署与超时见[历史记录](records/2026-11-05-oled-deploy.md) |
 | 初始化 GitHub Actions | 构建成功 | [运行 41173591262](https://github.com/miclle/discora/actions/runs/41173591262)，对应初始化提交 `61b8229`，不是本轮改动的 CI |
-| 本轮 CI 配置 | implemented | 主机侧 ASan/UBSan 检查已扩为十一组；保留十五项 bench 工具检查与五配置构建矩阵；0.10.0 本地主机检查与四配置构建通过；远端 CI 结果须以对应提交的运行记录为准 |
+| 本轮 CI 配置 | implemented | 主机 ASan/UBSan 与 15 项 bench 工具检查本地通过；六配置矩阵包含新增 64fs + PCNT；远端结果以对应提交运行记录为准 |
 | USB Host / BOT 最小探测 | implemented；常规查询 bench-tested | 原生 USB Host、接口筛选、基础查询及 READ TOC 已实测；已观察到超时、Data-In STALL 和一次 Reset Recovery；后续仍有离线，完整恢复验收未通过 |
 | 空 Hub 枚举 | bench-tested | USB-OTG 桥接后枚举 `05e3:0610`，Full-Speed，class `0x09`；下游未接设备 |
 | UJ-898 在 ESP32-S3 USB Host 枚举 | bench-tested | 桥接器 `13fd:0840`，Full-Speed，class/subclass/protocol `08/02/50`；前期有离线重枚举，原因未定位 |
@@ -18,11 +32,11 @@
 | READ TOC | bench-tested | 单张音乐 CD 取得 13 条音频轨、116 字节目录，lead-out LBA 252645；逐轨 LBA 和 lead-out 已与 macOS 参考目录一致 |
 | CD-DA 2352 字节扇区读取 | implemented；顺序窗口 bench-tested | 600 秒、105840000 字节，与电脑完整 SHA-256 一致；随机寻道成功与失败并存，恢复路径尚待实测，默认关闭 |
 | PCM 环形缓冲 | implemented；软件消费 bench-tested | 64 扇区内部 RAM，13 轨 / 594221040 字节逐轨 1× 软件消费，零欠载、各轨两端摘要一致；不是整盘 I²S 验收 |
-| I²S 测试音 / 控制核心 | implemented；空载外设 bench-tested | 441 / 882 Hz L/R、静音、暂停/恢复/停止已上板；延后日志输出后测试音完成事件队列溢出为 0；未接 DAC，未测引脚波形或模拟输出 |
-| CD 源到音频控制 / 输出适配器 | implemented；软件时钟 bench-tested | 13 轨 I²S 空载通过，供数阶段事件溢出 0、收尾每轨 2 次完整保留；0.8.0 末两轨自主切换/盘尾停止通过，真实 DAC 未测 |
-| GPIO7 轻触按键退盘 | bench-tested（用户反馈，默认查询配置） | 0.9.0 查询配置曾获用户实际退盘反馈，未采集该动作 CSW；当前 0.10.0 播放器保留退盘，初始化通过，实体动作及播放中场景待测，见[记录](records/2026-11-01-button-eject-deploy.md) |
-| GPIO8／GPIO9 上一曲／下一曲 | implemented | 0.10.0 软件时钟播放器已部署，GPIO 初始化通过；本轮无目录，实体按键换轨及音频未验收，见[说明](track-buttons.md) |
-| GPIO10／GPIO11 OLED 曲目与状态 | implemented | 0.10.0 SH1106 驱动，播放器模式默认启用；已烧录，0x3c 探测超时，实屏未验收，见[部署记录](records/2026-11-05-oled-deploy.md) |
+| I²S 测试音 / 控制核心 | implemented；接 DAC 试听 bench-tested | 独立左右测试音、双声道低音已获听感确认；MCU 及 DAC 排针时钟计数有记录，不能替代波形幅度、边沿或独立频率精度验收 |
+| CD 源到音频控制 / 输出适配器 | implemented；短时立体声 bench-tested | PCM5102A + TPA3118D2 原始立体声 CD 约 60 秒两边连续清晰；13 轨 I²S 空载是此前单独结果，不能合并为整盘有声验收 |
+| GPIO7 轻触按键退盘 | bench-tested（历史默认查询配置） | 0.9.0 曾获实际退盘反馈；当前音频实验 GPIO7 用于 DIN，退盘键关闭，不能同时接入，见[记录](records/2026-11-01-button-eject-deploy.md) |
+| GPIO8／GPIO9 上一曲／下一曲 | implemented | 此前 0.10.0 初始化通过，实体换轨未验收；当前音频实验关闭，见[说明](track-buttons.md) |
+| GPIO10／GPIO11 OLED 曲目与状态 | implemented | 此前 0.10.0 的 0x3c 探测超时，实屏未验收；当前音频实验关闭，见[记录](records/2026-11-05-oled-deploy.md) |
 | CD-R / CD-RW 实际刻录 | 未验证 | 存在 USB 带宽和最低写速风险；待 M4 |
 
 请优先追加**带日期的测试记录**，不要覆盖此前失败证据。运行 CI 的绿灯仅表示在指定 ESP-IDF 环境中成功构建，不代表 USB、音频、刻录功能通过。

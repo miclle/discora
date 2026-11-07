@@ -1,7 +1,7 @@
 # ADR-0006：独立测试音诊断与可离线验证的音频状态机
 
 - 日期：2026-10-31
-- 状态：Accepted；源码 implemented，实际 I²S / DAC 未验收
+- 状态：Accepted；源码 implemented；短时 DAC 试听 bench-tested，完整验收未完成（更新于 2026-11-07）
 
 ## 背景
 
@@ -26,3 +26,15 @@ USB OTG 转接头和 PCM5102 模块尚未到货。M2 已有 600 秒顺序数据�
 - [接线和验收草案](../audio-output.md)；[离线记录](../records/2026-10-31-m3-audio-prep.md)。
 - API 依据：[ESP-IDF v5.4 I²S](https://docs.espressif.com/projects/esp-idf/en/v5.4/esp32s3/api-reference/peripherals/i2s.html)。
 - 芯片接口依据：[TI PCM5102](https://www.ti.com/lit/ds/symlink/pcm5102.pdf)、[TI PCM5102A](https://www.ti.com/lit/ds/symlink/pcm5102a.pdf)。芯片级参数不替代具体模块供电/跳线说明。
+
+## 2026-11-06 诊断补充
+
+为排查已接 DAC 但无声的现象，新增默认关闭、仅独立诊断可用的 `CONFIG_DISCORA_DIAG_I2S_64FS`：数据宽度仍为 16 位，slot 与 WS 宽度均为 32，名义 BCLK 2.8224 MHz；保持测试音和 DMA 大小不变。默认 16-bit slot 和 CD 播放配置不变。两种时钟组合均在 TI 表 11 支持范围内，此项仅为可回退的对照实验，不据此推定原配置错误或模块损坏。验证状态见[排查记录](../records/2026-11-05-dac-no-sound.md)。
+
+## 2026-11-06 MCU 时钟计数补充
+
+在用户无逻辑分析仪／示波器、换 DAC 仍无声的情况下，新增默认关闭的独立诊断选项 `CONFIG_DISCORA_DIAG_CLOCK_PROBE`。通过原 GPIO 输入路径、两个 PCNT 单元和一秒门控计数，提供比名义配置值更直接的 MCU 端时钟活动证据；不增加接线，不修改 PCM 格式，不将计数正常解释为 DAC 端波形或声音正常。计数资源仅诊断启用时分配、在诊断生命周期内复用，错误后拒绝重试直到重启。接口、限制与配置见[音频诊断说明](../audio-output.md)。
+
+## 2026-11-07 实测边界更新
+
+PCM5102A 与 TPA3118D2 已完成独立左右测试音及约 60 秒原始立体声 CD 试听。成功实验使用 GPIO15/16/7、16-bit slot；主线默认 GPIO4/5/6 不变，64fs 选项仍只作诊断对照。原 DIN 连接更换后恢复声音，不能推断 DAC 损坏或原 32fs 格式不兼容。实际接法、临时候选与主线的区别见[音频说明](../audio-output.md#已通过的接法与默认配置差异)，日志与听感见[实测记录](../records/2026-11-07-cybertrack-audio-crosscheck.md)。此前 USB 掉线根因、长时间播放及波形指标仍未验收。
