@@ -1,0 +1,2 @@
+# Append after sdkconfig.defaults and bench/i2s-tone.defaults with a fresh config.
+CONFIG_DISCORA_DIAG_CLOCK_PROBE=y

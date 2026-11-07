@@ -102,17 +102,37 @@ def main():
         )
         subprocess.run([str(player)], check=True)
 
-        adapter = Path(temp) / "audio_i2s_test"
+        # Both wire formats retain PCM16 DMA sizing, preload and lifecycle checks.
+        for name, flags in [
+            ("default", []),
+            ("64fs", ["-DCONFIG_DISCORA_AUDIO_DIAGNOSTIC=1", "-DCONFIG_DISCORA_DIAG_I2S_64FS=1"]),
+            ("non_diag", ["-DCONFIG_DISCORA_DIAG_I2S_64FS=1"]),
+        ]:
+            adapter = Path(temp) / ("audio_i2s_test_" + name)
+            subprocess.run(
+                shlex.split(os.environ.get("CC", "cc")) + flags + [
+                    "-std=c11", "-Wall", "-Wextra", "-Werror", "-pedantic", "-g",
+                    "-fsanitize=address,undefined", "-fno-omit-frame-pointer",
+                    "-I", str(firmware / "tests/stubs"), "-I", str(firmware / "main"),
+                    str(firmware / "main/audio_i2s.c"), str(firmware / "tests/audio_i2s_test.c"),
+                    "-o", str(adapter),
+                ], check=True,
+            )
+            subprocess.run([str(adapter)], check=True)
+
+        clocks = Path(temp) / "audio_clock_probe_test"
         subprocess.run(
             shlex.split(os.environ.get("CC", "cc")) + [
                 "-std=c11", "-Wall", "-Wextra", "-Werror", "-pedantic", "-g",
                 "-fsanitize=address,undefined", "-fno-omit-frame-pointer",
+                "-DCONFIG_DISCORA_AUDIO_DIAGNOSTIC=1", "-DCONFIG_DISCORA_DIAG_CLOCK_PROBE=1",
                 "-I", str(firmware / "tests/stubs"), "-I", str(firmware / "main"),
-                str(firmware / "main/audio_i2s.c"), str(firmware / "tests/audio_i2s_test.c"),
-                "-o", str(adapter),
+                str(firmware / "main/audio_clock_probe.c"), str(firmware / "tests/audio_clock_probe_test.c"),
+                "-o", str(clocks),
             ], check=True,
         )
-        subprocess.run([str(adapter)], check=True)
+        for args in ([], ["setup-error"], ["start-error"]):
+            subprocess.run([str(clocks)] + args, check=True)
 
         waiting = Path(temp) / "transfer_wait_test"
         subprocess.run(

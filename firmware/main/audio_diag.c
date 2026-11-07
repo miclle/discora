@@ -10,6 +10,12 @@
 #include <unistd.h>
 #include "sdkconfig.h"
 #include "esp_log.h"
+#if defined(CONFIG_DISCORA_DIAG_CLOCK_PROBE)
+#include "audio_clock_probe.h"
+#define CANCEL_CLOCK_PROBE() audio_clock_probe_cancel()
+#else
+#define CANCEL_CLOCK_PROBE() ((void)0)
+#endif
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
@@ -32,6 +38,7 @@ static void status(void)
 
 static void output_fault(esp_err_t err)
 {
+    CANCEL_CLOCK_PROBE();
     ESP_LOGE(TAG, "I2S error=%s; stopped, explicit stop required before retry", esp_err_to_name(err));
     esp_err_t closed = audio_i2s_close(&output);
     if (closed != ESP_OK) ESP_LOGE(TAG, "I2S close=%s; retaining handle", esp_err_to_name(closed));
@@ -43,9 +50,20 @@ static void command(const char *line)
     if (!strcmp(line, "status")) { status(); return; }
     if (!strcmp(line, "help")) {
         ESP_LOGI(TAG, "commands: left right stereo silence play pause stop status help (diagnostic tones only)");
+#if defined(CONFIG_DISCORA_DIAG_CLOCK_PROBE)
+        ESP_LOGI(TAG, "clocks: count BCLK/LRCK at MCU GPIO inputs for about 1s; no DAC waveform validation");
+#endif
         return;
     }
+#if defined(CONFIG_DISCORA_DIAG_CLOCK_PROBE)
+    if (!strcmp(line, "clocks")) {
+        esp_err_t err = audio_clock_probe_begin(CONFIG_DISCORA_I2S_BCLK, CONFIG_DISCORA_I2S_LRCK);
+        if (err != ESP_OK) audio_report(TAG, "clocks rejected error=%d", err);
+        return;
+    }
+#endif
     if (!strcmp(line, "pause")) {
+        CANCEL_CLOCK_PROBE();
         esp_err_t err = audio_i2s_close(&output);
         if (err != ESP_OK) output_fault(err);
         else audio_core_pause(&core);
@@ -53,6 +71,7 @@ static void command(const char *line)
         return;
     }
     if (!strcmp(line, "stop")) {
+        CANCEL_CLOCK_PROBE();
         esp_err_t err = audio_i2s_close(&output);
         if (err != ESP_OK) output_fault(err);
         else {
@@ -63,6 +82,7 @@ static void command(const char *line)
         return;
     }
     if (!strcmp(line, "play")) {
+        CANCEL_CLOCK_PROBE();
         if (!audio_core_play(&core)) ESP_LOGW(TAG, "play rejected; use stop to clear fault");
         status();
         return;
@@ -74,6 +94,7 @@ static void command(const char *line)
     else if (!strcmp(line, "silence")) mode = TONE_SILENCE;
     else { ESP_LOGW(TAG, "unknown command; use help"); return; }
     if (core.state == AUDIO_FAULT) { ESP_LOGW(TAG, "source change rejected; use stop to clear fault"); return; }
+    CANCEL_CLOCK_PROBE();
     esp_err_t err = audio_i2s_close(&output);
     if (err != ESP_OK) { output_fault(err); return; }
     audio_core_stop(&core); // New source invalidates previous generation and all software/DMA bytes.
@@ -114,7 +135,11 @@ void discora_audio_diag_run(void)
     ESP_LOGI(TAG, "Discora I2S tone diagnostic; generated PCM only, USB optical service inactive");
     ESP_LOGI(TAG, "target=44100Hz PCM16LE stereo Philips I2S BCLK=GPIO%d LRCK=GPIO%d DATA=GPIO%d MCLK=unused",
              CONFIG_DISCORA_I2S_BCLK, CONFIG_DISCORA_I2S_LRCK, CONFIG_DISCORA_I2S_DATA);
-    ESP_LOGI(TAG, "nominal BCLK=1411200Hz; left=441Hz right=882Hz peak=4096; no analog/clock verification");
+    ESP_LOGI(TAG, "slot_bits=%d nominal BCLK=%dHz; left=441Hz right=882Hz peak=4096; no analog/clock verification",
+             AUDIO_I2S_SLOT_BITS, AUDIO_I2S_NOMINAL_BCLK);
+#if defined(CONFIG_DISCORA_DIAG_CLOCK_PROBE)
+    ESP_LOGI(TAG, "clock_probe enabled; clocks command reads MCU GPIO input paths");
+#endif
     ESP_LOGI(TAG, "boot state=stopped; enter left/right/stereo/silence or play via UART0 115200");
     if (!audio_core_init(&core, storage, sizeof(storage), AUDIO_PRELOAD_BYTES) ||
         !test_tone_init(&tone, TONE_LEFT)) { ESP_LOGE(TAG, "audio core init failed"); return; }
@@ -124,6 +149,9 @@ void discora_audio_diag_run(void)
     }
     for (;;) {
         poll_commands();
+#if defined(CONFIG_DISCORA_DIAG_CLOCK_PROBE)
+        audio_clock_probe_poll();
+#endif
         if (core.state != AUDIO_PREFILL && core.state != AUDIO_PLAYING) {
             vTaskDelay(pdMS_TO_TICKS(10));
             continue;
@@ -146,6 +174,7 @@ void discora_audio_diag_run(void)
             else status();
         } else {
             if (!audio_core_take(&core, block, sizeof(block))) {
+                CANCEL_CLOCK_PROBE();
                 esp_err_t err = audio_i2s_close(&output);
                 if (err != ESP_OK) output_fault(err);
                 else ESP_LOGW(TAG, "software underrun; use play to rebuffer");

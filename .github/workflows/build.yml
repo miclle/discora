@@ -29,6 +29,8 @@ jobs:
             defaults: sdkconfig.defaults
           - profile: tone
             defaults: sdkconfig.defaults;bench/i2s-tone.defaults
+          - profile: tone-64fs-probe
+            defaults: sdkconfig.defaults;bench/i2s-tone.defaults;bench/i2s-tone-64fs.defaults;bench/i2s-clock-probe.defaults
           - profile: clock
             defaults: sdkconfig.defaults;bench/cd-player-clock.defaults
           - profile: i2s

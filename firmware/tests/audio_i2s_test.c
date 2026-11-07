@@ -20,6 +20,13 @@ esp_err_t i2s_new_channel(const i2s_chan_config_t *c, i2s_chan_handle_t *h, i2s_
 esp_err_t i2s_channel_init_std_mode(i2s_chan_handle_t h, const i2s_std_config_t *c)
 {
     assert(h==&token && c->clk_cfg.sample_rate_hz==44100 && c->slot_cfg.bits==16 && c->slot_cfg.mode==2);
+#if defined(CONFIG_DISCORA_AUDIO_DIAGNOSTIC) && defined(CONFIG_DISCORA_DIAG_I2S_64FS)
+    assert(c->slot_cfg.slot_bit_width==32 && c->slot_cfg.ws_width==32);
+    assert(AUDIO_I2S_NOMINAL_BCLK==2822400);
+#else
+    assert(c->slot_cfg.slot_bit_width==16 && c->slot_cfg.ws_width==16);
+    assert(AUDIO_I2S_NOMINAL_BCLK==1411200);
+#endif
     assert(c->gpio_cfg.bclk==4 && c->gpio_cfg.ws==5 && c->gpio_cfg.dout==6 && c->gpio_cfg.mclk==-1);
     return init_error;
 }
