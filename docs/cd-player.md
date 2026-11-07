@@ -105,3 +105,9 @@ idf.py -B build-psram -DSDKCONFIG=sdkconfig.psram build
 | `failed/rejected` | 源调用失败次数／播放器拒收次数（包括旧代次）；两者可能重叠 |
 
 未完成的在途读取尚不进入耗时统计。按状态快照汇总输出，不逐次打印 READ CD 时间；建议以数秒间隔查询。I²S `event_overflows` 是驱动完成事件队列溢出，与软件 PCM 欠载分别记录。设计见 [ADR-0017](decisions/0017-psram-rebuffer.md)。
+
+## USB 读取负载对照（无音频输出）
+
+定位 USB 掉线时，可在上述 PSRAM 播放配置后继续叠加 `bench/usb-diagnostics.defaults;bench/usb-read-clock.defaults`，使用新的构建目录与 sdkconfig。最后一个 overlay 关闭 I²S、查询 A/B 实验、摘要校验和故障注入，保留实际 READ CD、2 MiB 缓冲与软件时钟消费；上电仍为 stopped。`play-disc` 会读取到盘尾，短窗口须由控制器发送 `stop`，该 overlay 本身不提供 600 秒截止。
+
+此模式不会输出测试音或音乐，也不代表音频链路通过。实机窗口、供电条件、构建与部署证据见[2026-11-07 读取对照](records/2026-11-07-usb-read-clock-comparison.md)。

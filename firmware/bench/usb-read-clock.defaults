@@ -1,0 +1,7 @@
+# Append after cd-player-i2s, cd-player-psram and usb-diagnostics.
+# Same CD producer and buffer; software-clock discard sink, no I2S output.
+# Boot stopped. Host controller must bound play-disc and stop on disconnect.
+CONFIG_DISCORA_USB_ENUM_QUERY_TEST=n
+CONFIG_DISCORA_CD_PLAYER_I2S=n
+CONFIG_DISCORA_CD_PLAYER_VERIFY=n
+CONFIG_DISCORA_CD_PLAYER_FAULT_TEST=n

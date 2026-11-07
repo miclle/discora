@@ -1,6 +1,7 @@
 #include "sdkconfig.h"
 #if defined(CONFIG_DISCORA_CD_PLAYER)
 #include "cd_player.h"
+#include "usb_probe.h"
 #include "cd_read_stats.h"
 #include "pcm_gain.h"
 #include "esp_heap_caps.h"
@@ -194,6 +195,22 @@ static void status(void)
 }
 static void command(const char *line)
 {
+#if defined(CONFIG_DISCORA_USB_ENUM_QUERY_TEST)
+    if (!strcmp(line, "stop")) {
+        discora_usb_probe_cancel_test();
+        ESP_LOGI(TAG, "USB comparison cancel requested; wait for usb_diag phase acknowledgement");
+        status();
+        return;
+    }
+    if (!strcmp(line, "help")) {
+        ESP_LOGI(TAG, "USB comparison: status help stop; playback and track commands disabled");
+        return;
+    }
+    if (strcmp(line, "status")) {
+        ESP_LOGW(TAG, "command rejected: USB comparison profile permits no playback");
+        return;
+    }
+#endif
 #if defined(CONFIG_DISCORA_CD_PLAYER_FAULT_TEST)
     if (inject_command(line)) { status(); return; }
 #endif

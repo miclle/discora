@@ -7,6 +7,28 @@ config DISCORA_USB_DIAGNOSTICS
         link-time observation of ESP-IDF 5.4's private HCD event handler.
         Does not alter timeouts, power, commands, recovery or playback policy.
 
+config DISCORA_USB_ENUM_QUERY_TEST
+    bool "One-shot enum-only then query USB comparison (no playback)"
+    depends on DISCORA_USB_DIAGNOSTICS && DISCORA_CD_PLAYER
+    depends on !DISCORA_AUDIO_DIAGNOSTIC && !DISCORA_CDDA_PROBE
+    depends on !DISCORA_EJECT_BUTTON && !DISCORA_TRACK_BUTTONS && !DISCORA_CD_PLAYER_FAULT_TEST
+    default n
+    help
+        For the 13fd:0840 bridge, hold off all BOT commands for the configured delay
+        after interface claim, then run existing queries for 120 seconds on
+        that same connection. Loss/fault/stop latches the test off until reboot.
+        Only status/help/stop console commands are accepted. No READ CD or I2S.
+
+config DISCORA_USB_ENUM_WAIT_SECONDS
+    int "Enum-only wait before queries (seconds)"
+    depends on DISCORA_USB_ENUM_QUERY_TEST
+    range 0 120
+    default 120
+    help
+        Diagnostic comparison only. 120 preserves the enum-only baseline;
+        0 starts queries on the next USB client iteration after interface claim.
+        The query observation window stays 120 seconds in either case.
+
 menu "Discora eject button"
 
 config DISCORA_EJECT_BUTTON

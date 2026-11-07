@@ -39,6 +39,8 @@ USB Bulk IN 长度按 MPS 向上对齐，CDB 请求与 CBW 数据长度仍保持
 
 0.11.1 增加默认关闭的 USB 诊断 profile：保存慢／失败命令的 CBW、DATA、CSW 分段耗时，断开时的传输／播放器快照，以及打开、关闭和应用 BOT reset 的原因与时间。通过仅限 IDF 5.4 的只读链接包装保留根端口事件，原处理函数只调用一次、返回值不变；异步报告不改变重试、供数或故障停止策略。实测已区分一次根端口 DISCONNECTION 先于应用恢复的故障，物理根因仍未确定；覆盖边界与验证见[USB 诊断记录](records/2026-11-07-usb-disconnect-diagnostics.md)。
 
+可选 USB 分阶段实验在同一连接上先仅枚举默认 120 秒，再启用现有只读查询约 120 秒；0.11.3 可将前段等待设为 0，单独对照启动查询时机，后段长度和命令策略不变。状态机及命令白名单在 client 任务内执行，掉线／取消／完成后重连不重启，播放器命令禁用；不修改默认查询或正常播放配置，见[对照记录](records/2026-11-07-usb-enum-query-comparison.md)。
+
 默认 console 为独立 UART0；主、次 USB console 均关闭，避免与 Host 共用内部 PHY。固件不负责外部 VBUS 开关或 USB-PD 协商。
 
 ## CD-DA 音频
