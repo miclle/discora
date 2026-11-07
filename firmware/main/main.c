@@ -8,7 +8,7 @@
 
 void app_main(void)
 {
-#if defined(CONFIG_DISCORA_AUDIO_DIAGNOSTIC) || defined(CONFIG_DISCORA_CD_PLAYER)
+#if defined(CONFIG_DISCORA_AUDIO_DIAGNOSTIC) || defined(CONFIG_DISCORA_CD_PLAYER) || defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
     if (!audio_report_start()) { ESP_LOGE("main", "audio report task allocation failed"); return; }
 #endif
 #if defined(CONFIG_DISCORA_AUDIO_DIAGNOSTIC)

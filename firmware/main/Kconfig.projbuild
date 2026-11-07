@@ -1,3 +1,12 @@
+config DISCORA_USB_DIAGNOSTICS
+    bool "Record USB disconnect context and slow BOT command phases"
+    default n
+    help
+        Nonblocking reports for root-port/client events, slow commands (>=100ms),
+        transfer errors and player state before media invalidation. Uses a
+        link-time observation of ESP-IDF 5.4's private HCD event handler.
+        Does not alter timeouts, power, commands, recovery or playback policy.
+
 menu "Discora eject button"
 
 config DISCORA_EJECT_BUTTON

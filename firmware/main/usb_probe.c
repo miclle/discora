@@ -21,6 +21,8 @@
 #include "cd_player.h"
 #include "transfer_wait.h"
 #include "eject_button.h"
+#include "usb_trace.h"
+#include "audio_report.h"
 
 #if CONFIG_ESP_CONSOLE_USB_CDC || CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG || CONFIG_ESP_CONSOLE_SECONDARY_USB_SERIAL_JTAG
 #error "Discora Host requires an independent UART console; disable both primary and secondary USB consoles in menuconfig"
@@ -74,6 +76,14 @@ typedef struct {
     probe_toc_t toc;
     uint32_t tag;
     int64_t next_poll;
+#if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
+    usb_trace_t trace, gone_trace;
+    uint32_t device_epoch, disconnects;
+    uint8_t device_address;
+    bool gone_report_pending, gone_owned, late_callback;
+    int64_t gone_us, last_service_end_us;
+    uint64_t service_gap_us, gone_service_gap_us, max_service_gap_us, max_service_call_us;
+#endif
 } probe_context_t;
 
 typedef enum { COMMAND_PASSED, COMMAND_FAILED, COMMAND_TRANSPORT_ERROR } command_result_t;
@@ -83,9 +93,75 @@ static int64_t now_ms(void)
     return esp_timer_get_time() / 1000;
 }
 
+#if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
+static void trace_command(const char *reason, const probe_context_t *ctx, const usb_trace_command_t *c)
+{
+    if (!c->valid) return;
+    int64_t end = c->active ? esp_timer_get_time() : c->end_us;
+    audio_report("usb_diag", "cmd reason=%s epoch=%" PRIu32 " addr=%u tag=%" PRIu32
+        " op=%s active=%u track=%u lba=%" PRIu32 " sectors=%u start_us=%" PRId64
+        " elapsed_us=%" PRId64 " cbw_us=%" PRIu64 " data_us=%" PRIu64
+        " csw_us=%" PRIu64 " control_us=%" PRIu64 " result=%d csw=%d",
+        reason, ctx->device_epoch, ctx->device_address, c->tag,
+        probe_command_name(c->command), c->active, c->track, c->lba, c->sectors,
+        c->start_us, end-c->start_us, c->phase_us[USB_TRACE_CBW], c->phase_us[USB_TRACE_DATA],
+        c->phase_us[USB_TRACE_CSW], c->phase_us[USB_TRACE_CONTROL], c->result, c->csw);
+}
+static void trace_transfer(const char *reason, const usb_trace_transfer_t *t, bool owned)
+{
+    if (!t->valid) return;
+    audio_report("usb_diag", "transfer reason=%s phase=%s ep=0x%02x requested=%d actual=%d"
+        " callback=%u status=%d error=%d owned=%u start_us=%" PRId64
+        " callback_us=%" PRId64 " end_us=%" PRId64,
+        reason, usb_trace_phase_name(t->phase), t->endpoint, t->requested, t->actual,
+        t->callback_seen, t->status, t->error, owned, t->start_us, t->callback_us, t->end_us);
+}
+static void trace_flush_events(probe_context_t *ctx)
+{
+    if (ctx->late_callback) {
+        ctx->late_callback=false;
+        trace_transfer("late_callback", &ctx->trace.transfer, ctx->in_flight);
+    }
+    if (!ctx->gone_report_pending) return;
+    ctx->gone_report_pending=false;
+    audio_report("usb_diag", "client_event=DEV_GONE epoch=%" PRIu32 " addr=%u count=%" PRIu32
+        " observed_us=%" PRId64 " owned=%u active=%u tag=%" PRIu32
+        " service_gap_us=%" PRIu64 " service_gap_max_us=%" PRIu64 " service_call_max_us=%" PRIu64,
+        ctx->device_epoch, ctx->device_address, ctx->disconnects, ctx->gone_us, ctx->gone_owned,
+        ctx->gone_trace.current.active, ctx->gone_trace.current.tag,
+        ctx->gone_service_gap_us, ctx->max_service_gap_us, ctx->max_service_call_us);
+    if (ctx->gone_trace.current.active) trace_command("gone_active", ctx, &ctx->gone_trace.current);
+    trace_command("gone_last", ctx, &ctx->gone_trace.last);
+    if (ctx->gone_trace.last_read.tag != ctx->gone_trace.last.tag)
+        trace_command("gone_last_read", ctx, &ctx->gone_trace.last_read);
+    trace_transfer("gone_snapshot", &ctx->gone_trace.transfer, ctx->gone_owned);
+#if defined(CONFIG_DISCORA_CD_PLAYER)
+    discora_cd_player_report_source_event("DEV_GONE", ctx->gone_us);
+#endif
+}
+static void trace_command_end(probe_context_t *ctx, command_result_t result, int csw)
+{
+    usb_trace_end(&ctx->trace, result, csw, ctx->trace.current.command==PROBE_READ_CD, esp_timer_get_time());
+    if (usb_trace_report_command(&ctx->trace.last, result==COMMAND_PASSED))
+        trace_command(result==COMMAND_PASSED ? "slow" : "failed", ctx, &ctx->trace.last);
+}
+#endif
+
 static void handle_events(probe_context_t *ctx, unsigned wait_ms)
 {
+#if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
+    int64_t begin = esp_timer_get_time();
+    uint64_t gap = ctx->last_service_end_us ? (uint64_t)(begin-ctx->last_service_end_us) : 0;
+    ctx->service_gap_us = gap;
+    if (gap > ctx->max_service_gap_us) ctx->max_service_gap_us=gap;
+#endif
     esp_err_t err = usb_host_client_handle_events(ctx->client, pdMS_TO_TICKS(wait_ms));
+#if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
+    ctx->last_service_end_us=esp_timer_get_time();
+    uint64_t elapsed=(uint64_t)(ctx->last_service_end_us-begin);
+    if (elapsed > ctx->max_service_call_us) ctx->max_service_call_us=elapsed;
+    trace_flush_events(ctx); // Callback snapshots are formatted outside the callback.
+#endif
     if (err != ESP_OK && err != ESP_ERR_TIMEOUT) {
         ESP_LOGE(TAG, "client events: %s", esp_err_to_name(err));
         ctx->faulted = true;
@@ -101,6 +177,14 @@ static void client_event(const usb_host_client_event_msg_t *event, void *arg)
     } else if (event->event == USB_HOST_CLIENT_EVENT_DEV_GONE &&
                event->dev_gone.dev_hdl == ctx->device) {
         ctx->gone = true;
+#if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
+        ctx->gone_us=esp_timer_get_time();
+        ctx->gone_service_gap_us=ctx->service_gap_us;
+        ctx->gone_owned=ctx->in_flight;
+        ctx->gone_trace=ctx->trace;
+        ctx->gone_report_pending=true;
+        ++ctx->disconnects;
+#endif
         discora_eject_button_enable(false);
     }
 }
@@ -109,6 +193,10 @@ static void transfer_done(usb_transfer_t *transfer)
 {
     probe_context_t *ctx = transfer->context;
     ctx->in_flight = false;
+#if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
+    ctx->late_callback |= usb_trace_callback(&ctx->trace, transfer->status,
+                                             transfer->actual_num_bytes, esp_timer_get_time());
+#endif
 }
 
 static void log_usb_error(const char *operation, esp_err_t err)
@@ -127,6 +215,13 @@ static void wait_expired(void *arg, bool disconnected, bool cancellable)
     probe_context_t *ctx = arg;
     ESP_LOGW(TAG, "transfer %s ep=0x%02x; cancel and drain before reuse",
              disconnected ? "disconnected" : "deadline exceeded", ctx->transfer->bEndpointAddress);
+#if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
+    audio_report("usb_diag", "wait_expired observed_us=%" PRId64 " tag=%" PRIu32
+        " phase=%s disconnected=%u cancellable=%u owned=%u",
+        esp_timer_get_time(), ctx->trace.current.tag, usb_trace_phase_name(ctx->trace.transfer.phase),
+        disconnected, cancellable, ctx->in_flight);
+    trace_transfer("wait_expired", &ctx->trace.transfer, ctx->in_flight);
+#endif
     // EP0 cannot be cancelled by the IDF Host API. Never fabricate ownership return.
     if (cancellable) {
         log_usb_error("cancel halt", usb_host_endpoint_halt(ctx->device, ctx->transfer->bEndpointAddress));
@@ -151,7 +246,7 @@ static esp_err_t wait_transfer(probe_context_t *ctx, unsigned timeout_ms)
     return ESP_OK;
 }
 
-static esp_err_t submit_transfer(probe_context_t *ctx, bool control, unsigned timeout_ms)
+static esp_err_t submit_transfer(probe_context_t *ctx, bool control, unsigned timeout_ms, usb_trace_phase_t phase)
 {
     if (ctx->gone || ctx->in_flight) {
         return ESP_ERR_INVALID_STATE;
@@ -160,18 +255,29 @@ static esp_err_t submit_transfer(probe_context_t *ctx, bool control, unsigned ti
     ctx->transfer->callback = transfer_done;
     ctx->transfer->context = ctx;
     ctx->transfer->flags = 0; // BOT forbids a terminating OUT ZLP.
+#if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
+    usb_trace_transfer_begin(&ctx->trace, phase, ctx->transfer->bEndpointAddress,
+                            ctx->transfer->num_bytes, esp_timer_get_time());
+#else
+    (void)phase;
+#endif
     ctx->in_flight = true;
     esp_err_t err = control ? usb_host_transfer_submit_control(ctx->client, ctx->transfer) :
                              usb_host_transfer_submit(ctx->transfer);
     if (err != ESP_OK) {
         ctx->in_flight = false;
-        return err;
+    } else {
+        err = wait_transfer(ctx, timeout_ms);
     }
-    return wait_transfer(ctx, timeout_ms);
+#if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
+    usb_trace_transfer_end(&ctx->trace, err, esp_timer_get_time());
+    if (err != ESP_OK) trace_transfer("submit_or_wait_error", &ctx->trace.transfer, ctx->in_flight);
+#endif
+    return err;
 }
 
 static esp_err_t bulk_transfer(probe_context_t *ctx, bool in, const uint8_t *out, size_t size,
-                                unsigned timeout_ms)
+                                unsigned timeout_ms, usb_trace_phase_t phase)
 {
     if (ctx->in_flight || ctx->gone) {
         return ESP_ERR_INVALID_STATE;
@@ -189,7 +295,7 @@ static esp_err_t bulk_transfer(probe_context_t *ctx, bool in, const uint8_t *out
     t->bEndpointAddress = in ? ctx->interface.ep_in : ctx->interface.ep_out;
     // IDF requires bulk IN lengths rounded to MPS. CBW/CDB retain the exact wire lengths.
     t->num_bytes = (int)rounded;
-    return submit_transfer(ctx, false, timeout_ms);
+    return submit_transfer(ctx, false, timeout_ms, phase);
 }
 
 static esp_err_t control_request(probe_context_t *ctx, uint8_t type, uint8_t request, uint16_t index)
@@ -205,7 +311,7 @@ static esp_err_t control_request(probe_context_t *ctx, uint8_t type, uint8_t req
     t->data_buffer[5] = (uint8_t)(index >> 8);
     t->bEndpointAddress = 0;
     t->num_bytes = 8;
-    return submit_transfer(ctx, true, TRANSFER_TIMEOUT_MS);
+    return submit_transfer(ctx, true, TRANSFER_TIMEOUT_MS, USB_TRACE_CONTROL);
 }
 
 static esp_err_t clear_halt(probe_context_t *ctx, uint8_t endpoint)
@@ -227,6 +333,10 @@ static void reset_recovery(probe_context_t *ctx)
     if (ctx->gone || ctx->in_flight) {
         return;
     }
+#if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
+    audio_report("usb_diag", "action=BOT_RESET observed_us=%" PRId64 " epoch=%" PRIu32 " tag=%" PRIu32,
+                 esp_timer_get_time(), ctx->device_epoch, ctx->tag);
+#endif
     ESP_LOGW(TAG, "BOT reset recovery (one attempt, no command replay)");
     esp_err_t err = control_request(ctx, 0x21, 0xff, ctx->interface.number);
     if (err == ESP_OK) {
@@ -246,6 +356,10 @@ static command_result_t execute_command(probe_context_t *ctx, probe_command_t co
     int64_t started = now_ms();
     result->size = 0;
     ++ctx->tag;
+#if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
+    usb_trace_begin(&ctx->trace, command, ctx->tag, audio ? audio->track->number : 0,
+                    audio ? audio->lba : 0, audio ? audio->sectors : 0, esp_timer_get_time());
+#endif
     bool valid = requested <= sizeof(result->data);
     if (command == PROBE_READ_CD) {
         valid = valid && audio && requested == (size_t)audio->sectors * PROBE_CD_SECTOR_SIZE &&
@@ -256,12 +370,15 @@ static command_result_t execute_command(probe_context_t *ctx, probe_command_t co
                 probe_make_cbw(command, ctx->interface.subclass, ctx->tag, requested, cbw);
     }
     if (!valid) {
+#if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
+        trace_command_end(ctx, COMMAND_TRANSPORT_ERROR, -1);
+#endif
         ctx->faulted = true;
         return COMMAND_TRANSPORT_ERROR;
     }
     if (!ctx->quiet_audio || command != PROBE_READ_CD) ESP_LOGI(TAG, "command=%s tag=%" PRIu32 " requested=%u LUN=0",
              probe_command_name(command), ctx->tag, (unsigned)requested);
-    esp_err_t err = bulk_transfer(ctx, false, cbw, sizeof(cbw), TRANSFER_TIMEOUT_MS);
+    esp_err_t err = bulk_transfer(ctx, false, cbw, sizeof(cbw), TRANSFER_TIMEOUT_MS, USB_TRACE_CBW);
     if (command == PROBE_REQUEST_SENSE) {
         ESP_LOGI(TAG, "sense phase=CBW result=%s elapsed_ms=%" PRIi64 " owned=%u",
                  esp_err_to_name(err), now_ms() - started, ctx->in_flight);
@@ -274,7 +391,7 @@ static command_result_t execute_command(probe_context_t *ctx, probe_command_t co
                                 command == PROBE_REQUEST_SENSE ? SENSE_DATA_TIMEOUT_MS : TRANSFER_TIMEOUT_MS;
         if (command == PROBE_REQUEST_SENSE) ESP_LOGI(TAG, "sense phase=DATA deadline_ms=%u", data_timeout);
         err = bulk_transfer(ctx, true, NULL, requested,
-                            data_timeout);
+                            data_timeout, USB_TRACE_DATA);
         if (command == PROBE_REQUEST_SENSE) {
             ESP_LOGI(TAG, "sense phase=DATA result=%s elapsed_ms=%" PRIi64 " owned=%u",
                      esp_err_to_name(err), now_ms() - started, ctx->in_flight);
@@ -298,7 +415,7 @@ static command_result_t execute_command(probe_context_t *ctx, probe_command_t co
         }
     }
     err = bulk_transfer(ctx, true, NULL, PROBE_CSW_SIZE,
-                        command == PROBE_EJECT ? EJECT_CSW_TIMEOUT_MS : TRANSFER_TIMEOUT_MS);
+                        command == PROBE_EJECT ? EJECT_CSW_TIMEOUT_MS : TRANSFER_TIMEOUT_MS, USB_TRACE_CSW);
     if (command == PROBE_REQUEST_SENSE) {
         ESP_LOGI(TAG, "sense phase=CSW result=%s elapsed_ms=%" PRIi64,
                  esp_err_to_name(err), now_ms() - started);
@@ -307,7 +424,7 @@ static command_result_t execute_command(probe_context_t *ctx, probe_command_t co
         err = clear_halt(ctx, ctx->interface.ep_in);
         if (err == ESP_OK) {
             err = bulk_transfer(ctx, true, NULL, PROBE_CSW_SIZE,
-                        command == PROBE_EJECT ? EJECT_CSW_TIMEOUT_MS : TRANSFER_TIMEOUT_MS);
+                        command == PROBE_EJECT ? EJECT_CSW_TIMEOUT_MS : TRANSFER_TIMEOUT_MS, USB_TRACE_CSW);
         }
     }
     if (err != ESP_OK) {
@@ -334,9 +451,21 @@ static command_result_t execute_command(probe_context_t *ctx, probe_command_t co
     if (result->size && command != PROBE_READ_CD) {
         ESP_LOG_BUFFER_HEX_LEVEL(TAG, result->data, result->size, ESP_LOG_INFO);
     }
+#if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
+    trace_command_end(ctx, csw.status == 0 ? COMMAND_PASSED : COMMAND_FAILED, csw.status);
+#endif
     return csw.status == 0 ? COMMAND_PASSED : COMMAND_FAILED;
 
 transport_error:
+#if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
+    trace_command_end(ctx, COMMAND_TRANSPORT_ERROR, -1);
+#if defined(CONFIG_DISCORA_CD_PLAYER)
+    // Transfer failure can precede DEV_GONE delivery. Capture before complete()
+    // invalidates the source and clears its PCM queue, not only on DEV_GONE.
+    if (command == PROBE_READ_CD)
+        discora_cd_player_report_source_event("READ_TRANSPORT_ERROR", esp_timer_get_time());
+#endif
+#endif
     ESP_LOGE(TAG, "command=%s transport error=%s elapsed_ms=%" PRIi64,
              probe_command_name(command), esp_err_to_name(err == ESP_OK ? ESP_FAIL : err),
              now_ms() - started);
@@ -747,12 +876,19 @@ static void poll_ready(probe_context_t *ctx)
     ctx->next_poll = now_ms() + POLL_INTERVAL_MS;
 }
 
-static void close_device(probe_context_t *ctx)
+static void close_device(probe_context_t *ctx, const char *reason)
 {
     discora_eject_button_enable(false);
     if (ctx->in_flight) {
         return;
     }
+#if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
+    audio_report("usb_diag", "action=close reason=%s epoch=%" PRIu32 " addr=%u observed_us=%" PRId64
+        " gone=%u faulted=%u owned=%u", reason, ctx->device_epoch, ctx->device_address,
+        esp_timer_get_time(), ctx->gone, ctx->faulted, ctx->in_flight);
+#else
+    (void)reason;
+#endif
     if (ctx->claimed) {
         esp_err_t err = usb_host_interface_release(ctx->client, ctx->device, ctx->interface.number);
         if (err != ESP_OK) {
@@ -791,6 +927,12 @@ static void open_device(probe_context_t *ctx, uint8_t address)
         log_usb_error("open device", err);
         return;
     }
+#if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
+    ++ctx->device_epoch;
+    ctx->device_address=address;
+    ctx->trace=(usb_trace_t){0};
+    ctx->late_callback=false;
+#endif
     usb_device_info_t info;
     const usb_device_desc_t *device_desc;
     const usb_config_desc_t *config;
@@ -798,13 +940,18 @@ static void open_device(probe_context_t *ctx, uint8_t address)
         (err = usb_host_get_device_descriptor(ctx->device, &device_desc)) != ESP_OK ||
         (err = usb_host_get_active_config_descriptor(ctx->device, &config)) != ESP_OK) {
         log_usb_error("cached descriptors", err);
-        close_device(ctx);
+        close_device(ctx, "descriptor_error");
         return;
     }
     ESP_LOGI(TAG, "USB address=%u VID:PID=%04x:%04x speed=%s config=%u device_class=0x%02x",
              address, device_desc->idVendor, device_desc->idProduct,
              info.speed == USB_SPEED_FULL ? "Full-Speed" : "other", info.bConfigurationValue,
              device_desc->bDeviceClass);
+#if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
+    audio_report("usb_diag", "action=open epoch=%" PRIu32 " addr=%u observed_us=%" PRId64
+        " vid=%04x pid=%04x parent=%s port=%u", ctx->device_epoch, address, esp_timer_get_time(),
+        device_desc->idVendor, device_desc->idProduct, info.parent.dev_hdl ? "hub" : "root", info.parent.port_num);
+#endif
     // Preserve interface class/subclass/protocol in logs, including unsupported UAS devices.
     const uint8_t *raw = (const uint8_t *)config;
     for (size_t offset = config->bLength; offset + 2 <= config->wTotalLength;) {
@@ -821,13 +968,13 @@ static void open_device(probe_context_t *ctx, uint8_t address)
     if (info.speed != USB_SPEED_FULL ||
         !probe_find_interface(raw, config->wTotalLength, &ctx->interface)) {
         ESP_LOGW(TAG, "no supported Full-Speed BOT interface (hub/UAS/other/malformed); skipped");
-        close_device(ctx);
+        close_device(ctx, "unsupported_interface");
         return;
     }
     err = usb_host_interface_claim(ctx->client, ctx->device, ctx->interface.number, 0);
     if (err != ESP_OK) {
         log_usb_error("claim BOT interface", err);
-        close_device(ctx);
+        close_device(ctx, "claim_error");
         return;
     }
     ctx->claimed = true;
@@ -838,12 +985,16 @@ static void open_device(probe_context_t *ctx, uint8_t address)
     ctx->next_poll = 0;
 }
 
+
 static void host_daemon(void *arg)
 {
     (void)arg;
     for (;;) {
-        uint32_t flags;
+        uint32_t flags=0;
         esp_err_t err = usb_host_lib_handle_events(portMAX_DELAY, &flags);
+#if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
+        if (flags) audio_report("usb_diag", "lib_flags=0x%" PRIx32 " observed_us=%" PRId64, flags, esp_timer_get_time());
+#endif
         if (err != ESP_OK) {
             log_usb_error("host daemon", err);
             vTaskDelay(pdMS_TO_TICKS(20));
@@ -853,6 +1004,10 @@ static void host_daemon(void *arg)
 
 void discora_usb_probe_run(void)
 {
+#if defined(CONFIG_DISCORA_USB_DIAGNOSTICS)
+    ESP_LOGI("usb_diag", "enabled reset_reason=%d slow_us=100000 root_hook=IDF5.4"
+             " snapshots=client-task reports=async; root events do not measure supply voltage", esp_reset_reason());
+#endif
     const esp_app_desc_t *app = esp_app_get_description();
     ESP_LOGI(TAG, "Discora optical control version=%s IDF=%s", app->version, app->idf_ver);
     ESP_LOGI(TAG, "Application ELF SHA256:");
@@ -900,8 +1055,9 @@ void discora_usb_probe_run(void)
         if (discora_eject_button_take()) eject_disc(&ctx);
         if (ctx.device) {
             if (ctx.gone) {
-                close_device(&ctx);
-            } else if (!ctx.faulted && ctx.identified && now_ms() >= ctx.next_poll) {
+                close_device(&ctx, "DEV_GONE");
+            }
+            else if (!ctx.faulted && ctx.identified && now_ms() >= ctx.next_poll) {
                 poll_ready(&ctx);
             }
 #if defined(CONFIG_DISCORA_CD_PLAYER)

@@ -37,6 +37,8 @@ READ CD  → 2352-byte audio sectors → ring buffer → I²S stereo
 
 USB Bulk IN 长度按 MPS 向上对齐，CDB 请求与 CBW 数据长度仍保持精确值。普通查询/CBW/CSW/控制传输截止时间为 3 秒，READ CD 数据阶段为 30 秒；取消后等回调归还所有权。0.5.1 增加 REQUEST SENSE 分阶段日志，实验可将其数据等待单独设为 30 秒，默认仍为 3 秒；有效 sense 已观察到 03/02/00（寻道未完成），尚无稳定修复结论。0.7.3 将等待与取消排空控制提取到生产和离线测试共享的 `transfer_wait.c`，不改变原截止和协议策略。只有完成回调解除所有权；超时后的迟到回调仅归还资源，不把超时改判成功。未归还的 transfer 不复用，控制超时需要拔下设备。断连后释放接口并关闭 device handle，Host 服务继续等待新设备。恢复策略和限制见 [ADR-0002](decisions/0002-read-only-native-bot-probe.md)。0.5.2 新增默认关闭的寻道间隔与有界读取恢复实验：仅对有效 `03/02/00`、仍健康且再次 TUR 就绪的连接，允许每次启动最多一次相同 READ CD 重放。原始失败单独计数，重连不重新授权；详见 [ADR-0007](decisions/0007-bounded-seek-recovery.md)。
 
+0.11.1 增加默认关闭的 USB 诊断 profile：保存慢／失败命令的 CBW、DATA、CSW 分段耗时，断开时的传输／播放器快照，以及打开、关闭和应用 BOT reset 的原因与时间。通过仅限 IDF 5.4 的只读链接包装保留根端口事件，原处理函数只调用一次、返回值不变；异步报告不改变重试、供数或故障停止策略。实测已区分一次根端口 DISCONNECTION 先于应用恢复的故障，物理根因仍未确定；覆盖边界与验证见[USB 诊断记录](records/2026-11-07-usb-disconnect-diagnostics.md)。
+
 默认 console 为独立 UART0；主、次 USB console 均关闭，避免与 Host 共用内部 PHY。固件不负责外部 VBUS 开关或 USB-PD 协商。
 
 ## CD-DA 音频
