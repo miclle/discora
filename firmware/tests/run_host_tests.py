@@ -102,6 +102,18 @@ def main():
         )
         subprocess.run([str(player)], check=True)
 
+        rebuffer = Path(temp) / "cd_player_rebuffer_test"
+        subprocess.run(
+            shlex.split(os.environ.get("CC", "cc")) + [
+                "-std=c11", "-Wall", "-Wextra", "-Werror", "-pedantic", "-g",
+                "-fsanitize=address,undefined", "-fno-omit-frame-pointer",
+                "-I", str(firmware / "main"), str(firmware / "main/pcm_buffer.c"),
+                str(firmware / "main/audio_core.c"), str(firmware / "main/cd_player_core.c"),
+                str(firmware / "tests/cd_player_rebuffer_test.c"), "-o", str(rebuffer),
+            ], check=True,
+        )
+        subprocess.run([str(rebuffer)], check=True)
+
         # Both wire formats retain PCM16 DMA sizing, preload and lifecycle checks.
         for name, flags in [
             ("default", []),

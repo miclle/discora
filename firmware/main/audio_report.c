@@ -20,7 +20,9 @@ static void report_task(void *arg)
 bool audio_report_start(void)
 {
     if (reports) return true;
-    reports = xQueueCreate(8, sizeof(report_t));
+    // EOF trace, optional verification, expanded status and sequence event can
+    // arrive in one burst. Keep headroom without ever blocking the audio owner.
+    reports = xQueueCreate(16, sizeof(report_t));
     if (!reports) return false;
     if (xTaskCreate(report_task,"audio_report",3072,NULL,1,NULL) != pdPASS) {
         vQueueDelete(reports); reports = NULL; return false;

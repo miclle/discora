@@ -35,6 +35,8 @@ jobs:
             defaults: sdkconfig.defaults;bench/cd-player-clock.defaults
           - profile: i2s
             defaults: sdkconfig.defaults;bench/cd-player-i2s.defaults
+          - profile: psram
+            defaults: sdkconfig.defaults;bench/cd-player-i2s.defaults;bench/cd-player-psram.defaults
           - profile: faults
             defaults: sdkconfig.defaults;bench/cd-player-faults.defaults
     steps:
