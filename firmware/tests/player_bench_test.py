@@ -171,10 +171,11 @@ class I2SEOFTests(unittest.TestCase):
 
 
 class SequenceTrace(bench.Bench):
-    def __init__(self, omit_advance=False):
+    def __init__(self, omit_advance=False, rewind=True):
         super().__init__(None, io.BytesIO(), {"actions": []}, 5)
         self.started = self.emitted = False
         self.omit_advance = omit_advance
+        self.rewind = rewind
         self.commands = []
         self.lines = ["usb_probe: TOC validated first=1 last=3 tracks=3 lead_out_lba=54"] + [
             f"usb_probe: TOC track={i} type=audio start_lba={(i-1)*18} end_lba={i*18}" for i in range(1,4)]
@@ -183,9 +184,10 @@ class SequenceTrace(bench.Bench):
         self.commands.append(command)
         if command == "play-disc": self.started = True
         return {"state": "prefill" if self.started and not self.emitted else "stopped",
-                "continuous": "1" if self.started and not self.emitted else "0", "eof": "1" if self.emitted else "0",
-                "track": "3" if self.emitted else "2", "generation": "11" if self.emitted else "10",
-                "delivered": "42336" if self.emitted else "0", "queued": "0", "reads": "6", "underruns": "0"}
+                "continuous": "1" if self.started and not self.emitted else "0", "eof": "1" if self.emitted and not self.rewind else "0",
+                "track": ("1" if self.rewind else "3") if self.emitted else "2",
+                "generation": ("12" if self.rewind else "11") if self.emitted else "10", "next_lba": "0",
+                "delivered": "42336" if self.emitted and not self.rewind else "0", "queued": "0", "reads": "6", "underruns": "0"}
 
     def pump(self, seconds):
         if not self.started or self.emitted: return
@@ -196,7 +198,8 @@ class SequenceTrace(bench.Bench):
                 f"cd_player: state=stopped eof=1 generation={gen} track={track} underruns=0"]
             if track == 2 and not self.omit_advance:
                 self.lines.append("cd_player: sequence advance from=2 to=3 generation=11")
-        self.lines.append("cd_player: sequence complete from=3 to=3 generation=11")
+        self.lines.append("cd_player: sequence complete from=3 to=1 generation=12 rewound=1 ended_generation=11 ended_lba=54 ended_bytes=42336"
+                          if self.rewind else "cd_player: sequence complete from=3 to=3 generation=11")
 
 
 class SequenceTests(unittest.TestCase):
@@ -207,6 +210,23 @@ class SequenceTests(unittest.TestCase):
         self.assertTrue(after_start and all(c == "status" for c in after_start))
         self.assertEqual(len(session.report["tracks"]), 2)
         self.assertEqual(session.report["final"]["continuous"], "0")
+
+    def test_legacy_sequence_still_supported(self):
+        session = SequenceTrace(rewind=False)
+        session.sequence(2)
+        self.assertEqual(session.report["final"]["track"], "3")
+
+    def test_rewind_requires_completed_track_evidence(self):
+        session = SequenceTrace()
+        session.command("play-disc"); session.pump(1)
+        state = session.command("status")
+        first, last = {"number": 1, "start": 0}, {"number": 3, "start": 36, "end": 54}
+        self.assertTrue(bench.sequence_finished(session.lines, state, first, last))
+        for patch in [{"track": "3"}, {"eof": "1"}, {"delivered": "42336"}, {"next_lba": "54"}]:
+            with self.assertRaisesRegex(RuntimeError, "rewound"):
+                bench.sequence_finished(session.lines, {**state, **patch}, first, last)
+        with self.assertRaisesRegex(RuntimeError, "completion evidence"):
+            bench.sequence_finished([x.replace("ended_bytes=42336", "ended_bytes=1") for x in session.lines], state, first, last)
 
     def test_missing_firmware_advance_rejected(self):
         with self.assertRaisesRegex(RuntimeError, "automatic track order"):

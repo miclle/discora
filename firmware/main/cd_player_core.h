@@ -37,7 +37,8 @@ bool cd_player_toggle(cd_player_core_t *p);
 bool cd_player_rebuffer(cd_player_core_t *p);
 // Restart the selected track, then advance at EOF without wrapping; boot/media never arms this.
 bool cd_player_play_disc(cd_player_core_t *p);
-// Output owner calls only after its adapter is fully closed. Core also requires drained EOF.
+// Output owner records EOF diagnostics and fully closes its adapter before calling.
+// True advances and plays; natural disc end returns false, selecting the first track stopped.
 bool cd_player_advance(cd_player_core_t *p);
 void cd_player_fault(cd_player_core_t *p);
 bool cd_player_pause(cd_player_core_t *p);

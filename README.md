@@ -22,7 +22,7 @@
 | 双声道模拟音频 | I²S → 立体声 DAC | bench-tested：当前 GPIO15/16/7、PCM5102A 与原功放完成约 60 秒原始立体声 CD，用户确认两边清晰；完整稳定性未验收 |
 | 轻触按键播放／暂停 | 四键 profile GPIO1 → 状态切换 | implemented：停止启动连续播放、播放／缓冲暂停、暂停原位恢复；实体待验收，见[四键控制](docs/playback-controls.md) |
 | 轻触按键退盘 | 四键 profile GPIO41 → USB 退盘命令；旧查询默认 GPIO7 | implemented：迁移引脚；历史查询版基本退盘 bench-tested（用户反馈），新配置及播放中退盘待验收，见[接线](docs/eject-button.md) |
-| 轻触按键上一曲／下一曲 | 四键 profile GPIO2／GPIO42 → 播放器换轨 | implemented：换轨开启连续播放、暂停中换轨保持暂停、首尾不循环；实体待验收，见[接线与配置](docs/track-buttons.md) |
+| 轻触按键上一曲／下一曲 | 四键 profile GPIO2／GPIO42 → 播放器换轨 | implemented：换轨开启连续播放、暂停中换轨保持暂停、手动首尾循环选曲；实体待验收，见[接线与配置](docs/track-buttons.md) |
 | OLED 曲目与播放状态 | GPIO10 SDA／GPIO11 SCL → SH1106 | bench-tested：当前四键有声版已启用，用户确认无介质画面清晰完整；动态显示待验收，见[显示说明](docs/oled-display.md) |
 | CD-R/CD-RW 刻录 | 测速、写入、封盘、校验 | 研究目标；可行性待测 |
 | DVD 读取/刻录 | 可选扩展 | 不在首版范围 |

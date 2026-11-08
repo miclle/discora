@@ -42,7 +42,8 @@ int main(void)
     track_buttons_init(&buttons, now);
     assert(!sample(false, true, 5000) && events == 0); // Boot-held never navigates.
     release();
-    assert(!press(-1) && events == 1 && player.index == 0); // First-track boundary.
+    assert(press(-1) && events == 1 && player.index == 3); // First wraps to last.
+    assert(cd_player_media(&player, &toc)); // Restore first track for the bounce test.
     release();
     assert(!sample(false, true, 10));
     assert(!sample(false, false, 10));
@@ -64,9 +65,10 @@ int main(void)
     assert(cd_player_request(&player, &old));
     assert(cd_player_complete(&player, &old, true, data, sizeof(data)));
     generation = player.audio.generation;
-    release(); assert(!press(1)); // Last-track rejection preserves current audio.
-    assert(player.audio.generation == generation && player.audio.pcm.used == sizeof(data));
+    release(); assert(press(1) && player.index == 0); // Last wraps to first.
+    assert(player.audio.generation != generation && !player.audio.pcm.used);
     assert(cd_player_pause(&player));
+    release(); assert(press(-1) && player.index == 3 && player.audio.state == AUDIO_PAUSED);
     release(); assert(press(-1) && player.index == 2 && player.audio.state == AUDIO_PAUSED);
     assert(player.continuous && !player.audio.pcm.used && !cd_player_request(&player, &old));
 
