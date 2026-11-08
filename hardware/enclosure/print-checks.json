@@ -1,5 +1,5 @@
 {
-  "model_sha256": "360b79141afac0870da58e5b7ca17ba631e3d888896ddd13e4742edac3664306",
+  "model_sha256": "bebcc9947ef72eceaae60e44bb6d79ad531b26a7de5a4ca39b7a4c3c75062088",
   "freecad_version": [
     "1",
     "1",
@@ -22,10 +22,10 @@
       "file": "FrontShell.stl",
       "size_xyz_mm": [
         142.00000000000006,
-        199.0,
-        78.00000000000006
+        213.64473684210526,
+        42.50000000000008
       ],
-      "facets": 212220,
+      "facets": 211972,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -34,16 +34,16 @@
         0.0,
         0.7071067811865476
       ],
-      "stl_sha256": "aa49dfe0fa07c009457654fcfe194e563f09eb7ef0ebef35edc4866a6fecb8d7"
+      "stl_sha256": "6b9f3219b015133e6486074b805b1bd4a21635f52d570893688c2a4032a75c4d"
     },
     "RearShell": {
       "file": "RearShell.stl",
       "size_xyz_mm": [
         142.0,
-        171.0,
-        75.00000000000006
+        188.6447368421053,
+        75.00000000000007
       ],
-      "facets": 3210,
+      "facets": 3442,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -52,7 +52,7 @@
         0.0,
         -0.7071067811865475
       ],
-      "stl_sha256": "13dd55e738b5b5e0a317078a968f5289f41fa080e9548ea437be4ef762b9a915"
+      "stl_sha256": "cce0a313e4c8a72b012f0794d3341ddc3c3fe1f35a3c0f6ed33ceea98bfc2f4c"
     },
     "SpeakerCarrier": {
       "file": "SpeakerCarrier.stl",
@@ -70,7 +70,7 @@
         0.0,
         -0.7071067811865475
       ],
-      "stl_sha256": "4e31ce7b83117e36750854e46dc528303fda0af30eab13c79aeb69d3a61f6f63"
+      "stl_sha256": "9ae509d7b2f27455cf9d8700f976281157b36fcb501128faff943948a900b924"
     },
     "LPort": {
       "file": "LPort.stl",
@@ -88,7 +88,7 @@
         0.0,
         0.7071067811865476
       ],
-      "stl_sha256": "6ea44a8ce23003a7e09c71f37ef178398b817cb4c4d6bbd0c65c7564b0906c8e"
+      "stl_sha256": "efe5735d0bb334710caf5aa4963dea310f25e39f2bd9bfa7757f7220c79ace8d"
     },
     "RPort": {
       "file": "RPort.stl",
@@ -106,14 +106,14 @@
         -0.0,
         0.7071067811865476
       ],
-      "stl_sha256": "a750e9eed7a5ad6821292d7f07a22b6697ce63d681382f6f95c326553485b10b"
+      "stl_sha256": "ddd0265646b81ec68714e430faa30cb1dc8d19300ed97e44d04be8dc7f9d87b4"
     },
     "Keycap": {
       "file": "Keycap.stl",
       "size_xyz_mm": [
         22.0,
-        21.99999999999997,
-        1.4500000000000597
+        21.999999999999986,
+        1.4500000000001023
       ],
       "facets": 140,
       "closed_mesh": true,
@@ -124,14 +124,14 @@
         0.0,
         0.952675287877846
       ],
-      "stl_sha256": "3514598289abd87f60661dd4d98b54274e695d01fe53a1457901d6fc05aa3eaf"
+      "stl_sha256": "41ae75e5048450b55871f700c174bafdd109875cdadfbd5587a36bfae8551b6f"
     },
     "Knob": {
       "file": "Knob.stl",
       "size_xyz_mm": [
         23.60000000000001,
-        23.600000000000037,
-        8.20000000000006
+        23.600000000000023,
+        8.200000000000045
       ],
       "facets": 284,
       "closed_mesh": true,
@@ -142,7 +142,7 @@
         0.0,
         0.952675287877846
       ],
-      "stl_sha256": "49113f6d3aebd2e7bd23fc6cc5d873be39e1faf50eb533a90f5625b7f45d00b9"
+      "stl_sha256": "ca32d143cbd08ca456a53c84986ad7862aa1500cc377a3923b3fb80c62bce48d"
     }
   },
   "profile_names": {
@@ -163,9 +163,9 @@
     "brim_width": "5"
   },
   "profile_sha256": {
-    "machine": "fbbc467eaed55147d4e21ff1851d76f4fdf6ac10ae8fffda9fc2ae66763325f5",
-    "process": "f181d2705e192b873eda32d5b4fa9f1504289244e40d7d207192b72f001e41e3",
-    "filament": "0328addb8453f889d45190acf23dae336a618d5d4a0e20428188cab5257dccaa"
+    "machine": "b7058cfe1a3d4cd505589443bc5b55d297f07bb973777a7fc67de96f8fe35a9b",
+    "process": "eb2a397e228585ebc5e78dcf7fb40629d5c5386ef7a8112cdec1905e09fd21ad",
+    "filament": "2c3746b6f61717d3023b58e846b10106f61534607644378063ac2a69db103355"
   },
   "plates": {
     "RearShell": {
@@ -173,9 +173,9 @@
         "RearShell"
       ],
       "exit_code": 0,
-      "gcode_sha256": "9ae2671e8234cd6f28bd21a8ac9d4d11654712df331cc8d39fbaf476a1e08477",
-      "total_estimated_time": "5h 0m 12s",
-      "filament_g": 180.28,
+      "gcode_sha256": "1fb4287d80ccd575714ee1c8f7778c062c336c1178934957784015df3cbdb347",
+      "total_estimated_time": "6h 6m 30s",
+      "filament_g": 208.3,
       "layers": 375,
       "vendor_T65535_parser_notice": true
     },
@@ -184,10 +184,10 @@
         "FrontShell"
       ],
       "exit_code": 0,
-      "gcode_sha256": "661c1d4d48b1310b35af15fdf86b97b69023ce292473d152e83548e632ec160c",
-      "total_estimated_time": "7h 36m 41s",
-      "filament_g": 109.94,
-      "layers": 388,
+      "gcode_sha256": "1efcf8af72ed102a0ff8e5a19af121176a4b653fca420f91a49dd3026f2a84ae",
+      "total_estimated_time": "14h 26m 29s",
+      "filament_g": 122.34,
+      "layers": 212,
       "vendor_T65535_parser_notice": true
     },
     "SpeakerCarrier": {
@@ -195,9 +195,9 @@
         "SpeakerCarrier"
       ],
       "exit_code": 0,
-      "gcode_sha256": "4f2468e3570d2cb21b52eb0a047abb2fea08fb083a29f27fff1007f48ccd2b46",
-      "total_estimated_time": "6h 25m 9s",
-      "filament_g": 158.78,
+      "gcode_sha256": "f64042ce2c741165a48fd927ba424c5e599907ae5812605af705f20de1ced0e9",
+      "total_estimated_time": "6h 57m 11s",
+      "filament_g": 158.54,
       "layers": 282,
       "vendor_T65535_parser_notice": true
     },
@@ -209,8 +209,8 @@
         "Knob"
       ],
       "exit_code": 0,
-      "gcode_sha256": "d61cf21db932c88903d049e9952cdce18e62a3683c13dc44435f76dddeabf7d5",
-      "total_estimated_time": "50m 12s",
+      "gcode_sha256": "7033e5e0cafcac3e74864a32e3d6ca1bf4fb79b39025a7cd7d9d2d66aa54e9ca",
+      "total_estimated_time": "51m 1s",
       "filament_g": 17.8,
       "layers": 60,
       "vendor_T65535_parser_notice": true
@@ -219,21 +219,5 @@
   "printer_profile_mapping": "User P2SC; installed Bambu P2S profile used for local slicing only",
   "printer_contacted": false,
   "gcode_execution_validated": false,
-  "slicer_version": "02.08.04.57",
-  "layer_preview_review": {
-    "nominal_print_z_mm": [
-      0.2,
-      2,
-      6,
-      20,
-      50
-    ],
-    "parts": [
-      "FrontShell",
-      "RearShell",
-      "SpeakerCarrier"
-    ],
-    "method": "Local plot of generated extrusion segments; G2/G3 arcs approximated by endpoint chords",
-    "finding": "Grille starts on bed; support exists under shoulder and carrier rear; open assembly faces provide access for removal. Physical removal remains untested."
-  }
+  "slicer_version": "02.09.01.70"
 }

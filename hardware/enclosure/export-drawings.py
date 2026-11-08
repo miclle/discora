@@ -28,7 +28,11 @@ def bounds(shape):
 def side_profile(doc, source_hash):
     points = [[edge.StartPoint.x, edge.StartPoint.y]
               for edge in doc.FoldSection.Geometry[:7]]
-    assert points == [[0,3],[0,150],[38,177],[38,202],[43,202],[43,177],[78,165]]
+    front_run=points[2][0]-points[1][0]
+    rear_run=points[6][0]-points[5][0]
+    front_rise=points[2][1]-points[1][1]
+    rear_rise=points[5][1]-points[6][1]
+    assert abs(front_run-rear_run)<1e-7 and abs(front_rise-rear_rise)<1e-7
     feet = doc.Feet.Shape.BoundBox
     shell_bottom = min(doc.getObject(n).Shape.BoundBox.ZMin
                        for n in ('FrontShell','RearShell'))
@@ -36,8 +40,11 @@ def side_profile(doc, source_hash):
     return dict(sha256=source_hash, units='mm', outer_profile_yz=points,
                 foot_bottom_z=feet.ZMin, shell_bottom_z=shell_bottom,
                 foot_height=feet.ZLength,
-                front_angle_deg=math.degrees(math.atan2(27,38)),
-                rear_angle_deg=math.degrees(math.atan2(12,35)))
+                front_horizontal_width_mm=front_run,rear_horizontal_width_mm=rear_run,
+                front_surface_width_mm=math.hypot(front_run,front_rise),
+                rear_surface_width_mm=math.hypot(rear_run,rear_rise),
+                front_angle_deg=math.degrees(math.atan2(front_rise,front_run)),
+                rear_angle_deg=math.degrees(math.atan2(rear_rise,rear_run)))
 
 
 def main():
@@ -148,7 +155,7 @@ def main():
     core = groups['Carrier'] + groups['Hardware']
     exploded('exploded-shell',[
         ('01','P1 一体前壳／提手／护网',['FrontShell'],(0,-150,0)),
-        ('02','P2 一体后壳／底板／托盘',['RearShell'],(0,160,0)),
+        ('02','P2 后斜面／碟口／后壳／底板',['RearShell'],(0,160,0)),
         ('03','P3 双喇叭与电路板支架',['SpeakerCarrier'],(0,0,0)),
         ('04','左侧后装导音孔',['LPort'],(-120,0,0)),
         ('05','右侧后装导音孔',['RPort'],(120,0,0)),
@@ -171,17 +178,17 @@ def main():
     ],core)
     # Validate critical annotations against the saved B-rep snapshot.
     checks = {
-        'overall_142_78_202': all(abs(a-b)<1e-5 for a,b in zip(data['overall']['size'],(142,78,202))),
+        'overall_142_80_216_645': all(abs(a-b)<1e-5 for a,b in zip(data['overall']['size'],(142,80,165+37.5*27/38+25))),
         'handle_opening_90_16': abs(handle.BoundBox.XLength-90)<1e-5 and abs(handle.BoundBox.ZLength-16)<1e-5,
         'hidden_grille_cut_130': abs(grille.BoundBox.XLength-130)<1e-5,
         'slot_124_3_2': abs(slot.BoundBox.XLength-124)<1e-5 and abs(slot.BoundBox.YLength-3.2)<1e-5,
         'screen_opening_36_20': abs(local.BoundBox.XLength-36)<1e-5 and abs(local.BoundBox.ZLength-20)<1e-5,
         'battery_112_70_20': all(abs(a-b)<1e-5 for a,b in zip(data['objects']['Battery']['size'],(112,70,20))),
-        'drive_y61_z32': abs(doc.Drive.Shape.BoundBox.YMin-61)<1e-5 and abs(doc.Drive.Shape.BoundBox.ZMin-32)<1e-5,
-        'slot_center_y65_75': abs(slot.BoundBox.Center.y-65.75)<1e-5,
+        'drive_y63_z32': abs(doc.Drive.Shape.BoundBox.YMin-63)<1e-5 and abs(doc.Drive.Shape.BoundBox.ZMin-32)<1e-5,
+        'slot_center_y67_75': abs(slot.BoundBox.Center.y-67.75)<1e-5,
         'bezel_outer_130_5':abs(doc.FrontBezel.Shape.BoundBox.XLength-130.5)<1e-5,
-        'grille_thickness_2':abs(doc.FrontGrille.Shape.BoundBox.YLength-2)<1e-5,
-        'side_ports_handle_y40_5':all(abs(doc.getObject(n).Shape.BoundBox.Center.y-40.5)<1e-5 for n in ('LPort','RPort','LPanelTool')),
+        'grille_thickness_5':abs(doc.FrontGrille.Shape.BoundBox.YLength-5)<1e-5,
+        'side_ports_handle_y40':all(abs(doc.getObject(n).Shape.BoundBox.Center.y-40)<1e-5 for n in ('LPort','RPort','LPanelTool')),
         '26_finished_objects':len(objects)==26,
         'three_connected_main_parts':all(len(doc.getObject(n).Shape.Solids)==1 for n in ('FrontShell','RearShell','SpeakerCarrier')),
         'source_unchanged':hashlib.sha256(source.read_bytes()).hexdigest()==source_hash,

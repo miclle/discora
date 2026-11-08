@@ -1,0 +1,19 @@
+{
+  "rear_roof_removed_from_front_mm3": 0.0,
+  "slot_guide_removed_from_front_mm3": 0.0,
+  "rear_roof_missing_from_rear_mm3": 0.0,
+  "slot_guide_missing_from_rear_mm3": 0.0,
+  "removed_volume_mm3": 18942.57235399363,
+  "added_volume_mm3": 18942.57235628611,
+  "transferred_volume_mm3": 18942.57235717996,
+  "front_added_material_mm3": 0.0,
+  "rear_removed_material_mm3": 0.0,
+  "front_remainder_difference_mm3": 0.0,
+  "rear_addition_difference_mm3": 0.0,
+  "model_sha256": "71e0cdd1ab8444dba5569240497c142494fc1522565276c6746689ce8fe2c0b1",
+  "baseline_sha256": "9880e938216431ab01b756dc89a530c53462798bda25471111b4105bb49300a1",
+  "split_plane_y_mm": 41.5,
+  "physical_validation": false,
+  "stage": "rear roof transfer before side seam simplification",
+  "followup_report": "seam-checks.json"
+}

@@ -1,0 +1,101 @@
+{
+  "transferred_volume_mm3": 48.03625686416586,
+  "removed_volume_mm3": 48.03625697849202,
+  "added_volume_mm3": 48.03625686012674,
+  "front_added_material_mm3": 0.0,
+  "rear_removed_material_mm3": 0.0,
+  "front_remainder_difference_mm3": 0.0,
+  "rear_addition_difference_mm3": 0.0,
+  "side_seam_yz_mm": [
+    [
+      3,
+      163.45141199342947
+    ],
+    [
+      41.5,
+      190.93421052631578
+    ]
+  ],
+  "sampled_ownership_points": [
+    [
+      -70,
+      4,
+      164.16525091636157
+    ],
+    [
+      -70,
+      12,
+      169.87596229981847
+    ],
+    [
+      -70,
+      24,
+      178.4420293750038
+    ],
+    [
+      -70,
+      35,
+      186.29425752725706
+    ],
+    [
+      -70,
+      38,
+      188.43577429605338
+    ],
+    [
+      -70,
+      40,
+      189.8634521419176
+    ],
+    [
+      -70,
+      41.4,
+      190.86282663402255
+    ],
+    [
+      70,
+      4,
+      164.16525091636157
+    ],
+    [
+      70,
+      12,
+      169.87596229981847
+    ],
+    [
+      70,
+      24,
+      178.4420293750038
+    ],
+    [
+      70,
+      35,
+      186.29425752725706
+    ],
+    [
+      70,
+      38,
+      188.43577429605338
+    ],
+    [
+      70,
+      40,
+      189.8634521419176
+    ],
+    [
+      70,
+      41.4,
+      190.86282663402255
+    ]
+  ],
+  "model_sha256": "64e279a3550a85d8e18e1cada3f4a6f31ab6f5fa02a04e36f89ac5bba8554599",
+  "baseline_sha256": "71e0cdd1ab8444dba5569240497c142494fc1522565276c6746689ce8fe2c0b1",
+  "physical_validation": false,
+  "presentation_repack": {
+    "previous_model_sha256": "a6eb78804c0d84e090c966536702b93fc58d3604283403dc9464ba2f9197e417",
+    "evidence": "appearance-checks.json",
+    "all_archive_entry_contents_identical": true
+  },
+  "stage": "straight side seam before five-mm front panel",
+  "superseded_by": "../../docs/decisions/0021-five-mm-front-panel.md"
+}

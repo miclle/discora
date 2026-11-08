@@ -1,7 +1,7 @@
 {
-  "sha256": "360b79141afac0870da58e5b7ca17ba631e3d888896ddd13e4742edac3664306",
-  "build_sha256": "a8210d473cf8057f88d5b9d5f71b276774b3e2b06e95631cb5bad3a0f72a3503",
-  "geometry_sha256": "fb036859897b3ed6a20e59e3138c02b533578014d947ae9f9ba9f4aeffee6259",
+  "sha256": "bebcc9947ef72eceaae60e44bb6d79ad531b26a7de5a4ca39b7a4c3c75062088",
+  "build_sha256": "a5b333711f479e7acb429f0d28f1cd6d24d41d2b0ae7dcede327011f1dea2aa4",
+  "geometry_sha256": "210c0bef32febad31047a513f45732b5defeac79d66025aae69e099746e38b49",
   "palette": {
     "TEAL": [
       0.025,
@@ -189,49 +189,49 @@
       "file": "front-color.png",
       "size_px": [
         1705,
-        2424
+        2600
       ]
     },
     "right": {
       "file": "right-color.png",
       "size_px": [
-        937,
-        2424
+        961,
+        2600
       ]
     },
     "top": {
       "file": "top-color.png",
       "size_px": [
         1705,
-        937
+        961
       ]
     },
     "rear": {
       "file": "rear-color.png",
       "size_px": [
         1705,
-        2424
+        2600
       ]
     },
     "section": {
       "file": "section-color.png",
       "size_px": [
-        937,
-        2424
+        961,
+        2600
       ]
     },
     "exploded-shell": {
       "file": "exploded-shell-color.png",
       "size_px": [
         4141,
-        4123
+        4215
       ]
     },
     "exploded-core": {
       "file": "exploded-core-color.png",
       "size_px": [
         3298,
-        3957
+        4103
       ]
     }
   }
