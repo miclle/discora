@@ -1,7 +1,7 @@
 {
-  "date": "2026-11-05",
+  "date": "2026-11-08",
   "model": "Discora.FCStd",
-  "sha256": "360b79141afac0870da58e5b7ca17ba631e3d888896ddd13e4742edac3664306",
+  "sha256": "bebcc9947ef72eceaae60e44bb6d79ad531b26a7de5a4ca39b7a4c3c75062088",
   "version": [
     "1",
     "1",
@@ -50,13 +50,106 @@
     "Keycap",
     "Knob"
   ],
+  "rear_roof_ownership": {
+    "RearRoof": {
+      "intersection_with_front_mm3": 0.0,
+      "missing_from_rear_mm3": 0.0
+    },
+    "SlotGuide": {
+      "intersection_with_front_mm3": 0.0,
+      "missing_from_rear_mm3": 0.0
+    }
+  },
+  "shell_split_y_mm": 42.5,
+  "straight_side_seam_yz_mm": [
+    [
+      5.0,
+      162.41901998904913
+    ],
+    [
+      42.5,
+      191.64473684210526
+    ]
+  ],
+  "side_seam_ownership_samples_xyz_mm": [
+    [
+      -70,
+      6,
+      163.19837243846396
+    ],
+    [
+      -70,
+      12,
+      167.87448713495294
+    ],
+    [
+      -70,
+      24,
+      177.2267165279309
+    ],
+    [
+      -70,
+      35,
+      185.79959347149403
+    ],
+    [
+      -70,
+      38,
+      188.13765081973852
+    ],
+    [
+      -70,
+      40,
+      189.69635571856819
+    ],
+    [
+      -70,
+      42.4,
+      191.5668015971638
+    ],
+    [
+      70,
+      6,
+      163.19837243846396
+    ],
+    [
+      70,
+      12,
+      167.87448713495294
+    ],
+    [
+      70,
+      24,
+      177.2267165279309
+    ],
+    [
+      70,
+      35,
+      185.79959347149403
+    ],
+    [
+      70,
+      38,
+      188.13765081973852
+    ],
+    [
+      70,
+      40,
+      189.69635571856819
+    ],
+    [
+      70,
+      42.4,
+      191.5668015971638
+    ]
+  ],
   "invalid": [],
   "intersection_tolerance_mm3": 0.001,
   "clashes": [],
   "assembly_size_xyz_mm": [
     142.00000000000006,
-    78.00000000000001,
-    202.0
+    80.00000000000001,
+    216.64473684210526
   ],
   "mirror_plane": "X=0",
   "mirror_difference_mm3": {
@@ -79,7 +172,7 @@
   "disc_sweep_mm": {
     "origin": [
       -60,
-      65.15,
+      67.15,
       34
     ],
     "size": [
@@ -89,39 +182,39 @@
     ]
   },
   "side_port_handle_alignment": {
-    "handle_center_y_mm": 40.5,
+    "handle_center_y_mm": 40.0,
     "port_center_y_mm": {
-      "LPort": 40.5,
-      "RPort": 40.5
+      "LPort": 40.0,
+      "RPort": 40.0
     },
-    "shell_opening_center_y_mm": 40.5
+    "shell_opening_center_y_mm": 40.0
   },
   "side_air_paths": {
     "L": {
       "points_mm": [
         [
           -26,
-          52,
+          54,
           76
         ],
         [
           -56,
-          52,
+          54,
           76
         ],
         [
           -56,
-          48.5,
+          48.0,
           76
         ],
         [
           -56,
-          48.5,
+          48.0,
           95
         ],
         [
           -73,
-          48.5,
+          48.0,
           95
         ]
       ],
@@ -132,27 +225,27 @@
       "points_mm": [
         [
           26,
-          52,
+          54,
           76
         ],
         [
           56,
-          52,
+          54,
           76
         ],
         [
           56,
-          48.5,
+          48.0,
           76
         ],
         [
           56,
-          48.5,
+          48.0,
           95
         ],
         [
           73,
-          48.5,
+          48.0,
           95
         ]
       ],
@@ -164,7 +257,7 @@
     "amp_input": {
       "origin_mm": [
         -48,
-        4,
+        6,
         123
       ],
       "size_mm": [
@@ -177,7 +270,7 @@
     "amp_output": {
       "origin_mm": [
         33,
-        4,
+        6,
         123
       ],
       "size_mm": [
@@ -190,7 +283,7 @@
     "mcu_left": {
       "origin_mm": [
         -36.695,
-        31.56,
+        33.56,
         148.7
       ],
       "size_mm": [
@@ -203,7 +296,7 @@
     "mcu_right": {
       "origin_mm": [
         31.695,
-        31.56,
+        33.56,
         148.7
       ],
       "size_mm": [
@@ -216,7 +309,7 @@
     "dac_input": {
       "origin_mm": [
         -67,
-        31,
+        33,
         122
       ],
       "size_mm": [
@@ -229,7 +322,7 @@
     "dac_output": {
       "origin_mm": [
         -67,
-        31,
+        33,
         158
       ],
       "size_mm": [
@@ -243,7 +336,7 @@
       "radius_mm": 1,
       "origin_mm": [
         50,
-        28,
+        30,
         136
       ],
       "height_mm": 12,
@@ -253,7 +346,7 @@
   "key_clearances_mm": {
     "Battery / FrontShell": 0.9999999999999911,
     "Battery / SpeakerCarrier": 3.5,
-    "MCUChip / FrontShell": 1.3289601115471992,
+    "MCUChip / FrontShell": 14.715080499919683,
     "Bridge / DAC": 4.512205669071396,
     "Drive / MCUChip": 1.5
   },
@@ -270,7 +363,7 @@
     ],
     "origin_xyz_mm": [
       -56.0,
-      4.0,
+      6.0,
       8.0
     ],
     "front_inner_wall_gap_mm": 1.0,
@@ -282,8 +375,36 @@
   "controls_translation_xyz_mm": [
     0,
     0,
-    0
+    15
   ],
+  "top_shoulders": {
+    "front": {
+      "horizontal_width_mm": 37.5,
+      "rise_mm": 26.64473684210526,
+      "surface_width_mm": 46.002086924236835,
+      "angle_deg": 35.39479584498706
+    },
+    "rear": {
+      "horizontal_width_mm": 37.5,
+      "rise_mm": 26.64473684210526,
+      "surface_width_mm": 46.002086924236835,
+      "angle_deg": 35.39479584498706
+    }
+  },
+  "front_panel_thickness_samples_mm": {
+    "vertical_-60_150": 4.999999999999993,
+    "vertical_60_150": 4.999999999999993,
+    "vertical_-67_80": 5.0,
+    "vertical_67_80": 5.0,
+    "vertical_0_6": 5.000000000000009,
+    "slope_-30_8": 4.999999999999999,
+    "slope_30_8": 5.000000000000002,
+    "slope_-30_30": 5.000000000000002,
+    "slope_30_30": 4.999999999999978,
+    "slope_50_32": 5.000000000000003,
+    "grille": 5.0,
+    "handle": 4.999999999999979
+  },
   "original_controls_difference_mm3": {
     "Window": 0.0,
     "StatusArt": 0.0,
@@ -293,7 +414,7 @@
     "DisplayPCB": 0.0,
     "DisplayHeader": 0.0,
     "DisplayCarrier": 0.0,
-    "source_model_sha256": "2e8afb0c3f00dd286b067f0a69713b565fb161d347611f39ac90a2ca201345f7"
+    "source_model_sha256": "360b79141afac0870da58e5b7ca17ba631e3d888896ddd13e4742edac3664306"
   },
   "handle_opening_mm": [
     90,

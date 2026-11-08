@@ -43,11 +43,27 @@ def check(doc):
         'clashes':hits}
     print('PATH speaker_carrier_front',hits,flush=True)
     fixed=['RearShell','Battery','DAC','DACChip','Feet']
-    hits=collisions(box_sweep(doc.Drive.Shape,2,180),fixed)
-    report['paths']['drive_top']={'method':'continuous conservative bounding-box sweep',
-        'translation_xyz_mm':[0,0,180],'moving':['Drive'],'fixed':fixed,
+    # The fixed rear roof prevents top extraction. Clear the rails, then yaw
+    # toward the free side before passing the DAC and front screw bosses.
+    drive=doc.Drive.Shape
+    hits=collisions(box_sweep(drive,1,-11.5),fixed)
+    pivot=drive.BoundBox.Center+V(0,-11.5,0)
+    for step in range(61):
+        fraction=step/60
+        pose=drive.copy();pose.translate(V(0,-11.5,0))
+        pose.rotate(pivot,V(0,0,1),-30*fraction)
+        pose.translate(V(0,-15.75*fraction,0))
+        found=collisions(pose,fixed)
+        if found:hits.append({'yaw_deg':-30*fraction,'additional_front_mm':15.75*fraction,'hits':found})
+    hits.extend(collisions(box_sweep(pose,1,-140),fixed))
+    report['paths']['drive_front']={'method':'continuous conservative translation sweeps before/after 61 exact B-rep yaw/translation samples; rotation is not a continuous proof',
+        'initial_translation_xyz_mm':[0,-11.5,0],
+        'yaw_axis':'Z','yaw_deg':-30,'yaw_step_deg':.5,
+        'yaw_pivot_xyz_mm':[pivot.x,pivot.y,pivot.z],
+        'translation_during_yaw_xyz_mm':[0,-15.75,0],
+        'final_translation_xyz_mm':[0,-140,0],'moving':['Drive'],'fixed':fixed,
         'prerequisites':['Front cover removed','Speaker carrier removed (not included among fixed objects)','Bridge cables disconnected'], 'clashes':hits}
-    print('PATH drive_top',hits,flush=True)
+    print('PATH drive_front',hits,flush=True)
     fixed=['RearShell','SpeakerCarrier','LDriver','RDriver','Drive','DAC','DACChip','Feet']
     hits=collisions(box_sweep(doc.Battery.Shape,1,-150),fixed)
     report['paths']['battery_front']={'method':'continuous conservative bounding-box sweep',
@@ -73,9 +89,9 @@ def check(doc):
         print('PATH',name,hits,flush=True)
     moving=['FrontShell','Window','StatusArt','Keycap','KeyLight','Knob','Encoder','VolumePot','DisplayPCB','DisplayHeader']
     fixed=[n for n in objects if n not in moving]
-    # The flat front face and grille lie at Y<=3 and have no positive-volume
-    # overlap with the remaining assembly (whose min Y is 3). Clip only that exterior slab.
-    clip=Part.makeBox(400,300,500,V(-200,3.00001,-100))
+    # The flat front face and grille lie at Y<=5 and have no positive-volume
+    # overlap with the remaining assembly (whose min Y is 5). Clip only that exterior slab.
+    clip=Part.makeBox(400,300,500,V(-200,5.00001,-100))
     body=Part.makeCompound([objects[n].Shape for n in moving]).common(clip)
     hits=[]
     for step in range(81):
