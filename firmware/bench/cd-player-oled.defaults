@@ -1,0 +1,4 @@
+# Append after PSRAM and button profiles to enable the connected SH1106.
+# SDA=GPIO10, SCL=GPIO11; VCC and I2C pull-ups use 3.3V.
+CONFIG_DISCORA_OLED=y
+CONFIG_DISCORA_OLED_ADDRESS=0x3c

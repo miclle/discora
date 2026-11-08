@@ -1,5 +1,5 @@
 {
-  "revision": "dual-buck-candidate-3",
+  "revision": "dual-buck-candidate-4-buttons-row",
   "status": "planned_not_a_cutting_or_drilling_template",
   "board_size_mm": [
     100,
@@ -296,5 +296,71 @@
       "4"
     ],
     "working_grid_note": "38 by 20 denotes the currently assigned working grid (X=A through L₂, Y=A through T), not the complete 42 by 30 board or a verified cut line."
+  },
+  "control_harness": {
+    "status": "planned_wiring_not_physical_fit_acceptance",
+    "connector": "P3: board-external detachable five-core harness; no new perfboard socket",
+    "source": "underside joints of existing MCU J2 socket",
+    "pin_order": [
+      {
+        "pin": 1,
+        "signal": "GND",
+        "header": "J2",
+        "header_pin": 1,
+        "hole_xy": [
+          "J",
+          "A"
+        ]
+      },
+      {
+        "pin": 2,
+        "signal": "PLAY_PAUSE",
+        "gpio": 1,
+        "header": "J2",
+        "header_pin": 4,
+        "hole_xy": [
+          "M",
+          "A"
+        ]
+      },
+      {
+        "pin": 3,
+        "signal": "PREV",
+        "gpio": 2,
+        "header": "J2",
+        "header_pin": 5,
+        "hole_xy": [
+          "N",
+          "A"
+        ]
+      },
+      {
+        "pin": 4,
+        "signal": "NEXT",
+        "gpio": 42,
+        "header": "J2",
+        "header_pin": 6,
+        "hole_xy": [
+          "O",
+          "A"
+        ]
+      },
+      {
+        "pin": 5,
+        "signal": "EJECT",
+        "gpio": 41,
+        "header": "J2",
+        "header_pin": 7,
+        "hole_xy": [
+          "P",
+          "A"
+        ]
+      }
+    ],
+    "limits": [
+      "GPIO41/42 cannot be shared with external JTAG.",
+      "No copper shorts between four inputs; button common is GND only.",
+      "Housing, bend radius, strain relief and enclosure clearance are unmeasured. Existing CAD analysis does not include this harness."
+    ]
   }
 }

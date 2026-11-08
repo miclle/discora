@@ -1,8 +1,10 @@
 # OLED 曲目与播放状态
 
-`0.10.0-oled`：**implemented，已部署；初始化超时，实屏未验收**。按仓库模块结构图和 SH1106 手册实现，不复制供应商例程或字体。实物如果是 SSD1306，不能直接使用此驱动；I²C ACK 也不能证明芯片型号或画面正确。
+当前 `0.12.2-buttons-oled` 在四键有声配置上启用 OLED。用户确认已按下表连接 SH1106；0x3c 初始化与首帧发送成功，用户确认无介质画面文字清晰完整；动态播放显示待验收。部署与实屏结果见[本轮记录](records/2026-11-08-buttons-oled.md)。此前 `0.12.1-buttons-row` 继承 PSRAM profile 的 `CONFIG_DISCORA_OLED=n`，是接屏后没有显示的软件原因。
 
-2026-11-05 已烧录软件时钟配置并独立校验，三个按键初始化和 UART 状态响应正常；0x3c 探测返回 `ESP_ERR_TIMEOUT`，未出现初始化成功日志。用户随后确认 OLED 尚未接线或未供电，完成接线和供电后需重启复测，详见 [部署记录](records/2026-11-05-oled-deploy.md)。
+历史 `0.10.0-oled`：implemented，已部署；当时初始化超时，实屏未验收。按仓库模块结构图和 SH1106 手册实现，不复制供应商例程或字体。实物如果是 SSD1306，不能直接使用此驱动；I²C ACK 也不能证明芯片型号或画面正确。
+
+历史 2026-11-05 已烧录软件时钟配置并独立校验，三个按键初始化和 UART 状态响应正常；0x3c 探测返回 `ESP_ERR_TIMEOUT`，未出现初始化成功日志。用户随后确认 OLED 尚未接线或未供电，完成接线和供电后需重启复测，详见 [部署记录](records/2026-11-05-oled-deploy.md)。
 
 ## 接线与配置
 
@@ -30,7 +32,7 @@
 | BUFFERING | 正在预填音频缓冲 |
 | PLAYING | 播放器正在消费 PCM |
 | PAUSED | 已暂停 |
-| UNDERRUN | 软件缓冲欠载，需显式恢复 |
+| UNDERRUN | 软件缓冲欠载；当前 PSRAM profile 自动重缓冲，切换为 BUFFERING 后补足再播放 |
 | FAULT | 播放器故障；按已有 stop／play 流程处理 |
 | NO MEDIA + TRACK -- | 无可用播放目录，包括启动、目录失效、退盘或断连；不据此诊断光驱内一定没有光盘 |
 
@@ -38,7 +40,19 @@
 
 每 200 ms 采样一次，状态变化才刷屏；短于采样周期的瞬态可能不显示。取快照后释放播放器锁，再进行 I²C，音频任务不等待显示。缺屏、NACK、超时或初始化失败只关闭显示任务，播放／按键／USB 继续。失败会记录 `display disabled until reboot`，尝试一次灭屏；若总线已断，旧画面可能残留，须以日志为准。修复接线后重启，不在运行中无限重试。
 
-## 构建
+## 当前四键有声构建
+
+在 I²S、PSRAM、四键 profile 后叠加显示配置：
+
+```bash
+idf.py -C firmware -B build-buttons-oled -DSDKCONFIG=sdkconfig.buttons-oled \
+  -DSDKCONFIG_DEFAULTS="sdkconfig.defaults;bench/cd-player-i2s.defaults;bench/cd-player-psram.defaults;bench/cd-player-buttons.defaults;bench/cd-player-oled.defaults" set-target esp32s3
+idf.py -C firmware -B build-buttons-oled -DSDKCONFIG=sdkconfig.buttons-oled build
+```
+
+本轮部署候选另保留 USB 诊断和单次寻道恢复，完整顺序见本轮记录。显示轨号及上述全部播放器状态；尚未显示歌曲名称、CD-Text、时间进度或音量。
+
+## 历史软件时钟构建
 
 加载 ESP-IDF v5.4 后，从仓库根目录执行；使用独立配置，保留已有 sdkconfig 和实验产物：
 

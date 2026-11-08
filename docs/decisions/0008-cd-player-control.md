@@ -1,5 +1,7 @@
 # ADR-0008：CD-DA 生产者接入独立音频控制任务
 
+> 2026-11-08：四键有声引脚及 next／prev／toggle 语义由 [ADR-0022](0022-four-button-controls.md) 更新；下文保留当时决策与实验边界。
+
 - 日期：2026-11-01
 - 状态：Accepted；软件时钟模式 bench-tested，I²S 适配器离线验证及构建，实机未验收
 

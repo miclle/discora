@@ -33,7 +33,7 @@ READ CD  → 2352-byte audio sectors → ring buffer → I²S stereo
 
 `firmware/main/usb_probe.c` 使用一个常驻 Host daemon 和单个 client 任务，默认串行发送四种查询命令，可显式启用受限 READ CD 实验；按键任务通过原子单槽投递退盘意图，USB client 仍为唯一命令发送者。`probe_protocol.c` 独立承担描述符筛选、CBW 构造及 CSW/INQUIRY/sense 解析，可直接在主机上运行协议测试。
 
-只访问当前配置、alternate setting 0、首个受支持 BOT 接口和 LUN 0。身份确认为可用 CD/DVD 后每 5 秒查询就绪状态；就绪后读取格式 0、MSF=0 的 TOC，先读 4 字节头再按校验长度取完整目录。最多 99 条轨道加 lead-out，共 804 字节；曲目边界和音频/数据标记全部校验后发布。一次介质就绪周期最多尝试三次；TUR 失败或断连后清除目录状态。READ CD 由默认关闭的实验开关控制；不发送写入/擦除命令；查询和播放器模式默认接受 GPIO7 显式退盘，先允许移除再发送 START STOP UNIT，基本退盘已获用户实测成功反馈，播放中等其余场景未验收，见 [ADR-0010](decisions/0010-gpio-eject-button.md)。开启外部和多级 Hub 配置，现有 UGREEN Hub `05e3:0610` 和光驱桥接器 `13fd:0840` 已完成基础枚举实验。TOC 边界见 [ADR-0003](decisions/0003-formatted-toc-probe.md)。
+只访问当前配置、alternate setting 0、首个受支持 BOT 接口和 LUN 0。身份确认为可用 CD/DVD 后每 5 秒查询就绪状态；就绪后读取格式 0、MSF=0 的 TOC，先读 4 字节头再按校验长度取完整目录。最多 99 条轨道加 lead-out，共 804 字节；曲目边界和音频/数据标记全部校验后发布。一次介质就绪周期最多尝试三次；TUR 失败或断连后清除目录状态。READ CD 由默认关闭的实验开关控制；不发送写入/擦除命令；查询和播放器可接受配置引脚的显式退盘（默认 GPIO7，四键有声 profile 为 GPIO41），先允许移除再发送 START STOP UNIT，基本退盘已获用户实测成功反馈，播放中等其余场景未验收，见 [ADR-0010](decisions/0010-gpio-eject-button.md)。开启外部和多级 Hub 配置，现有 UGREEN Hub `05e3:0610` 和光驱桥接器 `13fd:0840` 已完成基础枚举实验。TOC 边界见 [ADR-0003](decisions/0003-formatted-toc-probe.md)。
 
 USB Bulk IN 长度按 MPS 向上对齐，CDB 请求与 CBW 数据长度仍保持精确值。普通查询/CBW/CSW/控制传输截止时间为 3 秒，READ CD 数据阶段为 30 秒；取消后等回调归还所有权。0.5.1 增加 REQUEST SENSE 分阶段日志，实验可将其数据等待单独设为 30 秒，默认仍为 3 秒；有效 sense 已观察到 03/02/00（寻道未完成），尚无稳定修复结论。0.7.3 将等待与取消排空控制提取到生产和离线测试共享的 `transfer_wait.c`，不改变原截止和协议策略。只有完成回调解除所有权；超时后的迟到回调仅归还资源，不把超时改判成功。未归还的 transfer 不复用，控制超时需要拔下设备。断连后释放接口并关闭 device handle，Host 服务继续等待新设备。恢复策略和限制见 [ADR-0002](decisions/0002-read-only-native-bot-probe.md)。0.5.2 新增默认关闭的寻道间隔与有界读取恢复实验：仅对有效 `03/02/00`、仍健康且再次 TUR 就绪的连接，允许每次启动最多一次相同 READ CD 重放。原始失败单独计数，重连不重新授权；详见 [ADR-0007](decisions/0007-bounded-seek-recovery.md)。
 
@@ -87,13 +87,13 @@ SD / flash ISO or PCM → source reader → buffer → USB BOT
 
 `cd_player_core.c` 将音轨选择、单轨读取光标、预填、暂停/停止/换轨及代次检查接到 `audio_core`；`cd_player.c` 独占 UART 和输出适配器，USB client 仍是唯一 SCSI 发送者。请求复制音轨边界及代次，USB 等待不持有播放器锁，完成后仅将当前代次的完整回复复制入队；旧代次返回不能污染新轨。
 
-0.9.1 在播放器模式默认开启 GPIO8／GPIO9 换轨按键。输出 owner 轮询两键，在播放器锁内消抖并执行原有 `cd_player_step`，成功后由同一 owner 关闭旧输出；按键不访问 USB。消抖提取为 `button_core` 与退盘共用，双键互斥、介质失效和 fault 丢弃手势，详见 [ADR-0011](decisions/0011-gpio-track-buttons.md)。
+0.12.1 四键 profile 使用连续排针 J2-4～7：GPIO1 播放／暂停、GPIO2 上一曲、GPIO42 下一曲、GPIO41 退碟。输出 owner 在播放器锁内采样前三键并调用共享核心，成功后由同一 owner 关闭旧输出；按键不访问 USB。复用 `button_core`，任意多键重叠抑制至全部稳定释放，介质失效和 fault 丢弃手势。`toggle` 与实体键共用开始连续播放／暂停／原位恢复；`next`／`prev` 开启连续模式并保留暂停。退碟仍由独立任务投递给 USB client。见 [ADR-0022](decisions/0022-four-button-controls.md)。
 
 模式默认关闭、启动 stopped，与 bench/测试音互斥。软件时钟模式用真实 CD 数据验证控制和 1× 消费；I²S 模式复用已有适配器，短时接 DAC 试听已完成；主固件与成功实验的引脚、25% 增益和限时停止差异见[配置说明](audio-output.md#已通过的接法与默认配置差异)。单轨 EOF 停止，暂停可丢弃已提交 DMA，未实现无缝播放或独立硬件 DMA 欠载计数。详见 [ADR-0008](decisions/0008-cd-player-control.md)。
 
 播放器 EOF 诊断可选地对已接受源数据与软件消费分别累计 SHA-256，仅在完整同代次结束时比较字节数/摘要。0.6.4 的轨尾恢复允许不足预填门槛的已知 EOF 队列继续消费；I²S 短预装只在尾帧之后补静音，EOF 50 ms 截止在适配器内管理。离线 fake driver 测试调用实际 `audio_i2s.c`，只替换 ESP-IDF API，不能充当电气/声音验收。
 
-0.8.0 在控制核心增加显式连续模式，输出 owner 只有在旧轨队列耗尽、EOF 校验完成（启用时）及 I²S 通道成功关闭后，才选择下一受支持音轨并重新预填。play-disc 从当前轨起点到盘尾，不循环；暂停保留模式，停止、手动选择、fault 和介质失效取消模式。欠载默认取消；0.11.0 显式开启自动恢复时保留连续模式。存在轨间间隔，详见 [ADR-0009](decisions/0009-explicit-disc-sequence.md)。
+0.8.0 在控制核心增加显式连续模式，输出 owner 只有在旧轨队列耗尽、EOF 校验完成（启用时）及 I²S 通道成功关闭后，才选择下一受支持音轨并重新预填。play-disc 从当前轨起点到盘尾，不循环；暂停保留模式，停止、指定 `track N`、fault 和介质失效取消模式；0.12.0 的 next／prev 则开启模式并保留暂停。欠载默认取消；0.11.0 显式开启自动恢复时保留连续模式。存在轨间间隔，详见 [ADR-0009](decisions/0009-explicit-disc-sequence.md)。
 
 ## OLED 状态显示
 

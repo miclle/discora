@@ -20,9 +20,10 @@
 | 读取音乐 CD 曲目 | READ TOC | bench-tested：本张 CD 取得 13 条音频轨及 LBA；详见实测记录 |
 | CD-DA 数字音频读取 | READ CD | bench-tested：600 秒顺序读取 / 105.84 MB 与电脑完整摘要一致、软件缓冲零欠载；寻道有成功与失败窗口，稳定性未验收，实验默认关闭 |
 | 双声道模拟音频 | I²S → 立体声 DAC | bench-tested：当前 GPIO15/16/7、PCM5102A 与原功放完成约 60 秒原始立体声 CD，用户确认两边清晰；完整稳定性未验收 |
-| 轻触按键退盘 | GPIO7 → USB 退盘命令 | bench-tested（用户反馈）：默认查询配置按键触发及实际退盘成功；其余场景待验收，见[接线](docs/eject-button.md) |
-| 轻触按键上一曲／下一曲 | GPIO8／GPIO9 → 播放器换轨 | implemented：仅播放器模式启用，首尾不循环；软件时钟播放器已部署，实体换轨未实测，见[接线与配置](docs/track-buttons.md) |
-| OLED 曲目与播放状态 | GPIO10 SDA／GPIO11 SCL → SH1106 | implemented：播放器模式默认开启，实屏未验收，见[显示说明](docs/oled-display.md) |
+| 轻触按键播放／暂停 | 四键 profile GPIO1 → 状态切换 | implemented：停止启动连续播放、播放／缓冲暂停、暂停原位恢复；实体待验收，见[四键控制](docs/playback-controls.md) |
+| 轻触按键退盘 | 四键 profile GPIO41 → USB 退盘命令；旧查询默认 GPIO7 | implemented：迁移引脚；历史查询版基本退盘 bench-tested（用户反馈），新配置及播放中退盘待验收，见[接线](docs/eject-button.md) |
+| 轻触按键上一曲／下一曲 | 四键 profile GPIO2／GPIO42 → 播放器换轨 | implemented：换轨开启连续播放、暂停中换轨保持暂停、首尾不循环；实体待验收，见[接线与配置](docs/track-buttons.md) |
+| OLED 曲目与播放状态 | GPIO10 SDA／GPIO11 SCL → SH1106 | bench-tested：当前四键有声版已启用，用户确认无介质画面清晰完整；动态显示待验收，见[显示说明](docs/oled-display.md) |
 | CD-R/CD-RW 刻录 | 测速、写入、封盘、校验 | 研究目标；可行性待测 |
 | DVD 读取/刻录 | 可选扩展 | 不在首版范围 |
 
@@ -32,7 +33,7 @@
 
 随后旧候选长时播放暴露软件欠载停播。`0.11.0-buffered` 新增可选 **2 MiB PSRAM 队列、3 秒预填、欠载自动恢复和读取耗时统计**，当前 GPIO15/16/7 与 25% 数字幅度已纳入可复现 profile；正常配置不包含故障注入。构建与命令见 [CD 播放说明](docs/cd-player.md)，失败窗口、受控恢复与持续播放证据见[缓冲记录](docs/records/2026-11-07-buffered-playback.md)。
 
-成功实验使用 GPIO15→BCK、GPIO16→LCK、GPIO7→DIN、DAC 模拟输出三线直连功放；仓库默认接线仍是 GPIO4/5/6。PSRAM profile 已包含 25% 数字幅度和关闭按键／OLED 的配置，但不包含早期候选的 60 秒自动停止或 bench 命令。当前部署与运行状态见[状态记录](docs/status.md)，不能将无叠加配置的默认构建视为同一固件。配置差异见[音频输出说明](docs/audio-output.md#已通过的接法与默认配置差异)。借用的 CyberTrack 板原固件及配置已恢复并校验。
+成功实验使用 GPIO15→BCK、GPIO16→LCK、GPIO7→DIN、DAC 模拟输出三线直连功放；仓库默认接线仍是 GPIO4/5/6。PSRAM profile 已包含 25% 数字幅度和关闭按键／OLED 的配置，但不包含早期候选的 60 秒自动停止或 bench 命令。0.12.1 可在其后叠加[四键 profile](docs/playback-controls.md)启用 GPIO1／2／42／41 控制，GPIO7 仍只接 DIN。当前部署与运行状态见[状态记录](docs/status.md)，不能将无叠加配置的默认构建视为同一固件。配置差异见[音频输出说明](docs/audio-output.md#已通过的接法与默认配置差异)。借用的 CyberTrack 板原固件及配置已恢复并校验。
 
 ## 初始实验硬件
 
@@ -93,7 +94,7 @@ Discora explores a **low-cost standalone optical disc controller** built around 
 
 **Status:** flashing, UART0, Full-Speed hub/drive enumeration and read-only BOT queries have been bench-tested with MATSHITA UJ-898 firmware HC10. Thirteen consecutive TEST UNIT READY checks passed over 61.2 seconds; long-running, cold-start and reconnection qualification remain open. Formatted TOC was bench-tested on one music CD (13 audio tracks); A bounded READ CD probe (disabled by default) matched PC reference hashes for one/eight sectors and measured a 256-sector burst at 739,858 bytes/s. A 600-second paced software-buffer run transferred 105.84 MB with zero underruns and a full-window PC hash match. Random seeking failed; A standalone UART-controlled I²S tone diagnostic and playback-control core are implemented and build-tested; The actual CD source is integrated with UART controls and a software-clock sink, including a 60.47-second paced window; the I²S adapter is build-tested only and DAC output remains unverified. Writing is not implemented. See [current evidence](docs/status.md).
 
-The deployed `0.10.0-oled` software-clock player retains previous (GPIO8), next (GPIO9), and eject (GPIO7), boots stopped, and produces no audio. Flash verification, GPIO initialization and UART status response passed. OLED probing at 0x3c timed out; no optical drive or TOC was observed in this boot window. Display and physical button acceptance remain open. The default build remains query mode. See the [deployment record](docs/records/2026-11-05-oled-deploy.md).
+`0.12.1-buttons-row` adds an opt-in audio profile with play/pause (GPIO1), previous (GPIO2), next (GPIO42), and eject (GPIO41), preserving DAC DIN on GPIO7. Navigation arms continuous playback and preserves pause. Host checks and builds are separate from physical button acceptance; see [controls](docs/playback-controls.md) and [current deployment status](docs/status.md). The default build remains query mode.
 
 ## License
 

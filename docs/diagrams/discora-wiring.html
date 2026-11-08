@@ -3,21 +3,21 @@
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Discora 整机接线与洞洞板装配图</title><style>body{margin:0;background:#f5f5f5;color:#2d3142;font-family:"PingFang SC","Noto Sans CJK SC",sans-serif;line-height:1.8}main{max-width:1400px;margin:32px auto;padding:0 24px}h1{font-size:32px;line-height:1.3}h2{font-size:26px;margin-top:48px}h3{font-size:21px;margin-top:32px}p{max-width:1000px}a{color:#2e5aa8}nav{display:flex;gap:12px 24px;flex-wrap:wrap;padding:16px 0;border-block:1px solid #bfc0c0}section,details,h3{scroll-margin-top:24px}.eyebrow,.muted,footer{color:#4f5d75}.eyebrow{font-size:13px;letter-spacing:.08em}.verdict{border-left:4px solid #eb6c36;padding:16px 24px;background:#fff;margin:24px 0}.figure-scroll,.table-scroll{overflow-x:auto}svg{display:block;width:100%;height:auto}.perfboard-figure{min-width:1040px}#perfboard-layout .perfboard-figure{min-width:1400px}#overview svg{min-width:1000px}table{border-collapse:collapse;width:100%;min-width:640px;margin:20px 0}th,td{text-align:left;vertical-align:top;border-bottom:1px solid #bfc0c0;padding:12px}th{background:#ececec}details{margin-top:32px;border-top:1px solid #bfc0c0;padding-top:20px}summary{cursor:pointer;font-weight:600}footer{border-top:1px solid #bfc0c0;margin-top:36px;padding:16px 0;font-size:14px}@media print{main{max-width:none;margin:0;padding:0}nav{display:none}.figure-scroll,.table-scroll{overflow:visible}.perfboard-figure,#overview svg,table{min-width:0}section{break-before:page}h2,h3,summary{break-after:avoid}tr{break-inside:avoid}}</style></head>
 <body><main>
-<header><p class="eyebrow">DISCORA / WIRING &amp; PERFBOARD / 2026-11-07</p>
+<header><p class="eyebrow">DISCORA / WIRING &amp; PERFBOARD / 2026-11-08</p>
 <h1>整机接线与洞洞板装配图</h1>
-<p>当前音频接法为 GPIO15/16/7，已通过台架立体声播放；原台架孔位继续保留；本版新增含两块 DCE001 的 100 × 55 mm 机内载板候选。USB 长时稳定性仍未通过，供电与 USB 路径保留拆换；整板机内安装未验收。</p>
-<nav aria-label="图稿导航"><a href="#enclosure-layout">新增双路降压布局</a><a href="#overview">台架整机连接</a><a href="#perfboard">历史台架接线</a><a href="#perfboard-layout">新版孔位总图</a><a href="#perfboard-wire-list">历史导线端点</a><a href="../wiring.md">接线说明</a></nav></header>
+<p>当前音频接法为 GPIO15/16/7，已通过台架立体声播放；原台架孔位继续保留；本版保留含两块 DCE001 的 100 × 55 mm 机内载板候选，并增加 J2 连续四键信号与 P3 五芯线束。此前三轮整盘完成与间歇故障记录分别保留；本次四键只完成软件验证，实体接线和机内安装未验收。</p>
+<nav aria-label="图稿导航"><a href="#enclosure-layout">新增双路降压布局</a><a href="#overview">整机连接</a><a href="#button-harness">四键连续排针／P3 线束</a><a href="#perfboard">历史台架接线</a><a href="#perfboard-layout">新版孔位总图</a><a href="#perfboard-wire-list">历史导线端点</a><a href="../wiring.md">接线说明</a></nav></header>
 <section id="overview"><h2>01 · 整机连接与供电</h2>
 <p>模块级总览。框内信号逐线连接，不表示短接；虚线支路须先确认规格。<a href="discora-wiring.svg">单独打开整机总览 SVG</a>。</p>
 <div class="figure-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 3160" role="img" aria-labelledby="discora-wiring-title discora-wiring-desc">
 <title id="discora-wiring-title">Discora 整机接线图</title>
-<desc id="discora-wiring-desc">展示光驱、主控、DAC、功放、左右喇叭、三个按键、OLED、电源与调试电脑的模块连接，以及 DAC 引脚和焊桥、OLED 的 GPIO10 SDA／GPIO11 SCL 与 3.3V 四线规划；并解释 5Vin、D3 与 IN-OUT 的取电限制；虚线为待确认连接。</desc>
+<desc id="discora-wiring-desc">展示光驱、主控、DAC、功放、左右喇叭、四个按键、OLED、电源与调试电脑的模块连接，以及 DAC 引脚和焊桥、OLED 的 GPIO10 SDA／GPIO11 SCL 与 3.3V 四线规划；并解释 5Vin、D3 与 IN-OUT 的取电限制；虚线为待确认连接。</desc>
 <defs><style>text{font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif}</style>
 <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#4f5d75"/></marker>
 <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#eb6c36"/></marker>
 <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#2e5aa8"/></marker>
 </defs><rect width="1600" height="3160" fill="#f5f5f5"/>
-<text x="64" y="64" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">DISCORA / WIRING REFERENCE / 2026-11-07</text>
+<text x="64" y="64" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">DISCORA / WIRING REFERENCE / 2026-11-08</text>
 <text x="64" y="124" font-size="40" fill="#2d3142" font-weight="600" text-anchor="start">Discora 整机接线图</text>
 <text x="64" y="168" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO15/16/7 音频台架已通 · USB 长时失联待定位 · 模块可拔插 · 多个电源正极不并联</text>
 <path d="M64 200 H1536" fill="none" stroke="#bfc0c0" stroke-width="3"/>
@@ -41,8 +41,8 @@
 <path d="M1416 688 V768" fill="none" stroke="#4f5d75" stroke-width="3"/>
 <text x="1432" y="740" font-size="16" fill="#4f5d75" font-weight="400" text-anchor="start">OUTR + / −</text>
 <path d="M748 584 V688" fill="none" stroke="#4f5d75" stroke-width="3" stroke-dasharray="8 6"/>
-<text x="768" y="636" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">按键扩展预留</text>
-<text x="768" y="664" font-size="16" fill="#4f5d75" font-weight="400" text-anchor="start">本轮不接入</text>
+<text x="768" y="636" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">四键五芯线束</text>
+<text x="768" y="664" font-size="16" fill="#4f5d75" font-weight="400" text-anchor="start">引脚已定义，实体待接</text>
 <path d="M364 752 H444 Q452 752 452 744 V576 Q452 568 460 568 H584" fill="none" stroke="#4f5d75" stroke-width="3" stroke-dasharray="8 6"/>
 <text x="464" y="704" font-size="16" fill="#4f5d75" font-weight="400" text-anchor="start">I²C 10 / 11</text>
 <rect x="64" y="304" width="300" height="112" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
@@ -61,8 +61,8 @@
 <text x="604" y="416" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO15 → BCK</text>
 <text x="604" y="444" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO16 → LCK / LRCK</text>
 <text x="604" y="472" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO7 → DIN</text>
-<text x="604" y="500" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO7 已用于 DIN；按键关闭</text>
-<text x="604" y="528" font-size="20" fill="#4f5d75">GPIO10 / 11 → OLED（未接）</text>
+<text x="604" y="500" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO7 只接 DIN，不接按键</text>
+<text x="604" y="528" font-size="20" fill="#4f5d75">GPIO10 / 11 → OLED（已接）</text>
 <rect x="1120" y="320" width="416" height="144" rx="8" fill="#fff7f2" stroke="#eb6c36" stroke-width="2"/>
 <text x="1140" y="356" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">PCM5102 / PCM5102A</text>
 <text x="1140" y="388" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">VIN：确认支持后接 5V</text>
@@ -77,16 +77,16 @@
 <text x="1140" y="836" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">各自两线连接对应 BTL 输出</text>
 <text x="1140" y="864" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">L−、R− 不互连、不接 GND</text>
 <rect x="584" y="688" width="328" height="168" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2" stroke-dasharray="8 6"/>
-<text x="604" y="724" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">按键预留（当前关闭）</text>
-<text x="604" y="756" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">退盘脚待另定；不接 GPIO7</text>
-<text x="604" y="784" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO8：上一曲预留</text>
-<text x="604" y="812" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO9：下一曲预留</text>
-<text x="604" y="840" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">本次不分配孔位、不接线</text>
+<text x="604" y="724" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">四键 · J2 连续 4～7 针</text>
+<text x="604" y="756" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO1 播放／暂停 · 2 上一曲</text>
+<text x="604" y="784" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO42 下一曲 · 41 退碟</text>
+<text x="604" y="812" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">四个常开触点，另一端共地</text>
+<text x="604" y="840" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">P3 五芯可拔 · 接线待验收</text>
 <rect x="64" y="704" width="300" height="144" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2" stroke-dasharray="8 6"/>
 <text x="84" y="740" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">1.3 英寸 OLED</text>
-<text x="84" y="772" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">128 × 64 · I²C（规划）</text>
+<text x="84" y="772" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">128 × 64 · SH1106 · I²C</text>
 <text x="84" y="800" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">SDA=10 / SCL=11</text>
-<text x="84" y="828" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">VCC=3.3V；确认后接</text>
+<text x="84" y="828" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">3.3V；无介质画面通过</text>
 <text x="64" y="920" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">备选：Type-C Hub 替代直连拓扑；TPA3116D2 替代首选功放。microSD／编码器仅远期候选，当前不接线。</text>
 <path d="M64 968 H1536" fill="none" stroke="#bfc0c0" stroke-width="3"/>
 <text x="64" y="1000" font-size="24" fill="#eb6c36" font-weight="600" text-anchor="start">02</text>
@@ -210,8 +210,8 @@
 <text x="1000" y="2032" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">正面 SCK 桥确认接地后可替代地线</text>
 <path d="M64 2072 H1536" fill="none" stroke="#bfc0c0" stroke-width="3"/>
 <text x="64" y="2112" font-size="24" fill="#2d3142" font-weight="600">04</text>
-<text x="128" y="2112" font-size="28" fill="#2d3142" font-weight="600">1.3 英寸 OLED 扩展预留（当前关闭）</text>
-<text x="64" y="2152" font-size="20" fill="#2d3142" font-weight="400">当前有声配置关闭 OLED；以下为后续扩展参考，本轮不接入，不分配洞洞板孔位。</text>
+<text x="128" y="2112" font-size="28" fill="#2d3142" font-weight="600">1.3 英寸 OLED（当前已启用）</text>
+<text x="64" y="2152" font-size="20" fill="#2d3142" font-weight="400">0.12.2 已启用；用户确认四线接好、无介质画面正常；动态显示待验收，不分配洞洞板孔位。</text>
 <text x="64" y="2224" font-size="24" fill="#2d3142" font-weight="600">ESP32-S3</text>
 <text x="624" y="2224" font-size="24" fill="#2d3142" font-weight="600">OLED 模块</text>
 <text x="64" y="2284" font-size="24" fill="#2d3142" font-weight="400">3V3</text>
@@ -229,10 +229,10 @@
 <text x="1000" y="2248" font-size="24" fill="#2d3142" font-weight="600">I²C 总线条件</text>
 <text x="1000" y="2292" font-size="20" fill="#2d3142" font-weight="400">SDA、SCL 上拉只能到 3.3V</text>
 <text x="1000" y="2328" font-size="20" fill="#2d3142" font-weight="400">先检查板载上拉；缺失才另补</text>
-<text x="1000" y="2364" font-size="20" fill="#2d3142" font-weight="400">SH1106 / SSD1306 以实物为准</text>
-<text x="1000" y="2400" font-size="20" fill="#2d3142" font-weight="400">实际地址待确认；不预设成功通信</text>
-<text x="1000" y="2436" font-size="20" fill="#2d3142" font-weight="400">GPIO10 / 11 是文档规划</text>
-<text x="1000" y="2472" font-size="20" fill="#2d3142" font-weight="400">当前播放 profile 关闭显示</text>
+<text x="1000" y="2364" font-size="20" fill="#2d3142" font-weight="400">用户确认 SH1106 模块</text>
+<text x="1000" y="2400" font-size="20" fill="#2d3142" font-weight="400">0x3c 初始化与首帧发送成功</text>
+<text x="1000" y="2436" font-size="20" fill="#2d3142" font-weight="400">GPIO10 / 11 接线用户已确认</text>
+<text x="1000" y="2472" font-size="20" fill="#2d3142" font-weight="400">无介质画面用户确认正常</text>
 <text x="64" y="2532" font-size="20" fill="#2d3142" font-weight="400">注意：OLED 的 SCL 是 I²C 时钟；PCM5102 的 SCK／LCK 是音频接口，不能混接。</text>
 <path d="M64 2592 H1536" fill="none" stroke="#bfc0c0" stroke-width="3"/>
 <text x="64" y="2632" font-size="20" fill="#2d3142" font-weight="400">依据：供应商模块资料、ESP32 板卡图纸与当前固件。规划不等于已接线、已上电或音频／显示验收。</text>
@@ -240,10 +240,10 @@
 </svg></div></section>
 <section id="enclosure-layout"><h2>02 · 机内裁剪载板：ESP32＋DAC＋双路降压</h2>
 <p>新增两块 <a href="../../hardware/DCE001-5V/README.md">DCE001 固定 5V 模块</a>，分别供主控和光驱；每块供应商标称 17.5 × 12 × 4.5 mm。候选板由约 90 × 55 mm 调整为 <strong>100 × 55 mm</strong>，功放仍单独固定。<a href="../perfboard-layout.md">完整布局尺寸、接线边界与 CAD 试算</a>。</p>
-<div class="verdict"><strong>这是新的机内安装候选，当前机壳尚不能直接安装。</strong> 原 120 × 80 mm 台架孔位保留在下一节；本候选需要重新布置排母。尚未确定裁剪线、固定孔和 DCE001 半孔针序，不按本图直接裁板或接电。</div>
+<div class="verdict"><strong>这是机内安装候选，尚未通过装配验收。</strong> 原 120 × 80 mm 台架孔位保留在下一节；本候选需要重新布置排母。尚未确定裁剪线、固定孔和 DCE001 半孔针序，不按本图直接裁板或接电。</div>
 <div class="figure-scroll"><svg class="perfboard-figure" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 800" role="img" aria-labelledby="dual-buck-layout-title dual-buck-layout-desc">
 <title id="dual-buck-layout-title">100 × 55 mm 洞洞板：主控、DAC 与两块 DCE001</title>
-<desc id="dual-buck-layout-desc">元件面候选布局：主控后排、USB 朝右，DAC 左前，两块 DCE001 右前；模块本体按标称尺寸画，虚线为插头和引线预留，未通过当前机箱装配。</desc>
+<desc id="dual-buck-layout-desc">元件面候选布局：主控后排、USB 朝右，DAC 左前，两块 DCE001 右前；模块本体按标称尺寸画，虚线为插头和引线预留，尚未通过装配验收。</desc>
 <defs>
 <style>.pb-text{font-family:Geist,"PingFang SC",sans-serif;fill:#2d3142}.pb-sub{font-size:20px;fill:#4f5d75}.pb-head{font-size:28px;font-weight:600}</style>
 </defs>
@@ -290,19 +290,19 @@
 <text x="1020" y="340" class="pb-text pb-sub" text-anchor="start">两路 OUT+ 不并联</text>
 <text x="1020" y="380" class="pb-text pb-sub" text-anchor="start">USB VBUS 防回灌接法待定</text>
 <text x="1020" y="420" class="pb-text pb-sub" text-anchor="start">DAC 保留独立 5V 入口</text>
-<text x="1020" y="484" class="pb-text pb-head" text-anchor="start">机箱现状：不能直接装</text>
-<text x="1020" y="528" class="pb-text pb-sub" text-anchor="start">须重做上层托架与顶部空间</text>
+<text x="1020" y="484" class="pb-text pb-head" text-anchor="start">历史机箱试算：未通过</text>
+<text x="1020" y="528" class="pb-text pb-sub" text-anchor="start">当前 CAD 与线束仍待复核</text>
 <text x="1020" y="568" class="pb-text pb-sub" text-anchor="start">半孔针序、接头、固定点待测</text>
 <text x="1020" y="608" class="pb-text pb-sub" text-anchor="start">功放与桥接器仍分别固定</text>
 <path d="M40 688 H1400" stroke="#bfc0c0"/>
 <text x="40" y="724" class="pb-text pb-sub" text-anchor="start">实框：模块标称包络　　虚框：设计预留（不是实测插头）　　橙色：新增两路降压模块</text>
 <text x="40" y="764" class="pb-text pb-sub" text-anchor="start">本图坐标 u/v 不对应原板丝印；不沿用旧台架 Q／1／N 列孔位，先保留整板。</text>
 </svg></div>
-<details open id="perfboard-layout"><summary>孔位总图：新版排母、可拔电源入口、双降压与 USB 留空区</summary>
-<p><strong>按你确认的元件面方向：左上为原点，X 向右是 A～Z、再 A～P；Y 向下是 A～Z、再 1～4。</strong> 第二段 X 字母仅在图中加下标 ₂ 区分，实物仍印普通字母。下图展示完整 42 × 30 孔阵列；右侧放大 DAC 与 P1，表格统一按（X，Y）读孔。排母位置仍为待试插候选。</p>
+<details open id="perfboard-layout"><summary>孔位总图：连续四键引出、排母、电源入口、双降压与 USB 留空区</summary>
+<p><strong>按你确认的元件面方向：左上为原点，X 向右是 A～Z、再 A～P；Y 向下是 A～Z、再 1～4。</strong> 第二段 X 字母仅在图中加下标 ₂ 区分，实物仍印普通字母。下图展示完整 42 × 30 孔阵列；橙色圈为四键信号引出孔（M～P，A），地线在（J，A）；右侧放大 DAC 与 P1，表格统一按（X，Y）读孔。排母位置仍为待试插候选。</p>
 <div class="figure-scroll"><svg class="perfboard-figure" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1640 1180" role="img" aria-labelledby="candidate-holes-title candidate-holes-desc">
 <title id="candidate-holes-title">新版孔位总图：按原板 X/Y 丝印定位</title>
-<desc id="candidate-holes-desc">左上为原点，X 向右为 A 到 Z 再 A 到 P，第二段用下标 2 区分；Y 向下为 A 到 Z 再 1 到 4。主控排母位于 Y=A 和 K、X=J 到第二段 E；DAC 位于 X=N、Y=N 到 S；P1 位于 X=Q、Y=Q 和 R。展示完整 42 列 30 行与针脚放大标注。</desc>
+<desc id="candidate-holes-desc">左上为原点，X 向右为 A 到 Z 再 A 到 P，第二段用下标 2 区分；Y 向下为 A 到 Z 再 1 到 4。主控排母位于 Y=A 和 K、X=J 到第二段 E；DAC 位于 X=N、Y=N 到 S；P1 位于 X=Q、Y=Q 和 R。四键信号在（M到P，A），公共地在（J，A）；展示完整 42 列 30 行与针脚放大标注。</desc>
 <defs><style>.ch{font-family:Geist,"PingFang SC",sans-serif;fill:#2d3142}.ch-title{font-size:28px;font-weight:600}.ch-body{font-size:22px}.ch-small{font-size:18px;fill:#4f5d75}.ch-axis{font-size:16px;fill:#4f5d75;text-anchor:middle}.ch-pin{font-size:16px;fill:#4f5d75}</style></defs>
 <rect width="1640" height="1180" fill="#f5f5f5"/>
 <text x="40.00" y="48.00" class="ch ch-title" text-anchor="start">孔位总图 · 按板上字母找孔</text>
@@ -1685,10 +1685,10 @@
 <text x="306.00" y="238.00" class="ch ch-pin" text-anchor="middle">1</text>
 <circle cx="330" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="2" data-hole="X=K/Y=A"><title>J2 pin 2: X=K/Y=A</title></circle>
 <circle cx="354" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="3" data-hole="X=L/Y=A"><title>J2 pin 3: X=L/Y=A</title></circle>
-<circle cx="378" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="4" data-hole="X=M/Y=A"><title>J2 pin 4: X=M/Y=A</title></circle>
-<circle cx="402" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="5" data-hole="X=N/Y=A"><title>J2 pin 5: X=N/Y=A</title></circle>
-<circle cx="426" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="6" data-hole="X=O/Y=A"><title>J2 pin 6: X=O/Y=A</title></circle>
-<circle cx="450" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="7" data-hole="X=P/Y=A"><title>J2 pin 7: X=P/Y=A</title></circle>
+<circle cx="378" cy="210" r="6" fill="#eb6c36" data-socket="J2" data-pin="4" data-hole="X=M/Y=A"><title>J2-4 GPIO1: X=M/Y=A; four-button harness</title></circle>
+<circle cx="402" cy="210" r="6" fill="#eb6c36" data-socket="J2" data-pin="5" data-hole="X=N/Y=A"><title>J2-5 GPIO2: X=N/Y=A; four-button harness</title></circle>
+<circle cx="426" cy="210" r="6" fill="#eb6c36" data-socket="J2" data-pin="6" data-hole="X=O/Y=A"><title>J2-6 GPIO42: X=O/Y=A; four-button harness</title></circle>
+<circle cx="450" cy="210" r="6" fill="#eb6c36" data-socket="J2" data-pin="7" data-hole="X=P/Y=A"><title>J2-7 GPIO41: X=P/Y=A; four-button harness</title></circle>
 <circle cx="474" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="8" data-hole="X=Q/Y=A"><title>J2 pin 8: X=Q/Y=A</title></circle>
 <circle cx="498" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="9" data-hole="X=R/Y=A"><title>J2 pin 9: X=R/Y=A</title></circle>
 <circle cx="522" cy="210" r="6" fill="#fff" data-socket="J2" data-pin="10" data-hole="X=S/Y=A"><title>J2 pin 10: X=S/Y=A</title></circle>
@@ -1715,6 +1715,8 @@
 <rect x="464" y="584" width="20" height="44" rx="3" fill="#2d3142"/>
 <circle cx="474" cy="594" r="6" fill="#fff" data-socket="P1" data-pin="1" data-hole="X=Q/Y=Q"><title>P1 pin 1: X=Q/Y=Q</title></circle>
 <circle cx="474" cy="618" r="6" fill="#fff" data-socket="P1" data-pin="2" data-hole="X=Q/Y=R"><title>P1 pin 2: X=Q/Y=R</title></circle>
+<rect x="366" y="198" width="96" height="24" rx="6" fill="none" stroke="#eb6c36" stroke-width="2"/>
+<circle cx="306" cy="210" r="9" fill="none" stroke="#4f5d75" stroke-width="2"/>
 <text x="562.00" y="252.00" class="ch ch-small" text-anchor="middle">J2 后排 · Y=A · X=J → E₂</text>
 <text x="560.00" y="320.00" class="ch ch-title" text-anchor="middle">ESP32-S3</text>
 <text x="258.00" y="338.00" class="ch ch-small" text-anchor="middle">天线</text>
@@ -1757,19 +1759,21 @@
 <text x="1244.00" y="731.00" class="ch ch-body" text-anchor="start">（Q，Q）  +5V</text>
 <circle cx="1208" cy="774" r="7" fill="#fff"/>
 <text x="1244.00" y="781.00" class="ch ch-body" text-anchor="start">（Q，R）  GND</text>
-<text x="1180.00" y="850.00" class="ch ch-small" text-anchor="start">主控首针在左，末针在右。</text>
-<text x="1180.00" y="886.00" class="ch ch-small" text-anchor="start">两路降压 OUT+ 不并联。</text>
+<text x="1180" y="850" class="ch ch-small">四键：M／N／O／P，Y=A</text>
+<text x="1180" y="886" class="ch ch-small">地线：J／A；P3 在板外。</text>
 <path d="M40 970 H1600" stroke="#bfc0c0"/>
 <text x="40.00" y="1008.00" class="ch ch-body" text-anchor="start">完整 42 列 × 30 行。淡色孔仅作整板坐标参考，本方案未分配；空白区域不是裁剪指示。</text>
 <text x="40.00" y="1048.00" class="ch ch-body" text-anchor="start">读图：先在上边找到 X 字母，再沿左边 Y 字母所在行找交点。第二段字母必须带“第二段”或下标。</text>
-<text x="40.00" y="1088.00" class="ch ch-small" text-anchor="start">排母深色孔为拟焊位置；背面焊接仍按同一个孔的 X/Y 身份定位，不能翻面后重新编号。</text>
-<text x="40.00" y="1128.00" class="ch ch-small" text-anchor="start">几何与供电限制不变：当前机壳尚不能直接安装，DAC 排针边距、DCE001 半孔及安装孔仍待确认。</text>
+<text x="40.00" y="1088.00" class="ch ch-small" text-anchor="start">橙色四孔接按键，地线接 J／A。背面焊接仍按原 X/Y 孔身份，不翻面重新编号。</text>
+<text x="40.00" y="1128.00" class="ch ch-small" text-anchor="start">装配仍待复核：DAC 排针边距、DCE001 半孔、安装孔及线束空间未验收。</text>
 </svg></div>
-<div class="table-scroll"><table><thead><tr><th>新候选连接</th><th>主控／入口孔（X / Y）</th><th>DAC 孔（X / Y）</th></tr></thead><tbody>
+<div class="table-scroll"><table><thead><tr><th>新候选连接</th><th>主控／入口孔（X / Y）</th><th>目标端点／DAC 孔（X / Y）</th></tr></thead><tbody>
 <tr><td>BCK</td><td>GPIO15 / J1-8：X=Q / Y=K</td><td>X=N / Y=R</td></tr>
 <tr><td>LCK</td><td>GPIO16 / J1-9：X=R / Y=K</td><td>X=N / Y=P</td></tr>
 <tr><td>DIN</td><td>GPIO7 / J1-7：X=P / Y=K</td><td>X=N / Y=Q</td></tr>
 <tr><td>公共地</td><td>GND / J2-1：X=J / Y=A</td><td>X=N / Y=O</td></tr>
+<tr><td>播放／暂停</td><td>GPIO1 / J2-4：X=M / Y=A</td><td>P3-2 → 播放／暂停常开键；另一端接 P3-1 地</td></tr><tr><td>上一曲</td><td>GPIO2 / J2-5：X=N / Y=A</td><td>P3-3 → 上一曲常开键；另一端接 P3-1 地</td></tr><tr><td>下一曲</td><td>GPIO42 / J2-6：X=O / Y=A</td><td>P3-4 → 下一曲常开键；另一端接 P3-1 地</td></tr><tr><td>退碟</td><td>GPIO41 / J2-7：X=P / Y=A</td><td>P3-5 → 退碟常开键；另一端接 P3-1 地</td></tr>
+<tr><td>按键公共地</td><td>GND / J2-1：X=J / Y=A</td><td>P3-1；四个按键的另一端共地</td></tr>
 <tr><td>SCK 接地</td><td>DAC SCK：X=N / Y=S</td><td>DAC GND：X=N / Y=O</td></tr>
 <tr><td>DAC 独立 +5V</td><td>P1-1：X=Q / Y=Q</td><td>VIN：X=N / Y=N</td></tr>
 <tr><td>DAC 电源 GND</td><td>P1-2：X=Q / Y=R</td><td>GND：X=N / Y=O</td></tr>
@@ -1782,9 +1786,64 @@
 <tr><td>DCE001 A／B 右前</td><td>本体相隔 7 mm；各留 25 × 22 mm 支撑／引线区</td><td>半孔不等于 2.54 mm 排针；按实物丝印焊短线，绝缘压持并留可拔线束，不在模块上钻孔</td></tr>
 <tr><td>电池与光驱线束</td><td>输入在板外经总开关分支；B 沿右前缘离板</td><td>电机回路不走主控／DAC 信号地或洞洞板焊锡桥；两路 OUT+ 不直接或经 VBUS 并联</td></tr>
 </tbody></table></div>
-<p><strong>几何复核：</strong>四个模块标称平面包络不重叠、未超出载板。按暂定排母、支撑与线束包络，现有机箱有碰撞；把前壳及显示／操控组件临时上移 20／22 mm 后，对所列保留部件无碰撞且净距不小于 1 mm，但旧电子托架仍碰撞，必须重做。临时平移不构成闭合机壳设计，也不证明最终只需加高 20 mm。<a href="../../hardware/perfboard/analysis.json">查看计算结果</a>。</p>
+<p><strong>2026-11-07 历史几何复核：</strong>四个模块标称平面包络不重叠、未超出载板。按暂定排母、支撑与线束包络，现有机箱有碰撞；把前壳及显示／操控组件临时上移 20／22 mm 后，对所列保留部件无碰撞且净距不小于 1 mm，但旧电子托架仍碰撞，必须重做。临时平移不构成闭合机壳设计，也不证明最终只需加高 20 mm。当前 CAD 已在另一项工作中修改，本页未重算其包络，也未计入 P3 与四键线束。<a href="../../hardware/perfboard/analysis.json">查看计算结果</a>。</p>
 <p>两块降压模块按供应商自然散热要求在 2A 内评估，封闭机壳温升与光驱启动峰值未测。USB VBUS／COM 防回灌、充电管理和功放稳压尚未定型；图中分区不意味着现有 USB 失联已经解决。</p>
 </section>
+<section id="button-harness"><h2>四键线束 · 连续排针与逐孔装配</h2><p>采用 0.12.1-buttons-row 四键 profile。保留 I²S GPIO15／16／7、OLED GPIO10／11、USB Host 和 COM；四个按键均常开接地。如下五芯从已有 J2 排母底部焊脚引出，P3 接头在板外，不新增板面插座位置。</p><div class="figure-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 740" role="img" aria-labelledby="buttons-row-title buttons-row-desc">
+<title id="buttons-row-title">四键连续排针与 P3 五芯线束</title>
+<desc id="buttons-row-desc">J2-4到7的GPIO1、2、42、41分别连接播放暂停、上一曲、下一曲、退碟；J2-1为公共地，经板外P3五芯接头连接常开按键，洞洞板信号孔为M到P行A。</desc>
+<defs><style>.br-text{font-family:"PingFang SC",sans-serif;fill:#2d3142}.br-small{font-size:20px;fill:#4f5d75}.br-label{font-size:24px}.br-title{font-size:32px;font-weight:600}</style></defs>
+<rect width="1440" height="740" fill="#f5f5f5"/>
+<text x="40" y="48" class="br-text br-title">四根信号相邻，一根公共地 · P3 五芯可拔</text>
+<text x="40" y="88" class="br-text br-small">开发板竖放：右排 J2 第 4～7 针；洞洞板横放：后排 Y=A，X=M～P。</text>
+<text x="40" y="140" class="br-text br-label">主控排母底部引出（元件面孔坐标）</text>
+<text x="600" y="140" class="br-text br-label">P3 · 板外接头</text>
+<text x="1000" y="140" class="br-text br-label">前面板常开按键</text>
+<path d="M480 224 H600" stroke="#4f5d75" stroke-width="3" fill="none"/>
+<path d="M840 224 H1000" stroke="#4f5d75" stroke-width="3" fill="none"/>
+<path d="M1240 224 H1340" stroke="#4f5d75" stroke-width="3" fill="none"/>
+<path d="M480 304 H600" stroke="#4f5d75" stroke-width="3" fill="none"/>
+<path d="M840 304 H1000" stroke="#4f5d75" stroke-width="3" fill="none"/>
+<path d="M1240 304 H1340" stroke="#4f5d75" stroke-width="3" fill="none"/>
+<path d="M480 384 H600" stroke="#4f5d75" stroke-width="3" fill="none"/>
+<path d="M840 384 H1000" stroke="#4f5d75" stroke-width="3" fill="none"/>
+<path d="M1240 384 H1340" stroke="#4f5d75" stroke-width="3" fill="none"/>
+<path d="M480 464 H600" stroke="#4f5d75" stroke-width="3" fill="none"/>
+<path d="M840 464 H1000" stroke="#4f5d75" stroke-width="3" fill="none"/>
+<path d="M1240 464 H1340" stroke="#4f5d75" stroke-width="3" fill="none"/>
+<path d="M480 544 H600" stroke="#4f5d75" stroke-width="3" fill="none"/>
+<path d="M840 544 H1340" stroke="#4f5d75" stroke-width="3" fill="none"/>
+<path d="M1340 224 V544" stroke="#4f5d75" stroke-width="3" fill="none"/>
+<rect x="600" y="176" width="240" height="408" rx="8" fill="#fff7f2" stroke="#eb6c36" stroke-width="2"/>
+<rect x="40" y="196" width="440" height="56" rx="8" fill="#fff" stroke="#bfc0c0" stroke-width="2"/>
+<text x="60" y="232" class="br-text br-label">J2-4 · GPIO1 ·（M，A）</text>
+<text x="624" y="232" class="br-text br-label">2 · 播放／暂停</text>
+<rect x="1000" y="196" width="240" height="56" rx="8" fill="#fff" stroke="#bfc0c0" stroke-width="2"/><text x="1020" y="232" class="br-text br-label">播放／暂停 · 常开</text>
+<circle cx="1340" cy="224" r="5" fill="#4f5d75"/>
+<rect x="40" y="276" width="440" height="56" rx="8" fill="#fff" stroke="#bfc0c0" stroke-width="2"/>
+<text x="60" y="312" class="br-text br-label">J2-5 · GPIO2 ·（N，A）</text>
+<text x="624" y="312" class="br-text br-label">3 · 上一曲</text>
+<rect x="1000" y="276" width="240" height="56" rx="8" fill="#fff" stroke="#bfc0c0" stroke-width="2"/><text x="1020" y="312" class="br-text br-label">上一曲 · 常开</text>
+<circle cx="1340" cy="304" r="5" fill="#4f5d75"/>
+<rect x="40" y="356" width="440" height="56" rx="8" fill="#fff" stroke="#bfc0c0" stroke-width="2"/>
+<text x="60" y="392" class="br-text br-label">J2-6 · GPIO42 ·（O，A）</text>
+<text x="624" y="392" class="br-text br-label">4 · 下一曲</text>
+<rect x="1000" y="356" width="240" height="56" rx="8" fill="#fff" stroke="#bfc0c0" stroke-width="2"/><text x="1020" y="392" class="br-text br-label">下一曲 · 常开</text>
+<circle cx="1340" cy="384" r="5" fill="#4f5d75"/>
+<rect x="40" y="436" width="440" height="56" rx="8" fill="#fff" stroke="#bfc0c0" stroke-width="2"/>
+<text x="60" y="472" class="br-text br-label">J2-7 · GPIO41 ·（P，A）</text>
+<text x="624" y="472" class="br-text br-label">5 · 退碟</text>
+<rect x="1000" y="436" width="240" height="56" rx="8" fill="#fff" stroke="#bfc0c0" stroke-width="2"/><text x="1020" y="472" class="br-text br-label">退碟 · 常开</text>
+<circle cx="1340" cy="464" r="5" fill="#4f5d75"/>
+<rect x="40" y="516" width="440" height="56" rx="8" fill="#fff" stroke="#bfc0c0" stroke-width="2"/>
+<text x="60" y="552" class="br-text br-label">J2-1 · GND ·（J，A）</text>
+<text x="624" y="552" class="br-text br-label">1 · 公共地</text>
+<circle cx="1340" cy="544" r="5" fill="#4f5d75"/>
+<text x="1000" y="532" class="br-text br-small">另一触点均接 GND</text>
+<text x="40" y="636" class="br-text br-small">P3 按芯号标记，不按图中行序排列：1 地、2 播放、3 上一曲、4 下一曲、5 退碟。</text>
+<text x="40" y="676" class="br-text br-small">五芯无电源正极；每根信号独立，不能短接。GPIO41／42 不与外部 JTAG 同时使用。</text>
+<text x="40" y="716" class="br-text br-small">供装配核对，尚未实物验收；线从排母底部引出并绝缘，接头与弯线空间需试装。</text>
+</svg></div><ol><li>全部断电，按模块 GPIO 丝印确认 J2-4／5／6／7 及 J2-1；不得用 GPIO 数字猜排针序号。</li><li>按孔位总图，从（M，A）、（N，A）、（O，A）、（P，A）引出四根信号，从（J，A）引出公共地；排母顶面留给模块插拔。</li><li>背面焊脚分别焊短绝缘线，沿后缘出板；不跨天线、USB 插头或 BOOT／RST。用 P3 连接前面板五芯，接头两侧标记芯号并做应力固定。</li><li>检查每根信号到对应按键导通，松开到地不通、按下到地导通；相邻信号无短路。共地仅用于按键回路，不承载光驱／功放电流。</li><li>接线、烧录和实体操作按用户安排留待后续；当前机内 CAD 包络未计入 P3 和完整线束，不据此裁板或确认装机。</li></ol><p><a href="../playback-controls.md">固件配置与操作</a> · <a href="../perfboard-layout.md#四键线束引出">候选孔位和装配边界</a></p></section>
 <section id="perfboard"><h2>03 · 原台架 GPIO15/16/7 可拔插洞洞板</h2>
 <p><strong>本节仅对应原 120 × 80 mm 台架板。</strong> 上方 100 × 55 mm 机内候选不沿用本节孔位或裁剪尺寸。</p>
 <p>沿用 120 × 80 mm、30 列 × 42 行的洞洞板与原三条排母位置。ESP32 和 DAC 插在排母上；只焊载板侧导线。光驱、功放及电源模块保持板外，USB 继续使用板载接口与现有 USB 线。</p>

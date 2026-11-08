@@ -8,14 +8,16 @@ static cd_player_core_t player;
 static uint8_t storage[16 * PROBE_CD_SECTOR_SIZE], data[8 * PROBE_CD_SECTOR_SIZE];
 static int64_t now;
 static unsigned events;
-static bool sample(bool prev, bool next, int ms)
+static bool sample_keys(bool prev, bool next, bool play, int ms)
 {
     now += ms;
     int direction = track_buttons_sample(&buttons, player.media && player.audio.state != AUDIO_FAULT,
-                                         prev, next, now);
+                                         prev, next, play, now);
     if (direction) ++events;
-    return direction && cd_player_step(&player, direction);
+    return direction == PLAYER_BUTTON_TOGGLE ? cd_player_toggle(&player) :
+           direction && cd_player_step(&player, direction);
 }
+static bool sample(bool prev, bool next, int ms) { return sample_keys(prev, next, false, ms); }
 static void release(void)
 {
     assert(!sample(false, false, 10));
@@ -55,7 +57,7 @@ int main(void)
     assert(cd_player_complete(&player, &old, true, data, sizeof(data)));
     assert(cd_player_play_disc(&player) && cd_player_request(&player, &old));
     uint32_t generation = player.audio.generation;
-    release(); assert(press(1) && player.index == 3 && !player.continuous);
+    release(); assert(press(1) && player.index == 3 && player.continuous);
     assert(player.audio.generation != generation && !player.audio.pcm.used);
     assert(!cd_player_complete(&player, &old, true, data, sizeof(data)));
     assert(player.next_lba == 48 && player.audio.state == AUDIO_PREFILL);
@@ -65,7 +67,8 @@ int main(void)
     release(); assert(!press(1)); // Last-track rejection preserves current audio.
     assert(player.audio.generation == generation && player.audio.pcm.used == sizeof(data));
     assert(cd_player_pause(&player));
-    release(); assert(press(-1) && player.index == 2 && player.audio.state == AUDIO_PREFILL);
+    release(); assert(press(-1) && player.index == 2 && player.audio.state == AUDIO_PAUSED);
+    assert(player.continuous && !player.audio.pcm.used && !cd_player_request(&player, &old));
 
     release();
     unsigned before = events;
@@ -99,5 +102,44 @@ int main(void)
     track_buttons_init(&buttons, now);
     assert(!sample(false, true, 1000) && events == before);
     release(); assert(press(1));
-    puts("PASS: track button bounce/hold/chord, media/fault gating, boundaries, paused/stopped navigation, data skip, continuous cancellation and stale PCM isolation (offline)");
+    // Front-panel play/pause, debounce, hold and three-key overlap.
+    cd_player_stop(&player);
+    track_buttons_init(&buttons, now);
+    before = events;
+    assert(!sample_keys(false, false, true, 1000) && events == before);
+    release();
+    assert(!sample_keys(false, false, true, 10));
+    assert(!sample_keys(false, false, false, 10)); // Bounce is not a press.
+    assert(!sample_keys(false, false, true, 10));
+    assert(!sample_keys(false, false, true, 29));
+    assert(sample_keys(false, false, true, 1));
+    assert(player.continuous && player.audio.state == AUDIO_PREFILL);
+    assert(!sample_keys(false, false, true, 2000));
+    assert(player.audio.state == AUDIO_PREFILL);
+    release();
+    assert(!sample_keys(false, false, true, 10));
+    assert(sample_keys(false, false, true, 30));
+    assert(player.audio.state == AUDIO_PAUSED);
+    release(); before = events;
+    assert(!sample_keys(false, false, true, 10));
+    assert(!sample_keys(false, true, true, 10));
+    assert(!sample_keys(false, true, true, 100));
+    assert(!sample_keys(false, false, true, 100));
+    assert(!sample_keys(false, false, true, 100) && events == before);
+    release();
+    assert(!sample_keys(false, false, true, 10));
+    assert(sample_keys(false, false, true, 30));
+    assert(player.audio.state == AUDIO_PREFILL && player.continuous);
+    cd_player_lost(&player); release(); before = events;
+    assert(!sample_keys(false, false, true, 10));
+    assert(!sample_keys(false, false, true, 30));
+    assert(cd_player_media(&player, &toc));
+    assert(!sample_keys(false, false, true, 1000) && events == before);
+    release();
+    cd_player_fault(&player);
+    assert(!sample_keys(false, false, true, 10));
+    assert(!sample_keys(false, false, true, 30));
+    cd_player_stop(&player);
+    assert(!sample_keys(false, false, true, 1000) && events == before);
+    puts("PASS: play/pause/track debounce, hold/chord, media/fault gating, boundaries, paused navigation, continuous mode and stale PCM isolation (offline)");
 }
