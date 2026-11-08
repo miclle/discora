@@ -70,8 +70,14 @@ bool cd_player_select(cd_player_core_t *p, unsigned track)
 bool cd_player_step(cd_player_core_t *p, int direction)
 {
     if (!p->media || (direction != -1 && direction != 1)) return false;
-    for (int i = (int)p->index + direction; i >= 0 && i < (int)p->toc.track_count; i += direction)
-        if (eligible(&p->toc.tracks[i])) return cd_player_select(p, p->toc.tracks[i].number);
+    bool paused = p->audio.state == AUDIO_PAUSED;
+    for (int i = (int)p->index + direction; i >= 0 && i < (int)p->toc.track_count; i += direction) {
+        if (!eligible(&p->toc.tracks[i])) continue;
+        if (!cd_player_select(p, p->toc.tracks[i].number)) return false;
+        p->continuous = true;
+        if (paused) cd_player_pause(p);
+        return true;
+    }
     return false;
 }
 static void recovered(cd_player_core_t *p)
@@ -110,6 +116,14 @@ bool cd_player_play_disc(cd_player_core_t *p)
     select_index(p, p->index);
     p->continuous = audio_core_play(&p->audio);
     return p->continuous;
+}
+bool cd_player_toggle(cd_player_core_t *p)
+{
+    if (!p->media || p->audio.state == AUDIO_FAULT) return false;
+    if (p->audio.state == AUDIO_PAUSED) return cd_player_play(p);
+    // STOPPED during continuous EOF drain is still an active sequence: pause it.
+    if (p->audio.state == AUDIO_STOPPED && !p->continuous) return cd_player_play_disc(p);
+    return cd_player_pause(p);
 }
 bool cd_player_advance(cd_player_core_t *p)
 {

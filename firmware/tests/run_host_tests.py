@@ -6,10 +6,12 @@ from pathlib import Path
 import shlex
 import subprocess
 import tempfile
+import sys
 
 
 def main():
     firmware = Path(__file__).resolve().parents[1]
+    subprocess.run([sys.executable, str(firmware / "tests/control_pins_test.py")], check=True)
     with tempfile.TemporaryDirectory(prefix="discora-protocol-") as temp:
         for name, sources, flags in [
             ("usb_ab", ["tests/usb_ab_test.c"], []),

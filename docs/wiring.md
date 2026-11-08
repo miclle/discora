@@ -4,7 +4,7 @@
 
 **新增机内载板候选：**将 ESP32、DAC 与两块 DCE001 安排在约 **100 × 55 mm** 的可裁剪载板上，USB 朝右、DAC 左前、两路降压右前。见[新版布局图](diagrams/discora-wiring.html#enclosure-layout)和[尺寸／CAD 复核](perfboard-layout.md)。当前机壳与托架仍有碰撞，尚不能裁板定孔；下文原 120 × 80 mm 台架孔位不适用于新候选。
 
-当前台架音频接法为 **GPIO15→BCK、GPIO16→LCK、GPIO7→DIN**，本页总览、洞洞板图和导线表已统一；仓库无叠加配置时仍默认 GPIO4/5/6，不能混用。GPIO7 作 DIN，退盘键必须关闭并断开，当前有声配置也关闭换轨键和 OLED。实测接法见[音频说明](audio-output.md#已通过的接法与默认配置差异)。第 6 轨 USB 失联仍未解决，见[最新记录](records/2026-11-07-full-disc-usb-disconnect.md)；本次载板方案不改变 USB／供电拓扑，也不表示整板已装入机壳。
+当前台架音频接法为 **GPIO15→BCK、GPIO16→LCK、GPIO7→DIN**，本页总览、洞洞板图和导线表已统一；仓库无叠加配置时仍默认 GPIO4/5/6，不能混用。GPIO7 作 DIN，原 GPIO7 退盘键必须断开；原有声 profile 关闭按键和 OLED，独立四键 overlay 使用 GPIO1 播放／暂停、GPIO41 退碟、GPIO2／42 换轨，见[四键接线](playback-controls.md)。实测接法见[音频说明](audio-output.md#已通过的接法与默认配置差异)。历史 USB 失联与后续整盘测试分别保留证据，见[当前状态](status.md)；本次载板方案不改变 USB／供电拓扑，也不表示整板已装入机壳。
 
 ![Discora 整机连接、供电支路、PCM5102 焊桥及 OLED 四线接线示意](diagrams/discora-wiring.svg)
 
@@ -18,8 +18,8 @@
 | USB-C 公／USB-A 母 OTG 转接、SATA-USB 桥接器、UJ-898 | 按最近直连实验路径绘制；桥接器 VID:PID 为 `13fd:0840`，具体芯片未知；光驱固件 HC10 |
 | PCM5102 模块 | 已到货；PCM5102A 按上述实验接法短时试听通过，当前 GPIO15/16/7 接法已有台架实测，洞洞板实体装配未验收 |
 | TPA3118D2 功放、左右无源喇叭 | 当前首选；喇叭单只标称 4 Ω、10 W、峰值 18 W，见[单元资料](../hardware/Speaker-80x45-4ohm-10W/README.md)；上述台架组合短时试听通过，额定功率、热与整机匹配未验收，独立功放电源不可省略 |
-| 按键扩展预留 | 当前不接入；GPIO8／9 可保留换轨扩展，退盘引脚待另定，GPIO7 已作 DIN |
-| 1.3 英寸 OLED | GPIO10 SDA、GPIO11 SCL、3.3V VCC、GND；SH1106 驱动 implemented；当前有声配置关闭，不分配洞洞板孔位，实屏仍待验收 |
+| 四键扩展 | GPIO1 播放／暂停、GPIO41 退碟、GPIO2／42 上一曲／下一曲，常开到 GND；独立 profile 已实现，实体接线／验收待完成；GPIO7 只作 DIN |
+| 1.3 英寸 OLED | GPIO10 SDA、GPIO11 SCL、3.3V VCC、GND；0.12.2 有声配置已启用 SH1106；用户确认接线和无介质画面正常，不分配洞洞板孔位，动态播放显示待验收 |
 | 5V 电源／充电宝、功放电源、调试电脑 | 各支路按下文核对；不把多个电源输出直接并联 |
 | Type-C Hub、TPA3116D2 | 已有备选；Hub 不在当前直连路径中，TPA3116D2 不与首选功放同时连接 |
 | microSD／编码器 | 仅远期候选，当前未定型、不分配引脚、不接线；不属于当前播放接线必需件 |
@@ -37,7 +37,7 @@
 | PCM5102 SCK | PCM5102 GND | 无外部 MCLK；不能接 BCK |
 | 原 DAC 独立 5V 电源 | 经 P1 接 DAC VIN／GND | 保持原电源来源；不接主控 5Vin |
 
-当前 GPIO4 留空，不再接临时测量线。按键和 OLED 只保留扩展空间，本次不新增接线；GPIO8／9 可用于原换轨方案，退盘键须另分配引脚后再启用，不能照旧图把 GPIO7 接到按键。
+四键方案改用右排连续 J2-4～7：GPIO1 播放／暂停、GPIO2 上一曲、GPIO42 下一曲、GPIO41 退碟。用户在 2026-11-08 确认按键尚未接线、GPIO7 只接 DAC；新版孔位总图已标出按键引出孔，接线按[四键说明](playback-controls.md)，不能照历史退碟图把 GPIO7 接到按键。
 
 DAC 背面保持已验证的 **H1→L、H2→L、H3→H、H4→L**。说明见 [PCM5102 焊桥资料](../hardware/PCM5102-DAC/README.md#背面焊桥1-l2-l3-h4-l)。本次装配不改变焊桥，也不改变 USB-OTG／IN-OUT 状态。
 
@@ -174,7 +174,7 @@ OLED 可从开发板 **3V3 → VCC、GND → GND** 取电，前提是屏幕适�
 | GPIO11 | SCL | 已实现的 I²C 时钟 |
 | GPIO10 | SDA | 已实现的 I²C 数据 |
 
-GPIO10／11 在供应商 ESP32 板卡图纸中已引出，OLED 驱动已使用，与当前 GPIO15／16／7 音频、GPIO19／20 USB 和 GPIO43／44 UART 分开。当前有声 PSRAM profile 关闭 OLED；本节是后续扩展参考。驱动 7-bit 地址默认 0x3c、可配置 0x3d，实屏未验收。构建、状态含义与测试见 [OLED 显示说明](oled-display.md)。ESP-IDF 的 I²C SDA/SCL 引脚可以由软件配置，见 [ESP-IDF v5.4 I²C 文档](https://docs.espressif.com/projects/esp-idf/en/v5.4/esp32s3/api-reference/peripherals/i2c.html)。
+GPIO10／11 在供应商 ESP32 板卡图纸中已引出，OLED 驱动已使用，与当前 GPIO15／16／7 音频、GPIO19／20 USB 和 GPIO43／44 UART 分开。PSRAM profile 本身关闭 OLED；当前 0.12.2 在其后叠加 `cd-player-oled.defaults` 开启。0x3c 初始化成功，用户确认无介质画面正常，动态显示待验收。驱动 7-bit 地址默认 0x3c、可配置 0x3d。构建、状态含义与测试见 [OLED 显示说明](oled-display.md)。ESP-IDF 的 I²C SDA/SCL 引脚可以由软件配置，见 [ESP-IDF v5.4 I²C 文档](https://docs.espressif.com/projects/esp-idf/en/v5.4/esp32s3/api-reference/peripherals/i2c.html)。
 
 SDA、SCL 需要上拉到 3.3V；先确认模块是否已有板载上拉及其连接电源，不盲目重复加电阻，不接 5V 上拉。屏幕控制器（SH1106／SSD1306）、地址及初始化序列仍需按实物确认；模块未接入前不改地址焊桥。屏幕 SCL 与 DAC 的 SCK／LCK 属于不同接口，不可相连。参考资料与差异说明见 [OLED 硬件说明](../hardware/OLED-1.3-128x64/README.md)。
 
@@ -185,8 +185,24 @@ SDA、SCL 需要上拉到 3.3V；先确认模块是否已有板载上拉及其�
 3. 显式部署测试音配置，先验证 `left`、`right`、`stereo`、`silence`、`stop`。测试音模式不启动光驱任务。
 4. 左右声音通过后，再进入真实 CD I²S 配置；记录电源、实际焊桥、时钟、音频、光驱动作时干扰及温升。
 
-当前部署为 0.11.3 有声配置，GPIO15/16/7、2 MiB PSRAM、25% 数字幅度，按键和 OLED 关闭；上电 stopped。具体部署及 USB 长时失联边界见[当前状态](status.md)。本次只更新图稿和装配说明，没有焊接、烧录或新硬件验收。
+当前部署为 0.12.2 四键加 OLED 有声配置，GPIO15/16/7、2 MiB PSRAM、25% 数字幅度，上电 stopped。具体部署及 USB 长时失联边界见[当前状态](status.md)。OLED 四线接法由用户确认；通信和无介质画面通过，洞洞板装配及动态播放显示仍待验收。
 
 ## 图稿维护
 
 `diagrams/discora-wiring.html` 为自包含图稿（内联 SVG、无外部图片或脚本），`discora-wiring.svg` 仅保留供 Markdown 展示的整机总览，与 HTML 的第一个 SVG 保持一致。HTML 另含双路降压机内总览、新版候选孔位总图、原台架逐孔接线与历史排母孔位四个 SVG。默认“孔位总图”指向新版 X/Y 丝印坐标候选，旧图默认折叠。机内候选尺寸与 `hardware/perfboard/layout.json`、[布局说明](perfboard-layout.md)同步；原台架图与本页 W1～W10 及 P1／P2 定义同步，不能跨方案套用孔号。焊桥方框不按物理尺寸，机内候选的模块本体按标称比例画；两者都不替代实测。不用样例值填补实物未知参数。
+
+## 四键连续排针与洞洞板线束
+
+`0.12.1-buttons-row` 四键 profile 使用主控右排连续 J2-4～7；这取代本轮初版 GPIO4／5／8／9 分散接法。J2-1 提供公共地，五芯线束在板外通过 P3 可拔连接；不接 3.3V 或 5V。
+
+| P3 自定义芯号 | 功能 | 主控 GPIO／排针 | 新版候选洞洞板（X，Y） |
+| --- | --- | --- | --- |
+| 1 | 公共地 | GND／J2-1 | （J，A） |
+| 2 | 播放／暂停 | GPIO1／J2-4 | （M，A） |
+| 3 | 上一曲 | GPIO2／J2-5 | （N，A） |
+| 4 | 下一曲 | GPIO42／J2-6 | （O，A） |
+| 5 | 退碟 | GPIO41／J2-7 | （P，A） |
+
+以上孔位仅用于新版元件面 X 向右 A～Z 再 A～P、Y 向下 A～Z 再 1～4 的布局；原台架 Q／1 列孔位不能混用。模块占用排母顶面，线束从排母底部焊脚引出并绝缘，按[孔位总图及放大](diagrams/discora-wiring.html#button-harness)装配。五芯接头在板外，不新增孔位或改变载板尺寸，实际接头壳体与线束弯曲空间待确认。GPIO41／42 不与外部 JTAG 共用；COM、USB Host、音频、OLED 分配保持原状。
+
+装配顺序：断电 → 按丝印核对 J2 与五个孔 → 引出四根信号和地线 → 两侧标记 P3 芯号并通断核对 → 各常开键另一端接公共地 → 线束应力固定 → 检查相邻针无短路。上电、烧录及实体按键验收按用户安排留待后续，不把图纸引脚映射当作已接线证据。

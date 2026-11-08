@@ -6,6 +6,7 @@
 #include "pcm_gain.h"
 #include "esp_heap_caps.h"
 #include "track_buttons.h"
+#include "track_buttons_core.h"
 #include "oled_display.h"
 #include "audio_i2s.h"
 #include "audio_i2s_report.h"
@@ -216,12 +217,12 @@ static void command(const char *line)
 #endif
     if (!strcmp(line, "status")) { status(); return; }
     if (!strcmp(line, "help")) {
-        ESP_LOGI(TAG, "commands: play play-disc pause stop next prev track N status help; play-disc starts current track through disc end");
+        ESP_LOGI(TAG, "commands: play play-disc pause toggle stop next prev track N status help; toggle is front-panel play/pause; next/prev preserve pause and arm disc sequence");
         return;
     }
     unsigned track = 0; char extra;
     bool select = sscanf(line, "track %u %c", &track, &extra) == 1 && track >= 1 && track <= 99;
-    bool known = select || !strcmp(line,"play-disc") || !strcmp(line,"play") || !strcmp(line,"pause") || !strcmp(line,"stop") ||
+    bool known = select || !strcmp(line,"play-disc") || !strcmp(line,"play") || !strcmp(line,"pause") || !strcmp(line,"toggle") || !strcmp(line,"stop") ||
                  !strcmp(line,"next") || !strcmp(line,"prev");
     if (!known) { ESP_LOGW(TAG,"unknown command; use help"); return; }
     // Only this task owns output; reject invalid commands without discarding DMA.
@@ -231,6 +232,7 @@ static void command(const char *line)
     else if (!strcmp(line,"play")) ok = cd_player_play(&player);
     else if (!strcmp(line,"play-disc")) ok = cd_player_play_disc(&player);
     else if (!strcmp(line,"pause")) ok = cd_player_pause(&player);
+    else if (!strcmp(line,"toggle")) ok = cd_player_toggle(&player);
     else if (!strcmp(line,"stop")) cd_player_stop(&player);
     else ok = cd_player_step(&player, !strcmp(line,"next") ? 1 : -1);
     xSemaphoreGive(lock);
@@ -257,13 +259,14 @@ static void poll_commands(void)
 static void poll_track_buttons(void)
 {
     xSemaphoreTake(lock, portMAX_DELAY);
-    int direction = discora_track_buttons_poll(player.media && player.audio.state != AUDIO_FAULT);
-    bool ok = direction && cd_player_step(&player, direction);
+    int action = discora_track_buttons_poll(player.media && player.audio.state != AUDIO_FAULT);
+    bool ok = action == PLAYER_BUTTON_TOGGLE ? cd_player_toggle(&player) :
+              action && cd_player_step(&player, action);
     xSemaphoreGive(lock);
-    if (!direction) return;
+    if (!action) return;
     // Same transition as UART next/prev; only this task may discard the old DMA.
     if (ok && !close_output()) { status(); return; }
-    ESP_LOGI(TAG, "button=%s accepted=%u", direction < 0 ? "prev" : "next", ok);
+    ESP_LOGI(TAG, "button=%s accepted=%u", action == PLAYER_BUTTON_TOGGLE ? "toggle" : action < 0 ? "prev" : "next", ok);
     status();
 }
 static void advance_sequence(void)

@@ -1,0 +1,10 @@
+# Append after cd-player-i2s.defaults and cd-player-psram.defaults.
+# J2-4..7: GPIO1 play/pause, GPIO2 previous, GPIO42 next, GPIO41 eject.
+# Normally-open switches to GND; GPIO7 remains DAC DIN, never a button.
+CONFIG_DISCORA_PLAY_PAUSE_BUTTON=y
+CONFIG_DISCORA_PLAY_PAUSE_GPIO=1
+CONFIG_DISCORA_EJECT_BUTTON=y
+CONFIG_DISCORA_EJECT_GPIO=41
+CONFIG_DISCORA_TRACK_BUTTONS=y
+CONFIG_DISCORA_PREV_GPIO=2
+CONFIG_DISCORA_NEXT_GPIO=42

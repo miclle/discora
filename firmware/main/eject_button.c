@@ -1,4 +1,5 @@
 #include "eject_button.h"
+#include "control_pins.h"
 #if defined(CONFIG_DISCORA_EJECT_BUTTON)
 #include "button_core.h"
 #include "driver/gpio.h"
@@ -7,10 +8,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-#if defined(CONFIG_DISCORA_CD_PLAYER_I2S) && (CONFIG_DISCORA_I2S_BCLK == 7 || CONFIG_DISCORA_I2S_LRCK == 7 || CONFIG_DISCORA_I2S_DATA == 7)
-#error "GPIO7 is reserved for eject; move I2S pins or disable DISCORA_EJECT_BUTTON"
-#endif
-enum { EJECT_BUTTON_GPIO = 7 };
+enum { EJECT_BUTTON_GPIO = CONFIG_DISCORA_EJECT_GPIO };
 static button_core_t button;
 static void button_task(void *arg)
 {

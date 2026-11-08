@@ -31,6 +31,8 @@ void cd_player_lost(cd_player_core_t *p);
 bool cd_player_select(cd_player_core_t *p, unsigned track);
 bool cd_player_step(cd_player_core_t *p, int direction);
 bool cd_player_play(cd_player_core_t *p);
+// Front-panel action: stopped starts a disc sequence; paused resumes without seeking.
+bool cd_player_toggle(cd_player_core_t *p);
 // Output owner calls only after successfully closing the adapter. Keeps cursor/generation.
 bool cd_player_rebuffer(cd_player_core_t *p);
 // Restart the selected track, then advance at EOF without wrapping; boot/media never arms this.

@@ -11,7 +11,7 @@ config DISCORA_USB_ENUM_QUERY_TEST
     bool "One-shot enum-only then query USB comparison (no playback)"
     depends on DISCORA_USB_DIAGNOSTICS && DISCORA_CD_PLAYER
     depends on !DISCORA_AUDIO_DIAGNOSTIC && !DISCORA_CDDA_PROBE
-    depends on !DISCORA_EJECT_BUTTON && !DISCORA_TRACK_BUTTONS && !DISCORA_CD_PLAYER_FAULT_TEST
+    depends on !DISCORA_EJECT_BUTTON && !DISCORA_TRACK_BUTTONS && !DISCORA_PLAY_PAUSE_BUTTON && !DISCORA_CD_PLAYER_FAULT_TEST
     default n
     help
         For the 13fd:0840 bridge, hold off all BOT commands for the configured delay
@@ -32,14 +32,24 @@ config DISCORA_USB_ENUM_WAIT_SECONDS
 menu "Discora eject button"
 
 config DISCORA_EJECT_BUTTON
-    bool "Enable active-low eject button on GPIO7"
+    bool "Enable active-low eject button"
     depends on !DISCORA_AUDIO_DIAGNOSTIC && !DISCORA_CDDA_PROBE
     default y
     help
-        Wire a normally-open momentary switch between GPIO7 and GND.
+        Wire a normally-open momentary switch between the configured GPIO and GND.
         Internal pull-up, 30 ms debounce, one request per press after release.
         Available in query and CD player modes; disabled in bounded bench modes.
         Only an identified, healthy optical drive accepts requests. No auto-eject.
+
+config DISCORA_EJECT_GPIO
+    int "Eject button GPIO"
+    depends on DISCORA_EJECT_BUTTON
+    range 1 42
+    default 7
+    help
+        Legacy query wiring defaults to GPIO7. Use GPIO41 for the four-button
+        audio profile: GPIO7 is DAC DIN there. Reserved GPIOs and peripheral conflicts
+        are rejected at compile time.
 
 endmenu
 
@@ -202,15 +212,51 @@ config DISCORA_CD_PLAYER_TEST_DELAY_MS
         15000 exceeds a full 2 MiB CD queue and exercises automatic rebuffering.
 
 config DISCORA_TRACK_BUTTONS
-    bool "Enable previous/next track buttons on GPIO8/GPIO9"
+    bool "Enable previous/next track buttons"
     depends on DISCORA_CD_PLAYER
     default y
     help
-        Normally-open switches from GPIO8 (previous) and GPIO9 (next) to GND.
+        Normally-open switches from the configured previous/next GPIOs to GND.
         Internal pull-ups, 30 ms debounce, one action per press after release.
-        Same behavior as UART prev/next: start the adjacent supported audio track,
-        no wrap at disc boundaries. No actions without media or while faulted.
-        Holding both buttons suppresses navigation until both are released.
+        Same behavior as UART prev/next: select the adjacent supported audio track
+        and arm continuous playback, preserving pause; no wrap at disc boundaries.
+        No actions without media or while faulted. Overlapping play/track buttons
+        suppress further actions until all are released.
+
+config DISCORA_PREV_GPIO
+    int "Previous track button GPIO"
+    depends on DISCORA_TRACK_BUTTONS
+    range 1 42
+    default 8
+    help
+        Legacy wiring uses GPIO8; the adjacent J2 four-button profile uses GPIO2.
+
+config DISCORA_NEXT_GPIO
+    int "Next track button GPIO"
+    depends on DISCORA_TRACK_BUTTONS
+    range 1 42
+    default 9
+    help
+        Legacy wiring uses GPIO9; the adjacent J2 four-button profile uses GPIO42.
+        GPIO41/42 cannot be shared with an external JTAG probe.
+
+config DISCORA_PLAY_PAUSE_BUTTON
+    bool "Enable play/pause button"
+    depends on DISCORA_CD_PLAYER
+    default n
+    help
+        Normally-open switch to GND, internal pull-up, 30 ms debounce and one
+        action per press after release. Stopped starts a disc sequence; playing
+        or buffering pauses; paused resumes without seeking. No fault retry.
+
+config DISCORA_PLAY_PAUSE_GPIO
+    int "Play/pause button GPIO"
+    depends on DISCORA_PLAY_PAUSE_BUTTON
+    range 1 42
+    default 4
+    help
+        Use GPIO1 in the adjacent J2 four-button profile. Reserved GPIOs and
+        peripheral conflicts are rejected at compile time.
 
 config DISCORA_CD_PLAYER_VERIFY
     bool "Hash accepted and consumed CD PCM for single-track EOF verification"

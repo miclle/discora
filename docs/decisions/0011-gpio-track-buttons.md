@@ -1,5 +1,7 @@
 # ADR-0011：实体换轨键复用播放器控制
 
+> 2026-11-08：四键有声引脚及 next／prev／toggle 语义由 [ADR-0022](0022-four-button-controls.md) 更新；下文保留当时决策与实验边界。
+
 - 日期：2026-11-01
 - 状态：Accepted；implemented，硬件未验收
 - 补充 [ADR-0008](0008-cd-player-control.md) 和 [ADR-0010](0010-gpio-eject-button.md)

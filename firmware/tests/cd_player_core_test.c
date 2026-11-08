@@ -81,6 +81,63 @@ static void disc_sequence(void)
     assert(cd_player_pause(&p) && cd_player_play(&p));
     assert(!cd_player_take(&p,out,1764) && cd_player_advance(&p) && p.index==2);
 }
+static void front_panel(void)
+{
+    cd_player_read_t old, r;
+    init();
+    assert(cd_player_toggle(&p) && p.continuous && p.audio.state == AUDIO_PREFILL);
+    assert(cd_player_request(&p, &old));
+    uint32_t gen = p.audio.generation;
+    assert(cd_player_toggle(&p) && p.audio.state == AUDIO_PAUSED);
+    complete(&old); // An in-flight reply is retained, but never consumed while paused.
+    assert(p.audio.state == AUDIO_PAUSED && !cd_player_request(&p, &r));
+    assert(!cd_player_take(&p, out, 1764));
+    assert(cd_player_toggle(&p) && p.audio.state == AUDIO_PLAYING && p.audio.generation == gen);
+    assert(cd_player_take(&p, out, 1764) == 1764);
+    for (size_t i = 0; i < 1764; ++i) assert(out[i] == (uint8_t)(i % 251));
+    assert(cd_player_toggle(&p));
+    size_t used = p.audio.pcm.used;
+    uint32_t lba = p.next_lba;
+    assert(cd_player_toggle(&p) && p.audio.pcm.used == used && p.next_lba == lba);
+    assert(cd_player_request(&p, &r)); complete(&r); // Resume refills below the threshold.
+    assert(cd_player_take(&p, out, 3528) == 3528);
+    for (size_t i = 0; i < 3528; ++i) assert(out[i] == (uint8_t)((i + 1764) % 251));
+
+    assert(cd_player_request(&p, &old));
+    assert(cd_player_toggle(&p) && cd_player_step(&p, 1));
+    assert(p.index == 2 && p.continuous && p.audio.state == AUDIO_PAUSED);
+    assert(p.next_lba == 30 && !p.audio.pcm.used && !cd_player_request(&p, &r));
+    fill(&old); assert(!cd_player_complete(&p, &old, true, data, sizeof(data)));
+    gen = p.audio.generation;
+    assert(!cd_player_step(&p, 1) && p.audio.generation == gen && p.audio.state == AUDIO_PAUSED);
+    assert(cd_player_toggle(&p)); drain_track();
+    // Toggle during EOF drain pauses the sequence; it must not restart the track.
+    gen = p.audio.generation;
+    assert(cd_player_toggle(&p) && p.audio.state == AUDIO_PAUSED && !cd_player_advance(&p));
+    assert(cd_player_toggle(&p) && p.audio.generation == gen);
+    assert(!cd_player_take(&p, out, 1764) && !cd_player_advance(&p) && !p.continuous);
+    assert(cd_player_toggle(&p) && p.next_lba == 30 && p.continuous);
+
+    init(); p.auto_recover = true;
+    assert(cd_player_toggle(&p) && cd_player_request(&p, &r)); complete(&r);
+    assert(cd_player_take(&p, out, sizeof(data)) == sizeof(data));
+    assert(!cd_player_take(&p, out, 4) && p.audio.state == AUDIO_UNDERRUN);
+    assert(cd_player_toggle(&p) && !cd_player_rebuffer(&p));
+    assert(p.audio.state == AUDIO_PAUSED && p.continuous);
+    assert(cd_player_toggle(&p) && cd_player_request(&p, &r)); complete(&r);
+    assert(cd_player_take(&p, out, sizeof(data)) == sizeof(data));
+    assert(!cd_player_take(&p, out, 4) && cd_player_rebuffer(&p) && p.rebuffering);
+    assert(cd_player_toggle(&p) && !p.rebuffering && !cd_player_rebuffer(&p));
+    cd_player_fault(&p); gen = p.audio.generation;
+    assert(!cd_player_toggle(&p) && !cd_player_step(&p, 1) && p.audio.generation == gen);
+    cd_player_lost(&p); assert(!cd_player_toggle(&p));
+
+    init(); toc.track_count = 1;
+    assert(cd_player_media(&p, &toc));
+    assert(!cd_player_step(&p, -1) && !cd_player_step(&p, 1));
+    assert(cd_player_toggle(&p)); drain_track();
+    assert(!cd_player_advance(&p) && !p.continuous); // Single-track discs can start and stop.
+}
 int main(void)
 {
     cd_player_read_t r, old, newer;
@@ -133,6 +190,7 @@ int main(void)
     assert(cd_player_take(&p,out,7056)==1176);
     assert(cd_player_take(&p,out,1764)==0 && p.audio.state==AUDIO_STOPPED);
     disc_sequence();
+    front_panel();
     puts("PASS: continuous EOF/data-track skip/no-wrap and cancellation, real player core ordering/EOF, partial tail, pause, stop/track stale reads, data-track rejection, explicit underrun restart and media loss (synthetic PCM, no device)");
     return 0;
 }

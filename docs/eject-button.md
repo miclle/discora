@@ -1,26 +1,26 @@
 # 轻触按键退盘
 
-当前板上为 `0.9.1-track-buttons` 软件时钟播放器，GPIO7 退盘保留，另有 GPIO8／GPIO9 [上一曲／下一曲](track-buttons.md)。烧录、GPIO 初始化和目录启动通过，见[当前部署记录](records/2026-11-01-track-buttons-deploy.md)；本版本实际退盘及播放中退盘尚未验收。
+`0.12.1-buttons-row` 将退碟 GPIO 配置化；四键有声方案使用 **GPIO41**，GPIO7 保留给 DAC DIN。默认查询配置仍保留历史 GPIO7，不能将其接法用于 GPIO15/16/7 有声配置。当前实现、部署与实体验收见[本轮记录](records/2026-11-08-buttons-row.md)，完整四键接线见[四键控制](playback-controls.md)。
 
-基本退盘已有 **bench-tested（用户实测反馈，0.9.0 默认查询配置）** 证据：用户确认按键触发及实际光盘退出，但该动作未采集串口返回。此历史证据不等同于 0.9.1 播放器全部退盘场景通过；详见[退盘实现记录](records/2026-11-01-button-eject.md)和[0.9.0 部署及用户反馈](records/2026-11-01-button-eject-deploy.md)。
+基本退盘已有 **bench-tested（用户实测反馈，0.9.0 默认查询配置）** 证据：用户确认按键触发及实际光盘退出，但该动作未采集串口返回。此历史证据不等同于当前播放器全部退盘场景通过；详见[退盘实现记录](records/2026-11-01-button-eject.md)和[0.9.0 部署及用户反馈](records/2026-11-01-button-eject-deploy.md)。
 
 ## 接线
 
-选用**常开、按下接通、松开复位**的轻触按键。默认固定使用 **GPIO7**，内部上拉，低电平有效。
+选用**常开、按下接通、松开复位**的轻触按键。四键有声 profile 使用 **GPIO41**，内部上拉，低电平有效。
 
 ```text
-ESP32-S3 GPIO7 ───── 常开轻触按键 ───── ESP32-S3 GND
+ESP32-S3 GPIO41 ───── 常开轻触按键 ───── ESP32-S3 GND
 ```
 
-- 按键一个触点接开发板丝印 `7` / `IO7` / `GPIO7`，另一个触点接 `GND`。不接 5V，也不必另外接 3.3V。
+- 按键一个触点接开发板丝印 `41` / `IO41` / `GPIO41`，另一个触点接 `GND`。不接 5V，也不必另外接 3.3V。
 - 四脚轻触按键通常是两组内部相连的脚；断电用万用表确认选中的两脚是“松开不通、按下导通”，不要凭外观选两只脚。
-- 先断电接线，保持线短。内部上拉已由固件启用；若实际长线环境有干扰，可在 GPIO7 与 3.3V 之间加 10 kΩ 上拉后重新验证。
-- 依据本项目 [V1.4 板卡资料](../hardware/ESP32-S3-N16R8/README.md)及[排针摘录](../hardware/ESP32-S3-N16R8/board-data.json)，GPIO7 为 J1 第 7 针：元件面朝向观察者、天线向上、USB 向下时的左排，从顶部数。GND 可选 J1 第 22 针或任一确认的 GND。**以实物丝印为准，板修订号尚未逐网核实。**
-- GPIO7 不占用默认 I²S GPIO4/5/6、USB GPIO19/20、UART GPIO43/44，也不使用绑带或 N16R8 PSRAM 引脚。若自行把 CD I²S 改到 GPIO7，构建会报冲突，应调整 I²S 或关闭按键功能。
+- 先断电接线，保持线短。内部上拉已由固件启用；若实际长线环境有干扰，可在所选 GPIO 与 3.3V 之间加 10 kΩ 上拉后重新验证。
+- 依据本项目 [V1.4 板卡资料](../hardware/ESP32-S3-N16R8/README.md)及[排针摘录](../hardware/ESP32-S3-N16R8/board-data.json)，GPIO41 为 J2 第 7 针：元件面朝向观察者、天线向上、USB 向下时的右排，从顶部数。五芯线束 GND 使用同排 J2 第 1 针。**以实物丝印为准，板修订号尚未逐网核实。**
+- GPIO41 不占用当前有声 I²S GPIO15/16/7、USB GPIO19/20 或 UART GPIO43/44。部署须加载匹配当前 GPIO15/16/7 音频接线的有声四键 profile。
 
 ## 固件配置与行为
 
-`menuconfig → Discora eject button → Enable active-low eject button on GPIO7` 对应 `CONFIG_DISCORA_EJECT_BUTTON`。新配置默认开启，适用于默认查询、CD 软件时钟和 CD I²S 模式；有界 READ CD bench 与独立测试音模式自动禁用。已有 sdkconfig 应核对该项并重新构建、烧录；接线本身不会使旧固件拥有退盘功能。
+`menuconfig → Discora eject button → Enable active-low eject button` 对应 `CONFIG_DISCORA_EJECT_BUTTON`，`CONFIG_DISCORA_EJECT_GPIO` 选择引脚（默认 7，四键 overlay 覆盖为 41）。新配置默认开启，适用于默认查询、CD 软件时钟和 CD I²S 模式；有界 READ CD bench 与独立测试音模式自动禁用。已有 sdkconfig 应核对该项并重新构建、烧录；接线本身不会使旧固件拥有退盘功能。
 
 输入任务约每 10 ms 采样，以实际单调时间做 30 ms 消抖。上电先等一次稳定松开，长按不重复触发，释放也要稳定 30 ms 才能重新触发。未识别光驱、断连、传输故障或退盘处理中不保留新的退盘请求；已排队请求在断连时清除，不转移给下一个设备。没有定时、上电或 UART 自动退盘入口。
 
@@ -38,8 +38,8 @@ ESP32-S3 GPIO7 ───── 常开轻触按键 ───── ESP32-S3 GND
 
 保持光驱正常独立供电；首次使用不需要连接 DAC。记录 ESP32 板型号、固件/IDF 版本、光驱型号/版本、桥接 VID:PID 与介质。
 
-1. 启动日志应包含 `GPIO7 active-low internal pull-up; debounce=30ms`，等待目标 UJ-898 / HC10 的 INQUIRY 身份成功。
-2. 空闲有盘时按一下，应记录一次 `press accepted GPIO7`，随后 ALLOW 与 eject 的真实 CSW；肉眼确认碟片实际退出。
+1. 启动日志应包含 `GPIO41 active-low internal pull-up; debounce=30ms`，等待目标 UJ-898 / HC10 的 INQUIRY 身份成功。
+2. 空闲有盘时按一下，应记录一次 `press accepted GPIO41`，随后 ALLOW 与 eject 的真实 CSW；肉眼确认碟片实际退出。
 3. 长按 2 秒只执行一次；释放后再次按可发起新请求。上电一直按住不应退盘，松开后再按才触发。
 4. 播放时退盘应停止输出和读盘，重新插盘只刷新目录、不自动播放；分别检查软件时钟和已验证接线的 I²S 模式。
 5. 无盘、数据盘、断连时按键及重连后不误退盘分别记录。遇到传输超时保留原日志，不把“命令完成”或“无盘”独立当成机械退盘证据。

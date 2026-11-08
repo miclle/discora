@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 3160" role="img" aria-labelledby="discora-wiring-title discora-wiring-desc">
 <title id="discora-wiring-title">Discora 整机接线图</title>
-<desc id="discora-wiring-desc">展示光驱、主控、DAC、功放、左右喇叭、三个按键、OLED、电源与调试电脑的模块连接，以及 DAC 引脚和焊桥、OLED 的 GPIO10 SDA／GPIO11 SCL 与 3.3V 四线规划；并解释 5Vin、D3 与 IN-OUT 的取电限制；虚线为待确认连接。</desc>
+<desc id="discora-wiring-desc">展示光驱、主控、DAC、功放、左右喇叭、四个按键、OLED、电源与调试电脑的模块连接，以及 DAC 引脚和焊桥、OLED 的 GPIO10 SDA／GPIO11 SCL 与 3.3V 四线规划；并解释 5Vin、D3 与 IN-OUT 的取电限制；虚线为待确认连接。</desc>
 <defs><style>text{font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif}</style>
 <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#4f5d75"/></marker>
 <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#eb6c36"/></marker>
 <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#2e5aa8"/></marker>
 </defs><rect width="1600" height="3160" fill="#f5f5f5"/>
-<text x="64" y="64" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">DISCORA / WIRING REFERENCE / 2026-11-07</text>
+<text x="64" y="64" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">DISCORA / WIRING REFERENCE / 2026-11-08</text>
 <text x="64" y="124" font-size="40" fill="#2d3142" font-weight="600" text-anchor="start">Discora 整机接线图</text>
 <text x="64" y="168" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO15/16/7 音频台架已通 · USB 长时失联待定位 · 模块可拔插 · 多个电源正极不并联</text>
 <path d="M64 200 H1536" fill="none" stroke="#bfc0c0" stroke-width="3"/>
@@ -31,8 +31,8 @@
 <path d="M1416 688 V768" fill="none" stroke="#4f5d75" stroke-width="3"/>
 <text x="1432" y="740" font-size="16" fill="#4f5d75" font-weight="400" text-anchor="start">OUTR + / −</text>
 <path d="M748 584 V688" fill="none" stroke="#4f5d75" stroke-width="3" stroke-dasharray="8 6"/>
-<text x="768" y="636" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">按键扩展预留</text>
-<text x="768" y="664" font-size="16" fill="#4f5d75" font-weight="400" text-anchor="start">本轮不接入</text>
+<text x="768" y="636" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">四键五芯线束</text>
+<text x="768" y="664" font-size="16" fill="#4f5d75" font-weight="400" text-anchor="start">引脚已定义，实体待接</text>
 <path d="M364 752 H444 Q452 752 452 744 V576 Q452 568 460 568 H584" fill="none" stroke="#4f5d75" stroke-width="3" stroke-dasharray="8 6"/>
 <text x="464" y="704" font-size="16" fill="#4f5d75" font-weight="400" text-anchor="start">I²C 10 / 11</text>
 <rect x="64" y="304" width="300" height="112" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2"/>
@@ -51,8 +51,8 @@
 <text x="604" y="416" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO15 → BCK</text>
 <text x="604" y="444" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO16 → LCK / LRCK</text>
 <text x="604" y="472" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO7 → DIN</text>
-<text x="604" y="500" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO7 已用于 DIN；按键关闭</text>
-<text x="604" y="528" font-size="20" fill="#4f5d75">GPIO10 / 11 → OLED（未接）</text>
+<text x="604" y="500" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO7 只接 DIN，不接按键</text>
+<text x="604" y="528" font-size="20" fill="#4f5d75">GPIO10 / 11 → OLED（已接）</text>
 <rect x="1120" y="320" width="416" height="144" rx="8" fill="#fff7f2" stroke="#eb6c36" stroke-width="2"/>
 <text x="1140" y="356" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">PCM5102 / PCM5102A</text>
 <text x="1140" y="388" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">VIN：确认支持后接 5V</text>
@@ -67,16 +67,16 @@
 <text x="1140" y="836" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">各自两线连接对应 BTL 输出</text>
 <text x="1140" y="864" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">L−、R− 不互连、不接 GND</text>
 <rect x="584" y="688" width="328" height="168" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2" stroke-dasharray="8 6"/>
-<text x="604" y="724" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">按键预留（当前关闭）</text>
-<text x="604" y="756" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">退盘脚待另定；不接 GPIO7</text>
-<text x="604" y="784" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO8：上一曲预留</text>
-<text x="604" y="812" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO9：下一曲预留</text>
-<text x="604" y="840" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">本次不分配孔位、不接线</text>
+<text x="604" y="724" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">四键 · J2 连续 4～7 针</text>
+<text x="604" y="756" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO1 播放／暂停 · 2 上一曲</text>
+<text x="604" y="784" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">GPIO42 下一曲 · 41 退碟</text>
+<text x="604" y="812" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">四个常开触点，另一端共地</text>
+<text x="604" y="840" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">P3 五芯可拔 · 接线待验收</text>
 <rect x="64" y="704" width="300" height="144" rx="8" fill="#f5f5f5" stroke="#bfc0c0" stroke-width="2" stroke-dasharray="8 6"/>
 <text x="84" y="740" font-size="24" fill="#2d3142" font-weight="600" text-anchor="start">1.3 英寸 OLED</text>
-<text x="84" y="772" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">128 × 64 · I²C（规划）</text>
+<text x="84" y="772" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">128 × 64 · SH1106 · I²C</text>
 <text x="84" y="800" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">SDA=10 / SCL=11</text>
-<text x="84" y="828" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">VCC=3.3V；确认后接</text>
+<text x="84" y="828" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">3.3V；无介质画面通过</text>
 <text x="64" y="920" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">备选：Type-C Hub 替代直连拓扑；TPA3116D2 替代首选功放。microSD／编码器仅远期候选，当前不接线。</text>
 <path d="M64 968 H1536" fill="none" stroke="#bfc0c0" stroke-width="3"/>
 <text x="64" y="1000" font-size="24" fill="#eb6c36" font-weight="600" text-anchor="start">02</text>
@@ -200,8 +200,8 @@
 <text x="1000" y="2032" font-size="20" fill="#4f5d75" font-weight="400" text-anchor="start">正面 SCK 桥确认接地后可替代地线</text>
 <path d="M64 2072 H1536" fill="none" stroke="#bfc0c0" stroke-width="3"/>
 <text x="64" y="2112" font-size="24" fill="#2d3142" font-weight="600">04</text>
-<text x="128" y="2112" font-size="28" fill="#2d3142" font-weight="600">1.3 英寸 OLED 扩展预留（当前关闭）</text>
-<text x="64" y="2152" font-size="20" fill="#2d3142" font-weight="400">当前有声配置关闭 OLED；以下为后续扩展参考，本轮不接入，不分配洞洞板孔位。</text>
+<text x="128" y="2112" font-size="28" fill="#2d3142" font-weight="600">1.3 英寸 OLED（当前已启用）</text>
+<text x="64" y="2152" font-size="20" fill="#2d3142" font-weight="400">0.12.2 已启用；用户确认四线接好、无介质画面正常；动态显示待验收，不分配洞洞板孔位。</text>
 <text x="64" y="2224" font-size="24" fill="#2d3142" font-weight="600">ESP32-S3</text>
 <text x="624" y="2224" font-size="24" fill="#2d3142" font-weight="600">OLED 模块</text>
 <text x="64" y="2284" font-size="24" fill="#2d3142" font-weight="400">3V3</text>
@@ -219,10 +219,10 @@
 <text x="1000" y="2248" font-size="24" fill="#2d3142" font-weight="600">I²C 总线条件</text>
 <text x="1000" y="2292" font-size="20" fill="#2d3142" font-weight="400">SDA、SCL 上拉只能到 3.3V</text>
 <text x="1000" y="2328" font-size="20" fill="#2d3142" font-weight="400">先检查板载上拉；缺失才另补</text>
-<text x="1000" y="2364" font-size="20" fill="#2d3142" font-weight="400">SH1106 / SSD1306 以实物为准</text>
-<text x="1000" y="2400" font-size="20" fill="#2d3142" font-weight="400">实际地址待确认；不预设成功通信</text>
-<text x="1000" y="2436" font-size="20" fill="#2d3142" font-weight="400">GPIO10 / 11 是文档规划</text>
-<text x="1000" y="2472" font-size="20" fill="#2d3142" font-weight="400">当前播放 profile 关闭显示</text>
+<text x="1000" y="2364" font-size="20" fill="#2d3142" font-weight="400">用户确认 SH1106 模块</text>
+<text x="1000" y="2400" font-size="20" fill="#2d3142" font-weight="400">0x3c 初始化与首帧发送成功</text>
+<text x="1000" y="2436" font-size="20" fill="#2d3142" font-weight="400">GPIO10 / 11 接线用户已确认</text>
+<text x="1000" y="2472" font-size="20" fill="#2d3142" font-weight="400">无介质画面用户确认正常</text>
 <text x="64" y="2532" font-size="20" fill="#2d3142" font-weight="400">注意：OLED 的 SCL 是 I²C 时钟；PCM5102 的 SCK／LCK 是音频接口，不能混接。</text>
 <path d="M64 2592 H1536" fill="none" stroke="#bfc0c0" stroke-width="3"/>
 <text x="64" y="2632" font-size="20" fill="#2d3142" font-weight="400">依据：供应商模块资料、ESP32 板卡图纸与当前固件。规划不等于已接线、已上电或音频／显示验收。</text>

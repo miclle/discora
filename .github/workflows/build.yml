@@ -37,6 +37,10 @@ jobs:
             defaults: sdkconfig.defaults;bench/cd-player-i2s.defaults
           - profile: psram
             defaults: sdkconfig.defaults;bench/cd-player-i2s.defaults;bench/cd-player-psram.defaults
+          - profile: four-buttons
+            defaults: sdkconfig.defaults;bench/cd-player-i2s.defaults;bench/cd-player-psram.defaults;bench/usb-diagnostics.defaults;bench/cd-player-seek-recovery.defaults;bench/cd-player-buttons.defaults
+          - profile: four-buttons-oled
+            defaults: sdkconfig.defaults;bench/cd-player-i2s.defaults;bench/cd-player-psram.defaults;bench/usb-diagnostics.defaults;bench/cd-player-seek-recovery.defaults;bench/cd-player-buttons.defaults;bench/cd-player-oled.defaults
           - profile: usb-diag
             defaults: sdkconfig.defaults;bench/cd-player-i2s.defaults;bench/cd-player-psram.defaults;bench/usb-diagnostics.defaults
           - profile: usb-enum-query
