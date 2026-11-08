@@ -1,0 +1,93 @@
+{
+  "model_sha256": "5c73112e2f065d81831e8f2f88cdff3242b4138083f531cacf7b90971ef3878c",
+  "former_front_holes_sealed": [
+    {
+      "former_center_xz_mm": [
+        -65,
+        18
+      ],
+      "missing_front_material_mm3": 0.0
+    },
+    {
+      "former_center_xz_mm": [
+        -65,
+        140
+      ],
+      "missing_front_material_mm3": 0.0
+    },
+    {
+      "former_center_xz_mm": [
+        65,
+        18
+      ],
+      "missing_front_material_mm3": 0.0
+    },
+    {
+      "former_center_xz_mm": [
+        65,
+        140
+      ],
+      "missing_front_material_mm3": 0.0
+    }
+  ],
+  "rear_access": [
+    {
+      "rear_center_xyz_mm": [
+        -67.4,
+        80,
+        18
+      ],
+      "tool_diameter_mm": 4,
+      "seat_y_mm": 14.2,
+      "well_depth_mm": 65.8,
+      "clashes": []
+    },
+    {
+      "rear_center_xyz_mm": [
+        67.4,
+        80,
+        18
+      ],
+      "tool_diameter_mm": 4,
+      "seat_y_mm": 14.2,
+      "well_depth_mm": 65.8,
+      "clashes": []
+    },
+    {
+      "rear_center_xyz_mm": [
+        -29,
+        60.2962962962963,
+        179
+      ],
+      "tool_diameter_mm": 4,
+      "seat_y_mm": 39.2,
+      "well_depth_mm": 21.096296296296295,
+      "clashes": []
+    },
+    {
+      "rear_center_xyz_mm": [
+        29,
+        60.2962962962963,
+        179
+      ],
+      "tool_diameter_mm": 4,
+      "seat_y_mm": 39.2,
+      "well_depth_mm": 21.096296296296295,
+      "clashes": []
+    }
+  ],
+  "nominal_screw_diameter_mm": 2,
+  "nominal_under_head_length_mm": 8,
+  "clearance_bore_mm": 2.2,
+  "head_well_diameter_mm": 4.4,
+  "pilot_diameter_mm": 1.6,
+  "post_engagement_mm": 4.8,
+  "minimum_driver_reach_mm": 65.8,
+  "physical_fit_verified": false,
+  "thread_strength_verified": false,
+  "limits": [
+    "Screw head diameter must not exceed 4 mm; select length, thread form and PLA pilot fit with a sample.",
+    "Use a slim driver with at least 66 mm usable reach; actual handle and bit geometry are not modeled.",
+    "Integral side-wall wells do not establish printed strength, repeated assembly life or wire clearance."
+  ]
+}

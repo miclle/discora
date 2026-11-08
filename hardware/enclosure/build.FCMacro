@@ -53,6 +53,11 @@ DRIVE_TOP = 161.0
 DISPLAY_WINDOW = (36.0, 20.0)
 DISPLAY_DECK_Y = 18.0
 DISPLAY_PCB = (38.0, 1.6, 30.0)
+# Centers on the exterior slope; front row then rear row.
+BUTTONS = [('PlayPause', '播放／暂停', -59.0, 9.0),
+           ('Eject', '退碟', -41.0, 9.0),
+           ('Prev', '上一曲', -59.0, 26.0),
+           ('Next', '下一曲', -41.0, 26.0)]
 
 
 def build(folder):
@@ -180,8 +185,7 @@ def build(folder):
              screen_cut,
              cylinder(FRONT_GRILLE_RADIUS,9,(0,-3,SPEAKER_CENTER_Z),Y),
              obround((0,SLOT_Y,145),X,Y,Z,124,3.2,HANDLE_TOP-145)]
-    # Keep symmetric openings in a separate editable stage. Only the two
-    # existing control cutouts are exempt from the shell's mirror constraint.
+    # Keep symmetric openings separate from the asymmetric control cutouts.
     common_tool = raw("SymmetricCowlTool",Part.makeCompound(holes))
     common_tool.Label = "居中开孔 · 提手／显示窗／格栅／碟口"
     symmetric_cowl = doc.addObject("Part::Cut","SymmetricCowl")
@@ -189,7 +193,7 @@ def build(folder):
     symmetric_cowl.Base, symmetric_cowl.Tool = skin, common_tool
     skin.Visibility = common_tool.Visibility = False
     controls = [Part.makeCylinder(r,12,deck(x,y)-normal*7,normal)
-                for x,y,r in [(-49,18,11.25),(48,18,4.4)]]
+                for x,y,r in [(x,y,5.25) for _,_,x,y in BUTTONS]+[(48,18,4.4)]]
     native_cut("Cowl","整片折壳构造源 · 对称主体＋原操控开孔",symmetric_cowl,
                Part.makeCompound(controls),TEAL,shell)
 
@@ -284,10 +288,59 @@ def build(folder):
     glyphs.extend([battery,box(13,.4,bz+1,.7,.15,1),box(9,.4,bz+.8,2.5,.15,1.4)])
     for i in range(8): segment(-13+i*3.4,-6,2.3,1.2)
     feature("StatusArt","显示内容示意 · 曲目 07 / 播放 / 电量 / 音量",Part.makeCompound(glyphs),PIXEL,ui)
-    feature("Keycap","播放键",Part.makeCylinder(11,1.45,deck(-49,18)-normal*.5,normal),TEAL,ui)
-    key_mark=Part.makeBox(1.1,5,.15,V(-.55,-2.5,0))
-    key_mark.Placement=A.Placement(deck(-49,18)+normal*.95,A.Rotation(Z,normal)).multiply(key_mark.Placement)
-    feature("KeyLight","播放键 · 指示灯",key_mark,WHITE,ui)
+    # Local +Y is depth below the exterior face. Separate caps bridge the
+    # 5 mm panel; a measured 2.8 mm actuator alone cannot pass through it.
+    button_mounts=[]
+    button_pose=A.Placement(deck(-50,17.5),A.Rotation(Y,normal*-1))
+    row_offset=8.5*math.sqrt(1+SHOULDER_SLOPE**2)
+    retainer=box(-17,16.5,-row_offset-7,34,2,2*row_offset+14)
+    for key,label,x,y in BUTTONS:
+        pose=A.Placement(deck(x,y),A.Rotation(Y,normal*-1))
+        def placed(shape):
+            shape.Placement=pose.multiply(shape.Placement)
+            return shape
+        cap=cylinder(5,7.2,(0,-1.2,0),Y).fuse(cylinder(6.4,.8,(0,5.2,0),Y))
+        # Engraved symbols belong to each printable cap, with no loose inserts.
+        symbols=[]
+        def triangle(points):
+            pts=[V(xx,-1.21,zz) for xx,zz in points]
+            symbols.append(Part.Face(Part.makePolygon(pts+pts[:1])).extrude(Y*.36))
+        if key=='PlayPause':
+            triangle([(-2.9,-2),(-2.9,2),(0,0)])
+            symbols += [box(.7,-1.21,-2,.8,.36,4),box(2.1,-1.21,-2,.8,.36,4)]
+        elif key=='Eject':
+            triangle([(-2.7,-.2),(2.7,-.2),(0,2.7)])
+            symbols.append(box(-2.7,-1.21,-2.1,5.4,.36,.8))
+        else:
+            sign=-1 if key=='Prev' else 1
+            triangle([(-sign*2,-2),(-sign*2,2),(sign*1.8,0)])
+            symbols.append(box(-3 if key=='Prev' else 2.2,-1.21,-2,.8,.36,4))
+        cap=cap.cut(Part.makeCompound(symbols)).removeSplitter()
+        feature(key+'Key',label+' · 独立键帽／凹刻符号',placed(cap),TEAL,ui)
+        switch=box(-6,8.8,-6,12,3.2,12).fuse(cylinder(6,2.8,(0,6,0),Y)).removeSplitter()
+        obj=feature(key+'Switch',label+' · 12×12×6；圆头 Ø12 保守包络',placed(switch),RUBBER,hardware)
+        for prop,value in [('BodyThickness',3.2),('ActuatorHeight',2.8),('PinLengthAllowance',3.7)]:
+            obj.addProperty('App::PropertyLength',prop,'Switch dimensions');setattr(obj,prop,value)
+        obj.addProperty('App::PropertyString','Unverified','Switch dimensions')
+        obj.Unverified='Actuator diameter, stroke, pin footprint and support contact require measurement; pins are not modeled.'
+        socket=box(-7.8,4.7,-7.8,15.6,7.5,15.6)
+        socket=socket.cut(cylinder(6.6,3.9,(0,4.6,0),Y))
+        socket=socket.cut(cylinder(6.2,.4,(0,8.5,0),Y))
+        socket=socket.cut(box(-6.2,8.8,-6.2,12.4,3.5,12.4))
+        button_mounts.append(placed(socket.removeSplitter()))
+        # Center supports are provisional until the real lead footprint is known.
+        rz=-row_offset if y==9 else row_offset
+        retainer=retainer.fuse(cylinder(2,4.5,(x+50,12,rz),Y))
+    for x in (-14,14):
+        boss=cylinder(2.3,11.8,(x,4.7,0),Y).cut(cylinder(.8,10,(x,7,0),Y))
+        boss.Placement=button_pose.multiply(boss.Placement);button_mounts.append(boss)
+        retainer=retainer.cut(cylinder(1.1,2.3,(x,16.4,0),Y))
+        retainer=retainer.cut(Part.makeCone(2.1,1.1,1,V(x,18.5,0),Y*-1))
+    retainer.Placement=button_pose.multiply(retainer.Placement)
+    # Preserve the existing DAC connector allowance, with 0.5 mm side clearance.
+    retainer=retainer.cut(box(-67.5,32.5,157.5,9.6,18,11)).removeSplitter()
+    feature('ButtonRetainer','四键可拆压板 · 中央支点／引脚配合待测',retainer,TEAL,ui)
+    feature('ButtonMounts','四键定位座与压板螺柱 · 并入 P1',Part.makeCompound(button_mounts),TEAL,supports)
     loc = deck(48,18)
     knob = Part.makeCylinder(11.8,8.2,loc+normal*.45,normal).cut(
         Part.makeCylinder(5.8,5.3,loc+normal*3.55,normal))
@@ -384,16 +437,19 @@ def build(folder):
         result.ConstructionObjects=names
         return result
 
-    # Four front-cover screws; four separate carrier screws exposed after cover removal.
-    front_holes=[];rear_bosses=[];core_tabs=[]
+    # Four rear-access wells hold short screws against blind front-cover posts.
+    # Upper wells clear the electronics from above; lower wells flank the battery.
+    front_posts=[];rear_bosses=[];core_tabs=[];access_wells=[];post_clearances=[]
     for sign in (-1,1):
-        for z in (18,140):
-            x=sign*65
-            boss=box(-68 if sign<0 else 62,5.4,z-4,6,7.6,8)
-            boss=boss.cut(cylinder(1.0,8,(x,5,z),Y))
-            rear_bosses.append(boss)
-            front_holes.extend([cylinder(1.4,6,(x,-.5,z),Y),
-                                Part.makeCone(2.6,1.4,1.2,V(x,0,z),Y)])
+        for x,z,start,end,radius in [(sign*67.4,18,4,11,2.8),(sign*29,179,24.5,36,3.5)]:
+            post=cylinder(2.3,end-start,(x,start,z),Y).cut(cylinder(.8,5.6,(x,end-5.5,z),Y))
+            front_posts.append(post)
+            envelope=prism_yz(profile[:7]+[(CASE_DEPTH,3)],-WIDTH/2,WIDTH)
+            well=cylinder(radius,CASE_DEPTH-end-.4,(x,end+.4,z),Y).common(envelope)
+            rear_bosses.append(well)
+            access_wells.extend([cylinder(1.1,3,(x,end+.3,z),Y),
+                                 cylinder(2.2,CASE_DEPTH-end-3.1,(x,end+3.2,z),Y)])
+            post_clearances.append(cylinder(2.55,end-start+.5,(x,start-.1,z),Y))
         for z in (27,124):
             x=sign*64
             boss=box(-68 if sign<0 else 62,7,23 if z==27 else 120.5,6,7,8 if z==27 else 7.5)
@@ -407,6 +463,8 @@ def build(folder):
         obj=raw(name,shape);construction.addObject(obj);obj.Visibility=False
         return name
     core_tab_names=[source_part('CarrierTab'+str(i),shape) for i,shape in enumerate(core_tabs)]
+    front_post_name=source_part('FrontFastenerPosts',Part.makeCompound(front_posts))
+    rear_fastener_cuts=source_part('RearFastenerCuts',Part.makeCompound(access_wells+post_clearances))
     column_shapes=[box(x,y,121.5,2,3,25.7) for x in (-51,49) for y in (37,55)]
     column_shapes += [box(x,y,145,17,3,2.5) for x in (-51,34) for y in (37,55)]
     column_names=[source_part('MCUColumn'+str(i),shape) for i,shape in enumerate(column_shapes)]
@@ -435,14 +493,14 @@ def build(folder):
     doc.Cowl.Visibility=False
     doc.recompute()
     front=consolidate("FrontShell","P1 · 一体前壳／提手／护网",
-                      ['FrontCowl','FrontBezel','FrontGrille','DisplayCarrier',display_bridge],[],TEAL,shell)
-    front.Shape=front.Shape.cut(Part.makeCompound(front_holes)).removeSplitter()
+                      ['FrontCowl','FrontBezel','FrontGrille','DisplayCarrier',display_bridge,'ButtonMounts',front_post_name],[],TEAL,shell)
     core=consolidate("SpeakerCarrier","P3 · 双声腔／前障板／功放桥接托板",
                      ['LChamber','RChamber','LDriverFrame','RDriverFrame','FrontBaffle','AmpShelf','AmpPads',
                       'ElectronicsSled','MCUPads']+core_tab_names+column_names,
                      [],TEAL,supports)
     rear=consolidate("RearShell","P2 · 后斜面／碟口／侧壁／后壁／底板",
                      ['RearRoof','SlotGuide','LPanel','RPanel','Back','Base','BatteryCradle','DriveCarrier','DACPads'],rear_bosses,BLACK,shell)
+    rear.Shape=rear.Shape.cut(doc.getObject(rear_fastener_cuts).Shape).removeSplitter()
     # Strap slots are outside the 112 mm pack. Straps are removed before sliding the pack out.
     strap_slots=[box(x,y,2.5,3,8,18) for x in (-61,58) for y in (24,44)]
     rear.Shape=rear.Shape.cut(Part.makeCompound(strap_slots)).removeSplitter()

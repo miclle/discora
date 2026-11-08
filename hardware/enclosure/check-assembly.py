@@ -32,7 +32,7 @@ def check(doc):
     report={'units':'mm','fasteners_and_straps_removed':True,'cables_disconnected':True,'physical_assembly_test':False,'paths':{}}
     core_hw=['LDriver','RDriver','Amp','AmpChip','Bridge','MCU','MCUChip']
     core_sources=list(doc.SpeakerCarrier.ConstructionObjects)+core_hw
-    fixed=[n for n in objects if n not in core_hw+['SpeakerCarrier','FrontShell','LPort','RPort','Window','StatusArt','Keycap','KeyLight','Knob','Encoder','VolumePot','DisplayPCB','DisplayHeader']]
+    fixed=[n for n in objects if n not in core_hw+['SpeakerCarrier','FrontShell','LPort','RPort','Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch','Knob','Encoder','VolumePot','DisplayPCB','DisplayHeader']]
     hits=[]
     for name in core_sources:
         hit=collisions(box_sweep(doc.getObject(name).Shape,1,-140),fixed)
@@ -87,25 +87,21 @@ def check(doc):
             'translation_xyz_mm':[sign*25,0,0],'moving':[name],'fixed':fixed,
             'prerequisites':['Two side-port screws removed'], 'clashes':hits}
         print('PATH',name,hits,flush=True)
-    moving=['FrontShell','Window','StatusArt','Keycap','KeyLight','Knob','Encoder','VolumePot','DisplayPCB','DisplayHeader']
+    moving=['FrontShell','Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch','Knob','Encoder','VolumePot','DisplayPCB','DisplayHeader']
     fixed=[n for n in objects if n not in moving]
-    # The flat front face and grille lie at Y<=5 and have no positive-volume
-    # overlap with the remaining assembly (whose min Y is 5). Clip only that exterior slab.
+    # Fixed objects all start at Y>=5. The exterior slab at Y<=5 moves
+    # monotonically away and cannot intersect them; retain all inward posts.
+    assert all(objects[n].Shape.BoundBox.YMin>=5-1e-7 for n in fixed)
     clip=Part.makeBox(400,300,500,V(-200,5.00001,-100))
     body=Part.makeCompound([objects[n].Shape for n in moving]).common(clip)
     hits=[]
-    for step in range(81):
-        dz=step*.5;shape=body.copy();shape.translate(V(0,0,dz))
+    for step in range(141):
+        dy=-float(step);shape=body.copy();shape.translate(V(0,dy,0))
         found=collisions(shape,fixed)
-        if found:hits.append({'lift_z_mm':dz,'hits':found})
-    # Once lifted 40 mm, check horizontal separation, with the same exact geometry.
-    for step in range(1,141):
-        dy=-float(step);shape=body.copy();shape.translate(V(0,dy,40))
-        found=collisions(shape,fixed)
-        if found:hits.append({'front_y_mm':dy,'lift_z_mm':40,'hits':found})
-    report['paths']['front_cover']={'method':'exact B-rep samples; 0.5 mm lift steps then 1 mm forward steps',
-        'waypoints_xyz_mm':[[0,0,0],[0,0,40],[0,-140,40]],'moving':moving,'fixed':fixed,
-        'prerequisites':['Four front-cover screws removed','Control/display cables disconnected'],
+        if found:hits.append({'front_y_mm':dy,'hits':found})
+    report['paths']['front_cover']={'method':'exact B-rep samples; 1 mm forward steps',
+        'waypoints_xyz_mm':[[0,0,0],[0,-140,0]],'moving':moving,'fixed':fixed,
+        'prerequisites':['Four recessed rear-access front-cover screws removed','Control/display cables disconnected'],
         'clashes':hits}
     print('PATH front_cover',hits,flush=True)
     report['all_pass']=all(not p['clashes'] for p in report['paths'].values())

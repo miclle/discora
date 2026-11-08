@@ -1,13 +1,13 @@
 {
   "date": "2026-11-08",
   "model": "Discora.FCStd",
-  "sha256": "bebcc9947ef72eceaae60e44bb6d79ad531b26a7de5a4ca39b7a4c3c75062088",
+  "sha256": "5c73112e2f065d81831e8f2f88cdff3242b4138083f531cacf7b90971ef3878c",
   "version": [
     "1",
     "1",
     "4"
   ],
-  "items": 26,
+  "items": 33,
   "objects": [
     "LPort",
     "RPort",
@@ -16,12 +16,19 @@
     "Feet",
     "Window",
     "StatusArt",
-    "Keycap",
-    "KeyLight",
+    "PlayPauseKey",
+    "EjectKey",
+    "PrevKey",
+    "NextKey",
+    "ButtonRetainer",
     "Knob",
     "SpeakerCarrier",
     "LDriver",
     "RDriver",
+    "PlayPauseSwitch",
+    "EjectSwitch",
+    "PrevSwitch",
+    "NextSwitch",
     "Encoder",
     "VolumePot",
     "Drive",
@@ -47,7 +54,11 @@
     "SpeakerCarrier",
     "LPort",
     "RPort",
-    "Keycap",
+    "PlayPauseKey",
+    "EjectKey",
+    "PrevKey",
+    "NextKey",
+    "ButtonRetainer",
     "Knob"
   ],
   "rear_roof_ownership": {
@@ -160,7 +171,7 @@
     "Window / Window": 0.0,
     "RearShell (internal DAC pads excepted)": 0.0,
     "SpeakerCarrier below Z=120.5": 0.0,
-    "FrontShell (original control cutouts excepted)": 0.0
+    "FrontShell (control cutouts and button mounts excepted)": 0.0
   },
   "native_mirror_links": {
     "RPort": true,
@@ -346,7 +357,7 @@
   "key_clearances_mm": {
     "Battery / FrontShell": 0.9999999999999911,
     "Battery / SpeakerCarrier": 3.5,
-    "MCUChip / FrontShell": 14.715080499919683,
+    "MCUChip / FrontShell": 9.482541138474271,
     "Bridge / DAC": 4.512205669071396,
     "Drive / MCUChip": 1.5
   },
@@ -399,23 +410,13 @@
     "vertical_0_6": 5.000000000000009,
     "slope_-30_8": 4.999999999999999,
     "slope_30_8": 5.000000000000002,
-    "slope_-30_30": 5.000000000000002,
-    "slope_30_30": 4.999999999999978,
+    "slope_-25_30": 5.000000000000002,
+    "slope_25_30": 5.000000000000002,
     "slope_50_32": 5.000000000000003,
     "grille": 5.0,
     "handle": 4.999999999999979
   },
-  "original_controls_difference_mm3": {
-    "Window": 0.0,
-    "StatusArt": 0.0,
-    "Keycap": 0.0,
-    "KeyLight": 0.0,
-    "Knob": 0.0,
-    "DisplayPCB": 0.0,
-    "DisplayHeader": 0.0,
-    "DisplayCarrier": 0.0,
-    "source_model_sha256": "360b79141afac0870da58e5b7ca17ba631e3d888896ddd13e4742edac3664306"
-  },
+  "original_controls_difference_mm3": {},
   "handle_opening_mm": [
     90,
     16

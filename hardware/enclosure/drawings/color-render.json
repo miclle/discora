@@ -1,7 +1,7 @@
 {
-  "sha256": "bebcc9947ef72eceaae60e44bb6d79ad531b26a7de5a4ca39b7a4c3c75062088",
-  "build_sha256": "a5b333711f479e7acb429f0d28f1cd6d24d41d2b0ae7dcede327011f1dea2aa4",
-  "geometry_sha256": "210c0bef32febad31047a513f45732b5defeac79d66025aae69e099746e38b49",
+  "sha256": "5c73112e2f065d81831e8f2f88cdff3242b4138083f531cacf7b90971ef3878c",
+  "build_sha256": "f131f79fa9e6848d50fcee42b2524c4d08c1b167107e589acaa415b1d2a6aa24",
+  "geometry_sha256": "84f1bf753623a99ff48865aeae5d66b4cbddccaaa2da1e3bb0b90f73cc7595e8",
   "palette": {
     "TEAL": [
       0.025,
@@ -60,7 +60,27 @@
       0.75,
       0.72
     ],
-    "Keycap": [
+    "PlayPauseKey": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "EjectKey": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "PrevKey": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "NextKey": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "ButtonRetainer": [
       0.025,
       0.75,
       0.72
@@ -115,6 +135,26 @@
       0.08,
       0.09
     ],
+    "PlayPauseSwitch": [
+      0.07,
+      0.08,
+      0.09
+    ],
+    "EjectSwitch": [
+      0.07,
+      0.08,
+      0.09
+    ],
+    "PrevSwitch": [
+      0.07,
+      0.08,
+      0.09
+    ],
+    "NextSwitch": [
+      0.07,
+      0.08,
+      0.09
+    ],
     "Window": [
       0.045,
       0.085,
@@ -124,11 +164,6 @@
       0.85,
       0.97,
       1.0
-    ],
-    "KeyLight": [
-      0.94,
-      0.95,
-      0.94
     ],
     "Knob": [
       0.94,
@@ -230,8 +265,8 @@
     "exploded-core": {
       "file": "exploded-core-color.png",
       "size_px": [
-        3298,
-        4103
+        3524,
+        4807
       ]
     }
   }

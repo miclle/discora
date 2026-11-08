@@ -26,7 +26,59 @@
         0.72
       ]
     },
-    "Keycap": {
+    "PlayPauseKey": {
+      "actual_rgba": [
+        0.0235294122248888,
+        0.7490196228027344,
+        0.7215686440467834,
+        1.0
+      ],
+      "expected_rgb": [
+        0.025,
+        0.75,
+        0.72
+      ]
+    },
+    "EjectKey": {
+      "actual_rgba": [
+        0.0235294122248888,
+        0.7490196228027344,
+        0.7215686440467834,
+        1.0
+      ],
+      "expected_rgb": [
+        0.025,
+        0.75,
+        0.72
+      ]
+    },
+    "PrevKey": {
+      "actual_rgba": [
+        0.0235294122248888,
+        0.7490196228027344,
+        0.7215686440467834,
+        1.0
+      ],
+      "expected_rgb": [
+        0.025,
+        0.75,
+        0.72
+      ]
+    },
+    "NextKey": {
+      "actual_rgba": [
+        0.0235294122248888,
+        0.7490196228027344,
+        0.7215686440467834,
+        1.0
+      ],
+      "expected_rgb": [
+        0.025,
+        0.75,
+        0.72
+      ]
+    },
+    "ButtonRetainer": {
       "actual_rgba": [
         0.0235294122248888,
         0.7490196228027344,
@@ -169,6 +221,58 @@
         0.09
       ]
     },
+    "PlayPauseSwitch": {
+      "actual_rgba": [
+        0.07058823853731155,
+        0.0784313753247261,
+        0.09019608050584793,
+        1.0
+      ],
+      "expected_rgb": [
+        0.07,
+        0.08,
+        0.09
+      ]
+    },
+    "EjectSwitch": {
+      "actual_rgba": [
+        0.07058823853731155,
+        0.0784313753247261,
+        0.09019608050584793,
+        1.0
+      ],
+      "expected_rgb": [
+        0.07,
+        0.08,
+        0.09
+      ]
+    },
+    "PrevSwitch": {
+      "actual_rgba": [
+        0.07058823853731155,
+        0.0784313753247261,
+        0.09019608050584793,
+        1.0
+      ],
+      "expected_rgb": [
+        0.07,
+        0.08,
+        0.09
+      ]
+    },
+    "NextSwitch": {
+      "actual_rgba": [
+        0.07058823853731155,
+        0.0784313753247261,
+        0.09019608050584793,
+        1.0
+      ],
+      "expected_rgb": [
+        0.07,
+        0.08,
+        0.09
+      ]
+    },
     "Window": {
       "actual_rgba": [
         0.04313725605607033,
@@ -193,19 +297,6 @@
         0.85,
         0.97,
         1.0
-      ]
-    },
-    "KeyLight": {
-      "actual_rgba": [
-        0.9411764740943909,
-        0.9490196108818054,
-        0.9411764740943909,
-        1.0
-      ],
-      "expected_rgb": [
-        0.94,
-        0.95,
-        0.94
       ]
     },
     "Knob": {
@@ -358,6 +449,6 @@
     "1",
     "4"
   ],
-  "model_sha256": "bebcc9947ef72eceaae60e44bb6d79ad531b26a7de5a4ca39b7a4c3c75062088",
-  "method": "Native FreeCAD GUI save followed by close and reopen; 26 finished objects plus hidden disc reference checked"
+  "model_sha256": "5c73112e2f065d81831e8f2f88cdff3242b4138083f531cacf7b90971ef3878c",
+  "method": "Native FreeCAD GUI save followed by close and reopen; 33 finished objects plus hidden disc reference checked"
 }

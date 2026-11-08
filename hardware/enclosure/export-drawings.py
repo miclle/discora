@@ -137,6 +137,7 @@ def main():
     controls = Part.makeCompound([screen]+list(doc.CowlTool.Shape.Solids))
     controls.rotate(V(),V(1,0,0),90-angle)
     projection('control-cutouts',controls,'front')
+    data['features']['control_cut_centers_xz']=[[s.CenterOfMass.x,s.CenterOfMass.z] for s in controls.Solids[1:]]
 
     def exploded(name, definitions, expected):
         seen, pieces, anchors = [], [], {}
@@ -160,7 +161,7 @@ def main():
         ('04','左侧后装导音孔',['LPort'],(-120,0,0)),
         ('05','右侧后装导音孔',['RPort'],(120,0,0)),
         ('06','四个软质脚垫',['Feet'],(0,0,-65)),
-        ('07','屏窗与操控件',['Window','StatusArt','Keycap','KeyLight','Knob'],(0,-70,100)),
+        ('07','屏窗与操控件',['Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','Knob'],(0,-70,100)),
         ('08','硬件包络（见右图）',groups['Hardware'],(0,0,0)),
     ],shapes)
     exploded('exploded-core',[
@@ -175,6 +176,7 @@ def main():
         ('I','电位器与轴',['VolumePot','Encoder'],(70,-30,90)),
         ('J','5600 mAh 平排电池',['Battery'],(0,-10,-50)),
         ('K','桥接器占位',['Bridge'],(180,-30,-140)),
+        ('L','四个轻触按键包络',['PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch'],(-110,0,150)),
     ],core)
     # Validate critical annotations against the saved B-rep snapshot.
     checks = {
@@ -189,7 +191,7 @@ def main():
         'bezel_outer_130_5':abs(doc.FrontBezel.Shape.BoundBox.XLength-130.5)<1e-5,
         'grille_thickness_5':abs(doc.FrontGrille.Shape.BoundBox.YLength-5)<1e-5,
         'side_ports_handle_y40':all(abs(doc.getObject(n).Shape.BoundBox.Center.y-40)<1e-5 for n in ('LPort','RPort','LPanelTool')),
-        '26_finished_objects':len(objects)==26,
+        '33_finished_objects':len(objects)==33,
         'three_connected_main_parts':all(len(doc.getObject(n).Shape.Solids)==1 for n in ('FrontShell','RearShell','SpeakerCarrier')),
         'source_unchanged':hashlib.sha256(source.read_bytes()).hexdigest()==source_hash,
     }

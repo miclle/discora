@@ -1,4 +1,4 @@
-"""Export the seven rigid PLA pieces in review orientations; no printer is contacted.
+"""Export the eleven rigid PLA pieces in review orientations; no printer is contacted.
 
 Run with FreeCAD Python. Output is intentionally temporary until physical fit is checked.
 """
@@ -24,7 +24,11 @@ def main():
         'SpeakerCarrier':A.Rotation(A.Vector(1,0,0),-90),
         'LPort':A.Rotation(A.Vector(1,0,0),A.Vector(0,0,1)),
         'RPort':A.Rotation(A.Vector(-1,0,0),A.Vector(0,0,1)),
-        'Keycap':A.Rotation(normal,A.Vector(0,0,1)),
+        'PlayPauseKey':A.Rotation(normal,A.Vector(0,0,1)),
+        'EjectKey':A.Rotation(normal,A.Vector(0,0,1)),
+        'PrevKey':A.Rotation(normal,A.Vector(0,0,1)),
+        'NextKey':A.Rotation(normal,A.Vector(0,0,1)),
+        'ButtonRetainer':A.Rotation(normal,A.Vector(0,0,1)),
         'Knob':A.Rotation(normal,A.Vector(0,0,1)),
     }
     report={'model_sha256':hashlib.sha256(args.model.read_bytes()).hexdigest(),

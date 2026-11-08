@@ -32,7 +32,7 @@ def validate(folder):
     assert all(n==1 for n in connected.values()),connected
     roof_ownership={}
     for name in ('RearRoof','SlotGuide'):
-        source=doc.getObject(name).Shape
+        source=doc.getObject(name).Shape.cut(doc.RearFastenerCuts.Shape)
         roof_ownership[name]={'intersection_with_front_mm3':source.common(doc.FrontShell.Shape).Volume,
                               'missing_from_rear_mm3':source.cut(doc.RearShell.Shape).Volume}
         assert name in doc.RearShell.ConstructionObjects and name not in doc.FrontShell.ConstructionObjects
@@ -56,7 +56,8 @@ def validate(folder):
         return sum(edge.Length for edge in doc.getObject(name).Shape.common(probe).Edges)
     for x,z in [(-60,150),(60,150),(-67,80),(67,80),(0,6)]:
         thickness[f'vertical_{x}_{z}']=section_length('FrontShell',A.Vector(x,0,z),A.Vector(0,1,0))
-    for x,y in [(-30,8),(30,8),(-30,30),(30,30),(50,32)]:
+    # Keep panel probes outside the two added blind mounting posts at X=±29.
+    for x,y in [(-30,8),(30,8),(-25,30),(25,30),(50,32)]:
         thickness[f'slope_{x}_{y}']=section_length('FrontShell',A.Vector(x,y,165+slope*y),normal)
     thickness['grille']=section_length('FrontGrille',A.Vector(1.45,0,76),A.Vector(0,1,0))
     thickness['handle']=section_length('FrontShell',A.Vector(60,40,206),A.Vector(0,1,0))
@@ -75,9 +76,9 @@ def validate(folder):
     # The lower speaker structure, including baffle and mounting tabs, is symmetric.
     low=doc.SpeakerCarrier.Shape.common(Part.makeBox(300,200,220.5,A.Vector(-150,-50,-100)))
     symmetry['SpeakerCarrier below Z=120.5']=difference(low,reflected(low))
-    exceptions=doc.CowlTool.Shape.fuse(reflected(doc.CowlTool.Shape))
+    exceptions=doc.CowlTool.Shape.multiFuse([reflected(doc.CowlTool.Shape),doc.ButtonMounts.Shape,reflected(doc.ButtonMounts.Shape)])
     front=doc.FrontShell.Shape
-    symmetry['FrontShell (original control cutouts excepted)']=difference(front.cut(exceptions),reflected(front).cut(exceptions))
+    symmetry['FrontShell (control cutouts and button mounts excepted)']=difference(front.cut(exceptions),reflected(front).cut(exceptions))
     print('SYMMETRY',symmetry,flush=True)
     links={n:(doc.getObject(n).TypeId=='Part::Mirroring' and doc.getObject(n).Source.Name==n.replace('R','L',1)) for n in ('RPort','RDriver','RChamber','RDriverFrame')}
     slot_y=doc.Drive.Shape.BoundBox.Center.y
@@ -143,7 +144,7 @@ def validate(folder):
     controls={};baseline_path=os.environ.get('DISCORA_CAD_BASELINE')
     if baseline_path:
         baseline=A.openDocument(baseline_path)
-        for n in ('Window','StatusArt','Keycap','KeyLight','Knob','DisplayPCB','DisplayHeader','DisplayCarrier'):
+        for n in ('Window','StatusArt','Knob','DisplayPCB','DisplayHeader','DisplayCarrier'):
             previous=baseline.getObject(n).Shape.copy()
             previous.translate(A.Vector(0,0,15))
             controls[n]=difference(previous,doc.getObject(n).Shape)
@@ -153,7 +154,7 @@ def validate(folder):
     handle=collisions(Part.makeBox(70,10,14,A.Vector(-35,handle_y-5,shoulder_z+5.5)),objects)
     report={'date':'2026-11-08','model':model.name,'sha256':hashlib.sha256(model.read_bytes()).hexdigest(),
         'version':A.Version()[:3],'items':len(objects),'objects':[o.Name for o in objects],
-        'main_pla_parts':connected,'rigid_pla_pieces':['FrontShell','RearShell','SpeakerCarrier','LPort','RPort','Keycap','Knob'],
+        'main_pla_parts':connected,'rigid_pla_pieces':['FrontShell','RearShell','SpeakerCarrier','LPort','RPort','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','Knob'],
         'rear_roof_ownership':roof_ownership,'shell_split_y_mm':42.5,
         'straight_side_seam_yz_mm':[[seam_start.x,seam_start.y],[seam_end.x,seam_end.y]],
         'side_seam_ownership_samples_xyz_mm':seam_points,
@@ -176,7 +177,7 @@ def validate(folder):
     assert abs(handle_y-40)<1e-7
     assert all(abs(y-handle_y)<1e-7 for y in port_alignment['port_center_y_mm'].values())
     assert abs(port_alignment['shell_opening_center_y_mm']-handle_y)<1e-7
-    assert len(objects)==26,len(objects)
+    assert len(objects)==33,len(objects)
     assert not clashes and not disc and not handle,(clashes,disc,handle)
     assert all(v<=tolerance for v in symmetry.values()),symmetry
     assert all(links.values()),links

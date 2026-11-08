@@ -1,0 +1,232 @@
+{
+  "model_sha256": "5c73112e2f065d81831e8f2f88cdff3242b4138083f531cacf7b90971ef3878c",
+  "user_dimensions_mm": {
+    "width": 12,
+    "length": 12,
+    "total_height": 6,
+    "actuator_height": 2.8,
+    "body_height": 3.2,
+    "pin_length": 3.7
+  },
+  "head_diameter_measured": false,
+  "pin_footprint_verified": false,
+  "actual_stroke_verified": false,
+  "physical_fit_verified": false,
+  "cap_travel_sample_mm": [
+    0,
+    0.2,
+    0.4,
+    0.6,
+    0.8
+  ],
+  "buttons": {
+    "PlayPause": {
+      "exterior_center_xyz_mm": [
+        -59.0,
+        9.0,
+        171.39473684210526
+      ],
+      "local_cap": {
+        "min": [
+          -6.4,
+          -1.2,
+          -6.4
+        ],
+        "max": [
+          6.4,
+          6.0,
+          6.4
+        ],
+        "size": [
+          12.8,
+          7.2,
+          12.8
+        ]
+      },
+      "local_switch_envelope": {
+        "min": [
+          -6.0,
+          6.0,
+          -6.0
+        ],
+        "max": [
+          6.0,
+          12.0,
+          6.0
+        ],
+        "size": [
+          12.0,
+          6.0,
+          12.0
+        ]
+      },
+      "aperture_diameter_mm": 10.5,
+      "nominal_cap_radial_gap_mm": 0.25,
+      "travel_clashes": []
+    },
+    "Eject": {
+      "exterior_center_xyz_mm": [
+        -41.0,
+        9.0,
+        171.39473684210526
+      ],
+      "local_cap": {
+        "min": [
+          -6.4,
+          -1.2,
+          -6.4
+        ],
+        "max": [
+          6.4,
+          6.0,
+          6.4
+        ],
+        "size": [
+          12.8,
+          7.2,
+          12.8
+        ]
+      },
+      "local_switch_envelope": {
+        "min": [
+          -6.0,
+          6.0,
+          -6.0
+        ],
+        "max": [
+          6.0,
+          12.0,
+          6.0
+        ],
+        "size": [
+          12.0,
+          6.0,
+          12.0
+        ]
+      },
+      "aperture_diameter_mm": 10.5,
+      "nominal_cap_radial_gap_mm": 0.25,
+      "travel_clashes": []
+    },
+    "Prev": {
+      "exterior_center_xyz_mm": [
+        -59.0,
+        26.0,
+        183.4736842105263
+      ],
+      "local_cap": {
+        "min": [
+          -6.4,
+          -1.2,
+          -6.4
+        ],
+        "max": [
+          6.4,
+          6.0,
+          6.4
+        ],
+        "size": [
+          12.8,
+          7.2,
+          12.8
+        ]
+      },
+      "local_switch_envelope": {
+        "min": [
+          -6.0,
+          6.0,
+          -6.0
+        ],
+        "max": [
+          6.0,
+          12.0,
+          6.0
+        ],
+        "size": [
+          12.0,
+          6.0,
+          12.0
+        ]
+      },
+      "aperture_diameter_mm": 10.5,
+      "nominal_cap_radial_gap_mm": 0.25,
+      "travel_clashes": []
+    },
+    "Next": {
+      "exterior_center_xyz_mm": [
+        -41.0,
+        26.0,
+        183.4736842105263
+      ],
+      "local_cap": {
+        "min": [
+          -6.4,
+          -1.2,
+          -6.4
+        ],
+        "max": [
+          6.4,
+          6.0,
+          6.4
+        ],
+        "size": [
+          12.8,
+          7.2,
+          12.8
+        ]
+      },
+      "local_switch_envelope": {
+        "min": [
+          -6.0,
+          6.0,
+          -6.0
+        ],
+        "max": [
+          6.0,
+          12.0,
+          6.0
+        ],
+        "size": [
+          12.0,
+          6.0,
+          12.0
+        ]
+      },
+      "aperture_diameter_mm": 10.5,
+      "nominal_cap_radial_gap_mm": 0.25,
+      "travel_clashes": []
+    }
+  },
+  "preserved_controls_difference_mm3": {
+    "Window": 0.0,
+    "StatusArt": 0.0,
+    "Knob": 0.0,
+    "Encoder": 0.0,
+    "VolumePot": 0.0,
+    "DisplayPCB": 0.0,
+    "DisplayHeader": 0.0,
+    "DisplayCarrier": 0.0
+  },
+  "baseline_sha256": "4a29ca850aeb7174188fcac423b53cdf627379d4584fee33e063db738399a55e",
+  "retainer": {
+    "connected_solids": 1,
+    "panel_depth_mm": [
+      16.5,
+      18.5
+    ],
+    "support_depth_mm": [
+      12,
+      16.5
+    ],
+    "pin_tip_depth_allowance_mm": 15.7,
+    "nominal_pin_tip_to_plate_mm": 0.8,
+    "center_support_diameter_mm": 4,
+    "center_support_clear_of_actual_pins_verified": false
+  },
+  "limits": [
+    "Round head uses an intentionally conservative diameter 12 mm envelope, not a measurement.",
+    "3.7 mm leads are reserved behind the 3.2 mm body; lead datum and footprint require confirmation.",
+    "Center supports require a pin-free bearing surface; no pin locations or solder joints are invented.",
+    "0.8 mm cap movement is sampled CAD clearance, not measured actuator stroke or a tolerance stack acceptance."
+  ]
+}
