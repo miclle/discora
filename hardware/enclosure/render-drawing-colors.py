@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256 = 'bebcc9947ef72eceaae60e44bb6d79ad531b26a7de5a4ca39b7a4c3c75062088'
+MODEL_SHA256 = '5c73112e2f065d81831e8f2f88cdff3242b4138083f531cacf7b90971ef3878c'
 
 
 def palette_from_build():
@@ -32,6 +32,23 @@ def palette_from_build():
     return palette
 
 
+def wire_points(wire):
+    """Discretize ordered edges individually; OCC's compound-wire sampler can crash.
+
+    Explicitly orient samples by shared endpoints so hole masks remain closed.
+    """
+    paths=[edge.discretize(Deflection=.05) for edge in wire.OrderedEdges]
+    if len(paths)>1 and min((paths[0][-1]-p).Length for p in (paths[1][0],paths[1][-1]))>1e-6:
+        paths[0].reverse()
+    points=list(paths[0])
+    for path in paths[1:]:
+        if (points[-1]-path[-1]).Length<(points[-1]-path[0]).Length:path.reverse()
+        assert (points[-1]-path[0]).Length<1e-5, 'Disconnected wire samples'
+        points.extend(path[1:])
+    assert (points[0]-points[-1]).Length<1e-5, 'Open face boundary'
+    return np.array([[v.x,v.y,v.z] for v in points])
+
+
 def surface_polygons(shape):
     """Keep planar faces and their holes intact; mesh only curved faces.
 
@@ -42,8 +59,12 @@ def surface_polygons(shape):
     for face in shape.Faces:
         if isinstance(face.Surface,Part.Plane):
             outer=face.OuterWire
-            wires=[outer]+[w for w in face.Wires if not w.isSame(outer)]
-            loops=[np.array([[v.x,v.y,v.z] for v in w.discretize(Deflection=.05)]) for w in wires]
+            # Boolean tangencies may retain open INTERNAL edges on a planar
+            # face. They enclose no hole and crash OCC's wire sampler.
+            holes=[w for w in face.Wires if not w.isSame(outer)
+                   and any(e.Orientation not in ('Internal','External') for e in w.Edges)]
+            wires=[outer]+holes
+            loops=[wire_points(w) for w in wires]
             n=face.normalAt(0,0)
             surfaces.append((loops,np.array([n.x,n.y,n.z])))
         else:
@@ -76,6 +97,11 @@ def render(parts,rows,bounds,path):
             shaded=np.clip((.12+.88*np.array(color))*shade*255,0,255).astype(np.uint8)
             projected=[(loop+offset)@matrix.T for loop in loops]
             base=projected[0][0]
+            # Rasterized polygon borders can fall just outside a grazing face.
+            # Reject extrapolated depths beyond its actual vertex range, which
+            # otherwise lets distant cylinder edges leak through opaque panels.
+            near=min(loop[:,2].min() for loop in projected)
+            far=max(loop[:,2].max() for loop in projected)
             screen=[np.column_stack(((loop[:,0]-bounds['min'][0])*sx,
                                      (bounds['max'][1]-loop[:,1])*sy)) for loop in projected]
             outer=screen[0]
@@ -96,7 +122,7 @@ def render(parts,rows,bounds,path):
                 v=bounds['max'][1]-(yy+.5)/sy
                 z=base[2]-normal[0]/normal[2]*(u-base[0])-normal[1]/normal[2]*(v-base[1])
                 old=depth[ystart:yend,left:right]
-                mask=(mask_pixels[ystart-top:yend-top]>0)&(z>old)
+                mask=(mask_pixels[ystart-top:yend-top]>0)&(z>=near-1e-5)&(z<=far+1e-5)&(z>old)
                 old[mask]=z[mask]
                 tile=pixels[ystart:yend,left:right]
                 tile[mask,:3]=shaded;tile[mask,3]=255
@@ -111,10 +137,10 @@ def main():
     assert data['build_sha256']==hashlib.sha256((ROOT/'build.FCMacro').read_bytes()).hexdigest()
     palette=palette_from_build()
     assignments={
-        'TEAL':'FrontShell SpeakerCarrier Keycap',
+        'TEAL':'FrontShell SpeakerCarrier PlayPauseKey EjectKey PrevKey NextKey ButtonRetainer',
         'BLACK':'RearShell LPort RPort',
-        'RUBBER':'Feet LDriver RDriver VolumePot DisplayHeader AmpChip DACChip',
-        'GLASS':'Window','PIXEL':'StatusArt','WHITE':'KeyLight Knob',
+        'RUBBER':'Feet LDriver RDriver VolumePot DisplayHeader AmpChip DACChip PlayPauseSwitch EjectSwitch PrevSwitch NextSwitch',
+        'GLASS':'Window','PIXEL':'StatusArt','WHITE':'Knob',
         'SILVER':'Drive Encoder MCUChip','PCB':'Bridge DisplayPCB Amp MCU DAC','BLUE':'Battery',
     }
     colors={name:palette[key] for key,names in assignments.items() for name in names.split()}

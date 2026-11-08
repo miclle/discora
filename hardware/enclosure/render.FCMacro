@@ -37,7 +37,7 @@ def render(folder):
     doc.DiscReference.Visibility=True
     save('disc-path.png',angle)
     doc.DiscReference.Visibility=False
-    for name in ['FrontShell','Window','StatusArt']:
+    for name in ['FrontShell','Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch','Knob','Encoder','VolumePot','DisplayPCB','DisplayHeader']:
         doc.getObject(name).Visibility=False
     save('layout.png',angle)
     # Section through the left driver center, viewed from +X, reveals the depth stack.

@@ -18,7 +18,7 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = 'bebcc9947ef72eceaae60e44bb6d79ad531b26a7de5a4ca39b7a4c3c75062088'
+ANNOTATED_MODEL_SHA256 = '5c73112e2f065d81831e8f2f88cdff3242b4138083f531cacf7b90971ef3878c'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
@@ -220,28 +220,26 @@ def main():
     text(34,148,'120 × 1.2 光盘扫掠距提手后表面 24.65。',9,MUTED)
     view('rear',247,36)
     text(318,259,'背视 · 沿 -Y 观察',10,MUTED,'center')
-    text(247,27,'后壁与左右侧壁、底架一体成型；取消旧后盖孔。',9,TEAL)
+    text(247,27,'后壁下方两孔与后斜面两孔，用于从背面锁紧前壳。',9,TEAL)
     text(247,18,'P2 一体后壳 · 背面无独立盖板',10,MUTED)
     # Drawing cutouts share the actual inclined-plane frame.
     p=view('control-cutouts',40,97)
-    y0=data['views']['control-cutouts']['bounds']['min'][1]
-    center_v=y0+11.25
-    cx=lambda u:p(u,center_v)[0]
+    centers=data['features']['control_cut_centers_xz']
     text(34,134,'前斜面开孔真形 · 朝斜面法向观察',11,TEAL)
-    for u in (-49,0,48):
-        x,y=p(u,center_v)
-        line(x,y-14,x,y+15,LIGHT,.15,[3,1])
-    dh(cx(-49),cx(0),108.25,86,'49')
-    dh(cx(0),cx(48),108.25,86,'48')
+    keys=[p(u,v) for u,v in centers if u<0]
+    bottom=sorted(keys,key=lambda q:(q[1],q[0]))[:2]
+    dh(bottom[0][0],bottom[1][0],bottom[0][1],86,'18 键距')
+    left=sorted(keys,key=lambda q:q[0])[:2]
+    dv(min(q[1] for q in left),max(q[1] for q in left),left[0][0],29,'20.85')
     notes(34,74,[
-        '播放键孔 Ø22.5；键帽 Ø22，高 1.45（沿法向）。',
+        '四键孔 Ø10.5；键帽 Ø10，露出 1.2；背面止退沿 Ø12.8。',
         '屏幕开窗 36 × 20，R3；窗片 35.6 × 19.6，R2.8。',
         '旋钮轴孔 Ø8.8；旋钮外径 Ø23.6，高 8.2（沿法向）。',
-        '三处中心均位于 Y=18，Z=177.79；X=-49 / 0 / +48。',
-        'P1 前壳：4 孔，X=±65、Z=18 / 140；Ø2.8，沉头 Ø5.2。',
+        '键中心 X=-59 / -41、Y=9 / 26；屏与旋钮 Y=18、X=0 / 48。',
+        '前壳背锁：后壁 X=±67.4、Z=18；后斜面 X=±29、Z=179。',
         'P3 支架：4 孔，X=±64、Z=27 / 124；Ø2.8，沉头 Ø4.8。',
         '侧孔：每侧 2 孔，Y=40、Z=39 / 117；Ø2.2，沉头 Ø4.2。',
-        '操控孔与显示窗轮廓来自保存的布尔刀体；实体尺寸见第 5 页。',
+        '背锁孔 Ø4.4／通孔 Ø2.2／盲底孔 Ø1.6；下孔深 65.8，名义螺钉 2×8。',
     ],gap=6.5,size=8.5)
     c.showPage()
 
@@ -253,7 +251,7 @@ def main():
         c.setFillColor(HexColor(color));c.rect(sx*mm,258*mm,3*mm,3*mm,fill=1,stroke=0)
         text(sx+5,258.1,label,8,MUTED)
     line(210,38,210,251,LIGHT,.15)
-    for panel,name,title in [(12,'exploded-shell','结构层 · 01–08'),(214,'exploded-core','内部层 · A–K')]:
+    for panel,name,title in [(12,'exploded-shell','结构层 · 01–08'),(214,'exploded-core','内部层 · A–L')]:
         text(panel+97,250,title,10,TEAL,'center')
         info=data['views'][name]
         scale=min(150/info['bounds']['size'][0],147/info['bounds']['size'][1])
@@ -277,7 +275,7 @@ def main():
             x=panel+4+col*96;y=89-row*8
             badge(x,y+1,part['number']);text(x+5,y,part['label'].replace('见下一页','见右图'),8)
     notes(12,31,[
-        '左图覆盖 26 个成品对象，08 为硬件总成；右图展开 P3 支架和 15 个硬件对象，共 11 组。三个主体均为单一连续实体。',
+        '左图覆盖 33 个成品对象，08 为硬件总成；右图展开 P3 支架和 19 个硬件对象，共 12 组。三个主体均为单一连续实体。',
         '引线端点为组包络中心；展示位移不是拆装路径。侧孔需后装，拆装顺序及检查边界见第 5 页；颜色不代表实物材料。',
     ],gap=7,size=8)
     c.showPage()
@@ -319,14 +317,16 @@ def main():
     ],gap=8,size=9)
     c.showPage()
 
-    page(5,'对象清单、打印与拆装','26 个成品对象 · 尺寸为装配坐标系 X × Y × Z 的轴对齐包络，非展开尺寸','清单尺寸 mm；无制造数量承诺')
+    page(5,'对象清单、打印与拆装','33 个成品对象 · 尺寸为装配坐标系 X × Y × Z 的轴对齐包络，非展开尺寸','清单尺寸 mm；无制造数量承诺')
     labels={
         'FrontShell':'P1 前壳 / 提手 / 格栅 / 屏幕座',
         'RearShell':'P2 后斜面 / 碟口 / 侧后壁 / 底架 / 导轨',
         'SpeakerCarrier':'P3 双声腔 / 前障板 / 电子托架',
         'Cowl':'前壳 / 提手','LPanel':'左侧壳','RPanel':'右侧壳','LPort':'左导音孔 / 饰片','RPort':'右导音孔 / 饰片',
         'FrontBezel':'中央格栅压圈','FrontGrille':'通孔护网','Back':'后盖','Base':'底架 / 下固定座','Feet':'脚垫复合件（4 个）',
-        'Window':'斜面窗片','StatusArt':'显示内容示意','Keycap':'播放键帽','KeyLight':'键上指示灯','Knob':'音量旋钮',
+        'Window':'斜面窗片','StatusArt':'显示内容示意','PlayPauseKey':'播放／暂停键帽','EjectKey':'退碟键帽','PrevKey':'上一曲键帽','NextKey':'下一曲键帽',
+        'ButtonRetainer':'四键可拆压板（支点与引脚待核对）',
+        'PlayPauseSwitch':'播放／暂停开关包络','EjectSwitch':'退碟开关包络','PrevSwitch':'上一曲开关包络','NextSwitch':'下一曲开关包络','Knob':'音量旋钮',
         'LChamber':'左后腔','RChamber':'右后腔','LDriverFrame':'左喇叭预留框','RDriverFrame':'右喇叭预留框',
         'FrontBaffle':'双开口前障板','RearTopMount':'上固定耳（2 个）','DriveCarrier':'光驱底托 / 导轨','SlotGuide':'碟口导向框',
         'DisplayCarrier':'屏幕安装座','AmpShelf':'功放 / 桥接器托板','ElectronicsSled':'主控托板','AmpPads':'功放支撑复合件',
@@ -344,14 +344,14 @@ def main():
         x=12+201*col
         text(x,257,'图号 · 对象 ID / 名称',10,TEAL)
         text(x+195,257,'X × Y × Z',10,TEAL,'right')
-        for i,(name,obj) in enumerate(items[col*13:(col+1)*13]):
-            y=250-i*8.6
+        for i,(name,obj) in enumerate(items[col*17:(col+1)*17]):
+            y=250-i*6.6
             if i%2==0:
-                c.setFillColor(HexColor('#f1f6f6'));c.rect(x*mm,(y-7.8)*mm,195*mm,8.6*mm,fill=1,stroke=0)
-            text(x+1,y-2,f'{membership[name]}  {name}',8)
-            text(x+1,y-6,labels[name],7.5,MUTED)
-            text(x+193,y-4,' × '.join(fmt(n) for n in obj['size']),8,INK,'right')
-    text(12,127,'PLA 打印：3 个主体 + 2 个侧孔 + 键帽 + 旋钮 = 7 件',11,TEAL)
+                c.setFillColor(HexColor('#f1f6f6'));c.rect(x*mm,(y-6.2)*mm,195*mm,6.6*mm,fill=1,stroke=0)
+            text(x+1,y-1.8,f'{membership[name]}  {name}',7)
+            text(x+1,y-4.8,labels[name],7,MUTED)
+            text(x+193,y-3.5,' × '.join(fmt(n) for n in obj['size']),7.5,INK,'right')
+    text(12,127,'PLA 打印：3 主体 + 2 侧孔 + 4 键帽 + 压板 + 旋钮 = 11 件',11,TEAL)
     printing=json.loads((ROOT/'print-checks.json').read_text())
     assert printing['model_sha256']==data['sha256'],'Print report and drawing model differ'
     text(12,118,'用户设备 P2SC · 按 P2S 配置 / 256³ 空间 / 0.4 喷嘴 / 0.20 层高 / 3 壁 / 15% 填充 / 树状支撑',9)
@@ -362,11 +362,11 @@ def main():
         size=' × '.join(fmt(n) for n in part['size_xyz_mm'])
         text(14,106-i*9,f"{label}  ·  {pose}  ·  打印包络 {size} mm  ·  切片估重 {plate['filament_g']:.1f} g（含支撑）",9)
     notes(14,72,[
-        '拆卸：先卸前壳 4 螺钉，断开操控线；前壳先上提 40，再向前移出。',
+        '拆卸：从后壁与后斜面深孔取出 4 螺钉，断开操控线，前壳向前退出。',
         '支架拆卸前先拔出两侧孔件、断线并卸 4 螺钉；支架向前抽出，光驱先前移 11.5，再侧转 -30°并前移 15.75 后抽出。',
         '电池松开绑带并断线后向前取出；装配按反向顺序，侧孔最后装入并固定。',
-        '前壳路径按 0.5 / 1 mm 抽样；光驱转动按 0.5° 抽样，平移及其余路径连续保守扫掠。实物未验收。',
-        '支撑及 brim 需清理；0.2 喷嘴未切片验证。喇叭孔位、密封、螺钉配合及提手强度仍待实测。',
+        '前壳路径按 1 mm 抽样；光驱转动按 0.5° 抽样，平移及其余路径连续保守扫掠。实物未验收。',
+        '四键中央支点与引脚、按压行程待测；0.2 喷嘴未切片。喇叭孔位、密封、螺钉配合及提手强度待验。',
     ],gap=7,size=8.5)
     text(12,27,'FCStd SHA-256: '+data['sha256'],8,MUTED)
     text(408,27,'来源：Discora.FCStd / build.FCMacro / drawings/geometry.json',8,MUTED,'right')

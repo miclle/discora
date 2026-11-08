@@ -1,5 +1,5 @@
 {
-  "model_sha256": "bebcc9947ef72eceaae60e44bb6d79ad531b26a7de5a4ca39b7a4c3c75062088",
+  "model_sha256": "5c73112e2f065d81831e8f2f88cdff3242b4138083f531cacf7b90971ef3878c",
   "freecad_version": [
     "1",
     "1",
@@ -25,7 +25,7 @@
         213.64473684210526,
         42.50000000000008
       ],
-      "facets": 211972,
+      "facets": 214480,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -34,7 +34,7 @@
         0.0,
         0.7071067811865476
       ],
-      "stl_sha256": "6b9f3219b015133e6486074b805b1bd4a21635f52d570893688c2a4032a75c4d"
+      "stl_sha256": "f7f077938baa5723130007f626ced27d94c2cc17a70f94b0b271b8773e8cd588"
     },
     "RearShell": {
       "file": "RearShell.stl",
@@ -43,7 +43,7 @@
         188.6447368421053,
         75.00000000000007
       ],
-      "facets": 3442,
+      "facets": 4658,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -52,7 +52,7 @@
         0.0,
         -0.7071067811865475
       ],
-      "stl_sha256": "cce0a313e4c8a72b012f0794d3341ddc3c3fe1f35a3c0f6ed33ceea98bfc2f4c"
+      "stl_sha256": "fd6cb37861ff297770654091d756d42c3a8ea8bad3a0329b9e339cc8f8857c88"
     },
     "SpeakerCarrier": {
       "file": "SpeakerCarrier.stl",
@@ -108,14 +108,14 @@
       ],
       "stl_sha256": "ddd0265646b81ec68714e430faa30cb1dc8d19300ed97e44d04be8dc7f9d87b4"
     },
-    "Keycap": {
-      "file": "Keycap.stl",
+    "PlayPauseKey": {
+      "file": "PlayPauseKey.stl",
       "size_xyz_mm": [
-        22.0,
-        21.999999999999986,
-        1.4500000000001023
+        12.800000000000011,
+        12.799999999999983,
+        7.200000000000019
       ],
-      "facets": 140,
+      "facets": 328,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -124,7 +124,79 @@
         0.0,
         0.952675287877846
       ],
-      "stl_sha256": "41ae75e5048450b55871f700c174bafdd109875cdadfbd5587a36bfae8551b6f"
+      "stl_sha256": "ed37885514cde81d52d9905f9b391e6c5d3246bab1b209e7f2f816d6c4af580f"
+    },
+    "EjectKey": {
+      "file": "EjectKey.stl",
+      "size_xyz_mm": [
+        12.800000000000011,
+        12.799999999999983,
+        7.200000000000019
+      ],
+      "facets": 312,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "c4c1aaa116b256a896f11d526f67d2b9f6d69c64d8318504de59ade97acee0ac"
+    },
+    "PrevKey": {
+      "file": "PrevKey.stl",
+      "size_xyz_mm": [
+        12.800000000000011,
+        12.799999999999983,
+        7.200000000000019
+      ],
+      "facets": 312,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "c99571a4025af3f1aecab7bf4aca76ea86f7077ac0b05864e89d68f6d18c1307"
+    },
+    "NextKey": {
+      "file": "NextKey.stl",
+      "size_xyz_mm": [
+        12.800000000000011,
+        12.799999999999983,
+        7.200000000000019
+      ],
+      "facets": 312,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "1192c0340c07cc6dc63e5e05524c9798e8d36059fe0e6cf7c19cdea3cad111b2"
+    },
+    "ButtonRetainer": {
+      "file": "ButtonRetainer.stl",
+      "size_xyz_mm": [
+        34.0,
+        34.85427940565407,
+        6.500000000000011
+      ],
+      "facets": 1116,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "90c52c2117ad26965d8b057be6def87506cdb4f9a89505ffa95c1e5e79ad6a24"
     },
     "Knob": {
       "file": "Knob.stl",
@@ -173,9 +245,9 @@
         "RearShell"
       ],
       "exit_code": 0,
-      "gcode_sha256": "1fb4287d80ccd575714ee1c8f7778c062c336c1178934957784015df3cbdb347",
-      "total_estimated_time": "6h 6m 30s",
-      "filament_g": 208.3,
+      "gcode_sha256": "b282cbd8100b961c93889d9b4d0738bcaf4af3aa097c156a57ec957d09e3efc2",
+      "total_estimated_time": "6h 24m 35s",
+      "filament_g": 208.56,
       "layers": 375,
       "vendor_T65535_parser_notice": true
     },
@@ -184,9 +256,9 @@
         "FrontShell"
       ],
       "exit_code": 0,
-      "gcode_sha256": "1efcf8af72ed102a0ff8e5a19af121176a4b653fca420f91a49dd3026f2a84ae",
-      "total_estimated_time": "14h 26m 29s",
-      "filament_g": 122.34,
+      "gcode_sha256": "3a44913daf42fce80095de29d74a949f2ed0fdb0802f447c8d83c258c2905716",
+      "total_estimated_time": "14h 45m 22s",
+      "filament_g": 126.81,
       "layers": 212,
       "vendor_T65535_parser_notice": true
     },
@@ -205,13 +277,17 @@
       "parts": [
         "LPort",
         "RPort",
-        "Keycap",
+        "PlayPauseKey",
+        "EjectKey",
+        "PrevKey",
+        "NextKey",
+        "ButtonRetainer",
         "Knob"
       ],
       "exit_code": 0,
-      "gcode_sha256": "7033e5e0cafcac3e74864a32e3d6ca1bf4fb79b39025a7cd7d9d2d66aa54e9ca",
-      "total_estimated_time": "51m 1s",
-      "filament_g": 17.8,
+      "gcode_sha256": "47ad7599ad87950cd12801f5519b220a1a05fa212df5d9efe117983c64c225c1",
+      "total_estimated_time": "1h 4m 5s",
+      "filament_g": 22.3,
       "layers": 60,
       "vendor_T65535_parser_notice": true
     }

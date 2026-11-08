@@ -121,12 +121,19 @@
         "Feet",
         "Window",
         "StatusArt",
-        "Keycap",
-        "KeyLight",
+        "PlayPauseKey",
+        "EjectKey",
+        "PrevKey",
+        "NextKey",
+        "ButtonRetainer",
         "Knob",
         "SpeakerCarrier",
         "LDriver",
         "RDriver",
+        "PlayPauseSwitch",
+        "EjectSwitch",
+        "PrevSwitch",
+        "NextSwitch",
         "Encoder",
         "VolumePot",
         "Drive",
@@ -163,12 +170,19 @@
         "Feet",
         "Window",
         "StatusArt",
-        "Keycap",
-        "KeyLight",
+        "PlayPauseKey",
+        "EjectKey",
+        "PrevKey",
+        "NextKey",
+        "ButtonRetainer",
         "Knob",
         "SpeakerCarrier",
         "LDriver",
         "RDriver",
+        "PlayPauseSwitch",
+        "EjectSwitch",
+        "PrevSwitch",
+        "NextSwitch",
         "Encoder",
         "VolumePot",
         "Drive",
@@ -189,7 +203,7 @@
       "clashes": []
     },
     "front_cover": {
-      "method": "exact B-rep samples; 0.5 mm lift steps then 1 mm forward steps",
+      "method": "exact B-rep samples; 1 mm forward steps",
       "waypoints_xyz_mm": [
         [
           0,
@@ -198,21 +212,23 @@
         ],
         [
           0,
-          0,
-          40
-        ],
-        [
-          0,
           -140,
-          40
+          0
         ]
       ],
       "moving": [
         "FrontShell",
         "Window",
         "StatusArt",
-        "Keycap",
-        "KeyLight",
+        "PlayPauseKey",
+        "EjectKey",
+        "PrevKey",
+        "NextKey",
+        "ButtonRetainer",
+        "PlayPauseSwitch",
+        "EjectSwitch",
+        "PrevSwitch",
+        "NextSwitch",
         "Knob",
         "Encoder",
         "VolumePot",
@@ -238,12 +254,12 @@
         "Battery"
       ],
       "prerequisites": [
-        "Four front-cover screws removed",
+        "Four recessed rear-access front-cover screws removed",
         "Control/display cables disconnected"
       ],
       "clashes": []
     }
   },
   "all_pass": true,
-  "model_sha256": "bebcc9947ef72eceaae60e44bb6d79ad531b26a7de5a4ca39b7a4c3c75062088"
+  "model_sha256": "5c73112e2f065d81831e8f2f88cdff3242b4138083f531cacf7b90971ef3878c"
 }
