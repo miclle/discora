@@ -284,12 +284,18 @@ static void advance_sequence(void)
     }
 #endif
     unsigned from = player.toc.tracks[player.index].number;
+    uint32_t ended_generation = player.audio.generation, ended_lba = player.next_lba;
+    uint64_t ended_bytes = player.audio.dequeued_bytes;
     bool advanced = cd_player_advance(&player);
     unsigned to = player.toc.tracks[player.index].number;
     uint32_t generation = player.audio.generation;
     xSemaphoreGive(lock);
-    audio_report(TAG,"sequence %s from=%u to=%u generation=%" PRIu32,
-                 advanced ? "advance" : "complete",from,to,generation);
+    if (advanced)
+        audio_report(TAG,"sequence advance from=%u to=%u generation=%" PRIu32,from,to,generation);
+    else
+        audio_report(TAG,"sequence complete from=%u to=%u generation=%" PRIu32
+                     " rewound=1 ended_generation=%" PRIu32 " ended_lba=%" PRIu32 " ended_bytes=%" PRIu64,
+                     from,to,generation,ended_generation,ended_lba,ended_bytes);
 }
 static void output_task(void *arg)
 {

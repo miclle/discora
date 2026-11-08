@@ -219,7 +219,7 @@ config DISCORA_TRACK_BUTTONS
         Normally-open switches from the configured previous/next GPIOs to GND.
         Internal pull-ups, 30 ms debounce, one action per press after release.
         Same behavior as UART prev/next: select the adjacent supported audio track
-        and arm continuous playback, preserving pause; no wrap at disc boundaries.
+        and arm continuous playback, preserving pause; manual navigation wraps at disc boundaries.
         No actions without media or while faulted. Overlapping play/track buttons
         suppress further actions until all are released.
 

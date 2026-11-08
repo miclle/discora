@@ -42,8 +42,9 @@ int main(int argc, char **argv)
     assert(cd_player_step(&player, 1));
     status = cd_player_snapshot(&player);
     assert(status.track == 3 && status.state == AUDIO_PREFILL);
-    assert(!cd_player_step(&player, 1));
-    assert(cd_player_snapshot(&player).track == 3);
+    assert(cd_player_step(&player, 1));
+    assert(cd_player_snapshot(&player).track == 2);
+    assert(cd_player_step(&player, -1) && cd_player_snapshot(&player).track == 3);
     cd_player_fault(&player);
     status = cd_player_snapshot(&player);
     assert(status.track == 3 && !strcmp(oled_status_label(&status), "FAULT"));

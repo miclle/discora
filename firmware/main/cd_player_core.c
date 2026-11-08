@@ -71,7 +71,11 @@ bool cd_player_step(cd_player_core_t *p, int direction)
 {
     if (!p->media || (direction != -1 && direction != 1)) return false;
     bool paused = p->audio.state == AUDIO_PAUSED;
-    for (int i = (int)p->index + direction; i >= 0 && i < (int)p->toc.track_count; i += direction) {
+    size_t i = p->index;
+    // Manual navigation wraps once, skips unsupported tracks, and never reselects self.
+    for (size_t visited = 1; visited < p->toc.track_count; ++visited) {
+        i = direction > 0 ? (i + 1) % p->toc.track_count :
+                            (i ? i - 1 : p->toc.track_count - 1);
         if (!eligible(&p->toc.tracks[i])) continue;
         if (!cd_player_select(p, p->toc.tracks[i].number)) return false;
         p->continuous = true;
@@ -136,7 +140,15 @@ bool cd_player_advance(cd_player_core_t *p)
             return p->continuous;
         }
     }
-    p->continuous = false; // Last eligible track: retain its EOF counters, never wrap.
+    // Natural disc end: output owner has drained/closed and recorded the last EOF.
+    // Select the first playable track without arming playback or issuing a read.
+    for (size_t i = 0; i < p->toc.track_count; ++i) {
+        if (eligible(&p->toc.tracks[i])) {
+            select_index(p, i);
+            return false;
+        }
+    }
+    cd_player_fault(p); // A valid published TOC always has a playable track.
     return false;
 }
 bool cd_player_pause(cd_player_core_t *p)

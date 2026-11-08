@@ -73,3 +73,7 @@ python firmware/tools/player_bench.py sequence --start-track 12 --sink i2s-unloa
 从第 12 轨开始的通过结果只覆盖末两轨自主切换与盘尾停止，不等于从盘头开始的整盘自主播放。`disc` 仍是电脑逐轨调度，两类证据必须分开。
 
 场景完成或失败后的 finally 仍向已识别播放器尽力发送 stop，再关闭串口；这条清理命令不参与自动换轨证据。
+
+### 0.12.3 盘尾复位判定
+
+`sequence` 兼容历史末轨停止和新的首轨停止两种结束状态。新版须有本次 `sequence complete rewound=1`，末曲代次／终点 LBA／软件消费字节数完整，当前代次不同、选择首曲、eof=0、queued=0、delivered=0；I²S 模式还须 handle=0。仍逐轨验证原 EOF 摘要与输出关闭快照，不能只看到首曲 STOPPED 就判整盘成功。此工具仍要求完整纯音频 TOC；混合盘跳轨由离线测试覆盖，不冒充实机验收。

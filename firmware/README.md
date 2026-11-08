@@ -1,6 +1,6 @@
 # Discora firmware
 
-这是 **USB 光驱、CD 控制与独立 I²S 诊断固件**（`0.12.2-buttons-oled`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，600 秒顺序读取及软件缓冲已与电脑完整摘要一致；寻道仍有失败记录，完整重连/冷启动、I²S 和刻录尚待验收，见 [当前状态](../docs/status.md)。
+这是 **USB 光驱、CD 控制与独立 I²S 诊断固件**（`0.12.3-disc-rewind`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，600 秒顺序读取及软件缓冲已与电脑完整摘要一致；寻道仍有失败记录，完整重连/冷启动、I²S 和刻录尚待验收，见 [当前状态](../docs/status.md)。
 
 新增[四键有声配置](../docs/playback-controls.md)：GPIO1 播放／暂停、GPIO41 退碟、GPIO2／42 换轨，音频 GPIO15／16／7、2 MiB PSRAM 和 25% 幅度保持。源码、构建和设备部署分开记录，最新见[四键验证记录](../docs/records/2026-11-08-buttons-row.md)；当前 `0.12.2-buttons-oled` 再叠加 `bench/cd-player-oled.defaults` 启用 SH1106，见[显示记录](../docs/records/2026-11-08-buttons-oled.md)和[状态](../docs/status.md)。下面的默认构建仍为查询模式，不能直接替代有声配置。
 
@@ -148,7 +148,7 @@ CI 现在分别构建默认查询、独立测试音、CD 软件时钟、CD I²S�
 
 单张 CD 的 13 轨整盘软件时钟实测完成 594221040 字节，各轨两端摘要一致、零欠载；详细版本、范围和恢复证据见 [整盘记录](../docs/records/2026-11-01-m3-whole-disc.md)。没有新增电脑端整盘参考，也不代表整盘 I²S / DAC 输出通过。
 
-0.8.0 的 `play-disc` 显式从当前轨起点连续播放至盘尾，上一轨关闭后 MCU 自行切换，末轨不循环。普通 play 仍为单轨；停止、指定 track N 和错误取消连续模式；0.12.0 的 next／prev 开启连续模式并保留暂停。语义与验收见 [连续播放决策](../docs/decisions/0009-explicit-disc-sequence.md)。
+0.8.0 的 `play-disc` 显式从当前轨起点连续播放至盘尾，上一轨关闭后 MCU 自行切换，0.12.3 起末轨自然结束后回首条可播放音轨并停止，不自动重播。普通 play 仍为单轨；停止、指定 track N 和错误取消连续模式；0.12.0 的 next／prev 开启连续模式并保留暂停；0.12.3 起手动首尾循环选曲。语义与验收见 [连续播放决策](../docs/decisions/0009-explicit-disc-sequence.md)。
 
 ## 四键播放控制
 

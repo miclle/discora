@@ -49,6 +49,28 @@ def observed_toc(lines):
     return tracks
 
 
+def sequence_finished(lines, state, first, last):
+    completions = [fields(x) for x in lines if "cd_player: sequence complete " in x]
+    if not completions or state["state"] != "stopped" or state.get("continuous") != "0":
+        return False
+    require(len(completions) == 1, "Unexpected sequence completion count")
+    event = completions[0]
+    require(int(event["from"]) == last["number"], "Premature sequence stop")
+    if event.get("rewound") == "1":
+        require(int(event["to"]) == int(state["track"]) == first["number"] and state["eof"] == "0"
+                and state["queued"] == state["delivered"] == "0"
+                and int(state["next_lba"]) == first["start"]
+                and event["generation"] == state["generation"]
+                and event["ended_generation"] != state["generation"], "Invalid rewound sequence state")
+        require(int(event["ended_lba"]) == last["end"] and
+                int(event["ended_bytes"]) == (last["end"] - last["start"]) * 2352,
+                "Missing final-track completion evidence")
+    else:
+        require(int(state["track"]) == int(event["to"]) == last["number"] and state["eof"] == "1",
+                "Invalid legacy sequence state")
+    return True
+
+
 def i2s_eof_trace(lines, baseline, final, expected_bytes):
     points = {}
     for line in lines:
@@ -270,8 +292,7 @@ class Bench:
             if time.monotonic() >= progress:
                 print("sequence track", state["track"], "bytes", state["delivered"], flush=True)
                 progress = time.monotonic() + 30
-            if state["state"] == "stopped" and state.get("continuous") == "0" and state["eof"] == "1":
-                require(int(state["track"]) == tracks[-1]["number"], "Premature sequence stop")
+            if sequence_finished(self.lines[mark:], state, toc[0], tracks[-1]):
                 if not self.i2s or state["handle"] == "0": break
         else:
             raise RuntimeError("Sequence deadline exceeded")
