@@ -111,3 +111,11 @@ idf.py -B build-psram -DSDKCONFIG=sdkconfig.psram build
 定位 USB 掉线时，可在上述 PSRAM 播放配置后继续叠加 `bench/usb-diagnostics.defaults;bench/usb-read-clock.defaults`，使用新的构建目录与 sdkconfig。最后一个 overlay 关闭 I²S、查询 A/B 实验、摘要校验和故障注入，保留实际 READ CD、2 MiB 缓冲与软件时钟消费；上电仍为 stopped。`play-disc` 会读取到盘尾，短窗口须由控制器发送 `stop`，该 overlay 本身不提供 600 秒截止。
 
 此模式不会输出测试音或音乐，也不代表音频链路通过。实机窗口、供电条件、构建与部署证据见[2026-11-07 读取对照](records/2026-11-07-usb-read-clock-comparison.md)。
+
+## 单次寻道恢复实验
+
+需要验证真实 `03/02/00` 读取失败后的行为时，可在 I²S／PSRAM／USB 诊断配置后叠加 [cd-player-seek-recovery.defaults](../firmware/bench/cd-player-seek-recovery.defaults)。该文件只启用 `DISCORA_CDDA_SEEK_RECOVERY`，不更改引脚、增益、缓冲或默认播放行为；使用独立 sdkconfig 和 build 目录。
+
+只有有效失败 CSW、精确 `03/02/00`、目录有效且 USB 连接健康时才消耗每次 MCU 启动最多一次的恢复预算。等待 1000 ms 并继续处理 USB 事件，TUR 成功后仅重读相同 LBA／扇区数一次；断连、其它错误或再次失败仍停止。原始失败和 `seek recovery reserved / replay / succeeded` 日志必须保留，恢复后完成不计为无错误通过。策略详见 [ADR-0007](decisions/0007-bounded-seek-recovery.md)。
+
+此开关与软件欠载自动重缓冲不同：后者处理供数间隙，不会自行重试失败的 SCSI 命令。恢复等待可能使队列耗尽，即使重读成功也可能产生声音间隙。构建或未触发错误的播放成功，不能替代真实恢复分支的实机验证。

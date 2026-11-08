@@ -1,0 +1,4 @@
+# Append to an existing CD player profile for an explicit recovery experiment.
+# One same-LBA replay per MCU boot, only after valid sense 03/02/00 and TUR.
+# Retain original failures; recovered playback is not an error-free pass.
+CONFIG_DISCORA_CDDA_SEEK_RECOVERY=y
