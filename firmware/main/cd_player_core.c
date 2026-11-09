@@ -75,7 +75,7 @@ bool cd_player_step(cd_player_core_t *p, int direction)
     // Manual navigation wraps once, skips unsupported tracks, and never reselects self.
     for (size_t visited = 1; visited < p->toc.track_count; ++visited) {
         i = direction > 0 ? (i + 1) % p->toc.track_count :
-                            (i ? i - 1 : p->toc.track_count - 1);
+                            (i ? i - 1 : (size_t)p->toc.track_count - 1);
         if (!eligible(&p->toc.tracks[i])) continue;
         if (!cd_player_select(p, p->toc.tracks[i].number)) return false;
         p->continuous = true;
