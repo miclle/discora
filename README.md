@@ -29,9 +29,9 @@
 
 **请勿把技术可行性推断、其它项目的成果或 Linux 测试结果当作 Discora 的实测结论。**
 
-最近部署为 **0.12.6-oled-progress**（9063 主控），新增中文状态、单轨时间与进度条，启动和 OLED 初始化通过，中文显示和进度条已获用户实屏确认。此前 0.12.5 的四键播放、暂停、上一曲、下一曲和退碟基本操作已获用户确认；短时立体声试听及此前三轮整盘 I²S 提交已有实测证据。间歇性 USB／寻道故障仍未关闭，完整稳定性和整盘全程听感未验收。最新版本、配置与证据统一见[工程状态](docs/status.md)，后续工作见[路线图](docs/roadmap.md)，历史经过见[实验记录索引](docs/records/README.md)。
+最近部署为 **0.12.8-read-speed-probe（2× 实验配置，9063 主控）**。UJ-898／HC10 接受 4× 和 2× 限速请求；用户反馈 4× 噪声差别不明显，**2× 噪声明显降低、音乐正常**。默认构建仍关闭限速，实际主轴倍速与限速后的整盘稳定性尚未验收。此前中文 OLED／进度条、四键基本操作及短时立体声试听已有用户确认；间歇性 USB／寻道故障仍未关闭。当前配置与验证边界见[工程状态](docs/status.md)、[限速对照](docs/records/2026-11-09-read-speed-probe.md)，后续工作见[路线图](docs/roadmap.md)。
 
-复现有声接法使用 GPIO15→BCK、GPIO16→LCK、GPIO7→DIN，并叠加[四键 profile](docs/playback-controls.md)；无叠加的默认构建仍是查询模式，默认音频引脚为 GPIO4／5／6。详见[音频配置差异](docs/audio-output.md#已通过的接法与默认配置差异)。
+复现有声接法使用 GPIO15→BCK、GPIO16→LCK、GPIO7→DIN，并叠加[四键 profile](docs/playback-controls.md)；复现本次降噪配置还须追加[2× 限速 profile](docs/cd-player.md)。无叠加的默认构建仍是查询模式，默认音频引脚为 GPIO4／5／6。详见[音频配置差异](docs/audio-output.md#已通过的接法与默认配置差异)。
 
 ## 初始实验硬件
 

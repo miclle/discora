@@ -176,6 +176,34 @@ config DISCORA_CD_PLAYER
         Real READ CD producer with independent output/control task. Bench probes
         are disabled. Software-clock sink by default; never claim audible output.
 
+config DISCORA_CD_READ_SPEED_TEST
+    bool "Experiment: request a lower CD read speed before publishing TOC"
+    depends on DISCORA_CD_PLAYER
+    default n
+    help
+        Send SET CD SPEED once per validated TOC, before playback is available.
+        Unsupported command/field falls back; source and transport failures do not.
+        Acceptance is not proof of spindle speed or lower acoustic noise.
+
+choice DISCORA_CD_READ_SPEED
+    prompt "Requested CD read speed"
+    depends on DISCORA_CD_READ_SPEED_TEST
+    default DISCORA_CD_READ_SPEED_4X
+
+config DISCORA_CD_READ_SPEED_4X
+    bool "4x (708 kB/s)"
+
+config DISCORA_CD_READ_SPEED_2X
+    bool "2x (354 kB/s)"
+
+endchoice
+
+config DISCORA_CD_READ_SPEED_X
+    int
+    depends on DISCORA_CD_READ_SPEED_TEST
+    default 2 if DISCORA_CD_READ_SPEED_2X
+    default 4
+
 config DISCORA_CD_PLAYER_PSRAM_BUFFER
     bool "Use a 2 MiB PCM queue in PSRAM (3 seconds prefill)"
     depends on DISCORA_CD_PLAYER && SPIRAM

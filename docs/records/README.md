@@ -6,6 +6,8 @@
 
 ## 2026-11-09
 
+- [CD 读取限速：默认、4×、2× 对照](2026-11-09-read-speed-probe.md)
+
 - [CD-Text 曲名只读探测：当前盘返回空文字包](2026-11-09-cdtext-probe.md)
 
 - [OLED 中文布局与单轨进度软件验证](2026-11-09-oled-progress.md)

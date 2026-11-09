@@ -1,8 +1,10 @@
 # Discora firmware
 
-这是 **USB 光驱、CD 控制与独立 I²S 诊断固件**（源码 `0.12.5-usb-recovery-guard`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，600 秒顺序读取及软件缓冲已与电脑完整摘要一致；寻道仍有失败记录，完整重连/冷启动、I²S 和刻录尚待验收，见 [当前状态](../docs/status.md)。
+这是 **USB 光驱、CD 控制与独立 I²S 诊断固件**（源码 `0.12.8-read-speed-probe`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，600 秒顺序读取及软件缓冲已与电脑完整摘要一致；寻道仍有失败记录，完整重连/冷启动、I²S 和刻录尚待验收，见 [当前状态](../docs/status.md)。
 
-[四键有声配置](../docs/playback-controls.md)使用 GPIO1 播放／暂停、GPIO41 退碟、GPIO2／42 换轨，音频 GPIO15／16／7、2 MiB PSRAM 和 25% 幅度保持。叠加 `bench/cd-player-oled.defaults` 启用 SH1106；0.12.5 已部署且四键基本操作获用户确认，源码、构建、部署和实机边界统一见[当前状态](../docs/status.md)。下面的默认构建仍为查询模式，不能直接替代有声配置。
+[四键有声配置](../docs/playback-controls.md)使用 GPIO1 播放／暂停、GPIO41 退碟、GPIO2／42 换轨，音频 GPIO15／16／7、2 MiB PSRAM 和 25% 幅度保持。叠加 `bench/cd-player-oled.defaults` 启用 SH1106；四键基本操作、中文显示和进度条已有用户确认，源码、构建、部署和实机边界统一见[当前状态](../docs/status.md)。下面的默认构建仍为查询模式，不能直接替代有声配置。
+
+当前 9063 部署在上述组合后追加 `bench/cd-player-speed-2x.defaults`，请求 2×（354 kB/s）读取速度；用户确认噪声明显降低、音乐正常。对照用 `bench/cd-player-speed-4x.defaults` 请求 4×（708 kB/s），两档互斥且仓库默认关闭。每次完整 TOC 校验后、开放播放前发送一次 `SET CD SPEED`，不改变 PCM 缓存和读取节奏；短窗口不代表整盘稳定性，见[限速实验与备份](../docs/records/2026-11-09-read-speed-probe.md)。切换 profile 使用独立 sdkconfig／build，核对生成的 `CONFIG_DISCORA_CD_READ_SPEED_X`。
 
 播放器 Kconfig 默认开启 SH1106 OLED，但 PSRAM profile 显式关闭；当前有声四键方案须最后叠加 `bench/cd-player-oled.defaults` 重新启用。接线：GPIO10 SDA、GPIO11 SCL，显示轨号和播放状态。默认查询／测试音模式不启用显示；无介质及盘尾停止画面已由用户确认正常，全部动态状态待验收，见 [OLED 接线、构建与测试](../docs/oled-display.md)。
 

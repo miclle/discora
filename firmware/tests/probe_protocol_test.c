@@ -122,6 +122,31 @@ static void test_cbw(void)
     }
 }
 
+static void test_read_speed(void)
+{
+    const uint8_t subclasses[] = {2, 5, 6};
+    uint8_t cbw[PROBE_CBW_SIZE];
+    for (size_t i = 0; i < sizeof(subclasses); ++i) {
+        for (unsigned speed = 2; speed <= 4; speed += 2) {
+            uint8_t expected[PROBE_CBW_SIZE] = {
+                0x55, 0x53, 0x42, 0x43, 0x78, 0x56, 0x34, 0x12,
+                0, 0, 0, 0, 0, 0, 12, 0xbb, 0,
+            };
+            expected[17] = speed == 2 ? 1 : 2;
+            expected[18] = speed == 2 ? 0x62 : 0xc4;
+            assert(probe_make_set_cd_speed_cbw(subclasses[i], 0x12345678, speed, cbw));
+            assert(memcmp(cbw, expected, sizeof(cbw)) == 0);
+        }
+    }
+    const unsigned invalid[] = {0, 1, 3, 5, 0xffff, UINT32_MAX};
+    for (size_t i = 0; i < sizeof(invalid) / sizeof(invalid[0]); ++i)
+        assert(!probe_make_set_cd_speed_cbw(6, 1, invalid[i], cbw));
+    assert(!probe_make_set_cd_speed_cbw(4, 1, 4, cbw));
+    assert(!probe_make_set_cd_speed_cbw(6, 1, 4, NULL));
+    assert(!probe_make_cbw(PROBE_SET_CD_SPEED, 6, 1, 0, cbw));
+    assert(strcmp(probe_command_name(PROBE_SET_CD_SPEED), "SET CD SPEED") == 0);
+}
+
 static void test_read_cd(void)
 {
     uint8_t cbw[PROBE_CBW_SIZE];
@@ -349,6 +374,7 @@ int main(void)
     test_responses();
     test_toc();
     test_read_cd();
+    test_read_speed();
     test_parser_bounds();
     puts("PASS: protocol fixtures, malformed responses and 10000 bounds cases (not hardware tests)");
     return 0;

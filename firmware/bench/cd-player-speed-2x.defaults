@@ -1,0 +1,4 @@
+# Append to the existing audio/button/OLED profiles; only the speed request changes.
+CONFIG_DISCORA_CD_READ_SPEED_TEST=y
+CONFIG_DISCORA_CD_READ_SPEED_2X=y
+# CONFIG_DISCORA_CD_READ_SPEED_4X is not set

@@ -4,6 +4,8 @@
 
 ## 构建模式
 
+读取限速实验：在已有有声／PSRAM／四键／OLED 配置后，按需叠加 `bench/cd-player-speed-4x.defaults` 或 `bench/cd-player-speed-2x.defaults`。两者互斥，分别请求 708／354 kB/s；默认不发送限速命令。使用独立 sdkconfig 与 build 目录，切换候选时核对生成的 `CONFIG_DISCORA_CD_READ_SPEED_X`，不要依赖 defaults 覆盖已有 sdkconfig。命令在 TOC 发布前执行，上电仍保持 stopped。实现边界见 [ADR-0027](decisions/0027-cd-read-speed-probe.md)，实测及当前保留版本见[限速记录](records/2026-11-09-read-speed-probe.md)。
+
 | 配置 | 数据源 / 消费端 | 验证状态 |
 | --- | --- | --- |
 | [cd-player-clock.defaults](../firmware/bench/cd-player-clock.defaults) | 真实光驱 → 软件时钟消费 | 13 轨软件时钟及控制已实测；没有声音 |
