@@ -1,6 +1,6 @@
 # 上一曲／下一曲轻触按键
 
-`0.12.3-disc-rewind` 使用 GPIO2 上一曲、GPIO42 下一曲，换轨后开启连续播放，暂停中换轨保持暂停。新增播放／暂停及迁移退碟接线见[四键控制](playback-controls.md)，当前构建／部署／验收见[本轮记录](records/2026-11-08-buttons-row.md)。历史实现与软件时钟部署分别见[0.9.1 记录](records/2026-11-01-track-buttons.md)、[0.10.0 记录](records/2026-11-05-oled-deploy.md)，不代表本版本实体按键验收。
+`0.12.5-usb-recovery-guard` 使用 GPIO2 上一曲、GPIO42 下一曲，换轨后开启连续播放，暂停中换轨保持暂停。用户于 2026-11-09 确认实体上一曲、下一曲均正常，基本操作为 **bench-tested（用户实测通过）**；暂停保持、首尾循环及长按等实体按键场景仍待专项验收。当前部署与验收见[记录](records/2026-11-09-usb-offline-recovery.md#四键基本操作验收2026-11-09用户实测反馈)，完整接线见[四键控制](playback-controls.md)。历史实现与软件时钟部署分别见[0.9.1 记录](records/2026-11-01-track-buttons.md)、[0.10.0 记录](records/2026-11-05-oled-deploy.md)。
 
 ## 接线
 

@@ -1,0 +1,3 @@
+# Append to the existing player + USB diagnostics configuration for one bounded run.
+# Diagnostic comparison, not a validated fix; no READ CD replay is added.
+CONFIG_DISCORA_READ_CD_CSW_TIMEOUT_MS=30000

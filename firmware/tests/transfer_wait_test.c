@@ -43,10 +43,23 @@ int main(void)
     assert(run(&f,true)==TRANSFER_WAIT_DISCONNECTED && !f.owned && f.expired==1);
     f=(fake_t){.owned=true,.callback_at=40,.gone_at=40};
     assert(run(&f,true)==TRANSFER_WAIT_DISCONNECTED && !f.expired);
+    f=(fake_t){.owned=true,.callback_at=160,.gone_at=140};
+    assert(run(&f,true)==TRANSFER_WAIT_DISCONNECTED && !f.owned && f.expired==1);
+    f=(fake_t){.owned=true,.callback_at=-1,.gone_at=140};
+    assert(run(&f,true)==TRANSFER_WAIT_DISCONNECTED && f.owned && f.now==300);
 
     f=(fake_t){.owned=true,.callback_at=-1,.gone_at=-1};
     const transfer_wait_ops_t long_ops={&f,now,events,owned,gone,expired};
     assert(transfer_wait(&long_ops,30000,2000,true)==TRANSFER_WAIT_TIMEOUT && f.now==32000 && f.owned);
+
+    // The diagnostic CSW comparison must accept a genuinely late reply without
+    // mistaking a callback returned during timeout cleanup for success.
+    f=(fake_t){.owned=true,.callback_at=4000,.gone_at=-1};
+    assert(transfer_wait(&long_ops,3000,2000,true)==TRANSFER_WAIT_TIMEOUT && !f.owned && f.expired==1);
+    f=(fake_t){.owned=true,.callback_at=4000,.gone_at=-1};
+    assert(transfer_wait(&long_ops,30000,2000,true)==TRANSFER_WAIT_COMPLETE && !f.owned && !f.expired);
+    f=(fake_t){.owned=true,.callback_at=4000,.gone_at=3500};
+    assert(transfer_wait(&long_ops,30000,2000,true)==TRANSFER_WAIT_DISCONNECTED && !f.owned && f.expired==1);
 
     uint8_t storage[16*PROBE_CD_SECTOR_SIZE], data[8*PROBE_CD_SECTOR_SIZE];memset(data,0xa5,sizeof(data));
     probe_toc_t toc={.track_count=2,.tracks={{.number=1,.start_lba=0,.end_lba=100}, {.number=2,.start_lba=100,.end_lba=200}}};

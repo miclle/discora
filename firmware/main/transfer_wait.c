@@ -11,7 +11,8 @@ transfer_wait_result_t transfer_wait(const transfer_wait_ops_t *o, unsigned time
         o->expired(c, disconnected, cancellable);
         deadline = o->now_ms(c) + drain_ms;
         while (o->owned(c) && o->now_ms(c) < deadline) o->events(c, 20);
-        return disconnected ? TRANSFER_WAIT_DISCONNECTED : TRANSFER_WAIT_TIMEOUT;
+        // Device loss can arrive while draining a timed-out transfer.
+        return disconnected || o->gone(c) ? TRANSFER_WAIT_DISCONNECTED : TRANSFER_WAIT_TIMEOUT;
     }
     return o->gone(c) ? TRANSFER_WAIT_DISCONNECTED : TRANSFER_WAIT_COMPLETE;
 }

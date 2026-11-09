@@ -44,6 +44,8 @@ void cd_player_fault(cd_player_core_t *p);
 bool cd_player_pause(cd_player_core_t *p);
 void cd_player_stop(cd_player_core_t *p);
 bool cd_player_request(cd_player_core_t *p, cd_player_read_t *request);
+// Pending request identity, also valid while paused; stop/track/fault/loss invalidate it.
+bool cd_player_read_current(const cd_player_core_t *p, const cd_player_read_t *request);
 // False means stale/discarded or fault; caller must not copy bytes from a failed transfer.
 bool cd_player_complete(cd_player_core_t *p, const cd_player_read_t *request,
                         bool ok, const uint8_t *data, size_t size);

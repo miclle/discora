@@ -1,6 +1,6 @@
 # Discora firmware
 
-这是 **USB 光驱、CD 控制与独立 I²S 诊断固件**（`0.12.3-disc-rewind`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，600 秒顺序读取及软件缓冲已与电脑完整摘要一致；寻道仍有失败记录，完整重连/冷启动、I²S 和刻录尚待验收，见 [当前状态](../docs/status.md)。
+这是 **USB 光驱、CD 控制与独立 I²S 诊断固件**（源码 `0.12.5-usb-recovery-guard`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，600 秒顺序读取及软件缓冲已与电脑完整摘要一致；寻道仍有失败记录，完整重连/冷启动、I²S 和刻录尚待验收，见 [当前状态](../docs/status.md)。
 
 新增[四键有声配置](../docs/playback-controls.md)：GPIO1 播放／暂停、GPIO41 退碟、GPIO2／42 换轨，音频 GPIO15／16／7、2 MiB PSRAM 和 25% 幅度保持。源码、构建和设备部署分开记录，最新见[四键验证记录](../docs/records/2026-11-08-buttons-row.md)；当前 `0.12.2-buttons-oled` 再叠加 `bench/cd-player-oled.defaults` 启用 SH1106，见[显示记录](../docs/records/2026-11-08-buttons-oled.md)和[状态](../docs/status.md)。下面的默认构建仍为查询模式，不能直接替代有声配置。
 
@@ -74,6 +74,10 @@ idf.py -p <DISCORA_UART_PORT> flash monitor
 ## REQUEST SENSE 超时诊断
 
 `0.5.1` 为 REQUEST SENSE 记录 CBW、DATA、CSW 阶段的结果和累计耗时。实验参数 `CONFIG_DISCORA_SENSE_DATA_TIMEOUT_MS` 默认 3000，仅在 CD-DA 实验开启时可配置到 30000；普通默认固件继续使用 3 秒。超时后仍等待 transfer 归还，未归还时隔离，不增加命令重放。
+
+`0.12.4` 增加异常路径的 `data_stall`、`clear_halt` 和 `csw_wait` 日志，记录清除停在哪一步、返回值、等待期限、耗时及 transfer 所有权。USB diagnostics 下 `CONFIG_DISCORA_READ_CD_CSW_TIMEOUT_MS` 默认仍为 3000；在原有播放器配置后追加 `bench/cd-player-csw-diagnostic.defaults` 可单独比较 30000 ms 的 READ CD 状态等待。它也用于一次 CSW STALL 重试，但不延长其它命令、CBW、DATA 或控制传输，不增加 READ CD 重放。长等待可能耗尽音频缓冲；这是定位候选，不是已验证修复。构建、实机与原版本恢复分别见[诊断记录](../docs/records/2026-11-09-usb-stall-diagnostic.md)。
+
+`0.12.5` 在恢复准入、等待期间及 TUR 后检查播放器请求身份：停止／换轨／fault／介质失效后，不再为已失效请求启动额外恢复读取；暂停仍保留原在途请求。传输超时清理期间发现断连时正确分类为 disconnected，transfer 未归还则继续隔离。已按后续授权部署，新增控制边界尚待实机验证；见[验证记录](../docs/records/2026-11-09-usb-offline-recovery.md)。
 
 [sense-diagnostic.defaults](bench/sense-diagnostic.defaults) 沿用直连的同一寻道/整轨/缓冲工作负载，仅把 REQUEST SENSE 数据阶段上限设为 30 秒。CBW、CSW、控制传输仍为 3 秒，READ CD 数据阶段仍为 30 秒。这是诊断参数，不是已证实的修复；若未调用 REQUEST SENSE，成功读取不能归因于该参数。
 
