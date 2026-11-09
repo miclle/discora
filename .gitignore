@@ -6,13 +6,16 @@ firmware/managed_components/
 firmware/.idf_component_manager/
 firmware/.cache/
 
-# Local reproduction of the CI build matrix
-/firmware/build-ci/
-/firmware/sdkconfig.ci
-/firmware/sdkconfig.ci.old
+# Generated per-profile build trees and configurations
+/firmware/build-*/
+/firmware/sdkconfig.*
+!/firmware/sdkconfig.defaults
 
 # Bench captures and flash backups must survive idf.py fullclean / set-target.
 /.local/bench/
+
+# Ephemeral review and commit preparation
+/.local/review/
 
 # editor / OS
 .DS_Store

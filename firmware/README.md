@@ -2,9 +2,9 @@
 
 这是 **USB 光驱、CD 控制与独立 I²S 诊断固件**（源码 `0.12.5-usb-recovery-guard`），ESP-IDF 基线为 v5.4。默认执行基础查询和 READ TOC；可显式启用有界 READ CD 实验。单/8 扇区已与电脑参考摘要一致，600 秒顺序读取及软件缓冲已与电脑完整摘要一致；寻道仍有失败记录，完整重连/冷启动、I²S 和刻录尚待验收，见 [当前状态](../docs/status.md)。
 
-新增[四键有声配置](../docs/playback-controls.md)：GPIO1 播放／暂停、GPIO41 退碟、GPIO2／42 换轨，音频 GPIO15／16／7、2 MiB PSRAM 和 25% 幅度保持。源码、构建和设备部署分开记录，最新见[四键验证记录](../docs/records/2026-11-08-buttons-row.md)；当前 `0.12.2-buttons-oled` 再叠加 `bench/cd-player-oled.defaults` 启用 SH1106，见[显示记录](../docs/records/2026-11-08-buttons-oled.md)和[状态](../docs/status.md)。下面的默认构建仍为查询模式，不能直接替代有声配置。
+[四键有声配置](../docs/playback-controls.md)使用 GPIO1 播放／暂停、GPIO41 退碟、GPIO2／42 换轨，音频 GPIO15／16／7、2 MiB PSRAM 和 25% 幅度保持。叠加 `bench/cd-player-oled.defaults` 启用 SH1106；0.12.5 已部署且四键基本操作获用户确认，源码、构建、部署和实机边界统一见[当前状态](../docs/status.md)。下面的默认构建仍为查询模式，不能直接替代有声配置。
 
-播放器 Kconfig 默认开启 SH1106 OLED，但 PSRAM profile 显式关闭；当前有声四键方案须最后叠加 `bench/cd-player-oled.defaults` 重新启用。接线：GPIO10 SDA、GPIO11 SCL，显示轨号和播放状态。默认查询／测试音模式不启用显示；无介质画面已由用户确认正常，动态显示待验收，见 [OLED 接线、构建与测试](../docs/oled-display.md)。
+播放器 Kconfig 默认开启 SH1106 OLED，但 PSRAM profile 显式关闭；当前有声四键方案须最后叠加 `bench/cd-player-oled.defaults` 重新启用。接线：GPIO10 SDA、GPIO11 SCL，显示轨号和播放状态。默认查询／测试音模式不启用显示；无介质及盘尾停止画面已由用户确认正常，全部动态状态待验收，见 [OLED 接线、构建与测试](../docs/oled-display.md)。
 
 ## 构建
 

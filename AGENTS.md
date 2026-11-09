@@ -6,7 +6,7 @@
 
 - Discora 是**独立的 ESP32-S3 光驱项目**，不依赖其它 CD 机项目。
 - 目标是低成本 MCU 独立控制 USB 光驱，优先 CD-DA 立体声播放，随后研究 CD-R/CD-RW 刻录。
-- 首测硬件：MATSHITA DVD-R UJ-898 + SATA-USB 桥接器；该组合在 ESP32-S3 下**尚未验证**。
+- 首测硬件：MATSHITA DVD-R UJ-898 + SATA-USB 桥接器；验证范围以 `docs/status.md` 和对应实验记录为准，不将局部 bench-tested 等同于整体验收。
 - 项目必须清楚区分 `planned`、`implemented`、`bench-tested`、`verified`，禁止仅凭编译成功宣称功能可用。
 
 ## 执行方式

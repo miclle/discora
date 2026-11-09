@@ -1,10 +1,10 @@
 # OLED 曲目与播放状态
 
-当前 `0.12.2-buttons-oled` 在四键有声配置上启用 OLED。用户确认已按下表连接 SH1106；0x3c 初始化与首帧发送成功，用户确认无介质画面文字清晰完整；后续 0.12.3 的第 13 曲 PLAYING 和盘尾 TRACK 01／STOPPED 画面也获用户确认，见[盘尾验收](records/2026-11-09-disc-rewind-reconnect.md)；其余状态画面待验收。部署与实屏结果见[本轮记录](records/2026-11-08-buttons-oled.md)。此前 `0.12.1-buttons-row` 继承 PSRAM profile 的 `CONFIG_DISCORA_OLED=n`，是接屏后没有显示的软件原因。
+当前 0.12.5 沿用自 `0.12.2-buttons-oled` 启用的四键有声 OLED 配置，最新部署见[工程状态](status.md)。用户确认已按下表连接 SH1106；0x3c 初始化与首帧发送成功，用户确认无介质画面文字清晰完整；后续 0.12.3 的第 13 曲 PLAYING 和盘尾 TRACK 01／STOPPED 画面也获用户确认，见[盘尾验收](records/2026-11-09-disc-rewind-reconnect.md)；其余状态画面待验收。部署与实屏结果见[本轮记录](records/2026-11-08-buttons-oled.md)。此前 `0.12.1-buttons-row` 继承 PSRAM profile 的 `CONFIG_DISCORA_OLED=n`，是接屏后没有显示的软件原因。
 
 历史 `0.10.0-oled`：implemented，已部署；当时初始化超时，实屏未验收。按仓库模块结构图和 SH1106 手册实现，不复制供应商例程或字体。实物如果是 SSD1306，不能直接使用此驱动；I²C ACK 也不能证明芯片型号或画面正确。
 
-历史 2026-11-05 已烧录软件时钟配置并独立校验，三个按键初始化和 UART 状态响应正常；0x3c 探测返回 `ESP_ERR_TIMEOUT`，未出现初始化成功日志。用户随后确认 OLED 尚未接线或未供电，完成接线和供电后需重启复测，详见 [部署记录](records/2026-11-05-oled-deploy.md)。
+历史 2026-11-05 已烧录软件时钟配置并独立校验，三个按键初始化和 UART 状态响应正常；0x3c 探测返回 `ESP_ERR_TIMEOUT`，未出现初始化成功日志。用户随后确认 OLED 尚未接线或未供电，该历史失败随后已有接线后的成功记录，详见 [部署记录](records/2026-11-05-oled-deploy.md)。
 
 ## 接线与配置
 
@@ -50,7 +50,7 @@ idf.py -C firmware -B build-buttons-oled -DSDKCONFIG=sdkconfig.buttons-oled \
 idf.py -C firmware -B build-buttons-oled -DSDKCONFIG=sdkconfig.buttons-oled build
 ```
 
-本轮部署候选另保留 USB 诊断和单次寻道恢复，完整顺序见本轮记录。显示轨号及上述全部播放器状态；尚未显示歌曲名称、CD-Text、时间进度或音量。
+上述命令仅构建显示组合；复现最近部署所含的 USB 诊断和单次寻道恢复时，使用[四键控制](playback-controls.md)中的完整命令。显示轨号及上述全部播放器状态；尚未显示歌曲名称、CD-Text、时间进度或音量。
 
 ## 历史软件时钟构建
 

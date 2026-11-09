@@ -45,20 +45,20 @@
 
 ## 接入 Discora：三线 I²S
 
-状态：模块已到货；以下为依据参考图片、芯片手册及当前固件的接线方案（`planned`），尚未完成实物接线、焊桥连通性、电压或声音验收。整机元器件、供电支路和接线图见 [整机接线说明](../../docs/wiring.md)。
+状态：台架接线已完成短时立体声试听（bench-tested）。下表统一为 GPIO15／16／7 有声 profile；无叠加时的默认 GPIO4／5／6 不能与它混用。焊桥逐点连通性、完整电气指标及机内装配仍须分别验收。整机元器件、供电支路和接线图见 [整机接线说明](../../docs/wiring.md)。
 
 | 本模块引脚 | Discora 连接 | 说明 |
 | --- | --- | --- |
-| BCK | ESP32-S3 GPIO4 | 3.3V 逻辑位时钟 |
-| LCK（背面 LRCK） | ESP32-S3 GPIO5 | 左右字时钟 |
-| DIN | ESP32-S3 GPIO6 | MCU 向 DAC 发送音频数据 |
+| BCK | ESP32-S3 GPIO15 | 3.3V 逻辑位时钟 |
+| LCK（背面 LRCK） | ESP32-S3 GPIO16 | 左右字时钟 |
+| DIN | ESP32-S3 GPIO7 | MCU 向 DAC 发送音频数据 |
 | GND | ESP32-S3 GND | 公共信号地 |
 | SCK | GND | 三线 I²S，使用 BCK PLL，不接外部 MCLK；不要与 BCK 短接 |
 | VIN | 确认模块支持后接稳定 5V | 板载稳压器输入；这不是芯片电源脚可接 5V 的结论 |
 | A3V3 | 留空，可作测量点 | 不接 5V，不与 ESP32 的 3V3 并联供电 |
 | FLT / DEMP / XSMT / FMT 排针 | 焊桥正确设置后留空 | 不需要再接 MCU GPIO |
 
-固件使用 Philips I²S、44.1 kHz、16-bit 双声道、16-bit slot，目标 BCK 1.4112 MHz；这不是已测时钟。引脚来源为 `firmware/main/Kconfig.projbuild` 和 [测试音配置](../../firmware/bench/i2s-tone.defaults)。GPIO 编号不是排针序号。
+固件使用 Philips I²S、44.1 kHz、16-bit 双声道、16-bit slot，目标 BCK 1.4112 MHz；这不是已测时钟。上述引脚来自 [PSRAM 有声配置](../../firmware/bench/cd-player-psram.defaults)；独立测试音须另行设置为相同引脚后才能使用该接线。GPIO 编号不是排针序号。
 
 ## 背面焊桥：1-L、2-L、3-H、4-L
 
@@ -96,7 +96,7 @@ H4： H ○   ○──○ L       H3： H ○──○   ○ L
 
 优先使用 3.5mm 立体声音频线：模块 LINE OUT → TPA3118D2 的 3.5mm 音频输入。也可使用 L／R／AGND 三线接功放 INL／INR／GND；按信号名逐项连接，正反面视图不可直接照搬左右顺序。两种输入方式选其一，DAC 不能直接驱动无源喇叭。
 
-功放供电与 BTL 喇叭连接见 [整机说明](../../docs/wiring.md)。首次低音量测试：测试音配置启动 stopped，串口 115200，依次发送 `left`（左 441 Hz）、`right`（右 882 Hz）、`stereo`、`silence`、`stop`。独立测试音模式不启动 USB 光驱任务；通过后再切换真实 CD I²S 模式。最后部署记录仍是 `0.9.1-track-buttons` 软件时钟播放器，接线本身不会让它输出 I²S。完整步骤见 [音频验收](../../docs/audio-output.md)。
+功放供电与 BTL 喇叭连接见 [整机说明](../../docs/wiring.md)。首次低音量测试：测试音配置启动 stopped，串口 115200，依次发送 `left`（左 441 Hz）、`right`（右 882 Hz）、`stereo`、`silence`、`stop`。独立测试音模式不启动 USB 光驱任务；通过后再切换真实 CD I²S 模式。当前部署为有声配置，版本及证据见[工程状态](../../docs/status.md)；重新烧录默认查询或软件时钟配置后，不会仅因接线正确就输出 I²S。完整步骤见 [音频验收](../../docs/audio-output.md)。
 
 ## 接线依据
 

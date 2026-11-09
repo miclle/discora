@@ -29,11 +29,9 @@
 
 **请勿把技术可行性推断、其它项目的成果或 Linux 测试结果当作 Discora 的实测结论。**
 
-**2026-11-07：CD → ESP32-S3 → PCM5102A → TPA3118D2 → 双喇叭的基础立体声链路已调通（bench-tested）。** 当前主控 COM 尾号 8636，更换 GPIO7→DAC DIN 的连接后，右声道及双声道低音测试出声；随后第 1 轨原始立体声连续播放约 60 秒，用户确认左右都有清晰音乐、无明显杂音，日志写入错误与软件欠载均为 0。此前 USB 掉线的根因、整轨／整盘及冷启动、重复启停稳定性仍未验收。详见[对照与定位记录](docs/records/2026-11-07-cybertrack-audio-crosscheck.md)，早期失败保留在[无声排查记录](docs/records/2026-11-05-dac-no-sound.md)。
+最近部署为 **0.12.5-usb-recovery-guard**（9063 主控）。用户已确认四键的播放、暂停、上一曲、下一曲和退碟基本操作正常；短时立体声试听及此前三轮整盘 I²S 提交已有实测证据。间歇性 USB／寻道故障仍未关闭，完整稳定性和整盘全程听感未验收。最新版本、配置与证据统一见[工程状态](docs/status.md)，后续工作见[路线图](docs/roadmap.md)，历史经过见[实验记录索引](docs/records/README.md)。
 
-随后旧候选长时播放暴露软件欠载停播。`0.11.0-buffered` 新增可选 **2 MiB PSRAM 队列、3 秒预填、欠载自动恢复和读取耗时统计**，当前 GPIO15/16/7 与 25% 数字幅度已纳入可复现 profile；正常配置不包含故障注入。构建与命令见 [CD 播放说明](docs/cd-player.md)，失败窗口、受控恢复与持续播放证据见[缓冲记录](docs/records/2026-11-07-buffered-playback.md)。
-
-成功实验使用 GPIO15→BCK、GPIO16→LCK、GPIO7→DIN、DAC 模拟输出三线直连功放；仓库默认接线仍是 GPIO4/5/6。PSRAM profile 已包含 25% 数字幅度和关闭按键／OLED 的配置，但不包含早期候选的 60 秒自动停止或 bench 命令。0.12.1 可在其后叠加[四键 profile](docs/playback-controls.md)启用 GPIO1／2／42／41 控制，GPIO7 仍只接 DIN。当前部署与运行状态见[状态记录](docs/status.md)，不能将无叠加配置的默认构建视为同一固件。配置差异见[音频输出说明](docs/audio-output.md#已通过的接法与默认配置差异)。借用的 CyberTrack 板原固件及配置已恢复并校验。
+复现有声接法使用 GPIO15→BCK、GPIO16→LCK、GPIO7→DIN，并叠加[四键 profile](docs/playback-controls.md)；无叠加的默认构建仍是查询模式，默认音频引脚为 GPIO4／5／6。详见[音频配置差异](docs/audio-output.md#已通过的接法与默认配置差异)。
 
 ## 初始实验硬件
 
@@ -83,7 +81,7 @@ discora/
 │   ├── roadmap.md              # 分阶段实施计划
 │   ├── research.md             # 参考项目和资料
 │   ├── status.md               # 当前验证状态
-│   ├── records/                # 带日期的软件/硬件验证记录
+│   ├── records/                # README 索引与带日期的验证记录
 │   └── decisions/              # 设计决策记录
 └── firmware/                   # ESP-IDF 只读 BOT 探测与主机侧协议测试
 ```
@@ -92,9 +90,9 @@ discora/
 
 Discora explores a **low-cost standalone optical disc controller** built around ESP32-S3. The first goal is to read CD-DA from a USB-attached SATA/ATAPI drive and produce stereo I²S audio without a Linux computer. CD-R/CD-RW writing is a later **unverified research milestone**, subject to USB bridge compatibility and minimum write-speed constraints.
 
-**Status:** flashing, UART0, Full-Speed hub/drive enumeration and read-only BOT queries have been bench-tested with MATSHITA UJ-898 firmware HC10. Thirteen consecutive TEST UNIT READY checks passed over 61.2 seconds; long-running, cold-start and reconnection qualification remain open. Formatted TOC was bench-tested on one music CD (13 audio tracks); A bounded READ CD probe (disabled by default) matched PC reference hashes for one/eight sectors and measured a 256-sector burst at 739,858 bytes/s. A 600-second paced software-buffer run transferred 105.84 MB with zero underruns and a full-window PC hash match. Random seeking failed; A standalone UART-controlled I²S tone diagnostic and playback-control core are implemented and build-tested; The actual CD source is integrated with UART controls and a software-clock sink, including a 60.47-second paced window; the I²S adapter is build-tested only and DAC output remains unverified. Writing is not implemented. See [current evidence](docs/status.md).
+**Status:** USB queries, CD-DA reads, short stereo listening, three full-disc I²S submission runs, and the five basic operations of the four-button profile have bench evidence. Intermittent USB/seek failures remain unresolved; full-disc listening and complete reliability qualification remain open. Writing is not implemented. See [current deployment and evidence](docs/status.md), [remaining work](docs/roadmap.md), and [experiment records](docs/records/README.md).
 
-`0.12.1-buttons-row` adds an opt-in audio profile with play/pause (GPIO1), previous (GPIO2), next (GPIO42), and eject (GPIO41), preserving DAC DIN on GPIO7. Navigation arms continuous playback and preserves pause. Host checks and builds are separate from physical button acceptance; see [controls](docs/playback-controls.md) and [current deployment status](docs/status.md). The default build remains query mode.
+The audio profile uses GPIO15/16/7 for I²S, GPIO1/2/42/41 for play/pause, previous, next and eject, and GPIO10/11 for the OLED. The default build remains query mode; follow the [profile instructions](docs/playback-controls.md) to reproduce the audio configuration.
 
 ## License
 
