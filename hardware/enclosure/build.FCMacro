@@ -60,6 +60,27 @@ BUTTONS = [('PlayPause', '播放／暂停', -59.0, 9.0),
            ('Next', '下一曲', -41.0, 26.0)]
 
 
+def button_retainer(row_offset):
+    """Open direct-wire support; switch terminal pairs face local +/-Z.
+
+    Two pads per switch bear away from its central molded details. Continuous
+    terminal-side openings avoid inventing an unmeasured four-pin footprint.
+    """
+    def block(x,y,z,w,d,h):
+        return Part.makeBox(w,d,h,V(x,y,z))
+    frame=block(-1.5,16.5,-row_offset-1.5,3,2,2*row_offset+3)
+    frame=frame.fuse(block(-17,16.5,-2.4,34,2,4.8))
+    for rz in (-row_offset,row_offset):
+        frame=frame.fuse(block(-15,16.5,rz-1.5,30,2,3))
+        for cx in (-9,9):
+            for dx in (-3.8,3.8):
+                frame=frame.fuse(block(cx+dx-1,12,rz-1.5,2,4.5,3))
+    for x in (-14,14):
+        frame=frame.cut(Part.makeCylinder(1.1,2.3,V(x,16.4,0),Y))
+        frame=frame.cut(Part.makeCone(2.1,1.1,1,V(x,18.5,0),-Y))
+    return frame.removeSplitter()
+
+
 def build(folder):
     doc = A.newDocument("DiscoraV4Topload")
     doc.Label = "Discora V4 · 三件主要 PLA 结构"
@@ -293,7 +314,7 @@ def build(folder):
     button_mounts=[]
     button_pose=A.Placement(deck(-50,17.5),A.Rotation(Y,normal*-1))
     row_offset=8.5*math.sqrt(1+SHOULDER_SLOPE**2)
-    retainer=box(-17,16.5,-row_offset-7,34,2,2*row_offset+14)
+    retainer=button_retainer(row_offset)
     for key,label,x,y in BUTTONS:
         pose=A.Placement(deck(x,y),A.Rotation(Y,normal*-1))
         def placed(shape):
@@ -328,18 +349,13 @@ def build(folder):
         socket=socket.cut(cylinder(6.2,.4,(0,8.5,0),Y))
         socket=socket.cut(box(-6.2,8.8,-6.2,12.4,3.5,12.4))
         button_mounts.append(placed(socket.removeSplitter()))
-        # Center supports are provisional until the real lead footprint is known.
-        rz=-row_offset if y==9 else row_offset
-        retainer=retainer.fuse(cylinder(2,4.5,(x+50,12,rz),Y))
     for x in (-14,14):
         boss=cylinder(2.3,11.8,(x,4.7,0),Y).cut(cylinder(.8,10,(x,7,0),Y))
         boss.Placement=button_pose.multiply(boss.Placement);button_mounts.append(boss)
-        retainer=retainer.cut(cylinder(1.1,2.3,(x,16.4,0),Y))
-        retainer=retainer.cut(Part.makeCone(2.1,1.1,1,V(x,18.5,0),Y*-1))
     retainer.Placement=button_pose.multiply(retainer.Placement)
     # Preserve the existing DAC connector allowance, with 0.5 mm side clearance.
     retainer=retainer.cut(box(-67.5,32.5,157.5,9.6,18,11)).removeSplitter()
-    feature('ButtonRetainer','四键可拆压板 · 中央支点／引脚配合待测',retainer,TEAL,ui)
+    feature('ButtonRetainer','四键焊线支架 · 两侧敞开／双点支承',retainer,TEAL,ui)
     feature('ButtonMounts','四键定位座与压板螺柱 · 并入 P1',Part.makeCompound(button_mounts),TEAL,supports)
     loc = deck(48,18)
     knob = Part.makeCylinder(11.8,8.2,loc+normal*.45,normal).cut(

@@ -18,7 +18,7 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = '5c73112e2f065d81831e8f2f88cdff3242b4138083f531cacf7b90971ef3878c'
+ANNOTATED_MODEL_SHA256 = 'adc2d390a7f3e14a647d37d470555cb2524a16030cd2e80a7c4c1d4e52f37f21'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
@@ -77,7 +77,7 @@ def main():
         line(12,16,408,16,LIGHT)
         text(12,10,'概念设计 / CAD 静态几何 · 未经实物装配、声学或生产验收',8,MUTED)
         text(245,10,'单位 mm  |  '+scale,8,MUTED)
-        text(408,10,f'DC-V4-GA-{num:02d}  ·  2026-11-08  ·  {num}/{TOTAL_PAGES}',8,MUTED,'right')
+        text(408,10,f'DC-V4-GA-{num:02d}  ·  2026-11-09  ·  {num}/{TOTAL_PAGES}',8,MUTED,'right')
 
     def view(name,x,y,scale=1,clip_bottom=0):
         info=data['views'][name]
@@ -325,7 +325,7 @@ def main():
         'Cowl':'前壳 / 提手','LPanel':'左侧壳','RPanel':'右侧壳','LPort':'左导音孔 / 饰片','RPort':'右导音孔 / 饰片',
         'FrontBezel':'中央格栅压圈','FrontGrille':'通孔护网','Back':'后盖','Base':'底架 / 下固定座','Feet':'脚垫复合件（4 个）',
         'Window':'斜面窗片','StatusArt':'显示内容示意','PlayPauseKey':'播放／暂停键帽','EjectKey':'退碟键帽','PrevKey':'上一曲键帽','NextKey':'下一曲键帽',
-        'ButtonRetainer':'四键可拆压板（支点与引脚待核对）',
+        'ButtonRetainer':'四键焊线支架（两侧敞开／双点支承）',
         'PlayPauseSwitch':'播放／暂停开关包络','EjectSwitch':'退碟开关包络','PrevSwitch':'上一曲开关包络','NextSwitch':'下一曲开关包络','Knob':'音量旋钮',
         'LChamber':'左后腔','RChamber':'右后腔','LDriverFrame':'左喇叭预留框','RDriverFrame':'右喇叭预留框',
         'FrontBaffle':'双开口前障板','RearTopMount':'上固定耳（2 个）','DriveCarrier':'光驱底托 / 导轨','SlotGuide':'碟口导向框',
@@ -351,7 +351,7 @@ def main():
             text(x+1,y-1.8,f'{membership[name]}  {name}',7)
             text(x+1,y-4.8,labels[name],7,MUTED)
             text(x+193,y-3.5,' × '.join(fmt(n) for n in obj['size']),7.5,INK,'right')
-    text(12,127,'PLA 打印：3 主体 + 2 侧孔 + 4 键帽 + 压板 + 旋钮 = 11 件',11,TEAL)
+    text(12,127,'PLA 打印：3 主体 + 2 侧孔 + 4 键帽 + 焊线支架 + 旋钮 = 11 件',11,TEAL)
     printing=json.loads((ROOT/'print-checks.json').read_text())
     assert printing['model_sha256']==data['sha256'],'Print report and drawing model differ'
     text(12,118,'用户设备 P2SC · 按 P2S 配置 / 256³ 空间 / 0.4 喷嘴 / 0.20 层高 / 3 壁 / 15% 填充 / 树状支撑',9)
@@ -366,7 +366,7 @@ def main():
         '支架拆卸前先拔出两侧孔件、断线并卸 4 螺钉；支架向前抽出，光驱先前移 11.5，再侧转 -30°并前移 15.75 后抽出。',
         '电池松开绑带并断线后向前取出；装配按反向顺序，侧孔最后装入并固定。',
         '前壳路径按 1 mm 抽样；光驱转动按 0.5° 抽样，平移及其余路径连续保守扫掠。实物未验收。',
-        '四键中央支点与引脚、按压行程待测；0.2 喷嘴未切片。喇叭孔位、密封、螺钉配合及提手强度待验。',
+        '四键双点支承、实际焊线及行程待测；0.2 喷嘴未切片。喇叭孔位、密封、螺钉配合及提手强度待验。',
     ],gap=7,size=8.5)
     text(12,27,'FCStd SHA-256: '+data['sha256'],8,MUTED)
     text(408,27,'来源：Discora.FCStd / build.FCMacro / drawings/geometry.json',8,MUTED,'right')
