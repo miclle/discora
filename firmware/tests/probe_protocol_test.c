@@ -83,6 +83,25 @@ static void test_cbw(void)
     assert(cbw[24] == 0 && cbw[25] == 0 && cbw[26] == 0);
     assert(!probe_make_cbw(PROBE_READ_TOC, 6, 0, 3, cbw));
     assert(!probe_make_cbw(PROBE_READ_TOC, 6, 0, 805, cbw));
+    assert(probe_make_cbw(PROBE_READ_CDTEXT, 6, 5, 4, cbw));
+    assert(cbw[8] == 4 && cbw[12] == 0x80 && cbw[14] == 10 && cbw[15] == 0x43);
+    assert(cbw[16] == 0 && cbw[17] == 5 && cbw[21] == 0 && cbw[22] == 0 && cbw[23] == 4);
+    assert(probe_make_cbw(PROBE_READ_CDTEXT, 2, 6, 274, cbw));
+    assert(cbw[8] == 0x12 && cbw[9] == 1 && cbw[14] == 12 && cbw[17] == 5);
+    assert(cbw[22] == 1 && cbw[23] == 0x12 && cbw[24] == 0);
+    assert(!probe_make_cbw(PROBE_READ_CDTEXT, 6, 0, 3, cbw));
+    assert(!probe_make_cbw(PROBE_READ_CDTEXT, 6, 0, PROBE_MAX_DATA + 1, cbw));
+    size_t cdtext_size = 0;
+    const uint8_t empty_text[] = {0, 2, 0, 0};
+    const uint8_t text_header[] = {1, 16, 0, 0};
+    assert(probe_cdtext_size_from_header(empty_text, 4, &cdtext_size) && cdtext_size == 4);
+    assert(probe_cdtext_size_from_header(text_header, 4, &cdtext_size) && cdtext_size == 274);
+    assert(!probe_cdtext_size_from_header(text_header, 3, &cdtext_size));
+    const uint8_t bad_text[][4] = {{0, 0, 0, 0}, {0, 3, 0, 0}, {0xff, 0xfe, 0, 0}, {0, 2, 1, 0}};
+    for (size_t i = 0; i < sizeof(bad_text) / sizeof(bad_text[0]); ++i)
+        assert(!probe_cdtext_size_from_header(bad_text[i], 4, &cdtext_size));
+    assert(!probe_cdtext_size_from_header(NULL, 4, &cdtext_size));
+    assert(!probe_cdtext_size_from_header(empty_text, 4, NULL));
     const uint8_t subclasses[] = {2, 5, 6};
     for (unsigned i = 0; i < sizeof(subclasses); ++i) {
         const probe_command_t commands[] = {PROBE_ALLOW_REMOVAL, PROBE_EJECT};

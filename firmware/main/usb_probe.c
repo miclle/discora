@@ -621,6 +621,51 @@ static void identify_drive(probe_context_t *ctx)
     ESP_LOGW(TAG, "identity not confirmed; reconnect to run a new probe");
 }
 
+#if defined(CONFIG_DISCORA_CDTEXT_PROBE)
+static bool cdtext_fallback(probe_context_t *ctx, command_result_t status)
+{
+    if (status != COMMAND_FAILED) return false;
+    probe_sense_t sense;
+    // NOT READY / UNIT ATTENTION can invalidate the TOC read just before this.
+    // A missing optional title must not hide a removed or changed medium.
+    return request_sense(ctx, &sense) && sense.key != 2 && sense.key != 6;
+}
+
+static bool read_cdtext(probe_context_t *ctx)
+{
+    command_data_t *result = &ctx->result;
+    command_result_t status = execute_command(ctx, PROBE_READ_CDTEXT, PROBE_TOC_HEADER_SIZE, NULL, result);
+    if (status != COMMAND_PASSED) {
+        ESP_LOGW(TAG, "CD-Text unavailable result=%d; no title metadata", status);
+        return cdtext_fallback(ctx, status);
+    }
+    if (ctx->gone || ctx->faulted) return false;
+    size_t total;
+    if (!probe_cdtext_size_from_header(result->data, result->size, &total)) {
+        ESP_LOGW(TAG, "CD-Text header malformed or exceeds %u-byte reply budget", PROBE_MAX_DATA);
+        return true;
+    }
+    if (total == PROBE_TOC_HEADER_SIZE) {
+        ESP_LOGI(TAG, "CD-Text response empty: zero packs; keep track numbers");
+        return true;
+    }
+    uint8_t header[PROBE_TOC_HEADER_SIZE];
+    memcpy(header, result->data, sizeof(header));
+    status = execute_command(ctx, PROBE_READ_CDTEXT, total, NULL, result);
+    if (status != COMMAND_PASSED) {
+        ESP_LOGW(TAG, "CD-Text payload unavailable result=%d", status);
+        return cdtext_fallback(ctx, status);
+    }
+    if (result->size != total || memcmp(header, result->data, sizeof(header))) {
+        ESP_LOGW(TAG, "CD-Text response truncated or changed; ignored");
+        return true;
+    }
+    ESP_LOGI(TAG, "CD-Text captured bytes=%u packs=%u; raw metadata only, titles not decoded",
+             (unsigned)total, (unsigned)((total - PROBE_TOC_HEADER_SIZE) / 18));
+    return true;
+}
+#endif
+
 static void read_toc(probe_context_t *ctx)
 {
     command_data_t *result = &ctx->result;
@@ -655,6 +700,14 @@ static void read_toc(probe_context_t *ctx)
         ESP_LOGE(TAG, "TOC truncated, changed or malformed; no track metadata published");
         return;
     }
+#if defined(CONFIG_DISCORA_CDTEXT_PROBE)
+    // Probe before publishing selectable media, never during PCM production.
+    if (!read_cdtext(ctx) || ctx->faulted || ctx->gone) {
+        ctx->toc_valid = false;
+        ESP_LOGW(TAG, "CD-Text probe lost source readiness; discard TOC until a fresh query");
+        return;
+    }
+#endif
     ctx->toc_valid = true;
 #if defined(CONFIG_DISCORA_CD_PLAYER)
     discora_cd_player_media(&ctx->toc);

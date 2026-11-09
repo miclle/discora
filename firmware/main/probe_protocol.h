@@ -23,6 +23,7 @@ typedef enum {
     PROBE_READ_CD,
     PROBE_ALLOW_REMOVAL,
     PROBE_EJECT,
+    PROBE_READ_CDTEXT,
 } probe_command_t;
 
 typedef struct {
@@ -87,5 +88,8 @@ bool probe_parse_csw(const uint8_t *data, size_t size, uint32_t tag,
 bool probe_parse_inquiry(const uint8_t *data, size_t size, probe_inquiry_t *out);
 bool probe_parse_sense(const uint8_t *data, size_t size, probe_sense_t *out);
 bool probe_toc_size_from_header(const uint8_t *data, size_t size, size_t *total_size);
+// Format 5: four-byte header followed by complete 18-byte CD-Text packs.
+// Empty (four bytes) is valid; oversized replies are rejected before requesting data.
+bool probe_cdtext_size_from_header(const uint8_t *data, size_t size, size_t *total_size);
 // Format 0, MSF=0: complete sequential CD tracks followed by one lead-out (0xAA).
 bool probe_parse_toc(const uint8_t *data, size_t size, probe_toc_t *out);

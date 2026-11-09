@@ -277,6 +277,16 @@ config DISCORA_CD_PLAYER_VERIFY
         Diagnostic overhead under the queue mutex. Logs counts and SHA-256 only;
         no PCM is saved. Verifies the software queue, not audible I2S delivery.
 
+config DISCORA_CDTEXT_PROBE
+    bool "Probe CD-Text metadata after TOC (read-only experiment)"
+    depends on DISCORA_CD_PLAYER
+    default n
+    help
+        One header and at most one bounded full READ TOC format 5 per TOC.
+        Logs raw metadata for inspection; does not decode or display titles.
+        Unsupported/empty responses retain track-number display. Transport
+        errors still follow the existing fail-closed USB recovery policy.
+
 config DISCORA_OLED
     bool "Show track and state on SH1106 128x64 OLED (GPIO10/11)"
     depends on DISCORA_CD_PLAYER

@@ -1,0 +1,2 @@
+# Optional read-only CD-Text discovery; layer after the working player profiles.
+CONFIG_DISCORA_CDTEXT_PROBE=y

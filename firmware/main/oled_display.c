@@ -6,6 +6,7 @@
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include <string.h>
 
 #if defined(CONFIG_DISCORA_CD_PLAYER_I2S) && (CONFIG_DISCORA_I2S_BCLK == 10 || CONFIG_DISCORA_I2S_LRCK == 10 || CONFIG_DISCORA_I2S_DATA == 10 || CONFIG_DISCORA_I2S_BCLK == 11 || CONFIG_DISCORA_I2S_LRCK == 11 || CONFIG_DISCORA_I2S_DATA == 11)
 #error "GPIO10/11 are reserved for OLED; move I2S pins or disable DISCORA_OLED"
@@ -40,24 +41,29 @@ static void display_task(void *arg)
     if (last_error != ESP_OK || !oled_panel_init(write_panel, device)) goto done;
     vTaskDelay(pdMS_TO_TICKS(100)); // SH1106 internal DC-DC stabilization.
     uint8_t frame[OLED_FRAME_BYTES];
-    cd_player_status_t previous = {0};
+    // The sole display task owns this buffer; preserve its existing 4 KiB stack budget.
+    static uint8_t previous[OLED_FRAME_BYTES];
     bool displayed = false;
     for (;;) {
         cd_player_status_t current;
-        if (discora_cd_player_snapshot(&current) && (!displayed || current.media != previous.media ||
-            current.track != previous.track || current.state != previous.state)) {
+        if (discora_cd_player_snapshot(&current)) {
 #if defined(CONFIG_DISCORA_CD_PLAYER_I2S)
             oled_render(frame, &current, true);
 #else
             oled_render(frame, &current, false);
 #endif
+            // Compare pixels so sub-second position changes do not force a bus transfer.
+            if (displayed && !memcmp(frame, previous, sizeof(frame))) {
+                vTaskDelay(pdMS_TO_TICKS(200));
+                continue;
+            }
             if (!oled_panel_flush(write_panel, device, frame)) break;
             if (!displayed) {
                 if (!oled_panel_on(write_panel, device)) break;
                 ESP_LOGI(TAG, "SH1106 initialized SDA=GPIO10 SCL=GPIO11 address=0x%02x; physical display unverified", CONFIG_DISCORA_OLED_ADDRESS);
             }
             displayed = true;
-            previous = current;
+            memcpy(previous, frame, sizeof(frame));
         }
         vTaskDelay(pdMS_TO_TICKS(200));
     }

@@ -23,13 +23,13 @@
 | 轻触按键播放／暂停 | 四键 profile GPIO1 → 状态切换 | bench-tested：0.12.5 用户确认实体播放、暂停正常；长按等专项场景待验收，见[四键控制](docs/playback-controls.md) |
 | 轻触按键退盘 | 四键 profile GPIO41 → USB 退盘命令；旧查询默认 GPIO7 | bench-tested：0.12.5 用户确认实体退碟正常；退碟 CSW 未捕获，各状态及重插盘场景未完整覆盖，见[接线](docs/eject-button.md) |
 | 轻触按键上一曲／下一曲 | 四键 profile GPIO2／GPIO42 → 播放器换轨 | bench-tested：0.12.5 用户确认实体前后换轨正常；暂停保持及首尾循环的实体按键场景待专项验收，见[接线与配置](docs/track-buttons.md) |
-| OLED 曲目与播放状态 | GPIO10 SDA／GPIO11 SCL → SH1106 | bench-tested：当前四键有声版已启用，用户确认无介质画面清晰完整；动态显示待验收，见[显示说明](docs/oled-display.md) |
+| OLED 曲目与播放状态 | GPIO10 SDA／GPIO11 SCL → SH1106 | bench-tested：0.12.6 中文显示与进度条已有用户实屏确认，其余场景待验收，见[显示说明](docs/oled-display.md) |
 | CD-R/CD-RW 刻录 | 测速、写入、封盘、校验 | 研究目标；可行性待测 |
 | DVD 读取/刻录 | 可选扩展 | 不在首版范围 |
 
 **请勿把技术可行性推断、其它项目的成果或 Linux 测试结果当作 Discora 的实测结论。**
 
-最近部署为 **0.12.5-usb-recovery-guard**（9063 主控）。用户已确认四键的播放、暂停、上一曲、下一曲和退碟基本操作正常；短时立体声试听及此前三轮整盘 I²S 提交已有实测证据。间歇性 USB／寻道故障仍未关闭，完整稳定性和整盘全程听感未验收。最新版本、配置与证据统一见[工程状态](docs/status.md)，后续工作见[路线图](docs/roadmap.md)，历史经过见[实验记录索引](docs/records/README.md)。
+最近部署为 **0.12.6-oled-progress**（9063 主控），新增中文状态、单轨时间与进度条，启动和 OLED 初始化通过，中文显示和进度条已获用户实屏确认。此前 0.12.5 的四键播放、暂停、上一曲、下一曲和退碟基本操作已获用户确认；短时立体声试听及此前三轮整盘 I²S 提交已有实测证据。间歇性 USB／寻道故障仍未关闭，完整稳定性和整盘全程听感未验收。最新版本、配置与证据统一见[工程状态](docs/status.md)，后续工作见[路线图](docs/roadmap.md)，历史经过见[实验记录索引](docs/records/README.md)。
 
 复现有声接法使用 GPIO15→BCK、GPIO16→LCK、GPIO7→DIN，并叠加[四键 profile](docs/playback-controls.md)；无叠加的默认构建仍是查询模式，默认音频引脚为 GPIO4／5／6。详见[音频配置差异](docs/audio-output.md#已通过的接法与默认配置差异)。
 

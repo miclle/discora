@@ -3,9 +3,17 @@
 
 cd_player_status_t cd_player_snapshot(const cd_player_core_t *p)
 {
-    return (cd_player_status_t){.media = p->media,
+    cd_player_status_t status = {.media = p->media,
         .track = p->media ? p->toc.tracks[p->index].number : 0,
         .state = p->audio.state};
+    if (p->media) {
+        const probe_track_t *track = &p->toc.tracks[p->index];
+        status.duration_sectors = track->end_lba - track->start_lba;
+        uint64_t position = p->audio.dequeued_bytes / PROBE_CD_SECTOR_SIZE;
+        status.position_sectors = position < status.duration_sectors ?
+                                  (uint32_t)position : status.duration_sectors;
+    }
+    return status;
 }
 
 static bool eligible(const probe_track_t *t)
