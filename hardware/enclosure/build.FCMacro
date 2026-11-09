@@ -53,10 +53,53 @@ GRILLE_UNDERLAP = 3.0
 BATTERY = (112.0, 70.0, 20.0)
 SLOT_Y = 65.75 + INTERNAL_SHIFT_Y
 DRIVE_TOP = 161.0
-# Display mechanical envelope remains provisional; retain the original UI layout.
-DISPLAY_WINDOW = (36.0, 20.0)
+# OLED supplier drawing: dimensions are nominal, not measured hardware.
+# The origin is the active-area center; +Z points toward the four-pin header.
+DISPLAY_WINDOW = (30.42, 15.7)  # 0.5 mm beyond the active area on each side
+DISPLAY_OUTER_WINDOW = (32.82, 18.1)  # flared mouth; throat starts 0.8 mm inward
 DISPLAY_DECK_Y = 18.0
-DISPLAY_PCB = (38.0, 1.6, 30.0)
+DISPLAY_PCB = (35.4, 1.2, 33.5)
+DISPLAY_HOLES = [(x,z) for x in (-15.2,15.2) for z in (-16.3,12.2)]
+
+
+def oled_shapes():
+    """Local geometry from oled-module-dimensions-wiring.webp, in mm.
+
+    Panel front is 1.0 behind the exterior; a rear pocket leaves a 0.8 lip.
+    Four pegs locate the PCB, and a removable frame bears only on hole lands.
+    The side-view 11.3 spans
+    panel front to bent-pin tip. Header width/thickness are conservative
+    reservations (4 pitches by 1 pitch), not measured housing dimensions.
+    """
+    pcb=Part.makeBox(*DISPLAY_PCB,V(-17.7,2.4,-18.8))
+    pcb=pcb.cut(Part.makeBox(14,2,4.01,V(-7,2,-18.81)))
+    for x,z in DISPLAY_HOLES:
+        pcb=pcb.cut(Part.makeCylinder(1.5,2,V(x,2,z),Y))
+    panel=Part.makeBox(34.5,1.4,23,V(-17.25,1,-13.55))
+    header=Part.makeBox(10.16,8.7,2.54,V(-5.08,3.6,11.43))
+    left=Part.makeCompound([Part.makeCylinder(2.25,.6,V(-15.2,1.8,z),Y).fuse(
+        Part.makeCylinder(1.3,1.6,V(-15.2,2.4,z),Y)) for z in (-16.3,12.2)]+
+        [Part.makeCylinder(2.5,2.9,V(-20.5,3.5,-7),Y)])
+    pilots=Part.makeCompound([Part.makeCylinder(.8,4.5,V(x,2,-7),Y) for x in (-20.5,20.5)])
+    pocket=Part.makeBox(34.9,12,23.4,V(-17.45,.8,-13.75)).fuse(
+        Part.makeBox(36,12,34.1,V(-18,2.2,-19.1)))
+    # Open-bottom U frame leaves the header, PCB centre and lower notch accessible.
+    frame=Part.makeBox(44.5,2,3.5,V(-22.25,6.4,15.7))
+    members=[]
+    for sign in (-1,1):
+        cx=sign*20.5
+        members.append(Part.makeBox(3.5,2,34.25,V(cx-1.75,6.4,-18.55)))
+        members.append(Part.makeCylinder(3,2,V(cx,6.4,-7),Y))
+        for z in (-16.3,12.2):
+            x=sign*15.2
+            members.append(Part.makeCylinder(2.25,4.8,V(x,3.6,z),Y))
+            members.append(Part.makeBox(5.3,2,3.5,V(min(x,cx),6.4,z-1.75)))
+    frame=frame.multiFuse(members)
+    for x,z in DISPLAY_HOLES:
+        frame=frame.cut(Part.makeCylinder(1.6,5,V(x,3.5,z),Y))
+    for x in (-20.5,20.5):
+        frame=frame.cut(Part.makeCylinder(1.1,2.2,V(x,6.3,-7),Y))
+    return pcb.removeSplitter(),panel,header,left,pilots,frame.removeSplitter(),pocket.removeSplitter()
 # Centers on the exterior slope; front row then rear row.
 BUTTONS = [('PlayPause', '播放／暂停', -59.0, 9.0),
            ('Eject', '退碟', -41.0, 9.0),
@@ -204,7 +247,14 @@ def build(folder):
         return V(x,y,EAVE_Z+SHOULDER_SLOPE*y)
     # Local screen X is horizontal, +Z runs up the slope, +Y points into the case.
     display_pose=A.Placement(deck(0,DISPLAY_DECK_Y),A.Rotation(Y,normal*-1))
-    screen_cut=display_rect(*DISPLAY_WINDOW,3,-3,9)
+    def aperture_wire(width,height,radius,y):
+        slab=display_rect(width,height,radius,y,.1)
+        return next(f.OuterWire for f in slab.Faces
+                    if f.BoundBox.YLength<1e-7 and abs(f.CenterOfMass.y-y)<1e-7)
+    flare=Part.makeLoft([aperture_wire(*DISPLAY_OUTER_WINDOW,1.8,0),
+                         aperture_wire(*DISPLAY_WINDOW,.6,.8)],True,True)
+    screen_cut=display_rect(*DISPLAY_OUTER_WINDOW,1.8,-3,3).fuse(flare).fuse(
+        display_rect(*DISPLAY_WINDOW,.6,.8,8.2)).removeSplitter()
     screen_cut.Placement=display_pose.multiply(screen_cut.Placement)
     holes = [obround((0,HANDLE_FRONT-2,SHOULDER_Z+12.5), X,Z,Y,90,16,10),
              screen_cut,
@@ -295,12 +345,12 @@ def build(folder):
     feet=[cylinder(4,3,(x,y,0),Z) for x in (-55,55) for y in (11,CASE_DEPTH-11)]
     feature("Feet","四个脚垫",Part.makeCompound(feet),RUBBER,ui)
 
-    ww, wh = DISPLAY_WINDOW
-    feature("Window","斜面状态屏 · 圆角显示窗",display_rect(ww-.4,wh-.4,2.8,.6,2),GLASS,ui)
+    oled_pcb,oled_panel,oled_header,oled_left,oled_pilots,oled_frame,oled_pocket=oled_shapes()
+    feature("Window","OLED 玻璃面板 · 34.5×23×1.4",oled_panel,GLASS,ui)
     # Raised luminous shapes are a display-content mockup, not printable parts.
     glyphs=[]
     def segment(x,z,w,h):
-        glyphs.append(box(x,.4,z,w,.15,h))
+        glyphs.append(box(x,.85,z,w,.15,h))
     def digit(x,z,active):
         segments={'a':(x+.5,z+7,3,.55),'g':(x+.5,z+3.5,3,.55),
                   'd':(x+.5,z,3,.55),'f':(x,z+4,.55,2.8),
@@ -310,11 +360,11 @@ def build(folder):
     digit(-13,-2,'abcdef')
     digit(-7,-2,'abc')
     # Play icon, battery outline and volume bars.
-    pts=[V(1,.4,-1),V(1,.4,5),V(5,.4,2)]
+    pts=[V(1,.85,-1),V(1,.85,5),V(5,.85,2)]
     glyphs.append(Part.Face(Part.makePolygon(pts+[pts[0]])).extrude(Y*.15))
     bz=1
-    battery=box(8,.4,bz,5,.15,3).cut(box(8.5,.3,bz+.5,4,.4,2))
-    glyphs.extend([battery,box(13,.4,bz+1,.7,.15,1),box(9,.4,bz+.8,2.5,.15,1.4)])
+    battery=box(8,.85,bz,5,.15,3).cut(box(8.5,.8,bz+.5,4,.4,2))
+    glyphs.extend([battery,box(13,.85,bz+1,.7,.15,1),box(9,.85,bz+.8,2.5,.15,1.4)])
     for i in range(8): segment(-13+i*3.4,-6,2.3,1.2)
     feature("StatusArt","显示内容示意 · 曲目 07 / 播放 / 电量 / 音量",Part.makeCompound(glyphs),PIXEL,ui)
     # Local +Y is depth below the exterior face. Separate caps bridge the
@@ -398,15 +448,18 @@ def build(folder):
     guide=prism_yz([(y0,DRIVE_TOP),(y1,DRIVE_TOP),(y1,inner_roof(y1)),(y0,inner_roof(y0))],-63,126)
     guide=guide.cut(box(-62,SLOT_Y-1.6,DRIVE_TOP-.5,124,3.2,20))
     feature("SlotGuide","后斜面进碟导向框",guide,TEAL,supports)
-    pw, pt, ph = DISPLAY_PCB
-    block("DisplayPCB","小型单色状态屏 PCB · 预估占位",(-pw/2,7.4,-ph/2),DISPLAY_PCB,PCB,hardware)
-    block("DisplayHeader","状态屏接头 · 预估占位",(-5,9,-14),(10,4,4),RUBBER,hardware)
-    frame=box(-pw/2-3,3.3,-ph/2-3,pw+6,5.7,ph+6).cut(
-        box(-pw/2-.3,2.5,-ph/2-.3,pw+.6,7,ph+.6))
-    seat=box(-pw/2-3,9,-ph/2-3,pw+6,2,ph+6).cut(
-        box(-pw/2+2,8.5,-ph/2+2,pw-4,3,ph-4))
-    frame=frame.fuse(seat).cut(box(-5.3,8.8,-14.3,10.6,4.5,4.6))
-    feature("DisplayCarrier","小状态屏安装座 · 待选型细化",frame.removeSplitter(),TEAL,supports)
+    feature("DisplayPCB","SH1106 PCB · 35.4×33.5×1.2／四孔与底部缺口",oled_pcb,PCB,hardware)
+    header=feature("DisplayHeader","OLED 弯针接头预留 · 图纸深度11.3／2.54节距",oled_header,RUBBER,hardware)
+    header.addProperty('App::PropertyFloatList','PinCentersX').PinCentersX=[-3.81,-1.27,1.27,3.81]
+    header.addProperty('App::PropertyStringList','PinLabels').PinLabels=['VCC','GND','SCL','SDA']
+    feature('DisplayRetainer','OLED 可拆压框 · 四点承压／两侧锁紧',oled_frame,TEAL,ui)
+    left=feature('DisplayMountLeft','OLED 左侧定位柱与压框螺柱',oled_left,TEAL,supports)
+    left.Placement=display_pose.multiply(left.Placement)
+    right=mirrored('DisplayMountRight','OLED 右侧支柱 · 原生镜像',left,TEAL,supports)
+    doc.recompute()
+    # This carrier already has world coordinates; it is not transformed below.
+    feature('DisplayCarrier','OLED 四孔定位座 · 孔距30.4×28.5／外侧压框螺柱',
+            Part.makeCompound([left.Shape,right.Shape]),TEAL,supports)
 
     # Amp stays horizontal; MCU sits in front of the raised drive.
     # DAC stands on the left side. Only PCB sizes have documentary evidence.
@@ -440,7 +493,7 @@ def build(folder):
     feature("BatteryCradle","底部平排电池托盘 · 线材与固定方式待实测",cradle.removeSplitter(),TEAL,supports)
 
     # Move the complete display stack together, including the native PCB boxes.
-    for name in ('Window','StatusArt','DisplayPCB','DisplayHeader','DisplayCarrier'):
+    for name in ('Window','StatusArt','DisplayPCB','DisplayHeader','DisplayRetainer'):
         obj=doc.getObject(name)
         obj.Placement=display_pose.multiply(obj.Placement)
 
@@ -492,9 +545,13 @@ def build(folder):
     column_shapes=[box(x,y,121.5,2,3,25.7) for x in (-51,49) for y in (37,55)]
     column_shapes += [box(x,y,145,17,3,2.5) for x in (-51,34) for y in (37,55)]
     column_names=[source_part('MCUColumn'+str(i),shape) for i,shape in enumerate(column_shapes)]
-    bridge_shape=box(-22,2,-18,44,1.5,36).cut(box(-18.3,1.5,-10.3,36.6,3,20.6))
-    bridge_shape.Placement=display_pose.multiply(bridge_shape.Placement)
-    display_bridge=source_part('DisplayShellBridge',bridge_shape)
+    oled_pilots.Placement=display_pose.multiply(oled_pilots.Placement)
+    display_pilots=source_part('DisplayMountPilots',oled_pilots)
+    oled_pocket.Placement=display_pose.multiply(oled_pocket.Placement)
+    display_pocket=source_part('DisplayPocket',oled_pocket)
+    for obj in (left,right):
+        supports.removeObject(obj);construction.addObject(obj)
+        visible.remove(obj);obj.Visibility=False
     # The roof belongs to P2. At each side wall, one straight seam joins the
     # front shoulder's inner foot to the handle root, without a stepped heel.
     seam_profile=[(FRONT_THICKNESS,0),(HANDLE_REAR,0),(HANDLE_REAR,SHOULDER_Z),
@@ -517,7 +574,12 @@ def build(folder):
     doc.Cowl.Visibility=False
     doc.recompute()
     front=consolidate("FrontShell","P1 · 一体前壳／提手／护网",
-                      ['FrontCowl','FrontBezel','FrontGrille','DisplayCarrier',display_bridge,'ButtonMounts',front_post_name],[],TEAL,shell)
+                      ['FrontCowl','FrontBezel','FrontGrille','ButtonMounts',front_post_name],[],TEAL,shell)
+    front.Shape=front.Shape.cut(doc.getObject(display_pocket).Shape).fuse(doc.DisplayCarrier.Shape).cut(
+        doc.getObject(display_pilots).Shape).removeSplitter()
+    front.ConstructionObjects=list(front.ConstructionObjects)+['DisplayCarrier']
+    supports.removeObject(doc.DisplayCarrier);construction.addObject(doc.DisplayCarrier)
+    visible.remove(doc.DisplayCarrier);doc.DisplayCarrier.Visibility=False
     core=consolidate("SpeakerCarrier","P3 · 双声腔／前障板／功放桥接托板",
                      ['LChamber','RChamber','LDriverFrame','RDriverFrame','FrontBaffle','AmpShelf','AmpPads',
                       'ElectronicsSled','MCUPads']+core_tab_names+column_names,

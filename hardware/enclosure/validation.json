@@ -1,13 +1,13 @@
 {
-  "date": "2026-11-09",
+  "date": "2026-11-10",
   "model": "Discora.FCStd",
-  "sha256": "42ecc25db7d3df73db230a2d049c27795c1ac9ea7484fd432b2da56074bcff17",
+  "sha256": "0763858f1cfbe30c99434dce227a8c50fb99112e9ad7e43d9a5092ee646f35e8",
   "version": [
     "1",
     "1",
     "4"
   ],
-  "items": 33,
+  "items": 34,
   "objects": [
     "LPort",
     "RPort",
@@ -22,6 +22,7 @@
     "NextKey",
     "ButtonRetainer",
     "Knob",
+    "DisplayRetainer",
     "SpeakerCarrier",
     "LDriver",
     "RDriver",
@@ -59,6 +60,7 @@
     "PrevKey",
     "NextKey",
     "ButtonRetainer",
+    "DisplayRetainer",
     "Knob"
   ],
   "rear_roof_ownership": {

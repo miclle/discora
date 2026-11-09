@@ -16,7 +16,7 @@ def render(folder):
     view=G.activeDocument().activeView()
     camera = view.getCameraOrientation().Q
     view.setCameraType('Orthographic')
-    def save(name,rotation,focus=None,height=None):
+    def save(name,rotation,focus=None,height=None,size=(1000,1100)):
         # Set the Coin camera directly to avoid animated intermediate views.
         view.getCameraNode().orientation.setValue(coin.SbRotation(*rotation.Q))
         G.updateGui(); QtWidgets.QApplication.processEvents()
@@ -32,19 +32,20 @@ def render(folder):
             camera_node.nearDistance.setValue(.1)
             camera_node.farDistance.setValue(2000)
         G.updateGui(); QtWidgets.QApplication.processEvents()
-        view.saveImage(str(folder/name),1000,1100,'White')
+        view.saveImage(str(folder/name),*size,'White')
     front=A.Rotation(A.Vector(1,0,0),90)
     angle=A.Rotation(A.Vector(0,0,1),21).multiply(A.Rotation(A.Vector(1,0,0),76))
     save('preview.png',angle)
     save('front.png',front)
     save('grille-detail.png',angle,A.Vector(0,1,76),150)
     save('controls.png',A.Rotation(A.Vector(1,0,0),48))
+    save('oled-front-detail.png',front,A.Vector(0,18,190),65,(1400,600))
     save('side.png',A.Rotation(A.Vector(0,0,1),90).multiply(front))
     save('topload.png',A.Rotation(A.Vector(0,0,1),155).multiply(A.Rotation(A.Vector(1,0,0),55)))
     doc.DiscReference.Visibility=True
     save('disc-path.png',angle)
     doc.DiscReference.Visibility=False
-    for name in ['FrontShell','Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch','Knob','Encoder','VolumePot','DisplayPCB','DisplayHeader']:
+    for name in ['FrontShell','Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch','Knob','Encoder','VolumePot','DisplayPCB','DisplayHeader','DisplayRetainer']:
         doc.getObject(name).Visibility=False
     save('layout.png',angle)
     # Section through the left driver center, viewed from +X, reveals the depth stack.
@@ -74,6 +75,21 @@ def render(folder):
     section_view.saveImage(str(folder/'section.png'),1000,1100,'White')
     A.closeDocument(section.Name)
     A.setActiveDocument(doc.Name)
+    # Inside view of the actual OLED mount; no model or visibility is saved.
+    for name in ('Shell','Controls','Hardware'):
+        doc.getObject(name).Visibility=True
+    for obj in doc.Objects:
+        if hasattr(obj,'Shape'):obj.Visibility=False
+    for name in ('FrontShell','Window','DisplayPCB','DisplayHeader','DisplayRetainer'):
+        doc.getObject(name).Visibility=True
+    oled_modes={name:doc.getObject(name).ViewObject.DisplayMode for name in ('FrontShell','DisplayPCB','DisplayHeader','DisplayRetainer')}
+    for name in oled_modes:doc.getObject(name).ViewObject.DisplayMode='Flat Lines'
+    oled_pose=A.Placement(A.Vector(0,18,165+18*27/38),
+                         A.Rotation(A.Vector(0,1,0),A.Vector(0,27/38,-1)))
+    inside=A.Rotation(A.Vector(0,1,0),180).multiply(A.Rotation(A.Vector(1,0,0),-90))
+    save('oled-mount.png',oled_pose.Rotation.multiply(inside),
+         oled_pose.Base,60)
+    for name,mode in oled_modes.items():doc.getObject(name).ViewObject.DisplayMode=mode
     for name, state in visibility.items():
         doc.getObject(name).Visibility = state
     view.setCameraOrientation(camera)

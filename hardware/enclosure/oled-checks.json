@@ -1,0 +1,421 @@
+{
+  "model_sha256": "0763858f1cfbe30c99434dce227a8c50fb99112e9ad7e43d9a5092ee646f35e8",
+  "build_sha256": "51c40a6016506a83cf13c56ccdfcddb66bb4ff00b80015576a5942f6e90ae9bc",
+  "source": "../OLED-1.3-128x64/oled-module-dimensions-wiring.webp",
+  "source_sha256": "6adb394605cb124c7160bf8bf9fc2c827c520ebc458eb3d7139b901d61673733",
+  "freecad_version": [
+    "1",
+    "1",
+    "4"
+  ],
+  "units": "mm",
+  "pcb_local": {
+    "min": [
+      -17.7,
+      2.399999999999997,
+      -18.8
+    ],
+    "max": [
+      17.7,
+      3.600000000000004,
+      14.7
+    ],
+    "size": [
+      35.4,
+      1.2000000000000073,
+      33.5
+    ]
+  },
+  "panel_local": {
+    "min": [
+      -17.25,
+      0.9999999999999979,
+      -13.55
+    ],
+    "max": [
+      17.25,
+      2.400000000000003,
+      9.45
+    ],
+    "size": [
+      34.5,
+      1.4000000000000052,
+      23.0
+    ]
+  },
+  "header_reservation_local": {
+    "min": [
+      -5.08,
+      3.599999999999997,
+      11.43
+    ],
+    "max": [
+      5.08,
+      12.299999999999997,
+      13.970000000000002
+    ],
+    "size": [
+      10.16,
+      8.7,
+      2.5400000000000027
+    ]
+  },
+  "active_area": {
+    "size_mm": [
+      29.42,
+      14.7
+    ],
+    "left_from_pcb_mm": 2.99,
+    "top_from_pcb_mm": 7.35,
+    "center_above_pcb_center_mm": 2.05,
+    "exterior_reference_xyz_mm": [
+      0.0,
+      18.0,
+      177.78947368421052
+    ]
+  },
+  "aperture": {
+    "mouth_size_mm": [
+      32.82,
+      18.1
+    ],
+    "mouth_radius_mm": 1.8,
+    "throat_size_mm": [
+      30.42,
+      15.7
+    ],
+    "throat_radius_mm": 0.6,
+    "lip_depth_mm": 0.8,
+    "glass_setback_mm": 1,
+    "panel_to_lip_gap_mm": 0.2,
+    "moved_outward_mm": 4.4,
+    "obstructed_volume_mm3": 0,
+    "full_active_area_ray_sweeps": [
+      {
+        "horizontal_deg": -45,
+        "vertical_deg": -45,
+        "obstruction_mm3": 0.0
+      },
+      {
+        "horizontal_deg": -45,
+        "vertical_deg": 0,
+        "obstruction_mm3": 0.0
+      },
+      {
+        "horizontal_deg": -45,
+        "vertical_deg": 45,
+        "obstruction_mm3": 0.0
+      },
+      {
+        "horizontal_deg": 0,
+        "vertical_deg": -45,
+        "obstruction_mm3": 0.0
+      },
+      {
+        "horizontal_deg": 0,
+        "vertical_deg": 0,
+        "obstruction_mm3": 0.0
+      },
+      {
+        "horizontal_deg": 0,
+        "vertical_deg": 45,
+        "obstruction_mm3": 0.0
+      },
+      {
+        "horizontal_deg": 45,
+        "vertical_deg": -45,
+        "obstruction_mm3": 0.0
+      },
+      {
+        "horizontal_deg": 45,
+        "vertical_deg": 0,
+        "obstruction_mm3": 0.0
+      },
+      {
+        "horizontal_deg": 45,
+        "vertical_deg": 45,
+        "obstruction_mm3": 0.0
+      },
+      {
+        "horizontal_deg": 0,
+        "vertical_deg": 54.60520415501295,
+        "obstruction_mm3": 0.0
+      },
+      {
+        "horizontal_deg": 0,
+        "vertical_deg": -54.60520415501295,
+        "obstruction_mm3": 0.0
+      },
+      {
+        "horizontal_deg": 0,
+        "vertical_deg": 55,
+        "obstruction_mm3": 0.0
+      },
+      {
+        "horizontal_deg": 0,
+        "vertical_deg": -55,
+        "obstruction_mm3": 0.0
+      }
+    ]
+  },
+  "board_notch_mm": [
+    14,
+    4
+  ],
+  "hole_pitch_mm": [
+    30.4,
+    28.5
+  ],
+  "mounts": [
+    {
+      "local_xz_mm": [
+        -15.2,
+        -16.3
+      ],
+      "world_seat_center_xyz_mm": [
+        -15.199999999999998,
+        6.102656462513803,
+        166.3919644496876
+      ],
+      "pcb_hole_diameter_mm": 3,
+      "seat_outer_diameter_mm": 4.5,
+      "peg_diameter_mm": 2.6,
+      "peg_height_mm": 1.6,
+      "nominal_peg_radial_gap_mm": 0.2,
+      "retainer_contact_depth_mm": 3.6
+    },
+    {
+      "local_xz_mm": [
+        -15.2,
+        12.2
+      ],
+      "world_seat_center_xyz_mm": [
+        -15.199999999999998,
+        29.335298098102605,
+        182.89936771707963
+      ],
+      "pcb_hole_diameter_mm": 3,
+      "seat_outer_diameter_mm": 4.5,
+      "peg_diameter_mm": 2.6,
+      "peg_height_mm": 1.6,
+      "nominal_peg_radial_gap_mm": 0.2,
+      "retainer_contact_depth_mm": 3.6
+    },
+    {
+      "local_xz_mm": [
+        15.2,
+        -16.3
+      ],
+      "world_seat_center_xyz_mm": [
+        15.199999999999998,
+        6.102656462513803,
+        166.3919644496876
+      ],
+      "pcb_hole_diameter_mm": 3,
+      "seat_outer_diameter_mm": 4.5,
+      "peg_diameter_mm": 2.6,
+      "peg_height_mm": 1.6,
+      "nominal_peg_radial_gap_mm": 0.2,
+      "retainer_contact_depth_mm": 3.6
+    },
+    {
+      "local_xz_mm": [
+        15.2,
+        12.2
+      ],
+      "world_seat_center_xyz_mm": [
+        15.199999999999998,
+        29.335298098102605,
+        182.89936771707963
+      ],
+      "pcb_hole_diameter_mm": 3,
+      "seat_outer_diameter_mm": 4.5,
+      "peg_diameter_mm": 2.6,
+      "peg_height_mm": 1.6,
+      "nominal_peg_radial_gap_mm": 0.2,
+      "retainer_contact_depth_mm": 3.6
+    }
+  ],
+  "retainer_fasteners": [
+    {
+      "local_xz_mm": [
+        -20.5,
+        -7
+      ],
+      "pilot_diameter_mm": 1.6,
+      "pilot_depth_mm": 4.4,
+      "clearance_diameter_mm": 2.2,
+      "head_clashes": [],
+      "tool_clashes": []
+    },
+    {
+      "local_xz_mm": [
+        20.5,
+        -7
+      ],
+      "pilot_diameter_mm": 1.6,
+      "pilot_depth_mm": 4.4,
+      "clearance_diameter_mm": 2.2,
+      "head_clashes": [],
+      "tool_clashes": []
+    }
+  ],
+  "retainer": {
+    "connected_solids": 1,
+    "frame_depth_mm": [
+      6.4,
+      8.4
+    ],
+    "contact_depth_mm": 3.6,
+    "body_clearance_mm": 2.8,
+    "removal_clashes": []
+  },
+  "header": {
+    "pin_pitch_mm": 2.54,
+    "pin_centers_local_x_mm": [
+      -3.81,
+      -1.27,
+      1.27,
+      3.81
+    ],
+    "pin_labels": [
+      "VCC",
+      "GND",
+      "SCL",
+      "SDA"
+    ],
+    "pin_center_local_z_mm": 12.7,
+    "panel_front_to_pin_tip_mm": 11.3,
+    "housing_size_measured": false
+  },
+  "plug_and_wire_reservation": {
+    "local_min_mm": [
+      -6.08,
+      12.3,
+      10.43
+    ],
+    "size_mm": [
+      12.16,
+      6,
+      4.54
+    ],
+    "clashes": [],
+    "physical_plug_and_bend_verified": false
+  },
+  "screw_reservation": {
+    "nominal": "2 x M2 x 6",
+    "max_head_diameter_mm": 4,
+    "max_head_height_mm": 1.6,
+    "tool_diameter_mm": 4,
+    "tool_length_mm": 20,
+    "sku_and_print_fit_verified": false
+  },
+  "symmetry_difference_mm3": {
+    "DisplayCarrier": 0.0,
+    "Window": 0.0,
+    "DisplayPCB": 0.0,
+    "DisplayRetainer": 0.0
+  },
+  "native_mount_mirror": true,
+  "nearest_object_gaps_mm": {
+    "RearShell": {
+      "DisplayPCB": 9.64294719001322,
+      "DisplayHeader": 11.699309365918346,
+      "Window": 12.586615457306928
+    },
+    "SpeakerCarrier": {
+      "DisplayPCB": 29.082298736675494,
+      "DisplayHeader": 26.383092183457848,
+      "Window": 30.282298736675475
+    },
+    "MCUChip": {
+      "DisplayPCB": 22.115080499919696,
+      "DisplayHeader": 17.083092183457865,
+      "Window": 23.315080499919702
+    },
+    "Drive": {
+      "DisplayPCB": 38.172633297995,
+      "DisplayHeader": 30.368517908615683,
+      "Window": 41.250804908845105
+    },
+    "ButtonRetainer": {
+      "DisplayPCB": 20.012496096189505,
+      "DisplayHeader": 29.83556291479538,
+      "Window": 21.139359025287412
+    },
+    "EjectSwitch": {
+      "DisplayPCB": 17.46568063374571,
+      "DisplayHeader": 34.15382553447137,
+      "Window": 18.111391442956556
+    },
+    "NextSwitch": {
+      "DisplayPCB": 17.46568063374571,
+      "DisplayHeader": 29.919999999999998,
+      "Window": 18.11412169642257
+    },
+    "VolumePot": {
+      "DisplayPCB": 23.486006471939838,
+      "DisplayHeader": 36.19214417522123,
+      "Window": 24.109852757742008
+    }
+  },
+  "module_removal": {
+    "method": "51 B-rep samples at 0.5 mm inward-normal steps",
+    "travel_mm": 25,
+    "prerequisites": [
+      "Front shell detached",
+      "OLED wires, two frame screws and retainer removed"
+    ],
+    "clashes": []
+  },
+  "physical_fit_verified": false,
+  "all_pass": true,
+  "added_finished_objects": [
+    "DisplayRetainer"
+  ],
+  "baseline_sha256": "0005167cccb42dec1a38d3dfc59f059c9c28499c9e16056e784d7ef42dcce8a6",
+  "changed_finished_objects_difference_mm3": {
+    "FrontShell": 2730.912284619022,
+    "Window": 2221.7999999999993,
+    "StatusArt": 17.74200000000004,
+    "DisplayPCB": 2643.901598682461,
+    "DisplayHeader": 227.09632000000022
+  },
+  "unchanged_finished_objects": [
+    "LPort",
+    "RPort",
+    "RearShell",
+    "Feet",
+    "PlayPauseKey",
+    "EjectKey",
+    "PrevKey",
+    "NextKey",
+    "ButtonRetainer",
+    "Knob",
+    "SpeakerCarrier",
+    "LDriver",
+    "RDriver",
+    "PlayPauseSwitch",
+    "EjectSwitch",
+    "PrevSwitch",
+    "NextSwitch",
+    "Encoder",
+    "VolumePot",
+    "Drive",
+    "Bridge",
+    "Amp",
+    "AmpChip",
+    "MCU",
+    "MCUChip",
+    "DAC",
+    "DACChip",
+    "Battery"
+  ],
+  "limits": [
+    "Supplier drawing dimensions are not physical measurements.",
+    "Connector housing uses 10.16 x 2.54 conservative cross-section; only pitch and side extent are specified.",
+    "The 6 mm plug/wire reservation and 20 mm tool reach are design allowances, not verified cable bends or actual tools.",
+    "M2 x 6 screw heads and blind PLA pilots require SKU selection and a printed test coupon.",
+    "Full-area ray sweeps check the nominal aperture at selected angles; panel optics, tolerance stack, lip strength and dust seal are not certified."
+  ]
+}

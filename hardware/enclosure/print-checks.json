@@ -1,5 +1,5 @@
 {
-  "model_sha256": "42ecc25db7d3df73db230a2d049c27795c1ac9ea7484fd432b2da56074bcff17",
+  "model_sha256": "0763858f1cfbe30c99434dce227a8c50fb99112e9ad7e43d9a5092ee646f35e8",
   "freecad_version": [
     "1",
     "1",
@@ -25,7 +25,7 @@
         213.64473684210526,
         42.50000000000008
       ],
-      "facets": 239824,
+      "facets": 241588,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -34,7 +34,7 @@
         0.0,
         0.7071067811865476
       ],
-      "stl_sha256": "e19e2350d39b3260a0ea323bf29c13a857a0f4245f108077ba2c9f335b8ac695"
+      "stl_sha256": "7f26b0c4279211e8d38f689e3cb1fc0d0594cbe215ffaf2a244a37acd189ec96"
     },
     "RearShell": {
       "file": "RearShell.stl",
@@ -198,6 +198,24 @@
       ],
       "stl_sha256": "17ee4f08323f8878f428092fc2ee6b63ead09915fa8c8baaa53f1bf010339011"
     },
+    "DisplayRetainer": {
+      "file": "DisplayRetainer.stl",
+      "size_xyz_mm": [
+        46.977733291070834,
+        37.75000000000003,
+        4.800000000000038
+      ],
+      "facets": 1740,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "699b7962e736a43e40bf747c1254eb4b3a82e903334593d7c1832f5d60d9703f"
+    },
     "Knob": {
       "file": "Knob.stl",
       "size_xyz_mm": [
@@ -245,8 +263,8 @@
         "RearShell"
       ],
       "exit_code": 0,
-      "gcode_sha256": "ebac5955f6b2b61fa052d13168cacc53b903ec9a6a59035c39a788be245d6086",
-      "total_estimated_time": "6h 24m 38s",
+      "gcode_sha256": "0769c4d32cca2f98711d48a963fc889214dc0590e2cb7098ca979397fe30befc",
+      "total_estimated_time": "6h 24m 35s",
       "filament_g": 208.56,
       "layers": 375,
       "vendor_T65535_parser_notice": true
@@ -256,9 +274,9 @@
         "FrontShell"
       ],
       "exit_code": 0,
-      "gcode_sha256": "4c218b40a192cd48e025c6a1426672a25b50c6e85317862fe91de225250b4195",
-      "total_estimated_time": "12h 12m 34s",
-      "filament_g": 114.66,
+      "gcode_sha256": "aa28fa27fd8a0a3501b9e1226538a22d2679a13026e168f9fd9c2af234deb040",
+      "total_estimated_time": "12h 6m 15s",
+      "filament_g": 110.89,
       "layers": 212,
       "vendor_T65535_parser_notice": true
     },
@@ -267,7 +285,7 @@
         "SpeakerCarrier"
       ],
       "exit_code": 0,
-      "gcode_sha256": "f64042ce2c741165a48fd927ba424c5e599907ae5812605af705f20de1ced0e9",
+      "gcode_sha256": "20f9d6705425a7b152d36e6eb17185c4c25a9b51d8b098134d75842a97c4a07b",
       "total_estimated_time": "6h 57m 11s",
       "filament_g": 158.54,
       "layers": 282,
@@ -282,12 +300,13 @@
         "PrevKey",
         "NextKey",
         "ButtonRetainer",
+        "DisplayRetainer",
         "Knob"
       ],
       "exit_code": 0,
-      "gcode_sha256": "eb3a59e3d98dcb36e9a27290341d03dd6172d8cf8a5ea4142f5434cff5d26126",
-      "total_estimated_time": "1h 1m 41s",
-      "filament_g": 20.67,
+      "gcode_sha256": "90c7ea5d2110ddcdb90b5d56fb6fc66116c1ff26472351c71406042ae72081ae",
+      "total_estimated_time": "1h 6m 37s",
+      "filament_g": 22.16,
       "layers": 60,
       "vendor_T65535_parser_notice": true
     }

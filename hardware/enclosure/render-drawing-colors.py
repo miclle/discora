@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256 = '42ecc25db7d3df73db230a2d049c27795c1ac9ea7484fd432b2da56074bcff17'
+MODEL_SHA256 = '0763858f1cfbe30c99434dce227a8c50fb99112e9ad7e43d9a5092ee646f35e8'
 
 
 def palette_from_build():
@@ -137,7 +137,7 @@ def main():
     assert data['build_sha256']==hashlib.sha256((ROOT/'build.FCMacro').read_bytes()).hexdigest()
     palette=palette_from_build()
     assignments={
-        'TEAL':'FrontShell SpeakerCarrier PlayPauseKey EjectKey PrevKey NextKey ButtonRetainer',
+        'TEAL':'FrontShell SpeakerCarrier PlayPauseKey EjectKey PrevKey NextKey ButtonRetainer DisplayRetainer',
         'BLACK':'RearShell LPort RPort',
         'RUBBER':'Feet LDriver RDriver VolumePot DisplayHeader AmpChip DACChip PlayPauseSwitch EjectSwitch PrevSwitch NextSwitch',
         'GLASS':'Window','PIXEL':'StatusArt','WHITE':'Knob',
@@ -159,7 +159,7 @@ def main():
         print('SURFACES',name,len(meshes[name]),flush=True)
     outputs={}
     for name,view in data['views'].items():
-        if name=='control-cutouts':continue  # Keep this machining-style detail unfilled.
+        if name=='control-cutouts' or name.startswith('oled-'):continue  # Unfilled dimensional details.
         parts=[]
         if 'parts' in view:
             parts=[(n,p['offset_mm']) for p in view['parts'] for n in p['objects']]
