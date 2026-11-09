@@ -1,7 +1,7 @@
 {
   "model": "Discora.FCStd",
-  "sha256": "adc2d390a7f3e14a647d37d470555cb2524a16030cd2e80a7c4c1d4e52f37f21",
-  "build_sha256": "7a0a36bff9b60ec281654cb698d9e94cff5e6ba8aeff6ca9918d54bb205a6f1c",
+  "sha256": "42ecc25db7d3df73db230a2d049c27795c1ac9ea7484fd432b2da56074bcff17",
+  "build_sha256": "206636cf26acdf892afb1b4f4dc89c6ef817a326eee57d3c64dca2fa9fa58fac",
   "freecad_version": [
     "1",
     "1",
@@ -1305,8 +1305,11 @@
     "battery_112_70_20": true,
     "drive_y63_z32": true,
     "slot_center_y67_75": true,
-    "bezel_outer_130_5": true,
-    "grille_thickness_5": true,
+    "hidden_bezel_outer_136_5": true,
+    "oversized_grille_136": true,
+    "grille_thickness_2_5": true,
+    "grille_recess_2_5": true,
+    "circular_mouth_clear": true,
     "side_ports_handle_y40": true,
     "33_finished_objects": true,
     "three_connected_main_parts": true,

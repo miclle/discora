@@ -61,8 +61,54 @@ def validate(folder):
         thickness[f'slope_{x}_{y}']=section_length('FrontShell',A.Vector(x,y,165+slope*y),normal)
     thickness['grille']=section_length('FrontGrille',A.Vector(1.45,0,76),A.Vector(0,1,0))
     thickness['handle']=section_length('FrontShell',A.Vector(60,40,206),A.Vector(0,1,0))
-    assert all(abs(value-5)<1e-6 for value in thickness.values()),thickness
+    assert all(abs(value-(2.5 if name=='grille' else 5))<1e-6 for name,value in thickness.items()),thickness
     print('PANEL_THICKNESS',thickness,flush=True)
+    # Check the finished front shell, not just its hidden circular cutter.
+    mouth=Part.makeCylinder(65,2.5-2e-5,A.Vector(0,1e-5,76),A.Vector(0,1,0))
+    mouth_obstruction=doc.FrontShell.Shape.common(mouth).Volume
+    circles=[e.Curve.Radius for e in doc.FrontShell.Shape.Edges
+             if isinstance(e.Curve,Part.Circle)
+             and (e.Curve.Center-A.Vector(0,0,76)).Length<1e-6
+             and abs(e.Length-2*math.pi*65)<1e-5]
+    recess=doc.FrontGrille.Shape.BoundBox.YMin
+    grille_check={'opening_diameter_mm':130,'recess_mm':recess,
+                  'grille_thickness_mm':doc.FrontGrille.Shape.BoundBox.YLength,
+                  'mouth_obstruction_mm3':mouth_obstruction,
+                  'complete_front_circle_radii_mm':circles,
+                  'grille_back_y_mm':doc.FrontGrille.Shape.BoundBox.YMax,
+                  'driver_front_gap_mm':doc.LDriver.Shape.BoundBox.YMin-doc.FrontGrille.Shape.BoundBox.YMax}
+    assert circles and all(abs(r-65)<1e-6 for r in circles),grille_check
+    assert mouth_obstruction<=tolerance and abs(recess-2.5)<1e-6,grille_check
+    assert abs(grille_check['grille_back_y_mm']-5)<1e-6 and abs(grille_check['driver_front_gap_mm']-3)<1e-6,grille_check
+    # The larger sheet is masked by the smaller panel opening. Read the final
+    # hole walls to distinguish complete circles from exposed circular segments.
+    hole_walls=[f for f in doc.FrontShell.Shape.Faces
+                if isinstance(f.Surface,Part.Cylinder) and abs(f.Surface.Radius-.94)<1e-6]
+    areas={}
+    for face in hole_walls:
+        key=(round(face.Surface.Center.x,6),round(face.Surface.Center.z-76,6))
+        areas[key]=areas.get(key,0)+face.Area
+        assert abs(face.BoundBox.YMin-2.5)<1e-6 and abs(face.BoundBox.YMax-5)<1e-6
+    centers=set(areas)
+    source_centers={(round((col+.5*(row%2))*2.9,6),round(row*2.9,6))
+                    for row in range(-24,25) for col in range(-24,25)
+                    if math.hypot((col+.5*(row%2))*2.9,row*2.9)+.94<=67}
+    expected={p for p in source_centers if math.hypot(*p)-.94<65}
+    full={p for p in expected if math.hypot(*p)+.94<=65}
+    partial=expected-full
+    assert centers==expected and len(full)==1531 and len(partial)==92,(len(centers),len(full),len(partial))
+    full_wall_area=2*math.pi*.94*2.5
+    assert all(abs(areas[p]-full_wall_area)<1e-5 for p in full)
+    assert all(0<areas[p]<full_wall_area-1e-5 for p in partial)
+    assert all((-x,z) in centers for x,z in centers)
+    source_walls=[f for f in doc.FrontGrille.Shape.Faces
+                  if isinstance(f.Surface,Part.Cylinder) and abs(f.Surface.Radius-.94)<1e-6]
+    assert len(source_walls)==1627 and abs(doc.FrontGrille.Shape.BoundBox.XLength-136)<1e-6
+    grille_check.update(sheet_diameter_mm=136,panel_underlap_mm=3,source_hole_count=len(source_walls),
+                        exposed_hole_count=len(centers),complete_exposed_holes=len(full),
+                        partially_masked_edge_holes=len(partial),fully_masked_holes=len(source_centers-expected),
+                        continuous_visible_rim=False,minimum_hole_web_mm=2.9-1.88)
+    print('RECESSED_GRILLE',grille_check,flush=True)
     mirror=A.Matrix();mirror.A11=-1
     def reflected(shape):
         s=shape.copy();s.transformShape(mirror,True);return s
@@ -152,7 +198,7 @@ def validate(folder):
         A.closeDocument(baseline.Name)
     bb=Part.makeCompound([o.Shape for o in objects]).BoundBox
     handle=collisions(Part.makeBox(70,10,14,A.Vector(-35,handle_y-5,shoulder_z+5.5)),objects)
-    report={'date':'2026-11-08','model':model.name,'sha256':hashlib.sha256(model.read_bytes()).hexdigest(),
+    report={'date':'2026-11-09','model':model.name,'sha256':hashlib.sha256(model.read_bytes()).hexdigest(),
         'version':A.Version()[:3],'items':len(objects),'objects':[o.Name for o in objects],
         'main_pla_parts':connected,'rigid_pla_pieces':['FrontShell','RearShell','SpeakerCarrier','LPort','RPort','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','Knob'],
         'rear_roof_ownership':roof_ownership,'shell_split_y_mm':42.5,
@@ -165,6 +211,7 @@ def validate(folder):
         'side_port_handle_alignment':port_alignment,'side_air_paths':paths,'connector_allowances':keepouts,'key_clearances_mm':clearances,
         'battery_fit':battery_fit,'controls_translation_xyz_mm':[0,0,15],
         'top_shoulders':shoulders,'front_panel_thickness_samples_mm':thickness,
+        'recessed_grille':grille_check,
         'original_controls_difference_mm3':controls,'handle_opening_mm':[90,16],'handle_passage_clashes':handle,
         'physical_validation':False,'acoustic_tuning_verified':False,
         'limits':['Speaker mounting plane, actual mounting holes, terminals, gaskets and excursion remain unmeasured.',

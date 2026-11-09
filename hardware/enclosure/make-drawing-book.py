@@ -18,7 +18,7 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = 'adc2d390a7f3e14a647d37d470555cb2524a16030cd2e80a7c4c1d4e52f37f21'
+ANNOTATED_MODEL_SHA256 = '42ecc25db7d3df73db230a2d049c27795c1ac9ea7484fd432b2da56074bcff17'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
@@ -153,7 +153,7 @@ def main():
     line(106,42,106,253,LIGHT,.15,[5,2,1,2])
     line(39,112,173,112,LIGHT,.15,[5,2,1,2])
     c.setFillColor(white); c.rect(86*mm,107*mm,40*mm,10*mm,fill=1,stroke=0)
-    text(106,110,'Ø130.5 一体装饰圈',10,TEAL,'center')
+    text(106,110,'Ø130 圆孔 · 护网内凹 2.5',10,TEAL,'center')
     line(262,69,262,253,TEAL,.15,[4,2,1,2])
     dv(79,153,277,287,'74 侧孔主体')
     dh(247.5,276.5,116,169,'29')
@@ -183,8 +183,8 @@ def main():
         ('整机宽 / 深','142 / 80'),
         ('提手净开口 / 厚','90 × 16 / 5'),
         ('格栅中心 X / Z','0 / 76'),
-        ('压圈 / 护网外径','Ø130.5 / Ø126.4'),
-        ('前板 / 斜板 / 护网厚','5 / 5 / 5'),
+        ('圆孔 / 护网内凹','Ø130 / 2.5'),
+        ('前板 / 斜板 / 护网厚','5 / 5 / 2.5'),
         ('侧开口中心 Y / Z','40 / 80'),
         ('侧饰片宽 / 高','12 / 56'),
         ('脚垫','4 × Ø8 × 3'),
@@ -201,7 +201,7 @@ def main():
         '两种总高均包含提手；未计脚垫受压。',
         'X 向右、Y 向后、Z 向上；中心面 X=0。',
         '侧孔竖直轴与提手中线同为 Y=40。',
-        '护网孔径 Ø1.88；外壳按 X=0 镜像。',
+        '底片 Ø136；圆口边缘自然遮挡孔阵。',
         '尺寸为 CAD 名义值，未定义制造公差。',
         '请勿按图量取或直接投产。',
     ],gap=7,size=8)

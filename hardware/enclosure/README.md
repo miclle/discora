@@ -6,7 +6,9 @@
 
 **2026-11-07 载板布局补充：**[100 × 55 mm 裁剪洞洞板候选](../../docs/perfboard-layout.md)已加入主控、DAC 和两块 DCE001 的包络试算，但尚未写入本模型。该次试算的前壳／屏幕／操控区及上层电子托架存在碰撞；上移上部组件的试算不是已闭合的新机箱，也不能继承下面的整机、对称或拆装验证。该候选尚未针对 2026-11-08 等斜面模型重算，最终载板安装仍需独立闭合。
 
-**2026-11-08 当前版本：**前壳竖直面板、顶部斜面主体及格栅统一为 5 mm，与提手一致。按用户确认将深度从 78 增至 80 mm，电池和内部安装结构沿 Y 后移 2 mm，保留电池前后各 1 mm 间隙。前后斜面仍等角、等宽，侧面保留直线接缝。后斜面、碟口与导向框归 P2，提手归 P1；仍为三主体。详见 [ADR-0021](../../docs/decisions/0021-five-mm-front-panel.md)。此前等斜面和分件决策见 [ADR-0019](../../docs/decisions/0019-matched-top-shoulders.md)、[ADR-0020](../../docs/decisions/0020-rear-roof-shell-ownership.md)。
+**2026-11-08 主体尺寸调整：**前壳竖直面板、顶部斜面主体及格栅统一为 5 mm，与提手一致。按用户确认将深度从 78 增至 80 mm，电池和内部安装结构沿 Y 后移 2 mm，保留电池前后各 1 mm 间隙。前后斜面仍等角、等宽，侧面保留直线接缝。后斜面、碟口与导向框归 P2，提手归 P1；仍为三主体。详见 [ADR-0021](../../docs/decisions/0021-five-mm-front-panel.md)。此前等斜面和分件决策见 [ADR-0019](../../docs/decisions/0019-matched-top-shoulders.md)、[ADR-0020](../../docs/decisions/0020-rear-roof-shell-ownership.md)。
+
+**2026-11-09 正面圆孔：**按参考图将中央开口改为 Ø130 的完整圆口，护网正面从 Y=0 退至 Y=2.5，背面仍为 Y=5，厚度为 2.5 mm；前壳其余竖直面与顶部斜面仍厚 5 mm。Ø136 护网底片在 Ø130 面板圆口下方每侧延伸 3 mm，连接环完全藏在面板内。孔阵越过圆口边界，面板自然遮住外围孔，形成 1531 个完整可见孔和 92 个边缘部分孔，取消孔口内的连续实心边。见 [ADR-0026](../../docs/decisions/0026-recessed-front-grille.md)。
 
 **FCStd 配色保存：**无界面保存后补回 GUI 数据时，材质资源必须按 `GuiDocument.xml` 的引用顺序写入；不能用集合的无序遍历写入压缩包，否则 FreeCAD 会跳过颜色资源。`repair-gui-order.py 输入.FCStd 输出.FCStd` 可修复顺序，并逐项核对包内数据完全一致。修复后须在 FreeCAD GUI 读回颜色、关闭并重新打开核对；外部渲染图不能代替此项验证。当前记录见 [appearance-checks.json](appearance-checks.json)。
 
@@ -18,7 +20,7 @@
 
 | 成品 ID | 合并的功能 | 数量 |
 | --- | --- | --- |
-| `FrontShell` / P1 | 前壳、前斜面、提手、格栅装饰圈、通孔护网、屏幕安装座、四键定位座和压板螺柱 | 1 |
+| `FrontShell` / P1 | 前壳、前斜面、提手、面板下隐藏连接环、内凹通孔护网、屏幕安装座、四键定位座和压板螺柱 | 1 |
 | `RearShell` / P2 | 后斜面与碟口导向、左右侧壁、后壁、底架、电池托盘、光驱导轨、DAC 支撑和壳体连接柱 | 1 |
 | `SpeakerCarrier` / P3 | 双声腔、喇叭预留框、前障板、功放及桥接器托板、主控托板及其连接柱 | 1 |
 | `LPort` / `RPort` | 左右可拆导音孔与内凹饰片 | 2 |
@@ -41,7 +43,7 @@
 | 前壳面板 | 竖直面与顶部斜面主体法向厚 5；安装座、盲孔连接柱和提手根部为局部加强区域 |
 | 提手 | 净开口 90 × 16；顶面 Z=216.645、后表面 Y=42.5；厚 5 |
 | 碟口 | 水平投影 124 × 3.2，中心 Y=67.75；竖直退碟 |
-| 中央格栅 | 一体装饰圈外径 Ø130.5，护网 Ø126.4、厚 5；孔径 Ø1.88、孔距 2.9；中心 X=0、Z=76 |
+| 中央格栅 | 正面圆孔 Ø130，护网底片 Ø136、内凹 2.5、厚 2.5；圆口内 1531 个完整孔＋92 个部分孔，孔径 Ø1.88、孔距 2.9；中心 X=0、Z=76 |
 | 喇叭 | 每只 X/Y/Z=45/42/80，中心 X=±26、Z=76，Y=8…50，朝 −Y |
 | 后腔 | 每侧 65 × 52 × 89，Z=31.5…120.5；喇叭后包络距内壁 4.5 |
 | 侧开口 | 主体高 74 × 宽 29，中心 Y=40、Z=80；饰片 12 × 56；另有上下固定耳凹槽 |
@@ -66,7 +68,7 @@
 ## 验证依据
 
 - [validation.json](validation.json)：保存后重新打开，33 个成品对象有效，三主体各为一个连续实体，两两交叠不超过 0.001 mm³；退碟、侧向空气通路、接头设计预留、关键净距及提手检查通过。
-- 左右导音孔、侧壳开口及提手中线读回均为 Y=40。8 项镜像差集为零，4 组原生右件镜像关系有效。前壳仅排除操控开孔、四键定位座及其镜像区域；后壳仅排除内部 DAC 支撑及其镜像；支架检查声学下半部至 Z=120.5。与本次焊线支架修改前模型相比，8 项保留的屏幕／旋钮源件差集为零，记录在 `button-checks.json`；该报告另记录只有 `ButtonRetainer` 几何改变，其余 32 个成品对象读回一致。四键替换旧单键，历史单键差集不再适用。
+- 左右导音孔、侧壳开口及提手中线读回均为 Y=40。8 项镜像差集为零，4 组原生右件镜像关系有效。前壳仅排除操控开孔、四键定位座及其镜像区域；后壳仅排除内部 DAC 支撑及其镜像；支架检查声学下半部至 Z=120.5。与本次内凹加深前模型相比，8 项保留的屏幕／旋钮源件差集为零，记录在 `button-checks.json`；[grille-change-checks.json](grille-change-checks.json) 另对比修改前模型，只有 `FrontShell` 改变，其余 32 个成品对象保持一致。四键替换旧单键，历史单键差集不再适用。
 - [button-checks.json](button-checks.json)：核对四键孔径、键帽／开关局部包络及 0…0.8 mm 的五个键帽姿态。新增八个引脚侧连续开口、中央避让与双点支承检查；开口与实体、DAC 输出接头预留无交叠。真实圆头直径、行程、脚距和底面承压配合未验收。
 - [assembly-paths.json](assembly-paths.json)：支架、电池及侧孔采用连续保守扫掠；光驱从前方侧转拆出，其平移段连续保守扫掠、转动段按 0.5° 步长检查实际 B-rep；前壳卸背面螺钉后向前退出，按 1 mm 步长检查。均以前壳或侧孔按顺序拆除、紧固件和绑带卸下、导线断开为前提。
 - [print-checks.json](print-checks.json)：十一个闭合网格均能在 256³ 空间内放置并留 5 mm brim，Bambu Studio 的 P2S / 0.4 mm 配置完成四盘 PLA 切片。切片不等于实际成型或承载试验。
@@ -79,4 +81,4 @@
 
 执行 [validate.FCMacro](validate.FCMacro) 重新读回检查；若需要历史操控对比，用 `DISCORA_CAD_BASELINE` 指向 2026-11-05 三主体旧模型，不设置时不声称重新验证历史差集；当前历史比较只涵盖保留的 6 项显示／旋钮源件，预期沿 Z 上移 15 mm；不再比较旧单键。再运行 [check-fasteners.py](check-fasteners.py)、[check-buttons.py](check-buttons.py)（可用 `--baseline` 指定四键修改前模型，比较屏幕与旋钮不动）、[check-assembly.py](check-assembly.py)、[export-print-parts.py](export-print-parts.py) 与 [slice-print-parts.py](slice-print-parts.py)；临时 STL、配置和 G-code 放在被忽略的 `tmp/`，仅保存检查摘要。切片脚本仅本地计算，不连接或发送到打印机。
 
-[render.FCMacro](render.FCMacro) 从保存模型生成[整机](preview.png)、[正面](front.png)、[侧面](side.png)、[操控区](controls.png)、[后上方碟口](topload.png)、[光盘退出示意](disc-path.png)、[移开前壳的内部](layout.png)和[真实侧剖](section.png)。光盘参考对象默认隐藏，不代表实际退出行程。彩色图册更新步骤见[图册说明](../../docs/enclosure-drawings.md)。
+[render.FCMacro](render.FCMacro) 从保存模型生成[整机](preview.png)、[正面](front.png)、[护网细节](grille-detail.png)、[侧面](side.png)、[操控区](controls.png)、[后上方碟口](topload.png)、[光盘退出示意](disc-path.png)、[移开前壳的内部](layout.png)和[真实侧剖](section.png)。光盘参考对象默认隐藏，不代表实际退出行程。彩色图册更新步骤见[图册说明](../../docs/enclosure-drawings.md)。

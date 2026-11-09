@@ -16,7 +16,7 @@ def render(folder):
     view=G.activeDocument().activeView()
     camera = view.getCameraOrientation().Q
     view.setCameraType('Orthographic')
-    def save(name,rotation):
+    def save(name,rotation,focus=None,height=None):
         # Set the Coin camera directly to avoid animated intermediate views.
         view.getCameraNode().orientation.setValue(coin.SbRotation(*rotation.Q))
         G.updateGui(); QtWidgets.QApplication.processEvents()
@@ -25,12 +25,19 @@ def render(folder):
         # Keep margin when the export aspect differs from the GUI viewport.
         camera_node=view.getCameraNode()
         camera_node.height.setValue(camera_node.height.getValue()*1.25)
+        if focus is not None:
+            position=focus+rotation.multVec(A.Vector(0,0,500))
+            camera_node.position.setValue(position.x,position.y,position.z)
+            camera_node.height.setValue(height)
+            camera_node.nearDistance.setValue(.1)
+            camera_node.farDistance.setValue(2000)
         G.updateGui(); QtWidgets.QApplication.processEvents()
         view.saveImage(str(folder/name),1000,1100,'White')
     front=A.Rotation(A.Vector(1,0,0),90)
     angle=A.Rotation(A.Vector(0,0,1),21).multiply(A.Rotation(A.Vector(1,0,0),76))
     save('preview.png',angle)
     save('front.png',front)
+    save('grille-detail.png',angle,A.Vector(0,1,76),150)
     save('controls.png',A.Rotation(A.Vector(1,0,0),48))
     save('side.png',A.Rotation(A.Vector(0,0,1),90).multiply(front))
     save('topload.png',A.Rotation(A.Vector(0,0,1),155).multiply(A.Rotation(A.Vector(1,0,0),55)))
