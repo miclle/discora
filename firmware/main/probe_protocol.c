@@ -106,7 +106,8 @@ size_t probe_data_size(probe_command_t command)
     case PROBE_INQUIRY: return 36;
     case PROBE_REQUEST_SENSE: return 18;
     case PROBE_TEST_UNIT_READY: return 0;
-    case PROBE_READ_TOC: return PROBE_TOC_HEADER_SIZE;
+    case PROBE_READ_TOC:
+    case PROBE_READ_CDTEXT: return PROBE_TOC_HEADER_SIZE;
     default: return 0;
     }
 }
@@ -118,6 +119,7 @@ const char *probe_command_name(probe_command_t command)
     case PROBE_TEST_UNIT_READY: return "TEST UNIT READY";
     case PROBE_REQUEST_SENSE: return "REQUEST SENSE";
     case PROBE_READ_TOC: return "READ TOC";
+    case PROBE_READ_CDTEXT: return "READ TOC (CD-Text)";
     case PROBE_READ_CD: return "READ CD";
     case PROBE_ALLOW_REMOVAL: return "ALLOW MEDIUM REMOVAL";
     case PROBE_EJECT: return "START STOP UNIT (eject)";
@@ -133,7 +135,8 @@ bool probe_make_cbw(probe_command_t command, uint8_t subclass, uint32_t tag,
     case PROBE_INQUIRY: opcode = 0x12; break;
     case PROBE_TEST_UNIT_READY: opcode = 0x00; break;
     case PROBE_REQUEST_SENSE: opcode = 0x03; break;
-    case PROBE_READ_TOC: opcode = 0x43; break;
+    case PROBE_READ_TOC:
+    case PROBE_READ_CDTEXT: opcode = 0x43; break;
     case PROBE_ALLOW_REMOVAL: opcode = 0x1e; break;
     case PROBE_EJECT: opcode = 0x1b; break;
     default: return false;
@@ -141,8 +144,10 @@ bool probe_make_cbw(probe_command_t command, uint8_t subclass, uint32_t tag,
     if (!out || !supported_subclass(subclass)) {
         return false;
     }
-    if (command == PROBE_READ_TOC) {
-        if (data_size < PROBE_TOC_HEADER_SIZE || data_size > PROBE_MAX_TOC_DATA) {
+    bool toc = command == PROBE_READ_TOC || command == PROBE_READ_CDTEXT;
+    if (toc) {
+        size_t limit = command == PROBE_READ_CDTEXT ? PROBE_MAX_DATA : PROBE_MAX_TOC_DATA;
+        if (data_size < PROBE_TOC_HEADER_SIZE || data_size > limit) {
             return false;
         }
     } else if (data_size != probe_data_size(command)) {
@@ -154,10 +159,11 @@ bool probe_make_cbw(probe_command_t command, uint8_t subclass, uint32_t tag,
     write_le32(out + 8, (uint32_t)data_size);
     out[12] = data_size ? 0x80 : 0;
     // ATAPI command sets use 12-byte packets; SCSI uses the native CDB length.
-    out[14] = subclass == 0x06 ? (command == PROBE_READ_TOC ? 10 : 6) : 12;
+    out[14] = subclass == 0x06 ? (toc ? 10 : 6) : 12;
     out[15] = opcode;
-    if (command == PROBE_READ_TOC) {
-        // Format 0, MSF=0, starting track 0 (all tracks). Allocation is big-endian.
+    if (toc) {
+        // Format 0 or 5, MSF=0, starting track 0. Allocation is big-endian.
+        out[17] = command == PROBE_READ_CDTEXT ? 5 : 0;
         out[22] = (uint8_t)(data_size >> 8);
         out[23] = (uint8_t)data_size;
     } else {
@@ -260,6 +266,16 @@ bool probe_toc_size_from_header(const uint8_t *data, size_t size, size_t *total_
         return false;
     }
     *total_size = reported;
+    return true;
+}
+
+bool probe_cdtext_size_from_header(const uint8_t *data, size_t size, size_t *total_size)
+{
+    if (!data || !total_size || size < PROBE_TOC_HEADER_SIZE || data[2] || data[3]) return false;
+    size_t total = ((size_t)data[0] << 8 | data[1]) + 2;
+    if (total < PROBE_TOC_HEADER_SIZE || total > PROBE_MAX_DATA ||
+        (total - PROBE_TOC_HEADER_SIZE) % 18) return false;
+    *total_size = total;
     return true;
 }
 

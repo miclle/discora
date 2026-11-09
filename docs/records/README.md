@@ -6,6 +6,10 @@
 
 ## 2026-11-09
 
+- [CD-Text 曲名只读探测：当前盘返回空文字包](2026-11-09-cdtext-probe.md)
+
+- [OLED 中文布局与单轨进度软件验证](2026-11-09-oled-progress.md)
+
 - [USB STALL 与状态超时分层排查](2026-11-09-usb-stall-diagnostic.md)
 - [恢复边界离线修复](2026-11-09-usb-offline-recovery.md)
 - [断电重连后盘尾回首曲验证通过](2026-11-09-disc-rewind-reconnect.md)

@@ -23,6 +23,7 @@ int main(void)
     assert(usb_ab_command_allowed(&t, PROBE_REQUEST_SENSE));
     assert(usb_ab_command_allowed(&t, PROBE_READ_TOC));
     assert(!usb_ab_command_allowed(&t, PROBE_READ_CD));
+    assert(!usb_ab_command_allowed(&t, PROBE_READ_CDTEXT));
     assert(!usb_ab_command_allowed(&t, PROBE_EJECT));
     assert(!usb_ab_command_allowed(&t, PROBE_ALLOW_REMOVAL));
     usb_ab_tick(&t, 1000000000 + 2 * USB_AB_WINDOW_US - 1, false, USB_AB_WINDOW_US);

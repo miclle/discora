@@ -97,7 +97,7 @@ SD / flash ISO or PCM → source reader → buffer → USB BOT
 
 ## OLED 状态显示
 
-`oled_display.c` 在播放器启动后运行独立优先级 1 任务，使用 ESP-IDF 原生 I²C master API（GPIO10 SDA／GPIO11 SCL，100 kHz）；默认 SH1106、7-bit 地址 0x3c。每 200 ms 尝试在播放器 mutex 内复制轨号、介质可用性与状态，锁等待最多 10 ms；释放锁后才渲染和通信，USB 与音频 owner 不等待 OLED。`oled_panel.c` 负责本地字形、1024 字节帧和 SH1106 分页／列偏移，不使用第三方显示库。仅变化时刷屏；I²C 单次等待最多 50 ms，失败后尝试灭屏并释放资源，直到重启才重试，播放继续。状态为核心逻辑状态，不代表 DAC 实际声音。查询／测试音模式不初始化 OLED；配置与硬件边界见 [显示说明](oled-display.md)、[ADR-0012](decisions/0012-sh1106-status-display.md)。
+`oled_display.c` 在播放器启动后运行独立优先级 1 任务，使用 ESP-IDF 原生 I²C master API（GPIO10 SDA／GPIO11 SCL，100 kHz）；默认 SH1106、7-bit 地址 0x3c。每 200 ms 尝试在播放器 mutex 内复制轨号、介质可用性、状态与本轨时长／消费位置，锁等待最多 10 ms；释放锁后才渲染和通信，USB 与音频 owner 不等待 OLED。`oled_panel.c` 负责本地 ASCII 字形、OFL 中文界面子集、时间／进度条、1024 字节帧和 SH1106 分页／列偏移，不使用第三方显示库。每次采样在锁外渲染，仅像素变化时刷屏；进度取当前轨出队 PCM 计数，不使用 USB 预读位置，也不声称代表 DAC 实际声音。可选 CD-Text Format 5 原始元数据探测在 TOC 发布前由 USB client 完成，默认关闭；空／不支持回复保留有效曲号，介质未就绪／变化、sense 失败或传输失败拒绝发布旧 TOC。当前盘实测为空，曲名解析／滚动尚未实现。I²C 单次等待最多 50 ms，失败后尝试灭屏并释放资源，直到重启才重试，播放继续。状态为核心逻辑状态，不代表 DAC 实际声音。查询／测试音模式不初始化 OLED；配置与硬件边界见 [显示说明](oled-display.md)、[ADR-0012](decisions/0012-sh1106-status-display.md)。
 
 ## PSRAM 播放队列与恢复
 

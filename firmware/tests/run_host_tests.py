@@ -3,6 +3,7 @@
 
 import os
 from pathlib import Path
+import re
 import shlex
 import subprocess
 import tempfile
@@ -13,6 +14,28 @@ def main():
     firmware = Path(__file__).resolve().parents[1]
     subprocess.run([sys.executable, str(firmware / "tests/control_pins_test.py")], check=True)
     with tempfile.TemporaryDirectory(prefix="discora-protocol-") as temp:
+        # Compile the production flow without bringing the entire ESP-IDF USB
+        # driver into this host test. Keep its functions verbatim; fake only I/O.
+        usb_source = (firmware / "main/usb_probe.c").read_text()
+        functions = []
+        for name in ("cdtext_fallback", "read_cdtext", "read_toc"):
+            match = re.search(r"^static (?:bool|void) " + name + r"\(", usb_source, re.MULTILINE)
+            if not match:
+                raise RuntimeError(f"Missing production function {name}")
+            end = usb_source.index("\n}\n", match.start()) + 3
+            functions.append(usb_source[match.start():end])
+        (Path(temp) / "usb_cdtext_under_test.inc").write_text("\n".join(functions))
+        cdtext = Path(temp) / "cdtext_probe_test"
+        subprocess.run(
+            shlex.split(os.environ.get("CC", "cc")) + [
+                "-std=c11", "-Wall", "-Wextra", "-Werror", "-pedantic", "-g",
+                "-fsanitize=address,undefined", "-fno-omit-frame-pointer",
+                "-I", temp, "-I", str(firmware / "main"),
+                str(firmware / "main/probe_protocol.c"),
+                str(firmware / "tests/cdtext_probe_test.c"), "-o", str(cdtext),
+            ], check=True,
+        )
+        subprocess.run([str(cdtext)], check=True)
         for name, sources, flags in [
             ("usb_ab", ["tests/usb_ab_test.c"], []),
             ("usb_trace", ["tests/usb_trace_test.c"], []),

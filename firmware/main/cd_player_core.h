@@ -21,6 +21,8 @@ typedef struct {
     bool media;
     unsigned track;
     audio_state_t state;
+    // Track-relative PCM dequeued to the adapter (not measured DAC output), at 75 sectors/s.
+    uint32_t position_sectors, duration_sectors;
 } cd_player_status_t;
 // Copy under the same serialization as all other core operations; no borrowed data.
 cd_player_status_t cd_player_snapshot(const cd_player_core_t *p);
