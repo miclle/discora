@@ -17,25 +17,30 @@ def main():
         # Compile the production flow without bringing the entire ESP-IDF USB
         # driver into this host test. Keep its functions verbatim; fake only I/O.
         usb_source = (firmware / "main/usb_probe.c").read_text()
-        functions = []
-        for name in ("cdtext_fallback", "read_cdtext", "read_toc"):
-            match = re.search(r"^static (?:bool|void) " + name + r"\(", usb_source, re.MULTILINE)
-            if not match:
-                raise RuntimeError(f"Missing production function {name}")
-            end = usb_source.index("\n}\n", match.start()) + 3
-            functions.append(usb_source[match.start():end])
-        (Path(temp) / "usb_cdtext_under_test.inc").write_text("\n".join(functions))
-        cdtext = Path(temp) / "cdtext_probe_test"
-        subprocess.run(
-            shlex.split(os.environ.get("CC", "cc")) + [
-                "-std=c11", "-Wall", "-Wextra", "-Werror", "-pedantic", "-g",
-                "-fsanitize=address,undefined", "-fno-omit-frame-pointer",
-                "-I", temp, "-I", str(firmware / "main"),
-                str(firmware / "main/probe_protocol.c"),
-                str(firmware / "tests/cdtext_probe_test.c"), "-o", str(cdtext),
-            ], check=True,
-        )
-        subprocess.run([str(cdtext)], check=True)
+        for test, names in [
+            ("cdtext_probe", ("cdtext_fallback", "read_cdtext", "read_toc")),
+            ("read_speed", ("set_read_speed", "read_toc")),
+        ]:
+            functions = []
+            for name in names:
+                match = re.search(r"^static (?:bool|void) " + name + r"\(", usb_source, re.MULTILINE)
+                if not match:
+                    raise RuntimeError(f"Missing production function {name}")
+                end = usb_source.index("\n}\n", match.start()) + 3
+                functions.append(usb_source[match.start():end])
+            include = "usb_cdtext_under_test.inc" if test == "cdtext_probe" else "usb_speed_under_test.inc"
+            (Path(temp) / include).write_text("\n".join(functions))
+            binary = Path(temp) / test
+            subprocess.run(
+                shlex.split(os.environ.get("CC", "cc")) + [
+                    "-std=c11", "-Wall", "-Wextra", "-Werror", "-pedantic", "-g",
+                    "-fsanitize=address,undefined", "-fno-omit-frame-pointer",
+                    "-I", temp, "-I", str(firmware / "main"),
+                    str(firmware / "main/probe_protocol.c"),
+                    str(firmware / f"tests/{test}_test.c"), "-o", str(binary),
+                ], check=True,
+            )
+            subprocess.run([str(binary)], check=True)
         for name, sources, flags in [
             ("usb_ab", ["tests/usb_ab_test.c"], []),
             ("usb_trace", ["tests/usb_trace_test.c"], []),

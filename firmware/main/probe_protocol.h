@@ -24,6 +24,7 @@ typedef enum {
     PROBE_ALLOW_REMOVAL,
     PROBE_EJECT,
     PROBE_READ_CDTEXT,
+    PROBE_SET_CD_SPEED,
 } probe_command_t;
 
 typedef struct {
@@ -80,6 +81,9 @@ const char *probe_command_name(probe_command_t command);
 // No arbitrary CDB or Data-Out API: only the explicit queries and allow-removal/eject commands, LUN 0.
 bool probe_make_cbw(probe_command_t command, uint8_t subclass, uint32_t tag,
                     size_t data_size, uint8_t out[PROBE_CBW_SIZE]);
+// Bounded read-speed experiment: 2x or 4x only, no data phase; write speed is zero.
+bool probe_make_set_cd_speed_cbw(uint8_t subclass, uint32_t tag, unsigned speed_x,
+                                 uint8_t out[PROBE_CBW_SIZE]);
 // CD-DA only, 1..8 sectors entirely inside one validated audio track; no cross-track reads.
 bool probe_make_read_cd_cbw(uint8_t subclass, uint32_t tag, const probe_track_t *track,
                             uint32_t lba, uint8_t sectors, uint8_t out[PROBE_CBW_SIZE]);

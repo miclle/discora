@@ -422,7 +422,15 @@ static command_result_t execute_command(probe_context_t *ctx, probe_command_t co
         valid = valid && audio && requested == (size_t)audio->sectors * PROBE_CD_SECTOR_SIZE &&
                 probe_make_read_cd_cbw(ctx->interface.subclass, ctx->tag, audio->track,
                                        audio->lba, audio->sectors, cbw);
-    } else {
+    }
+#if defined(CONFIG_DISCORA_CD_READ_SPEED_TEST)
+    else if (command == PROBE_SET_CD_SPEED) {
+        valid = valid && !audio && requested == 0 &&
+                probe_make_set_cd_speed_cbw(ctx->interface.subclass, ctx->tag,
+                                            CONFIG_DISCORA_CD_READ_SPEED_X, cbw);
+    }
+#endif
+    else {
         valid = valid && !audio &&
                 probe_make_cbw(command, ctx->interface.subclass, ctx->tag, requested, cbw);
     }
@@ -666,6 +674,29 @@ static bool read_cdtext(probe_context_t *ctx)
 }
 #endif
 
+#if defined(CONFIG_DISCORA_CD_READ_SPEED_TEST)
+static bool set_read_speed(probe_context_t *ctx)
+{
+    ESP_LOGI(TAG, "read_speed request=%ux kbps=%u; acceptance is not measured spindle speed",
+             CONFIG_DISCORA_CD_READ_SPEED_X, CONFIG_DISCORA_CD_READ_SPEED_X * 177);
+    command_result_t status = execute_command(ctx, PROBE_SET_CD_SPEED, 0, NULL, &ctx->result);
+    if (ctx->gone || ctx->faulted || status == COMMAND_TRANSPORT_ERROR) return false;
+    if (status == COMMAND_PASSED) {
+        ESP_LOGI(TAG, "read_speed accepted=%ux; acoustic and sustained-read validation pending",
+                 CONFIG_DISCORA_CD_READ_SPEED_X);
+        return true;
+    }
+    probe_sense_t sense;
+    if (!request_sense(ctx, &sense) || ctx->gone || ctx->faulted) return false;
+    if (sense.key == 5 && (sense.asc == 0x20 || sense.asc == 0x24) && sense.ascq == 0) {
+        ESP_LOGW(TAG, "read_speed unsupported; retain drive policy, no speed retry for this TOC");
+        return true;
+    }
+    ESP_LOGW(TAG, "read_speed failed; discard TOC instead of hiding source failure");
+    return false;
+}
+#endif
+
 static void read_toc(probe_context_t *ctx)
 {
     command_data_t *result = &ctx->result;
@@ -705,6 +736,12 @@ static void read_toc(probe_context_t *ctx)
     if (!read_cdtext(ctx) || ctx->faulted || ctx->gone) {
         ctx->toc_valid = false;
         ESP_LOGW(TAG, "CD-Text probe lost source readiness; discard TOC until a fresh query");
+        return;
+    }
+#endif
+#if defined(CONFIG_DISCORA_CD_READ_SPEED_TEST)
+    if (!set_read_speed(ctx) || ctx->faulted || ctx->gone) {
+        ctx->toc_valid = false;
         return;
     }
 #endif

@@ -120,6 +120,7 @@ const char *probe_command_name(probe_command_t command)
     case PROBE_REQUEST_SENSE: return "REQUEST SENSE";
     case PROBE_READ_TOC: return "READ TOC";
     case PROBE_READ_CDTEXT: return "READ TOC (CD-Text)";
+    case PROBE_SET_CD_SPEED: return "SET CD SPEED";
     case PROBE_READ_CD: return "READ CD";
     case PROBE_ALLOW_REMOVAL: return "ALLOW MEDIUM REMOVAL";
     case PROBE_EJECT: return "START STOP UNIT (eject)";
@@ -170,6 +171,22 @@ bool probe_make_cbw(probe_command_t command, uint8_t subclass, uint32_t tag,
         // Eject only: IMMED=0, LoEj=1, Start=0. ALLOW uses Prevent=0.
         out[19] = command == PROBE_EJECT ? 0x02 : (uint8_t)data_size;
     }
+    return true;
+}
+
+bool probe_make_set_cd_speed_cbw(uint8_t subclass, uint32_t tag, unsigned speed_x,
+                                 uint8_t out[PROBE_CBW_SIZE])
+{
+    if (!out || !supported_subclass(subclass) || (speed_x != 2 && speed_x != 4)) return false;
+    // Match the Linux optical driver's rounded-up Nx -> kB/s conversion.
+    unsigned kbps = speed_x * 177;
+    memset(out, 0, PROBE_CBW_SIZE);
+    write_le32(out, 0x43425355);
+    write_le32(out + 4, tag);
+    out[14] = 12;
+    out[15] = 0xbb;
+    out[17] = (uint8_t)(kbps >> 8);
+    out[18] = (uint8_t)kbps;
     return true;
 }
 
