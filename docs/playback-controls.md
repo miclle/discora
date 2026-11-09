@@ -23,16 +23,16 @@ GPIO41／42 有外部 JTAG 复用功能，本方案通过 `gpio_config()` 选择
 
 洞洞板候选的引出孔为：播放（M，A）、上一曲（N，A）、下一曲（O，A）、退碟（P，A），GND（J，A）。从已有排母底部焊脚引出短线，板外 P3 五芯可拔接头统一定义为 **1=GND、2=播放、3=上一曲、4=下一曲、5=退碟**。这是项目线序，不是商品接头默认针号；两侧按标记逐线核对。接头壳体、固定和实际弯线空间待试装。见[孔位总图与线束放大](diagrams/discora-wiring.html#button-harness)及[载板说明](perfboard-layout.md#四键线束引出)。
 
-以全新 sdkconfig 和 build 目录，依次叠加有声、PSRAM、四键配置：
+复现最近部署的有声、PSRAM、USB 诊断、单次寻道恢复、四键及 OLED 组合时，使用全新 sdkconfig 和 build 目录：
 
 ```sh
 cd firmware
 idf.py -B build-buttons -DSDKCONFIG=sdkconfig.buttons \
-  -DSDKCONFIG_DEFAULTS="sdkconfig.defaults;bench/cd-player-i2s.defaults;bench/cd-player-psram.defaults;bench/cd-player-buttons.defaults;bench/cd-player-oled.defaults" set-target esp32s3
+  -DSDKCONFIG_DEFAULTS="sdkconfig.defaults;bench/cd-player-i2s.defaults;bench/cd-player-psram.defaults;bench/usb-diagnostics.defaults;bench/cd-player-seek-recovery.defaults;bench/cd-player-buttons.defaults;bench/cd-player-oled.defaults" set-target esp32s3
 idf.py -B build-buttons -DSDKCONFIG=sdkconfig.buttons build
 ```
 
-继承 2 MiB PSRAM、3 秒预填、25% 数字幅度和自动重缓冲；在最后叠加 `cd-player-oled.defaults` 启用 GPIO10／11、0x3c 的 SH1106，显示曲号与播放状态。`cd-player-buttons.defaults` 只启用四键，不自行开启 USB 诊断、单次寻道恢复或故障注入。本次候选额外保留上一部署的 `usb-diagnostics.defaults`、`cd-player-seek-recovery.defaults`，准确构建配置见验证记录。原 PSRAM profile 本身仍关闭按键；必须在它之后叠加四键文件。
+继承 2 MiB PSRAM、3 秒预填、25% 数字幅度和自动重缓冲；在最后叠加 `cd-player-oled.defaults` 启用 GPIO10／11、0x3c 的 SH1106，显示曲号与播放状态。`cd-player-buttons.defaults` 只启用四键，不自行开启 USB 诊断、单次寻道恢复或故障注入。上面的完整命令显式包含 `usb-diagnostics.defaults` 和 `cd-player-seek-recovery.defaults`，与最近部署及 CI 的 four-buttons-oled 组合一致；READ CD CSW 保持默认 3 秒，不叠加 30 秒诊断配置。原 PSRAM profile 本身仍关闭按键；必须在它之后叠加四键文件。
 
 ## 操作语义
 

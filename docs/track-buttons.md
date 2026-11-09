@@ -47,7 +47,7 @@ idf.py -C firmware -B "$PWD/.local/bench/track-buttons-manual/build" build
 1. 软件时钟配置启动应打印 `prev=GPIO2 next=GPIO42 active-low internal pull-up; debounce=30ms`；获得 TOC 后仍为 stopped。
 2. 在至少两条音频轨的测试盘上，按下一曲再上一曲，核对 `button=next/prev accepted=1`、实际轨号／源 LBA、后续真实 READ CD 和软件消费推进。
 3. 长按 2 秒只换一次；释放再按可以重复。分别测试两键上电按住、双键按住、先释放其中一键，均不应产生额外换轨。
-4. 在首／末可用轨验证边界拒绝不改变 generation、队列或当前播放；暂停换轨保持暂停且不派发新读取；停止换轨从目标轨起点重新预填，continuous=1。
+4. 在首／末可用轨验证双向循环到末／首轨；只有一条可播放音轨时不改变 generation、队列或当前播放。暂停换轨保持暂停且不派发新读取；停止换轨从目标轨起点重新预填，continuous=1。
 5. 在 READ CD 在途时换轨，核对旧回复拒收；连续播放中换轨应保留连续模式。源故障不自动重试，不以离线注入替代真实故障证据。
 6. 退盘、无盘按键、插盘时按住、重连分别验证不会延迟执行旧动作；四键 profile 的 GPIO41 退盘回归单独记录。
 7. DAC 验收后再确认真实声音切换、左右声道及无异常复位；软件状态切换不等于声音输出已通过。

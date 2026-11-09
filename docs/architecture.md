@@ -1,4 +1,4 @@
-# 架构初稿（待实验验证）
+# 系统架构与验证边界
 
 ## 总体数据路径
 
@@ -81,7 +81,7 @@ SD / flash ISO or PCM → source reader → buffer → USB BOT
 2. 已采用原生 USB Host + 独立最小 BOT 层；是否需要扩展命令调度随音频读取结果再评估。
 3. 缓冲空间与 SD 卡传输是否与 USB 带宽/任务调度冲突。
 4. PCM5102A 不需要外部 MCLK 的具体模块接法与时钟精度验证。
-5. 是否需要 PSRAM；初期先不用其承担 USB DMA。
+5. 当前有声 profile 已采用 PSRAM 软件队列；USB／I²S DMA 仍保留内部 RAM，继续验证缓冲、供数延迟与实际故障恢复边界。
 
 ## CD 播放控制接入
 
