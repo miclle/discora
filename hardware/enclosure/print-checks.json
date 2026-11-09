@@ -1,5 +1,5 @@
 {
-  "model_sha256": "5c73112e2f065d81831e8f2f88cdff3242b4138083f531cacf7b90971ef3878c",
+  "model_sha256": "adc2d390a7f3e14a647d37d470555cb2524a16030cd2e80a7c4c1d4e52f37f21",
   "freecad_version": [
     "1",
     "1",
@@ -184,10 +184,10 @@
       "file": "ButtonRetainer.stl",
       "size_xyz_mm": [
         34.0,
-        34.85427940565407,
-        6.500000000000011
+        23.854279405654083,
+        6.50000000000005
       ],
-      "facets": 1116,
+      "facets": 724,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -196,7 +196,7 @@
         0.0,
         0.952675287877846
       ],
-      "stl_sha256": "90c52c2117ad26965d8b057be6def87506cdb4f9a89505ffa95c1e5e79ad6a24"
+      "stl_sha256": "011a8d52fdf6735b0e55f2a04f9880393bb8161a7664696b5786dee342d36e06"
     },
     "Knob": {
       "file": "Knob.stl",
@@ -256,7 +256,7 @@
         "FrontShell"
       ],
       "exit_code": 0,
-      "gcode_sha256": "3a44913daf42fce80095de29d74a949f2ed0fdb0802f447c8d83c258c2905716",
+      "gcode_sha256": "18806dcf9c3d33a4a23531028c932c43518edf2962710b2808be4404720b0b15",
       "total_estimated_time": "14h 45m 22s",
       "filament_g": 126.81,
       "layers": 212,
@@ -267,7 +267,7 @@
         "SpeakerCarrier"
       ],
       "exit_code": 0,
-      "gcode_sha256": "f64042ce2c741165a48fd927ba424c5e599907ae5812605af705f20de1ced0e9",
+      "gcode_sha256": "20f9d6705425a7b152d36e6eb17185c4c25a9b51d8b098134d75842a97c4a07b",
       "total_estimated_time": "6h 57m 11s",
       "filament_g": 158.54,
       "layers": 282,
@@ -285,9 +285,9 @@
         "Knob"
       ],
       "exit_code": 0,
-      "gcode_sha256": "47ad7599ad87950cd12801f5519b220a1a05fa212df5d9efe117983c64c225c1",
-      "total_estimated_time": "1h 4m 5s",
-      "filament_g": 22.3,
+      "gcode_sha256": "8e28253bb0d33d4c3d91a4982209282180ef1add67c40d6956f65f77563fb040",
+      "total_estimated_time": "1h 1m 41s",
+      "filament_g": 20.67,
       "layers": 60,
       "vendor_T65535_parser_notice": true
     }

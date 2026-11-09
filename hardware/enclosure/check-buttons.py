@@ -74,14 +74,51 @@ def main():
         report['preserved_controls_difference_mm3']=differences
         report['baseline_sha256']=hashlib.sha256(args.baseline.read_bytes()).hexdigest()
         A.closeDocument(previous.Name)
-    report['retainer']=dict(connected_solids=len(doc.ButtonRetainer.Shape.Solids),
-        panel_depth_mm=[16.5,18.5],support_depth_mm=[12,16.5],pin_tip_depth_allowance_mm=15.7,
-        nominal_pin_tip_to_plate_mm=.8,center_support_diameter_mm=4,
-        center_support_clear_of_actual_pins_verified=False)
+    retainer=doc.ButtonRetainer.Shape
+    wire_checks=[]
+    for key,x,y in specs:
+        origin=V(x,y,edge.StartPoint.y+y*slope)
+        pose=A.Placement(origin,A.Rotation(V(0,1,0),-outward))
+        local=retainer.copy();local.Placement=pose.inverse().multiply(local.Placement)
+        # Entire terminal-side bands stay open, regardless of exact pin pitch.
+        # These are design reservations, not a measured wire or solder envelope.
+        for sign in (-1,1):
+            z=4 if sign>0 else -8
+            band=Part.makeBox(12.4,5.4,4,V(-6.2,12.3,z))
+            assert local.common(band).Volume<.001,(key,sign,'blocked terminal side')
+            band.Placement=pose.multiply(band.Placement)
+            hits=[]
+            for o in objects:
+                if band.BoundBox.intersect(o.Shape.BoundBox):
+                    overlap=band.common(o.Shape).Volume
+                    if overlap>.001:hits.append(dict(object=o.Name,volume_mm3=overlap))
+            # Preserve the existing 10 mm DAC output connector reservation.
+            dac=doc.DAC.Shape.BoundBox; chip=doc.DACChip.Shape.BoundBox
+            connector=Part.makeBox(chip.XMax-dac.XMin,dac.YLength,10,
+                                   V(dac.XMin,dac.YMin,dac.ZMax))
+            overlap=band.common(connector).Volume
+            if overlap>.001:hits.append(dict(object='DAC output connector allowance',volume_mm3=overlap))
+            assert not hits,(key,sign,hits)
+            wire_checks.append(dict(button=key,terminal_side=sign,local_x_mm=[-6.2,6.2],
+                local_z_mm=[z,z+4],depth_mm=[12.3,17.7],clashes=hits))
+        # Leave central molded details free; two 2 x 3 mm contact pads per switch.
+        relief=Part.makeBox(5.6,4.4,10,V(-2.8,12.05,-5))
+        assert local.common(relief).Volume<.001,(key,'central relief')
+        for cx in (-3.8,3.8):
+            pad=Part.makeBox(2,.1,3,V(cx-1,12,-1.5))
+            assert abs(local.common(pad).Volume-.6)<1e-5,(key,cx,'support pad')
+    report['retainer']=dict(connected_solids=len(retainer.Solids),
+        frame_depth_mm=[16.5,18.5],support_depth_mm=[12,16.5],pin_tip_depth_allowance_mm=15.7,
+        support_pads_per_switch=2,support_pad_size_mm=[2,3],support_pad_centers_local_x_mm=[-3.8,3.8],
+        center_relief_width_mm=5.6,terminal_direction='local +/-Z (along front slope)',
+        nominal_space_beyond_pin_tips_mm=2.0,
+        direct_solder_wires=True,terminal_side_reservations=wire_checks,
+        physical_bearing_surface_verified=False)
     assert report['retainer']['connected_solids']==1
     report['limits']=['Round head uses an intentionally conservative diameter 12 mm envelope, not a measurement.',
                       '3.7 mm leads are reserved behind the 3.2 mm body; lead datum and footprint require confirmation.',
-                      'Center supports require a pin-free bearing surface; no pin locations or solder joints are invented.',
+                      'Two plastic-base pads avoid the central molded features in the photo; exact bearing flatness requires a sample.',
+                      'Open terminal bands are clearance reservations, not measured solder joints, wire bends or pin positions.',
                       '0.8 mm cap movement is sampled CAD clearance, not measured actuator stroke or a tolerance stack acceptance.']
     args.output.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
     A.closeDocument(doc.Name)

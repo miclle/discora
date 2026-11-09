@@ -87,7 +87,7 @@ P1 前壳合并前斜面、提手、格栅、屏幕座和四键定位座；P2 �
 - [print-checks.json](../hardware/enclosure/print-checks.json)：十一个闭合网格适合用户给定的 256³ 空间，Bambu Studio 使用 P2S / 0.4 mm 配置完成四盘 PLA 切片；未用 0.2 mm 喷嘴切片，未实物打印。
 - 图册只保留这一份彩色 PDF，共 5 页 A3 横向，已逐页渲染检查文字、标注及爆炸编号；实体颜色沿用 CAD，线图和填色共享同一模型及投影。颜色、网格精度及输出尺寸见 [color-render.json](../hardware/enclosure/drawings/color-render.json)。临时渲染和切片在被忽略的 `tmp/`，未向打印机发送任务。
 
-四键设计与尺寸假设见 [ADR-0023](decisions/0023-four-button-front-panel.md)，[button-checks.json](../hardware/enclosure/button-checks.json)记录孔径、局部尺寸和键帽活动余量；引脚排列、实际行程和压板支点配合待实测。
+四键设计与尺寸假设见 [ADR-0023](decisions/0023-four-button-front-panel.md)，[button-checks.json](../hardware/enclosure/button-checks.json)记录孔径、局部尺寸和键帽活动余量；引脚面照片和直接焊线要求对应的镂空支架见 [ADR-0025](decisions/0025-open-button-wire-retainer.md)；精确脚距、实际行程和支承面配合待实测。
 
 电池当前位置为 X=−56…56、Y=6…76、Z=8…28；本次前壳加厚并将深度增至 80 mm，详见 [ADR-0021](decisions/0021-five-mm-front-panel.md)。此前顶部等斜面与操控上移 15 mm 的决策见 [ADR-0019](decisions/0019-matched-top-shoulders.md)。后斜面及碟口导向现已并入后壳，光驱整件从前方拆装，见 [ADR-0020](decisions/0020-rear-roof-shell-ownership.md)。托盘已并入后壳并增加绑带槽。前障板并入 P3，后盖孔取消，连接孔和侧孔安装耳随分件更新。取舍见 [ADR-0016](decisions/0016-three-part-pla-enclosure.md)，此前电池布局见 [ADR-0015](decisions/0015-flat-battery-enclosure.md)。喇叭安装面／孔位、实物屏幕、桥接连接、电池线材和外围供电模块、密封与热性能、提手强度、打印补偿及螺钉耐久仍待实测。
 
