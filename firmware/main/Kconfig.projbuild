@@ -83,6 +83,17 @@ config DISCORA_SENSE_DATA_TIMEOUT_MS
         Changes only REQUEST SENSE Bulk IN data waiting. CBW, CSW and control
         transfers keep their normal deadline. No command replay is added.
 
+config DISCORA_READ_CD_CSW_TIMEOUT_MS
+    int "Diagnostic READ CD status-stage timeout (ms)"
+    depends on DISCORA_USB_DIAGNOSTICS && (DISCORA_CDDA_PROBE || DISCORA_CD_PLAYER)
+    range 3000 30000
+    default 3000
+    help
+        Changes only READ CD CSW waiting, including its one permitted STALL
+        retry. Compare 3000 and 30000 to distinguish a late status response
+        from a transport failure. Does not replay READ CD or change recovery
+        eligibility. A longer wait can exhaust the audio buffer.
+
 config DISCORA_CDDA_SEEK_BENCH
     bool "Include the 12-position seek experiment"
     depends on DISCORA_CDDA_SOAK

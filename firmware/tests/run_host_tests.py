@@ -105,6 +105,8 @@ def main():
                 "-std=c11", "-Wall", "-Wextra", "-Werror", "-pedantic", "-g",
                 "-fsanitize=address,undefined", "-fno-omit-frame-pointer",
                 "-I", str(firmware / "main"), str(firmware / "main/cdda_recovery.c"),
+                str(firmware / "main/pcm_buffer.c"), str(firmware / "main/audio_core.c"),
+                str(firmware / "main/cd_player_core.c"),
                 str(firmware / "tests/cdda_recovery_test.c"), "-o", str(recovery),
             ], check=True,
         )

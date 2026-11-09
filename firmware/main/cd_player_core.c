@@ -176,10 +176,14 @@ bool cd_player_request(cd_player_core_t *p, cd_player_read_t *out)
     *out = p->request;
     return true;
 }
+bool cd_player_read_current(const cd_player_core_t *p, const cd_player_read_t *r)
+{
+    return r && p->pending && r->generation == p->audio.generation && r->serial == p->request.serial;
+}
 bool cd_player_complete(cd_player_core_t *p, const cd_player_read_t *r,
                         bool ok, const uint8_t *data, size_t size)
 {
-    if (!p->pending || r->generation != p->audio.generation || r->serial != p->request.serial) {
+    if (!cd_player_read_current(p, r)) {
         ++p->stale_completions; return false;
     }
     p->pending = false;

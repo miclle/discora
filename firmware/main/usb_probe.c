@@ -49,6 +49,11 @@ enum { SENSE_DATA_TIMEOUT_MS = CONFIG_DISCORA_SENSE_DATA_TIMEOUT_MS };
 #else
 enum { SENSE_DATA_TIMEOUT_MS = TRANSFER_TIMEOUT_MS };
 #endif
+#if defined(CONFIG_DISCORA_READ_CD_CSW_TIMEOUT_MS)
+enum { READ_CD_CSW_TIMEOUT_MS = CONFIG_DISCORA_READ_CD_CSW_TIMEOUT_MS };
+#else
+enum { READ_CD_CSW_TIMEOUT_MS = TRANSFER_TIMEOUT_MS };
+#endif
 static const char *TAG = "usb_probe";
 
 typedef struct {
@@ -78,6 +83,9 @@ typedef struct {
     bool quiet_audio;
     unsigned read_failures;
     cdda_recovery_t recovery; // One budget per MCU boot; never reset on reconnect.
+#if defined(CONFIG_DISCORA_CD_PLAYER)
+    const cd_player_read_t *player_read; // Borrowed only during synchronous read_audio().
+#endif
     size_t audio_resume_index;
     uint32_t audio_resume_lba;
     command_data_t result; // One shared reply buffer; only the serialized client owns it.
@@ -334,15 +342,37 @@ static esp_err_t control_request(probe_context_t *ctx, uint8_t type, uint8_t req
 static esp_err_t clear_halt(probe_context_t *ctx, uint8_t endpoint)
 {
     // CLEAR_FEATURE clears the device's halt/toggle; endpoint_clear only clears the host pipe.
+    const char *stage = "host_halt";
+    int64_t started = esp_timer_get_time();
     esp_err_t err = usb_host_endpoint_halt(ctx->device, endpoint);
-    if (err != ESP_OK) {
-        return err;
+    if (err == ESP_OK) {
+        stage = "device_clear";
+        err = control_request(ctx, 0x02, 0x01, endpoint);
     }
-    err = control_request(ctx, 0x02, 0x01, endpoint);
-    if (err != ESP_OK) {
-        return err;
+    if (err == ESP_OK) {
+        stage = "host_clear";
+        err = usb_host_endpoint_clear(ctx->device, endpoint);
     }
-    return usb_host_endpoint_clear(ctx->device, endpoint);
+    audio_report(TAG, "clear_halt tag=%" PRIu32 " ep=0x%02x stage=%s result=%s"
+                 " elapsed_us=%" PRId64 " owned=%u gone=%u",
+                 ctx->tag, endpoint, stage, esp_err_to_name(err),
+                 esp_timer_get_time()-started, ctx->in_flight, ctx->gone);
+    return err;
+}
+
+static esp_err_t receive_csw(probe_context_t *ctx, probe_command_t command,
+                             bool after_stall, unsigned attempt)
+{
+    unsigned timeout = command == PROBE_EJECT ? EJECT_CSW_TIMEOUT_MS :
+                       command == PROBE_READ_CD ? READ_CD_CSW_TIMEOUT_MS : TRANSFER_TIMEOUT_MS;
+    int64_t started = esp_timer_get_time();
+    esp_err_t err = bulk_transfer(ctx, true, NULL, PROBE_CSW_SIZE, timeout, USB_TRACE_CSW);
+    if (after_stall || err != ESP_OK)
+        audio_report(TAG, "csw_wait tag=%" PRIu32 " op=%s after_stall=%u attempt=%u deadline_ms=%u"
+                     " result=%s elapsed_us=%" PRId64 " owned=%u gone=%u",
+                     ctx->tag, probe_command_name(command), after_stall, attempt, timeout,
+                     esp_err_to_name(err), esp_timer_get_time()-started, ctx->in_flight, ctx->gone);
+    return err;
 }
 
 static void reset_recovery(probe_context_t *ctx)
@@ -379,6 +409,7 @@ static command_result_t execute_command(probe_context_t *ctx, probe_command_t co
 #endif
     uint8_t cbw[PROBE_CBW_SIZE];
     size_t received = 0;
+    bool data_stalled = false;
     int64_t started = now_ms();
     result->size = 0;
     ++ctx->tag;
@@ -434,14 +465,16 @@ static command_result_t execute_command(probe_context_t *ctx, probe_command_t co
         memcpy(result->data, ctx->transfer->data_buffer, received);
         if (err != ESP_OK) {
             // A Data-In STALL does not imply command failure until CSW is obtained.
+            data_stalled = true;
+            audio_report(TAG, "data_stall tag=%" PRIu32 " op=%s requested=%u reported_actual=%u",
+                         ctx->tag, probe_command_name(command), (unsigned)requested, (unsigned)received);
             err = clear_halt(ctx, ctx->interface.ep_in);
             if (err != ESP_OK) {
                 goto transport_error;
             }
         }
     }
-    err = bulk_transfer(ctx, true, NULL, PROBE_CSW_SIZE,
-                        command == PROBE_EJECT ? EJECT_CSW_TIMEOUT_MS : TRANSFER_TIMEOUT_MS, USB_TRACE_CSW);
+    err = receive_csw(ctx, command, data_stalled, 1);
     if (command == PROBE_REQUEST_SENSE) {
         ESP_LOGI(TAG, "sense phase=CSW result=%s elapsed_ms=%" PRIi64,
                  esp_err_to_name(err), now_ms() - started);
@@ -449,8 +482,7 @@ static command_result_t execute_command(probe_context_t *ctx, probe_command_t co
     if (err == ESP_FAIL && ctx->transfer->status == USB_TRANSFER_STATUS_STALL) {
         err = clear_halt(ctx, ctx->interface.ep_in);
         if (err == ESP_OK) {
-            err = bulk_transfer(ctx, true, NULL, PROBE_CSW_SIZE,
-                        command == PROBE_EJECT ? EJECT_CSW_TIMEOUT_MS : TRANSFER_TIMEOUT_MS, USB_TRACE_CSW);
+            err = receive_csw(ctx, command, true, 2);
         }
     }
     if (err != ESP_OK) {
@@ -647,6 +679,9 @@ typedef struct { probe_context_t *ctx; audio_read_t audio; size_t expected; } re
 static bool recovery_healthy(void *arg)
 {
     probe_context_t *ctx = ((recovery_call_t *)arg)->ctx;
+#if defined(CONFIG_DISCORA_CD_PLAYER)
+    if (ctx->player_read && !discora_cd_player_read_current(ctx->player_read)) return false;
+#endif
     return !ctx->gone && !ctx->faulted && !ctx->in_flight && ctx->toc_valid;
 }
 static bool recovery_wait(void *arg, unsigned ms)
@@ -703,7 +738,7 @@ static bool read_audio(probe_context_t *ctx, const probe_track_t *track,
             ESP_LOGW(TAG, "seek recovery succeeded; recovered read, not a clean first attempt");
             return true;
         }
-        if (recovered == CDDA_RECOVERY_LOST) ESP_LOGW(TAG, "seek recovery aborted: device lost/faulted; no replay");
+        if (recovered == CDDA_RECOVERY_LOST) ESP_LOGW(TAG, "seek recovery aborted: device unavailable or request superseded; no replay");
         if (recovered == CDDA_RECOVERY_NOT_READY) ESP_LOGW(TAG, "seek recovery aborted: not ready; TOC invalidated, no replay");
         if (recovered == CDDA_RECOVERY_FAILED) ESP_LOGW(TAG, "seek recovery failed; budget exhausted");
 #else
@@ -1150,7 +1185,9 @@ void discora_usb_probe_run(void)
                 if (discora_cd_player_request(&request)) {
                     ctx.quiet_audio = true;
                     int64_t read_started = esp_timer_get_time();
+                    ctx.player_read = &request;
                     bool ok = read_audio(&ctx, &request.track, request.lba, request.sectors);
+                    ctx.player_read = NULL;
                     uint64_t elapsed_us = (uint64_t)(esp_timer_get_time() - read_started);
                     ctx.quiet_audio = false;
                     discora_cd_player_complete(&request, ok, ok ? ctx.result.data : NULL, ok ? ctx.result.size : 0, elapsed_us);

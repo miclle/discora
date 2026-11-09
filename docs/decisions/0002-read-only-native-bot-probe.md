@@ -39,3 +39,9 @@ M1 需要直接观察 USB 光驱的真实 SCSI 返回值。普通文件系统挂
 ## 2026-11-01：只读恢复实验的有限例外
 
 0.5.2 新增默认关闭的单次 READ CD 恢复，仅接受有效 `03/02/00` 且设备仍连接、再次 TUR 就绪；传输错误不重放，重连不重置预算。此前无自动重放规则仍适用于默认配置，完整条件见 [ADR-0007](0007-bounded-seek-recovery.md)。
+
+## 2026-11-09：READ CD 状态等待对照
+
+已观察到 DATA STALL 清除后 CSW 在 3 秒截止时仍未返回。0.12.4 在 USB diagnostics 下增加独立的 `DISCORA_READ_CD_CSW_TIMEOUT_MS`（3000～30000，默认 3000），只改变 READ CD 的两次可能 CSW 等待；第二次仅在第一次 CSW STALL 且 clear 成功时发生。其它命令和 DATA／CBW／控制期限、超时取消与所有权隔离、恢复准入保持不变。最长两次 CSW 等待可达 60 秒，不承诺不中断声音。
+
+先记录设备／Host clear 结果，再观察是否在 3 秒之后取得有效 CSW；收到失败状态后仍须 REQUEST SENSE，不能把 STALL 或延长截止当作成功。即使一次播放成功，只要没有触发目标错误，就不能归因于该参数。详见[诊断记录](../records/2026-11-09-usb-stall-diagnostic.md)。

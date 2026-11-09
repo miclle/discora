@@ -1,6 +1,8 @@
 # 四键播放控制
 
-`0.12.3-disc-rewind` 提供播放／暂停、上一曲、下一曲和退碟。状态为 **implemented**；四键证据见[连续排针记录](records/2026-11-08-buttons-row.md)，OLED 配置与上一部署见[显示记录](records/2026-11-08-buttons-oled.md)，盘尾复位与循环换轨见[实现及首轮检查](records/2026-11-08-disc-rewind.md)和[重连后盘尾验收](records/2026-11-09-disc-rewind-reconnect.md)。UART 共用控制核心的循环换轨、暂停保持、盘尾回首曲与再次播放已 bench-tested；实体按钮手势仍待独立验收。代码支持不等于当前设备已烧录或接线。历史串口、查询模式退碟及整盘播放证据不替代本版本四键验收。
+`0.12.5-usb-recovery-guard` 已部署，用户于 2026-11-09 确认四个实体按键的播放、暂停、上一曲、下一曲和退碟均正常，五项基本操作为 **bench-tested（用户实测通过）**，见[部署与验收记录](records/2026-11-09-usb-offline-recovery.md#四键基本操作验收2026-11-09用户实测反馈)。长按、组合按键及故障恢复等专项场景尚未完整验收。
+
+四键接线沿用[连续排针方案](records/2026-11-08-buttons-row.md)，OLED 配置见[显示记录](records/2026-11-08-buttons-oled.md)。UART 共用控制核心的循环换轨、暂停保持、盘尾回首曲与再次播放已 bench-tested，见[首轮检查](records/2026-11-08-disc-rewind.md)和[重连后盘尾验收](records/2026-11-09-disc-rewind-reconnect.md)；本次基本操作反馈不扩大为这些边界场景的实体按键验收。
 
 ## 接线与配置
 

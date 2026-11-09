@@ -500,6 +500,13 @@ bool discora_cd_player_request(cd_player_read_t *request)
 #endif
     xSemaphoreGive(lock); return ok;
 }
+bool discora_cd_player_read_current(const cd_player_read_t *request)
+{
+    xSemaphoreTake(lock, portMAX_DELAY);
+    bool current = cd_player_read_current(&player, request);
+    xSemaphoreGive(lock);
+    return current;
+}
 void discora_cd_player_complete(const cd_player_read_t *request, bool ok, const uint8_t *data, size_t size, uint64_t elapsed_us)
 {
     xSemaphoreTake(lock, portMAX_DELAY);
