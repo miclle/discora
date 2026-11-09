@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="35.400000000000006mm" height="33.500000000000014mm" viewBox="-17.700000000000003 -14.70000000000002 35.400000000000006 33.500000000000014">
+<g   fill="none"
+   stroke="rgb(0, 0, 0)"
+   stroke-linecap="butt"
+   stroke-linejoin="miter"
+   stroke-width="0.18"
+   transform="scale(1, -1)"
+  >
+<path id= "1" d=" M -17.7 -18.8 L -17.7 14.7 " />
+<path id= "2" d=" M -17.7 -18.8 L -7 -18.8 " />
+<path id= "3" d=" M -7 -14.8 L -7 -18.8 " />
+<path id= "4" d=" M -17.7 14.7 L 17.7 14.7 " />
+<path id= "5" d=" M -7 -14.8 L 7 -14.8 " />
+<path id= "6" d=" M 17.7 -18.8 L 17.7 14.7 " />
+<path id= "7" d=" M 7 -14.8 L 7 -18.8 " />
+<path id= "8" d=" M 7 -18.8 L 17.7 -18.8 " />
+<circle cx ="-15.2" cy ="-16.3" r ="1.5" /><circle cx ="-15.2" cy ="12.2" r ="1.5" /><circle cx ="15.2" cy ="-16.3" r ="1.5" /><circle cx ="15.2" cy ="12.2" r ="1.5" /><path id= "13" d=" M -17.25 -13.55 L -17.25 9.45 " />
+<path id= "14" d=" M 17.25 -13.55 L 17.25 9.45 " />
+<path id= "15" d=" M -17.25 -13.55 L 17.25 -13.55 " />
+<path id= "16" d=" M -17.25 9.45 L 17.25 9.45 " />
+</g>
+</svg>

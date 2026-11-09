@@ -42,7 +42,7 @@
 - **供电**：光驱独立、足额的 5V 供电支路；主控与光驱共地，不让开发板 GPIO 或微弱 USB 输出直接负担光驱电机电流。
 - **刻录输入**：以后可选 SD 卡上的 ISO / PCM 数据；当前未定型。
 
-这只是**实验选型**，不是已验证的 BOM。详见 [硬件清单与风险](docs/hardware.md)。机身外形与竖装光驱布局见 [V4 顶部进碟与中央双喇叭 FreeCAD 概念模型](hardware/enclosure/README.md)；外观尺寸、爆炸图和侧剖见 [彩色整机图册（5 页 A3 PDF）及说明](docs/enclosure-drawings.md)。
+这只是**实验选型**，不是已验证的 BOM。详见 [硬件清单与风险](docs/hardware.md)。机身外形与竖装光驱布局见 [V4 顶部进碟与中央双喇叭 FreeCAD 概念模型](hardware/enclosure/README.md)；外观尺寸、爆炸图和侧剖见 [彩色整机图册（6 页 A3 PDF）及说明](docs/enclosure-drawings.md)。
 
 ## 从哪里开始
 

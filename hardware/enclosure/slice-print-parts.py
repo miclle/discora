@@ -48,7 +48,7 @@ def main():
                   printer_contacted=False,gcode_execution_validated=False)
     for name in ('RearShell','FrontShell','SpeakerCarrier','SmallParts'):
         target=out/name;target.mkdir(exist_ok=True)
-        names=[name] if name!='SmallParts' else ['LPort','RPort','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','Knob']
+        names=[name] if name!='SmallParts' else ['LPort','RPort','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','DisplayRetainer','Knob']
         for n in names:assert digest(meshes/(n+'.stl'))==report['parts'][n]['stl_sha256']
         command=[str(args.bambu.resolve()),'--datadir',str(out/('userdata-'+name)),
                  '--load-settings',str(settings['machine'])+';'+str(settings['process']),

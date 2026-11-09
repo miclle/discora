@@ -127,6 +127,7 @@
         "NextKey",
         "ButtonRetainer",
         "Knob",
+        "DisplayRetainer",
         "SpeakerCarrier",
         "LDriver",
         "RDriver",
@@ -176,6 +177,7 @@
         "NextKey",
         "ButtonRetainer",
         "Knob",
+        "DisplayRetainer",
         "SpeakerCarrier",
         "LDriver",
         "RDriver",
@@ -203,7 +205,7 @@
       "clashes": []
     },
     "front_cover": {
-      "method": "exact B-rep samples; 1 mm forward steps",
+      "method": "exact per-part B-rep samples; 1 mm forward steps",
       "waypoints_xyz_mm": [
         [
           0,
@@ -233,7 +235,8 @@
         "Encoder",
         "VolumePot",
         "DisplayPCB",
-        "DisplayHeader"
+        "DisplayHeader",
+        "DisplayRetainer"
       ],
       "fixed": [
         "LPort",
@@ -261,5 +264,5 @@
     }
   },
   "all_pass": true,
-  "model_sha256": "42ecc25db7d3df73db230a2d049c27795c1ac9ea7484fd432b2da56074bcff17"
+  "model_sha256": "0763858f1cfbe30c99434dce227a8c50fb99112e9ad7e43d9a5092ee646f35e8"
 }

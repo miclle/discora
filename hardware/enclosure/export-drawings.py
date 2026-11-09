@@ -139,6 +139,18 @@ def main():
     projection('control-cutouts',controls,'front')
     data['features']['control_cut_centers_xz']=[[s.CenterOfMass.x,s.CenterOfMass.z] for s in controls.Solids[1:]]
 
+    # OLED details retain the saved parts at their real relative positions.
+    pose=A.Placement(V(0,18,a.y+18*slope),A.Rotation(V(0,1,0),V(0,slope,-1)))
+    module=compound(['DisplayPCB','Window','DisplayHeader'])
+    module.Placement=pose.inverse().multiply(module.Placement)
+    projection('oled-module',module,'front')
+    installed=compound(['FrontShell','DisplayPCB','Window','DisplayHeader','DisplayRetainer'])
+    installed.Placement=pose.inverse().multiply(installed.Placement)
+    section=installed.common(Part.makeBox(.2,20,40,V(-.1,-1,-20)))
+    projection('oled-side',section,'right')
+    data['oled']={'pcb':bounds(doc.DisplayPCB.Shape),'active_center_exterior_xyz_mm':list(pose.Base),
+                 'local_frame':'X right; Y inward normal; Z up slope toward header'}
+
     def exploded(name, definitions, expected):
         seen, pieces, anchors = [], [], {}
         for number,label,names,offset in definitions:
@@ -161,7 +173,7 @@ def main():
         ('04','左侧后装导音孔',['LPort'],(-120,0,0)),
         ('05','右侧后装导音孔',['RPort'],(120,0,0)),
         ('06','四个软质脚垫',['Feet'],(0,0,-65)),
-        ('07','屏窗与操控件',['Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','Knob'],(0,-70,100)),
+        ('07','屏窗与操控件',['Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','DisplayRetainer','Knob'],(0,-70,100)),
         ('08','硬件包络（见右图）',groups['Hardware'],(0,0,0)),
     ],shapes)
     exploded('exploded-core',[
@@ -184,7 +196,7 @@ def main():
         'handle_opening_90_16': abs(handle.BoundBox.XLength-90)<1e-5 and abs(handle.BoundBox.ZLength-16)<1e-5,
         'hidden_grille_cut_130': abs(grille.BoundBox.XLength-130)<1e-5,
         'slot_124_3_2': abs(slot.BoundBox.XLength-124)<1e-5 and abs(slot.BoundBox.YLength-3.2)<1e-5,
-        'screen_opening_36_20': abs(local.BoundBox.XLength-36)<1e-5 and abs(local.BoundBox.ZLength-20)<1e-5,
+        'screen_mouth_32_82_18_1': abs(local.BoundBox.XLength-32.82)<1e-5 and abs(local.BoundBox.ZLength-18.1)<1e-5,
         'battery_112_70_20': all(abs(a-b)<1e-5 for a,b in zip(data['objects']['Battery']['size'],(112,70,20))),
         'drive_y63_z32': abs(doc.Drive.Shape.BoundBox.YMin-63)<1e-5 and abs(doc.Drive.Shape.BoundBox.ZMin-32)<1e-5,
         'slot_center_y67_75': abs(slot.BoundBox.Center.y-67.75)<1e-5,
@@ -194,7 +206,7 @@ def main():
         'grille_recess_2_5':abs(doc.FrontGrille.Shape.BoundBox.YMin-2.5)<1e-5,
         'circular_mouth_clear':doc.FrontShell.Shape.common(Part.makeCylinder(65,2.49998,A.Vector(0,.00001,76),A.Vector(0,1,0))).Volume<.001,
         'side_ports_handle_y40':all(abs(doc.getObject(n).Shape.BoundBox.Center.y-40)<1e-5 for n in ('LPort','RPort','LPanelTool')),
-        '33_finished_objects':len(objects)==33,
+        '34_finished_objects':len(objects)==34,
         'three_connected_main_parts':all(len(doc.getObject(n).Shape.Solids)==1 for n in ('FrontShell','RearShell','SpeakerCarrier')),
         'source_unchanged':hashlib.sha256(source.read_bytes()).hexdigest()==source_hash,
     }

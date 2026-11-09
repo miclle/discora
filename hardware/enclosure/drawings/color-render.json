@@ -1,7 +1,7 @@
 {
-  "sha256": "42ecc25db7d3df73db230a2d049c27795c1ac9ea7484fd432b2da56074bcff17",
-  "build_sha256": "206636cf26acdf892afb1b4f4dc89c6ef817a326eee57d3c64dca2fa9fa58fac",
-  "geometry_sha256": "c5feafb1078e968d0e245b7b55d255007c090ef76fd0ff1799de15a858f230ba",
+  "sha256": "0763858f1cfbe30c99434dce227a8c50fb99112e9ad7e43d9a5092ee646f35e8",
+  "build_sha256": "51c40a6016506a83cf13c56ccdfcddb66bb4ff00b80015576a5942f6e90ae9bc",
+  "geometry_sha256": "2290d18df271db292e7228a513630f10241e2a318816ebb0bc48642f7cd59ed3",
   "palette": {
     "TEAL": [
       0.025,
@@ -81,6 +81,11 @@
       0.72
     ],
     "ButtonRetainer": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "DisplayRetainer": [
       0.025,
       0.75,
       0.72

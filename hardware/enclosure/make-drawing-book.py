@@ -18,12 +18,12 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = '42ecc25db7d3df73db230a2d049c27795c1ac9ea7484fd432b2da56074bcff17'
+ANNOTATED_MODEL_SHA256 = '0763858f1cfbe30c99434dce227a8c50fb99112e9ad7e43d9a5092ee646f35e8'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
 LIGHT = HexColor('#d5e1e4')
-TOTAL_PAGES = 5
+TOTAL_PAGES = 6
 
 
 def main():
@@ -77,7 +77,7 @@ def main():
         line(12,16,408,16,LIGHT)
         text(12,10,'概念设计 / CAD 静态几何 · 未经实物装配、声学或生产验收',8,MUTED)
         text(245,10,'单位 mm  |  '+scale,8,MUTED)
-        text(408,10,f'DC-V4-GA-{num:02d}  ·  2026-11-09  ·  {num}/{TOTAL_PAGES}',8,MUTED,'right')
+        text(408,10,f'DC-V4-GA-{num:02d}  ·  2026-11-10  ·  {num}/{TOTAL_PAGES}',8,MUTED,'right')
 
     def view(name,x,y,scale=1,clip_bottom=0):
         info=data['views'][name]
@@ -233,7 +233,7 @@ def main():
     dv(min(q[1] for q in left),max(q[1] for q in left),left[0][0],29,'20.85')
     notes(34,74,[
         '四键孔 Ø10.5；键帽 Ø10，露出 1.2；背面止退沿 Ø12.8。',
-        '屏幕开窗 36 × 20，R3；窗片 35.6 × 19.6，R2.8。',
+        'OLED 外口 32.82 × 18.1，倒角深 0.8；玻璃内退 1.0，详见第 6 页。',
         '旋钮轴孔 Ø8.8；旋钮外径 Ø23.6，高 8.2（沿法向）。',
         '键中心 X=-59 / -41、Y=9 / 26；屏与旋钮 Y=18、X=0 / 48。',
         '前壳背锁：后壁 X=±67.4、Z=18；后斜面 X=±29、Z=179。',
@@ -275,7 +275,7 @@ def main():
             x=panel+4+col*96;y=89-row*8
             badge(x,y+1,part['number']);text(x+5,y,part['label'].replace('见下一页','见右图'),8)
     notes(12,31,[
-        '左图覆盖 33 个成品对象，08 为硬件总成；右图展开 P3 支架和 19 个硬件对象，共 12 组。三个主体均为单一连续实体。',
+        '左图覆盖 34 个成品对象，08 为硬件总成；右图展开 P3 支架和 19 个硬件对象，共 12 组。三个主体均为单一连续实体。',
         '引线端点为组包络中心；展示位移不是拆装路径。侧孔需后装，拆装顺序及检查边界见第 5 页；颜色不代表实物材料。',
     ],gap=7,size=8)
     c.showPage()
@@ -301,7 +301,7 @@ def main():
         ('功放 PCB / 元件预留','66 × 53 × 1.6 / 15；组件最高 Z=139.6'),
         ('主控 PCB / 元件预留','63.39 × 27.94 × 1.6 / 7；组件最高 Z=157.3'),
         ('DAC PCB / 元件预留','31 × 17 × 1.6 / 7；侧立，长边沿 Z'),
-        ('显示 PCB 局部尺寸','38 × 30 × 1.6；并非已核实 OLED 实物安装尺寸'),
+        ('OLED PCB 局部尺寸','35.4 × 33.5 × 1.2；四孔 Ø3，孔距 30.4 × 28.5；图纸值'),
         ('5600 mAh 平排电池','112 × 70 × 20；X=±56，Y=6…76，Z=8…28'),
         ('电池周围名义净距','距后腔底 3.5；前 / 后内壁各 1；托盘侧壁各 1'),
         ('脚垫中心','X=±55；Y=11 / 69；4 个脚垫为一个 CAD 复合对象'),
@@ -317,22 +317,23 @@ def main():
     ],gap=8,size=9)
     c.showPage()
 
-    page(5,'对象清单、打印与拆装','33 个成品对象 · 尺寸为装配坐标系 X × Y × Z 的轴对齐包络，非展开尺寸','清单尺寸 mm；无制造数量承诺')
+    page(5,'对象清单、打印与拆装','34 个成品对象 · 尺寸为装配坐标系 X × Y × Z 的轴对齐包络，非展开尺寸','清单尺寸 mm；无制造数量承诺')
     labels={
         'FrontShell':'P1 前壳 / 提手 / 格栅 / 屏幕座',
         'RearShell':'P2 后斜面 / 碟口 / 侧后壁 / 底架 / 导轨',
         'SpeakerCarrier':'P3 双声腔 / 前障板 / 电子托架',
         'Cowl':'前壳 / 提手','LPanel':'左侧壳','RPanel':'右侧壳','LPort':'左导音孔 / 饰片','RPort':'右导音孔 / 饰片',
         'FrontBezel':'中央格栅压圈','FrontGrille':'通孔护网','Back':'后盖','Base':'底架 / 下固定座','Feet':'脚垫复合件（4 个）',
-        'Window':'斜面窗片','StatusArt':'显示内容示意','PlayPauseKey':'播放／暂停键帽','EjectKey':'退碟键帽','PrevKey':'上一曲键帽','NextKey':'下一曲键帽',
+        'Window':'OLED 玻璃面板','StatusArt':'显示内容示意','PlayPauseKey':'播放／暂停键帽','EjectKey':'退碟键帽','PrevKey':'上一曲键帽','NextKey':'下一曲键帽',
         'ButtonRetainer':'四键焊线支架（两侧敞开／双点支承）',
+        'DisplayRetainer':'OLED 可拆压框（四点承压／两侧锁紧）',
         'PlayPauseSwitch':'播放／暂停开关包络','EjectSwitch':'退碟开关包络','PrevSwitch':'上一曲开关包络','NextSwitch':'下一曲开关包络','Knob':'音量旋钮',
         'LChamber':'左后腔','RChamber':'右后腔','LDriverFrame':'左喇叭预留框','RDriverFrame':'右喇叭预留框',
         'FrontBaffle':'双开口前障板','RearTopMount':'上固定耳（2 个）','DriveCarrier':'光驱底托 / 导轨','SlotGuide':'碟口导向框',
         'DisplayCarrier':'屏幕安装座','AmpShelf':'功放 / 桥接器托板','ElectronicsSled':'主控托板','AmpPads':'功放支撑复合件',
         'MCUPads':'主控支撑复合件','DACPads':'DAC 支撑复合件','BatteryCradle':'平排电池托盘',
         'LDriver':'左喇叭总包络','RDriver':'右喇叭总包络','Encoder':'电位器轴预留','VolumePot':'电位器本体预留',
-        'Drive':'UJ-898 包络','Bridge':'桥接器转向占位','DisplayPCB':'屏幕 PCB 占位','DisplayHeader':'屏幕接头占位',
+        'Drive':'UJ-898 包络','Bridge':'桥接器转向占位','DisplayPCB':'OLED PCB／四孔与缺口','DisplayHeader':'OLED 弯针接头预留',
         'Amp':'功放 PCB','AmpChip':'功放元件预留','MCU':'主控 PCB','MCUChip':'主控元件预留','DAC':'DAC PCB',
         'DACChip':'DAC 元件预留','Battery':'5600 mAh 平排电池',
     }
@@ -351,7 +352,7 @@ def main():
             text(x+1,y-1.8,f'{membership[name]}  {name}',7)
             text(x+1,y-4.8,labels[name],7,MUTED)
             text(x+193,y-3.5,' × '.join(fmt(n) for n in obj['size']),7.5,INK,'right')
-    text(12,127,'PLA 打印：3 主体 + 2 侧孔 + 4 键帽 + 焊线支架 + 旋钮 = 11 件',11,TEAL)
+    text(12,127,'PLA 打印：3 主体 + 2 侧孔 + 4 键帽 + 焊线支架 + 旋钮 + OLED 压框 = 12 件',11,TEAL)
     printing=json.loads((ROOT/'print-checks.json').read_text())
     assert printing['model_sha256']==data['sha256'],'Print report and drawing model differ'
     text(12,118,'用户设备 P2SC · 按 P2S 配置 / 256³ 空间 / 0.4 喷嘴 / 0.20 层高 / 3 壁 / 15% 填充 / 树状支撑',9)
@@ -370,6 +371,58 @@ def main():
     ],gap=7,size=8.5)
     text(12,27,'FCStd SHA-256: '+data['sha256'],8,MUTED)
     text(408,27,'来源：Discora.FCStd / build.FCMacro / drawings/geometry.json',8,MUTED,'right')
+    c.showPage()
+
+    page(6,'OLED 沉槽与可拆压框','依据供应商结构图；玻璃面向外移 4.4；沉槽、倒角与压框来自保存 CAD；有效区虚线标注','模组正视 4:1；安装中剖 3:1')
+    oled=json.loads((ROOT/'oled-checks.json').read_text())
+    assert oled['model_sha256']==data['sha256'] and oled['all_pass']
+    p=view('oled-module',38,86,4)
+    text(109,243,'模组正面 · 排针朝斜面上方',11,TEAL,'center')
+    lo,hi=p(-17.7,-18.8),p(17.7,14.7)
+    dh(lo[0],hi[0],hi[1],233,'35.4 PCB')
+    dv(lo[1],hi[1],lo[0],23,'33.5 PCB')
+    h0,h1=p(-15.2,12.2),p(15.2,12.2)
+    dh(h0[0],h1[0],h0[1],221,'30.4 孔距')
+    b0=p(-15.2,-16.3)
+    dv(b0[1],h0[1],h0[0],188,'28.5 孔距')
+    aa0,aa1=p(-14.71,-7.35),p(14.71,7.35)
+    c.setStrokeColor(TEAL);c.setLineWidth(.3*mm);c.setDash([3,2])
+    c.rect(aa0[0]*mm,aa0[1]*mm,(aa1[0]-aa0[0])*mm,(aa1[1]-aa0[1])*mm,stroke=1,fill=0)
+    c.setDash([])
+    text(109,149,'有效区 29.42 × 14.7',10,TEAL,'center',True)
+    text(109,140,'中心 X=0；高于 PCB 中心 2.05',8,MUTED,'center',True)
+    text(38,75,'4 × Ø3 通孔；铜环外径图示 Ø4.5；底部缺口 14 × 4。',9)
+    text(38,67,'有效区距 PCB 左边 2.99、顶边 7.35；玻璃距左边 0.45、顶边 5.25。',8.5)
+    q=view('oled-side',214,101,3)
+    text(237,243,'安装中剖（局部）',11,TEAL,'center')
+    f,t=q(1,13.97),q(12.3,13.97)
+    dh(f[0],t[0],f[1],233,'11.3 图纸总深度')
+    text(214,94,'玻璃面距外斜面 1.0',8.5,TEAL)
+    text(214,86,'玻璃 1.4 / PCB 1.2',8.5,TEAL)
+    table(274,247,134,[
+        ('外口 / 内喉口','32.82×18.1 / 30.42×15.7'),
+        ('倒角 / 前缘厚度','深0.8；圆角R1.8→R0.6'),
+        ('外斜面基准','X=0，Y=18，Z=177.789'),
+        ('玻璃前面 / PCB 前面','法向向内 1.0 / 2.4'),
+        ('PCB 背面 / 针尖','法向向内 3.6 / 12.3'),
+        ('四孔定位柱','Ø2.6；PCB 孔 Ø3'),
+        ('可拆压框','四点承压；背梁深6.4…8.4'),
+        ('压框双侧固定','X=±20.5、局部Z=-7'),
+        ('盲孔 / 名义螺钉','Ø1.6深4.4 / 2枚M2×6'),
+        ('针尖后的插线预留','12.16 × 6 × 4.54'),
+        ('工具通路预留','Ø4 × 20；两处无交叠'),
+    ],split=51,height=10)
+    notes(274,122,[
+        '深度从外斜面沿内法向量取。',
+        '玻璃与前缘间隙0.2；PCB 孔周四点承压。',
+        '先卸前壳、断线；取下两螺钉和压框，',
+        '再沿内法向取出模组；两步均按0.5采样。',
+    ],gap=7,size=8.5)
+    notes(38,49,[
+        '尺寸来源：oled-module-dimensions-wiring.webp。沉槽、倒角、定位柱和压框为外壳设计值。',
+        '接头塑壳截面、插线和工具包络是设计预留；线材弯折、实际螺钉、打印孔补偿及装配配合仍须实测。',
+        'Window 表示 OLED 自带玻璃面板；本版没有另设透明保护窗片。正前方及选定斜视方向无遮挡；不代表面板光学、密封或实物验收。',
+    ],gap=7,size=8.5)
     c.showPage()
 
     c.save()

@@ -32,7 +32,7 @@ def check(doc):
     report={'units':'mm','fasteners_and_straps_removed':True,'cables_disconnected':True,'physical_assembly_test':False,'paths':{}}
     core_hw=['LDriver','RDriver','Amp','AmpChip','Bridge','MCU','MCUChip']
     core_sources=list(doc.SpeakerCarrier.ConstructionObjects)+core_hw
-    fixed=[n for n in objects if n not in core_hw+['SpeakerCarrier','FrontShell','LPort','RPort','Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch','Knob','Encoder','VolumePot','DisplayPCB','DisplayHeader']]
+    fixed=[n for n in objects if n not in core_hw+['SpeakerCarrier','FrontShell','LPort','RPort','Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch','Knob','Encoder','VolumePot','DisplayPCB','DisplayHeader','DisplayRetainer']]
     hits=[]
     for name in core_sources:
         hit=collisions(box_sweep(doc.getObject(name).Shape,1,-140),fixed)
@@ -87,19 +87,25 @@ def check(doc):
             'translation_xyz_mm':[sign*25,0,0],'moving':[name],'fixed':fixed,
             'prerequisites':['Two side-port screws removed'], 'clashes':hits}
         print('PATH',name,hits,flush=True)
-    moving=['FrontShell','Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch','Knob','Encoder','VolumePot','DisplayPCB','DisplayHeader']
+    moving=['FrontShell','Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch','Knob','Encoder','VolumePot','DisplayPCB','DisplayHeader','DisplayRetainer']
     fixed=[n for n in objects if n not in moving]
     # Fixed objects all start at Y>=5. The exterior slab at Y<=5 moves
     # monotonically away and cannot intersect them; retain all inward posts.
     assert all(objects[n].Shape.BoundBox.YMin>=5-1e-7 for n in fixed)
     clip=Part.makeBox(400,300,500,V(-200,5.00001,-100))
-    body=Part.makeCompound([objects[n].Shape for n in moving]).common(clip)
+    # Clip and test each part separately. The assembled OLED frame bears on
+    # the PCB; a compound boolean needlessly resolves these internal contacts.
+    # Collision against fixed objects distributes over the moving parts.
+    bodies={n:objects[n].Shape.common(clip) for n in moving}
     hits=[]
     for step in range(141):
-        dy=-float(step);shape=body.copy();shape.translate(V(0,dy,0))
-        found=collisions(shape,fixed)
-        if found:hits.append({'front_y_mm':dy,'hits':found})
-    report['paths']['front_cover']={'method':'exact B-rep samples; 1 mm forward steps',
+        dy=-float(step)
+        for name,body in bodies.items():
+            if body.isNull() or not body.Solids:continue
+            shape=body.copy();shape.translate(V(0,dy,0))
+            found=collisions(shape,fixed)
+            if found:hits.append({'front_y_mm':dy,'moving_object':name,'hits':found})
+    report['paths']['front_cover']={'method':'exact per-part B-rep samples; 1 mm forward steps',
         'waypoints_xyz_mm':[[0,0,0],[0,-140,0]],'moving':moving,'fixed':fixed,
         'prerequisites':['Four recessed rear-access front-cover screws removed','Control/display cables disconnected'],
         'clashes':hits}
