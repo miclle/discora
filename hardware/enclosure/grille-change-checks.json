@@ -1,0 +1,42 @@
+{
+  "baseline_sha256": "923a669bff97507aa49d1897196841ae66baa5a3049d735684e4f24949e47130",
+  "model_sha256": "42ecc25db7d3df73db230a2d049c27795c1ac9ea7484fd432b2da56074bcff17",
+  "finished_object_difference_mm3": {
+    "LPort": 0.0,
+    "RPort": 0.0,
+    "FrontShell": 13335.470173266924,
+    "RearShell": 0.0,
+    "Feet": 0.0,
+    "Window": 0.0,
+    "StatusArt": 0.0,
+    "PlayPauseKey": 0.0,
+    "EjectKey": 0.0,
+    "PrevKey": 0.0,
+    "NextKey": 0.0,
+    "ButtonRetainer": 0.0,
+    "Knob": 0.0,
+    "SpeakerCarrier": 0.0,
+    "LDriver": 0.0,
+    "RDriver": 0.0,
+    "PlayPauseSwitch": 0.0,
+    "EjectSwitch": 0.0,
+    "PrevSwitch": 0.0,
+    "NextSwitch": 0.0,
+    "Encoder": 0.0,
+    "VolumePot": 0.0,
+    "Drive": 0.0,
+    "Bridge": 0.0,
+    "DisplayPCB": 0.0,
+    "DisplayHeader": 0.0,
+    "Amp": 0.0,
+    "AmpChip": 0.0,
+    "MCU": 0.0,
+    "MCUChip": 0.0,
+    "DAC": 0.0,
+    "DACChip": 0.0,
+    "Battery": 0.0
+  },
+  "changed_objects": [
+    "FrontShell"
+  ]
+}

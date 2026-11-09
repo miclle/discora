@@ -1,7 +1,7 @@
 {
-  "date": "2026-11-08",
+  "date": "2026-11-09",
   "model": "Discora.FCStd",
-  "sha256": "adc2d390a7f3e14a647d37d470555cb2524a16030cd2e80a7c4c1d4e52f37f21",
+  "sha256": "42ecc25db7d3df73db230a2d049c27795c1ac9ea7484fd432b2da56074bcff17",
   "version": [
     "1",
     "1",
@@ -413,8 +413,28 @@
     "slope_-25_30": 5.000000000000002,
     "slope_25_30": 5.000000000000002,
     "slope_50_32": 5.000000000000003,
-    "grille": 5.0,
+    "grille": 2.5,
     "handle": 4.999999999999979
+  },
+  "recessed_grille": {
+    "opening_diameter_mm": 130,
+    "recess_mm": 2.5,
+    "grille_thickness_mm": 2.5,
+    "mouth_obstruction_mm3": 0.0,
+    "complete_front_circle_radii_mm": [
+      65.0
+    ],
+    "grille_back_y_mm": 5.0,
+    "driver_front_gap_mm": 3.0,
+    "sheet_diameter_mm": 136,
+    "panel_underlap_mm": 3,
+    "source_hole_count": 1627,
+    "exposed_hole_count": 1623,
+    "complete_exposed_holes": 1531,
+    "partially_masked_edge_holes": 92,
+    "fully_masked_holes": 4,
+    "continuous_visible_rim": false,
+    "minimum_hole_web_mm": 1.02
   },
   "original_controls_difference_mm3": {},
   "handle_opening_mm": [

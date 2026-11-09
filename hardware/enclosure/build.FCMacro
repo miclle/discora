@@ -45,6 +45,10 @@ SPEAKER_CENTER_X, SPEAKER_CENTER_Z = 26.0, 76.0
 # Align the side-view vertical port axis with the centered handle mid-plane.
 PORT_CENTER_Y, PORT_CENTER_Z = CASE_DEPTH / 2, 80.0
 FRONT_GRILLE_RADIUS = 65.0
+# A true circular mouth precedes the grille; +Y is inward from the front face.
+FRONT_GRILLE_RECESS = 2.5
+GRILLE_HOLE_RADIUS, GRILLE_PITCH = .94, 2.9
+GRILLE_UNDERLAP = 3.0
 # Supplier image: selected flat 5600 mAh pack, excluding leads/connectors.
 BATTERY = (112.0, 70.0, 20.0)
 SLOT_Y = 65.75 + INTERNAL_SHIFT_Y
@@ -247,18 +251,22 @@ def build(folder):
     # Front grille, baffle and two rectangular driver envelopes.
     zc=SPEAKER_CENTER_Z
     radius=FRONT_GRILLE_RADIUS
-    bezel=cylinder(radius+.25,4.85,(0,0,zc),Y).cut(cylinder(radius-1.9,6,(0,-.1,zc),Y))
-    feature("FrontBezel","中央圆形格栅压圈",bezel,RUBBER,shell)
-    grille=cylinder(radius-1.8,FRONT_THICKNESS,(0,0,zc),Y)
+    mesh_radius=radius+GRILLE_UNDERLAP
+    bezel=cylinder(mesh_radius+.25,FRONT_THICKNESS-FRONT_GRILLE_RECESS,
+                   (0,FRONT_GRILLE_RECESS,zc),Y).cut(cylinder(mesh_radius-.1,7,(0,-.1,zc),Y))
+    feature("FrontBezel","面板下方 · 隐藏护网连接环",bezel,TEAL,shell)
+    grille=cylinder(mesh_radius,FRONT_THICKNESS-FRONT_GRILLE_RECESS,(0,FRONT_GRILLE_RECESS,zc),Y)
     vents=[]
-    grid_extent = int(radius / 2.9) + 1
+    grid_extent = int(mesh_radius / GRILLE_PITCH) + 1
     for row in range(-grid_extent,grid_extent+1):
-        dz=row*2.9
+        dz=row*GRILLE_PITCH
         for col in range(-grid_extent,grid_extent+1):
-            dx=(col+.5*(row%2))*2.9
-            if dx*dx+dz*dz<(radius-3.5)**2:
-                vents.append(cylinder(.94,FRONT_THICKNESS+1,(dx,0,zc+dz),Y))
-    feature("FrontGrille","中央双喇叭 · 通孔圆形护网",grille.cut(Part.makeCompound(vents)),TEAL,shell)
+            dx=(col+.5*(row%2))*GRILLE_PITCH
+            # The oversized sheet continues under the panel. The circular cowl
+            # masks perimeter holes naturally; its visible aperture has no lip.
+            if math.hypot(dx,dz)+GRILLE_HOLE_RADIUS<=mesh_radius-1:
+                vents.append(cylinder(GRILLE_HOLE_RADIUS,FRONT_THICKNESS+1,(dx,FRONT_GRILLE_RECESS-.1,zc+dz),Y))
+    feature("FrontGrille","中央双喇叭 · 内凹 2.5 mm 通孔护网",grille.cut(Part.makeCompound(vents)),TEAL,shell)
     depth,width,height=SPEAKER
     apertures=[]
     for right in [False,True]:

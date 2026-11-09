@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256 = 'adc2d390a7f3e14a647d37d470555cb2524a16030cd2e80a7c4c1d4e52f37f21'
+MODEL_SHA256 = '42ecc25db7d3df73db230a2d049c27795c1ac9ea7484fd432b2da56074bcff17'
 
 
 def palette_from_build():

@@ -1,5 +1,5 @@
 {
-  "model_sha256": "adc2d390a7f3e14a647d37d470555cb2524a16030cd2e80a7c4c1d4e52f37f21",
+  "model_sha256": "42ecc25db7d3df73db230a2d049c27795c1ac9ea7484fd432b2da56074bcff17",
   "user_dimensions_mm": {
     "width": 12,
     "length": 12,
@@ -207,7 +207,7 @@
     "DisplayHeader": 0.0,
     "DisplayCarrier": 0.0
   },
-  "baseline_sha256": "5c73112e2f065d81831e8f2f88cdff3242b4138083f531cacf7b90971ef3878c",
+  "baseline_sha256": "923a669bff97507aa49d1897196841ae66baa5a3049d735684e4f24949e47130",
   "retainer": {
     "connected_solids": 1,
     "frame_depth_mm": [
@@ -378,19 +378,5 @@
     "Two plastic-base pads avoid the central molded features in the photo; exact bearing flatness requires a sample.",
     "Open terminal bands are clearance reservations, not measured solder joints, wire bends or pin positions.",
     "0.8 mm cap movement is sampled CAD clearance, not measured actuator stroke or a tolerance stack acceptance."
-  ],
-  "retainer_revision_comparison": {
-    "baseline_sha256": "5c73112e2f065d81831e8f2f88cdff3242b4138083f531cacf7b90971ef3878c",
-    "changed_objects": [
-      "ButtonRetainer"
-    ],
-    "unchanged_object_count": 32,
-    "readback_symmetric_difference_mm3": {
-      "RPort": 0.0,
-      "RDriver": 0.0,
-      "SpeakerCarrier": 0.0,
-      "RearShell": 0.0
-    },
-    "method": "Saved native shape/placement fingerprints; recompute/serialization fingerprint differences additionally checked by bidirectional B-rep subtraction, tolerance 0.001 mm3."
-  }
+  ]
 }
