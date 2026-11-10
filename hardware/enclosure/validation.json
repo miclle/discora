@@ -1,7 +1,7 @@
 {
   "date": "2026-11-10",
   "model": "Discora.FCStd",
-  "sha256": "d7c2b89b240a10b2462816dccdbaa3489bcd6d2ade85581517a99eafa7ab16d5",
+  "sha256": "03003ef9826f330a439a5d65ae9a22fef7aab73ffc10c6200de9ec1f7a7e5a65",
   "version": [
     "1",
     "1",
@@ -155,6 +155,15 @@
   "invalid": [],
   "intersection_tolerance_mm3": 0.001,
   "clashes": [],
+  "intentional_press_fit": [
+    {
+      "first": "Knob",
+      "object": "Encoder",
+      "volume_mm3": 2.1292055481744283,
+      "outside_allowed_band_mm3": 0.0,
+      "physical_retention_verified": false
+    }
+  ],
   "assembly_size_xyz_mm": [
     142.00000000000003,
     80.00000000000001,
@@ -449,5 +458,10 @@
     "Separate assembly-path report distinguishes continuous conservative sweeps from sampled cover motion.",
     "Battery leads, straps, connectors, bridge cables and power modules are not validated.",
     "Side passages remain untuned; geometric continuity is not acoustic validation."
-  ]
+  ],
+  "incremental_verification": {
+    "previous_model_sha256": "6eb82d8a43668dcf0f2d6537d5367b618900118fa0fe19d1f1e4de42e78b39fc",
+    "evidence": "dual-color-knob-checks.json",
+    "method": "31 finished B-reps unchanged; the only envelope change fills the existing exterior index recess. Mounting core, shell symmetry and assembly interfaces remain unchanged. Static knob collisions checked by knob-span-checks.json."
+  }
 }

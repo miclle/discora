@@ -131,7 +131,8 @@ def main():
     data['features']['screen_cut_local'] = bounds(local)
     data['features']['controls_radii'] = [max(e.Curve.Radius for e in s.Edges
                                              if hasattr(e.Curve,'Radius'))
-                                          for s in doc.CowlTool.Shape.Solids]
+                                          for s in doc.CowlTool.Shape.Solids
+                                          if any(hasattr(e.Curve,'Radius') for e in s.Edges)]
     data['features']['knob_radius'] = max(e.Curve.Radius for e in shapes['Knob'].Edges
                                          if hasattr(e.Curve,'Radius'))
     controls = Part.makeCompound([screen]+list(doc.CowlTool.Shape.Solids))

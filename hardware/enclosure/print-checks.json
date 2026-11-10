@@ -1,5 +1,5 @@
 {
-  "model_sha256": "d7c2b89b240a10b2462816dccdbaa3489bcd6d2ade85581517a99eafa7ab16d5",
+  "model_sha256": "03003ef9826f330a439a5d65ae9a22fef7aab73ffc10c6200de9ec1f7a7e5a65",
   "freecad_version": [
     "1",
     "1",
@@ -25,7 +25,7 @@
         142.0000000000001,
         42.50000000000008
       ],
-      "facets": 241588,
+      "facets": 241820,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -34,7 +34,7 @@
         0.5,
         0.5000000000000001
       ],
-      "stl_sha256": "6f22af57ba4f0dfaf9da2330d3285d458868f0d9689df9f2d9ece71ea7e718a7"
+      "stl_sha256": "51d01e98609b8a2def698bbde21027d61d4fb63b28a0ba1d15fb9d75f82d02d5"
     },
     "RearShell": {
       "file": "RearShell.stl",
@@ -187,11 +187,11 @@
     "Knob": {
       "file": "Knob.stl",
       "size_xyz_mm": [
-        23.60000000000001,
-        23.600000000000023,
-        8.200000000000045
+        24.560266961988262,
+        24.560266961988262,
+        13.900000000000013
       ],
-      "facets": 284,
+      "facets": 4848,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -200,7 +200,8 @@
         0.0,
         0.952675287877846
       ],
-      "stl_sha256": "ca32d143cbd08ca456a53c84986ad7862aa1500cc377a3923b3fb80c62bce48d"
+      "stl_sha256": "c8e7d66ac5c575501dda6d52336d8bee7d4116765420bd171dad9bbd14dc9974",
+      "color_print_source": "export-dual-color-knob.py; STL is a single-material envelope"
     }
   },
   "profile_names": {
@@ -226,15 +227,16 @@
     "filament": "2c3746b6f61717d3023b58e846b10106f61534607644378063ac2a69db103355"
   },
   "plates": {
-    "FrontShell": {
+    "SmallParts": {
       "parts": [
-        "FrontShell"
+        "ButtonRetainer",
+        "DisplayRetainer"
       ],
       "exit_code": 0,
-      "gcode_sha256": "2b3a829267a7dae84e3a95d04b3ae2d4b6ede8fc46b31d13ec3da2a5e1aaefeb",
-      "total_estimated_time": "12h 46m 54s",
-      "filament_g": 123.64,
-      "layers": 212,
+      "gcode_sha256": "b479c3f4d434e18a3301f6a6ea7cc0bb37703be3e725a76506543ad064639bc3",
+      "total_estimated_time": "18m 12s",
+      "filament_g": 2.81,
+      "layers": 32,
       "vendor_T65535_parser_notice": true
     },
     "RearShell": {
@@ -242,46 +244,52 @@
         "RearShell"
       ],
       "exit_code": 0,
-      "gcode_sha256": "95d2a87e15f844c4909c3f6246a692bd60bd1be1d352ed7041ae4d5d2d70a725",
+      "gcode_sha256": "24f64202bc3a3f33343d889dda2426057009a8e7b1e11597e44380ebab1df0bd",
       "total_estimated_time": "6h 52m 14s",
       "filament_g": 219.57,
       "layers": 375,
-      "vendor_T65535_parser_notice": true,
-      "reused_from_model_sha256": "689484e0bbd4bdf62b64226ff32c36097f8b14c4c995aae4bbcbf2e0fe932edd",
-      "reuse_basis": "Identical STL bytes, resolved profile hashes and slicer version; prior G-code hash verified"
+      "vendor_T65535_parser_notice": true
+    },
+    "FrontShell": {
+      "parts": [
+        "FrontShell"
+      ],
+      "exit_code": 0,
+      "gcode_sha256": "3ecb22ff644ecbe693ee2d8c4d667700456899be87ef613e4089aa2d0aeb341e",
+      "total_estimated_time": "12h 47m 42s",
+      "filament_g": 123.45,
+      "layers": 212,
+      "vendor_T65535_parser_notice": true
     },
     "SpeakerCarrier": {
       "parts": [
         "SpeakerCarrier"
       ],
       "exit_code": 0,
-      "gcode_sha256": "20f9d6705425a7b152d36e6eb17185c4c25a9b51d8b098134d75842a97c4a07b",
+      "gcode_sha256": "f64042ce2c741165a48fd927ba424c5e599907ae5812605af705f20de1ced0e9",
       "total_estimated_time": "6h 57m 11s",
       "filament_g": 158.54,
       "layers": 282,
-      "vendor_T65535_parser_notice": true,
-      "reused_from_model_sha256": "689484e0bbd4bdf62b64226ff32c36097f8b14c4c995aae4bbcbf2e0fe932edd",
-      "reuse_basis": "Identical STL bytes, resolved profile hashes and slicer version; prior G-code hash verified"
-    },
-    "SmallParts": {
-      "parts": [
-        "ButtonRetainer",
-        "DisplayRetainer",
-        "Knob"
-      ],
-      "exit_code": 0,
-      "gcode_sha256": "571a7e9b3edafa421c8bf9f4cc6595a67049794458f6ed1723b0e7b5d38c859a",
-      "total_estimated_time": "22m 49s",
-      "filament_g": 5.22,
-      "layers": 41,
-      "vendor_T65535_parser_notice": true,
-      "reused_from_model_sha256": "689484e0bbd4bdf62b64226ff32c36097f8b14c4c995aae4bbcbf2e0fe932edd",
-      "reuse_basis": "Identical STL bytes, resolved profile hashes and slicer version; prior G-code hash verified"
+      "vendor_T65535_parser_notice": true
     }
   },
   "printer_profile_mapping": "User P2SC; installed Bambu P2S profile used for local slicing only",
   "printer_contacted": false,
   "gcode_execution_validated": false,
   "slicer_version": "02.09.01.70",
-  "dual_color_keys": "Excluded here; see dual-color-key-checks.json and export-dual-color-keys.py"
+  "dual_color_keys": "Excluded here; see dual-color-key-checks.json and export-dual-color-keys.py",
+  "incremental_verification": {
+    "previous_model_sha256": "6eb82d8a43668dcf0f2d6537d5367b618900118fa0fe19d1f1e4de42e78b39fc",
+    "evidence": "dual-color-knob-checks.json",
+    "resliced_plates": [
+      "SmallParts"
+    ],
+    "reused_plates": [
+      "RearShell",
+      "FrontShell",
+      "SpeakerCarrier"
+    ],
+    "method": "31 finished B-reps unchanged; current knob STL is an envelope only and has a dedicated two-material 3MF. Reused G-code and profile digests checked."
+  },
+  "dual_color_knob": "Excluded here; see dual-color-knob-checks.json and export-dual-color-knob.py"
 }

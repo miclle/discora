@@ -1,0 +1,47 @@
+{
+  "build_sha256": "5d73a3a255b7d79dc73eb3187aa1cfd1961a99a19db045a839bae6b7c662d451",
+  "physical_fit_verified": false,
+  "diameter_refers_to": "inscribed diameter at six rib tips, not carrier bore",
+  "samples": [
+    {
+      "file": "Grip-5.5mm.stl",
+      "tip_diameter_mm": 5.5,
+      "plate_order_left_to_right": 1,
+      "outer_diameter_mm": 9.2,
+      "height_mm": 8,
+      "facets": 924,
+      "closed_mesh": true,
+      "sha256": "b20c0e35a69cb12254f5cfcfb1c1b5497febbb9064c6fa1052d57fa7d9589997"
+    },
+    {
+      "file": "Grip-5.6mm.stl",
+      "tip_diameter_mm": 5.6,
+      "plate_order_left_to_right": 2,
+      "outer_diameter_mm": 9.2,
+      "height_mm": 8,
+      "facets": 960,
+      "closed_mesh": true,
+      "sha256": "7e8c6aa269980f029582db86812363290047d7bde5b532ae9c0adb579ab20b4a"
+    },
+    {
+      "file": "Grip-5.7mm.stl",
+      "tip_diameter_mm": 5.7,
+      "plate_order_left_to_right": 3,
+      "outer_diameter_mm": 9.2,
+      "height_mm": 8,
+      "facets": 1008,
+      "closed_mesh": true,
+      "sha256": "e87db56ce60da12a79b75acba0e7ce9409a4cb1f91c91f079ed059c7eb793816"
+    }
+  ],
+  "model_sha256": "aa845dd84c5c06dd1284e1a0f3a87bc19cf5cc6b9928a2daab729824785b4c5a",
+  "slicing": {
+    "exit_code": 0,
+    "profile": "Bambu P2S 0.4 / 0.20 Standard / Generic PLA",
+    "gcode_sha256": "b7b8f77e9c3bb7863c8af358347ef8491549771d1d53d33a24f1a4508da57fc1",
+    "estimated_time": "14m 1s",
+    "filament_g": 1.26
+  },
+  "printer_contacted": false,
+  "scope": "Three open sleeves only; full-knob retention and torque unverified"
+}

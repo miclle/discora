@@ -1,7 +1,7 @@
 {
-  "sha256": "d7c2b89b240a10b2462816dccdbaa3489bcd6d2ade85581517a99eafa7ab16d5",
-  "build_sha256": "41442bff9b7c783fbf7a3078bf228e222807a5cfd2094cf9d270679801702a03",
-  "geometry_sha256": "6f8153c3f0397fd6aca33b2fa311aaec87c75a017298bbab6347a9f32ba89d5e",
+  "sha256": "03003ef9826f330a439a5d65ae9a22fef7aab73ffc10c6200de9ec1f7a7e5a65",
+  "build_sha256": "d8f8a1ba02681b8508df661601cfb4d7f64306586d7377cd402892c88c975e50",
+  "geometry_sha256": "b4ac13d3e586487ff3b2788856d5398b954586e325e97d5298d51f995833c8e2",
   "palette": {
     "ORANGE": [
       1.0,
@@ -279,6 +279,14 @@
       20,
       21,
       22
+    ],
+    "Knob": [
+      96,
+      97,
+      98,
+      99,
+      100,
+      101
     ]
   },
   "tessellation_deflection_mm": 0.05,

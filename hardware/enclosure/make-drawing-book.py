@@ -18,7 +18,7 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = 'd7c2b89b240a10b2462816dccdbaa3489bcd6d2ade85581517a99eafa7ab16d5'
+ANNOTATED_MODEL_SHA256 = '03003ef9826f330a439a5d65ae9a22fef7aab73ffc10c6200de9ec1f7a7e5a65'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
@@ -40,10 +40,14 @@ def main():
     assert all(data['checks'].values())
     integration=json.loads((ROOT/'side-port-checks.json').read_text())
     handle=json.loads((ROOT/'handle-checks.json').read_text())
-    assert handle['model_sha256']==data['sha256']
+    volume=json.loads((ROOT/'volume-checks.json').read_text())
+    assert volume['model_sha256']==data['sha256'] and volume['all_pass']
+    assert volume['baseline_sha256']==handle['model_sha256']
     assert integration['model_sha256']==handle['baseline_sha256']
     def evidence_matches_geometry(report,owners):
         if report['model_sha256']==data['sha256']:return True
+        if any(volume['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
+        if report['model_sha256']==volume['baseline_sha256']:return True
         if any(handle['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
         if report['model_sha256']==handle['baseline_sha256']:return True
         if (report['model_sha256']==integration.get('baseline_sha256')
@@ -89,7 +93,7 @@ def main():
         line(12,16,408,16,LIGHT)
         text(12,10,'概念设计 / CAD 静态几何 · 未经实物装配、声学或生产验收',8,MUTED)
         text(245,10,'单位 mm  |  '+scale,8,MUTED)
-        text(408,10,f'DC-V4-GA-{num:02d}  ·  2026-11-10  ·  {num}/{TOTAL_PAGES}',8,MUTED,'right')
+        text(408,10,f'DC-V4-GA-{num:02d}  ·  2026-11-11  ·  {num}/{TOTAL_PAGES}',8,MUTED,'right')
 
     def view(name,x,y,scale=1,clip_bottom=0):
         info=data['views'][name]
@@ -242,11 +246,12 @@ def main():
     dh(bottom[0][0],bottom[1][0],bottom[0][1],86,'18 键距')
     left=sorted(keys,key=lambda q:q[0])[:2]
     dv(min(q[1] for q in left),max(q[1] for q in left),left[0][0],29,'20.85')
+    text(146,94,'外圈：凹位 Ø25.6；内孔：Ø7.2',7,MUTED)
     notes(34,74,[
         '四键孔 Ø10.5；键帽 Ø10，露出 1.2；背面止退沿 Ø12.8。',
         '橙白双色键帽：白色符号深 0.6，与键面齐平；分别指定两种 PLA Lite。',
         'OLED 外口 32.82 × 18.1，倒角深 0.8；玻璃内退 1.0，详见第 6 页。',
-        '旋钮轴孔 Ø8.8；旋钮外径 Ø23.6，高 8.2（沿法向）。',
+        'B50K 壳孔 Ø7.2／局部壁厚 2；底盘 Ø24 下沉 1，十字 24×6.8，顶面高 12.9。',
         '键中心 X=-59 / -41、Y=9 / 26；屏与旋钮 Y=18、X=0 / 48。',
         '前壳背锁：后壁 X=±67.4、Z=18；后斜面 X=±29、Z=179。',
         'P3 支架：4 孔，X=±64、Z=27 / 124；Ø2.8，沉头 Ø4.8。',
@@ -339,12 +344,12 @@ def main():
         'Window':'OLED 玻璃面板','StatusArt':'显示内容示意','PlayPauseKey':'播放／暂停键帽','EjectKey':'退碟键帽','PrevKey':'上一曲键帽','NextKey':'下一曲键帽',
         'ButtonRetainer':'四键焊线支架（两侧敞开／双点支承）',
         'DisplayRetainer':'OLED 可拆压框（四点承压／两侧锁紧）',
-        'PlayPauseSwitch':'播放／暂停开关包络','EjectSwitch':'退碟开关包络','PrevSwitch':'上一曲开关包络','NextSwitch':'下一曲开关包络','Knob':'音量旋钮',
+        'PlayPauseSwitch':'播放／暂停开关包络','EjectSwitch':'退碟开关包络','PrevSwitch':'上一曲开关包络','NextSwitch':'下一曲开关包络','Knob':'音量旋钮 · 黑白双色',
         'LChamber':'左后腔','RChamber':'右后腔','LDriverFrame':'左喇叭预留框','RDriverFrame':'右喇叭预留框',
         'FrontBaffle':'双开口前障板','RearTopMount':'上固定耳（2 个）','DriveCarrier':'光驱底托 / 导轨','SlotGuide':'碟口导向框',
         'DisplayCarrier':'屏幕安装座','AmpShelf':'功放 / 桥接器托板','ElectronicsSled':'主控托板','AmpPads':'功放支撑复合件',
         'MCUPads':'主控支撑复合件','DACPads':'DAC 支撑复合件','BatteryCradle':'平排电池托盘',
-        'LDriver':'左喇叭总包络','RDriver':'右喇叭总包络','Encoder':'电位器轴预留','VolumePot':'电位器本体预留',
+        'LDriver':'左喇叭总包络','RDriver':'右喇叭总包络','Encoder':'B50K 轴／六角螺母','VolumePot':'B50K 双联带开关主体',
         'Drive':'UJ-898 包络','Bridge':'桥接器转向占位','DisplayPCB':'OLED PCB／四孔与缺口','DisplayHeader':'OLED 弯针接头预留',
         'Amp':'功放 PCB','AmpChip':'功放元件预留','MCU':'主控 PCB','MCUChip':'主控元件预留','DAC':'DAC PCB',
         'DACChip':'DAC 元件预留','Battery':'5600 mAh 平排电池',
@@ -382,6 +387,7 @@ def main():
         '电池松开绑带并断线后向前取出；装配按反向顺序，无独立侧孔装配步骤。',
         '前壳路径按 1 mm 抽样；光驱转动按 0.5° 抽样，平移及其余路径连续保守扫掠。实物未验收。',
         '四键双色：0.4 喷嘴 / 0.12 层高；白色 0.6 深；使用双色 3MF。实际色彩、配合与按压行程待测。',
+        '音量旋钮：凹位内先锁螺母，再直接压入；六筋 Ø5.6 配 Ø5.8 花轴；标记白色 0.6 深，使用黑白双色 3MF。',
     ],gap=7,size=8.5)
     text(12,27,'FCStd SHA-256: '+data['sha256'],8,MUTED)
     text(408,27,'来源：Discora.FCStd / build.FCMacro / drawings/geometry.json',8,MUTED,'right')
