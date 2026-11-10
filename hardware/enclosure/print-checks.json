@@ -1,5 +1,5 @@
 {
-  "model_sha256": "b1e943face3860219c90706176f7a709497eb15f5b1de335028ce72c6ac2d5ad",
+  "model_sha256": "d7c2b89b240a10b2462816dccdbaa3489bcd6d2ade85581517a99eafa7ab16d5",
   "freecad_version": [
     "1",
     "1",
@@ -21,27 +21,27 @@
     "FrontShell": {
       "file": "FrontShell.stl",
       "size_xyz_mm": [
-        142.00000000000006,
-        213.64473684210526,
+        233.6447368421053,
+        142.0000000000001,
         42.50000000000008
       ],
       "facets": 241588,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
-        0.7071067811865475,
-        0.0,
-        0.0,
-        0.7071067811865476
+        0.5,
+        0.4999999999999999,
+        0.5,
+        0.5000000000000001
       ],
-      "stl_sha256": "7f26b0c4279211e8d38f689e3cb1fc0d0594cbe215ffaf2a244a37acd189ec96"
+      "stl_sha256": "6f22af57ba4f0dfaf9da2330d3285d458868f0d9689df9f2d9ece71ea7e718a7"
     },
     "RearShell": {
       "file": "RearShell.stl",
       "size_xyz_mm": [
         142.0,
-        188.644736842105,
-        75.00000000000006
+        188.6447368421053,
+        75.00000000000007
       ],
       "facets": 5064,
       "closed_mesh": true,
@@ -52,7 +52,7 @@
         0.0,
         -0.7071067811865475
       ],
-      "stl_sha256": "92de414c5e9e0d97c391e9619dfb3922a90305318f66f33a61ee995f174a425a"
+      "stl_sha256": "27d9a566c60bcff74b0edde0bd656ec11e86b10e7cede7bd03734cd3cc2782f7"
     },
     "SpeakerCarrier": {
       "file": "SpeakerCarrier.stl",
@@ -70,7 +70,7 @@
         0.0,
         -0.7071067811865475
       ],
-      "stl_sha256": "9ae509d7b2f27455cf9d8700f976281157b36fcb501128faff943948a900b924"
+      "stl_sha256": "2444833b1c991e12705ad559f6643dd2a354bed4ac7078ca2ab52ae7bb691e53"
     },
     "PlayPauseKey": {
       "file": "PlayPauseKey.stl",
@@ -226,42 +226,42 @@
     "filament": "2c3746b6f61717d3023b58e846b10106f61534607644378063ac2a69db103355"
   },
   "plates": {
-    "RearShell": {
-      "parts": [
-        "RearShell"
-      ],
-      "exit_code": 0,
-      "gcode_sha256": "4a5984f2b56b7438e91cfd962e16ce1ce76d2f96f8277aba759f655e93e1b1c1",
-      "total_estimated_time": "6h 52m 2s",
-      "filament_g": 219.54,
-      "layers": 375,
-      "vendor_T65535_parser_notice": true
-    },
     "FrontShell": {
       "parts": [
         "FrontShell"
       ],
       "exit_code": 0,
-      "gcode_sha256": "f45467c37284de5990b56bc54a69597e15b065e866e0712d78c957ec7c445a30",
-      "total_estimated_time": "12h 6m 14s",
-      "filament_g": 110.89,
+      "gcode_sha256": "2b3a829267a7dae84e3a95d04b3ae2d4b6ede8fc46b31d13ec3da2a5e1aaefeb",
+      "total_estimated_time": "12h 46m 54s",
+      "filament_g": 123.64,
       "layers": 212,
+      "vendor_T65535_parser_notice": true
+    },
+    "RearShell": {
+      "parts": [
+        "RearShell"
+      ],
+      "exit_code": 0,
+      "gcode_sha256": "95d2a87e15f844c4909c3f6246a692bd60bd1be1d352ed7041ae4d5d2d70a725",
+      "total_estimated_time": "6h 52m 14s",
+      "filament_g": 219.57,
+      "layers": 375,
       "vendor_T65535_parser_notice": true,
-      "reused_from_model_sha256": "87c28f128db6d821b76464446645afe38d47a9a3b9af55ff80cfadb172d77389",
-      "reuse_evidence": "All plate STL bytes, slicer version and profile hashes unchanged."
+      "reused_from_model_sha256": "689484e0bbd4bdf62b64226ff32c36097f8b14c4c995aae4bbcbf2e0fe932edd",
+      "reuse_basis": "Identical STL bytes, resolved profile hashes and slicer version; prior G-code hash verified"
     },
     "SpeakerCarrier": {
       "parts": [
         "SpeakerCarrier"
       ],
       "exit_code": 0,
-      "gcode_sha256": "ab9107612969b5b5be336523f5be8528a57400ecd46395dbc68ec0cae3733df1",
-      "total_estimated_time": "6h 57m 32s",
-      "filament_g": 158.55,
+      "gcode_sha256": "20f9d6705425a7b152d36e6eb17185c4c25a9b51d8b098134d75842a97c4a07b",
+      "total_estimated_time": "6h 57m 11s",
+      "filament_g": 158.54,
       "layers": 282,
       "vendor_T65535_parser_notice": true,
-      "reused_from_model_sha256": "87c28f128db6d821b76464446645afe38d47a9a3b9af55ff80cfadb172d77389",
-      "reuse_evidence": "All plate STL bytes, slicer version and profile hashes unchanged."
+      "reused_from_model_sha256": "689484e0bbd4bdf62b64226ff32c36097f8b14c4c995aae4bbcbf2e0fe932edd",
+      "reuse_basis": "Identical STL bytes, resolved profile hashes and slicer version; prior G-code hash verified"
     },
     "SmallParts": {
       "parts": [
@@ -270,19 +270,18 @@
         "Knob"
       ],
       "exit_code": 0,
-      "gcode_sha256": "f7cd500b4627cd02a899952aa3824b5cb41460adae7121e770727c2882cc5f6a",
+      "gcode_sha256": "571a7e9b3edafa421c8bf9f4cc6595a67049794458f6ed1723b0e7b5d38c859a",
       "total_estimated_time": "22m 49s",
       "filament_g": 5.22,
       "layers": 41,
       "vendor_T65535_parser_notice": true,
-      "reused_from_model_sha256": "87c28f128db6d821b76464446645afe38d47a9a3b9af55ff80cfadb172d77389",
-      "reuse_evidence": "All plate STL bytes, slicer version and profile hashes unchanged."
+      "reused_from_model_sha256": "689484e0bbd4bdf62b64226ff32c36097f8b14c4c995aae4bbcbf2e0fe932edd",
+      "reuse_basis": "Identical STL bytes, resolved profile hashes and slicer version; prior G-code hash verified"
     }
   },
   "printer_profile_mapping": "User P2SC; installed Bambu P2S profile used for local slicing only",
   "printer_contacted": false,
   "gcode_execution_validated": false,
   "slicer_version": "02.09.01.70",
-  "dual_color_keys": "Excluded here; see dual-color-key-checks.json and export-dual-color-keys.py",
-  "verification_scope": "RearShell resliced after rib reinforcement; other plates reuse identical STL/profile/slicer evidence."
+  "dual_color_keys": "Excluded here; see dual-color-key-checks.json and export-dual-color-keys.py"
 }

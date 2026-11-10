@@ -190,8 +190,8 @@ def main():
     ],core)
     # Validate critical annotations against the saved B-rep snapshot.
     checks = {
-        'overall_142_80_216_645': all(abs(a-b)<1e-5 for a,b in zip(data['overall']['size'],(142,80,165+37.5*27/38+25))),
-        'handle_opening_90_16': abs(handle.BoundBox.XLength-90)<1e-5 and abs(handle.BoundBox.ZLength-16)<1e-5,
+        'overall_142_80_236_645': all(abs(a-b)<1e-5 for a,b in zip(data['overall']['size'],(142,80,165+37.5*27/38+45))),
+        'handle_opening_90_24': abs(handle.BoundBox.XLength-90)<1e-5 and abs(handle.BoundBox.ZLength-24)<1e-5,
         'hidden_grille_cut_130': abs(grille.BoundBox.XLength-130)<1e-5,
         'slot_124_3_2': abs(slot.BoundBox.XLength-124)<1e-5 and abs(slot.BoundBox.YLength-3.2)<1e-5,
         'screen_mouth_32_82_18_1': abs(local.BoundBox.XLength-32.82)<1e-5 and abs(local.BoundBox.ZLength-18.1)<1e-5,

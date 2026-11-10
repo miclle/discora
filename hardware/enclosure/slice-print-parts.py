@@ -55,6 +55,10 @@ def main():
                  '--load-settings',str(settings['machine'])+';'+str(settings['process']),
                  '--load-filaments',str(settings['filament']),'--slice','0','--outputdir',str(target)]
         if name=='SmallParts':command+=['--arrange','1']
+        if name=='FrontShell':
+            # Preserve the checked bed placement: automatic tree-support packing
+            # reserves 12 mm per edge and rejects this 233.645 mm part.
+            command+=['--arrange','0','--orient','0','--ensure-on-bed']
         command += [str(meshes/(n+'.stl')) for n in names]
         log=out/(name+'.log')
         with log.open('w') as stream:run=subprocess.run(command,cwd=out,stdout=stream,stderr=subprocess.STDOUT)

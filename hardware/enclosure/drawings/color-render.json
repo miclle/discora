@@ -1,7 +1,7 @@
 {
-  "sha256": "b1e943face3860219c90706176f7a709497eb15f5b1de335028ce72c6ac2d5ad",
-  "build_sha256": "2d6bea81548c11cd6390d818c15892561fbe62619675bcc27aac31bbdcafba76",
-  "geometry_sha256": "338c47569ad0aee3580387fe7c0f47eb5065e5d150639a8130b7090f695568e0",
+  "sha256": "d7c2b89b240a10b2462816dccdbaa3489bcd6d2ade85581517a99eafa7ab16d5",
+  "build_sha256": "41442bff9b7c783fbf7a3078bf228e222807a5cfd2094cf9d270679801702a03",
+  "geometry_sha256": "6f8153c3f0397fd6aca33b2fa311aaec87c75a017298bbab6347a9f32ba89d5e",
   "palette": {
     "ORANGE": [
       1.0,
@@ -289,14 +289,14 @@
       "file": "front-color.png",
       "size_px": [
         1705,
-        2600
+        2840
       ]
     },
     "right": {
       "file": "right-color.png",
       "size_px": [
         961,
-        2600
+        2840
       ]
     },
     "top": {
@@ -310,14 +310,14 @@
       "file": "rear-color.png",
       "size_px": [
         1705,
-        2600
+        2840
       ]
     },
     "section": {
       "file": "section-color.png",
       "size_px": [
         961,
-        2600
+        2840
       ]
     },
     "exploded-shell": {

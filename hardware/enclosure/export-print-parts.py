@@ -20,7 +20,8 @@ def main():
     doc=A.openDocument(str(args.model.resolve()))
     normal=A.Vector(0,-27,38);normal.normalize()
     rotations={
-        'FrontShell':A.Rotation(A.Vector(1,0,0),90),
+        # Put the taller dimension along X to avoid the P2S rear reserved area.
+        'FrontShell':A.Rotation(A.Vector(0,0,1),90).multiply(A.Rotation(A.Vector(1,0,0),90)),
         'RearShell':A.Rotation(A.Vector(1,0,0),-90),
         'SpeakerCarrier':A.Rotation(A.Vector(1,0,0),-90),
         'PlayPauseKey':A.Rotation(normal,A.Vector(0,0,1)),

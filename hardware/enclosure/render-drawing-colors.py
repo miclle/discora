@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256 = 'b1e943face3860219c90706176f7a709497eb15f5b1de335028ce72c6ac2d5ad'
+MODEL_SHA256 = 'd7c2b89b240a10b2462816dccdbaa3489bcd6d2ade85581517a99eafa7ab16d5'
 
 
 def palette_from_build():
@@ -148,7 +148,11 @@ def main():
     assert set(colors)==set(data['objects'])
     appearance=json.loads((ROOT/'appearance-checks.json').read_text())
     integration=json.loads((ROOT/'side-port-checks.json').read_text())
-    assert integration['model_sha256']==MODEL_SHA256
+    handle=json.loads((ROOT/'handle-checks.json').read_text())
+    assert handle['model_sha256']==MODEL_SHA256
+    assert integration['model_sha256']==handle['baseline_sha256']
+    assert all(handle['unchanged_finished_parts_difference_mm3'][n]<.001
+               for n in ('PlayPauseKey','EjectKey','PrevKey','NextKey'))
     assert appearance['model_sha256']==integration['baseline_sha256']
     assert all(integration['unchanged_finished_parts_difference_mm3'][n]<.001
                for n in ('PlayPauseKey','EjectKey','PrevKey','NextKey'))
