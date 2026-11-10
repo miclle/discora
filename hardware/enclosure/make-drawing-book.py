@@ -18,7 +18,7 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = '0763858f1cfbe30c99434dce227a8c50fb99112e9ad7e43d9a5092ee646f35e8'
+ANNOTATED_MODEL_SHA256 = '0013eea8732dbd1725533b5175b80ad0e8cd4d1a6d52db49556d1610d12cabd8'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
@@ -38,6 +38,13 @@ def main():
         if hashlib.sha256((ROOT/file).read_bytes()).hexdigest()!=data[key]:
             raise SystemExit('Source changed; rerun export-drawings.py: '+file)
     assert all(data['checks'].values())
+    geometry_revisions={data['sha256']}
+    appearance=json.loads((ROOT/'appearance-checks.json').read_text())
+    update=appearance.get('color_update',{})
+    if (appearance['model_sha256']==data['sha256']
+            and update.get('document_and_geometry_resources_byte_identical')):
+        # Material-only updates preserve the baseline geometry and slicing evidence.
+        geometry_revisions.add(update['baseline_sha256'])
     side=json.loads((ROOT/'drawings'/'side-profile.json').read_text())
     assert side['sha256']==data['sha256']
     color_data=json.loads((ROOT/'drawings'/'color-render.json').read_text())
@@ -245,9 +252,9 @@ def main():
 
     page(3,'整机爆炸图 / 外壳与内部','两层展开并排对照 · 相同 CAD 几何与展示位移，编号对应第 5 页对象清单','爆炸图 NTS（非比例装配距离）')
     for i,(color,label) in enumerate([
-        ('#16a9a4','外壳 / 支架'),('#4d5155','深色结构 / 单元'),
+        ('#ff671f','P1 橙色前壳'),('#8e9089','按键 / 旋钮'),('#16a9a4','内部支架'),('#4d5155','深色结构 / 单元'),
         ('#bac0c4','光驱 / 银色包络'),('#39775b','PCB'),('#3c6da9','5600 mAh 平排电池')]):
-        sx=14+i*80
+        sx=14+i*57
         c.setFillColor(HexColor(color));c.rect(sx*mm,258*mm,3*mm,3*mm,fill=1,stroke=0)
         text(sx+5,258.1,label,8,MUTED)
     line(210,38,210,251,LIGHT,.15)
@@ -313,7 +320,7 @@ def main():
         '喇叭未建盆架、磁铁和安装孔；显示内容为示意，电子板元件与接头高度含设计预留。',
         '剖图使用实际实体裁切、隐藏线消除；未施加材料剖面线，不能由线型判断材质。',
         '三个主体及拆装路径已做 CAD 检查、PLA 切片；仍需配合试片、螺钉试装、强度和走线实测。',
-        '本次 validation.json 与图册使用同一模型摘要；静态通过不等于实物或生产验收。',
+        '本次仅改前壳、键帽与旋钮配色；几何与原验收模型逐字节一致，见 appearance-checks.json。静态通过不等于实物验收。',
     ],gap=8,size=9)
     c.showPage()
 
@@ -354,7 +361,7 @@ def main():
             text(x+193,y-3.5,' × '.join(fmt(n) for n in obj['size']),7.5,INK,'right')
     text(12,127,'PLA 打印：3 主体 + 2 侧孔 + 4 键帽 + 焊线支架 + 旋钮 + OLED 压框 = 12 件',11,TEAL)
     printing=json.loads((ROOT/'print-checks.json').read_text())
-    assert printing['model_sha256']==data['sha256'],'Print report and drawing model differ'
+    assert printing['model_sha256'] in geometry_revisions,'Print report and drawing geometry differ'
     text(12,118,'用户设备 P2SC · 按 P2S 配置 / 256³ 空间 / 0.4 喷嘴 / 0.20 层高 / 3 壁 / 15% 填充 / 树状支撑',9)
     for i,(name,label,pose) in enumerate([
         ('FrontShell','P1 前壳','正面朝下'),('RearShell','P2 后壳','背面朝下'),
@@ -375,7 +382,7 @@ def main():
 
     page(6,'OLED 沉槽与可拆压框','依据供应商结构图；玻璃面向外移 4.4；沉槽、倒角与压框来自保存 CAD；有效区虚线标注','模组正视 4:1；安装中剖 3:1')
     oled=json.loads((ROOT/'oled-checks.json').read_text())
-    assert oled['model_sha256']==data['sha256'] and oled['all_pass']
+    assert oled['model_sha256'] in geometry_revisions and oled['all_pass']
     p=view('oled-module',38,86,4)
     text(109,243,'模组正面 · 排针朝斜面上方',11,TEAL,'center')
     lo,hi=p(-17.7,-18.8),p(17.7,14.7)

@@ -10,7 +10,7 @@ Discora 是一个基于 **ESP32-S3** 的开源独立 CD 播放器项目。它通
 
 <p align="center">
   <a href="hardware/enclosure/README.md">
-    <img src="hardware/enclosure/preview.png" alt="Discora 外壳 CAD 预览：青绿色前壳、顶部提手、四键与屏幕、圆形扬声器格栅" width="480">
+    <img src="hardware/enclosure/preview.png" alt="Discora 外壳 CAD 预览：橙色前壳、顶部提手、四键与屏幕、圆形扬声器格栅" width="480">
   </a>
 </p>
 

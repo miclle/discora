@@ -1,7 +1,7 @@
 {
   "model": "Discora.FCStd",
-  "sha256": "0763858f1cfbe30c99434dce227a8c50fb99112e9ad7e43d9a5092ee646f35e8",
-  "build_sha256": "51c40a6016506a83cf13c56ccdfcddb66bb4ff00b80015576a5942f6e90ae9bc",
+  "sha256": "0013eea8732dbd1725533b5175b80ad0e8cd4d1a6d52db49556d1610d12cabd8",
+  "build_sha256": "e194f5e665db9bf938cbe55bd9d6cabcf3762dfa59ed22e036048b7fa56ce6c4",
   "freecad_version": [
     "1",
     "1",

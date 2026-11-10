@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256 = '0763858f1cfbe30c99434dce227a8c50fb99112e9ad7e43d9a5092ee646f35e8'
+MODEL_SHA256 = '0013eea8732dbd1725533b5175b80ad0e8cd4d1a6d52db49556d1610d12cabd8'
 
 
 def palette_from_build():
@@ -26,9 +26,9 @@ def palette_from_build():
         if not isinstance(node,ast.Assign) or not isinstance(node.targets[0],ast.Tuple):
             continue
         names=[n.id for n in node.targets[0].elts]
-        if names[0] in ('TEAL','GLASS','WHITE'):
+        if names[0] in ('ORANGE','GLASS','GRAY'):
             palette.update(zip(names,ast.literal_eval(node.value)))
-    assert len(palette)==9
+    assert len(palette)==10
     return palette
 
 
@@ -137,10 +137,11 @@ def main():
     assert data['build_sha256']==hashlib.sha256((ROOT/'build.FCMacro').read_bytes()).hexdigest()
     palette=palette_from_build()
     assignments={
-        'TEAL':'FrontShell SpeakerCarrier PlayPauseKey EjectKey PrevKey NextKey ButtonRetainer DisplayRetainer',
+        'ORANGE':'FrontShell',
+        'TEAL':'SpeakerCarrier ButtonRetainer DisplayRetainer',
         'BLACK':'RearShell LPort RPort',
         'RUBBER':'Feet LDriver RDriver VolumePot DisplayHeader AmpChip DACChip PlayPauseSwitch EjectSwitch PrevSwitch NextSwitch',
-        'GLASS':'Window','PIXEL':'StatusArt','WHITE':'Knob',
+        'GLASS':'Window','PIXEL':'StatusArt','GRAY':'PlayPauseKey EjectKey PrevKey NextKey Knob',
         'SILVER':'Drive Encoder MCUChip','PCB':'Bridge DisplayPCB Amp MCU DAC','BLUE':'Battery',
     }
     colors={name:palette[key] for key,names in assignments.items() for name in names.split()}
