@@ -168,10 +168,8 @@ def main():
     core = groups['Carrier'] + groups['Hardware']
     exploded('exploded-shell',[
         ('01','P1 一体前壳／提手／护网',['FrontShell'],(0,-150,0)),
-        ('02','P2 后斜面／碟口／后壳／底板',['RearShell'],(0,160,0)),
+        ('02','P2 一体后壳／左右导音孔及饰片',['RearShell'],(0,160,0)),
         ('03','P3 双喇叭与电路板支架',['SpeakerCarrier'],(0,0,0)),
-        ('04','左侧后装导音孔',['LPort'],(-120,0,0)),
-        ('05','右侧后装导音孔',['RPort'],(120,0,0)),
         ('06','四个软质脚垫',['Feet'],(0,0,-65)),
         ('07','屏窗与操控件',['Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','DisplayRetainer','Knob'],(0,-70,100)),
         ('08','硬件包络（见右图）',groups['Hardware'],(0,0,0)),
@@ -206,7 +204,7 @@ def main():
         'grille_recess_2_5':abs(doc.FrontGrille.Shape.BoundBox.YMin-2.5)<1e-5,
         'circular_mouth_clear':doc.FrontShell.Shape.common(Part.makeCylinder(65,2.49998,A.Vector(0,.00001,76),A.Vector(0,1,0))).Volume<.001,
         'side_ports_handle_y40':all(abs(doc.getObject(n).Shape.BoundBox.Center.y-40)<1e-5 for n in ('LPort','RPort','LPanelTool')),
-        '34_finished_objects':len(objects)==34,
+        '32_finished_objects':len(objects)==32,
         'three_connected_main_parts':all(len(doc.getObject(n).Shape.Solids)==1 for n in ('FrontShell','RearShell','SpeakerCarrier')),
         'source_unchanged':hashlib.sha256(source.read_bytes()).hexdigest()==source_hash,
     }

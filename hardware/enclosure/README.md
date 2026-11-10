@@ -2,7 +2,7 @@
 
 整机宽 **142 × 深 80 × 高 216.645 mm**（含脚垫和提手），不含脚垫为 **213.645 mm**。5600 mAh 电池按用户选定的平排 **112 × 70 × 20 mm** 商品标称包络放在底部；保留顶部进碟、前斜面操控、中央双喇叭和左右对称的外轮廓。
 
-打开 [Discora.FCStd](Discora.FCStd) 查看模型；唯一的[彩色尺寸与装配图册（6 页 A3）](drawings/Discora-V4-drawing-book-color.pdf)包含双基准高度、侧面斜肩尺寸、彩色爆炸图、侧剖、对象清单和 OLED 安装详图。分件取舍见 [ADR-0016](../../docs/decisions/0016-three-part-pla-enclosure.md)，打印姿态、切片与拆装检查见[打印与装配说明](../../docs/enclosure-printing.md)。这是已完成 CAD 和切片检查的原型设计，尚未做实物打印、装配或声学验收。
+打开 [Discora.FCStd](Discora.FCStd) 查看模型；唯一的[彩色尺寸与装配图册（6 页 A3）](drawings/Discora-V4-drawing-book-color.pdf)包含双基准高度、侧面斜肩尺寸、彩色爆炸图、侧剖、对象清单和 OLED 安装详图。分件取舍见 [ADR-0016](../../docs/decisions/0016-three-part-pla-enclosure.md)，打印姿态、切片与拆装检查见[打印与装配说明](../../docs/enclosure-printing.md)。这是已完成 CAD 和本地切片检查的原型设计，尚未做实物打印、装配或声学验收。
 
 **2026-11-07 载板布局补充：**[100 × 55 mm 裁剪洞洞板候选](../../docs/perfboard-layout.md)已加入主控、DAC 和两块 DCE001 的包络试算，但尚未写入本模型。该次试算的前壳／屏幕／操控区及上层电子托架存在碰撞；上移上部组件的试算不是已闭合的新机箱，也不能继承下面的整机、对称或拆装验证。该候选尚未针对 2026-11-08 等斜面模型重算，最终载板安装仍需独立闭合。
 
@@ -18,11 +18,15 @@
 
 本机 Bambu Studio 02.09.01.70 使用 P2S 0.4 mm / 0.12 mm 配置完成双色切片：每键均有 5 层白色路径，共 60 层；整盘预估 34 分 20 秒，橙色 4.93 g、白色 2.49 g（含换色与擦拭塔消耗）。这是本地切片证据，未发送打印；白色遮盖、粘结和按压配合仍需实物确认。详见 [dual-color-key-checks.json](dual-color-key-checks.json)。
 
-本次仅四个键帽的形状变为多材料复合体，其余 88 个形状资源与原验收版本逐字节一致，键帽外包络和安装位置不变；四键对其余装配件无超过 0.001 mm³ 的碰撞。关闭并重新打开验证了橙白分面颜色，外壳既有左右对称性保持。预览及图册由当前保存模型重新生成，详见 `appearance-checks.json`。
+前次双色键帽调整仅将四个键帽变为多材料复合体，其余 88 个形状资源在该阶段与原验收版本逐字节一致，键帽外包络和安装位置不变；四键对其余装配件无超过 0.001 mm³ 的碰撞。配色阶段曾关闭并重新打开验证橙白分面颜色，详见 `appearance-checks.json`。本次四点加强的整机、侧面、局部特写及图册由当前保存模型无界面生成；其它 GUI 视图保留上一版，未表现新增端部筋。当前 FreeCAD 界面重载超时，锁屏期间未完成界面读回；保存文件的几何检查已完成。
 
 **FCStd 配色保存：**无界面保存后补回 GUI 数据时，材质资源必须按 `GuiDocument.xml` 的引用顺序写入；不能用集合的无序遍历写入压缩包，否则 FreeCAD 会跳过颜色资源。`repair-gui-order.py 输入.FCStd 输出.FCStd` 可修复顺序，并逐项核对包内数据完全一致。修复后须在 FreeCAD GUI 读回颜色、关闭并重新打开核对；外部渲染图不能代替此项验证。当前记录见 [appearance-checks.json](appearance-checks.json)。
 
 **背面锁紧：**正面四个螺丝孔已取消；后壁下方两孔、后斜面两孔锁紧前壳，名义螺钉 2×8 mm。下方通道深 65.8 mm，需细长螺丝刀。结构和工具边界见 [ADR-0024](../../docs/decisions/0024-rear-access-front-cover-fasteners.md) 与 [fastener-checks.json](fastener-checks.json)。
+
+**2026-11-10 侧孔一体打印：**左右导音孔与内凹饰片已并入 P2，取消外侧固定耳、螺钉孔和装配缝；短管与声腔保持 0.3 mm 轴向名义间隙，使 P3 仍可从前方抽出。`LPort` / `RPort` 仅作为隐藏构造源保留，不再单独打印。当前共 10 件刚性 PLA 零件，见 [ADR-0029](../../docs/decisions/0029-integral-side-ports.md)。
+
+**侧饰片连接加强：**饰片改为上、下及中部左右共四点连接，连接筋截面由 1×2 增至 2×3 mm，饰片向内加厚至 2 mm，表面仍内凹 1.5 mm。[当前连接特写](side-port-detail.png)由保存模型无界面渲染。单侧最窄采样净通流面积约 384.24 mm²，较前版减少 6.59%；67×22 mm 开口轮廓保留。现有喇叭缺少 T/S 参数，无法据外形尺寸认定需要继续缩孔；容积和声学边界见 [ADR-0030](../../docs/decisions/0030-side-inset-support-and-port-sizing.md)。
 
 ## 分件
 
@@ -31,18 +35,17 @@
 | 成品 ID | 合并的功能 | 数量 |
 | --- | --- | --- |
 | `FrontShell` / P1 | 前壳、前斜面、提手、面板下隐藏连接环、内凹通孔护网、屏幕安装座、四键定位座和压板螺柱 | 1 |
-| `RearShell` / P2 | 后斜面与碟口导向、左右侧壁、后壁、底架、电池托盘、光驱导轨、DAC 支撑和壳体连接柱 | 1 |
+| `RearShell` / P2 | 后斜面与碟口导向、左右侧壁及导音孔／饰片、后壁、底架、电池托盘、光驱导轨、DAC 支撑和壳体连接柱 | 1 |
 | `SpeakerCarrier` / P3 | 双声腔、喇叭预留框、前障板、功放及桥接器托板、主控托板及其连接柱 | 1 |
-| `LPort` / `RPort` | 左右可拆导音孔与内凹饰片 | 2 |
 | `PlayPauseKey` / `EjectKey` / `PrevKey` / `NextKey` | 四个带凹刻图标的独立键帽 | 4 |
 | `ButtonRetainer` / `Knob` | 四键焊线支架、音量旋钮 | 2 |
 | `DisplayRetainer` | OLED 可拆压框，四点承压、两侧锁紧 | 1 |
 
-**3 个主要结构件，12 件刚性 PLA 零件**。两个喇叭与电路板作为采购件装到 P3，不与打印件融为材料实体。脚垫另用软质件，OLED 自带玻璃、电子板、紧固件、绑带和导线不计入 12 件。前障板功能保留在 P3 中，不再单独打印；未虚构尚未测量的喇叭安装孔。
+**3 个主要结构件，10 件刚性 PLA 零件**。两个喇叭与电路板作为采购件装到 P3，不与打印件融为材料实体。脚垫另用软质件，OLED 自带玻璃、电子板、紧固件、绑带和导线不计入 10 件。前障板功能保留在 P3 中，不再单独打印；未虚构尚未测量的喇叭安装孔。
 
-左右侧孔的侧视竖直中心线与提手厚度中线重合于 Y=40；开口、声腔接口、固定耳和螺孔一起对齐。
+左右侧孔的侧视竖直中心线与提手厚度中线重合于 Y=40；开口、声腔接口和饰片保持镜像对齐。
 
-侧孔不能固定并入 P1 或 P2：其伸入声腔的管段会挡住 P3 向前拆出的路径。两侧各用两个外侧可接近的沉头孔固定，装入支架后再插入，拆支架前先拆侧孔。旧独立后盖及其四个后向孔取消，后斜面固定在后壳后，光驱维修改为拆下支架后从正面抽出。
+侧孔与饰片和 P2 一体打印，无单独安装步骤。短管末端位于 X=±65.3，声腔外壁位于 X=±65，保留 0.3 mm 轴向名义间隙；导音管不再伸入 P3 的前向拆装扫掠范围。气密、声学和打印补偿仍需实物验证。光驱维护仍先拆下 P3，再从正面侧转抽出。
 
 ## 尺寸和布局
 
@@ -57,7 +60,7 @@
 | 中央格栅 | 正面圆孔 Ø130，护网底片 Ø136、内凹 2.5、厚 2.5；圆口内 1531 个完整孔＋92 个部分孔，孔径 Ø1.88、孔距 2.9；中心 X=0、Z=76 |
 | 喇叭 | 每只 X/Y/Z=45/42/80，中心 X=±26、Z=76，Y=8…50，朝 −Y |
 | 后腔 | 每侧 65 × 52 × 89，Z=31.5…120.5；喇叭后包络距内壁 4.5 |
-| 侧开口 | 主体高 74 × 宽 29，中心 Y=40、Z=80；饰片 12 × 56；另有上下固定耳凹槽 |
+| 侧开口 | 外侧可见导音口高 67 × 宽 22，中心 Y=40、Z=80；一体外环 74.6 × 29.6 覆盖旧 74 × 29 构造开口与装配缝，饰片 12 × 56；无固定耳凹槽 |
 | UJ-898 | 128 × 9.5 × 129，Y=63…72.5、Z=32…161；导轨左右侧隙各 0.3 |
 | SATA–USB 桥接器 | 10 × 24 × 24 占位，X=−61…−51、Y=8…32、Z=124…148；软连接方式待核实 |
 | 功放 | PCB 66 × 53 × 1.6，Y=6…59、Z=123…124.6；元件高度预留 15 |
@@ -71,7 +74,7 @@
 | 电池绑带槽 | 四处，X=−61…−58 / 58…61，Y=24…32 / 44…52；绑带未建模 |
 | 前壳连接孔 | 正面无螺丝孔；后壁 X=±67.4、Z=18，后斜面 X=±29、Z=179；Ø4.4 深孔／Ø2.2 通孔／前柱 Ø1.6 盲孔 |
 | 支架连接孔 | 4 处，X=±64、Z=27 / 124，沿 Y；Ø2.8，沉头 Ø4.8，后壳底孔 Ø2.0 |
-| 侧孔连接孔 | 每侧 2 处，Y=40、Z=39 / 117，沿 X；Ø2.2，沉头 Ø4.2，底孔 Ø1.6 |
+| 侧孔接口 | 与后壳一体；旧四处固定孔已补实，短管对声腔轴向留隙 0.3 |
 
 沉头及底孔是名义连接设计，按约 Ø2.5 / Ø2 螺杆预留；螺钉具体牙型、长度和 PLA 底孔配合须用试片选定。没有建模热熔嵌件。壳体接触面按名义贴合，需实测打印补偿和密封垫厚度；0.3 mm 侧隙也不是对任意打印设置的保证。
 
@@ -79,12 +82,14 @@
 
 ## 验证依据
 
-- [validation.json](validation.json)：双色改版前的结构验收记录；保存后重新打开，34 个成品对象有效，三主体各为一个连续实体，两两交叠不超过 0.001 mm³；退碟、侧向空气通路、接头设计预留、关键净距及提手检查通过。
-- 左右导音孔、侧壳开口及提手中线读回均为 Y=40。8 项镜像差集为零，4 组原生右件镜像关系有效。前壳仅排除操控开孔、四键定位座及其镜像区域；后壳仅排除内部 DAC 支撑及其镜像；支架检查声学下半部至 Z=120.5。[grille-change-checks.json](grille-change-checks.json)保留此前护网调整的历史比较，不能当作当前 OLED 版的摘要；当前比较见 `oled-checks.json`，五个既有成品对象改变、新增 OLED 压框，其余 28 个对象保持。四键替换旧单键，历史单键差集不再适用。
+- [port-reinforcement-checks.json](port-reinforcement-checks.json)：四点连接、饰片厚度、局部新增材料无干涉和开口面积检查；仅为几何结果，不代替强度与声学实测。
+- [side-port-checks.json](side-port-checks.json)：一体后壳有效且仅含一个实体；侧孔归属、旧螺孔补实、0.3 mm 轴向间隙和镜像检查通过，其余 31 个成品对象几何保持。
+- [validation.json](validation.json)：侧孔一体化后的结构检查；保存后重新打开，32 个成品对象有效，三主体各为一个连续实体，两两交叠不超过 0.001 mm³；退碟、侧向空气通路、接头设计预留、关键净距及提手检查通过。
+- 左右导音孔、侧壳开口及提手中线读回均为 Y=40。8 项镜像差集为零，4 组原生右件镜像关系有效。前壳仅排除操控开孔、四键定位座及其镜像区域；后壳仅排除内部 DAC 支撑及其镜像；支架检查声学下半部至 Z=120.5。[grille-change-checks.json](grille-change-checks.json)保留此前护网调整的历史比较，不能当作当前 OLED 版的摘要；OLED 阶段曾改变五个既有成品对象并新增压框；当前侧孔改版的几何比较见 `side-port-checks.json`。四键替换旧单键，历史单键差集不再适用。
 - [oled-checks.json](oled-checks.json)：四孔、玻璃深度、沉槽／倒角、指定方向无遮挡、定位座原生镜像及压框、接头／插线预留及螺钉头／工具通路通过；前壳卸下后的压框、模组两步取出路径分别按 0.5 mm 检查 51 个姿态。接头截面、线材、螺钉与打印配合仍待实测。
 - [button-checks.json](button-checks.json)：核对四键孔径、键帽／开关局部包络及 0…0.8 mm 的五个键帽姿态。新增八个引脚侧连续开口、中央避让与双点支承检查；开口与实体、DAC 输出接头预留无交叠。真实圆头直径、行程、脚距和底面承压配合未验收。
-- [assembly-paths.json](assembly-paths.json)：支架、电池及侧孔采用连续保守扫掠；光驱从前方侧转拆出，其平移段连续保守扫掠、转动段按 0.5° 步长检查实际 B-rep；前壳卸背面螺钉后向前退出，按 1 mm 步长检查。均以前壳或侧孔按顺序拆除、紧固件和绑带卸下、导线断开为前提。
-- [print-checks.json](print-checks.json)：双色改版前的单色切片记录，三主体几何保持有效；当前四键改用独立双色验收。原十二个闭合网格均能在 256³ 空间内放置并留 5 mm brim，Bambu Studio 的 P2S / 0.4 mm 配置完成四盘 PLA 切片。切片不等于实际成型或承载试验。
+- [assembly-paths.json](assembly-paths.json)：支架、电池采用连续保守扫掠，侧孔保持为后壳固定部分；光驱从前方侧转拆出，其平移段连续保守扫掠、转动段按 0.5° 步长检查实际 B-rep；前壳卸背面螺钉后向前退出，按 1 mm 步长检查。均以前壳按顺序拆除、紧固件和绑带卸下、导线断开为前提。
+- [print-checks.json](print-checks.json)：侧孔一体化后的单色切片记录，四键沿用独立双色验收。十个闭合网格均能在 256³ 空间内放置并留 5 mm brim，Bambu Studio 的 P2S / 0.4 mm 配置完成四盘 PLA 切片。切片不等于实际成型或承载试验。
 
 接头检查为功放左右各 15、主控两端各 5、DAC 两端 5 / 10 mm 的暂定区域及旋钮线束路径；OLED 另检查图纸 11.3 mm 深度和针尖后 6 mm 插线预留，并检查一体支架是否侵入；不涵盖尚未测量的桥接转接线、电池引线、充电稳压板和实际弯折半径。声腔连通不等于声学调谐或气密验证。提手层间强度、支撑清理、螺钉反复拆装寿命及 PLA 热变形需试样验证。
 
@@ -92,6 +97,6 @@
 
 在 FreeCAD 执行 [build.FCMacro](build.FCMacro) 重建。隐藏的 `Construction` 组保留草图、布尔源件和原生镜像；三个成品实体记录 `ConstructionObjects`，由脚本融合生成。**修改隐藏源件后应重新运行建模脚本**；三主体不是会随源件自动更新的实时融合特征。`RPort`、`RDriver`、`RChamber`、`RDriverFrame` 和 `DisplayMountRight` 保留原生镜像。
 
-执行 [validate.FCMacro](validate.FCMacro) 重新读回检查，再运行 [check-oled.py](check-oled.py)、[check-fasteners.py](check-fasteners.py)、[check-buttons.py](check-buttons.py)、[check-assembly.py](check-assembly.py)、[export-print-parts.py](export-print-parts.py) 与 [slice-print-parts.py](slice-print-parts.py)。OLED 版已经改变屏幕几何，不应再传入旧屏幕模型运行历史“操控不变”或 Z 上移比较；`check-oled.py --baseline` 接受本次适配前模型，核对其余 28 个成品对象不变。双色键帽另外运行 [export-dual-color-keys.py](export-dual-color-keys.py)；常规单色切片脚本排除这四个键帽，避免丢失材料分配。临时 STL、3MF、配置和 G-code 放在被忽略的 `tmp/`，仅保存检查摘要；切片脚本不连接或发送到打印机。
+执行 [validate.FCMacro](validate.FCMacro) 重新读回检查，再运行 [check-side-ports.py](check-side-ports.py)（日常复查用 `--output tmp/side-port-current-checks.json`，保留已提交的基准比较证据）、[check-oled.py](check-oled.py)、[check-fasteners.py](check-fasteners.py)、[check-buttons.py](check-buttons.py)、[check-assembly.py](check-assembly.py)、[export-print-parts.py](export-print-parts.py) 与 [slice-print-parts.py](slice-print-parts.py)。OLED 版已经改变屏幕几何，不应再传入旧屏幕模型运行历史“操控不变”或 Z 上移比较；`check-oled.py --baseline` 接受本次适配前模型，核对其余 28 个成品对象不变。双色键帽另外运行 [export-dual-color-keys.py](export-dual-color-keys.py)；常规单色切片脚本排除这四个键帽，避免丢失材料分配。临时 STL、3MF、配置和 G-code 放在被忽略的 `tmp/`，仅保存检查摘要；切片脚本不连接或发送到打印机。
 
 [render.FCMacro](render.FCMacro) 从保存模型生成[整机](preview.png)、[正面](front.png)、[护网细节](grille-detail.png)、[侧面](side.png)、[操控区](controls.png)、[后上方碟口](topload.png)、[光盘退出示意](disc-path.png)、[移开前壳的内部](layout.png)、[OLED 安装座内侧](oled-mount.png)、[正前方 OLED 细节](oled-front-detail.png)和[真实侧剖](section.png)。光盘参考对象默认隐藏，不代表实际退出行程。彩色图册更新步骤见[图册说明](../../docs/enclosure-drawings.md)。

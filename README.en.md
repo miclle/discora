@@ -157,7 +157,7 @@ Raw CD-DA requires **176,400 bytes/s**. ESP32-S3's native USB is Full-Speed, wit
 
 The enclosure is designed around top-loading discs, a top handle, a sloped front control area, and two centrally placed speakers. Except for the established control layout, the outer shape, side features, grille, and acoustic structures are kept symmetric about the body's center plane.
 
-Three main PLA structures form the enclosure: **front shell, rear shell, and speaker/electronics carrier**, with removable side ports, button caps, a button retainer, and an OLED retainer. The drive stands vertically, the battery envelope sits at the bottom, and the screen and four buttons occupy the sloped front, allowing mechanical, electronic, and control-interface work to proceed separately.
+Three main PLA structures form the enclosure: **front shell, rear shell, and speaker/electronics carrier**, with the side ports and recessed inserts integrated into the rear shell, plus separate button caps, a button retainer, and an OLED retainer. The drive stands vertically, the battery envelope sits at the bottom, and the screen and four buttons occupy the sloped front, allowing mechanical, electronic, and control-interface work to proceed separately.
 
 The repository includes an editable FreeCAD model, a rebuild macro, print meshes, dimensioned and exploded drawings, and geometry, removal-path, and slicing checks. Passing these checks does not establish physical fit, load capacity, thermal behavior, or acoustic performance. The internal carrier-board layout still needs to be fitted to the enclosure.
 

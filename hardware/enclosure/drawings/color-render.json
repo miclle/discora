@@ -1,7 +1,7 @@
 {
-  "sha256": "e9cc3ffd1e33dfd2ffecf19e1d6f2b694a027e31021bc9adc5b356991a9dbe37",
-  "build_sha256": "357eda4893fff9ee8f3f0347df9b82e4a03365daa39763c0655e3d8d6328f30b",
-  "geometry_sha256": "4c962b9219f6fd969319952128c0e1ea4edbb7924ed58dac509e3af202b7eaf8",
+  "sha256": "b1e943face3860219c90706176f7a709497eb15f5b1de335028ce72c6ac2d5ad",
+  "build_sha256": "2d6bea81548c11cd6390d818c15892561fbe62619675bcc27aac31bbdcafba76",
+  "geometry_sha256": "338c47569ad0aee3580387fe7c0f47eb5065e5d150639a8130b7090f695568e0",
   "palette": {
     "ORANGE": [
       1.0,
@@ -101,16 +101,6 @@
       0.72
     ],
     "RearShell": [
-      0.145,
-      0.155,
-      0.17
-    ],
-    "LPort": [
-      0.145,
-      0.155,
-      0.17
-    ],
-    "RPort": [
       0.145,
       0.155,
       0.17
@@ -333,7 +323,7 @@
     "exploded-shell": {
       "file": "exploded-shell-color.png",
       "size_px": [
-        4141,
+        3809,
         4215
       ]
     },

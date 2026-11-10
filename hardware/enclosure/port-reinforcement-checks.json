@@ -1,0 +1,171 @@
+{
+  "model_sha256": "b1e943face3860219c90706176f7a709497eb15f5b1de335028ce72c6ac2d5ad",
+  "baseline_sha256": "87c28f128db6d821b76464446645afe38d47a9a3b9af55ff80cfadb172d77389",
+  "physical_strength_test": false,
+  "acoustic_test": false,
+  "connections": {
+    "middle_front": {
+      "cross_section_mm2": 5.999999999999986,
+      "continuous": true
+    },
+    "middle_back": {
+      "cross_section_mm2": 5.999999999999986,
+      "continuous": true
+    },
+    "bottom": {
+      "cross_section_mm2": 5.999999999999986,
+      "continuous": true
+    },
+    "top": {
+      "cross_section_mm2": 5.999999999999986,
+      "continuous": true
+    }
+  },
+  "inset": {
+    "thickness_mm": 2.0,
+    "recess_mm": 1.5
+  },
+  "change_boundary": {
+    "removed_mm3": 0.0,
+    "added_mm3": 836.6391562903689,
+    "added_outside_side_port_regions_mm3": 0.0,
+    "addition_collisions": {}
+  },
+  "free_area_before": {
+    "sections": [
+      {
+        "x_mm": -70.9,
+        "free_area_mm2": 1370.1327110843652,
+        "passages": 1
+      },
+      {
+        "x_mm": -69.75,
+        "free_area_mm2": 1370.1327110843652,
+        "passages": 1
+      },
+      {
+        "x_mm": -69.25,
+        "free_area_mm2": 729.0353755551325,
+        "passages": 1
+      },
+      {
+        "x_mm": -68.75,
+        "free_area_mm2": 411.3716694115406,
+        "passages": 2
+      },
+      {
+        "x_mm": -68.25,
+        "free_area_mm2": 411.3716694115406,
+        "passages": 2
+      },
+      {
+        "x_mm": -67.75,
+        "free_area_mm2": 1064.4690049407734,
+        "passages": 1
+      },
+      {
+        "x_mm": -67.25,
+        "free_area_mm2": 1064.4690049407734,
+        "passages": 1
+      },
+      {
+        "x_mm": -66.75,
+        "free_area_mm2": 1064.4690049407734,
+        "passages": 1
+      },
+      {
+        "x_mm": -65.31,
+        "free_area_mm2": 1064.4690049407734,
+        "passages": 1
+      }
+    ],
+    "minimum_sampled_area_mm2": 411.3716694115406,
+    "equal_area_circle_diameter_mm": 22.886124116557916
+  },
+  "free_area_after": {
+    "sections": [
+      {
+        "x_mm": -70.9,
+        "free_area_mm2": 1370.1327110843652,
+        "passages": 1
+      },
+      {
+        "x_mm": -69.75,
+        "free_area_mm2": 1370.1327110843652,
+        "passages": 1
+      },
+      {
+        "x_mm": -69.25,
+        "free_area_mm2": 729.0353755551325,
+        "passages": 1
+      },
+      {
+        "x_mm": -68.75,
+        "free_area_mm2": 384.2441249821661,
+        "passages": 4
+      },
+      {
+        "x_mm": -68.25,
+        "free_area_mm2": 384.2441249821661,
+        "passages": 4
+      },
+      {
+        "x_mm": -67.75,
+        "free_area_mm2": 384.2441249821661,
+        "passages": 4
+      },
+      {
+        "x_mm": -67.25,
+        "free_area_mm2": 974.7200570832355,
+        "passages": 2
+      },
+      {
+        "x_mm": -66.75,
+        "free_area_mm2": 1064.4690049407734,
+        "passages": 1
+      },
+      {
+        "x_mm": -65.31,
+        "free_area_mm2": 1064.4690049407734,
+        "passages": 1
+      }
+    ],
+    "minimum_sampled_area_mm2": 384.2441249821661,
+    "equal_area_circle_diameter_mm": 22.118653095508645
+  },
+  "free_area_reduction_percent": 6.594412412546524,
+  "chamber_volume_assessment": {
+    "inner_envelope_liters": 0.258762,
+    "driver_rectangular_envelope_in_cavity_liters": 0.1512,
+    "remainder_after_full_driver_envelope_liters": 0.107562,
+    "actual_acoustic_net_volume_known": false
+  },
+  "speaker": {
+    "size_mm": [
+      80,
+      45,
+      42
+    ],
+    "nominal_ohms": 4,
+    "advertised_watts": 10,
+    "missing_parameters": [
+      "Fs",
+      "Qts",
+      "Vas",
+      "Sd",
+      "Xmax",
+      "actual basket/magnet displacement"
+    ]
+  },
+  "decision": "Keep the 67 x 22 mm outer mouth and 63 x 18 mm short tube; only structural ribs reduce free area. No unsupported acoustic retuning.",
+  "limits": [
+    "Equal-area circle is an area comparison, not an acoustically equivalent circular port.",
+    "The 0.3 mm chamber interface clearance and unmodeled driver seal prevent a validated sealed acoustic volume.",
+    "No reliable driver T/S data or measured frequency/impedance response is available.",
+    "Geometric continuity and 6 mm2 rib sections do not establish a load rating or printed fatigue strength."
+  ],
+  "gui_reload": {
+    "passed": false,
+    "reason": "FreeCAD reload_document timed out; RPC reported GUI dispatch stuck. Desktop inspection unavailable while Mac locked. Saved model verified headlessly."
+  }
+}
