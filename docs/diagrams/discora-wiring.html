@@ -1,14 +1,32 @@
 <!doctype html>
 <html lang="zh-CN">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Discora 整机接线与洞洞板装配图</title><style>body{margin:0;background:#f5f5f5;color:#2d3142;font-family:"PingFang SC","Noto Sans CJK SC",sans-serif;line-height:1.8}main{max-width:1400px;margin:32px auto;padding:0 24px}h1{font-size:32px;line-height:1.3}h2{font-size:26px;margin-top:48px}h3{font-size:21px;margin-top:32px}p{max-width:1000px}a{color:#2e5aa8}nav{display:flex;gap:12px 24px;flex-wrap:wrap;padding:16px 0;border-block:1px solid #bfc0c0}section,details,h3{scroll-margin-top:24px}.eyebrow,.muted,footer{color:#4f5d75}.eyebrow{font-size:13px;letter-spacing:.08em}.verdict{border-left:4px solid #eb6c36;padding:16px 24px;background:#fff;margin:24px 0}.figure-scroll,.table-scroll{overflow-x:auto}svg{display:block;width:100%;height:auto}.perfboard-figure{min-width:1040px}#perfboard-layout .perfboard-figure{min-width:1400px}#overview svg{min-width:1000px}table{border-collapse:collapse;width:100%;min-width:640px;margin:20px 0}th,td{text-align:left;vertical-align:top;border-bottom:1px solid #bfc0c0;padding:12px}th{background:#ececec}details{margin-top:32px;border-top:1px solid #bfc0c0;padding-top:20px}summary{cursor:pointer;font-weight:600}footer{border-top:1px solid #bfc0c0;margin-top:36px;padding:16px 0;font-size:14px}@media print{main{max-width:none;margin:0;padding:0}nav{display:none}.figure-scroll,.table-scroll{overflow:visible}.perfboard-figure,#overview svg,table{min-width:0}section{break-before:page}h2,h3,summary{break-after:avoid}tr{break-inside:avoid}}</style></head>
+<title>Discora 整机接线与洞洞板装配图</title><style>body{margin:0;background:#f5f5f5;color:#2d3142;font-family:"PingFang SC","Noto Sans CJK SC",sans-serif;line-height:1.8}main{max-width:1400px;margin:32px auto;padding:0 24px}h1{font-size:32px;line-height:1.3}h2{font-size:26px;margin-top:48px}h3{font-size:21px;margin-top:32px}p{max-width:1000px}a{color:#2e5aa8}nav{display:flex;gap:12px 24px;flex-wrap:wrap;padding:16px 0;border-block:1px solid #bfc0c0}section,details,h3{scroll-margin-top:24px}.eyebrow,.muted,footer{color:#4f5d75}.eyebrow{font-size:13px;letter-spacing:.08em}.verdict{border-left:4px solid #eb6c36;padding:16px 24px;background:#fff;margin:24px 0}.figure-scroll,.table-scroll{overflow-x:auto}svg{display:block;width:100%;height:auto}.perfboard-figure{min-width:1040px}#perfboard-layout .perfboard-figure{min-width:1400px}#overview svg{min-width:1000px}table{border-collapse:collapse;width:100%;min-width:640px;margin:20px 0}th,td{text-align:left;vertical-align:top;border-bottom:1px solid #bfc0c0;padding:12px}th{background:#ececec}details{margin-top:32px;border-top:1px solid #bfc0c0;padding-top:20px}summary{cursor:pointer;font-weight:600}footer{border-top:1px solid #bfc0c0;margin-top:36px;padding:16px 0;font-size:14px}@media print{main{max-width:none;margin:0;padding:0}nav{display:none}.figure-scroll,.table-scroll{overflow:visible}.perfboard-figure,#overview svg,table{min-width:0}section{break-before:page}h2,h3,summary{break-after:avoid}tr{break-inside:avoid}}
+/* USB direct-wiring styles stay local to this section. */
+#usb-gpio-dual-5v svg{min-width:960px}
+#usb-gpio-dual-5v svg text{fill:#2d3142;font-family:"PingFang SC","Noto Sans CJK SC",sans-serif;font-size:20px}
+#usb-gpio-dual-5v svg .small{font-size:16px;fill:#4f5d75}
+#usb-gpio-dual-5v svg .title{font-size:24px;font-weight:600}
+#usb-gpio-dual-5v svg .power{stroke:#eb6c36;stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+#usb-gpio-dual-5v svg .ground{stroke:#2d3142;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+#usb-gpio-dual-5v svg .data{stroke:#2e5aa8;stroke-width:3;fill:none}
+#usb-gpio-dual-5v svg .box{fill:#fff;stroke:#bfc0c0;stroke-width:2}
+#usb-gpio-dual-5v svg .dot{fill:#eb6c36}
+#usb-gpio-dual-5v .notes{display:grid;grid-template-columns:1.1fr 1fr;gap:24px}
+#usb-gpio-dual-5v .note{background:#fff;border:1px solid #bfc0c0;border-radius:8px;padding:24px;min-width:0}
+#usb-gpio-dual-5v .note h3{font-size:24px;margin:0 0 12px}
+#usb-gpio-dual-5v .note p{margin:8px 0}
+#usb-gpio-dual-5v .wide{grid-column:1/-1}
+@media(max-width:800px){#usb-gpio-dual-5v .notes{grid-template-columns:1fr}#usb-gpio-dual-5v .wide{grid-column:auto}}
+@media print{#usb-gpio-dual-5v svg{min-width:0}#usb-gpio-dual-5v .notes{display:block}#usb-gpio-dual-5v .note{break-inside:avoid;margin-top:16px}}
+</style></head>
 <body><main>
-<header><p class="eyebrow">DISCORA / WIRING &amp; PERFBOARD / 2026-11-08</p>
+<header><p class="eyebrow">DISCORA / WIRING &amp; PERFBOARD / 2026-11-10</p>
 <h1>整机接线与洞洞板装配图</h1>
-<p>当前音频接法为 GPIO15/16/7，已通过台架立体声播放；原台架孔位继续保留；本版保留含两块 DCE001 的 100 × 55 mm 机内载板候选，并增加 J2 连续四键信号与 P3 五芯线束。此前三轮整盘完成与间歇故障记录分别保留；本次四键只完成软件验证，实体接线和机内安装未验收。</p>
-<nav aria-label="图稿导航"><a href="#enclosure-layout">新增双路降压布局</a><a href="#overview">整机连接</a><a href="#button-harness">四键连续排针／P3 线束</a><a href="#perfboard">历史台架接线</a><a href="#perfboard-layout">新版孔位总图</a><a href="#perfboard-wire-list">历史导线端点</a><a href="../wiring.md">接线说明</a></nav></header>
+<p>音频接法为 GPIO15/16/7，原台架孔位、机内双路降压载板候选及四键 P3 线束保留。新增 USB 直连 GPIO19／20 与双 DCE001 防回灌方案，尚未改接或完成带载验收；播放、按键与 OLED 的最新实测结论见<a href="../status.md">工程状态</a>。</p>
+<nav aria-label="图稿导航"><a href="#usb-gpio-dual-5v">USB 直连／双路 5V 防回灌</a><a href="#enclosure-layout">新增双路降压布局</a><a href="#overview">整机连接</a><a href="#button-harness">四键连续排针／P3 线束</a><a href="#perfboard">历史台架接线</a><a href="#perfboard-layout">新版孔位总图</a><a href="#perfboard-wire-list">历史导线端点</a><a href="../wiring.md">接线说明</a></nav></header>
 <section id="overview"><h2>01 · 整机连接与供电</h2>
-<p>模块级总览。框内信号逐线连接，不表示短接；虚线支路须先确认规格。<a href="discora-wiring.svg">单独打开整机总览 SVG</a>。</p>
+<p>原台架模块级总览，保留 COM 与原生 USB 插头路径；不能与下方的<a href="#usb-gpio-dual-5v">双路 5V 改接方案</a>混接。框内信号逐线连接，不表示短接；虚线支路须先确认规格。<a href="discora-wiring.svg">单独打开整机总览 SVG</a>。</p>
 <div class="figure-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 3160" role="img" aria-labelledby="discora-wiring-title discora-wiring-desc">
 <title id="discora-wiring-title">Discora 整机接线图</title>
 <desc id="discora-wiring-desc">展示光驱、主控、DAC、功放、左右喇叭、四个按键、OLED、电源与调试电脑的模块连接，以及 DAC 引脚和焊桥、OLED 的 GPIO10 SDA／GPIO11 SCL 与 3.3V 四线规划；并解释 5Vin、D3 与 IN-OUT 的取电限制；虚线为待确认连接。</desc>
@@ -238,6 +256,100 @@
 <text x="64" y="2632" font-size="20" fill="#2d3142" font-weight="400">依据：供应商模块资料、ESP32 板卡图纸与当前固件。规划不等于已接线、已上电或音频／显示验收。</text>
 </g>
 </svg></div></section>
+<section id="usb-gpio-dual-5v"><h2>USB 直连 · 双路 5V 与防回灌</h2>
+<p><strong>A 只供主控，B 供桥接器与光驱；USB 的 5V 留在 B 支路，所有 GND 共地。</strong></p>
+<div class="verdict"><strong>2026-11-10 改接方案：planned，未改实物、未做带载验收。</strong> 这一节替代原台架的 USB 插头与供电接法，仅在完成线束改造及检查后采用。按 ESP32-S3-COREBOARD V1.4 图纸核对；端子位置为示意，以实物丝印为准。</div>
+<div class="figure-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1000" role="img" aria-labelledby="usb-gpio-dual-5v-title usb-gpio-dual-5v-desc">
+<title id="usb-gpio-dual-5v-title">USB 直连与双 DCE001 供电接线图</title>
+<desc id="usb-gpio-dual-5v-desc">同一三串电池经总开关供两块 DCE001，A 的 5V 接主控 5Vin，B 的 5V 接光驱桥接器 USB VBUS，D− 接 GPIO19、D+ 接 GPIO20，全部共地，A 与 B 正极不相连，运行时断开电脑和原辅助电源。</desc>
+<!-- Wires first; repeated GND symbols are the same electrical net. -->
+<path class="power" d="M640 160 V196 M640 244 V264 M240 304 V272 Q240 264 248 264 H1032 Q1040 264 1040 272 V304"/>
+<circle class="dot" cx="640" cy="264" r="5"/>
+<path class="ground" d="M800 112 H856 Q864 112 864 120 V144 M848 144 H880 M852 152 H876 M860 160 H868"/>
+<path class="ground" d="M80 372 H56 Q48 372 48 380 V408 M32 408 H64 M36 416 H60 M44 424 H52"/>
+<path class="ground" d="M1200 372 H1224 Q1232 372 1232 380 V408 M1216 408 H1248 M1220 416 H1244 M1228 424 H1236"/>
+<path class="power" d="M240 484 V608 M1040 484 V608"/>
+<path class="ground" d="M360 484 V608 M920 484 V608"/>
+<path class="data" d="M480 724 H800 M480 784 H800"/>
+<path class="ground" d="M480 844 H800"/>
+<!-- Components -->
+<rect class="box" x="480" y="48" width="320" height="112" rx="8"/>
+<text class="title" x="640" y="84" text-anchor="middle">3S 电池包 · 保护输出</text>
+<text class="small" x="640" y="112" text-anchor="middle">约 9–12.6V · 非恒定 12V</text>
+<text class="small" x="640" y="148" text-anchor="middle">P+ / 输出正极</text>
+<text class="small" x="812" y="100">P−</text><text class="small" x="888" y="152">GND</text>
+<rect class="box" x="560" y="196" width="160" height="48" rx="8"/>
+<text x="640" y="228" text-anchor="middle">总电源开关</text>
+<rect class="box" x="80" y="304" width="400" height="180" rx="8"/>
+<text class="small" x="240" y="332" text-anchor="middle">IN+</text>
+<text class="title" x="280" y="376" text-anchor="middle">DCE001 A · 主控</text>
+<text class="small" x="96" y="412">IN−</text>
+<text class="small" x="280" y="412" text-anchor="middle">固定输出 5V</text>
+<text x="240" y="468" text-anchor="middle">OUT+</text><text x="360" y="468" text-anchor="middle">OUT−</text>
+<rect class="box" x="800" y="304" width="400" height="180" rx="8"/>
+<text class="small" x="1040" y="332" text-anchor="middle">IN+</text>
+<text class="title" x="1000" y="376" text-anchor="middle">DCE001 B · 光驱</text>
+<text class="small" x="1184" y="412" text-anchor="end">IN−</text>
+<text class="small" x="1000" y="412" text-anchor="middle">固定输出 5V</text>
+<text x="920" y="468" text-anchor="middle">OUT−</text><text x="1040" y="468" text-anchor="middle">OUT+</text>
+<text class="small" x="224" y="552" text-anchor="end">5V_A</text><text class="small" x="376" y="552">GND</text>
+<text class="small" x="904" y="552" text-anchor="end">GND</text><text class="small" x="1056" y="552">5V_B</text>
+<rect x="496" y="376" width="288" height="168" rx="8" fill="#f5f5f5" stroke="#eb6c36" stroke-width="2"/>
+<text x="640" y="416" text-anchor="middle" font-weight="600">A、B 输出正极不相连</text>
+<text class="small" x="640" y="452" text-anchor="middle">不依赖 DCE001 反向阻断</text>
+<text class="small" x="640" y="480" text-anchor="middle">USB 红线只接 B，不接主控</text>
+<text class="small" x="640" y="508" text-anchor="middle">两个模块非隔离，负极共地</text>
+<rect class="box" x="80" y="608" width="400" height="300" rx="8"/>
+<text x="240" y="640" text-anchor="middle">5Vin</text><text x="360" y="640" text-anchor="middle">GND</text>
+<text class="title" x="112" y="684">ESP32-S3 主控</text>
+<text x="456" y="720" text-anchor="end">GPIO19</text>
+<text x="456" y="780" text-anchor="end">GPIO20</text>
+<text x="456" y="840" text-anchor="end">GND</text>
+<text class="small" x="112" y="876">COM 与原生 USB 插座均留空</text>
+<rect class="box" x="800" y="608" width="400" height="300" rx="8"/>
+<text x="920" y="640" text-anchor="middle">GND</text><text x="1040" y="640" text-anchor="middle">VBUS / +5V</text>
+<text class="title" x="832" y="684">SATA–USB 桥接器 + UJ-898</text>
+<text x="824" y="720">USB D−</text><text x="824" y="780">USB D+</text><text x="824" y="840">USB GND</text>
+<text class="small" x="832" y="876">保留桥接器及 SATA 连接</text>
+<rect x="548" y="688" width="184" height="24" fill="#f5f5f5"/>
+<text class="small" x="640" y="708" text-anchor="middle">D− · 常见白线</text>
+<rect x="548" y="748" width="184" height="24" fill="#f5f5f5"/>
+<text class="small" x="640" y="768" text-anchor="middle">D+ · 常见绿线</text>
+<rect x="548" y="808" width="184" height="24" fill="#f5f5f5"/>
+<text class="small" x="640" y="828" text-anchor="middle">信号地 · 常见黑线</text>
+<path d="M40 940 H1240" stroke="#bfc0c0"/>
+<path class="power" d="M48 972 H96"/><text class="small" x="108" y="980">电源正极</text>
+<path class="data" d="M272 972 H320"/><text class="small" x="332" y="980">USB 数据对</text>
+<path class="ground" d="M512 972 H560"/><text class="small" x="572" y="980">公共 GND</text>
+<text class="small" x="800" y="980">线色仅供参考；端子按信号名核对</text>
+</svg></div>
+<div class="notes">
+<div class="note"><h3>① USB 线怎样改</h3>
+<p>移除主控端原 USB 插头／OTG 转接头，保留通往光驱桥接器的一段线。桥接器侧的 <strong>VBUS（常见红线）接 B OUT+</strong>；D−、D+、GND 分别接 GPIO19、GPIO20、主控 GND。</p>
+<p><strong>不是把光驱的 VBUS 悬空：</strong>桥接器仍从 B 得到有效 5V。主控板 USB2 VBUS 不接这根红线，也不接 B。</p>
+<p>保留 D+/D− 原双绞结构，剥开的末端尽量短；不经洞洞板长散线。用短、足额的独立正负电源线供光驱，其大电流回路直接回 B OUT−。</p></div>
+<div class="note"><h3>② 辅助电源怎样处理</h3>
+<p><strong>拔掉原充电宝／充电器及辅助 USB 插头。</strong>若保留分叉线，将不用的插头移除或逐芯绝缘封住；不能留下带电裸触点或可误插电脑的插头。</p>
+<p>断电测辅助 5V 与 USB VBUS 是否连通。若光驱还需要辅助入口，两入口都只能从<strong>同一个 B OUT+／OUT−</strong>分支供电；确认它们均为 5V 输入后再接。</p>
+<p>原插头线芯若已剪断，两端分别绝缘。不要把屏蔽层／裸排流线当作唯一的 GND 回路。</p></div>
+<div class="note wide"><h3>③ 电脑与板载焊桥：明确两种工作状态</h3>
+<div class="table-scroll"><table><thead><tr><th>状态</th><th>A / B 与直连线</th><th>电脑连接</th></tr></thead><tbody>
+<tr><td><strong>电池独立播放</strong></td><td>按上图；A、B 由同一总开关控制</td><td>COM、原生 USB 均不插电脑；无外部辅助电源</td></tr>
+<tr><td><strong>只烧录主控</strong></td><td>关总开关，拔开 A OUT+ → 5Vin；拔开光驱 D− / D+ / GND 三线接头</td><td>再连接 COM，由电脑单独供主控；原生 USB 留空</td></tr>
+</tbody></table></div>
+<p>图示方案的目标焊桥状态：<strong>IN-OUT 断开、USB-OTG 断开</strong>；若 USB-OTG 已焊通，全部断电后移除焊桥并核对。IN-OUT 旁路 D3，USB-OTG 旁路 D2；两者都不是稳压器或限流器。</p>
+<p>V1.4 图纸中，5Vin 经 D3 向板内 5V 供电；COM VBUS 经 D1 向板内 5V 供电，CH343P 还取电于 COM VBUS。本图用“拔开供电线／不同时接电脑”消除外部电源并接，不依赖未核验的实物二极管；<strong>不把“剪掉 COM 红线”作为通用调试办法</strong>。</p>
+<p>烧录结束后先拔掉 COM，再恢复 A 供电线与光驱三线接头，最后打开总开关。边播放边调试需另行核对 COM 电源隔离及板载 CH343P 的供电／引脚状态；不能直接并接另一只 USB-UART 的 TX，以免与板载发送端争用或经信号线给断电器件供电。</p></div>
+<div class="note wide"><h3>上电前与首次验证</h3>
+<ol>
+<li><strong>全部断电：</strong>核对模块实物 IN± / OUT±，用通断档确认线芯及 GND；不得有 A OUT+ 与 B OUT+ 的直接导通路径，也不得让 B OUT+ 通到主控 5Vin、板内 5V 或 USB2 VBUS。二极管、电容会影响读数，不能只凭一次蜂鸣判断隔离。</li>
+<li><strong>分支单独上电：</strong>先拔开 USB 数据三线，再分别只给 A、只给 B 输入供电，确认另一支输出没有被抬升至供电电压；分别测空载输出及主控板内 5V / 3V3。D3 有正向压降，板内电压需实测。</li>
+<li><strong>恢复整机接线后同时供电：</strong>检查枚举、启动／进退碟、寻道及连续播放。测 B 输出和光驱端的最低电压、峰值电流与模块温升；DCE001 标称 3A，但供应商要求无散热时在 2A 内，当前负载能力未验收。</li>
+</ol>
+<p>本方案避免的是 A、B 与电脑之间的<strong>外部 5V 回灌路径</strong>，不提供电气隔离，也不保证消除 USB 掉线。充电、功放和 DAC 支路未画入，不据此扩展接线。</p></div>
+</div>
+<p class="muted">核对依据：<a href="../../hardware/ESP32-S3-N16R8/ESP32-S3-SCH-V1.4.pdf">开发板 V1.4 原理图</a> · <a href="../../hardware/DCE001-5V/README.md">DCE001 供应商资料与待测项</a> · <a href="../decisions/0018-dual-5v-buck.md">ADR-0018</a> · 乐鑫 USB 硬件设计说明（链接见整机接线文档）<br>图纸核对与建议接法，不代表实物已改装或验收。中文采用系统字体，离线可查看。</p>
+</section>
 <section id="enclosure-layout"><h2>02 · 机内裁剪载板：ESP32＋DAC＋双路降压</h2>
 <p>新增两块 <a href="../../hardware/DCE001-5V/README.md">DCE001 固定 5V 模块</a>，分别供主控和光驱；每块供应商标称 17.5 × 12 × 4.5 mm。候选板由约 90 × 55 mm 调整为 <strong>100 × 55 mm</strong>，功放仍单独固定。<a href="../perfboard-layout.md">完整布局尺寸、接线边界与 CAD 试算</a>。</p>
 <div class="verdict"><strong>这是机内安装候选，尚未通过装配验收。</strong> 原 120 × 80 mm 台架孔位保留在下一节；本候选需要重新布置排母。尚未确定裁剪线、固定孔和 DCE001 半孔针序，不按本图直接裁板或接电。</div>
