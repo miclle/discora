@@ -66,6 +66,70 @@ DISPLAY_PCB = (35.4, 1.2, 33.5)
 DISPLAY_HOLES = [(x,z) for x in (-15.2,15.2) for z in (-16.3,12.2)]
 
 
+def volume_shapes(grip_tip_diameter=5.6):
+    """B50K switch potentiometer; local +Y is inward, +Z up the slope.
+
+    User dimensions: 9.5 across pins, 11.2 front-to-back, 14.5 axial;
+    pin face Z=-2.7 relative to the shaft. Pins are clearance envelopes,
+    not an invented footprint. The 5 mm bushing clamps a 2 mm local web.
+    """
+    body=Part.makeBox(9.5,14.5,11.2,V(-4.75,3.6,-2.7))
+    shaft=Part.makeCylinder(3.4,5,V(0,3.6,0),-Y).fuse(
+        Part.makeCylinder(2.9,10,V(0,-1.4,0),-Y))
+    # 0.3 mm body clearance, with an open terminal-side exit. The body pocket
+    # also limits rotation; nut friction is still required for clamping.
+    pocket=Part.makeBox(10.1,20,11.8,V(-5.05,3.6,-3))
+    pocket=pocket.fuse(Part.makeBox(10.1,20,7,V(-5.05,3.6,-10))).removeSplitter()
+    # Exterior recess: 0.4 mm mouth bevel; bottom at 1.6 leaves the web 2 mm.
+    recess=Part.makeCylinder(12.8,.2,V(0,-.2,0),Y).fuse(
+        Part.makeCone(12.8,12.4,.4,V(),Y)).fuse(
+        Part.makeCylinder(12.4,1.2,V(0,.4,0),Y)).removeSplitter()
+    radius=9.8/math.sqrt(3)
+    vertices=[V(radius*math.cos(i*math.pi/3),1.6,radius*math.sin(i*math.pi/3)) for i in range(6)]
+    nut=Part.Face(Part.makePolygon(vertices+vertices[:1])).extrude(-Y*1.9).cut(
+        Part.makeCylinder(3.4,1.9,V(0,1.6,0),-Y))
+    shaft=shaft.fuse(nut).removeSplitter()
+    disk=Part.makeCylinder(12,1.4,V(0,1,0),-Y)
+    # Slender full-height lobes: 24 mm span, 6.8 mm arm width, R3.4 ends.
+    cross=Part.makeBox(17.2,12.5,6.8,V(-8.6,-12.9,-3.4)).fuse(
+        Part.makeBox(6.8,12.5,17.2,V(-3.4,-12.9,-8.6)))
+    cross=cross.multiFuse([Part.makeCylinder(3.4,12.5,V(x,-12.9,z),Y)
+                          for x,z in ((-8.6,0),(8.6,0),(0,-8.6),(0,8.6))]).removeSplitter()
+    inside=[e for e in cross.Edges if e.BoundBox.YLength>12
+            and abs(abs(e.CenterOfMass.x)-3.4)<1e-6
+            and abs(abs(e.CenterOfMass.z)-3.4)<1e-6]
+    cross=cross.makeFillet(.8,inside)
+    top=[e for e in cross.Edges if abs(e.BoundBox.YMin+12.9)<1e-6
+         and abs(e.BoundBox.YMax+12.9)<1e-6]
+    cross=cross.makeFillet(.5,top)
+    # Round the feet slightly so the 24 mm lobes do not meet the 24 mm disk
+    # at a tangent-only vertex, which produces an open STL seam in OCCT.
+    bottom=[e for e in cross.Edges if abs(e.BoundBox.YMin+.4)<1e-6
+            and abs(e.BoundBox.YMax+.4)<1e-6]
+    cross=cross.makeFillet(.25,bottom)
+    # A short flared root closes the nut cavity between the slimmer arms.
+    # At the cavity roof Y=-2.4 its radial wall remains over 0.57 mm.
+    hub=Part.makeCone(7.2,6.2,3.2,V(0,-.4,0),-Y)
+    knob=disk.multiFuse([cross,hub]).removeSplitter()
+    # Nut relief and 6 mm carrier bore; six sacrificial ribs grip the actual
+    # splines. These are press-fit ribs, not a fabricated matching spline form.
+    knob=knob.cut(Part.makeCylinder(6,3.5,V(0,1.1,0),-Y))
+    knob=knob.cut(Part.makeCylinder(3,13,V(0,1.3,0),-Y))
+    tip=grip_tip_diameter/2
+    profile=[(3.2,-10.2),(tip,-10.2),(tip,-4.2),(3,-3.2),(3.2,-3.2)]
+    pts=[V(x,y,-.3) for x,y in profile]
+    rib=Part.Face(Part.makePolygon(pts+pts[:1])).extrude(Z*.6)
+    ribs=[]
+    for angle in range(0,360,60):
+        s=rib.copy();s.rotate(V(),Y,angle);ribs.append(s)
+    knob=knob.multiFuse(ribs).removeSplitter()
+    # Flush white PLA index, 0.6 mm deep; two non-overlapping print volumes.
+    mark=Part.makeBox(.7,.6,2.2,V(-.35,-12.9,7.1))
+    body_black=knob.cut(mark).removeSplitter()
+    knob=Part.makeCompound([body_black,mark])
+    return dict(body=body,shaft=shaft,pocket=pocket,recess=recess,knob=knob)
+
+
 def oled_shapes():
     """Local geometry from oled-module-dimensions-wiring.webp, in mm.
 
@@ -297,7 +361,15 @@ def build(folder):
     symmetric_cowl.Base, symmetric_cowl.Tool = skin, common_tool
     skin.Visibility = common_tool.Visibility = False
     controls = [Part.makeCylinder(r,12,deck(x,y)-normal*7,normal)
-                for x,y,r in [(x,y,5.25) for _,_,x,y in BUTTONS]+[(48,18,4.4)]]
+                for x,y,r in [(x,y,5.25) for _,_,x,y in BUTTONS]+[(48,18,3.6)]]
+    volume=volume_shapes()
+    volume_pose=A.Placement(deck(48,18),A.Rotation(Y,-normal))
+    volume_pocket=volume['pocket'].copy()
+    volume_pocket.Placement=volume_pose.multiply(volume_pocket.Placement)
+    controls.append(volume_pocket)
+    volume_recess=volume['recess'].copy()
+    volume_recess.Placement=volume_pose.multiply(volume_recess.Placement)
+    controls.append(volume_recess)
     native_cut("Cowl","整片折壳构造源 · 对称主体＋原操控开孔",symmetric_cowl,
                Part.makeCompound(controls),TEAL,shell)
 
@@ -438,16 +510,18 @@ def build(folder):
     retainer=retainer.cut(box(-67.5,32.5,157.5,9.6,18,11)).removeSplitter()
     feature('ButtonRetainer','四键焊线支架 · 两侧敞开／双点支承',retainer,TEAL,ui)
     feature('ButtonMounts','四键定位座与压板螺柱 · 并入 P1',Part.makeCompound(button_mounts),TEAL,supports)
-    loc = deck(48,18)
-    knob = Part.makeCylinder(11.8,8.2,loc+normal*.45,normal).cut(
-        Part.makeCylinder(5.8,5.3,loc+normal*3.55,normal))
-    feature("Knob","音量旋钮 · 内凹",knob,KNOB_BLACK,ui)
-    feature("Encoder","音量电位器轴 · 安装预留",Part.makeCylinder(4,7,loc-normal*6.55,normal),SILVER,hardware)
-    # Existing amplifier potentiometer relocated behind the original outer knob.
-    # Body dimensions are a design allowance, not a measurement or wiring pinout.
-    pot_body=box(-7,6.55,-7,14,12,14)
-    pot_body.Placement=A.Placement(loc,A.Rotation(Y,normal*-1)).multiply(pot_body.Placement)
-    feature("VolumePot","分离音量电位器 · 14×14×12 预留（待测）",pot_body,RUBBER,hardware)
+    for key,name,label,color,parent in (
+        ('knob','Knob','音量旋钮 · 黑白双色／下沉细十字／压配',KNOB_BLACK,ui),
+        ('shaft','Encoder','B50K · Ø6.8 螺纹／Ø5.8 花轴／9.8 六角螺母',SILVER,hardware),
+        ('body','VolumePot','B50K 双联带开关 · 9.5×11.2×14.5／轴偏置 2.7',RUBBER,hardware)):
+        shape=volume[key].copy();shape.Placement=volume_pose.multiply(shape.Placement)
+        obj=feature(name,label,shape,color,parent)
+        if name=='Knob':
+            mark=shape.Solids[1]
+            obj.ViewObject.DiffuseColor=[WHITE if any(face.isSame(f) for f in mark.Faces) else KNOB_BLACK
+                                        for face in shape.Faces]
+        obj.addProperty('App::PropertyString','FitStatus','Volume control')
+        obj.FitStatus='User dimensions; six crush ribs have intentional 0.1 mm radial interference with the spline envelope. Printed retention and pin footprint unverified.'
 
     # Rear vertical drive opens into the slot behind the handle.
     dw,dt,dh = DRIVE

@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-10",
+  "source": "User-provided supplier image and dimensions; Taobao page not independently readable",
+  "url": "https://item.taobao.com/item.htm?id=630267024761&skuId=4742190163296",
+  "image": "supplier-reference.png",
+  "bytes": 251034,
+  "sha256": "a63ba205c4ecb14b039ae6f4ad83720c0aa350d55a2e9e0b8337e65cc5641cb0",
+  "body_length_width_axial_height_mm": [
+    11.2,
+    9.5,
+    14.5
+  ],
+  "shaft_total_length_mm": 15,
+  "thread_length_mm": 5,
+  "thread_diameter_mm": 6.8,
+  "rotating_shaft_length_approx_mm": 10,
+  "rotating_shaft_diameter_mm": 5.8,
+  "pin_extension_mm": 3.5,
+  "shaft_axis_to_pin_side_wall_mm": 2.7,
+  "nut_across_flats_mm": 9.8,
+  "nut_thickness_mm": 1.9,
+  "physical_fit_verified": false,
+  "characteristics_image": {
+    "file": "supplier-characteristics.png",
+    "bytes": 2268211,
+    "sha256": "690035d684859bd6006d9dc622a455ee09c09d0893b8de31310fa72fa1523b62",
+    "source": "Additional user-provided supplier characteristics image on 2026-11-10",
+    "shown_total_resistance": "10K",
+    "selected_part": "B50K",
+    "sku_applicability_verified": false,
+    "switch_rating_shown": "1 A at DC 12 V",
+    "notes": [
+      "Do not replace selected 50K with sheet 10K or silently transfer ratings between variants.",
+      "Original image retained; shaft push/pull strength row uses kgf.cm, requiring supplier clarification."
+    ]
+  }
+}

@@ -1,0 +1,200 @@
+{
+  "model_sha256": "03003ef9826f330a439a5d65ae9a22fef7aab73ffc10c6200de9ec1f7a7e5a65",
+  "build_sha256": "d8f8a1ba02681b8508df661601cfb4d7f64306586d7377cd402892c88c975e50",
+  "white_mark_size_mm": [
+    0.7,
+    2.2,
+    0.6
+  ],
+  "white_faces_zero_based": [
+    96,
+    97,
+    98,
+    99,
+    100,
+    101
+  ],
+  "saved_gui_material_array_verified": true,
+  "gui_reopen_verified": false,
+  "materials": {
+    "1": "PLA Basic Black #000000",
+    "2": "PLA Lite White #FFFFFF"
+  },
+  "orientation": "Disk on bed; index face up",
+  "overlap_mm3": 0.0,
+  "assembled_single_connected_solid": true,
+  "printer_contacted": false,
+  "physical_print_test": false,
+  "volumes": [
+    {
+      "name": "Knob_Black",
+      "material": 1,
+      "closed_mesh": true,
+      "facets": 21124,
+      "volume_mm3": 3286.38568599766
+    },
+    {
+      "name": "Knob_WhiteIndex",
+      "material": 2,
+      "closed_mesh": true,
+      "facets": 12,
+      "volume_mm3": 0.9240000000000006
+    }
+  ],
+  "previous_model_sha256": "6eb82d8a43668dcf0f2d6537d5367b618900118fa0fe19d1f1e4de42e78b39fc",
+  "unchanged_finished_shape_brep": {
+    "FrontShell": true,
+    "RearShell": true,
+    "Feet": true,
+    "Window": true,
+    "StatusArt": true,
+    "PlayPauseKey": true,
+    "EjectKey": true,
+    "PrevKey": true,
+    "NextKey": true,
+    "ButtonRetainer": true,
+    "DisplayRetainer": true,
+    "SpeakerCarrier": true,
+    "LDriver": true,
+    "RDriver": true,
+    "PlayPauseSwitch": true,
+    "EjectSwitch": true,
+    "PrevSwitch": true,
+    "NextSwitch": true,
+    "Encoder": true,
+    "VolumePot": true,
+    "Drive": true,
+    "Bridge": true,
+    "DisplayPCB": true,
+    "DisplayHeader": true,
+    "Amp": true,
+    "AmpChip": true,
+    "MCU": true,
+    "MCUChip": true,
+    "DAC": true,
+    "DACChip": true,
+    "Battery": true
+  },
+  "change_outside_marker_mm3": 0.0,
+  "file": "Discora-knob-black-white.3mf",
+  "file_sha256": "a3fc79eb3dc7199c01381ecd94f5840487ee44fd486bb0516ba19db2b070deb0",
+  "all_pass": true,
+  "slicing": {
+    "exit_code": 0,
+    "version": "02.09.01.70",
+    "layer_height_mm": 0.12,
+    "first_layer_height_mm": 0.12,
+    "layers": 116,
+    "estimated_time": "48m 42s",
+    "filament_g_including_purge": [
+      6.58,
+      2.92
+    ],
+    "white_toolpaths_by_height": {
+      "13.44": {
+        "extrusion_moves": 5,
+        "xy_bounds_mm": [
+          [
+            131.253,
+            132.41
+          ],
+          [
+            119.859,
+            121.641
+          ]
+        ]
+      },
+      "13.56": {
+        "extrusion_moves": 5,
+        "xy_bounds_mm": [
+          [
+            131.253,
+            132.41
+          ],
+          [
+            119.859,
+            121.641
+          ]
+        ]
+      },
+      "13.68": {
+        "extrusion_moves": 5,
+        "xy_bounds_mm": [
+          [
+            131.253,
+            132.41
+          ],
+          [
+            119.859,
+            121.641
+          ]
+        ]
+      },
+      "13.8": {
+        "extrusion_moves": 5,
+        "xy_bounds_mm": [
+          [
+            131.253,
+            132.41
+          ],
+          [
+            119.859,
+            121.641
+          ]
+        ]
+      },
+      "13.92": {
+        "extrusion_moves": 5,
+        "xy_bounds_mm": [
+          [
+            131.253,
+            132.41
+          ],
+          [
+            119.859,
+            121.641
+          ]
+        ]
+      }
+    },
+    "gcode_sha256": "6059060b9e8738092e9baf9bf5f8f5839e9d924013153e9e20c0ddf4cb48b576",
+    "vendor_T65535_parser_notice": true,
+    "printer_contacted": false,
+    "physical_print_test": false,
+    "profile_names": {
+      "machine": "Bambu Lab P2S 0.4 nozzle",
+      "process": "0.12mm High Quality @BBL P2S",
+      "black": "Bambu PLA Basic @BBL P2S",
+      "white": "Bambu PLA Lite @BBL P2S 0.4 nozzle"
+    },
+    "process_overrides": {
+      "initial_layer_print_height": "0.12",
+      "wall_generator": "arachne",
+      "wall_loops": "3",
+      "sparse_infill_density": "15%",
+      "sparse_infill_pattern": "gyroid",
+      "enable_support": "1",
+      "support_type": "tree(auto)",
+      "support_on_build_plate_only": "1",
+      "support_threshold_angle": "30",
+      "support_top_z_distance": "0.2",
+      "brim_type": "outer_only",
+      "brim_width": "5",
+      "enable_prime_tower": "1"
+    },
+    "profile_sha256": {
+      "machine": "b7058cfe1a3d4cd505589443bc5b55d297f07bb973777a7fc67de96f8fe35a9b",
+      "process": "f3745b6909477eac43402c4695bf4de4c6dd3dc88b6850752937b66f0708b2d5",
+      "black": "d7a0056e88e79929450d1ad42d5ac4d4172882791955a113cd8212afe7c4ae87",
+      "white": "420341c8091f9b7bb2b86d2f739abd6af4065b93463bb65cb159a400862cf9f7"
+    }
+  },
+  "bambu_project": {
+    "file": "Discora-knob-bambu.3mf",
+    "sha256": "81ae095919ef7021a1ded67ccaa0d9991999450712c9fb3961db66a0def79be0",
+    "object_count": 1,
+    "volumes_per_object": 2,
+    "material_assignment_verified": true,
+    "mesh_repair_count": 0
+  }
+}

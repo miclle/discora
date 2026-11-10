@@ -16,11 +16,15 @@
 
 **2026-11-10 前壳配色：**P1 一体前壳（正面板、内凹护网、前斜面和提手）采用[用户指定耗材](https://item.jd.com/10161064876888.html)的拓竹 PLA Lite 橙色 16301，CAD 色值为 `#FF671F`（RGB 255/103/31），来自 Bambu Studio 的 `filaments_color_codes.json`。屏幕颜色仅为参考，实际耗材受照明与打印表面影响。四个独立键帽与前壳同用 PLA Lite 橙色；音量旋钮采用用户已有的拓竹 PLA Basic 黑色 10101（`#000000`）。
 
+**2026-11-10 音量适配：**按用户选定的 [B50K 双联带开关电位器](../Potentiometer-B50K-Switch/README.md)调整前壳：Ø7.2 孔、偏心内槽及 2 mm 夹持面；外侧增加底径 Ø24.8、深 1.6 的凹位。六角螺母对边 9.8、厚 1.9。按后续反馈将十字臂宽从 9 收至 6.8、跨度改为与底盘直径一致的 24；Ø24×1.4 底盘下沉 1，顶面高出面板 12.9。取消侧螺钉，采用六条筋尖内切直径 5.6 的压配筋咬合 Ø5.8 花轴，实际松紧和耐久需试片确认。详见 [ADR-0032](../../docs/decisions/0032-b50k-cross-knob.md)、[检查报告](volume-checks.json)及[局部预览](volume-detail.png)。
+
+**2026-11-11 旋钮白色标记：**保留 0.7×2.2 mm 指示条，改为深 0.6 mm、与顶面齐平的白色实体。`export-dual-color-knob.py` 生成一个旋钮、两个材料区域的 3MF：材料 1 为 PLA Basic 黑色，材料 2 为 PLA Lite 白色。`slice-dual-color-knob.py` 使用本机 P2S 0.4 mm／0.12 mm 配置完成验证，标记有 5 层白色路径；整盘预估 48 分 42 秒，含支撑和换色消耗约 9.50 g。见 [双色旋钮检查](dual-color-knob-checks.json)；实际遮盖、粘结和压配仍待打印确认。
+
 **白色功能标记：**四个键帽均为橙色键体加白色符号的双色打印件。白色符号深 0.6 mm、与键面齐平，最细笔画约 0.8 mm；每键保留两个材料区域，白色区域含 2 或 3 个连通分量，与橙色共同打印，无需另装小嵌件。`export-dual-color-keys.py` 输出四键一盘的双色 3MF（材料 1：PLA Lite 橙色，材料 2：PLA Lite 白色），保持符号面朝上、止退沿贴板。普通 STL 只能导出单色包络，不能保留双色分配。
 
 本机 Bambu Studio 02.09.01.70 使用 P2S 0.4 mm / 0.12 mm 配置完成双色切片：每键均有 5 层白色路径，共 60 层；整盘预估 34 分 20 秒，橙色 4.93 g、白色 2.49 g（含换色与擦拭塔消耗）。这是本地切片证据，未发送打印；白色遮盖、粘结和按压配合仍需实物确认。详见 [dual-color-key-checks.json](dual-color-key-checks.json)。
 
-前次双色键帽调整仅将四个键帽变为多材料复合体，其余 88 个形状资源在该阶段与原验收版本逐字节一致，键帽外包络和安装位置不变；四键对其余装配件无超过 0.001 mm³ 的碰撞。配色阶段曾关闭并重新打开验证橙白分面颜色，详见 `appearance-checks.json`。本次提手加高后的整机、正面、侧面、操控区、退碟、侧剖及图册直接从当前保存模型生成。其它局部图保留前次结果，相关几何未变。FreeCAD GUI 接口当前不可连接；本次保留原 GUI 材质资源并核对双色键帽面序，未完成交互界面读回。
+前次双色键帽调整仅将四个键帽变为多材料复合体，其余 88 个形状资源在该阶段与原验收版本逐字节一致，键帽外包络和安装位置不变；四键对其余装配件无超过 0.001 mm³ 的碰撞。配色阶段曾关闭并重新打开验证橙白分面颜色，详见 `appearance-checks.json`。本次音量适配后的整机、正面、侧面、操控区、退碟、侧剖及图册直接从当前保存模型生成。其它局部图保留前次结果，相关几何未变。FreeCAD GUI 接口当前不可连接；本次保留其它 GUI 材质资源，更新并解析核对旋钮的黑白分面材质数组，核对双色键帽面序，未完成交互界面读回。
 
 **FCStd 配色保存：**无界面保存后补回 GUI 数据时，材质资源必须按 `GuiDocument.xml` 的引用顺序写入；不能用集合的无序遍历写入压缩包，否则 FreeCAD 会跳过颜色资源。`repair-gui-order.py 输入.FCStd 输出.FCStd` 可修复顺序，并逐项核对包内数据完全一致。修复后须在 FreeCAD GUI 读回颜色、关闭并重新打开核对；外部渲染图不能代替此项验证。当前记录见 [appearance-checks.json](appearance-checks.json)。
 
@@ -72,6 +76,7 @@
 | 按键安装 | 12.4 方孔容纳 12×12×3.2 本体；凸起高 2.8；镂空支架／双点支承，两侧开口供直接焊线；支承及焊线配合待测 |
 | OLED | PCB 35.4 × 33.5 × 1.2；玻璃 34.5 × 23 × 1.4；有效区 29.42 × 14.7；外口 32.82 × 18.1、内喉口 30.42 × 15.7，倒角深 0.8 |
 | OLED 安装 | 有效区基准 X=0、Y=18、Z≈177.789；玻璃内退 1.0；四孔 Ø3、孔距 30.4 × 28.5；Ø2.6 定位柱与可拆压框，2 枚名义 M2×6 |
+| 音量组件 | B50K 主体 9.5×11.2×14.5；轴偏置 2.7；壳孔 Ø7.2、局部壁厚 2；旋钮 Ø24、下沉 1、顶面距面板 12.9、六筋压配 |
 | 电池 | 112 × 70 × 20，X=−56…56、Y=6…76、Z=8…28；前后壁各 1、托盘侧隙各 1、距声腔底 3.5 |
 | 电池绑带槽 | 四处，X=−61…−58 / 58…61，Y=24…32 / 44…52；绑带未建模 |
 | 前壳连接孔 | 正面无螺丝孔；后壁 X=±67.4、Z=18，后斜面 X=±29、Z=179；Ø4.4 深孔／Ø2.2 通孔／前柱 Ø1.6 盲孔 |
@@ -87,12 +92,13 @@
 - [port-reinforcement-checks.json](port-reinforcement-checks.json)：四点连接、饰片厚度、局部新增材料无干涉和开口面积检查；仅为几何结果，不代替强度与声学实测。
 - [side-port-checks.json](side-port-checks.json)：一体后壳有效且仅含一个实体；侧孔归属、旧螺孔补实、0.3 mm 轴向间隙和镜像检查通过，其余 31 个成品对象几何保持。
 - [handle-checks.json](handle-checks.json)：提手加高的改动边界、31 个成品不变、提手镜像及键帽面序检查。
-- [validation.json](validation.json)：提手加高后的结构检查；保存后重新打开，32 个成品对象有效，三主体各为一个连续实体，两两交叠不超过 0.001 mm³；退碟、侧向空气通路、接头设计预留、关键净距及提手检查通过。
-- 左右导音孔、侧壳开口及提手中线读回均为 Y=40。8 项镜像差集为零，4 组原生右件镜像关系有效。前壳仅排除操控开孔、四键定位座及其镜像区域；后壳仅排除内部 DAC 支撑及其镜像；支架检查声学下半部至 Z=120.5。[grille-change-checks.json](grille-change-checks.json)保留此前护网调整的历史比较，不能当作当前 OLED 版的摘要；OLED 阶段曾改变五个既有成品对象并新增压框；当前侧孔改版的几何比较见 `side-port-checks.json`。四键替换旧单键，历史单键差集不再适用。
+- [volume-checks.json](volume-checks.json)：音量元件尺寸、螺母／工具／焊线预留、旋钮整圈包络与拆卸检查，28 个其它成品几何保持。
+- [validation.json](validation.json)：音量适配后的结构检查；保存后重新打开，32 个成品对象有效，三主体各为一个连续实体，除报告单列的六条压配筋／花轴包络名义过盈外，两两交叠不超过 0.001 mm³；退碟、侧向空气通路、接头设计预留、关键净距及提手检查通过。
+- 左右导音孔、侧壳开口及提手中线读回均为 Y=40。8 项镜像差集为零，4 组原生右件镜像关系有效。前壳仅排除操控开孔（含电位器内侧沉槽）、四键定位座及其镜像区域；后壳仅排除内部 DAC 支撑及其镜像；支架检查声学下半部至 Z=120.5。[grille-change-checks.json](grille-change-checks.json)保留此前护网调整的历史比较，不能当作当前 OLED 版的摘要；OLED 阶段曾改变五个既有成品对象并新增压框；当前侧孔改版的几何比较见 `side-port-checks.json`。四键替换旧单键，历史单键差集不再适用。
 - [oled-checks.json](oled-checks.json)：四孔、玻璃深度、沉槽／倒角、指定方向无遮挡、定位座原生镜像及压框、接头／插线预留及螺钉头／工具通路通过；前壳卸下后的压框、模组两步取出路径分别按 0.5 mm 检查 51 个姿态。接头截面、线材、螺钉与打印配合仍待实测。
 - [button-checks.json](button-checks.json)：核对四键孔径、键帽／开关局部包络及 0…0.8 mm 的五个键帽姿态。新增八个引脚侧连续开口、中央避让与双点支承检查；开口与实体、DAC 输出接头预留无交叠。真实圆头直径、行程、脚距和底面承压配合未验收。
 - [assembly-paths.json](assembly-paths.json)：支架、电池采用连续保守扫掠，侧孔保持为后壳固定部分；光驱从前方侧转拆出，其平移段连续保守扫掠、转动段按 0.5° 步长检查实际 B-rep；前壳卸背面螺钉后向前退出，按 1 mm 步长检查。均以前壳按顺序拆除、紧固件和绑带卸下、导线断开为前提。
-- [print-checks.json](print-checks.json)：提手加高后的单色切片记录，四键沿用独立双色验收。十个闭合网格均能在 256³ 空间内放置并留 5 mm brim，Bambu Studio 的 P2S / 0.4 mm 配置完成四盘 PLA 切片。切片不等于实际成型或承载试验。
+- [print-checks.json](print-checks.json)：音量适配后的单色切片记录，四键与旋钮分别使用独立双色记录。十个闭合包络网格均能在 256³ 空间内放置并留 5 mm brim，Bambu Studio 的 P2S / 0.4 mm 配置完成四盘 PLA 切片。切片不等于实际成型或承载试验。
 
 接头检查为功放左右各 15、主控两端各 5、DAC 两端 5 / 10 mm 的暂定区域及旋钮线束路径；OLED 另检查图纸 11.3 mm 深度和针尖后 6 mm 插线预留，并检查一体支架是否侵入；不涵盖尚未测量的桥接转接线、电池引线、充电稳压板和实际弯折半径。声腔连通不等于声学调谐或气密验证。提手层间强度、支撑清理、螺钉反复拆装寿命及 PLA 热变形需试样验证。
 
@@ -100,8 +106,10 @@
 
 在 FreeCAD 执行 [build.FCMacro](build.FCMacro) 重建。隐藏的 `Construction` 组保留草图、布尔源件和原生镜像；三个成品实体记录 `ConstructionObjects`，由脚本融合生成。**修改隐藏源件后应重新运行建模脚本**；三主体不是会随源件自动更新的实时融合特征。`RPort`、`RDriver`、`RChamber`、`RDriverFrame` 和 `DisplayMountRight` 保留原生镜像。
 
+音量适配的前后对照使用 [check-volume.py](check-volume.py) `--baseline <调整前.FCStd>`；实测之前用 5.5／5.6／5.7 压配筋试片确认松紧；名义过盈不等同于保持力实测。
+
 提手调整的前后对照使用 [check-handle.py](check-handle.py) `--baseline <调整前.FCStd>`；基准文件应在修改前保存到忽略目录。
 
-执行 [validate.FCMacro](validate.FCMacro) 重新读回检查，再运行 [check-side-ports.py](check-side-ports.py)（日常复查用 `--output tmp/side-port-current-checks.json`，保留已提交的基准比较证据）、[check-oled.py](check-oled.py)、[check-fasteners.py](check-fasteners.py)、[check-buttons.py](check-buttons.py)、[check-assembly.py](check-assembly.py)、[export-print-parts.py](export-print-parts.py) 与 [slice-print-parts.py](slice-print-parts.py)。OLED 版已经改变屏幕几何，不应再传入旧屏幕模型运行历史“操控不变”或 Z 上移比较；`check-oled.py --baseline` 接受本次适配前模型，核对其余 28 个成品对象不变。双色键帽另外运行 [export-dual-color-keys.py](export-dual-color-keys.py)；常规单色切片脚本排除这四个键帽，避免丢失材料分配。临时 STL、3MF、配置和 G-code 放在被忽略的 `tmp/`，仅保存检查摘要；切片脚本不连接或发送到打印机。
+执行 [validate.FCMacro](validate.FCMacro) 重新读回检查，再运行 [check-side-ports.py](check-side-ports.py)（日常复查用 `--output tmp/side-port-current-checks.json`，保留已提交的基准比较证据）、[check-oled.py](check-oled.py)、[check-fasteners.py](check-fasteners.py)、[check-buttons.py](check-buttons.py)、[check-assembly.py](check-assembly.py)、[export-print-parts.py](export-print-parts.py) 与 [slice-print-parts.py](slice-print-parts.py)。OLED 版已经改变屏幕几何，不应再传入旧屏幕模型运行历史“操控不变”或 Z 上移比较；`check-oled.py --baseline` 接受本次适配前模型，核对其余 28 个成品对象不变。双色键帽另外运行 [export-dual-color-keys.py](export-dual-color-keys.py)；旋钮另外运行 [export-dual-color-knob.py](export-dual-color-knob.py) 与 [slice-dual-color-knob.py](slice-dual-color-knob.py)；常规单色切片脚本排除四个键帽和旋钮，避免丢失材料分配。临时 STL、3MF、配置和 G-code 放在被忽略的 `tmp/`，仅保存检查摘要；切片脚本不连接或发送到打印机。
 
 [render.FCMacro](render.FCMacro) 从保存模型生成[整机](preview.png)、[正面](front.png)、[护网细节](grille-detail.png)、[侧面](side.png)、[操控区](controls.png)、[后上方碟口](topload.png)、[光盘退出示意](disc-path.png)、[移开前壳的内部](layout.png)、[OLED 安装座内侧](oled-mount.png)、[正前方 OLED 细节](oled-front-detail.png)和[真实侧剖](section.png)。光盘参考对象默认隐藏，不代表实际退出行程。彩色图册更新步骤见[图册说明](../../docs/enclosure-drawings.md)。

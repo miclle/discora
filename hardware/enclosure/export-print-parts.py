@@ -40,7 +40,7 @@ def main():
             'physical_print_test':False,'parts':{}}
     for name,rotation in rotations.items():
         shape=doc.getObject(name).Shape.copy()
-        if name in ('PlayPauseKey','EjectKey','PrevKey','NextKey'):
+        if name in ('PlayPauseKey','EjectKey','PrevKey','NextKey','Knob'):
             # STL loses material assignments; the dedicated 3MF retains them.
             shape=shape.Solids[0].multiFuse(shape.Solids[1:]).removeSplitter()
         assert shape.isValid() and len(shape.Solids)==1,name
@@ -60,6 +60,8 @@ def main():
             'stl_sha256':hashlib.sha256(target.read_bytes()).hexdigest()}
         if name.endswith('Key'):
             report['parts'][name]['color_print_source']='export-dual-color-keys.py; STL is a single-material envelope'
+        if name=='Knob':
+            report['parts'][name]['color_print_source']='export-dual-color-knob.py; STL is a single-material envelope'
         print('MESH_OK',name,mesh.CountFacets,flush=True)
     A.closeDocument(doc.Name)
     (args.output/'mesh-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
