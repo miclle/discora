@@ -18,7 +18,7 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = '0013eea8732dbd1725533b5175b80ad0e8cd4d1a6d52db49556d1610d12cabd8'
+ANNOTATED_MODEL_SHA256 = 'e9cc3ffd1e33dfd2ffecf19e1d6f2b694a027e31021bc9adc5b356991a9dbe37'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
@@ -38,13 +38,14 @@ def main():
         if hashlib.sha256((ROOT/file).read_bytes()).hexdigest()!=data[key]:
             raise SystemExit('Source changed; rerun export-drawings.py: '+file)
     assert all(data['checks'].values())
-    geometry_revisions={data['sha256']}
     appearance=json.loads((ROOT/'appearance-checks.json').read_text())
     update=appearance.get('color_update',{})
-    if (appearance['model_sha256']==data['sha256']
-            and update.get('document_and_geometry_resources_byte_identical')):
-        # Material-only updates preserve the baseline geometry and slicing evidence.
-        geometry_revisions.add(update['baseline_sha256'])
+    def evidence_matches_geometry(report,owners):
+        if report['model_sha256']==data['sha256']:return True
+        # Reuse historical evidence only for explicitly unchanged objects.
+        return (appearance['model_sha256']==data['sha256']
+                and report['model_sha256']==update['baseline_sha256']
+                and set(owners)<=set(update.get('unchanged_geometry_objects',[])))
     side=json.loads((ROOT/'drawings'/'side-profile.json').read_text())
     assert side['sha256']==data['sha256']
     color_data=json.loads((ROOT/'drawings'/'color-render.json').read_text())
@@ -240,6 +241,7 @@ def main():
     dv(min(q[1] for q in left),max(q[1] for q in left),left[0][0],29,'20.85')
     notes(34,74,[
         '四键孔 Ø10.5；键帽 Ø10，露出 1.2；背面止退沿 Ø12.8。',
+        '橙白双色键帽：白色符号深 0.6，与键面齐平；分别指定两种 PLA Lite。',
         'OLED 外口 32.82 × 18.1，倒角深 0.8；玻璃内退 1.0，详见第 6 页。',
         '旋钮轴孔 Ø8.8；旋钮外径 Ø23.6，高 8.2（沿法向）。',
         '键中心 X=-59 / -41、Y=9 / 26；屏与旋钮 Y=18、X=0 / 48。',
@@ -252,7 +254,7 @@ def main():
 
     page(3,'整机爆炸图 / 外壳与内部','两层展开并排对照 · 相同 CAD 几何与展示位移，编号对应第 5 页对象清单','爆炸图 NTS（非比例装配距离）')
     for i,(color,label) in enumerate([
-        ('#ff671f','P1 橙色前壳'),('#8e9089','按键 / 旋钮'),('#16a9a4','内部支架'),('#4d5155','深色结构 / 单元'),
+        ('#ff671f','前壳 / 橙色键帽'),('#000000','黑色旋钮'),('#16a9a4','内部支架'),('#4d5155','深色结构 / 单元'),
         ('#bac0c4','光驱 / 银色包络'),('#39775b','PCB'),('#3c6da9','5600 mAh 平排电池')]):
         sx=14+i*57
         c.setFillColor(HexColor(color));c.rect(sx*mm,258*mm,3*mm,3*mm,fill=1,stroke=0)
@@ -320,7 +322,7 @@ def main():
         '喇叭未建盆架、磁铁和安装孔；显示内容为示意，电子板元件与接头高度含设计预留。',
         '剖图使用实际实体裁切、隐藏线消除；未施加材料剖面线，不能由线型判断材质。',
         '三个主体及拆装路径已做 CAD 检查、PLA 切片；仍需配合试片、螺钉试装、强度和走线实测。',
-        '本次仅改前壳、键帽与旋钮配色；几何与原验收模型逐字节一致，见 appearance-checks.json。静态通过不等于实物验收。',
+        '本次四键改为双色实体，其余 88 个形状不变；按键已独立切片验证，实物配合与白色遮盖效果仍待验。',
     ],gap=8,size=9)
     c.showPage()
 
@@ -361,7 +363,9 @@ def main():
             text(x+193,y-3.5,' × '.join(fmt(n) for n in obj['size']),7.5,INK,'right')
     text(12,127,'PLA 打印：3 主体 + 2 侧孔 + 4 键帽 + 焊线支架 + 旋钮 + OLED 压框 = 12 件',11,TEAL)
     printing=json.loads((ROOT/'print-checks.json').read_text())
-    assert printing['model_sha256'] in geometry_revisions,'Print report and drawing geometry differ'
+    assert evidence_matches_geometry(printing,['FrontShell','RearShell','SpeakerCarrier']),'Main-body print geometry differs'
+    keys=json.loads((ROOT/'dual-color-key-checks.json').read_text())
+    assert keys['model_sha256']==data['sha256'] and keys['slicing']['exit_code']==0
     text(12,118,'用户设备 P2SC · 按 P2S 配置 / 256³ 空间 / 0.4 喷嘴 / 0.20 层高 / 3 壁 / 15% 填充 / 树状支撑',9)
     for i,(name,label,pose) in enumerate([
         ('FrontShell','P1 前壳','正面朝下'),('RearShell','P2 后壳','背面朝下'),
@@ -374,7 +378,7 @@ def main():
         '支架拆卸前先拔出两侧孔件、断线并卸 4 螺钉；支架向前抽出，光驱先前移 11.5，再侧转 -30°并前移 15.75 后抽出。',
         '电池松开绑带并断线后向前取出；装配按反向顺序，侧孔最后装入并固定。',
         '前壳路径按 1 mm 抽样；光驱转动按 0.5° 抽样，平移及其余路径连续保守扫掠。实物未验收。',
-        '四键双点支承、实际焊线及行程待测；0.2 喷嘴未切片。喇叭孔位、密封、螺钉配合及提手强度待验。',
+        '四键双色：0.4 喷嘴 / 0.12 层高；白色 0.6 深；使用双色 3MF。实际色彩、配合与按压行程待测。',
     ],gap=7,size=8.5)
     text(12,27,'FCStd SHA-256: '+data['sha256'],8,MUTED)
     text(408,27,'来源：Discora.FCStd / build.FCMacro / drawings/geometry.json',8,MUTED,'right')
@@ -382,7 +386,7 @@ def main():
 
     page(6,'OLED 沉槽与可拆压框','依据供应商结构图；玻璃面向外移 4.4；沉槽、倒角与压框来自保存 CAD；有效区虚线标注','模组正视 4:1；安装中剖 3:1')
     oled=json.loads((ROOT/'oled-checks.json').read_text())
-    assert oled['model_sha256'] in geometry_revisions and oled['all_pass']
+    assert evidence_matches_geometry(oled,['FrontShell','Window','DisplayPCB','DisplayHeader','DisplayRetainer']) and oled['all_pass']
     p=view('oled-module',38,86,4)
     text(109,243,'模组正面 · 排针朝斜面上方',11,TEAL,'center')
     lo,hi=p(-17.7,-18.8),p(17.7,14.7)

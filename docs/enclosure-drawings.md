@@ -86,13 +86,14 @@ P1 前壳合并前斜面、提手、格栅、屏幕座和四键定位座；P2 �
 ## 版本与证据
 
 - 模型来源：[Discora.FCStd](../hardware/enclosure/Discora.FCStd)，图册日期 2026-11-10。
-- 模型 SHA-256：`0013eea8732dbd1725533b5175b80ad0e8cd4d1a6d52db49556d1610d12cabd8`。
-- 本次仅将 P1 一体前壳改为拓竹 PLA Lite 橙色 16301（`#FF671F`），四个键帽与音量旋钮统一采用用户已有的拓竹 PLA Basic 灰色 10103（`#8E9089`）。已在 FreeCAD 1.1.4 关闭并重新打开验证颜色；文档与几何资源逐字节保持，92 个形状读回一致，因此沿用已审阅的尺寸、投影与引线，重新生成填色层及图册。此前几何验收记录仍对应改色前模型摘要，等价性证据见 `appearance-checks.json`。
+- 模型 SHA-256：`e9cc3ffd1e33dfd2ffecf19e1d6f2b694a027e31021bc9adc5b356991a9dbe37`。
+- P1 前壳及四键采用 PLA Lite 橙色 16301（`#FF671F`），旋钮采用 PLA Basic 黑色 10101（`#000000`）；白色符号为独立 PLA Lite 实体，深 0.6 mm、与键面齐平。四个键帽的复合形状已更新，其余 88 个形状资源与原验收版本逐字节一致；键帽外包络、安装位置及外壳对称性保持。已在 FreeCAD 1.1.4 关闭并重开验证各材料面的颜色，重新导出当前几何投影和填色图。
+- [dual-color-key-checks.json](../hardware/enclosure/dual-color-key-checks.json)：四键的橙白网格闭合、材料体积不重叠、合并为连续实体；Bambu Studio 识别四个对象、每个两个材料区域，并以 0.4 mm 喷嘴 / 0.12 mm 层高切片。每键均生成 5 层白色路径；白色遮盖和实际成型未验。其余装配碰撞与历史几何等价性见 `appearance-checks.json`。
 - 出图检查核对整机 142/80/216.645、提手净开口 90/16、正面圆孔直径 130、护网内凹 2.5、厚 2.5、碟口水平投影 124/3.2、屏窗外口 32.82/18.1、内喉口 30.42/15.7、电池 112/70/20，以及光驱、碟口坐标和左右侧孔 Y=40 与提手中线对齐；读回壳体截面、外壳底面和脚垫底面核对双基准高度。最终前壳在 Y=0…2.5 保留完整 Ø130 圆口，检查该区域无材料侵入。
-- [validation.json](../hardware/enclosure/validation.json)：34 个成品对象有效，三个主体各一个实体，两两无超过 0.001 mm³ 的交叠；退碟扫掠、侧通路、接头预留及关键净距通过；8 项镜像差集为零，4 组原生镜像有效；OLED 有效区沿用 X=0、Y=18 的外斜面基准，旋钮与四键位置保持；对称检查排除四键安装座及操控开孔。
+- [validation.json](../hardware/enclosure/validation.json)：双色改版前的结构记录，34 个成品对象有效，三个主体各一个实体，两两无超过 0.001 mm³ 的交叠；退碟扫掠、侧通路、接头预留及关键净距通过；8 项镜像差集为零，4 组原生镜像有效；OLED 有效区沿用 X=0、Y=18 的外斜面基准，旋钮与四键位置保持；对称检查排除四键安装座及操控开孔。
 - [oled-checks.json](../hardware/enclosure/oled-checks.json)：孔位、玻璃深度、沉槽／倒角、选定正视及斜视方向无遮挡、定位柱与压框、左右对称、接头／插线、工具通路及先卸压框再取屏的两步路径通过；实际模块、线材和螺钉配合待验。
 - [assembly-paths.json](../hardware/enclosure/assembly-paths.json)：前壳卸背面螺钉后向前退出，按 1 mm 步长检查；支架、电池和侧孔用连续保守扫掠；光驱改为前向侧转拆出，平移段连续保守扫掠，转动段按 0.5° 步长采样。均以前置拆卸、卸紧固件及断线为条件；详细顺序和限制见[打印与装配说明](enclosure-printing.md)。
-- [print-checks.json](../hardware/enclosure/print-checks.json)：十二个闭合网格适合用户给定的 256³ 空间，Bambu Studio 使用 P2S / 0.4 mm 配置完成四盘 PLA 切片；未用 0.2 mm 喷嘴切片，未实物打印。
+- [print-checks.json](../hardware/enclosure/print-checks.json)：双色改版前的单色记录，三主体几何保持有效，当前四键另用双色验收。原十二个闭合网格适合用户给定的 256³ 空间，Bambu Studio 使用 P2S / 0.4 mm 配置完成四盘 PLA 切片；未用 0.2 mm 喷嘴切片，未实物打印。
 - 图册只保留这一份彩色 PDF，共 6 页 A3 横向，已逐页渲染检查文字、标注及爆炸编号；实体颜色沿用 CAD，线图和填色共享同一模型及投影。颜色、网格精度及输出尺寸见 [color-render.json](../hardware/enclosure/drawings/color-render.json)。临时渲染和切片在被忽略的 `tmp/`，未向打印机发送任务。
 
 四键设计与尺寸假设见 [ADR-0023](decisions/0023-four-button-front-panel.md)，[button-checks.json](../hardware/enclosure/button-checks.json)记录孔径、局部尺寸和键帽活动余量；引脚面照片和直接焊线要求对应的镂空支架见 [ADR-0025](decisions/0025-open-button-wire-retainer.md)；精确脚距、实际行程和支承面配合待实测。

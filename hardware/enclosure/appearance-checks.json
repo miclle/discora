@@ -28,54 +28,54 @@
     },
     "PlayPauseKey": {
       "actual_rgba": [
-        0.5568627715110779,
-        0.5647059082984924,
-        0.5372549295425415,
+        1.0,
+        0.40392157435417175,
+        0.12156862765550613,
         1.0
       ],
       "expected_rgb": [
-        0.5568627450980392,
-        0.5647058823529412,
-        0.5372549019607843
+        1.0,
+        0.403921568627451,
+        0.12156862745098039
       ]
     },
     "EjectKey": {
       "actual_rgba": [
-        0.5568627715110779,
-        0.5647059082984924,
-        0.5372549295425415,
+        1.0,
+        0.40392157435417175,
+        0.12156862765550613,
         1.0
       ],
       "expected_rgb": [
-        0.5568627450980392,
-        0.5647058823529412,
-        0.5372549019607843
+        1.0,
+        0.403921568627451,
+        0.12156862745098039
       ]
     },
     "PrevKey": {
       "actual_rgba": [
-        0.5568627715110779,
-        0.5647059082984924,
-        0.5372549295425415,
+        1.0,
+        0.40392157435417175,
+        0.12156862765550613,
         1.0
       ],
       "expected_rgb": [
-        0.5568627450980392,
-        0.5647058823529412,
-        0.5372549019607843
+        1.0,
+        0.403921568627451,
+        0.12156862745098039
       ]
     },
     "NextKey": {
       "actual_rgba": [
-        0.5568627715110779,
-        0.5647059082984924,
-        0.5372549295425415,
+        1.0,
+        0.40392157435417175,
+        0.12156862765550613,
         1.0
       ],
       "expected_rgb": [
-        0.5568627450980392,
-        0.5647058823529412,
-        0.5372549019607843
+        1.0,
+        0.403921568627451,
+        0.12156862745098039
       ]
     },
     "ButtonRetainer": {
@@ -314,15 +314,15 @@
     },
     "Knob": {
       "actual_rgba": [
-        0.5568627715110779,
-        0.5647059082984924,
-        0.5372549295425415,
+        0.0,
+        0.0,
+        0.0,
         1.0
       ],
       "expected_rgb": [
-        0.5568627450980392,
-        0.5647058823529412,
-        0.5372549019607843
+        0.0,
+        0.0,
+        0.0
       ]
     },
     "Drive": {
@@ -462,13 +462,11 @@
     "1",
     "4"
   ],
-  "model_sha256": "0013eea8732dbd1725533b5175b80ad0e8cd4d1a6d52db49556d1610d12cabd8",
+  "model_sha256": "e9cc3ffd1e33dfd2ffecf19e1d6f2b694a027e31021bc9adc5b356991a9dbe37",
   "color_update": {
     "date": "2026-11-10",
     "front_filament": "Bambu PLA Lite Orange 16301",
     "front_hex": "#FF671F",
-    "controls_filament": "Bambu PLA Basic Gray 10103",
-    "controls_hex": "#8E9089",
     "product_url": "https://item.jd.com/10161064876888.html",
     "color_source": "https://github.com/bambulab/BambuStudio/blob/master/resources/profiles/BBL/filament/filaments_color_codes.json",
     "baseline_sha256": "0763858f1cfbe30c99434dce227a8c50fb99112e9ad7e43d9a5092ee646f35e8",
@@ -480,10 +478,217 @@
       "NextKey",
       "Knob"
     ],
-    "all_shape_breps_unchanged": true,
+    "all_shape_breps_unchanged": false,
     "shape_count": 92,
-    "document_and_geometry_resources_byte_identical": true,
+    "document_and_geometry_resources_byte_identical": false,
     "visibility_unchanged": true,
-    "symmetry": "Geometry unchanged; uniform part colors preserve left/right appearance."
+    "symmetry": "Only four existing key regions changed; all other shapes and the enclosure symmetry are unchanged.",
+    "keys_filament": "Bambu PLA Lite Orange 16301",
+    "keys_hex": "#FF671F",
+    "knob_filament": "Bambu PLA Basic Black 10101",
+    "knob_hex": "#000000",
+    "markings": "Independent white PLA Lite solids, 0.6 mm deep and flush with the orange key face; two material volumes per printable key",
+    "marks_hex": "#FFFFFF",
+    "white_mark_faces_zero_based": {
+      "PlayPauseKey": [
+        15,
+        16,
+        17,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "EjectKey": [
+        11,
+        12,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22
+      ],
+      "PrevKey": [
+        11,
+        12,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22
+      ],
+      "NextKey": [
+        11,
+        12,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22
+      ]
+    },
+    "per_face_colors_reopened_verified": true,
+    "unchanged_shape_count": 88,
+    "changed_shape_objects": [
+      "PlayPauseKey",
+      "EjectKey",
+      "PrevKey",
+      "NextKey"
+    ],
+    "key_geometry_checks": {
+      "PlayPauseKey": {
+        "orange_solids": 1,
+        "white_solids": 3,
+        "orange_volume_mm3": 598.2785326471974,
+        "white_volume_mm3": 7.320000000000003,
+        "overlap_mm3": 0.0,
+        "assembled_single_connected_solid": true,
+        "external_bounds_unchanged": true,
+        "symbol_depth_mm": 0.6
+      },
+      "EjectKey": {
+        "orange_solids": 1,
+        "white_solids": 2,
+        "orange_volume_mm3": 598.3085326471974,
+        "white_volume_mm3": 7.29,
+        "overlap_mm3": 0.0,
+        "assembled_single_connected_solid": true,
+        "external_bounds_unchanged": true,
+        "symbol_depth_mm": 0.6
+      },
+      "PrevKey": {
+        "orange_solids": 1,
+        "white_solids": 2,
+        "orange_volume_mm3": 599.1185326471973,
+        "white_volume_mm3": 6.4799999999999995,
+        "overlap_mm3": 0.0,
+        "assembled_single_connected_solid": true,
+        "external_bounds_unchanged": true,
+        "symbol_depth_mm": 0.6
+      },
+      "NextKey": {
+        "orange_solids": 1,
+        "white_solids": 2,
+        "orange_volume_mm3": 599.1185326471972,
+        "white_volume_mm3": 6.480000000000002,
+        "overlap_mm3": 0.0,
+        "assembled_single_connected_solid": true,
+        "external_bounds_unchanged": true,
+        "symbol_depth_mm": 0.6
+      }
+    },
+    "key_assembly_collisions": [],
+    "unchanged_geometry_objects": [
+      "Shell",
+      "Controls",
+      "Carrier",
+      "Hardware",
+      "FoldSection",
+      "FoldedSkin",
+      "CowlEdges",
+      "SymmetricCowlTool",
+      "SymmetricCowl",
+      "CowlTool",
+      "Cowl",
+      "LPanelBlank",
+      "LPanelTool",
+      "LPanel",
+      "RPanel",
+      "LPort",
+      "RPort",
+      "LChamber",
+      "RChamber",
+      "FrontBezel",
+      "FrontGrille",
+      "LDriver",
+      "LDriverFrame",
+      "RDriver",
+      "RDriverFrame",
+      "FrontBaffle",
+      "Back",
+      "Base",
+      "Feet",
+      "Window",
+      "StatusArt",
+      "PlayPauseSwitch",
+      "EjectSwitch",
+      "PrevSwitch",
+      "NextSwitch",
+      "ButtonRetainer",
+      "ButtonMounts",
+      "Knob",
+      "Encoder",
+      "VolumePot",
+      "DriveBlank",
+      "DriveTool",
+      "Drive",
+      "Bridge",
+      "DriveCarrier",
+      "SlotGuide",
+      "DisplayPCB",
+      "DisplayHeader",
+      "DisplayRetainer",
+      "DisplayMountLeft",
+      "DisplayMountRight",
+      "DisplayCarrier",
+      "AmpShelf",
+      "ElectronicsSled",
+      "Amp",
+      "AmpChip",
+      "AmpPads",
+      "MCU",
+      "MCUChip",
+      "MCUPads",
+      "DAC",
+      "DACChip",
+      "DACPads",
+      "Battery",
+      "BatteryCradle",
+      "CarrierTab0",
+      "CarrierTab1",
+      "CarrierTab2",
+      "CarrierTab3",
+      "FrontFastenerPosts",
+      "RearFastenerCuts",
+      "MCUColumn0",
+      "MCUColumn1",
+      "MCUColumn2",
+      "MCUColumn3",
+      "MCUColumn4",
+      "MCUColumn5",
+      "MCUColumn6",
+      "MCUColumn7",
+      "DisplayMountPilots",
+      "DisplayPocket",
+      "RearRoofRegion",
+      "FrontCowl",
+      "RearRoof",
+      "FrontShell",
+      "SpeakerCarrier",
+      "RearShell",
+      "DiscReference"
+    ]
   }
 }
