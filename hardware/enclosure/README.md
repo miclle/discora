@@ -12,6 +12,8 @@
 
 **2026-11-10 OLED 适配：**已按供应商结构图替换旧占位，保持有效区左右居中。PCB、四孔、玻璃和底部缺口均按图建模，玻璃前面从深度 5.4 移至 1.0，内侧沉槽配四孔定位柱和可拆压框；外口 32.82 × 18.1 倒角收至 30.42 × 15.7 喉口。正前方与选定斜视方向、接头、插线与工具空间经过 CAD 检查，实物配合仍待验收。详见 [ADR-0028](../../docs/decisions/0028-oled-mechanical-mount.md)和图册第 6 页。
 
+**2026-11-10 前壳配色：**P1 一体前壳（正面板、内凹护网、前斜面和提手）采用[用户指定耗材](https://item.jd.com/10161064876888.html)的拓竹 PLA Lite 橙色 16301，CAD 色值为 `#FF671F`（RGB 255/103/31），来自 Bambu Studio 的 `filaments_color_codes.json`。屏幕颜色仅为参考，实际耗材受照明与打印表面影响。四个独立键帽与音量旋钮统一采用用户已有的拓竹 PLA Basic 灰色 10103（`#8E9089`，RGB 142/144/137），与橙色前壳形成对比。本次只更换 P1、四个键帽与旋钮的材质颜色；保存文件的文档、几何资源逐字节一致，GUI 重新打开后 92 个形状读回一致，其余部件配色和可见性不变，左右对称性保持。预览及彩色图册同步更新，详见 `appearance-checks.json`。
+
 **FCStd 配色保存：**无界面保存后补回 GUI 数据时，材质资源必须按 `GuiDocument.xml` 的引用顺序写入；不能用集合的无序遍历写入压缩包，否则 FreeCAD 会跳过颜色资源。`repair-gui-order.py 输入.FCStd 输出.FCStd` 可修复顺序，并逐项核对包内数据完全一致。修复后须在 FreeCAD GUI 读回颜色、关闭并重新打开核对；外部渲染图不能代替此项验证。当前记录见 [appearance-checks.json](appearance-checks.json)。
 
 **背面锁紧：**正面四个螺丝孔已取消；后壁下方两孔、后斜面两孔锁紧前壳，名义螺钉 2×8 mm。下方通道深 65.8 mm，需细长螺丝刀。结构和工具边界见 [ADR-0024](../../docs/decisions/0024-rear-access-front-cover-fasteners.md) 与 [fastener-checks.json](fastener-checks.json)。

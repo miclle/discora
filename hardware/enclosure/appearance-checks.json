@@ -2,15 +2,15 @@
   "colors": {
     "FrontShell": {
       "actual_rgba": [
-        0.0235294122248888,
-        0.7490196228027344,
-        0.7215686440467834,
+        1.0,
+        0.40392157435417175,
+        0.12156862765550613,
         1.0
       ],
       "expected_rgb": [
-        0.025,
-        0.75,
-        0.72
+        1.0,
+        0.403921568627451,
+        0.12156862745098039
       ]
     },
     "SpeakerCarrier": {
@@ -28,54 +28,54 @@
     },
     "PlayPauseKey": {
       "actual_rgba": [
-        0.0235294122248888,
-        0.7490196228027344,
-        0.7215686440467834,
+        0.5568627715110779,
+        0.5647059082984924,
+        0.5372549295425415,
         1.0
       ],
       "expected_rgb": [
-        0.025,
-        0.75,
-        0.72
+        0.5568627450980392,
+        0.5647058823529412,
+        0.5372549019607843
       ]
     },
     "EjectKey": {
       "actual_rgba": [
-        0.0235294122248888,
-        0.7490196228027344,
-        0.7215686440467834,
+        0.5568627715110779,
+        0.5647059082984924,
+        0.5372549295425415,
         1.0
       ],
       "expected_rgb": [
-        0.025,
-        0.75,
-        0.72
+        0.5568627450980392,
+        0.5647058823529412,
+        0.5372549019607843
       ]
     },
     "PrevKey": {
       "actual_rgba": [
-        0.0235294122248888,
-        0.7490196228027344,
-        0.7215686440467834,
+        0.5568627715110779,
+        0.5647059082984924,
+        0.5372549295425415,
         1.0
       ],
       "expected_rgb": [
-        0.025,
-        0.75,
-        0.72
+        0.5568627450980392,
+        0.5647058823529412,
+        0.5372549019607843
       ]
     },
     "NextKey": {
       "actual_rgba": [
-        0.0235294122248888,
-        0.7490196228027344,
-        0.7215686440467834,
+        0.5568627715110779,
+        0.5647059082984924,
+        0.5372549295425415,
         1.0
       ],
       "expected_rgb": [
-        0.025,
-        0.75,
-        0.72
+        0.5568627450980392,
+        0.5647058823529412,
+        0.5372549019607843
       ]
     },
     "ButtonRetainer": {
@@ -314,15 +314,15 @@
     },
     "Knob": {
       "actual_rgba": [
-        0.9411764740943909,
-        0.9490196108818054,
-        0.9411764740943909,
+        0.5568627715110779,
+        0.5647059082984924,
+        0.5372549295425415,
         1.0
       ],
       "expected_rgb": [
-        0.94,
-        0.95,
-        0.94
+        0.5568627450980392,
+        0.5647058823529412,
+        0.5372549019607843
       ]
     },
     "Drive": {
@@ -462,5 +462,28 @@
     "1",
     "4"
   ],
-  "model_sha256": "0763858f1cfbe30c99434dce227a8c50fb99112e9ad7e43d9a5092ee646f35e8"
+  "model_sha256": "0013eea8732dbd1725533b5175b80ad0e8cd4d1a6d52db49556d1610d12cabd8",
+  "color_update": {
+    "date": "2026-11-10",
+    "front_filament": "Bambu PLA Lite Orange 16301",
+    "front_hex": "#FF671F",
+    "controls_filament": "Bambu PLA Basic Gray 10103",
+    "controls_hex": "#8E9089",
+    "product_url": "https://item.jd.com/10161064876888.html",
+    "color_source": "https://github.com/bambulab/BambuStudio/blob/master/resources/profiles/BBL/filament/filaments_color_codes.json",
+    "baseline_sha256": "0763858f1cfbe30c99434dce227a8c50fb99112e9ad7e43d9a5092ee646f35e8",
+    "changed_color_objects": [
+      "FrontShell",
+      "PlayPauseKey",
+      "EjectKey",
+      "PrevKey",
+      "NextKey",
+      "Knob"
+    ],
+    "all_shape_breps_unchanged": true,
+    "shape_count": 92,
+    "document_and_geometry_resources_byte_identical": true,
+    "visibility_unchanged": true,
+    "symmetry": "Geometry unchanged; uniform part colors preserve left/right appearance."
+  }
 }

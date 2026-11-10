@@ -11,9 +11,11 @@ from PySide import QtCore, QtWidgets
 
 V = A.Vector
 X, Y, Z = V(1, 0, 0), V(0, 1, 0), V(0, 0, 1)
-TEAL, BLACK, RUBBER = (0.025, 0.75, 0.72), (0.145, 0.155, 0.17), (0.07, 0.08, 0.09)
+# P1: Bambu PLA Lite Orange 16301, #FF671F (Bambu Studio filament color table).
+ORANGE, TEAL, BLACK, RUBBER = (1.0, 0.403921568627451, 0.12156862745098039), (0.025, 0.75, 0.72), (0.145, 0.155, 0.17), (0.07, 0.08, 0.09)
 GLASS, PIXEL = (0.045, 0.085, 0.10), (0.85, 0.97, 1.0)
-WHITE, SILVER, PCB, BLUE = (0.94, 0.95, 0.94), (0.70, 0.73, 0.75), (0.14, 0.40, 0.32), (0.12, 0.33, 0.62)
+# Controls: Bambu PLA Basic Gray 10103, #8E9089.
+GRAY, SILVER, PCB, BLUE = (0.5568627450980392, 0.5647058823529412, 0.5372549019607843), (0.70, 0.73, 0.75), (0.14, 0.40, 0.32), (0.12, 0.33, 0.62)
 # The drive face is parallel to XZ and the disc moves vertically behind the handle.
 WIDTH = 142.0
 DRIVE = (128.0, 9.5, 129.0)
@@ -395,7 +397,7 @@ def build(folder):
             triangle([(-sign*2,-2),(-sign*2,2),(sign*1.8,0)])
             symbols.append(box(-3 if key=='Prev' else 2.2,-1.21,-2,.8,.36,4))
         cap=cap.cut(Part.makeCompound(symbols)).removeSplitter()
-        feature(key+'Key',label+' · 独立键帽／凹刻符号',placed(cap),TEAL,ui)
+        feature(key+'Key',label+' · 独立键帽／凹刻符号',placed(cap),GRAY,ui)
         switch=box(-6,8.8,-6,12,3.2,12).fuse(cylinder(6,2.8,(0,6,0),Y)).removeSplitter()
         obj=feature(key+'Switch',label+' · 12×12×6；圆头 Ø12 保守包络',placed(switch),RUBBER,hardware)
         for prop,value in [('BodyThickness',3.2),('ActuatorHeight',2.8),('PinLengthAllowance',3.7)]:
@@ -418,7 +420,7 @@ def build(folder):
     loc = deck(48,18)
     knob = Part.makeCylinder(11.8,8.2,loc+normal*.45,normal).cut(
         Part.makeCylinder(5.8,5.3,loc+normal*3.55,normal))
-    feature("Knob","音量旋钮 · 内凹",knob,WHITE,ui)
+    feature("Knob","音量旋钮 · 内凹",knob,GRAY,ui)
     feature("Encoder","音量电位器轴 · 安装预留",Part.makeCylinder(4,7,loc-normal*6.55,normal),SILVER,hardware)
     # Existing amplifier potentiometer relocated behind the original outer knob.
     # Body dimensions are a design allowance, not a measurement or wiring pinout.
@@ -574,7 +576,7 @@ def build(folder):
     doc.Cowl.Visibility=False
     doc.recompute()
     front=consolidate("FrontShell","P1 · 一体前壳／提手／护网",
-                      ['FrontCowl','FrontBezel','FrontGrille','ButtonMounts',front_post_name],[],TEAL,shell)
+                      ['FrontCowl','FrontBezel','FrontGrille','ButtonMounts',front_post_name],[],ORANGE,shell)
     front.Shape=front.Shape.cut(doc.getObject(display_pocket).Shape).fuse(doc.DisplayCarrier.Shape).cut(
         doc.getObject(display_pilots).Shape).removeSplitter()
     front.ConstructionObjects=list(front.ConstructionObjects)+['DisplayCarrier']
