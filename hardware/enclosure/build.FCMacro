@@ -14,8 +14,8 @@ X, Y, Z = V(1, 0, 0), V(0, 1, 0), V(0, 0, 1)
 # P1: Bambu PLA Lite Orange 16301, #FF671F (Bambu Studio filament color table).
 ORANGE, TEAL, BLACK, RUBBER = (1.0, 0.403921568627451, 0.12156862745098039), (0.025, 0.75, 0.72), (0.145, 0.155, 0.17), (0.07, 0.08, 0.09)
 GLASS, PIXEL = (0.045, 0.085, 0.10), (0.85, 0.97, 1.0)
-# Controls: Bambu PLA Basic Gray 10103, #8E9089.
-GRAY, SILVER, PCB, BLUE = (0.5568627450980392, 0.5647058823529412, 0.5372549019607843), (0.70, 0.73, 0.75), (0.14, 0.40, 0.32), (0.12, 0.33, 0.62)
+# Knob: Bambu PLA Basic Black 10101; white is the PLA Lite symbol region.
+KNOB_BLACK, WHITE, SILVER, PCB, BLUE = (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), (0.70, 0.73, 0.75), (0.14, 0.40, 0.32), (0.12, 0.33, 0.62)
 # The drive face is parallel to XZ and the disc moves vertically behind the handle.
 WIDTH = 142.0
 DRIVE = (128.0, 9.5, 129.0)
@@ -128,6 +128,31 @@ def button_retainer(row_offset):
         frame=frame.cut(Part.makeCylinder(1.1,2.3,V(x,16.4,0),Y))
         frame=frame.cut(Part.makeCone(2.1,1.1,1,V(x,18.5,0),-Y))
     return frame.removeSplitter()
+
+
+def button_parts(key):
+    """Return orange body and white symbol solids in the key-local frame."""
+    def box(x,y,z,dx,dy,dz):
+        return Part.makeBox(dx,dy,dz,V(x,y,z))
+    cap=Part.makeCylinder(5,7.2,V(0,-1.2,0),Y).fuse(Part.makeCylinder(6.4,.8,V(0,5.2,0),Y))
+    # A 0.6 mm flush white region is printed with the orange body.
+    symbols=[]
+    def triangle(points):
+        pts=[V(xx,-1.2,zz) for xx,zz in points]
+        symbols.append(Part.Face(Part.makePolygon(pts+pts[:1])).extrude(Y*.6))
+    if key=='PlayPause':
+        triangle([(-2.9,-2),(-2.9,2),(0,0)])
+        symbols += [box(.7,-1.2,-2,.8,.6,4),box(2.1,-1.2,-2,.8,.6,4)]
+    elif key=='Eject':
+        triangle([(-2.7,-.2),(2.7,-.2),(0,2.7)])
+        symbols.append(box(-2.7,-1.2,-2.1,5.4,.6,.8))
+    else:
+        sign=-1 if key=='Prev' else 1
+        triangle([(-sign*2,-2),(-sign*2,2),(sign*1.8,0)])
+        symbols.append(box(-3 if key=='Prev' else 2.2,-1.2,-2,.8,.6,4))
+    marks=Part.makeCompound(symbols)
+    body=cap.cut(marks).removeSplitter()
+    return body,marks
 
 
 def build(folder):
@@ -380,24 +405,13 @@ def build(folder):
         def placed(shape):
             shape.Placement=pose.multiply(shape.Placement)
             return shape
-        cap=cylinder(5,7.2,(0,-1.2,0),Y).fuse(cylinder(6.4,.8,(0,5.2,0),Y))
-        # Engraved symbols belong to each printable cap, with no loose inserts.
-        symbols=[]
-        def triangle(points):
-            pts=[V(xx,-1.21,zz) for xx,zz in points]
-            symbols.append(Part.Face(Part.makePolygon(pts+pts[:1])).extrude(Y*.36))
-        if key=='PlayPause':
-            triangle([(-2.9,-2),(-2.9,2),(0,0)])
-            symbols += [box(.7,-1.21,-2,.8,.36,4),box(2.1,-1.21,-2,.8,.36,4)]
-        elif key=='Eject':
-            triangle([(-2.7,-.2),(2.7,-.2),(0,2.7)])
-            symbols.append(box(-2.7,-1.21,-2.1,5.4,.36,.8))
-        else:
-            sign=-1 if key=='Prev' else 1
-            triangle([(-sign*2,-2),(-sign*2,2),(sign*1.8,0)])
-            symbols.append(box(-3 if key=='Prev' else 2.2,-1.21,-2,.8,.36,4))
-        cap=cap.cut(Part.makeCompound(symbols)).removeSplitter()
-        feature(key+'Key',label+' · 独立键帽／凹刻符号',placed(cap),GRAY,ui)
+        body,marks=button_parts(key)
+        shape=Part.makeCompound([body,marks])
+        face_colors=[WHITE if any(face.isSame(mark) for mark in marks.Faces) else ORANGE
+                     for face in shape.Faces]
+        key_obj=feature(key+'Key',label+' · 双色键帽／白色功能标记',placed(shape),ORANGE,ui)
+        # Shared interface faces occur only once in the compound's face list.
+        key_obj.ViewObject.DiffuseColor=face_colors
         switch=box(-6,8.8,-6,12,3.2,12).fuse(cylinder(6,2.8,(0,6,0),Y)).removeSplitter()
         obj=feature(key+'Switch',label+' · 12×12×6；圆头 Ø12 保守包络',placed(switch),RUBBER,hardware)
         for prop,value in [('BodyThickness',3.2),('ActuatorHeight',2.8),('PinLengthAllowance',3.7)]:
@@ -420,7 +434,7 @@ def build(folder):
     loc = deck(48,18)
     knob = Part.makeCylinder(11.8,8.2,loc+normal*.45,normal).cut(
         Part.makeCylinder(5.8,5.3,loc+normal*3.55,normal))
-    feature("Knob","音量旋钮 · 内凹",knob,GRAY,ui)
+    feature("Knob","音量旋钮 · 内凹",knob,KNOB_BLACK,ui)
     feature("Encoder","音量电位器轴 · 安装预留",Part.makeCylinder(4,7,loc-normal*6.55,normal),SILVER,hardware)
     # Existing amplifier potentiometer relocated behind the original outer knob.
     # Body dimensions are a design allowance, not a measurement or wiring pinout.

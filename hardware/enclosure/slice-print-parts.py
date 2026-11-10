@@ -48,7 +48,8 @@ def main():
                   printer_contacted=False,gcode_execution_validated=False)
     for name in ('RearShell','FrontShell','SpeakerCarrier','SmallParts'):
         target=out/name;target.mkdir(exist_ok=True)
-        names=[name] if name!='SmallParts' else ['LPort','RPort','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','DisplayRetainer','Knob']
+        # Two-material keys must use their dedicated 3MF, not monochrome STL.
+        names=[name] if name!='SmallParts' else ['LPort','RPort','ButtonRetainer','DisplayRetainer','Knob']
         for n in names:assert digest(meshes/(n+'.stl'))==report['parts'][n]['stl_sha256']
         command=[str(args.bambu.resolve()),'--datadir',str(out/('userdata-'+name)),
                  '--load-settings',str(settings['machine'])+';'+str(settings['process']),
@@ -71,6 +72,7 @@ def main():
             vendor_T65535_parser_notice='Invalid T command (T65535)' in log.read_text())
         print('SLICE_OK',name,report['plates'][name],flush=True)
     assert report['model_sha256']==digest(args.model),'Model changed during slicing'
+    report['dual_color_keys']='Excluded here; see dual-color-key-checks.json and export-dual-color-keys.py'
     args.output.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
     print('PRINT_CHECKS_OK',args.output)
 

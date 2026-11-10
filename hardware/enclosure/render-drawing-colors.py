@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256 = '0013eea8732dbd1725533b5175b80ad0e8cd4d1a6d52db49556d1610d12cabd8'
+MODEL_SHA256 = 'e9cc3ffd1e33dfd2ffecf19e1d6f2b694a027e31021bc9adc5b356991a9dbe37'
 
 
 def palette_from_build():
@@ -26,9 +26,9 @@ def palette_from_build():
         if not isinstance(node,ast.Assign) or not isinstance(node.targets[0],ast.Tuple):
             continue
         names=[n.id for n in node.targets[0].elts]
-        if names[0] in ('ORANGE','GLASS','GRAY'):
+        if names[0] in ('ORANGE','GLASS','KNOB_BLACK'):
             palette.update(zip(names,ast.literal_eval(node.value)))
-    assert len(palette)==10
+    assert len(palette)==11
     return palette
 
 
@@ -137,15 +137,18 @@ def main():
     assert data['build_sha256']==hashlib.sha256((ROOT/'build.FCMacro').read_bytes()).hexdigest()
     palette=palette_from_build()
     assignments={
-        'ORANGE':'FrontShell',
+        'ORANGE':'FrontShell PlayPauseKey EjectKey PrevKey NextKey',
         'TEAL':'SpeakerCarrier ButtonRetainer DisplayRetainer',
         'BLACK':'RearShell LPort RPort',
         'RUBBER':'Feet LDriver RDriver VolumePot DisplayHeader AmpChip DACChip PlayPauseSwitch EjectSwitch PrevSwitch NextSwitch',
-        'GLASS':'Window','PIXEL':'StatusArt','GRAY':'PlayPauseKey EjectKey PrevKey NextKey Knob',
+        'GLASS':'Window','PIXEL':'StatusArt','KNOB_BLACK':'Knob',
         'SILVER':'Drive Encoder MCUChip','PCB':'Bridge DisplayPCB Amp MCU DAC','BLUE':'Battery',
     }
     colors={name:palette[key] for key,names in assignments.items() for name in names.split()}
     assert set(colors)==set(data['objects'])
+    appearance=json.loads((ROOT/'appearance-checks.json').read_text())
+    assert appearance['model_sha256']==MODEL_SHA256
+    white_marks=appearance['color_update']['white_mark_faces_zero_based']
     rows={
         'front':((1,0,0),(0,0,1),(0,-1,0)),
         'right':((0,1,0),(0,0,1),(1,0,0)),
@@ -173,7 +176,16 @@ def main():
                 shape=doc.getObject(obj).Shape.common(Part.makeBox(174,400,500,A.Vector(-200,-100,-100)))
                 if shape.isNull() or not shape.Faces:continue
                 mesh=surface_polygons(shape)
-            render_parts.append((mesh,colors[obj],np.array(offset)))
+            if obj in white_marks and name!='section':
+                shape=doc.getObject(obj).Shape
+                indices=set(white_marks[obj])
+                # Render the white PLA regions recorded in the saved GUI model.
+                for is_white in (False,True):
+                    faces=[f for i,f in enumerate(shape.Faces) if (i in indices)==is_white]
+                    render_parts.append((surface_polygons(Part.makeCompound(faces)),
+                                         palette['WHITE'] if is_white else colors[obj],np.array(offset)))
+            else:
+                render_parts.append((mesh,colors[obj],np.array(offset)))
         size=render(render_parts,rows[view['direction']],view['bounds'],OUT/(name+'-color.png'))
         outputs[name]={'file':name+'-color.png','size_px':size}
         print('COLOUR_OK',name,size,flush=True)
@@ -182,7 +194,8 @@ def main():
     (OUT/'color-render.json').write_text(json.dumps(dict(
         sha256=MODEL_SHA256,build_sha256=data['build_sha256'],
         geometry_sha256=hashlib.sha256((OUT/'geometry.json').read_bytes()).hexdigest(),
-        palette=palette,objects=colors,tessellation_deflection_mm=.05,pixels_per_mm=12,
+        palette=palette,objects=colors,white_mark_faces_zero_based=white_marks,
+        tessellation_deflection_mm=.05,pixels_per_mm=12,
         method='Orthographic planar faces with hole masks and curved-face triangles, per-pixel depth and directional shading; exact HLR edges added in PDF',
         outputs=outputs),ensure_ascii=False,indent=2)+'\n')
 

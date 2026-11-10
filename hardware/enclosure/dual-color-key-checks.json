@@ -1,0 +1,464 @@
+{
+  "model_sha256": "e9cc3ffd1e33dfd2ffecf19e1d6f2b694a027e31021bc9adc5b356991a9dbe37",
+  "white_depth_mm": 0.6,
+  "minimum_symbol_stroke_mm": 0.8,
+  "materials": {
+    "1": "PLA Lite Orange #FF671F",
+    "2": "PLA Lite White #FFFFFF"
+  },
+  "orientation": "Symbol face up; flange on bed",
+  "printer_contacted": false,
+  "physical_print_test": false,
+  "keys": {
+    "PlayPauseKey": {
+      "volumes": [
+        {
+          "material": 1,
+          "closed_mesh": true,
+          "facets": 712,
+          "solids": 1,
+          "volume_mm3": 598.2785326471974
+        },
+        {
+          "material": 2,
+          "closed_mesh": true,
+          "facets": 32,
+          "solids": 3,
+          "volume_mm3": 7.32
+        }
+      ],
+      "overlap_mm3": 0.0,
+      "assembled_single_connected_solid": true,
+      "size_mm": [
+        12.8,
+        12.79999999999999,
+        7.200000000000019
+      ]
+    },
+    "EjectKey": {
+      "volumes": [
+        {
+          "material": 1,
+          "closed_mesh": true,
+          "facets": 696,
+          "solids": 1,
+          "volume_mm3": 598.3085326471972
+        },
+        {
+          "material": 2,
+          "closed_mesh": true,
+          "facets": 20,
+          "solids": 2,
+          "volume_mm3": 7.289999999999999
+        }
+      ],
+      "overlap_mm3": 0.0,
+      "assembled_single_connected_solid": true,
+      "size_mm": [
+        12.8,
+        12.79999999999999,
+        7.200000000000019
+      ]
+    },
+    "PrevKey": {
+      "volumes": [
+        {
+          "material": 1,
+          "closed_mesh": true,
+          "facets": 696,
+          "solids": 1,
+          "volume_mm3": 599.1185326471973
+        },
+        {
+          "material": 2,
+          "closed_mesh": true,
+          "facets": 20,
+          "solids": 2,
+          "volume_mm3": 6.479999999999999
+        }
+      ],
+      "overlap_mm3": 0.0,
+      "assembled_single_connected_solid": true,
+      "size_mm": [
+        12.8,
+        12.79999999999999,
+        7.200000000000019
+      ]
+    },
+    "NextKey": {
+      "volumes": [
+        {
+          "material": 1,
+          "closed_mesh": true,
+          "facets": 696,
+          "solids": 1,
+          "volume_mm3": 599.1185326471972
+        },
+        {
+          "material": 2,
+          "closed_mesh": true,
+          "facets": 20,
+          "solids": 2,
+          "volume_mm3": 6.479999999999997
+        }
+      ],
+      "overlap_mm3": 0.0,
+      "assembled_single_connected_solid": true,
+      "size_mm": [
+        12.8,
+        12.79999999999999,
+        7.200000000000019
+      ]
+    }
+  },
+  "file": "Discora-buttons-orange-white.3mf",
+  "file_sha256": "82d4cc7bdcf2cc61ac83306626c10368868b4c9ba0c69d2bfdfe3379902a3c1b",
+  "slicing": {
+    "exit_code": 0,
+    "version": "02.09.01.70",
+    "machine_profile": "Bambu Lab P2S 0.4 nozzle",
+    "process_profile": "0.12mm High Quality @BBL P2S",
+    "filament_profile": "Bambu PLA Lite @BBL P2S 0.4 nozzle",
+    "layer_height_mm": 0.12,
+    "first_layer_height_mm": 0.12,
+    "wall_generator": "arachne",
+    "prime_tower": true,
+    "support": false,
+    "layers": 60,
+    "estimated_time": "34m 20s",
+    "filament_g_including_purge": [
+      4.93,
+      2.49
+    ],
+    "white_toolpaths_by_object_label": {
+      "16": {
+        "extrusion_moves": 89,
+        "heights": [
+          6.72,
+          6.84,
+          6.96,
+          7.08,
+          7.2
+        ]
+      },
+      "20": {
+        "extrusion_moves": 89,
+        "heights": [
+          6.72,
+          6.84,
+          6.96,
+          7.08,
+          7.2
+        ]
+      },
+      "12": {
+        "extrusion_moves": 87,
+        "heights": [
+          6.72,
+          6.84,
+          6.96,
+          7.08,
+          7.2
+        ]
+      },
+      "8": {
+        "extrusion_moves": 115,
+        "heights": [
+          6.72,
+          6.84,
+          6.96,
+          7.08,
+          7.2
+        ]
+      }
+    },
+    "orange_toolpaths_by_object_label": {
+      "16": {
+        "extrusion_moves": 11490,
+        "heights": [
+          0.12,
+          0.24,
+          0.36,
+          0.48,
+          0.6,
+          0.72,
+          0.84,
+          0.96,
+          1.08,
+          1.2,
+          1.32,
+          1.44,
+          1.56,
+          1.68,
+          1.8,
+          1.92,
+          2.04,
+          2.16,
+          2.28,
+          2.4,
+          2.52,
+          2.64,
+          2.76,
+          2.88,
+          3.0,
+          3.12,
+          3.24,
+          3.36,
+          3.48,
+          3.6,
+          3.72,
+          3.84,
+          3.96,
+          4.08,
+          4.2,
+          4.32,
+          4.44,
+          4.56,
+          4.68,
+          4.8,
+          4.92,
+          5.04,
+          5.16,
+          5.28,
+          5.4,
+          5.52,
+          5.64,
+          5.76,
+          5.88,
+          6.0,
+          6.12,
+          6.24,
+          6.36,
+          6.48,
+          6.6,
+          6.72,
+          6.84,
+          6.96,
+          7.08,
+          7.2
+        ]
+      },
+      "20": {
+        "extrusion_moves": 11491,
+        "heights": [
+          0.12,
+          0.24,
+          0.36,
+          0.48,
+          0.6,
+          0.72,
+          0.84,
+          0.96,
+          1.08,
+          1.2,
+          1.32,
+          1.44,
+          1.56,
+          1.68,
+          1.8,
+          1.92,
+          2.04,
+          2.16,
+          2.28,
+          2.4,
+          2.52,
+          2.64,
+          2.76,
+          2.88,
+          3.0,
+          3.12,
+          3.24,
+          3.36,
+          3.48,
+          3.6,
+          3.72,
+          3.84,
+          3.96,
+          4.08,
+          4.2,
+          4.32,
+          4.44,
+          4.56,
+          4.68,
+          4.8,
+          4.92,
+          5.04,
+          5.16,
+          5.28,
+          5.4,
+          5.52,
+          5.64,
+          5.76,
+          5.88,
+          6.0,
+          6.12,
+          6.24,
+          6.36,
+          6.48,
+          6.6,
+          6.72,
+          6.84,
+          6.96,
+          7.08,
+          7.2
+        ]
+      },
+      "12": {
+        "extrusion_moves": 11441,
+        "heights": [
+          0.12,
+          0.24,
+          0.36,
+          0.48,
+          0.6,
+          0.72,
+          0.84,
+          0.96,
+          1.08,
+          1.2,
+          1.32,
+          1.44,
+          1.56,
+          1.68,
+          1.8,
+          1.92,
+          2.04,
+          2.16,
+          2.28,
+          2.4,
+          2.52,
+          2.64,
+          2.76,
+          2.88,
+          3.0,
+          3.12,
+          3.24,
+          3.36,
+          3.48,
+          3.6,
+          3.72,
+          3.84,
+          3.96,
+          4.08,
+          4.2,
+          4.32,
+          4.44,
+          4.56,
+          4.68,
+          4.8,
+          4.92,
+          5.04,
+          5.16,
+          5.28,
+          5.4,
+          5.52,
+          5.64,
+          5.76,
+          5.88,
+          6.0,
+          6.12,
+          6.24,
+          6.36,
+          6.48,
+          6.6,
+          6.72,
+          6.84,
+          6.96,
+          7.08,
+          7.2
+        ]
+      },
+      "8": {
+        "extrusion_moves": 11783,
+        "heights": [
+          0.12,
+          0.24,
+          0.36,
+          0.48,
+          0.6,
+          0.72,
+          0.84,
+          0.96,
+          1.08,
+          1.2,
+          1.32,
+          1.44,
+          1.56,
+          1.68,
+          1.8,
+          1.92,
+          2.04,
+          2.16,
+          2.28,
+          2.4,
+          2.52,
+          2.64,
+          2.76,
+          2.88,
+          3.0,
+          3.12,
+          3.24,
+          3.36,
+          3.48,
+          3.6,
+          3.72,
+          3.84,
+          3.96,
+          4.08,
+          4.2,
+          4.32,
+          4.44,
+          4.56,
+          4.68,
+          4.8,
+          4.92,
+          5.04,
+          5.16,
+          5.28,
+          5.4,
+          5.52,
+          5.64,
+          5.76,
+          5.88,
+          6.0,
+          6.12,
+          6.24,
+          6.36,
+          6.48,
+          6.6,
+          6.72,
+          6.84,
+          6.96,
+          7.08,
+          7.2
+        ]
+      }
+    },
+    "gcode_sha256": "322ea544ed6aa86290525f6cd5575c31ff97b730d4d46820e2ffa80fc7d7d46e",
+    "vendor_T65535_parser_notice": true,
+    "physical_print_test": false,
+    "printer_contacted": false,
+    "process_overrides": {
+      "initial_layer_print_height": "0.12",
+      "wall_generator": "arachne",
+      "wall_loops": "3",
+      "sparse_infill_density": "20%",
+      "enable_support": "0",
+      "brim_type": "no_brim",
+      "enable_prime_tower": "1"
+    },
+    "profile_sha256": {
+      "machine": "b7058cfe1a3d4cd505589443bc5b55d297f07bb973777a7fc67de96f8fe35a9b",
+      "process": "7a64999e3beef25621d416aeff7e4fc0d1757e461a3fd0c9163574d77788b4b5",
+      "orange": "03636600f84ef50118fabd3d5f0d6f975f34f845a2c92e81a01874cb423690be",
+      "white": "420341c8091f9b7bb2b86d2f739abd6af4065b93463bb65cb159a400862cf9f7"
+    }
+  },
+  "bambu_project": {
+    "file": "Discora-buttons-bambu.3mf",
+    "sha256": "fe6729f1335b00895ed964f07c4daad6269197985df445cdf484bdb0c17553cc",
+    "object_count": 4,
+    "volumes_per_object": 2,
+    "material_assignment_verified": true
+  }
+}

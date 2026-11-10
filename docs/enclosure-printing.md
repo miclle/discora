@@ -6,7 +6,15 @@
 
 模型与图纸见[外壳说明](../hardware/enclosure/README.md)和[唯一彩色图册](../hardware/enclosure/drawings/Discora-V4-drawing-book-color.pdf)。三个主体均为单一连续实体；含两侧孔、四键帽、按键支架、OLED 压框和旋钮，共 12 件刚性 PLA 零件，软脚垫与 OLED 自带玻璃另计；本版没有独立透明保护片。
 
-## 打印摆放和切片
+## 橙白双色键帽（2026-11-10）
+
+四个键帽已改为橙色键体和白色功能符号两个材料区域；白色符号深 0.6 mm、表面与键面齐平，最细笔画 0.8 mm。外包络、止退沿、按键孔和安装位置保持。用 FreeCAD Python 执行 `hardware/enclosure/export-dual-color-keys.py`，在 `tmp/dual-color-keys/` 生成四键一盘的 3MF 及同坐标 STL 分区；优先用 3MF 保持材料区域的相对位置。
+
+在 Bambu Studio 中将材料 1 对应 PLA Lite 橙色、材料 2 对应 PLA Lite 白色，并映射实际 AMS 槽位；符号面朝上、止退沿贴板。已用本机 P2S 0.4 mm / 0.12 mm 配置切片，启用擦拭塔；每个按键生成 5 层白色路径，整盘 60 层，预估 34 分 20 秒、总耗材 7.42 g（含换色消耗）。本地原生项目在 `tmp/dual-color-keys/slicer/Discora-buttons-bambu.3mf`，不提交生成文件；复核配置后在自己的设备上打印。
+
+[双色验收记录](../hardware/enclosure/dual-color-key-checks.json)记录实体、网格、材料分配及实际生成的双色路径。切片器返回成功，同时保留安装版本的 `T65535` 解析提示；没有发送打印或验证设备执行。白色遮盖、材料粘结、按压行程及实物装配仍待验证。下面的原四盘单色记录属于历史版本，四个键帽改用本节的双色记录；三主体与其它零件的几何未变。常规 `slice-print-parts.py` 已排除四键，避免误用丢失双色信息的单色 STL。
+
+## 原单色版打印摆放和切片（历史记录）
 
 | 零件 | 放置方向 | 旋转后的包络 X × Y × Z / mm | 注意事项 |
 | --- | --- | --- | --- |
@@ -74,6 +82,7 @@ CAD 成品静态无干涉、网格闭合和切片成功，不代表喇叭安装�
 "$DISCORA_FREECAD_PYTHON" hardware/enclosure/check-assembly.py
 "$DISCORA_FREECAD_PYTHON" hardware/enclosure/export-print-parts.py
 python3 hardware/enclosure/slice-print-parts.py
+"$DISCORA_FREECAD_PYTHON" hardware/enclosure/export-dual-color-keys.py
 ```
 
 切片器和配置目录可用 `--bambu`、`--profiles` 指定，临时网格目录可用 `--meshes` 指定。脚本核对模型与网格摘要、返回码及 G-code 统计；不会发起打印。

@@ -1,6 +1,7 @@
 """Export the twelve rigid PLA pieces in review orientations; no printer is contacted.
 
 Run with FreeCAD Python. Output is intentionally temporary until physical fit is checked.
+Key STL files are single-material envelopes; export-dual-color-keys.py preserves their materials.
 """
 import argparse
 import hashlib
@@ -40,6 +41,9 @@ def main():
             'physical_print_test':False,'parts':{}}
     for name,rotation in rotations.items():
         shape=doc.getObject(name).Shape.copy()
+        if name in ('PlayPauseKey','EjectKey','PrevKey','NextKey'):
+            # STL loses material assignments; the dedicated 3MF retains them.
+            shape=shape.Solids[0].multiFuse(shape.Solids[1:]).removeSplitter()
         assert shape.isValid() and len(shape.Solids)==1,name
         shape.Placement=A.Placement(A.Vector(),rotation).multiply(shape.Placement)
         b=shape.BoundBox
@@ -55,6 +59,8 @@ def main():
             'facets':mesh.CountFacets,'closed_mesh':True,'fits_with_5mm_brim':fits,
             'rotation_quaternion_xyzw':list(rotation.Q),
             'stl_sha256':hashlib.sha256(target.read_bytes()).hexdigest()}
+        if name.endswith('Key'):
+            report['parts'][name]['color_print_source']='export-dual-color-keys.py; STL is a single-material envelope'
         print('MESH_OK',name,mesh.CountFacets,flush=True)
     A.closeDocument(doc.Name)
     (args.output/'mesh-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
