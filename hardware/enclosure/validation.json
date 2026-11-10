@@ -1,7 +1,7 @@
 {
   "date": "2026-11-10",
   "model": "Discora.FCStd",
-  "sha256": "b1e943face3860219c90706176f7a709497eb15f5b1de335028ce72c6ac2d5ad",
+  "sha256": "d7c2b89b240a10b2462816dccdbaa3489bcd6d2ade85581517a99eafa7ab16d5",
   "version": [
     "1",
     "1",
@@ -158,7 +158,7 @@
   "assembly_size_xyz_mm": [
     142.00000000000003,
     80.00000000000001,
-    216.64473684210526
+    236.64473684210526
   ],
   "mirror_plane": "X=0",
   "mirror_difference_mm3": {
@@ -412,7 +412,7 @@
     "slope_25_30": 5.000000000000002,
     "slope_50_32": 5.000000000000003,
     "grille": 2.5,
-    "handle": 4.999999999999979
+    "handle": 4.999999999999993
   },
   "recessed_grille": {
     "opening_diameter_mm": 130,
@@ -437,7 +437,7 @@
   "original_controls_difference_mm3": {},
   "handle_opening_mm": [
     90,
-    16
+    24
   ],
   "handle_passage_clashes": [],
   "physical_validation": false,

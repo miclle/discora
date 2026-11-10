@@ -18,7 +18,7 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = 'b1e943face3860219c90706176f7a709497eb15f5b1de335028ce72c6ac2d5ad'
+ANNOTATED_MODEL_SHA256 = 'd7c2b89b240a10b2462816dccdbaa3489bcd6d2ade85581517a99eafa7ab16d5'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
@@ -39,9 +39,13 @@ def main():
             raise SystemExit('Source changed; rerun export-drawings.py: '+file)
     assert all(data['checks'].values())
     integration=json.loads((ROOT/'side-port-checks.json').read_text())
-    assert integration['model_sha256']==data['sha256']
+    handle=json.loads((ROOT/'handle-checks.json').read_text())
+    assert handle['model_sha256']==data['sha256']
+    assert integration['model_sha256']==handle['baseline_sha256']
     def evidence_matches_geometry(report,owners):
         if report['model_sha256']==data['sha256']:return True
+        if any(handle['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
+        if report['model_sha256']==handle['baseline_sha256']:return True
         if (report['model_sha256']==integration.get('baseline_sha256')
                 and all(integration.get('unchanged_finished_parts_difference_mm3',{}).get(n,1)<.001 for n in owners)):
             return True
@@ -148,33 +152,33 @@ def main():
     page(1,'整机外观尺寸','正视与右视 · 独立正投影，按视图名称读取；不按排列推断投影法','主视图 1:1')
     shoulder_z=side['outer_profile_yz'][2][1]
     handle_top=side['outer_profile_yz'][3][1]
-    view('front',35,36)
-    view('right',222,36)
-    text(106,264,'正视 · 沿 +Y 观察',10,MUTED,'center')
+    view('front',35,20)
+    view('right',222,20)
+    text(35,264,'正视 · 沿 +Y 观察',9,MUTED)
     text(259,264,'右视 · 沿 -X 观察',10,MUTED,'center')
-    dh(35,177,36,25,'142')
-    dv(36,36+handle_top,35,23,f'{handle_top:.2f}（含脚垫和提手）')
-    dh(222,302,36,25,'80')
-    dh(61,151,36+shoulder_z+20.5,255,'90 净开口')
-    dv(36+shoulder_z+4.5,36+shoulder_z+20.5,151,164,'16')
-    dv(36,112,177,191,'76 格栅中心高')
-    line(106,42,106,253,LIGHT,.15,[5,2,1,2])
-    line(39,112,173,112,LIGHT,.15,[5,2,1,2])
-    c.setFillColor(white); c.rect(86*mm,107*mm,40*mm,10*mm,fill=1,stroke=0)
-    text(106,110,'Ø130 圆孔 · 护网内凹 2.5',10,TEAL,'center')
-    line(262,69,262,253,TEAL,.15,[4,2,1,2])
-    dv(82.5,149.5,273,287,'67 导音口')
-    dh(251,273,116,169,'22')
+    dh(35,177,20,18,'142')
+    dv(20,20+handle_top,35,23,f'{handle_top:.2f}（含脚垫和提手）')
+    dh(222,302,20,18,'80')
+    dh(61,151,20+shoulder_z+34.5,259,'90 净开口')
+    dv(20+shoulder_z+10.5,20+shoulder_z+34.5,151,164,'24')
+    dv(20,96,177,191,'76 格栅中心高')
+    line(106,26,106,253,LIGHT,.15,[5,2,1,2])
+    line(39,96,173,96,LIGHT,.15,[5,2,1,2])
+    c.setFillColor(white); c.rect(86*mm,91*mm,40*mm,10*mm,fill=1,stroke=0)
+    text(106,94,'Ø130 圆孔 · 护网内凹 2.5',10,TEAL,'center')
+    line(262,53,262,253,TEAL,.15,[4,2,1,2])
+    dv(66.5,133.5,273,287,'67 导音口')
+    dh(251,273,100,153,'22')
     # Side dimensions use foot-bottom Z=0; paired body-bottom values are adjacent.
     for z,edge,x,label in [(165,222,211,'165'),(shoulder_z,259.5,200,f'{shoulder_z:.2f}'),(165,302,310,'165')]:
-        dv(36,36+z,edge,x,label)
-    dh(222,259.5,36+shoulder_z,255,'37.5')
-    dh(264.5,302,36+shoulder_z,255,'37.5')
-    line(218,36,312,36,MUTED,.15,[4,2])
-    line(218,39,302,39,LIGHT,.15,[2,2])
+        dv(20,20+z,edge,x,label)
+    dh(222,259.5,20+shoulder_z,239,'37.5')
+    dh(264.5,302,20+shoulder_z,239,'37.5')
+    line(218,20,312,20,MUTED,.15,[4,2])
+    line(218,23,302,23,LIGHT,.15,[2,2])
     for letter,u,z,dx,dy in [('A',0,165,3,-7),('B',37.5,shoulder_z,-5,3),
                               ('C',42.5,shoulder_z,4,3),('D',80,165,-5,-7)]:
-        text(222+u+dx,36+z+dy,letter,8,TEAL,'center',background=True)
+        text(222+u+dx,20+z+dy,letter,8,TEAL,'center',background=True)
     text(319,257,'高度对照 / mm',11,TEAL)
     text(319,248,'测点',8,MUTED)
     text(374,248,'含脚垫',8,MUTED,'center')
@@ -189,7 +193,7 @@ def main():
         text(398,yy-4,f"{z-side['shell_bottom_z']:.2f}",9,TEAL,'center')
     table(317,199,91,[
         ('整机宽 / 深','142 / 80'),
-        ('提手净开口 / 厚','90 × 16 / 5'),
+        ('提手净开口 / 厚','90 × 24 / 5'),
         ('格栅中心 X / Z','0 / 76'),
         ('圆孔 / 护网内凹','Ø130 / 2.5'),
         ('前板 / 斜板 / 护网厚','5 / 5 / 2.5'),
@@ -200,7 +204,7 @@ def main():
         ('前斜面与水平夹角',f"{side['front_angle_deg']:.2f}°"),
         ('后斜面水平 / 高差','37.5 / 26.645'),
         ('后斜面与水平夹角',f"{side['rear_angle_deg']:.2f}°"),
-        ('提手高于肩部','25'),
+        ('提手高 / 上下横梁','45 / 10.5'),
         ('提手顶外角 / 前棱','R4 / R1.6'),
     ],split=44,height=8)
     notes(319,78,[
@@ -226,10 +230,9 @@ def main():
     line(105,168,105,248,LIGHT,.15,[5,2,1,2])
     text(34,156,'碟口中心 Y=67.75；提手后表面 Y=42.5。',10)
     text(34,148,'120 × 1.2 光盘扫掠距提手后表面 24.65。',9,MUTED)
-    view('rear',247,36)
-    text(318,259,'背视 · 沿 -Y 观察',10,MUTED,'center')
-    text(247,27,'后壁下方两孔与后斜面两孔，用于从背面锁紧前壳。',9,TEAL)
-    text(247,18,'P2 一体后壳 · 背面无独立盖板',10,MUTED)
+    view('rear',247,20)
+    text(318,263,'背视 · 沿 -Y 观察',10,MUTED,'center')
+    text(34,142,'背锁：后壁下方两孔与后斜面两孔，从背面锁紧前壳。',8,TEAL)
     # Drawing cutouts share the actual inclined-plane frame.
     p=view('control-cutouts',40,97)
     centers=data['features']['control_cut_centers_xz']
@@ -290,14 +293,14 @@ def main():
     c.showPage()
 
     page(4,'侧剖与内部空间','截面 X=-26：穿过左喇叭中心，保留 -X 半体，沿 -X 观察','剖视 1:1；表格为模型读数')
-    view('section',38,36)
-    text(75,258,'A-A 侧剖',11,TEAL,'center')
-    dh(46,88,112,145,'42 喇叭总深度')
-    dh(101,110.5,170,222,'9.5 光驱厚度')
-    dv(72,152,38,25,'80 单元高度')
-    dh(44,114,44,26,'70 电池深度')
-    dv(44,64,44,32,'20')
-    text(77,52,'5600 mAh',8,white,'center')
+    view('section',38,20)
+    text(75,263,'A-A 侧剖',11,TEAL,'center')
+    dh(46,88,96,129,'42 喇叭总深度')
+    dh(101,110.5,154,206,'9.5 光驱厚度')
+    dv(56,136,38,25,'80 单元高度')
+    dh(44,114,28,18,'70 电池深度')
+    dv(28,48,44,32,'20')
+    text(77,36,'5600 mAh',8,white,'center')
     text(130,253,'主要包络 / 关键净距',12,TEAL)
     table(128,246,280,[
         ('单只喇叭 X × Y × Z','45 × 42 × 80；中心 X=±26，Z=76；总包络，安装面待测'),
@@ -368,7 +371,7 @@ def main():
     assert evidence_matches_geometry(keys,['PlayPauseKey','EjectKey','PrevKey','NextKey']) and keys['slicing']['exit_code']==0
     text(12,118,'用户设备 P2SC · 按 P2S 配置 / 256³ 空间 / 0.4 喷嘴 / 0.20 层高 / 3 壁 / 15% 填充 / 树状支撑',9)
     for i,(name,label,pose) in enumerate([
-        ('FrontShell','P1 前壳','正面朝下'),('RearShell','P2 后壳','背面朝下'),
+        ('FrontShell','P1 前壳','正面朝下 / 板内转 90°'),('RearShell','P2 后壳','背面朝下'),
         ('SpeakerCarrier','P3 支架','声腔背面朝下')]):
         part=printing['parts'][name];plate=printing['plates'][name]
         size=' × '.join(fmt(n) for n in part['size_xyz_mm'])

@@ -34,7 +34,9 @@ SHOULDER_SLOPE = 27.0 / 38.0
 EAVE_Z = 165.0
 SHOULDER_Z = EAVE_Z + SHOULDER_RUN * SHOULDER_SLOPE
 HANDLE_FRONT, HANDLE_REAR = SHOULDER_RUN, CASE_DEPTH - SHOULDER_RUN
-HANDLE_TOP = SHOULDER_Z + 25.0
+HANDLE_HEIGHT = 45.0
+HANDLE_OPENING_HEIGHT = 24.0
+HANDLE_TOP = SHOULDER_Z + HANDLE_HEIGHT
 ROOF_OFFSET_Z = REAR_THICKNESS * math.sqrt(1 + SHOULDER_SLOPE**2)
 FRONT_OFFSET_Z = FRONT_THICKNESS * math.sqrt(1 + SHOULDER_SLOPE**2)
 INNER_CENTER_Y = CASE_DEPTH/2 + (FRONT_OFFSET_Z-ROOF_OFFSET_Z)/(2*SHOULDER_SLOPE)
@@ -283,7 +285,7 @@ def build(folder):
     screen_cut=display_rect(*DISPLAY_OUTER_WINDOW,1.8,-3,3).fuse(flare).fuse(
         display_rect(*DISPLAY_WINDOW,.6,.8,8.2)).removeSplitter()
     screen_cut.Placement=display_pose.multiply(screen_cut.Placement)
-    holes = [obround((0,HANDLE_FRONT-2,SHOULDER_Z+12.5), X,Z,Y,90,16,10),
+    holes = [obround((0,HANDLE_FRONT-2,SHOULDER_Z+HANDLE_HEIGHT/2), X,Z,Y,90,HANDLE_OPENING_HEIGHT,10),
              screen_cut,
              cylinder(FRONT_GRILLE_RADIUS,9,(0,-3,SPEAKER_CENTER_Z),Y),
              obround((0,SLOT_Y,145),X,Y,Z,124,3.2,HANDLE_TOP-145)]

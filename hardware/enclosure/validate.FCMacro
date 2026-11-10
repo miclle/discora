@@ -197,7 +197,7 @@ def validate(folder):
         controls['source_model_sha256']=hashlib.sha256(Path(baseline_path).read_bytes()).hexdigest()
         A.closeDocument(baseline.Name)
     bb=Part.makeCompound([o.Shape for o in objects]).BoundBox
-    handle=collisions(Part.makeBox(70,10,14,A.Vector(-35,handle_y-5,shoulder_z+5.5)),objects)
+    handle=collisions(Part.makeBox(50,10,22,A.Vector(-25,handle_y-5,shoulder_z+11.5)),objects)
     report={'date':'2026-11-10','model':model.name,'sha256':hashlib.sha256(model.read_bytes()).hexdigest(),
         'version':A.Version()[:3],'items':len(objects),'objects':[o.Name for o in objects],
         'main_pla_parts':connected,'rigid_pla_pieces':['FrontShell','RearShell','SpeakerCarrier','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','DisplayRetainer','Knob'],
@@ -212,7 +212,7 @@ def validate(folder):
         'battery_fit':battery_fit,'controls_translation_xyz_mm':[0,0,15],
         'top_shoulders':shoulders,'front_panel_thickness_samples_mm':thickness,
         'recessed_grille':grille_check,
-        'original_controls_difference_mm3':controls,'handle_opening_mm':[90,16],'handle_passage_clashes':handle,
+        'original_controls_difference_mm3':controls,'handle_opening_mm':[90,24],'handle_passage_clashes':handle,
         'physical_validation':False,'acoustic_tuning_verified':False,
         'limits':['Speaker mounting plane, actual mounting holes, terminals, gaskets and excursion remain unmeasured.',
                   'PCB sizes are documented; component heights and connector reservations are provisional.',
@@ -231,7 +231,7 @@ def validate(folder):
     assert all(not p['clashes'] for p in paths.values()),paths
     assert all(not p['clashes'] for p in keepouts.values()),keepouts
     assert all(v>=1-1e-7 for v in clearances.values()),clearances
-    assert abs(handle_top-(165+37.5*27/38+25))<1e-7
+    assert abs(handle_top-(165+37.5*27/38+45))<1e-7
     assert all(abs(a-b)<1e-7 for a,b in zip(report['assembly_size_xyz_mm'],[142,80,handle_top]))
     assert all(abs(a-b)<1e-7 for a,b in zip(battery_fit['model_size_xyz_mm'],[112,70,20]))
     assert all(v<=tolerance for k,v in controls.items() if k!='source_model_sha256'),controls
