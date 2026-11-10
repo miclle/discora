@@ -1,5 +1,5 @@
 {
-  "model_sha256": "0763858f1cfbe30c99434dce227a8c50fb99112e9ad7e43d9a5092ee646f35e8",
+  "model_sha256": "b1e943face3860219c90706176f7a709497eb15f5b1de335028ce72c6ac2d5ad",
   "freecad_version": [
     "1",
     "1",
@@ -40,10 +40,10 @@
       "file": "RearShell.stl",
       "size_xyz_mm": [
         142.0,
-        188.6447368421053,
-        75.00000000000007
+        188.644736842105,
+        75.00000000000006
       ],
-      "facets": 4658,
+      "facets": 5064,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -52,7 +52,7 @@
         0.0,
         -0.7071067811865475
       ],
-      "stl_sha256": "fd6cb37861ff297770654091d756d42c3a8ea8bad3a0329b9e339cc8f8857c88"
+      "stl_sha256": "92de414c5e9e0d97c391e9619dfb3922a90305318f66f33a61ee995f174a425a"
     },
     "SpeakerCarrier": {
       "file": "SpeakerCarrier.stl",
@@ -72,50 +72,14 @@
       ],
       "stl_sha256": "9ae509d7b2f27455cf9d8700f976281157b36fcb501128faff943948a900b924"
     },
-    "LPort": {
-      "file": "LPort.stl",
-      "size_xyz_mm": [
-        86.0,
-        28.39999999999999,
-        12.000000000000036
-      ],
-      "facets": 1400,
-      "closed_mesh": true,
-      "fits_with_5mm_brim": true,
-      "rotation_quaternion_xyzw": [
-        0.0,
-        -0.7071067811865475,
-        0.0,
-        0.7071067811865476
-      ],
-      "stl_sha256": "efe5735d0bb334710caf5aa4963dea310f25e39f2bd9bfa7757f7220c79ace8d"
-    },
-    "RPort": {
-      "file": "RPort.stl",
-      "size_xyz_mm": [
-        86.0,
-        28.39999999999999,
-        12.000000000000036
-      ],
-      "facets": 1400,
-      "closed_mesh": true,
-      "fits_with_5mm_brim": true,
-      "rotation_quaternion_xyzw": [
-        0.0,
-        0.7071067811865475,
-        -0.0,
-        0.7071067811865476
-      ],
-      "stl_sha256": "ddd0265646b81ec68714e430faa30cb1dc8d19300ed97e44d04be8dc7f9d87b4"
-    },
     "PlayPauseKey": {
       "file": "PlayPauseKey.stl",
       "size_xyz_mm": [
         12.800000000000011,
         12.799999999999983,
-        7.200000000000019
+        7.200000000000055
       ],
-      "facets": 328,
+      "facets": 284,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -124,16 +88,17 @@
         0.0,
         0.952675287877846
       ],
-      "stl_sha256": "ed37885514cde81d52d9905f9b391e6c5d3246bab1b209e7f2f816d6c4af580f"
+      "stl_sha256": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
+      "color_print_source": "export-dual-color-keys.py; STL is a single-material envelope"
     },
     "EjectKey": {
       "file": "EjectKey.stl",
       "size_xyz_mm": [
         12.800000000000011,
         12.799999999999983,
-        7.200000000000019
+        7.200000000000055
       ],
-      "facets": 312,
+      "facets": 284,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -142,16 +107,17 @@
         0.0,
         0.952675287877846
       ],
-      "stl_sha256": "c4c1aaa116b256a896f11d526f67d2b9f6d69c64d8318504de59ade97acee0ac"
+      "stl_sha256": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
+      "color_print_source": "export-dual-color-keys.py; STL is a single-material envelope"
     },
     "PrevKey": {
       "file": "PrevKey.stl",
       "size_xyz_mm": [
         12.800000000000011,
-        12.799999999999983,
-        7.200000000000019
+        12.800000000000011,
+        7.200000000000055
       ],
-      "facets": 312,
+      "facets": 284,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -160,16 +126,17 @@
         0.0,
         0.952675287877846
       ],
-      "stl_sha256": "c99571a4025af3f1aecab7bf4aca76ea86f7077ac0b05864e89d68f6d18c1307"
+      "stl_sha256": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
+      "color_print_source": "export-dual-color-keys.py; STL is a single-material envelope"
     },
     "NextKey": {
       "file": "NextKey.stl",
       "size_xyz_mm": [
         12.800000000000011,
-        12.799999999999983,
-        7.200000000000019
+        12.800000000000011,
+        7.200000000000055
       ],
-      "facets": 312,
+      "facets": 284,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -178,7 +145,8 @@
         0.0,
         0.952675287877846
       ],
-      "stl_sha256": "1192c0340c07cc6dc63e5e05524c9798e8d36059fe0e6cf7c19cdea3cad111b2"
+      "stl_sha256": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
+      "color_print_source": "export-dual-color-keys.py; STL is a single-material envelope"
     },
     "ButtonRetainer": {
       "file": "ButtonRetainer.stl",
@@ -263,9 +231,9 @@
         "RearShell"
       ],
       "exit_code": 0,
-      "gcode_sha256": "0769c4d32cca2f98711d48a963fc889214dc0590e2cb7098ca979397fe30befc",
-      "total_estimated_time": "6h 24m 35s",
-      "filament_g": 208.56,
+      "gcode_sha256": "4a5984f2b56b7438e91cfd962e16ce1ce76d2f96f8277aba759f655e93e1b1c1",
+      "total_estimated_time": "6h 52m 2s",
+      "filament_g": 219.54,
       "layers": 375,
       "vendor_T65535_parser_notice": true
     },
@@ -274,45 +242,47 @@
         "FrontShell"
       ],
       "exit_code": 0,
-      "gcode_sha256": "aa28fa27fd8a0a3501b9e1226538a22d2679a13026e168f9fd9c2af234deb040",
-      "total_estimated_time": "12h 6m 15s",
+      "gcode_sha256": "f45467c37284de5990b56bc54a69597e15b065e866e0712d78c957ec7c445a30",
+      "total_estimated_time": "12h 6m 14s",
       "filament_g": 110.89,
       "layers": 212,
-      "vendor_T65535_parser_notice": true
+      "vendor_T65535_parser_notice": true,
+      "reused_from_model_sha256": "87c28f128db6d821b76464446645afe38d47a9a3b9af55ff80cfadb172d77389",
+      "reuse_evidence": "All plate STL bytes, slicer version and profile hashes unchanged."
     },
     "SpeakerCarrier": {
       "parts": [
         "SpeakerCarrier"
       ],
       "exit_code": 0,
-      "gcode_sha256": "20f9d6705425a7b152d36e6eb17185c4c25a9b51d8b098134d75842a97c4a07b",
-      "total_estimated_time": "6h 57m 11s",
-      "filament_g": 158.54,
+      "gcode_sha256": "ab9107612969b5b5be336523f5be8528a57400ecd46395dbc68ec0cae3733df1",
+      "total_estimated_time": "6h 57m 32s",
+      "filament_g": 158.55,
       "layers": 282,
-      "vendor_T65535_parser_notice": true
+      "vendor_T65535_parser_notice": true,
+      "reused_from_model_sha256": "87c28f128db6d821b76464446645afe38d47a9a3b9af55ff80cfadb172d77389",
+      "reuse_evidence": "All plate STL bytes, slicer version and profile hashes unchanged."
     },
     "SmallParts": {
       "parts": [
-        "LPort",
-        "RPort",
-        "PlayPauseKey",
-        "EjectKey",
-        "PrevKey",
-        "NextKey",
         "ButtonRetainer",
         "DisplayRetainer",
         "Knob"
       ],
       "exit_code": 0,
-      "gcode_sha256": "90c7ea5d2110ddcdb90b5d56fb6fc66116c1ff26472351c71406042ae72081ae",
-      "total_estimated_time": "1h 6m 37s",
-      "filament_g": 22.16,
-      "layers": 60,
-      "vendor_T65535_parser_notice": true
+      "gcode_sha256": "f7cd500b4627cd02a899952aa3824b5cb41460adae7121e770727c2882cc5f6a",
+      "total_estimated_time": "22m 49s",
+      "filament_g": 5.22,
+      "layers": 41,
+      "vendor_T65535_parser_notice": true,
+      "reused_from_model_sha256": "87c28f128db6d821b76464446645afe38d47a9a3b9af55ff80cfadb172d77389",
+      "reuse_evidence": "All plate STL bytes, slicer version and profile hashes unchanged."
     }
   },
   "printer_profile_mapping": "User P2SC; installed Bambu P2S profile used for local slicing only",
   "printer_contacted": false,
   "gcode_execution_validated": false,
-  "slicer_version": "02.09.01.70"
+  "slicer_version": "02.09.01.70",
+  "dual_color_keys": "Excluded here; see dual-color-key-checks.json and export-dual-color-keys.py",
+  "verification_scope": "RearShell resliced after rib reinforcement; other plates reuse identical STL/profile/slicer evidence."
 }

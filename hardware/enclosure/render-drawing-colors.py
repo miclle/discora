@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256 = 'e9cc3ffd1e33dfd2ffecf19e1d6f2b694a027e31021bc9adc5b356991a9dbe37'
+MODEL_SHA256 = 'b1e943face3860219c90706176f7a709497eb15f5b1de335028ce72c6ac2d5ad'
 
 
 def palette_from_build():
@@ -139,7 +139,7 @@ def main():
     assignments={
         'ORANGE':'FrontShell PlayPauseKey EjectKey PrevKey NextKey',
         'TEAL':'SpeakerCarrier ButtonRetainer DisplayRetainer',
-        'BLACK':'RearShell LPort RPort',
+        'BLACK':'RearShell',
         'RUBBER':'Feet LDriver RDriver VolumePot DisplayHeader AmpChip DACChip PlayPauseSwitch EjectSwitch PrevSwitch NextSwitch',
         'GLASS':'Window','PIXEL':'StatusArt','KNOB_BLACK':'Knob',
         'SILVER':'Drive Encoder MCUChip','PCB':'Bridge DisplayPCB Amp MCU DAC','BLUE':'Battery',
@@ -147,7 +147,11 @@ def main():
     colors={name:palette[key] for key,names in assignments.items() for name in names.split()}
     assert set(colors)==set(data['objects'])
     appearance=json.loads((ROOT/'appearance-checks.json').read_text())
-    assert appearance['model_sha256']==MODEL_SHA256
+    integration=json.loads((ROOT/'side-port-checks.json').read_text())
+    assert integration['model_sha256']==MODEL_SHA256
+    assert appearance['model_sha256']==integration['baseline_sha256']
+    assert all(integration['unchanged_finished_parts_difference_mm3'][n]<.001
+               for n in ('PlayPauseKey','EjectKey','PrevKey','NextKey'))
     white_marks=appearance['color_update']['white_mark_faces_zero_based']
     rows={
         'front':((1,0,0),(0,0,1),(0,-1,0)),

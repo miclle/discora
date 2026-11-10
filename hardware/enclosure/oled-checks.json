@@ -1,6 +1,6 @@
 {
-  "model_sha256": "0763858f1cfbe30c99434dce227a8c50fb99112e9ad7e43d9a5092ee646f35e8",
-  "build_sha256": "51c40a6016506a83cf13c56ccdfcddb66bb4ff00b80015576a5942f6e90ae9bc",
+  "model_sha256": "b1e943face3860219c90706176f7a709497eb15f5b1de335028ce72c6ac2d5ad",
+  "build_sha256": "2d6bea81548c11cd6390d818c15892561fbe62619675bcc27aac31bbdcafba76",
   "source": "../OLED-1.3-128x64/oled-module-dimensions-wiring.webp",
   "source_sha256": "6adb394605cb124c7160bf8bf9fc2c827c520ebc458eb3d7139b901d61673733",
   "freecad_version": [
@@ -370,47 +370,6 @@
   },
   "physical_fit_verified": false,
   "all_pass": true,
-  "added_finished_objects": [
-    "DisplayRetainer"
-  ],
-  "baseline_sha256": "0005167cccb42dec1a38d3dfc59f059c9c28499c9e16056e784d7ef42dcce8a6",
-  "changed_finished_objects_difference_mm3": {
-    "FrontShell": 2730.912284619022,
-    "Window": 2221.7999999999993,
-    "StatusArt": 17.74200000000004,
-    "DisplayPCB": 2643.901598682461,
-    "DisplayHeader": 227.09632000000022
-  },
-  "unchanged_finished_objects": [
-    "LPort",
-    "RPort",
-    "RearShell",
-    "Feet",
-    "PlayPauseKey",
-    "EjectKey",
-    "PrevKey",
-    "NextKey",
-    "ButtonRetainer",
-    "Knob",
-    "SpeakerCarrier",
-    "LDriver",
-    "RDriver",
-    "PlayPauseSwitch",
-    "EjectSwitch",
-    "PrevSwitch",
-    "NextSwitch",
-    "Encoder",
-    "VolumePot",
-    "Drive",
-    "Bridge",
-    "Amp",
-    "AmpChip",
-    "MCU",
-    "MCUChip",
-    "DAC",
-    "DACChip",
-    "Battery"
-  ],
   "limits": [
     "Supplier drawing dimensions are not physical measurements.",
     "Connector housing uses 10.16 x 2.54 conservative cross-section; only pitch and side extent are specified.",

@@ -18,7 +18,7 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = 'e9cc3ffd1e33dfd2ffecf19e1d6f2b694a027e31021bc9adc5b356991a9dbe37'
+ANNOTATED_MODEL_SHA256 = 'b1e943face3860219c90706176f7a709497eb15f5b1de335028ce72c6ac2d5ad'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
@@ -38,14 +38,14 @@ def main():
         if hashlib.sha256((ROOT/file).read_bytes()).hexdigest()!=data[key]:
             raise SystemExit('Source changed; rerun export-drawings.py: '+file)
     assert all(data['checks'].values())
-    appearance=json.loads((ROOT/'appearance-checks.json').read_text())
-    update=appearance.get('color_update',{})
+    integration=json.loads((ROOT/'side-port-checks.json').read_text())
+    assert integration['model_sha256']==data['sha256']
     def evidence_matches_geometry(report,owners):
         if report['model_sha256']==data['sha256']:return True
-        # Reuse historical evidence only for explicitly unchanged objects.
-        return (appearance['model_sha256']==data['sha256']
-                and report['model_sha256']==update['baseline_sha256']
-                and set(owners)<=set(update.get('unchanged_geometry_objects',[])))
+        if (report['model_sha256']==integration.get('baseline_sha256')
+                and all(integration.get('unchanged_finished_parts_difference_mm3',{}).get(n,1)<.001 for n in owners)):
+            return True
+        return False
     side=json.loads((ROOT/'drawings'/'side-profile.json').read_text())
     assert side['sha256']==data['sha256']
     color_data=json.loads((ROOT/'drawings'/'color-render.json').read_text())
@@ -163,8 +163,8 @@ def main():
     c.setFillColor(white); c.rect(86*mm,107*mm,40*mm,10*mm,fill=1,stroke=0)
     text(106,110,'Ø130 圆孔 · 护网内凹 2.5',10,TEAL,'center')
     line(262,69,262,253,TEAL,.15,[4,2,1,2])
-    dv(79,153,277,287,'74 侧孔主体')
-    dh(247.5,276.5,116,169,'29')
+    dv(82.5,149.5,273,287,'67 导音口')
+    dh(251,273,116,169,'22')
     # Side dimensions use foot-bottom Z=0; paired body-bottom values are adjacent.
     for z,edge,x,label in [(165,222,211,'165'),(shoulder_z,259.5,200,f'{shoulder_z:.2f}'),(165,302,310,'165')]:
         dv(36,36+z,edge,x,label)
@@ -247,7 +247,7 @@ def main():
         '键中心 X=-59 / -41、Y=9 / 26；屏与旋钮 Y=18、X=0 / 48。',
         '前壳背锁：后壁 X=±67.4、Z=18；后斜面 X=±29、Z=179。',
         'P3 支架：4 孔，X=±64、Z=27 / 124；Ø2.8，沉头 Ø4.8。',
-        '侧孔：每侧 2 孔，Y=40、Z=39 / 117；Ø2.2，沉头 Ø4.2。',
+        '侧孔饰片四点连接：筋 2×3，饰片厚 2；短管与声腔轴向留隙 0.3。',
         '背锁孔 Ø4.4／通孔 Ø2.2／盲底孔 Ø1.6；下孔深 65.8，名义螺钉 2×8。',
     ],gap=6.5,size=8.5)
     c.showPage()
@@ -284,8 +284,8 @@ def main():
             x=panel+4+col*96;y=89-row*8
             badge(x,y+1,part['number']);text(x+5,y,part['label'].replace('见下一页','见右图'),8)
     notes(12,31,[
-        '左图覆盖 34 个成品对象，08 为硬件总成；右图展开 P3 支架和 19 个硬件对象，共 12 组。三个主体均为单一连续实体。',
-        '引线端点为组包络中心；展示位移不是拆装路径。侧孔需后装，拆装顺序及检查边界见第 5 页；颜色不代表实物材料。',
+        '左图覆盖 32 个成品对象，08 为硬件总成；右图展开 P3 支架和 19 个硬件对象，共 12 组。三个主体均为单一连续实体。',
+        '引线端点为组包络中心；展示位移不是拆装路径。侧孔已并入后壳，拆装顺序及检查边界见第 5 页；颜色不代表实物材料。',
     ],gap=7,size=8)
     c.showPage()
 
@@ -322,14 +322,14 @@ def main():
         '喇叭未建盆架、磁铁和安装孔；显示内容为示意，电子板元件与接头高度含设计预留。',
         '剖图使用实际实体裁切、隐藏线消除；未施加材料剖面线，不能由线型判断材质。',
         '三个主体及拆装路径已做 CAD 检查、PLA 切片；仍需配合试片、螺钉试装、强度和走线实测。',
-        '本次四键改为双色实体，其余 88 个形状不变；按键已独立切片验证，实物配合与白色遮盖效果仍待验。',
+        '侧饰片已加厚为 2 mm，四处 2×3 连接筋；净通流面积约 384 mm²，尚未完成声学调谐。',
     ],gap=8,size=9)
     c.showPage()
 
-    page(5,'对象清单、打印与拆装','34 个成品对象 · 尺寸为装配坐标系 X × Y × Z 的轴对齐包络，非展开尺寸','清单尺寸 mm；无制造数量承诺')
+    page(5,'对象清单、打印与拆装','32 个成品对象 · 尺寸为装配坐标系 X × Y × Z 的轴对齐包络，非展开尺寸','清单尺寸 mm；无制造数量承诺')
     labels={
         'FrontShell':'P1 前壳 / 提手 / 格栅 / 屏幕座',
-        'RearShell':'P2 后斜面 / 碟口 / 侧后壁 / 底架 / 导轨',
+        'RearShell':'P2 一体后壳 / 碟口 / 导音孔及饰片 / 底架',
         'SpeakerCarrier':'P3 双声腔 / 前障板 / 电子托架',
         'Cowl':'前壳 / 提手','LPanel':'左侧壳','RPanel':'右侧壳','LPort':'左导音孔 / 饰片','RPort':'右导音孔 / 饰片',
         'FrontBezel':'中央格栅压圈','FrontGrille':'通孔护网','Back':'后盖','Base':'底架 / 下固定座','Feet':'脚垫复合件（4 个）',
@@ -361,11 +361,11 @@ def main():
             text(x+1,y-1.8,f'{membership[name]}  {name}',7)
             text(x+1,y-4.8,labels[name],7,MUTED)
             text(x+193,y-3.5,' × '.join(fmt(n) for n in obj['size']),7.5,INK,'right')
-    text(12,127,'PLA 打印：3 主体 + 2 侧孔 + 4 键帽 + 焊线支架 + 旋钮 + OLED 压框 = 12 件',11,TEAL)
+    text(12,127,'PLA 打印：3 主体（侧孔并入后壳）+ 4 键帽 + 焊线支架 + 旋钮 + OLED 压框 = 10 件',11,TEAL)
     printing=json.loads((ROOT/'print-checks.json').read_text())
     assert evidence_matches_geometry(printing,['FrontShell','RearShell','SpeakerCarrier']),'Main-body print geometry differs'
     keys=json.loads((ROOT/'dual-color-key-checks.json').read_text())
-    assert keys['model_sha256']==data['sha256'] and keys['slicing']['exit_code']==0
+    assert evidence_matches_geometry(keys,['PlayPauseKey','EjectKey','PrevKey','NextKey']) and keys['slicing']['exit_code']==0
     text(12,118,'用户设备 P2SC · 按 P2S 配置 / 256³ 空间 / 0.4 喷嘴 / 0.20 层高 / 3 壁 / 15% 填充 / 树状支撑',9)
     for i,(name,label,pose) in enumerate([
         ('FrontShell','P1 前壳','正面朝下'),('RearShell','P2 后壳','背面朝下'),
@@ -375,8 +375,8 @@ def main():
         text(14,106-i*9,f"{label}  ·  {pose}  ·  打印包络 {size} mm  ·  切片估重 {plate['filament_g']:.1f} g（含支撑）",9)
     notes(14,72,[
         '拆卸：从后壁与后斜面深孔取出 4 螺钉，断开操控线，前壳向前退出。',
-        '支架拆卸前先拔出两侧孔件、断线并卸 4 螺钉；支架向前抽出，光驱先前移 11.5，再侧转 -30°并前移 15.75 后抽出。',
-        '电池松开绑带并断线后向前取出；装配按反向顺序，侧孔最后装入并固定。',
+        '支架拆卸前断线并卸 4 螺钉；左右侧孔随后壳保持固定；支架向前抽出，光驱先前移 11.5，再侧转 -30°并前移 15.75 后抽出。',
+        '电池松开绑带并断线后向前取出；装配按反向顺序，无独立侧孔装配步骤。',
         '前壳路径按 1 mm 抽样；光驱转动按 0.5° 抽样，平移及其余路径连续保守扫掠。实物未验收。',
         '四键双色：0.4 喷嘴 / 0.12 层高；白色 0.6 深；使用双色 3MF。实际色彩、配合与按压行程待测。',
     ],gap=7,size=8.5)

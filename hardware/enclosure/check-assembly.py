@@ -32,14 +32,14 @@ def check(doc):
     report={'units':'mm','fasteners_and_straps_removed':True,'cables_disconnected':True,'physical_assembly_test':False,'paths':{}}
     core_hw=['LDriver','RDriver','Amp','AmpChip','Bridge','MCU','MCUChip']
     core_sources=list(doc.SpeakerCarrier.ConstructionObjects)+core_hw
-    fixed=[n for n in objects if n not in core_hw+['SpeakerCarrier','FrontShell','LPort','RPort','Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch','Knob','Encoder','VolumePot','DisplayPCB','DisplayHeader','DisplayRetainer']]
+    fixed=[n for n in objects if n not in core_hw+['SpeakerCarrier','FrontShell','Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch','Knob','Encoder','VolumePot','DisplayPCB','DisplayHeader','DisplayRetainer']]
     hits=[]
     for name in core_sources:
         hit=collisions(box_sweep(doc.getObject(name).Shape,1,-140),fixed)
         if hit:hits.append({'moving_source':name,'hits':hit})
     report['paths']['speaker_carrier_front']={'method':'continuous conservative bounding-box sweep per construction component',
         'translation_xyz_mm':[0,-140,0],'moving':['SpeakerCarrier']+core_hw,'fixed':fixed,
-        'prerequisites':['Front cover removed and its cables disconnected','Both side-port inserts removed','Four carrier screws removed'],
+        'prerequisites':['Front cover removed and its cables disconnected','Four carrier screws removed'],
         'clashes':hits}
     print('PATH speaker_carrier_front',hits,flush=True)
     fixed=['RearShell','Battery','DAC','DACChip','Feet']
@@ -70,23 +70,6 @@ def check(doc):
         'translation_xyz_mm':[0,-150,0],'moving':['Battery'],'fixed':fixed,
         'prerequisites':['Front cover removed','Battery straps and cables removed'], 'clashes':hits}
     print('PATH battery_front',hits,flush=True)
-    for name,sign in [('LPort',-1),('RPort',1)]:
-        source=objects[name].Shape;direction=V(sign*25,0,0)
-        volumes=[source.copy()]
-        for face in source.Faces:
-            # All curved port surfaces are coaxial with X; their axial normal sign is constant.
-            if not isinstance(face.Surface,Part.Plane):
-                assert hasattr(face.Surface,'Axis') and abs(abs(face.Surface.Axis.x)-1)<1e-7,(name,face.Surface)
-            if face.normalAt(0,0).dot(direction)>1e-7:
-                solid=face.extrude(direction)
-                assert solid.isValid(),name
-                if solid.Solids:volumes.append(solid)
-        fixed=[n for n in objects if n!=name]
-        hits=collisions(Part.makeCompound(volumes),fixed)
-        report['paths'][name+'_outward']={'method':'continuous forward-facing surface extrusion along X',
-            'translation_xyz_mm':[sign*25,0,0],'moving':[name],'fixed':fixed,
-            'prerequisites':['Two side-port screws removed'], 'clashes':hits}
-        print('PATH',name,hits,flush=True)
     moving=['FrontShell','Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch','Knob','Encoder','VolumePot','DisplayPCB','DisplayHeader','DisplayRetainer']
     fixed=[n for n in objects if n not in moving]
     # Fixed objects all start at Y>=5. The exterior slab at Y<=5 moves

@@ -200,7 +200,7 @@ def validate(folder):
     handle=collisions(Part.makeBox(70,10,14,A.Vector(-35,handle_y-5,shoulder_z+5.5)),objects)
     report={'date':'2026-11-10','model':model.name,'sha256':hashlib.sha256(model.read_bytes()).hexdigest(),
         'version':A.Version()[:3],'items':len(objects),'objects':[o.Name for o in objects],
-        'main_pla_parts':connected,'rigid_pla_pieces':['FrontShell','RearShell','SpeakerCarrier','LPort','RPort','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','DisplayRetainer','Knob'],
+        'main_pla_parts':connected,'rigid_pla_pieces':['FrontShell','RearShell','SpeakerCarrier','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','DisplayRetainer','Knob'],
         'rear_roof_ownership':roof_ownership,'shell_split_y_mm':42.5,
         'straight_side_seam_yz_mm':[[seam_start.x,seam_start.y],[seam_end.x,seam_end.y]],
         'side_seam_ownership_samples_xyz_mm':seam_points,
@@ -224,7 +224,7 @@ def validate(folder):
     assert abs(handle_y-40)<1e-7
     assert all(abs(y-handle_y)<1e-7 for y in port_alignment['port_center_y_mm'].values())
     assert abs(port_alignment['shell_opening_center_y_mm']-handle_y)<1e-7
-    assert len(objects)==34,len(objects)
+    assert len(objects)==32,len(objects)
     assert not clashes and not disc and not handle,(clashes,disc,handle)
     assert all(v<=tolerance for v in symmetry.values()),symmetry
     assert all(links.values()),links

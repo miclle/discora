@@ -31,7 +31,6 @@
       ],
       "prerequisites": [
         "Front cover removed and its cables disconnected",
-        "Both side-port inserts removed",
         "Four carrier screws removed"
       ],
       "clashes": []
@@ -104,106 +103,6 @@
       ],
       "clashes": []
     },
-    "LPort_outward": {
-      "method": "continuous forward-facing surface extrusion along X",
-      "translation_xyz_mm": [
-        -25,
-        0,
-        0
-      ],
-      "moving": [
-        "LPort"
-      ],
-      "fixed": [
-        "RPort",
-        "FrontShell",
-        "RearShell",
-        "Feet",
-        "Window",
-        "StatusArt",
-        "PlayPauseKey",
-        "EjectKey",
-        "PrevKey",
-        "NextKey",
-        "ButtonRetainer",
-        "Knob",
-        "DisplayRetainer",
-        "SpeakerCarrier",
-        "LDriver",
-        "RDriver",
-        "PlayPauseSwitch",
-        "EjectSwitch",
-        "PrevSwitch",
-        "NextSwitch",
-        "Encoder",
-        "VolumePot",
-        "Drive",
-        "Bridge",
-        "DisplayPCB",
-        "DisplayHeader",
-        "Amp",
-        "AmpChip",
-        "MCU",
-        "MCUChip",
-        "DAC",
-        "DACChip",
-        "Battery"
-      ],
-      "prerequisites": [
-        "Two side-port screws removed"
-      ],
-      "clashes": []
-    },
-    "RPort_outward": {
-      "method": "continuous forward-facing surface extrusion along X",
-      "translation_xyz_mm": [
-        25,
-        0,
-        0
-      ],
-      "moving": [
-        "RPort"
-      ],
-      "fixed": [
-        "LPort",
-        "FrontShell",
-        "RearShell",
-        "Feet",
-        "Window",
-        "StatusArt",
-        "PlayPauseKey",
-        "EjectKey",
-        "PrevKey",
-        "NextKey",
-        "ButtonRetainer",
-        "Knob",
-        "DisplayRetainer",
-        "SpeakerCarrier",
-        "LDriver",
-        "RDriver",
-        "PlayPauseSwitch",
-        "EjectSwitch",
-        "PrevSwitch",
-        "NextSwitch",
-        "Encoder",
-        "VolumePot",
-        "Drive",
-        "Bridge",
-        "DisplayPCB",
-        "DisplayHeader",
-        "Amp",
-        "AmpChip",
-        "MCU",
-        "MCUChip",
-        "DAC",
-        "DACChip",
-        "Battery"
-      ],
-      "prerequisites": [
-        "Two side-port screws removed"
-      ],
-      "clashes": []
-    },
     "front_cover": {
       "method": "exact per-part B-rep samples; 1 mm forward steps",
       "waypoints_xyz_mm": [
@@ -239,8 +138,6 @@
         "DisplayRetainer"
       ],
       "fixed": [
-        "LPort",
-        "RPort",
         "RearShell",
         "Feet",
         "SpeakerCarrier",
@@ -264,5 +161,5 @@
     }
   },
   "all_pass": true,
-  "model_sha256": "0763858f1cfbe30c99434dce227a8c50fb99112e9ad7e43d9a5092ee646f35e8"
+  "model_sha256": "b1e943face3860219c90706176f7a709497eb15f5b1de335028ce72c6ac2d5ad"
 }
