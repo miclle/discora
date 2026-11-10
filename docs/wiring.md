@@ -141,6 +141,8 @@ DAC 的 A3V3 留空，仅作电压核对点，不接外部 5V，也不并联 ESP
 
 模块标称 3A，但不加散热要求在 2A 内，光驱启动／进退碟及长期读盘能力尚未验证。两路共地、正极不并联；接入前须断电核对光驱辅助 5V 与 USB VBUS 的连通性，以及主控 USB-OTG、IN-OUT 和 COM 电源路径，避免经 USB 将两路输出并联。若互通，先确定防回灌／隔离接法并保留有效 VBUS，不能直接沿用现有双头线接入。光驱电流不经主控板，DAC 最终电池支路仍待确认。
 
+2026-11-10 新增 [USB 直连 GPIO19／20 与双路 5V 接线图](diagrams/discora-wiring.html#usb-gpio-dual-5v)：A 供主控 5Vin，B 供光驱／桥接器 USB VBUS，D−／D+／GND 直连主控；不把 B 的 VBUS 接到主控 5V。图中列明辅助电源移除、两入口同源供电条件、目标焊桥状态及电池播放／COM 烧录的切换步骤。该图是 `planned` 改接方案，区别于本文前述台架 USB 线缆布局；尚未修改实物或完成回灌、带载及读盘验证。 USB 固定引脚与布线原则另见[乐鑫硬件设计说明](https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32s3/schematic-checklist.html#usb)。
+
 ### 开发板取电：3V3、5Vin 与 IN-OUT
 
 OLED 可从开发板 **3V3 → VCC、GND → GND** 取电，前提是屏幕适用 3.3V、板上稳压器及输入电源有余量。DAC 则使用确认可用的 **5V → VIN、GND → GND**；两个模块无需各自配一个独立电源，但不能从普通 GPIO 取电。功放和光驱仍使用足额支路，不让大电流经过主控板。
