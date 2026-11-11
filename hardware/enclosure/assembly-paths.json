@@ -52,7 +52,7 @@
       ],
       "translation_during_yaw_xyz_mm": [
         0,
-        -15.75,
+        -17.75,
         0
       ],
       "final_translation_xyz_mm": [
@@ -161,5 +161,5 @@
     }
   },
   "all_pass": true,
-  "model_sha256": "5afabeab868c7abc9d47c7db4277e66120d579b33a9798a8da762107acf189f2"
+  "model_sha256": "e507a10f55fc1f1f7340c7df5203a91666335190cf97bc31325e94052f30bc4b"
 }

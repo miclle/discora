@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256 = '5afabeab868c7abc9d47c7db4277e66120d579b33a9798a8da762107acf189f2'
+MODEL_SHA256 = 'e507a10f55fc1f1f7340c7df5203a91666335190cf97bc31325e94052f30bc4b'
 
 
 def palette_from_build():
@@ -151,7 +151,13 @@ def main():
     handle=json.loads((ROOT/'handle-checks.json').read_text())
     volume=json.loads((ROOT/'volume-checks.json').read_text())
     seam=json.loads((ROOT/'side-seam-checks.json').read_text())
-    assert seam['model_sha256']==MODEL_SHA256 and seam['all_pass']
+    bottom=json.loads((ROOT/'bottom-corner-checks.json').read_text())
+    rear=json.loads((ROOT/'rear-thickness-checks.json').read_text())
+    assert rear['model_sha256']==MODEL_SHA256 and rear['all_pass']
+    assert all(rear['key_and_knob_face_order_preserved'].values())
+    assert bottom['model_sha256']==rear['baseline_sha256'] and bottom['all_pass']
+    assert all(bottom['key_and_knob_face_order_preserved'].values())
+    assert seam['model_sha256']==bottom['baseline_sha256'] and seam['all_pass']
     assert all(seam['key_and_knob_face_order_preserved'].values())
     assert volume['model_sha256']==seam['baseline_sha256'] and volume['all_pass']
     assert volume['baseline_sha256']==handle['model_sha256']

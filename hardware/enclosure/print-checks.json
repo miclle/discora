@@ -1,5 +1,5 @@
 {
-  "model_sha256": "5afabeab868c7abc9d47c7db4277e66120d579b33a9798a8da762107acf189f2",
+  "model_sha256": "e507a10f55fc1f1f7340c7df5203a91666335190cf97bc31325e94052f30bc4b",
   "freecad_version": [
     "1",
     "1",
@@ -21,11 +21,11 @@
     "FrontShell": {
       "file": "FrontShell.stl",
       "size_xyz_mm": [
-        233.6447368421053,
-        142.00000000000006,
-        42.50000000000008
+        236.35526315789477,
+        146.0000000000001,
+        43.50000000000008
       ],
-      "facets": 241820,
+      "facets": 241872,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -34,14 +34,14 @@
         0.5,
         0.5000000000000001
       ],
-      "stl_sha256": "a039c41d4d8f801e183f0e4e184f77fe22665cd2db8e66f86990b93d0ced9977"
+      "stl_sha256": "62855c3c5d3b5cd66aaef70b410c4ffa37e20d29ec5cc840c490fbd6bee47c98"
     },
     "RearShell": {
       "file": "RearShell.stl",
       "size_xyz_mm": [
-        142.0,
-        186.06375683115442,
-        75.00000000000006
+        146.0,
+        188.77428314694393,
+        77.00000000000007
       ],
       "facets": 5060,
       "closed_mesh": true,
@@ -52,7 +52,7 @@
         0.0,
         -0.7071067811865475
       ],
-      "stl_sha256": "6d015bc782dd2d77c31551a4349123ce4e3638f81903187b1a73c995fdc6396f"
+      "stl_sha256": "4a1830a831352c16470c2566ce4056b4be2afdfe68b77c34f75695075826f1f8"
     },
     "SpeakerCarrier": {
       "file": "SpeakerCarrier.stl",
@@ -61,7 +61,7 @@
         125.69999999999999,
         56.50000000000003
       ],
-      "facets": 3452,
+      "facets": 3476,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -70,7 +70,7 @@
         0.0,
         -0.7071067811865475
       ],
-      "stl_sha256": "9425d11b3edc4fbe0ab1aac6b9a68127e42c023c4bc571c4983337da8f74b3d6"
+      "stl_sha256": "0bd218034a4046ac61803d1f5f795d1d7b2233fb508538762bd5d940f0a727a4"
     },
     "PlayPauseKey": {
       "file": "PlayPauseKey.stl",
@@ -232,10 +232,10 @@
         "RearShell"
       ],
       "exit_code": 0,
-      "gcode_sha256": "026c2dc10395e3aadadc6e9b01f26d985f0d41d990e97918543b720c4c014cfb",
-      "total_estimated_time": "6h 46m 47s",
-      "filament_g": 217.49,
-      "layers": 375,
+      "gcode_sha256": "7aa80ede425c2975d343b2cf7addb57c010bce753ccd9b0eab62e83be91c8569",
+      "total_estimated_time": "7h 54m 18s",
+      "filament_g": 243.72,
+      "layers": 385,
       "vendor_T65535_parser_notice": true
     },
     "FrontShell": {
@@ -243,22 +243,26 @@
         "FrontShell"
       ],
       "exit_code": 0,
-      "gcode_sha256": "c86986557b4b86a2e7787a147060727a2734f3ec44bcc6375524c84c155f993c",
-      "total_estimated_time": "12h 48m 13s",
-      "filament_g": 123.72,
-      "layers": 212,
-      "vendor_T65535_parser_notice": true
+      "gcode_sha256": "f48b708e3e451f503484a15c978066cc77c4841f94323d27d2d2d07e0a3f6119",
+      "total_estimated_time": "13h 3m 55s",
+      "filament_g": 129.32,
+      "layers": 217,
+      "vendor_T65535_parser_notice": true,
+      "reused_from_model_sha256": "c2a6f6e7688aadbf636201ec5114228a52f45d27dfbfc7a5d58f642af80d6528",
+      "reuse_basis": "Identical STL bytes, profile hashes and slicer version; prior G-code hash verified after the side-port through-cut correction."
     },
     "SpeakerCarrier": {
       "parts": [
         "SpeakerCarrier"
       ],
       "exit_code": 0,
-      "gcode_sha256": "5ccad5a13bab68c85957f5df993f6aa0a641d740fb1ebf359476f06764e05120",
-      "total_estimated_time": "7h 0m 5s",
-      "filament_g": 158.57,
+      "gcode_sha256": "b4008603aa04eb1566a99c0b92398263d4f4229e6776dbcadb4f8b04a643ad29",
+      "total_estimated_time": "7h 1m 52s",
+      "filament_g": 158.97,
       "layers": 282,
-      "vendor_T65535_parser_notice": true
+      "vendor_T65535_parser_notice": true,
+      "reused_from_model_sha256": "c2a6f6e7688aadbf636201ec5114228a52f45d27dfbfc7a5d58f642af80d6528",
+      "reuse_basis": "Identical STL bytes, profile hashes and slicer version; prior G-code hash verified after the side-port through-cut correction."
     },
     "SmallParts": {
       "parts": [
@@ -266,13 +270,13 @@
         "DisplayRetainer"
       ],
       "exit_code": 0,
-      "gcode_sha256": "b479c3f4d434e18a3301f6a6ea7cc0bb37703be3e725a76506543ad064639bc3",
+      "gcode_sha256": "6d2d6acc697236fe2f108d63b86e60448d1ec6a6fd4470c27470cdc8388aa03b",
       "total_estimated_time": "18m 12s",
       "filament_g": 2.81,
       "layers": 32,
       "vendor_T65535_parser_notice": true,
-      "reused_from_model_sha256": "1236bfea29f0e857223b9c5dcc89cedc3c88c1f736967e49dfa8ef54e3ab667b",
-      "reuse_basis": "Identical STL bytes, resolved profile hashes and slicer version; prior G-code hash verified"
+      "reused_from_model_sha256": "c2a6f6e7688aadbf636201ec5114228a52f45d27dfbfc7a5d58f642af80d6528",
+      "reuse_basis": "Identical STL bytes, profile hashes and slicer version; prior G-code hash verified after the side-port through-cut correction."
     }
   },
   "printer_profile_mapping": "User P2SC; installed Bambu P2S profile used for local slicing only",

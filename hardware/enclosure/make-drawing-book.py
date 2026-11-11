@@ -18,7 +18,7 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = '5afabeab868c7abc9d47c7db4277e66120d579b33a9798a8da762107acf189f2'
+ANNOTATED_MODEL_SHA256 = 'e507a10f55fc1f1f7340c7df5203a91666335190cf97bc31325e94052f30bc4b'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
@@ -42,12 +42,20 @@ def main():
     handle=json.loads((ROOT/'handle-checks.json').read_text())
     volume=json.loads((ROOT/'volume-checks.json').read_text())
     seam=json.loads((ROOT/'side-seam-checks.json').read_text())
-    assert seam['model_sha256']==data['sha256'] and seam['all_pass']
+    bottom_check=json.loads((ROOT/'bottom-corner-checks.json').read_text())
+    rear=json.loads((ROOT/'rear-thickness-checks.json').read_text())
+    assert rear['model_sha256']==data['sha256'] and rear['all_pass']
+    assert bottom_check['model_sha256']==rear['baseline_sha256'] and bottom_check['all_pass']
+    assert seam['model_sha256']==bottom_check['baseline_sha256'] and seam['all_pass']
     assert volume['model_sha256']==seam['baseline_sha256'] and volume['all_pass']
     assert volume['baseline_sha256']==handle['model_sha256']
     assert integration['model_sha256']==handle['baseline_sha256']
     def evidence_matches_geometry(report,owners):
         if report['model_sha256']==data['sha256']:return True
+        if any(rear['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
+        if report['model_sha256']==rear['baseline_sha256']:return True
+        if any(bottom_check['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
+        if report['model_sha256']==bottom_check['baseline_sha256']:return True
         if any(seam['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
         if report['model_sha256']==seam['baseline_sha256']:return True
         if any(volume['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
@@ -166,29 +174,31 @@ def main():
     view('right',222,20)
     text(35,264,'正视 · 沿 +Y 观察',9,MUTED)
     text(259,264,'右视 · 沿 -X 观察',10,MUTED,'center')
-    dh(35,177,20,18,'142')
-    dv(20,20+handle_top,35,23,f'{handle_top:.2f}（含脚垫和提手）')
-    dh(222,302,20,18,'80')
-    dh(61,151,20+shoulder_z+34.5,259,'90 净开口')
-    dv(20+shoulder_z+10.5,20+shoulder_z+34.5,151,164,'24')
-    dv(20,96,177,191,'76 格栅中心高')
-    line(106,26,106,253,LIGHT,.15,[5,2,1,2])
-    line(39,96,173,96,LIGHT,.15,[5,2,1,2])
-    c.setFillColor(white); c.rect(86*mm,91*mm,40*mm,10*mm,fill=1,stroke=0)
-    text(106,94,'Ø130 圆孔 · 护网内凹 2.5',10,TEAL,'center')
-    line(264.5,53,264.5,253,TEAL,.15,[4,2,1,2])
-    dv(66.5,133.5,275.5,287,'67 导音口')
-    dh(253.5,275.5,100,153,'22')
-    # Side dimensions use foot-bottom Z=0; paired body-bottom values are adjacent.
-    for z,edge,x,label in [(165,222,211,'165'),(shoulder_z,259.5,200,f'{shoulder_z:.2f}'),(rear_eave_z,302,310,f'{rear_eave_z:.2f}')]:
-        dv(20,20+z,edge,x,label)
-    dh(222,259.5,20+shoulder_z,239,'37.5')
-    dh(264.5,302,20+shoulder_z,239,'37.5')
+    dh(35,181,20,18,'146')
+    line(38,26,49,32,TEAL,.2)
+    text(50,33,'底角 R4（前后共四处）',8,TEAL,background=True)
+    dv(20,22+handle_top,35,23,f'{handle_top+2:.2f}（含脚垫和提手）')
+    dh(222,304,20,18,'82')
+    dh(63,153,22+shoulder_z+34.5,262,'90 净开口')
+    dv(22+shoulder_z+10.5,22+shoulder_z+34.5,153,166,'24')
+    dv(20,98,181,191,'78 格栅离地高')
+    line(108,26,108,256,LIGHT,.15,[5,2,1,2])
+    line(41,98,175,98,LIGHT,.15,[5,2,1,2])
+    c.setFillColor(white); c.rect(88*mm,93*mm,40*mm,10*mm,fill=1,stroke=0)
+    text(108,96,'Ø130 圆孔 · 护网内凹 2.5',10,TEAL,'center')
+    line(265.5,53,265.5,256,TEAL,.15,[4,2,1,2])
+    dv(68.5,135.5,276.5,288,'67 导音口')
+    dh(254.5,276.5,102,153,'22')
+    # Side dimensions use foot-bottom Z=-2; paired body-bottom values are adjacent.
+    for z,edge,x,label in [(165,222,211,'167'),(shoulder_z,260.5,200,f'{shoulder_z+2:.2f}'),(rear_eave_z,304,312,f'{rear_eave_z+2:.2f}')]:
+        dv(20,22+z,edge,x,label)
+    dh(222,260.5,22+shoulder_z,242,'38.5')
+    dh(265.5,304,22+shoulder_z,242,'38.5')
     line(218,20,312,20,MUTED,.15,[4,2])
-    line(218,23,302,23,LIGHT,.15,[2,2])
-    for letter,u,z,dx,dy in [('A',0,165,3,-7),('B',37.5,shoulder_z,-5,3),
-                              ('C',42.5,rear_peak_z,4,3),('D',80,rear_eave_z,-5,-7)]:
-        text(222+u+dx,20+z+dy,letter,8,TEAL,'center',background=True)
+    line(218,23,304,23,LIGHT,.15,[2,2])
+    for letter,u,z,dx,dy in [('A',0,165,3,-7),('B',38.5,shoulder_z,-5,3),
+                              ('C',43.5,rear_peak_z,4,3),('D',82,rear_eave_z,-5,-7)]:
+        text(222+u+dx,22+z+dy,letter,8,TEAL,'center',background=True)
     text(319,257,'高度对照 / mm',11,TEAL)
     text(319,248,'测点',8,MUTED)
     text(374,248,'含脚垫',8,MUTED,'center')
@@ -202,27 +212,27 @@ def main():
         text(374,yy-4,f"{z-side['foot_bottom_z']:.2f}",9,TEAL,'center')
         text(398,yy-4,f"{z-side['shell_bottom_z']:.2f}",9,TEAL,'center')
     table(317,189,91,[
-        ('整机宽 / 深','142 / 80'),
+        ('整机宽 / 深','146 / 82'),
         ('提手净开口 / 厚','90 × 24 / 5'),
         ('格栅中心 X / Z','0 / 76'),
         ('圆孔 / 护网内凹','Ø130 / 2.5'),
-        ('前板 / 斜板 / 护网厚','5 / 5 / 2.5'),
-        ('侧开口中心 Y / Z','42.5 / 80'),
+        ('前 / 后壳主体 / 护网','5 / 5 / 2.5'),
+        ('侧开口中心 Y / Z','43.5 / 80'),
         ('侧饰片宽 / 高','12 / 56'),
         ('脚垫','4 × Ø8 × 3'),
-        ('前斜面水平 / 高差','37.5 / 26.645'),
+        ('前斜面水平 / 高差','38.5 / 27.355'),
         ('前斜面与水平夹角',f"{side['front_angle_deg']:.2f}°"),
-        ('后斜面水平 / 高差','37.5 / 26.645'),
+        ('后斜面水平 / 高差','38.5 / 27.355'),
         ('后斜面与水平夹角',f"{side['rear_angle_deg']:.2f}°"),
         ('提手高 / 上下横梁','45 / 10.5'),
         ('提手顶外角 / 前棱','R4 / R1.6'),
     ],split=44,height=8)
     notes(319,70,[
-        '尺寸线以脚垫底面 Z=0 为基准。',
-        '不含脚垫高度从外壳底面 Z=3 量起。',
+        '尺寸线以脚垫底面 Z=−2 为基准。',
+        '不含脚垫高度从外壳底面 Z=1 量起。',
         '两种总高均包含提手；未计脚垫受压。',
         'X 向右、Y 向后、Z 向上；中心面 X=0。',
-        '后壳侧轮廓与侧孔以 Y=42.5 对称。',
+        '后壳侧轮廓与侧孔以 Y=43.5 对称。',
         '前斜面高于后壳 2.581；无顶部台阶。',
         '尺寸为 CAD 名义值，未定义制造公差。',
         '请勿按图量取或直接投产。',
@@ -232,14 +242,14 @@ def main():
     page(2,'顶面、背面与操控开孔','碟口尺寸按水平投影；操控开孔按前斜面真形','顶 / 背视图 1:1；开孔详图 1:1')
     view('top',34,168)
     text(105,259,'顶视 · 沿 -Z 观察',10,MUTED,'center')
-    dh(34,176,248,253,'142')
-    dv(168,248,176,190,'80')
+    dh(34,180,250,255,'146')
+    dv(168,250,180,192,'82')
     # Slot extremes are X=-62...62, Y=66.15...69.35.
-    dh(43,167,237.35,224,'124 碟口水平长度')
-    line(167,235.75,201,240,TEAL,.16); text(201,242,'宽 3.2',9,TEAL)
-    line(105,168,105,248,LIGHT,.15,[5,2,1,2])
-    text(34,156,'碟口中心 Y=67.75；提手后表面 Y=42.5。',10)
-    text(34,148,'120 × 1.2 光盘扫掠距提手后表面 24.65。',9,MUTED)
+    dh(45,169,237.35,224,'124 碟口水平长度')
+    line(169,235.75,201,240,TEAL,.16); text(201,242,'宽 3.2',9,TEAL)
+    line(107,168,107,250,LIGHT,.15,[5,2,1,2])
+    text(34,156,'碟口中心 Y=67.75；提手后表面 Y=43.5。',10)
+    text(34,148,'120 × 1.2 光盘扫掠距提手后表面 23.65。',9,MUTED)
     view('rear',247,20)
     text(318,263,'背视 · 沿 -Y 观察',10,MUTED,'center')
     text(34,142,'背锁：后壁下方两孔与后斜面两孔，从背面锁紧前壳。',8,TEAL)
@@ -262,7 +272,7 @@ def main():
         '前壳背锁：后壁 X=±67.4、Z=18；后斜面 X=±29、Z=179。',
         'P3 支架：4 孔，X=±64、Z=27 / 124；Ø2.8，沉头 Ø4.8。',
         '侧孔饰片四点连接：筋 2×3，饰片厚 2；短管与声腔轴向留隙 0.3。',
-        '背锁孔 Ø4.4／通孔 Ø2.2／盲底孔 Ø1.6；下孔深 65.8，名义螺钉 2×8。',
+        '背锁孔 Ø4.4／通孔 Ø2.2／盲底孔 Ø1.6；下孔深 67.8，名义螺钉 2×8。',
     ],gap=6.5,size=8.5)
     c.showPage()
 
@@ -306,12 +316,12 @@ def main():
     page(4,'侧剖与内部空间','截面 X=-26：穿过左喇叭中心，保留 -X 半体，沿 -X 观察','剖视 1:1；表格为模型读数')
     view('section',38,20)
     text(75,263,'A-A 侧剖',11,TEAL,'center')
-    dh(46,88,96,129,'42 喇叭总深度')
-    dh(101,110.5,154,206,'9.5 光驱厚度')
-    dv(56,136,38,25,'80 单元高度')
-    dh(44,114,28,18,'70 电池深度')
-    dv(28,48,44,32,'20')
-    text(77,36,'5600 mAh',8,white,'center')
+    dh(46,88,98,131,'42 喇叭总深度')
+    dh(101,110.5,156,208,'9.5 光驱厚度')
+    dv(58,138,38,25,'80 单元高度')
+    dh(44,114,30,18,'70 电池深度')
+    dv(30,50,44,32,'20')
+    text(77,38,'5600 mAh',8,white,'center')
     text(130,253,'主要包络 / 关键净距',12,TEAL)
     table(128,246,280,[
         ('单只喇叭 X × Y × Z','45 × 42 × 80；中心 X=±26，Z=76；总包络，安装面待测'),
@@ -389,7 +399,7 @@ def main():
         text(14,106-i*9,f"{label}  ·  {pose}  ·  打印包络 {size} mm  ·  切片估重 {plate['filament_g']:.1f} g（含支撑）",9)
     notes(14,72,[
         '拆卸：从后壁与后斜面深孔取出 4 螺钉，断开操控线，前壳向前退出。',
-        '支架拆卸前断线并卸 4 螺钉；左右侧孔随后壳保持固定；支架向前抽出，光驱先前移 11.5，再侧转 -30°并前移 15.75 后抽出。',
+        '支架拆卸前断线并卸 4 螺钉；左右侧孔随后壳保持固定；支架向前抽出，光驱先前移 11.5，再侧转 -30°并前移 17.75 后抽出。',
         '电池松开绑带并断线后向前取出；装配按反向顺序，无独立侧孔装配步骤。',
         '前壳路径按 1 mm 抽样；光驱转动按 0.5° 抽样，平移及其余路径连续保守扫掠。实物未验收。',
         '四键双色：0.4 喷嘴 / 0.12 层高；白色 0.6 深；使用双色 3MF。实际色彩、配合与按压行程待测。',

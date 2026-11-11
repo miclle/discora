@@ -52,15 +52,15 @@ def check(doc):
         fraction=step/60
         pose=drive.copy();pose.translate(V(0,-11.5,0))
         pose.rotate(pivot,V(0,0,1),-30*fraction)
-        pose.translate(V(0,-15.75*fraction,0))
+        pose.translate(V(0,-17.75*fraction,0))
         found=collisions(pose,fixed)
-        if found:hits.append({'yaw_deg':-30*fraction,'additional_front_mm':15.75*fraction,'hits':found})
+        if found:hits.append({'yaw_deg':-30*fraction,'additional_front_mm':17.75*fraction,'hits':found})
     hits.extend(collisions(box_sweep(pose,1,-140),fixed))
     report['paths']['drive_front']={'method':'continuous conservative translation sweeps before/after 61 exact B-rep yaw/translation samples; rotation is not a continuous proof',
         'initial_translation_xyz_mm':[0,-11.5,0],
         'yaw_axis':'Z','yaw_deg':-30,'yaw_step_deg':.5,
         'yaw_pivot_xyz_mm':[pivot.x,pivot.y,pivot.z],
-        'translation_during_yaw_xyz_mm':[0,-15.75,0],
+        'translation_during_yaw_xyz_mm':[0,-17.75,0],
         'final_translation_xyz_mm':[0,-140,0],'moving':['Drive'],'fixed':fixed,
         'prerequisites':['Front cover removed','Speaker carrier removed (not included among fixed objects)','Bridge cables disconnected'], 'clashes':hits}
     print('PATH drive_front',hits,flush=True)

@@ -1,0 +1,244 @@
+{
+  "model_sha256": "e507a10f55fc1f1f7340c7df5203a91666335190cf97bc31325e94052f30bc4b",
+  "baseline_sha256": "0eac3493e84140aebd0590bc5bd985d41efade196ed2bf49c7a3595e9bf8a527",
+  "physical_assembly_test": false,
+  "unchanged_finished_parts_difference_mm3": {
+    "Window": 0.0,
+    "StatusArt": 0.0,
+    "PlayPauseKey": 0.0,
+    "EjectKey": 0.0,
+    "PrevKey": 0.0,
+    "NextKey": 0.0,
+    "ButtonRetainer": 0.0,
+    "Knob": 0.0,
+    "DisplayRetainer": 0.0,
+    "LDriver": 0.0,
+    "RDriver": 0.0,
+    "PlayPauseSwitch": 0.0,
+    "EjectSwitch": 0.0,
+    "PrevSwitch": 0.0,
+    "NextSwitch": 0.0,
+    "Encoder": 0.0,
+    "VolumePot": 0.0,
+    "Drive": 0.0,
+    "Bridge": 0.0,
+    "DisplayPCB": 0.0,
+    "DisplayHeader": 0.0,
+    "Amp": 0.0,
+    "AmpChip": 0.0,
+    "MCU": 0.0,
+    "MCUChip": 0.0,
+    "DAC": 0.0,
+    "DACChip": 0.0,
+    "Battery": 0.0
+  },
+  "rear_body_normal_thickness_samples_mm": {
+    "back": 5.0,
+    "bottom": 5.0,
+    "side_-1_20_100": 5.000000000000014,
+    "side_-1_60_130": 5.000000000000014,
+    "side_-1_30_145": 5.000000000000014,
+    "side_1_20_100": 4.999999999999957,
+    "side_1_60_130": 4.999999999999957,
+    "side_1_30_145": 4.999999999999957,
+    "roof_0_55": 4.999999999999984,
+    "roof_20_60": 5.000000000000016,
+    "roof_-20_75": 4.9999999999999805
+  },
+  "clearances_mm": {
+    "RearRoof / Drive": 1.6592250498084458,
+    "Back / Battery": 1.0,
+    "LPanel / DAC": 1.0,
+    "LPort / SpeakerCarrier": 0.42426406871192446,
+    "RPort / SpeakerCarrier": 0.42426406871192446,
+    "Battery / FrontShell": 0.9999999999999911,
+    "Battery / SpeakerCarrier": 3.5
+  },
+  "roof_to_drive_previous_mm": 2.5008107854300348,
+  "inner_planes_mm": {
+    "floor": 6.0,
+    "rear": 77.0,
+    "left": -68.0,
+    "right": 68.0
+  },
+  "battery_under_pack_space_mm": 2.0,
+  "rear_side_outline_mirror_difference_mm3": 0.0,
+  "shell_overlap_mm3": 0.0,
+  "bottom_corner_cylinders": {
+    "FrontShell": 2,
+    "RearShell": 2
+  },
+  "feet_translation_xyz_mm": [
+    0,
+    0,
+    -2
+  ],
+  "side_port_free_area_sections": [
+    {
+      "x_mm": -72.95,
+      "free_area_mm2": 1370.1327110843652,
+      "passages": 1
+    },
+    {
+      "x_mm": -72.7,
+      "free_area_mm2": 1370.1327110843652,
+      "passages": 1
+    },
+    {
+      "x_mm": -72.45,
+      "free_area_mm2": 1370.1327110843652,
+      "passages": 1
+    },
+    {
+      "x_mm": -72.2,
+      "free_area_mm2": 1370.1327110843652,
+      "passages": 1
+    },
+    {
+      "x_mm": -71.95,
+      "free_area_mm2": 1370.1327110843652,
+      "passages": 1
+    },
+    {
+      "x_mm": -71.7,
+      "free_area_mm2": 1370.1327110843652,
+      "passages": 1
+    },
+    {
+      "x_mm": -71.45,
+      "free_area_mm2": 729.0353755551325,
+      "passages": 1
+    },
+    {
+      "x_mm": -71.2,
+      "free_area_mm2": 729.0353755551325,
+      "passages": 1
+    },
+    {
+      "x_mm": -70.95,
+      "free_area_mm2": 384.2441249821661,
+      "passages": 4
+    },
+    {
+      "x_mm": -70.7,
+      "free_area_mm2": 384.2441249821661,
+      "passages": 4
+    },
+    {
+      "x_mm": -70.45,
+      "free_area_mm2": 384.2441249821661,
+      "passages": 4
+    },
+    {
+      "x_mm": -70.2,
+      "free_area_mm2": 384.2441249821661,
+      "passages": 4
+    },
+    {
+      "x_mm": -69.95,
+      "free_area_mm2": 384.2441249821661,
+      "passages": 4
+    },
+    {
+      "x_mm": -69.7,
+      "free_area_mm2": 384.2441249821661,
+      "passages": 4
+    },
+    {
+      "x_mm": -69.45,
+      "free_area_mm2": 974.7200570832356,
+      "passages": 2
+    },
+    {
+      "x_mm": -69.2,
+      "free_area_mm2": 974.7200570832356,
+      "passages": 2
+    },
+    {
+      "x_mm": -68.95,
+      "free_area_mm2": 1064.4690049407732,
+      "passages": 1
+    },
+    {
+      "x_mm": -68.7,
+      "free_area_mm2": 1064.4690049407732,
+      "passages": 1
+    },
+    {
+      "x_mm": -68.45,
+      "free_area_mm2": 1064.4690049407732,
+      "passages": 1
+    },
+    {
+      "x_mm": -68.2,
+      "free_area_mm2": 1064.4690049407732,
+      "passages": 1
+    },
+    {
+      "x_mm": -67.95,
+      "free_area_mm2": 1064.4690049407732,
+      "passages": 1
+    },
+    {
+      "x_mm": -67.7,
+      "free_area_mm2": 1064.4690049407732,
+      "passages": 1
+    },
+    {
+      "x_mm": -67.45,
+      "free_area_mm2": 1064.4690049407732,
+      "passages": 1
+    },
+    {
+      "x_mm": -67.2,
+      "free_area_mm2": 1064.4690049407732,
+      "passages": 1
+    },
+    {
+      "x_mm": -66.95,
+      "free_area_mm2": 1064.4690049407732,
+      "passages": 1
+    },
+    {
+      "x_mm": -66.7,
+      "free_area_mm2": 1064.4690049407732,
+      "passages": 1
+    },
+    {
+      "x_mm": -66.45,
+      "free_area_mm2": 1064.4690049407732,
+      "passages": 1
+    },
+    {
+      "x_mm": -66.2,
+      "free_area_mm2": 1064.4690049407732,
+      "passages": 1
+    },
+    {
+      "x_mm": -65.95,
+      "free_area_mm2": 1064.4690049407732,
+      "passages": 1
+    },
+    {
+      "x_mm": -65.7,
+      "free_area_mm2": 1064.4690049407732,
+      "passages": 1
+    },
+    {
+      "x_mm": -65.45,
+      "free_area_mm2": 1064.4690049407732,
+      "passages": 1
+    }
+  ],
+  "side_port_minimum_sampled_area_mm2": 384.2441249821661,
+  "key_and_knob_face_order_preserved": {
+    "PlayPauseKey": true,
+    "EjectKey": true,
+    "PrevKey": true,
+    "NextKey": true,
+    "Knob": true
+  },
+  "gui_resources_preserved": true,
+  "gui_readback_performed": false,
+  "all_pass": true
+}

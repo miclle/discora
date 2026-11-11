@@ -53,7 +53,7 @@ def validate(folder):
                               'missing_from_rear_mm3':source.cut(doc.RearShell.Shape).Volume}
         assert name in doc.RearShell.ConstructionObjects and name not in doc.FrontShell.ConstructionObjects
         assert all(abs(v)<=tolerance for v in roof_ownership[name].values()),roof_ownership
-    assert abs(doc.FrontShell.Shape.BoundBox.YMax-42.5)<1e-7
+    assert abs(doc.FrontShell.Shape.BoundBox.YMax-43.5)<1e-7
     # Extend the saved inner slope to the handle rear plane. Its endpoint must
     # meet the rear roof peak directly, without a vertical step.
     seam_start=doc.FoldSection.Geometry[10].StartPoint
@@ -63,7 +63,7 @@ def validate(folder):
     seam_end=A.Vector(rear_y,seam_start.y+(rear_y-seam_start.x)*seam_slope,0)
     assert abs(seam_end.y-doc.FoldSection.Geometry[5].StartPoint.y)<1e-7
     seam_points=[]
-    for x in (-70,70):
+    for x in (-72,72):
         for y in (6,12,24,35,38,40,42.4):
             z=seam_start.y+(y-seam_start.x)*(seam_end.y-seam_start.y)/(seam_end.x-seam_start.x)
             assert doc.FrontShell.Shape.isInside(A.Vector(x,y,z+.05),1e-6,True)
@@ -80,7 +80,7 @@ def validate(folder):
     # Keep panel probes outside the two added blind mounting posts at X=±29.
     for x,y in [(-30,8),(30,8),(-25,30),(25,30),(50,32)]:
         thickness[f'slope_{x}_{y}']=section_length('FrontShell',A.Vector(x,y,165+slope*y),normal)
-    for x in (-70,70):
+    for x in (-72,72):
         for y in (5,12,24,32,37):
             thickness[f'slope_side_{x}_{y}']=section_length('FrontShell',A.Vector(x,y,165+slope*y),normal)
     thickness['grille']=section_length('FrontGrille',A.Vector(1.45,0,76),A.Vector(0,1,0))
@@ -176,7 +176,7 @@ def validate(folder):
         # Pass behind the driver frame, then turn before entering the shifted tube.
         air_y=doc.LPort.Shape.BoundBox.Center.y+8
         points=[(sign*26,54,76),(sign*56,54,76),(sign*56,air_y,76),
-                (sign*56,air_y,95),(sign*73,air_y,95)]
+                (sign*56,air_y,95),(sign*75,air_y,95)]
         parts=[]
         for a,b in zip(points,points[1:]):
             a,b=A.Vector(*a),A.Vector(*b);parts.append(Part.makeCylinder(.4,(b-a).Length,a,b-a))
@@ -226,7 +226,7 @@ def validate(folder):
     report={'date':'2026-11-11','model':model.name,'sha256':hashlib.sha256(model.read_bytes()).hexdigest(),
         'version':A.Version()[:3],'items':len(objects),'objects':[o.Name for o in objects],
         'main_pla_parts':connected,'rigid_pla_pieces':['FrontShell','RearShell','SpeakerCarrier','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','DisplayRetainer','Knob'],
-        'rear_roof_ownership':roof_ownership,'shell_split_y_mm':42.5,
+        'rear_roof_ownership':roof_ownership,'shell_split_y_mm':43.5,
         'straight_side_seam_yz_mm':[[seam_start.x,seam_start.y],[seam_end.x,seam_end.y]],
         'side_seam_ownership_samples_xyz_mm':seam_points,
         'invalid':invalid,'intersection_tolerance_mm3':tolerance,'clashes':clashes,
@@ -247,7 +247,7 @@ def validate(folder):
                   'Battery leads, straps, connectors, bridge cables and power modules are not validated.',
                   'Side passages remain untuned; geometric continuity is not acoustic validation.']}
     (folder/'validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
-    assert abs(handle_y-40)<1e-7
+    assert abs(handle_y-41)<1e-7
     assert all(abs(y-port_alignment['rear_outline_center_y_mm'])<1e-7 for y in port_alignment['port_center_y_mm'].values())
     assert abs(port_alignment['shell_opening_center_y_mm']-port_alignment['rear_outline_center_y_mm'])<1e-7
     assert len(objects)==32,len(objects)
@@ -257,8 +257,8 @@ def validate(folder):
     assert all(not p['clashes'] for p in paths.values()),paths
     assert all(not p['clashes'] for p in keepouts.values()),keepouts
     assert all(v>=1-1e-7 for v in clearances.values()),clearances
-    assert abs(handle_top-(165+37.5*27/38+45))<1e-7
-    assert all(abs(a-b)<1e-7 for a,b in zip(report['assembly_size_xyz_mm'],[142,80,handle_top]))
+    assert abs(handle_top-(165+38.5*27/38+45))<1e-7
+    assert all(abs(a-b)<1e-7 for a,b in zip(report['assembly_size_xyz_mm'],[146,82,handle_top+2]))
     assert all(abs(a-b)<1e-7 for a,b in zip(battery_fit['model_size_xyz_mm'],[112,70,20]))
     assert all(v<=tolerance for k,v in controls.items() if k!='source_model_sha256'),controls
     print('PASS: three connected PLA solids, interference, symmetry, disc and air paths',flush=True)

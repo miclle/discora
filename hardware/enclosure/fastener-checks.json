@@ -1,5 +1,5 @@
 {
-  "model_sha256": "5afabeab868c7abc9d47c7db4277e66120d579b33a9798a8da762107acf189f2",
+  "model_sha256": "e507a10f55fc1f1f7340c7df5203a91666335190cf97bc31325e94052f30bc4b",
   "former_front_holes_sealed": [
     {
       "former_center_xz_mm": [
@@ -34,45 +34,45 @@
     {
       "rear_center_xyz_mm": [
         -67.4,
-        80,
+        82.0,
         18
       ],
       "tool_diameter_mm": 4,
       "seat_y_mm": 14.2,
-      "well_depth_mm": 65.8,
+      "well_depth_mm": 67.8,
       "clashes": []
     },
     {
       "rear_center_xyz_mm": [
         67.4,
-        80,
+        82.0,
         18
       ],
       "tool_diameter_mm": 4,
       "seat_y_mm": 14.2,
-      "well_depth_mm": 65.8,
+      "well_depth_mm": 67.8,
       "clashes": []
     },
     {
       "rear_center_xyz_mm": [
         -29,
-        56.66380591051359,
+        58.663805910513595,
         179
       ],
       "tool_diameter_mm": 4,
       "seat_y_mm": 39.2,
-      "well_depth_mm": 17.463805910513585,
+      "well_depth_mm": 19.463805910513592,
       "clashes": []
     },
     {
       "rear_center_xyz_mm": [
         29,
-        56.66380591051359,
+        58.663805910513595,
         179
       ],
       "tool_diameter_mm": 4,
       "seat_y_mm": 39.2,
-      "well_depth_mm": 17.463805910513585,
+      "well_depth_mm": 19.463805910513592,
       "clashes": []
     }
   ],
@@ -82,12 +82,12 @@
   "head_well_diameter_mm": 4.4,
   "pilot_diameter_mm": 1.6,
   "post_engagement_mm": 4.8,
-  "minimum_driver_reach_mm": 65.8,
+  "minimum_driver_reach_mm": 67.8,
   "physical_fit_verified": false,
   "thread_strength_verified": false,
   "limits": [
     "Screw head diameter must not exceed 4 mm; select length, thread form and PLA pilot fit with a sample.",
-    "Use a slim driver with at least 66 mm usable reach; actual handle and bit geometry are not modeled.",
+    "Use a slim driver with at least 68 mm usable reach; actual handle and bit geometry are not modeled.",
     "Integral side-wall wells do not establish printed strength, repeated assembly life or wire clearance."
   ]
 }

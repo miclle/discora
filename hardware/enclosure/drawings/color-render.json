@@ -1,7 +1,7 @@
 {
-  "sha256": "5afabeab868c7abc9d47c7db4277e66120d579b33a9798a8da762107acf189f2",
-  "build_sha256": "5d3968ce6a0d499910b283b423c7e04d43490cbd58e7b3d0d42a861fd085aa69",
-  "geometry_sha256": "d2e05c77160b5b334b7e6a779a788c50f652a8d70476807387b3c8745f0f8e96",
+  "sha256": "e507a10f55fc1f1f7340c7df5203a91666335190cf97bc31325e94052f30bc4b",
+  "build_sha256": "49f8de8896ddecdd3e75678f964e466b7071e4174489ec3404c67d06fa61ac96",
+  "geometry_sha256": "3afafadc1be139b04f2dd10a72d707fa37c742e676a99462d104e48953cfb368",
   "palette": {
     "ORANGE": [
       1.0,
@@ -296,43 +296,43 @@
     "front": {
       "file": "front-color.png",
       "size_px": [
-        1704,
-        2840
+        1753,
+        2873
       ]
     },
     "right": {
       "file": "right-color.png",
       "size_px": [
-        961,
-        2840
+        985,
+        2873
       ]
     },
     "top": {
       "file": "top-color.png",
       "size_px": [
-        1704,
-        961
+        1753,
+        985
       ]
     },
     "rear": {
       "file": "rear-color.png",
       "size_px": [
-        1704,
-        2840
+        1753,
+        2873
       ]
     },
     "section": {
       "file": "section-color.png",
       "size_px": [
-        961,
-        2840
+        985,
+        2873
       ]
     },
     "exploded-shell": {
       "file": "exploded-shell-color.png",
       "size_px": [
-        3809,
-        4188
+        3870,
+        4227
       ]
     },
     "exploded-core": {
