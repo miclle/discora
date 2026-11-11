@@ -1,7 +1,7 @@
 {
-  "date": "2026-11-10",
+  "date": "2026-11-11",
   "model": "Discora.FCStd",
-  "sha256": "03003ef9826f330a439a5d65ae9a22fef7aab73ffc10c6200de9ec1f7a7e5a65",
+  "sha256": "5afabeab868c7abc9d47c7db4277e66120d579b33a9798a8da762107acf189f2",
   "version": [
     "1",
     "1",
@@ -77,79 +77,79 @@
     ],
     [
       42.5,
-      191.64473684210526
+      189.0637568311544
     ]
   ],
   "side_seam_ownership_samples_xyz_mm": [
     [
       -70,
       6,
-      163.19837243846396
+      163.1295463048386
     ],
     [
       -70,
       12,
-      167.87448713495294
+      167.39270419957546
     ],
     [
       -70,
       24,
-      177.2267165279309
+      175.91901998904913
     ],
     [
       -70,
       35,
-      185.79959347149403
+      183.73480946273335
     ],
     [
       -70,
       38,
-      188.13765081973852
+      185.86638841010176
     ],
     [
       -70,
       40,
-      189.69635571856819
+      187.28744104168072
     ],
     [
       -70,
       42.4,
-      191.5668015971638
+      188.99270419957543
     ],
     [
       70,
       6,
-      163.19837243846396
+      163.1295463048386
     ],
     [
       70,
       12,
-      167.87448713495294
+      167.39270419957546
     ],
     [
       70,
       24,
-      177.2267165279309
+      175.91901998904913
     ],
     [
       70,
       35,
-      185.79959347149403
+      183.73480946273335
     ],
     [
       70,
       38,
-      188.13765081973852
+      185.86638841010176
     ],
     [
       70,
       40,
-      189.69635571856819
+      187.28744104168072
     ],
     [
       70,
       42.4,
-      191.5668015971638
+      188.99270419957543
     ]
   ],
   "invalid": [],
@@ -165,7 +165,7 @@
     }
   ],
   "assembly_size_xyz_mm": [
-    142.00000000000003,
+    142.0,
     80.00000000000001,
     236.64473684210526
   ],
@@ -201,11 +201,12 @@
   },
   "side_port_handle_alignment": {
     "handle_center_y_mm": 40.0,
+    "rear_outline_center_y_mm": 42.50000000000003,
     "port_center_y_mm": {
-      "LPort": 40.0,
-      "RPort": 40.0
+      "LPort": 42.5,
+      "RPort": 42.5
     },
-    "shell_opening_center_y_mm": 40.0
+    "shell_opening_center_y_mm": 42.5
   },
   "side_air_paths": {
     "L": {
@@ -222,17 +223,17 @@
         ],
         [
           -56,
-          48.0,
+          50.5,
           76
         ],
         [
           -56,
-          48.0,
+          50.5,
           95
         ],
         [
           -73,
-          48.0,
+          50.5,
           95
         ]
       ],
@@ -253,17 +254,17 @@
         ],
         [
           56,
-          48.0,
+          50.5,
           76
         ],
         [
           56,
-          48.0,
+          50.5,
           95
         ],
         [
           73,
-          48.0,
+          50.5,
           95
         ]
       ],
@@ -416,12 +417,22 @@
     "vertical_67_80": 5.0,
     "vertical_0_6": 5.000000000000009,
     "slope_-30_8": 4.999999999999999,
-    "slope_30_8": 5.000000000000002,
-    "slope_-25_30": 5.000000000000002,
-    "slope_25_30": 5.000000000000002,
-    "slope_50_32": 5.000000000000003,
+    "slope_30_8": 5.000000000000001,
+    "slope_-25_30": 4.99999999999997,
+    "slope_25_30": 4.99999999999997,
+    "slope_50_32": 4.999999999999998,
+    "slope_side_-70_5": 4.999999999999998,
+    "slope_side_-70_12": 4.999999999999967,
+    "slope_side_-70_24": 4.99999999999997,
+    "slope_side_-70_32": 4.999999999999998,
+    "slope_side_-70_37": 4.999999999999998,
+    "slope_side_70_5": 4.999999999999998,
+    "slope_side_70_12": 4.999999999999969,
+    "slope_side_70_24": 4.99999999999997,
+    "slope_side_70_32": 4.999999999999998,
+    "slope_side_70_37": 4.999999999999998,
     "grille": 2.5,
-    "handle": 4.999999999999993
+    "handle": 5.0
   },
   "recessed_grille": {
     "opening_diameter_mm": 130,
@@ -458,10 +469,5 @@
     "Separate assembly-path report distinguishes continuous conservative sweeps from sampled cover motion.",
     "Battery leads, straps, connectors, bridge cables and power modules are not validated.",
     "Side passages remain untuned; geometric continuity is not acoustic validation."
-  ],
-  "incremental_verification": {
-    "previous_model_sha256": "6eb82d8a43668dcf0f2d6537d5367b618900118fa0fe19d1f1e4de42e78b39fc",
-    "evidence": "dual-color-knob-checks.json",
-    "method": "31 finished B-reps unchanged; the only envelope change fills the existing exterior index recess. Mounting core, shell symmetry and assembly interfaces remain unchanged. Static knob collisions checked by knob-span-checks.json."
-  }
+  ]
 }

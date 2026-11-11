@@ -23,7 +23,7 @@ DRIVE = (128.0, 9.5, 129.0)
 # Frontmost diaphragm to rearmost magnet; mounting plane remains unmeasured.
 SPEAKER = (42.0, 45.0, 80.0)
 CASE_DEPTH = 80.0
-# Equal front/rear shoulders retain the original front angle and drive clearance.
+# The rear housing is symmetric in side elevation; the front skin overlays it.
 HANDLE_THICKNESS = 5.0
 FRONT_THICKNESS = HANDLE_THICKNESS
 REAR_THICKNESS = 3.0
@@ -39,15 +39,18 @@ HANDLE_OPENING_HEIGHT = 24.0
 HANDLE_TOP = SHOULDER_Z + HANDLE_HEIGHT
 ROOF_OFFSET_Z = REAR_THICKNESS * math.sqrt(1 + SHOULDER_SLOPE**2)
 FRONT_OFFSET_Z = FRONT_THICKNESS * math.sqrt(1 + SHOULDER_SLOPE**2)
-INNER_CENTER_Y = CASE_DEPTH/2 + (FRONT_OFFSET_Z-ROOF_OFFSET_Z)/(2*SHOULDER_SLOPE)
+REAR_CENTER_Y = (FRONT_THICKNESS + CASE_DEPTH) / 2
+REAR_EAVE_Z = EAVE_Z + FRONT_THICKNESS*SHOULDER_SLOPE - FRONT_OFFSET_Z
+REAR_SHOULDER_Z = REAR_EAVE_Z + (CASE_DEPTH-REAR_CENTER_Y)*SHOULDER_SLOPE
+INNER_CENTER_Y = CASE_DEPTH/2 + (REAR_EAVE_Z-EAVE_Z+FRONT_OFFSET_Z-ROOF_OFFSET_Z)/(2*SHOULDER_SLOPE)
 INNER_FRONT, INNER_REAR = INNER_CENTER_Y-1.25, INNER_CENTER_Y+1.25
 INNER_PEAK_Z = EAVE_Z + INNER_FRONT * SHOULDER_SLOPE - FRONT_OFFSET_Z
 FRONT_INNER_EAVE_Z = EAVE_Z + FRONT_THICKNESS * SHOULDER_SLOPE - FRONT_OFFSET_Z
-INNER_EAVE_Z = EAVE_Z + REAR_THICKNESS * SHOULDER_SLOPE - ROOF_OFFSET_Z
+INNER_EAVE_Z = REAR_EAVE_Z + REAR_THICKNESS * SHOULDER_SLOPE - ROOF_OFFSET_Z
 # Two front-facing drivers share one circular grille, but separate rear cavities.
 SPEAKER_CENTER_X, SPEAKER_CENTER_Z = 26.0, 76.0
-# Align the side-view vertical port axis with the centered handle mid-plane.
-PORT_CENTER_Y, PORT_CENTER_Z = CASE_DEPTH / 2, 80.0
+# Center the ports on the rear housing's side outline, excluding the front skin.
+PORT_CENTER_Y, PORT_CENTER_Z = REAR_CENTER_Y, 80.0
 FRONT_GRILLE_RADIUS = 65.0
 # A true circular mouth precedes the grille; +Y is inward from the front face.
 FRONT_GRILLE_RECESS = 2.5
@@ -309,7 +312,7 @@ def build(folder):
 
     # An editable sketch drives the continuous front, roof and handle extrusion.
     profile = [(0,3),(0,EAVE_Z),(HANDLE_FRONT,SHOULDER_Z),(HANDLE_FRONT,HANDLE_TOP),
-               (HANDLE_REAR,HANDLE_TOP),(HANDLE_REAR,SHOULDER_Z),(CASE_DEPTH,EAVE_Z),
+               (HANDLE_REAR,HANDLE_TOP),(HANDLE_REAR,REAR_SHOULDER_Z),(CASE_DEPTH,REAR_EAVE_Z),
                (CASE_DEPTH-3,INNER_EAVE_Z),(INNER_REAR,INNER_PEAK_Z),
                (INNER_FRONT,INNER_PEAK_Z),(FRONT_THICKNESS,FRONT_INNER_EAVE_Z),(FRONT_THICKNESS,3)]
     section = doc.addObject("Sketcher::SketchObject", "FoldSection")
@@ -443,7 +446,7 @@ def build(folder):
 
     # Narrow side gaps leave no room for full-height rear screw pillars.
     # Lower mounts flank the battery; upper mounts sit behind the drive.
-    rear=prism_yz([(CASE_DEPTH-3,3),(CASE_DEPTH,3),(CASE_DEPTH,EAVE_Z),
+    rear=prism_yz([(CASE_DEPTH-3,3),(CASE_DEPTH,3),(CASE_DEPTH,REAR_EAVE_Z),
                    (CASE_DEPTH-3,INNER_EAVE_Z)],-WIDTH/2,WIDTH)
     tray=box(-WIDTH/2+3,FRONT_THICKNESS,3,WIDTH-6,CASE_DEPTH-FRONT_THICKNESS-3,3)
     feature("Back","后壳后壁 · 构造源",rear,BLACK,shell)
@@ -540,7 +543,7 @@ def build(folder):
     feature("DriveCarrier","光驱底托和两侧导轨",carrier,TEAL,supports)
     # Upper edge follows the rear roof's 3 mm normal-offset inner plane.
     def inner_roof(y):
-        return EAVE_Z+(CASE_DEPTH-y)*SHOULDER_SLOPE-ROOF_OFFSET_Z
+        return REAR_EAVE_Z+(CASE_DEPTH-y)*SHOULDER_SLOPE-ROOF_OFFSET_Z
     y0,y1=SLOT_Y-2.5,SLOT_Y+2.5
     guide=prism_yz([(y0,DRIVE_TOP),(y1,DRIVE_TOP),(y1,inner_roof(y1)),(y0,inner_roof(y0))],-63,126)
     guide=guide.cut(box(-62,SLOT_Y-1.6,DRIVE_TOP-.5,124,3.2,20))
@@ -649,9 +652,10 @@ def build(folder):
     for obj in (left,right):
         supports.removeObject(obj);construction.addObject(obj)
         visible.remove(obj);obj.Visibility=False
-    # The roof belongs to P2. At each side wall, one straight seam joins the
-    # front shoulder's inner foot to the handle root, without a stepped heel.
-    seam_profile=[(FRONT_THICKNESS,0),(HANDLE_REAR,0),(HANDLE_REAR,SHOULDER_Z),
+    # The 5 mm normal-offset seam ends exactly at the symmetric rear peak.
+    # There is no vertical step or exposed rear-shell tip above the seam.
+    seam_top_z=REAR_SHOULDER_Z
+    seam_profile=[(FRONT_THICKNESS,0),(HANDLE_REAR,0),(HANDLE_REAR,seam_top_z),
                   (FRONT_THICKNESS,FRONT_INNER_EAVE_Z)]
     roof_region_shape=box(-WIDTH/2-1,HANDLE_REAR,0,WIDTH+2,
                           CASE_DEPTH-HANDLE_REAR+1,HANDLE_TOP+1)

@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256 = '03003ef9826f330a439a5d65ae9a22fef7aab73ffc10c6200de9ec1f7a7e5a65'
+MODEL_SHA256 = '5afabeab868c7abc9d47c7db4277e66120d579b33a9798a8da762107acf189f2'
 
 
 def palette_from_build():
@@ -150,7 +150,10 @@ def main():
     integration=json.loads((ROOT/'side-port-checks.json').read_text())
     handle=json.loads((ROOT/'handle-checks.json').read_text())
     volume=json.loads((ROOT/'volume-checks.json').read_text())
-    assert volume['model_sha256']==MODEL_SHA256 and volume['all_pass']
+    seam=json.loads((ROOT/'side-seam-checks.json').read_text())
+    assert seam['model_sha256']==MODEL_SHA256 and seam['all_pass']
+    assert all(seam['key_and_knob_face_order_preserved'].values())
+    assert volume['model_sha256']==seam['baseline_sha256'] and volume['all_pass']
     assert volume['baseline_sha256']==handle['model_sha256']
     assert all(volume['key_face_order_preserved'].values())
     assert integration['model_sha256']==handle['baseline_sha256']
@@ -161,7 +164,7 @@ def main():
                for n in ('PlayPauseKey','EjectKey','PrevKey','NextKey'))
     white_marks=dict(appearance['color_update']['white_mark_faces_zero_based'])
     knob=json.loads((ROOT/'dual-color-knob-checks.json').read_text())
-    assert knob['model_sha256']==MODEL_SHA256 and knob['all_pass']
+    assert knob['model_sha256']==seam['baseline_sha256'] and knob['all_pass']
     white_marks['Knob']=knob['white_faces_zero_based']
     rows={
         'front':((1,0,0),(0,0,1),(0,-1,0)),

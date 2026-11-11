@@ -54,9 +54,14 @@ def validate(folder):
         assert name in doc.RearShell.ConstructionObjects and name not in doc.FrontShell.ConstructionObjects
         assert all(abs(v)<=tolerance for v in roof_ownership[name].values()),roof_ownership
     assert abs(doc.FrontShell.Shape.BoundBox.YMax-42.5)<1e-7
-    # Read the actual side seam endpoints from the retained section and handle.
+    # Extend the saved inner slope to the handle rear plane. Its endpoint must
+    # meet the rear roof peak directly, without a vertical step.
     seam_start=doc.FoldSection.Geometry[10].StartPoint
-    seam_end=doc.FoldSection.Geometry[5].StartPoint
+    inner_slope=doc.FoldSection.Geometry[9]
+    seam_slope=(inner_slope.StartPoint.y-inner_slope.EndPoint.y)/(inner_slope.StartPoint.x-inner_slope.EndPoint.x)
+    rear_y=doc.FoldSection.Geometry[5].StartPoint.x
+    seam_end=A.Vector(rear_y,seam_start.y+(rear_y-seam_start.x)*seam_slope,0)
+    assert abs(seam_end.y-doc.FoldSection.Geometry[5].StartPoint.y)<1e-7
     seam_points=[]
     for x in (-70,70):
         for y in (6,12,24,35,38,40,42.4):
@@ -75,6 +80,9 @@ def validate(folder):
     # Keep panel probes outside the two added blind mounting posts at X=±29.
     for x,y in [(-30,8),(30,8),(-25,30),(25,30),(50,32)]:
         thickness[f'slope_{x}_{y}']=section_length('FrontShell',A.Vector(x,y,165+slope*y),normal)
+    for x in (-70,70):
+        for y in (5,12,24,32,37):
+            thickness[f'slope_side_{x}_{y}']=section_length('FrontShell',A.Vector(x,y,165+slope*y),normal)
     thickness['grille']=section_length('FrontGrille',A.Vector(1.45,0,76),A.Vector(0,1,0))
     thickness['handle']=section_length('FrontShell',A.Vector(60,40,206),A.Vector(0,1,0))
     assert all(abs(value-(2.5 if name=='grille' else 5))<1e-6 for name,value in thickness.items()),thickness
@@ -160,6 +168,7 @@ def validate(folder):
     shoulder_z=doc.FoldSection.Geometry[2].StartPoint.y
     handle_top=doc.FoldSection.Geometry[3].StartPoint.y
     port_alignment={'handle_center_y_mm':handle_y,
+        'rear_outline_center_y_mm':(rear.BoundBox.YMin+rear.BoundBox.YMax)/2,
         'port_center_y_mm':{n:doc.getObject(n).Shape.BoundBox.Center.y for n in ('LPort','RPort')},
         'shell_opening_center_y_mm':doc.LPanelTool.Shape.BoundBox.Center.y}
     paths={}
@@ -214,7 +223,7 @@ def validate(folder):
         A.closeDocument(baseline.Name)
     bb=Part.makeCompound([o.Shape for o in objects]).BoundBox
     handle=collisions(Part.makeBox(50,10,22,A.Vector(-25,handle_y-5,shoulder_z+11.5)),objects)
-    report={'date':'2026-11-10','model':model.name,'sha256':hashlib.sha256(model.read_bytes()).hexdigest(),
+    report={'date':'2026-11-11','model':model.name,'sha256':hashlib.sha256(model.read_bytes()).hexdigest(),
         'version':A.Version()[:3],'items':len(objects),'objects':[o.Name for o in objects],
         'main_pla_parts':connected,'rigid_pla_pieces':['FrontShell','RearShell','SpeakerCarrier','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','DisplayRetainer','Knob'],
         'rear_roof_ownership':roof_ownership,'shell_split_y_mm':42.5,
@@ -239,8 +248,8 @@ def validate(folder):
                   'Side passages remain untuned; geometric continuity is not acoustic validation.']}
     (folder/'validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
     assert abs(handle_y-40)<1e-7
-    assert all(abs(y-handle_y)<1e-7 for y in port_alignment['port_center_y_mm'].values())
-    assert abs(port_alignment['shell_opening_center_y_mm']-handle_y)<1e-7
+    assert all(abs(y-port_alignment['rear_outline_center_y_mm'])<1e-7 for y in port_alignment['port_center_y_mm'].values())
+    assert abs(port_alignment['shell_opening_center_y_mm']-port_alignment['rear_outline_center_y_mm'])<1e-7
     assert len(objects)==32,len(objects)
     assert not clashes and not disc and not handle,(clashes,disc,handle)
     assert all(v<=tolerance for v in symmetry.values()),symmetry

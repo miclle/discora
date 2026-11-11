@@ -204,7 +204,7 @@ def main():
         'grille_thickness_2_5':abs(doc.FrontGrille.Shape.BoundBox.YLength-2.5)<1e-5,
         'grille_recess_2_5':abs(doc.FrontGrille.Shape.BoundBox.YMin-2.5)<1e-5,
         'circular_mouth_clear':doc.FrontShell.Shape.common(Part.makeCylinder(65,2.49998,A.Vector(0,.00001,76),A.Vector(0,1,0))).Volume<.001,
-        'side_ports_handle_y40':all(abs(doc.getObject(n).Shape.BoundBox.Center.y-40)<1e-5 for n in ('LPort','RPort','LPanelTool')),
+        'side_ports_rear_outline_y42_5':all(abs(doc.getObject(n).Shape.BoundBox.Center.y-42.5)<1e-5 for n in ('LPort','RPort','LPanelTool')),
         '32_finished_objects':len(objects)==32,
         'three_connected_main_parts':all(len(doc.getObject(n).Shape.Solids)==1 for n in ('FrontShell','RearShell','SpeakerCarrier')),
         'source_unchanged':hashlib.sha256(source.read_bytes()).hexdigest()==source_hash,
