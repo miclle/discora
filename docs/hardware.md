@@ -7,7 +7,7 @@
 | 部件 | 候选 | 现状与注意 |
 | --- | --- | --- |
 | MCU | ESP32-S3 开发板，4 MB Flash 或以上 | 选有 USB OTG 引出的型号；部分接口仅为 USB-UART |
-| 光驱 | MATSHITA DVD-R UJ-898 | 已有；吸入式、SATA/ATAPI、支持光盘刻录 |
+| 光驱 | [MATSHITA DVD-R UJ-898](../hardware/MATSHITA-UJ-898/README.md) | 已有；吸入式、SATA/ATAPI、支持光盘刻录；2026-11-11 实物照片与 A–F 尺寸已归档，CAD 尚未按本次实测适配 |
 | 桥接器 | SATA → USB 光驱适配器 | 已有；确认可透传 SCSI/MMC |
 | DAC | PCM5102 / PCM5102A 立体声 I²S 模块 | 已记录 PCM5102 商品，见下方采购清单；用户已确认到货，已保存正反面参考图，确切模块待核对，线路输出需接有源设备 |
 | 功放 | TPA3118D2 双声道模拟输入 Class-D 功放板 | 用户已有；已接 PCM5102A 完成短时立体声试听，额定功率、温升及整机验收仍待测 |
