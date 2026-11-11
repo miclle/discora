@@ -1,0 +1,19 @@
+{
+  "recorded_on": "2026-11-11",
+  "source": "用户在本次对话提供的两张实物照片",
+  "processing": "仅重命名，按附件原始字节复制；未旋转、裁剪或重编码",
+  "files": [
+    {
+      "original_filename": "codex-clipboard-b42d2e60-45d5-435b-9e02-7db76c9eff76.jpg",
+      "path": "drive-cover-user-photo.jpg",
+      "bytes": 5978059,
+      "sha256": "a09e4a589686dcb85997ab2abaa5344e7666d1286f6fda7117f717cf35ea3d3a"
+    },
+    {
+      "original_filename": "codex-clipboard-b8504344-92d4-47c1-888c-55b280f14e98.jpg",
+      "path": "drive-bottom-user-photo.jpg",
+      "bytes": 5512956,
+      "sha256": "f8e7b8c64fc22ba08bf817de6454b7ab280a476c993903bb54f8fe565006596d"
+    }
+  ]
+}
