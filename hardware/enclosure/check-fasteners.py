@@ -27,8 +27,10 @@ def main():
             missing=probe.cut(doc.FrontShell.Shape).Volume
             assert missing<.001,(x,z,missing)
             sealed.append(dict(former_center_xz_mm=[x,z],missing_front_material_mm3=missing))
+    roof=doc.FoldSection.Geometry[5]
+    upper_entry=roof.StartPoint.x+(179-roof.StartPoint.y)*(roof.EndPoint.x-roof.StartPoint.x)/(roof.EndPoint.y-roof.StartPoint.y)
     for x,z,start,end,entry in [(-67.4,18,4,11,80),(67.4,18,4,11,80),
-                                (-29,179,24.5,36,80-(179-165)*38/27),(29,179,24.5,36,80-(179-165)*38/27)]:
+                                (-29,179,24.5,36,upper_entry),(29,179,24.5,36,upper_entry)]:
         seat=end+3.2
         tool=Part.makeCylinder(2,80,V(x,seat+.01,z),V(0,1,0))
         hits=[]

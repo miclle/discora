@@ -18,7 +18,7 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = '03003ef9826f330a439a5d65ae9a22fef7aab73ffc10c6200de9ec1f7a7e5a65'
+ANNOTATED_MODEL_SHA256 = '5afabeab868c7abc9d47c7db4277e66120d579b33a9798a8da762107acf189f2'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
@@ -41,11 +41,15 @@ def main():
     integration=json.loads((ROOT/'side-port-checks.json').read_text())
     handle=json.loads((ROOT/'handle-checks.json').read_text())
     volume=json.loads((ROOT/'volume-checks.json').read_text())
-    assert volume['model_sha256']==data['sha256'] and volume['all_pass']
+    seam=json.loads((ROOT/'side-seam-checks.json').read_text())
+    assert seam['model_sha256']==data['sha256'] and seam['all_pass']
+    assert volume['model_sha256']==seam['baseline_sha256'] and volume['all_pass']
     assert volume['baseline_sha256']==handle['model_sha256']
     assert integration['model_sha256']==handle['baseline_sha256']
     def evidence_matches_geometry(report,owners):
         if report['model_sha256']==data['sha256']:return True
+        if any(seam['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
+        if report['model_sha256']==seam['baseline_sha256']:return True
         if any(volume['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
         if report['model_sha256']==volume['baseline_sha256']:return True
         if any(handle['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
@@ -156,6 +160,8 @@ def main():
     page(1,'整机外观尺寸','正视与右视 · 独立正投影，按视图名称读取；不按排列推断投影法','主视图 1:1')
     shoulder_z=side['outer_profile_yz'][2][1]
     handle_top=side['outer_profile_yz'][3][1]
+    rear_peak_z=side['outer_profile_yz'][5][1]
+    rear_eave_z=side['outer_profile_yz'][6][1]
     view('front',35,20)
     view('right',222,20)
     text(35,264,'正视 · 沿 +Y 观察',9,MUTED)
@@ -170,38 +176,38 @@ def main():
     line(39,96,173,96,LIGHT,.15,[5,2,1,2])
     c.setFillColor(white); c.rect(86*mm,91*mm,40*mm,10*mm,fill=1,stroke=0)
     text(106,94,'Ø130 圆孔 · 护网内凹 2.5',10,TEAL,'center')
-    line(262,53,262,253,TEAL,.15,[4,2,1,2])
-    dv(66.5,133.5,273,287,'67 导音口')
-    dh(251,273,100,153,'22')
+    line(264.5,53,264.5,253,TEAL,.15,[4,2,1,2])
+    dv(66.5,133.5,275.5,287,'67 导音口')
+    dh(253.5,275.5,100,153,'22')
     # Side dimensions use foot-bottom Z=0; paired body-bottom values are adjacent.
-    for z,edge,x,label in [(165,222,211,'165'),(shoulder_z,259.5,200,f'{shoulder_z:.2f}'),(165,302,310,'165')]:
+    for z,edge,x,label in [(165,222,211,'165'),(shoulder_z,259.5,200,f'{shoulder_z:.2f}'),(rear_eave_z,302,310,f'{rear_eave_z:.2f}')]:
         dv(20,20+z,edge,x,label)
     dh(222,259.5,20+shoulder_z,239,'37.5')
     dh(264.5,302,20+shoulder_z,239,'37.5')
     line(218,20,312,20,MUTED,.15,[4,2])
     line(218,23,302,23,LIGHT,.15,[2,2])
     for letter,u,z,dx,dy in [('A',0,165,3,-7),('B',37.5,shoulder_z,-5,3),
-                              ('C',42.5,shoulder_z,4,3),('D',80,165,-5,-7)]:
+                              ('C',42.5,rear_peak_z,4,3),('D',80,rear_eave_z,-5,-7)]:
         text(222+u+dx,20+z+dy,letter,8,TEAL,'center',background=True)
     text(319,257,'高度对照 / mm',11,TEAL)
     text(319,248,'测点',8,MUTED)
     text(374,248,'含脚垫',8,MUTED,'center')
     text(398,248,'不含脚垫',8,MUTED,'center')
-    for i,(label,z) in enumerate([('A 前斜面起点',165),('B/C 肩部最高处',shoulder_z),
-                                ('D 后斜面端点',165),('提手顶 / 整机总高',handle_top)]):
+    for i,(label,z) in enumerate([('A 前斜面起点',165),('B 前斜肩顶',shoulder_z),
+                                ('C 后壳对称顶点',rear_peak_z),('D 后斜面端点',rear_eave_z),('提手顶 / 整机总高',handle_top)]):
         yy=244-i*10
         if i%2==0:
             c.setFillColor(HexColor('#f1f6f6'));c.rect(317*mm,(yy-8)*mm,91*mm,10*mm,fill=1,stroke=0)
         text(319,yy-4,label,8)
         text(374,yy-4,f"{z-side['foot_bottom_z']:.2f}",9,TEAL,'center')
         text(398,yy-4,f"{z-side['shell_bottom_z']:.2f}",9,TEAL,'center')
-    table(317,199,91,[
+    table(317,189,91,[
         ('整机宽 / 深','142 / 80'),
         ('提手净开口 / 厚','90 × 24 / 5'),
         ('格栅中心 X / Z','0 / 76'),
         ('圆孔 / 护网内凹','Ø130 / 2.5'),
         ('前板 / 斜板 / 护网厚','5 / 5 / 2.5'),
-        ('侧开口中心 Y / Z','40 / 80'),
+        ('侧开口中心 Y / Z','42.5 / 80'),
         ('侧饰片宽 / 高','12 / 56'),
         ('脚垫','4 × Ø8 × 3'),
         ('前斜面水平 / 高差','37.5 / 26.645'),
@@ -211,13 +217,13 @@ def main():
         ('提手高 / 上下横梁','45 / 10.5'),
         ('提手顶外角 / 前棱','R4 / R1.6'),
     ],split=44,height=8)
-    notes(319,78,[
+    notes(319,70,[
         '尺寸线以脚垫底面 Z=0 为基准。',
         '不含脚垫高度从外壳底面 Z=3 量起。',
         '两种总高均包含提手；未计脚垫受压。',
         'X 向右、Y 向后、Z 向上；中心面 X=0。',
-        '侧孔竖直轴与提手中线同为 Y=40。',
-        '底片 Ø136；圆口边缘自然遮挡孔阵。',
+        '后壳侧轮廓与侧孔以 Y=42.5 对称。',
+        '前斜面高于后壳 2.581；无顶部台阶。',
         '尺寸为 CAD 名义值，未定义制造公差。',
         '请勿按图量取或直接投产。',
     ],gap=7,size=8)
