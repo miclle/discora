@@ -1,0 +1,66 @@
+{
+  "model_sha256": "0eac3493e84140aebd0590bc5bd985d41efade196ed2bf49c7a3595e9bf8a527",
+  "baseline_sha256": "5afabeab868c7abc9d47c7db4277e66120d579b33a9798a8da762107acf189f2",
+  "radius_mm": 4,
+  "unchanged_finished_parts_difference_mm3": {
+    "Feet": 0.0,
+    "Window": 0.0,
+    "StatusArt": 0.0,
+    "PlayPauseKey": 0.0,
+    "EjectKey": 0.0,
+    "PrevKey": 0.0,
+    "NextKey": 0.0,
+    "ButtonRetainer": 0.0,
+    "Knob": 0.0,
+    "DisplayRetainer": 0.0,
+    "SpeakerCarrier": 0.0,
+    "LDriver": 0.0,
+    "RDriver": 0.0,
+    "PlayPauseSwitch": 0.0,
+    "EjectSwitch": 0.0,
+    "PrevSwitch": 0.0,
+    "NextSwitch": 0.0,
+    "Encoder": 0.0,
+    "VolumePot": 0.0,
+    "Drive": 0.0,
+    "Bridge": 0.0,
+    "DisplayPCB": 0.0,
+    "DisplayHeader": 0.0,
+    "Amp": 0.0,
+    "AmpChip": 0.0,
+    "MCU": 0.0,
+    "MCUChip": 0.0,
+    "DAC": 0.0,
+    "DACChip": 0.0,
+    "Battery": 0.0
+  },
+  "shell_checks": {
+    "FrontShell": {
+      "removed_mm3": 31.56429634999558,
+      "added_mm3": 0.0,
+      "change_outside_bottom_corners_mm3": 0.0,
+      "removed_material_mirror_difference_mm3": 0.0,
+      "r4_surface_count": 2
+    },
+    "RearShell": {
+      "removed_mm3": 515.0444078461197,
+      "added_mm3": 0.0,
+      "change_outside_bottom_corners_mm3": 0.0,
+      "removed_material_mirror_difference_mm3": 0.0,
+      "r4_surface_count": 2
+    }
+  },
+  "physical_print_test": false,
+  "gui_readback_performed": false,
+  "shell_overlap_mm3": 0.0,
+  "rear_side_outline_mirror_difference_mm3": 0.0,
+  "key_and_knob_face_order_preserved": {
+    "PlayPauseKey": true,
+    "EjectKey": true,
+    "PrevKey": true,
+    "NextKey": true,
+    "Knob": true
+  },
+  "gui_resources_preserved_in_reference_order": true,
+  "all_pass": true
+}

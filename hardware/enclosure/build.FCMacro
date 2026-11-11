@@ -17,16 +17,19 @@ GLASS, PIXEL = (0.045, 0.085, 0.10), (0.85, 0.97, 1.0)
 # Knob: Bambu PLA Basic Black 10101; white is the PLA Lite symbol region.
 KNOB_BLACK, WHITE, SILVER, PCB, BLUE = (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), (0.70, 0.73, 0.75), (0.14, 0.40, 0.32), (0.12, 0.33, 0.62)
 # The drive face is parallel to XZ and the disc moves vertically behind the handle.
-WIDTH = 142.0
+WIDTH = 146.0
 DRIVE = (128.0, 9.5, 129.0)
 # User-supplied total envelope, oriented upright: depth, width, height.
 # Frontmost diaphragm to rearmost magnet; mounting plane remains unmeasured.
 SPEAKER = (42.0, 45.0, 80.0)
-CASE_DEPTH = 80.0
+CASE_DEPTH = 82.0
 # The rear housing is symmetric in side elevation; the front skin overlays it.
 HANDLE_THICKNESS = 5.0
 FRONT_THICKNESS = HANDLE_THICKNESS
-REAR_THICKNESS = 3.0
+REAR_THICKNESS = FRONT_THICKNESS
+# Grow outward to retain the 136 mm inner width, rear plane Y=77 and floor Z=6.
+BASE_Z = 1.0
+FEET_BOTTOM_Z = BASE_Z - 3.0
 # Move internal hardware back by the added front wall thickness.
 INTERNAL_SHIFT_Y = FRONT_THICKNESS - 3.0
 SHOULDER_RUN = (CASE_DEPTH - HANDLE_THICKNESS) / 2
@@ -37,6 +40,7 @@ HANDLE_FRONT, HANDLE_REAR = SHOULDER_RUN, CASE_DEPTH - SHOULDER_RUN
 HANDLE_HEIGHT = 45.0
 HANDLE_OPENING_HEIGHT = 24.0
 HANDLE_TOP = SHOULDER_Z + HANDLE_HEIGHT
+OUTER_CORNER_RADIUS = 4.0
 ROOF_OFFSET_Z = REAR_THICKNESS * math.sqrt(1 + SHOULDER_SLOPE**2)
 FRONT_OFFSET_Z = FRONT_THICKNESS * math.sqrt(1 + SHOULDER_SLOPE**2)
 REAR_CENTER_Y = (FRONT_THICKNESS + CASE_DEPTH) / 2
@@ -67,6 +71,20 @@ DISPLAY_OUTER_WINDOW = (32.82, 18.1)  # flared mouth; throat starts 0.8 mm inwar
 DISPLAY_DECK_Y = 18.0
 DISPLAY_PCB = (35.4, 1.2, 33.5)
 DISPLAY_HOLES = [(x,z) for x in (-15.2,15.2) for z in (-16.3,12.2)]
+
+
+def bottom_corner_envelope():
+    """Match the handle's XZ corner arcs across the full enclosure depth.
+
+    A shared envelope keeps P1/P2 coincident at the seam and preserves the
+    rear housing's front/back side-outline symmetry. Only Z=BASE_Z..BASE_Z+4 is trimmed.
+    """
+    blank = Part.makeBox(WIDTH, CASE_DEPTH, HANDLE_TOP, V(-WIDTH/2, 0, BASE_Z))
+    edges = [e for e in blank.Edges
+             if abs(e.CenterOfMass.z-BASE_Z) < 1e-7
+             and abs(abs(e.CenterOfMass.x)-WIDTH/2) < 1e-7]
+    assert len(edges) == 2
+    return blank.makeFillet(OUTER_CORNER_RADIUS, edges)
 
 
 def volume_shapes(grip_tip_diameter=5.6):
@@ -311,10 +329,10 @@ def build(folder):
         return obj
 
     # An editable sketch drives the continuous front, roof and handle extrusion.
-    profile = [(0,3),(0,EAVE_Z),(HANDLE_FRONT,SHOULDER_Z),(HANDLE_FRONT,HANDLE_TOP),
+    profile = [(0,BASE_Z),(0,EAVE_Z),(HANDLE_FRONT,SHOULDER_Z),(HANDLE_FRONT,HANDLE_TOP),
                (HANDLE_REAR,HANDLE_TOP),(HANDLE_REAR,REAR_SHOULDER_Z),(CASE_DEPTH,REAR_EAVE_Z),
-               (CASE_DEPTH-3,INNER_EAVE_Z),(INNER_REAR,INNER_PEAK_Z),
-               (INNER_FRONT,INNER_PEAK_Z),(FRONT_THICKNESS,FRONT_INNER_EAVE_Z),(FRONT_THICKNESS,3)]
+               (CASE_DEPTH-REAR_THICKNESS,INNER_EAVE_Z),(INNER_REAR,INNER_PEAK_Z),
+               (INNER_FRONT,INNER_PEAK_Z),(FRONT_THICKNESS,FRONT_INNER_EAVE_Z),(FRONT_THICKNESS,BASE_Z)]
     section = doc.addObject("Sketcher::SketchObject", "FoldSection")
     section.Label = "壳体 YZ 截面 · 可编辑"
     section.Placement = A.Placement(V(-WIDTH/2,0,0), A.Rotation(V(1,1,1),120))
@@ -330,7 +348,7 @@ def build(folder):
         c = edge.CenterOfMass
         at_end = abs(abs(c.x)-WIDTH/2) < .01
         if at_end and abs(c.z-HANDLE_TOP) < .01:
-            rounded.append((i, 4.0, 4.0))
+            rounded.append((i, OUTER_CORNER_RADIUS, OUTER_CORNER_RADIUS))
         elif at_end and abs(c.y) < .01 and edge.Length > 140:
             rounded.append((i, 1.6, 1.6))
     fil = doc.addObject("Part::Fillet","CowlEdges")
@@ -377,21 +395,22 @@ def build(folder):
                Part.makeCompound(controls),TEAL,shell)
 
     # Integral side ports retain open peripheral air passages.
-    panel_profile = [(FRONT_THICKNESS,3),(CASE_DEPTH-3,3),(CASE_DEPTH-3,INNER_EAVE_Z),
+    panel_profile = [(FRONT_THICKNESS,BASE_Z),(CASE_DEPTH-REAR_THICKNESS,BASE_Z),(CASE_DEPTH-REAR_THICKNESS,INNER_EAVE_Z),
                      (INNER_REAR,INNER_PEAK_Z),(INNER_FRONT,INNER_PEAK_Z),(FRONT_THICKNESS,FRONT_INNER_EAVE_Z)]
     cy, cz = PORT_CENTER_Y, PORT_CENTER_Z
     x = -WIDTH/2
-    base = raw("LPanelBlank",prism_yz(panel_profile,x,3))
+    base = raw("LPanelBlank",prism_yz(panel_profile,x,REAR_THICKNESS))
     left_panel = native_cut("LPanel","左侧壳 · 镜像源",base,
-                            side_capsule(x-1,cy,cz,74,29,5),BLACK,shell)
+                            side_capsule(x-1,cy,cz,74,29,REAR_THICKNESS+2),BLACK,shell)
     mirrored("RPanel","右侧壳 · 关联镜像",left_panel,BLACK,shell)
 
     # Build the left port and cavity, then mirror them exactly for the right.
     left=-WIDTH/2
     # Overlap the panel opening by 0.3 mm instead of leaving an assembly seam.
-    ring=side_capsule(left,cy,cz,74.6,29.6,3).cut(side_capsule(left-1,cy,cz,67,22,5))
+    ring=side_capsule(left,cy,cz,74.6,29.6,REAR_THICKNESS).cut(side_capsule(left-1,cy,cz,67,22,REAR_THICKNESS+2))
     # Stop 0.3 mm outside the chamber wall so P3 can slide forward with P2 fixed.
-    tube=side_capsule(left+2,cy,cz,67,22,3.7).cut(side_capsule(left+1,cy,cz,63,18,6))
+    tube=side_capsule(left+2,cy,cz,67,22,REAR_THICKNESS+.7).cut(
+        side_capsule(left+1,cy,cz,63,18,REAR_THICKNESS+3))
     inset=side_capsule(left+1.5,cy,cz,56,12,2)
     # Four connections support both ends as well as the middle of the long inset.
     # All ribs stay behind the recessed face and outside the carrier's sweep.
@@ -399,8 +418,8 @@ def build(folder):
     end_bridges=[box(left+2,cy-1.5,z,2,3,9) for z in (cz-34.5,cz+25.5)]
     port=ring.multiFuse([tube,inset,bridge]+end_bridges).removeSplitter()
     # Compact symmetric cavities retain the complete driver envelopes.
-    outer=box(left+6,5,31.5,WIDTH/2-6,52,89)
-    inner=box(left+8.5,4,34,WIDTH/2-10,50.5,84)
+    outer=box(-65,5,31.5,65,52,89)
+    inner=box(-62.5,4,34,61,50.5,84)
     cavity=outer.cut(inner).cut(side_capsule(left-1,cy,cz,67.6,22.6,13.2)).removeSplitter()
     left_port = feature("LPort","左侧 · 导音孔及饰片构造源（并入 P2）",port,BLACK,shell)
     mirrored("RPort","右侧 · 导音孔及饰片镜像源（并入 P2）",left_port,BLACK,shell)
@@ -446,12 +465,12 @@ def build(folder):
 
     # Narrow side gaps leave no room for full-height rear screw pillars.
     # Lower mounts flank the battery; upper mounts sit behind the drive.
-    rear=prism_yz([(CASE_DEPTH-3,3),(CASE_DEPTH,3),(CASE_DEPTH,REAR_EAVE_Z),
-                   (CASE_DEPTH-3,INNER_EAVE_Z)],-WIDTH/2,WIDTH)
-    tray=box(-WIDTH/2+3,FRONT_THICKNESS,3,WIDTH-6,CASE_DEPTH-FRONT_THICKNESS-3,3)
+    rear=prism_yz([(CASE_DEPTH-REAR_THICKNESS,BASE_Z),(CASE_DEPTH,BASE_Z),(CASE_DEPTH,REAR_EAVE_Z),
+                   (CASE_DEPTH-REAR_THICKNESS,INNER_EAVE_Z)],-WIDTH/2,WIDTH)
+    tray=box(-WIDTH/2+REAR_THICKNESS,FRONT_THICKNESS,BASE_Z,WIDTH-2*REAR_THICKNESS,CASE_DEPTH-FRONT_THICKNESS-REAR_THICKNESS,REAR_THICKNESS)
     feature("Back","后壳后壁 · 构造源",rear,BLACK,shell)
     feature("Base","后壳底板 · 构造源",tray,BLACK,shell)
-    feet=[cylinder(4,3,(x,y,0),Z) for x in (-55,55) for y in (11,CASE_DEPTH-11)]
+    feet=[cylinder(4,3,(x,y,FEET_BOTTOM_Z),Z) for x in (-55,55) for y in (11,69)]
     feature("Feet","四个脚垫",Part.makeCompound(feet),RUBBER,ui)
 
     oled_pcb,oled_panel,oled_header,oled_left,oled_pilots,oled_frame,oled_pocket=oled_shapes()
@@ -537,11 +556,11 @@ def build(folder):
     block("Bridge","SATA–USB 桥接转向占位 · 连接方式待核对",(-61,8,124),(10,24,24),PCB,hardware)
     rail_y=SLOT_Y-dt/2-1.05
     rail_width=dt+2.1
-    bottom_rail=box(-68,rail_y,bottom-2,136,CASE_DEPTH-3-rail_y,2)
-    side_rails=[box(x,rail_y,bottom,3.7,CASE_DEPTH-3-rail_y,dh) for x in (-68,64.3)]
+    bottom_rail=box(-68,rail_y,bottom-2,136,CASE_DEPTH-REAR_THICKNESS-rail_y,2)
+    side_rails=[box(x,rail_y,bottom,3.7,CASE_DEPTH-REAR_THICKNESS-rail_y,dh) for x in (-68,64.3)]
     carrier=bottom_rail.multiFuse(side_rails).removeSplitter()
     feature("DriveCarrier","光驱底托和两侧导轨",carrier,TEAL,supports)
-    # Upper edge follows the rear roof's 3 mm normal-offset inner plane.
+    # Upper edge follows the rear roof's 5 mm normal-offset inner plane.
     def inner_roof(y):
         return REAR_EAVE_Z+(CASE_DEPTH-y)*SHOULDER_SLOPE-ROOF_OFFSET_Z
     y0,y1=SLOT_Y-2.5,SLOT_Y+2.5
@@ -621,7 +640,7 @@ def build(folder):
         for x,z,start,end,radius in [(sign*67.4,18,4,11,2.8),(sign*29,179,24.5,36,3.5)]:
             post=cylinder(2.3,end-start,(x,start,z),Y).cut(cylinder(.8,5.6,(x,end-5.5,z),Y))
             front_posts.append(post)
-            envelope=prism_yz(profile[:7]+[(CASE_DEPTH,3)],-WIDTH/2,WIDTH)
+            envelope=prism_yz(profile[:7]+[(CASE_DEPTH,BASE_Z)],-WIDTH/2,WIDTH)
             well=cylinder(radius,CASE_DEPTH-end-.4,(x,end+.4,z),Y).common(envelope)
             rear_bosses.append(well)
             access_wells.extend([cylinder(1.1,3,(x,end+.3,z),Y),
@@ -660,7 +679,7 @@ def build(folder):
     roof_region_shape=box(-WIDTH/2-1,HANDLE_REAR,0,WIDTH+2,
                           CASE_DEPTH-HANDLE_REAR+1,HANDLE_TOP+1)
     roof_region_shape=roof_region_shape.multiFuse([
-        prism_yz(seam_profile,-WIDTH/2,3),prism_yz(seam_profile,WIDTH/2-3,3)]).removeSplitter()
+        prism_yz(seam_profile,-WIDTH/2,REAR_THICKNESS),prism_yz(seam_profile,WIDTH/2-REAR_THICKNESS,REAR_THICKNESS)]).removeSplitter()
     roof_region=doc.getObject(source_part('RearRoofRegion',
         roof_region_shape))
     front_cowl=doc.addObject('Part::Cut','FrontCowl')
@@ -689,8 +708,13 @@ def build(folder):
                      ['RearRoof','SlotGuide','LPanel','RPanel','Back','Base','BatteryCradle','DriveCarrier','DACPads','LPort','RPort'],rear_bosses,BLACK,shell)
     rear.Shape=rear.Shape.cut(doc.getObject(rear_fastener_cuts).Shape).removeSplitter()
     # Strap slots are outside the 112 mm pack. Straps are removed before sliding the pack out.
-    strap_slots=[box(x,y,2.5,3,8,18) for x in (-61,58) for y in (24,44)]
+    strap_slots=[box(x,y,BASE_Z-.5,3,8,20) for x in (-61,58) for y in (24,44)]
     rear.Shape=rear.Shape.cut(Part.makeCompound(strap_slots)).removeSplitter()
+    bottom_envelope = bottom_corner_envelope()
+    for obj in (front, rear):
+        obj.Shape = obj.Shape.common(bottom_envelope).removeSplitter()
+        obj.addProperty('App::PropertyLength', 'BottomCornerRadius', 'Dimensions')
+        obj.BottomCornerRadius = OUTER_CORNER_RADIUS
     for obj in (front,rear,core):
         if len(obj.Shape.Solids)!=1:
             raise RuntimeError(f"{obj.Name}: expected one connected solid, got {len(obj.Shape.Solids)}")
