@@ -105,12 +105,9 @@ idf.py build
 
 ## M3：音频播放
 
-已实现默认关闭的独立测试音模式和控制核心，见 [接线与验收草案](audio-output.md)。离线检查覆盖预填、暂停保留软件队列、停止清理及旧 generation 拒收、欠载手动恢复、fault 清除、测试音声道独立和 PCM16LE 端序。当前只编译，不刷机；模块到货后才记录实际时钟和模拟输出。源为合成测试音，不能将其结果当作 USB 光驱返回或 CD 播放成功。
+CD-DA 立体声播放已通过实机验收。既有证据包括 DAC 排针的 BCLK／LRCK 计数、左右声道试听、三轮整盘 I²S 提交，以及用户确认的完整链路重复播放，见 [#4](https://github.com/miclle/discora/issues/4)。
 
-- 首先用固件生成的已知 L/R 测试 PCM 验证 I²S 时钟、通道独立性，再接入 CD-DA。
-- 测量实际 44.1 kHz、16-bit、两声道输出。
-- 播放一整张测试盘，监控环形缓冲欠载、5V 电压与重启。
-- 确认音轨切换不会遗留上一轨 PCM 数据或造成明显爆音。
+音频接线或输出配置改变后，播放实际 CD，检查左右声道、基本控制和是否有异常声音。仅在排查无声或单声道问题时使用[独立测试音](audio-output.md)。整机带载供电和 USB 异常恢复分别见 [#1](https://github.com/miclle/discora/issues/1) 和 [#7](https://github.com/miclle/discora/issues/7)。
 
 ## M4：刻录安全门槛
 

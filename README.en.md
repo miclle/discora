@@ -212,8 +212,8 @@ For the default query build, use `idf.py -p <DISCORA_UART_PORT> flash monitor`. 
 
 The project distinguishes `planned`, `implemented` (source code or design exists), `bench-tested` (evidence under specified conditions), and `verified` (all criteria for the corresponding acceptance scope are met). Feature descriptions do not imply qualification across every hardware combination.
 
-- **Bench evidence exists for:** USB queries, TOC/CD-DA reads, audio-hash comparisons against a computer, short analog stereo listening, full-disc I²S submissions, basic four-button operations, and the Chinese OLED interface. The main setup uses UJ-898/HC10, a `13fd:0840` bridge, and one 13-track CD.
-- **Further validation is needed for:** intermittent USB disconnects and seek failures, full-disc listening, additional drives and media, button edge cases, battery power, and physical enclosure integration. Software underrun recovery is not USB disconnect recovery. Pause and track changes are not guaranteed to be sample-exact or gapless.
+- **Bench evidence exists for:** USB queries, TOC/CD-DA reads, audio-hash comparisons against a computer, repeated end-to-end stereo playback, full-disc I²S submissions, basic four-button operations, and the Chinese OLED interface. The main setup uses UJ-898/HC10, a `13fd:0840` bridge, and one 13-track CD.
+- **Further validation is needed for:** cold starts, controlled USB reconnects, recovery from disconnects and seek failures, button edge cases, battery power, and physical enclosure integration. Software underrun recovery is not USB disconnect recovery. Pause and track changes are not guaranteed to be sample-exact or gapless.
 - **Future research:** CD-R/CD-RW writing, session finalization, and read-back verification are not implemented. Minimum write speed and sustained throughput must be measured first.
 
 Detailed evidence, deployment information, and outstanding work are maintained in [engineering status](docs/status.md), [experiment records](docs/records/README.md), and the [roadmap](docs/roadmap.md).

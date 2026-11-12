@@ -115,7 +115,7 @@ python3 firmware/tests/run_host_tests.py
 
 上电为 stopped。通过 COM / UART0 115200 发送回车结束的 `left`、`right`、`stereo`、`silence`、`play`、`pause`、`stop`、`status`、`help`。数据为明确标记的合成 PCM，不是光驱响应；没有自动出声。默认 GPIO4 / 5 / 6 分别为 BCLK / LRCK / DATA，目标 44.1 kHz、16-bit stereo、Philips I²S，无 MCLK 输出。
 
-暂停保留尚未提交的软件队列，并关闭/重建 DMA；最多约 40 ms 已排队 DMA 数据会被丢弃，不是采样级无损暂停。该独立诊断不使用 CD-DA 源；精确播放位置和硬件 DMA 欠载计数尚未实现。接线与验收见 [音频输出草案](../docs/audio-output.md)；源码、离线测试及构建证据见 [M3 准备记录](../docs/records/2026-10-31-m3-audio-prep.md)。独立 I²S 模式已上板做空载测试，真实 DAC / 引脚波形 / 模拟输出尚未验收。
+暂停保留尚未提交的软件队列，并关闭/重建 DMA；最多约 40 ms 已排队 DMA 数据会被丢弃，不是采样级无损暂停。该独立诊断不使用 CD-DA 源；精确播放位置和硬件 DMA 欠载计数尚未实现。接线与排查见[音频输出说明](../docs/audio-output.md)；源码、离线测试及构建证据见 [M3 准备记录](../docs/records/2026-10-31-m3-audio-prep.md)。独立 I²S 模式已有空载记录。经 DAC 和功放的完整 CD 播放验收见 [#4](https://github.com/miclle/discora/issues/4)。
 
 ## 当前模块
 
