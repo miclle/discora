@@ -24,7 +24,7 @@ def main():
     assert rear.isValid() and len(rear.Solids) == 1
     report = dict(model_sha256=hashlib.sha256(args.model.read_bytes()).hexdigest(),
                   freecad_version=A.Version()[:3], rear_valid=True, rear_solids=1,
-                  rigid_pla_pieces=10, ports={}, physical_print_test=False,
+                  rigid_pla_pieces=11, ports={}, physical_print_test=False,
                   acoustic_sealing_verified=False)
     for name, sign in [('LPort', -1), ('RPort', 1)]:
         port = doc.getObject(name)
@@ -36,10 +36,10 @@ def main():
                else port.Shape.BoundBox.XMin-chamber.Shape.BoundBox.XMax)
         distance = port.Shape.distToShape(chamber.Shape)[0]
         assert missing < .001 and abs(gap-.3) < 1e-6, (name, missing, gap)
-        # Former fastening centers must now be solid wall, not open pilot holes.
+        # The corresponding former ear heights must be solid at the current wall.
         sealed = []
         for z in (39, 117):
-            probe = Part.makeCylinder(.79, 2.9, A.Vector(sign*70.95, 40, z),
+            probe = Part.makeCylinder(.79, 2.9, A.Vector(sign*(doc.Back.Shape.BoundBox.XLength/2-.05), port.Shape.BoundBox.Center.y, z),
                                       A.Vector(-sign, 0, 0))
             absent = probe.cut(rear).Volume
             assert absent < .001, (name, z, absent)

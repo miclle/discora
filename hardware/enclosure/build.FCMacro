@@ -17,17 +17,21 @@ GLASS, PIXEL = (0.045, 0.085, 0.10), (0.85, 0.97, 1.0)
 # Knob: Bambu PLA Basic Black 10101; white is the PLA Lite symbol region.
 KNOB_BLACK, WHITE, SILVER, PCB, BLUE = (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), (0.70, 0.73, 0.75), (0.14, 0.40, 0.32), (0.12, 0.33, 0.62)
 # The drive face is parallel to XZ and the disc moves vertically behind the handle.
-WIDTH = 146.0
-DRIVE = (128.0, 9.5, 129.0)
+WIDTH = 170.0
+DRIVE = (128.0, 10.8, 130.0)  # measured maximum envelope; front lip is thicker than the 9.5 mm rear
 # User-supplied total envelope, oriented upright: depth, width, height.
 # Frontmost diaphragm to rearmost magnet; mounting plane remains unmeasured.
 SPEAKER = (42.0, 45.0, 80.0)
-CASE_DEPTH = 82.0
+CASE_DEPTH = 93.0
 # The rear housing is symmetric in side elevation; the front skin overlays it.
 HANDLE_THICKNESS = 5.0
 FRONT_THICKNESS = HANDLE_THICKNESS
 REAR_THICKNESS = FRONT_THICKNESS
-# Grow outward to retain the 136 mm inner width, rear plane Y=77 and floor Z=6.
+INNER_HALF_WIDTH = WIDTH/2-REAR_THICKNESS
+LOWER_FASTENER_X = WIDTH/2-5.6
+LOWER_FASTENER_Z = 33.0
+DAC_X = -INNER_HALF_WIDTH+1
+# Keep the existing floor plane Z=6 and the 3 mm soft-foot height.
 BASE_Z = 1.0
 FEET_BOTTOM_Z = BASE_Z - 3.0
 # Move internal hardware back by the added front wall thickness.
@@ -55,6 +59,7 @@ INNER_EAVE_Z = REAR_EAVE_Z + REAR_THICKNESS * SHOULDER_SLOPE - ROOF_OFFSET_Z
 SPEAKER_CENTER_X, SPEAKER_CENTER_Z = 26.0, 76.0
 # Center the ports on the rear housing's side outline, excluding the front skin.
 PORT_CENTER_Y, PORT_CENTER_Z = REAR_CENTER_Y, 80.0
+CHAMBER_DEPTH = 52.0 + (CASE_DEPTH - 82.0) / 2
 FRONT_GRILLE_RADIUS = 65.0
 # A true circular mouth precedes the grille; +Y is inward from the front face.
 FRONT_GRILLE_RECESS = 2.5
@@ -62,8 +67,13 @@ GRILLE_HOLE_RADIUS, GRILLE_PITCH = .94, 2.9
 GRILLE_UNDERLAP = 3.0
 # Supplier image: selected flat 5600 mAh pack, excluding leads/connectors.
 BATTERY = (112.0, 70.0, 20.0)
-SLOT_Y = 65.75 + INTERNAL_SHIFT_Y
-DRIVE_TOP = 161.0
+# The measured underside faces the rear wall; 1 mm is reserved for protective pads.
+DRIVE_DATUM_Y = CASE_DEPTH - REAR_THICKNESS - 1.0
+DRIVE_TOP = 159.5
+SLOT_Y = DRIVE_DATUM_Y - (5.9 + 10.0) / 2
+SLOT_HEIGHT = 5.5  # 4.5 mm reported opening plus 0.5 mm each side
+CABLE_SIDE_ALLOWANCE = 14.5  # measured natural cable extent; 1.5 mm side-wall clearance
+
 # OLED supplier drawing: dimensions are nominal, not measured hardware.
 # The origin is the active-area center; +Z points toward the four-pin header.
 DISPLAY_WINDOW = (30.42, 15.7)  # 0.5 mm beyond the active area on each side
@@ -373,7 +383,7 @@ def build(folder):
     holes = [obround((0,HANDLE_FRONT-2,SHOULDER_Z+HANDLE_HEIGHT/2), X,Z,Y,90,HANDLE_OPENING_HEIGHT,10),
              screen_cut,
              cylinder(FRONT_GRILLE_RADIUS,9,(0,-3,SPEAKER_CENTER_Z),Y),
-             obround((0,SLOT_Y,145),X,Y,Z,124,3.2,HANDLE_TOP-145)]
+             obround((0,SLOT_Y,145),X,Y,Z,124,SLOT_HEIGHT,HANDLE_TOP-145)]
     # Keep symmetric openings separate from the asymmetric control cutouts.
     common_tool = raw("SymmetricCowlTool",Part.makeCompound(holes))
     common_tool.Label = "居中开孔 · 提手／显示窗／格栅／碟口"
@@ -409,8 +419,9 @@ def build(folder):
     # Overlap the panel opening by 0.3 mm instead of leaving an assembly seam.
     ring=side_capsule(left,cy,cz,74.6,29.6,REAR_THICKNESS).cut(side_capsule(left-1,cy,cz,67,22,REAR_THICKNESS+2))
     # Stop 0.3 mm outside the chamber wall so P3 can slide forward with P2 fixed.
-    tube=side_capsule(left+2,cy,cz,67,22,REAR_THICKNESS+.7).cut(
-        side_capsule(left+1,cy,cz,63,18,REAR_THICKNESS+3))
+    tube_depth=-65.3-(left+2)
+    tube=side_capsule(left+2,cy,cz,67,22,tube_depth).cut(
+        side_capsule(left+1,cy,cz,63,18,tube_depth+2))
     inset=side_capsule(left+1.5,cy,cz,56,12,2)
     # Four connections support both ends as well as the middle of the long inset.
     # All ribs stay behind the recessed face and outside the carrier's sweep.
@@ -418,9 +429,9 @@ def build(folder):
     end_bridges=[box(left+2,cy-1.5,z,2,3,9) for z in (cz-34.5,cz+25.5)]
     port=ring.multiFuse([tube,inset,bridge]+end_bridges).removeSplitter()
     # Compact symmetric cavities retain the complete driver envelopes.
-    outer=box(-65,5,31.5,65,52,89)
-    inner=box(-62.5,4,34,61,50.5,84)
-    cavity=outer.cut(inner).cut(side_capsule(left-1,cy,cz,67.6,22.6,13.2)).removeSplitter()
+    outer=box(-65,5,31.5,65,CHAMBER_DEPTH,89)
+    inner=box(-62.5,4,34,61,CHAMBER_DEPTH-1.5,84)
+    cavity=outer.cut(inner).cut(side_capsule(left-1,cy,cz,67.6,22.6,-60.8-(left-1))).removeSplitter()
     left_port = feature("LPort","左侧 · 导音孔及饰片构造源（并入 P2）",port,BLACK,shell)
     mirrored("RPort","右侧 · 导音孔及饰片镜像源（并入 P2）",left_port,BLACK,shell)
     left_chamber = feature("LChamber","左声道 · 后腔及侧向通道（未调谐）",cavity,TEAL,supports)
@@ -545,28 +556,55 @@ def build(folder):
         obj.addProperty('App::PropertyString','FitStatus','Volume control')
         obj.FitStatus='User dimensions; six crush ribs have intentional 0.1 mm radial interference with the spline envelope. Printed retention and pin footprint unverified.'
 
-    # Rear vertical drive opens into the slot behind the handle.
+    # Measured optical-drive envelope. Local front becomes +Z and underside +Y;
+    # this mounting orientation reverses the user's left/right along machine X.
     dw,dt,dh = DRIVE
     bottom = DRIVE_TOP-dh
-    drive = block("DriveBlank","光驱毛坯",(-dw/2,SLOT_Y-dt/2,bottom),DRIVE,SILVER,hardware)
-    hardware.removeObject(drive)
-    visible.remove(drive)
-    native_cut("Drive","UJ-898 · 竖装向上退碟",drive,
-               box(-61,SLOT_Y-1,bottom+2,122,2,dh),SILVER,hardware)
-    block("Bridge","SATA–USB 桥接转向占位 · 连接方式待核对",(-61,8,124),(10,24,24),PCB,hardware)
-    rail_y=SLOT_Y-dt/2-1.05
-    rail_width=dt+2.1
-    bottom_rail=box(-68,rail_y,bottom-2,136,CASE_DEPTH-REAR_THICKNESS-rail_y,2)
-    side_rails=[box(x,rail_y,bottom,3.7,CASE_DEPTH-REAR_THICKNESS-rail_y,dh) for x in (-68,64.3)]
-    carrier=bottom_rail.multiFuse(side_rails).removeSplitter()
-    feature("DriveCarrier","光驱底托和两侧导轨",carrier,TEAL,supports)
-    # Upper edge follows the rear roof's 5 mm normal-offset inner plane.
+    front_y = DRIVE_DATUM_Y-dt
+    # Maximum-thickness envelope is conservative: the exact front-lip length,
+    # corner radii and underside transition are not yet measured.
+    drive_outline=[(-64,bottom+35),(-64,DRIVE_TOP),(64,DRIVE_TOP),
+                   (64,bottom),(-39,bottom)]
+    points=[V(x,front_y,z) for x,z in drive_outline]
+    drive_shape=Part.Face(Part.makePolygon(points+points[:1])).extrude(Y*dt)
+    # Recess location follows the reported local right-hand 25.2 mm strip.
+    drive_shape=drive_shape.cut(box(-64,DRIVE_DATUM_Y-4.5,bottom,25.2,4.5,dh))
+    drive=feature("DriveBlank","UJ-898 · 实测外形／前端厚度保守包络",drive_shape,SILVER,hardware)
+    hardware.removeObject(drive);visible.remove(drive)
+    body=native_cut("Drive","UJ-898 · 底面朝后／竖装向上退碟",drive,
+               box(-61.4,SLOT_Y-2.25,bottom+2,121.6,4.5,dh),SILVER,hardware)
+    for name,value in [('MeasuredFrontThickness',10.8),('MeasuredRearThickness',9.5),
+                       ('UndersideStepWidth',25.2),('UndersideStepHeight',4.5),
+                       ('RearWallPadAllowance',1.0),('SlotDatumHeight',7.95)]:
+        body.addProperty('App::PropertyLength',name,'Measured drive');setattr(body,name,value)
+    body.addProperty('App::PropertyString','FitStatus','Measured drive')
+    body.FitStatus='User measurements; conservative maximum thickness. Corner/step extent and SATA transverse envelope need physical confirmation.'
+    # Adapter is removed before extracting the drive; it no longer sits on P3.
+    adapter_y=DRIVE_DATUM_Y-(9.5+7)/2
+    adapter_z=bottom-20.4
+    adapter=box(28.3,adapter_y,adapter_z,37.7,7,20.4)
+    adapter=adapter.fuse(cylinder(3.25,3,(66,DRIVE_DATUM_Y-4.75,adapter_z+10.2),X)).removeSplitter()
+    plug=feature("Bridge","Slimline SATA · 37.7×7／后伸20.4／根部Ø6.5×3",adapter,RUBBER,hardware)
+    plug.addProperty('App::PropertyString','FitStatus','Measured drive')
+    plug.FitStatus='Measured housing and strain relief. Vertical centering is provisional; 38.8 x 9.5 x 20.4 envelope checked separately.'
+    # One short central shelf avoids both the stepped edge and the connector.
+    shelf=box(-20,front_y,bottom-2,40,CASE_DEPTH-REAR_THICKNESS-front_y,2)
+    bosses=[box(x,front_y,115,3.7,CASE_DEPTH-REAR_THICKNESS-front_y,4).fuse(
+        box(x,front_y+5,111,3.7,CASE_DEPTH-REAR_THICKNESS-front_y-5,8)) for x in (-68,64.3)]
+    pilots=[cylinder(.8,9,(x,front_y-.1,117),Y) for x in (-66.15,66.15)]
+    carrier=shelf.multiFuse(bosses).cut(Part.makeCompound(pilots)).removeSplitter()
+    feature("DriveCarrier","光驱中央承托／双侧压条螺柱",carrier,BLACK,supports)
+    retainer=box(-64,front_y-3,110,128,3,10).multiFuse([
+        box(x,front_y-3,115,4,3,4) for x in (-68,64)]).cut(Part.makeCompound([
+        cylinder(1.1,4,(x,front_y-3.5,117),Y) for x in (-66.15,66.15)])).removeSplitter()
+    feature("DriveRetainer","光驱可拆压条 · 两枚名义M2×10／薄垫接触",retainer,TEAL,supports)
+    # Roof slot is symmetric; the slightly off-centre measured opening fits within it.
     def inner_roof(y):
         return REAR_EAVE_Z+(CASE_DEPTH-y)*SHOULDER_SLOPE-ROOF_OFFSET_Z
-    y0,y1=SLOT_Y-2.5,SLOT_Y+2.5
-    guide=prism_yz([(y0,DRIVE_TOP),(y1,DRIVE_TOP),(y1,inner_roof(y1)),(y0,inner_roof(y0))],-63,126)
-    guide=guide.cut(box(-62,SLOT_Y-1.6,DRIVE_TOP-.5,124,3.2,20))
-    feature("SlotGuide","后斜面进碟导向框",guide,TEAL,supports)
+    y0,y1=SLOT_Y-3.5,SLOT_Y+3.5
+    guide=prism_yz([(y0,DRIVE_TOP+.5),(y1,DRIVE_TOP+.5),(y1,inner_roof(y1)),(y0,inner_roof(y0))],-63,126)
+    guide=guide.cut(box(-62,SLOT_Y-SLOT_HEIGHT/2,DRIVE_TOP,124,SLOT_HEIGHT,30))
+    feature("SlotGuide","后斜面进碟导向框 · 5.5 mm 喉口",guide,TEAL,supports)
     feature("DisplayPCB","SH1106 PCB · 35.4×33.5×1.2／四孔与底部缺口",oled_pcb,PCB,hardware)
     header=feature("DisplayHeader","OLED 弯针接头预留 · 图纸深度11.3／2.54节距",oled_header,RUBBER,hardware)
     header.addProperty('App::PropertyFloatList','PinCentersX').PinCentersX=[-3.81,-1.27,1.27,3.81]
@@ -584,10 +622,8 @@ def build(folder):
     # DAC stands on the left side. Only PCB sizes have documentary evidence.
     lower=box(-51,5,120,102,54,2)
     feet=[box(x,yy,120.5,3,3,.5) for x in (-36,33) for yy in (5,57)]
-    bridge_shelf=box(-61.5,6,120,25.5,26.5,2)
-    bridge_pads=[cylinder(1.5,2,(x,y,122),Z) for x in (-59,-53) for y in (10,30)]
-    feature("AmpShelf","功放与桥接器托板 · 支撑位置待测",
-            lower.multiFuse(feet+[bridge_shelf]+bridge_pads).removeSplitter(),TEAL,supports)
+    feature("AmpShelf","功放托板 · 支撑位置待测",
+            lower.multiFuse(feet).removeSplitter(),TEAL,supports)
     feature("ElectronicsSled","光驱上部前方主控托板",box(-34,32.5,147,68,29,1),TEAL,supports)
     for key,label,x,y,z,w,d,h in [
         ("Amp","TPA3118D2 · PCB 标称 66×53",-33,6,123,66,53,15),
@@ -599,16 +635,16 @@ def build(folder):
         posts=[cylinder(1.5,z-post_base,(xx,yy,post_base),Z)
                for xx in (x+2,x+w-2) for yy in (y+2,y+d-2)]
         feature(key+"Pads",label+" · 支撑示意（非安装孔位）",Part.makeCompound(posts),TEAL,supports)
-    block("DAC","PCM5102 · 侧置 PCB 标称 31×17",(-67,33,127),(1.6,17,31),PCB,hardware)
-    block("DACChip","PCM5102 · 元件高度 7 mm 预留",(-65.4,33,127),(7,17,31),RUBBER,hardware)
-    posts=[cylinder(1.5,1,(-68,yy,zz),X) for yy in (35,48) for zz in (129,156)]
+    block("DAC","PCM5102 · 侧置 PCB 标称 31×17",(DAC_X,33,127),(1.6,17,31),PCB,hardware)
+    block("DACChip","PCM5102 · 元件高度 7 mm 预留",(DAC_X+1.6,33,127),(7,17,31),RUBBER,hardware)
+    posts=[cylinder(1.5,1,(-INNER_HALF_WIDTH,yy,zz),X) for yy in (35,48) for zz in (129,156)]
     feature("DACPads","PCM5102 · 侧壁支撑示意（非安装孔位）",Part.makeCompound(posts),TEAL,supports)
     bx,by,_=BATTERY
     block("Battery","5600 mAh 平排电池包 · 商品标称 112×70×20",(-bx/2,6,8),BATTERY,BLUE,hardware)
     # A centered open-ended tray leaves 1 mm at each side of the pack.
     # Lead routing and final retention require the physical pack; no invented holes.
     cradle=box(-bx/2-3,6,6,bx+6,by,2)
-    cradle=cradle.multiFuse([box(x,6,8,2,by,12) for x in (-bx/2-3,bx/2+1)])
+    cradle=cradle.multiFuse([box(x,6,8,2,50,12) for x in (-bx/2-3,bx/2+1)])
     feature("BatteryCradle","底部平排电池托盘 · 线材与固定方式待实测",cradle.removeSplitter(),TEAL,supports)
 
     # Move the complete display stack together, including the native PCB boxes.
@@ -637,7 +673,7 @@ def build(folder):
     # Upper wells clear the electronics from above; lower wells flank the battery.
     front_posts=[];rear_bosses=[];core_tabs=[];access_wells=[];post_clearances=[]
     for sign in (-1,1):
-        for x,z,start,end,radius in [(sign*67.4,18,4,11,2.8),(sign*29,179,24.5,36,3.5)]:
+        for x,z,start,end,radius in [(sign*LOWER_FASTENER_X,LOWER_FASTENER_Z,4,11,2.8),(sign*29,179,24.5,36,3.5)]:
             post=cylinder(2.3,end-start,(x,start,z),Y).cut(cylinder(.8,5.6,(x,end-5.5,z),Y))
             front_posts.append(post)
             envelope=prism_yz(profile[:7]+[(CASE_DEPTH,BASE_Z)],-WIDTH/2,WIDTH)
@@ -648,7 +684,7 @@ def build(folder):
             post_clearances.append(cylinder(2.55,end-start+.5,(x,start-.1,z),Y))
         for z in (27,124):
             x=sign*64
-            boss=box(-68 if sign<0 else 62,7,23 if z==27 else 120.5,6,7,8 if z==27 else 7.5)
+            boss=box(-INNER_HALF_WIDTH if sign<0 else 62,7,23 if z==27 else 120.5,INNER_HALF_WIDTH-62,7,8 if z==27 else 7.5)
             rear_bosses.append(boss.cut(cylinder(1.0,8,(x,6.5,z),Y)))
             tab=box(-67 if sign<0 else 60,5,z-4,7,2,8)
             if z==27:tab=tab.fuse(box(-67 if sign<0 else 60,5,31,7,2,3))
@@ -719,6 +755,12 @@ def build(folder):
         if len(obj.Shape.Solids)!=1:
             raise RuntimeError(f"{obj.Name}: expected one connected solid, got {len(obj.Shape.Solids)}")
 
+
+    allowance=raw('SataPlugClearance',box(27.2,DRIVE_DATUM_Y-9.5,bottom-20.4,38.8,9.5,20.4))
+    construction.addObject(allowance);allowance.Visibility=False
+    wire=raw('SataCableClearance',box(64,DRIVE_DATUM_Y-26,bottom-13.45,CABLE_SIDE_ALLOWANCE,26,6.5))
+    wire.Label='SATA 线缆走线预留 · 实测侧向14.5／侧壁余量1.5'
+    construction.addObject(wire);wire.Visibility=False
 
     disc=raw("DiscReference",cylinder(60,1.2,(0,SLOT_Y-.6,180),Y).cut(
         cylinder(7.5,2,(0,SLOT_Y-1,180),Y)))

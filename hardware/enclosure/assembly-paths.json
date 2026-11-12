@@ -17,14 +17,15 @@
         "RDriver",
         "Amp",
         "AmpChip",
-        "Bridge",
         "MCU",
         "MCUChip"
       ],
       "fixed": [
         "RearShell",
         "Feet",
+        "DriveRetainer",
         "Drive",
+        "Bridge",
         "DAC",
         "DACChip",
         "Battery"
@@ -35,11 +36,125 @@
       ],
       "clashes": []
     },
+    "drive_retainer_front": {
+      "method": "continuous conservative bounding-box sweeps of waist and two ears",
+      "translation_xyz_mm": [
+        0,
+        -140,
+        0
+      ],
+      "moving": [
+        "DriveRetainer"
+      ],
+      "fixed": [
+        "RearShell",
+        "Feet",
+        "Drive",
+        "Bridge",
+        "DAC",
+        "DACChip",
+        "Battery"
+      ],
+      "prerequisites": [
+        "Front cover and speaker carrier removed",
+        "Two retainer screws removed"
+      ],
+      "clashes": []
+    },
+    "drive_service_position": {
+      "method": "continuous initial translation then 31 maximum-envelope B-rep lift/translation samples; not a continuous lift proof",
+      "waypoints_xyz_mm": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          -12,
+          0
+        ],
+        [
+          0,
+          -15,
+          9.5
+        ]
+      ],
+      "moving": [
+        "Drive",
+        "Bridge"
+      ],
+      "fixed": [
+        "RearShell",
+        "DAC",
+        "DACChip",
+        "Feet"
+      ],
+      "prerequisites": [
+        "Front cover and speaker carrier removed",
+        "Drive retainer removed",
+        "Battery removed",
+        "Cable slack released"
+      ],
+      "clashes": []
+    },
+    "sata_removal": {
+      "method": "continuous conservative bounding-box sweeps",
+      "relative_waypoints_xyz_mm": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          -10
+        ],
+        [
+          -14,
+          0,
+          -10
+        ],
+        [
+          -14,
+          -140,
+          -10
+        ]
+      ],
+      "start_offset_xyz_mm": [
+        0,
+        -15,
+        9.5
+      ],
+      "moving": [
+        "Bridge"
+      ],
+      "fixed": [
+        "RearShell",
+        "DAC",
+        "DACChip",
+        "Feet",
+        "Drive at service position"
+      ],
+      "prerequisites": [
+        "Drive held at service position",
+        "Cable released"
+      ],
+      "connector_release_allowance_mm": 10,
+      "actual_cable_bend_verified": false,
+      "clashes": []
+    },
     "drive_front": {
-      "method": "continuous conservative translation sweeps before/after 61 exact B-rep yaw/translation samples; rotation is not a continuous proof",
+      "method": "continuous conservative translation sweeps before/after 61 maximum-envelope B-rep yaw/translation samples; rotation is not a continuous proof",
+      "start_offset_xyz_mm": [
+        0,
+        -15,
+        9.5
+      ],
       "initial_translation_xyz_mm": [
         0,
-        -11.5,
+        -13,
         0
       ],
       "yaw_axis": "Z",
@@ -47,12 +162,12 @@
       "yaw_step_deg": 0.5,
       "yaw_pivot_xyz_mm": [
         0.0,
-        56.25,
-        96.5
+        53.599999999999994,
+        104.0
       ],
       "translation_during_yaw_xyz_mm": [
         0,
-        -17.75,
+        -20,
         0
       ],
       "final_translation_xyz_mm": [
@@ -65,15 +180,14 @@
       ],
       "fixed": [
         "RearShell",
-        "Battery",
         "DAC",
         "DACChip",
         "Feet"
       ],
       "prerequisites": [
-        "Front cover removed",
-        "Speaker carrier removed (not included among fixed objects)",
-        "Bridge cables disconnected"
+        "Drive at service position",
+        "SATA adapter removed",
+        "Speaker carrier, battery and drive retainer removed"
       ],
       "clashes": []
     },
@@ -93,6 +207,7 @@
         "LDriver",
         "RDriver",
         "Drive",
+        "Bridge",
         "DAC",
         "DACChip",
         "Feet"
@@ -140,6 +255,7 @@
       "fixed": [
         "RearShell",
         "Feet",
+        "DriveRetainer",
         "SpeakerCarrier",
         "LDriver",
         "RDriver",
@@ -160,6 +276,7 @@
       "clashes": []
     }
   },
+  "drive_service_envelope": "Filled maximum 128 x 10.8 x 130 mm box; connector retains modeled housing and strain relief",
   "all_pass": true,
-  "model_sha256": "e507a10f55fc1f1f7340c7df5203a91666335190cf97bc31325e94052f30bc4b"
+  "model_sha256": "fb24c86b81e000e9f2db58d3b2802ead2c5aad04e26171616b4c4fc6266ced1e"
 }

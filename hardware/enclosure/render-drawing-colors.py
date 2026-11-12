@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256 = 'e507a10f55fc1f1f7340c7df5203a91666335190cf97bc31325e94052f30bc4b'
+MODEL_SHA256 = 'fb24c86b81e000e9f2db58d3b2802ead2c5aad04e26171616b4c4fc6266ced1e'
 
 
 def palette_from_build():
@@ -138,11 +138,11 @@ def main():
     palette=palette_from_build()
     assignments={
         'ORANGE':'FrontShell PlayPauseKey EjectKey PrevKey NextKey',
-        'TEAL':'SpeakerCarrier ButtonRetainer DisplayRetainer',
+        'TEAL':'SpeakerCarrier ButtonRetainer DisplayRetainer DriveRetainer',
         'BLACK':'RearShell',
-        'RUBBER':'Feet LDriver RDriver VolumePot DisplayHeader AmpChip DACChip PlayPauseSwitch EjectSwitch PrevSwitch NextSwitch',
+        'RUBBER':'Bridge Feet LDriver RDriver VolumePot DisplayHeader AmpChip DACChip PlayPauseSwitch EjectSwitch PrevSwitch NextSwitch',
         'GLASS':'Window','PIXEL':'StatusArt','KNOB_BLACK':'Knob',
-        'SILVER':'Drive Encoder MCUChip','PCB':'Bridge DisplayPCB Amp MCU DAC','BLUE':'Battery',
+        'SILVER':'Drive Encoder MCUChip','PCB':'DisplayPCB Amp MCU DAC','BLUE':'Battery',
     }
     colors={name:palette[key] for key,names in assignments.items() for name in names.split()}
     assert set(colors)==set(data['objects'])
@@ -153,7 +153,10 @@ def main():
     seam=json.loads((ROOT/'side-seam-checks.json').read_text())
     bottom=json.loads((ROOT/'bottom-corner-checks.json').read_text())
     rear=json.loads((ROOT/'rear-thickness-checks.json').read_text())
-    assert rear['model_sha256']==MODEL_SHA256 and rear['all_pass']
+    mount=json.loads((ROOT/'drive-mount-checks.json').read_text())
+    assert mount['model_sha256']==MODEL_SHA256 and mount['all_pass']
+    assert all(mount['key_and_knob_face_order_preserved'].values())
+    assert rear['model_sha256']==mount['baseline_sha256'] and rear['all_pass']
     assert all(rear['key_and_knob_face_order_preserved'].values())
     assert bottom['model_sha256']==rear['baseline_sha256'] and bottom['all_pass']
     assert all(bottom['key_and_knob_face_order_preserved'].values())

@@ -29,10 +29,10 @@ def main():
             sealed.append(dict(former_center_xz_mm=[x,z],missing_front_material_mm3=missing))
     roof=doc.FoldSection.Geometry[5]
     upper_entry=roof.StartPoint.x+(179-roof.StartPoint.y)*(roof.EndPoint.x-roof.StartPoint.x)/(roof.EndPoint.y-roof.StartPoint.y)
-    for x,z,start,end,entry in [(-67.4,18,4,11,doc.Back.Shape.BoundBox.YMax),(67.4,18,4,11,doc.Back.Shape.BoundBox.YMax),
+    for x,z,start,end,entry in [(-79.4,33,4,11,doc.Back.Shape.BoundBox.YMax),(79.4,33,4,11,doc.Back.Shape.BoundBox.YMax),
                                 (-29,179,24.5,36,upper_entry),(29,179,24.5,36,upper_entry)]:
         seat=end+3.2
-        tool=Part.makeCylinder(2,80,V(x,seat+.01,z),V(0,1,0))
+        tool=Part.makeCylinder(2,100,V(x,seat+.01,z),V(0,1,0))
         hits=[]
         for o in objects:
             volume=tool.common(o.Shape).Volume
@@ -50,7 +50,7 @@ def main():
                 post_engagement_mm=4.8,minimum_driver_reach_mm=max(item["well_depth_mm"] for item in access),
                 physical_fit_verified=False,thread_strength_verified=False,
                 limits=['Screw head diameter must not exceed 4 mm; select length, thread form and PLA pilot fit with a sample.',
-                        'Use a slim driver with at least 68 mm usable reach; actual handle and bit geometry are not modeled.',
+                        'Use a slim driver with at least 79 mm usable reach; actual handle and bit geometry are not modeled.',
                         'Integral side-wall wells do not establish printed strength, repeated assembly life or wire clearance.'])
     assert hashlib.sha256(args.model.read_bytes()).hexdigest()==sha
     args.output.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')

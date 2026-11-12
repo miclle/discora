@@ -1,0 +1,12 @@
+{
+  "checked_model_sha256": "e3c210833fa65d05120980e36e6e09b129c157b12dc0736d2afed5298ba80301",
+  "model_sha256": "fb24c86b81e000e9f2db58d3b2802ead2c5aad04e26171616b4c4fc6266ced1e",
+  "changed_only": "SataCableClearance.Label",
+  "geometry_and_material_resources_byte_identical": true,
+  "unchanged_archive_entries": 412,
+  "gui_readback_verified": false,
+  "gui_view_provider_count": 96,
+  "gui_resource_count": 272,
+  "gui_resources_in_xml_reference_order": true,
+  "key_and_knob_gui_material_resources_byte_identical": true
+}

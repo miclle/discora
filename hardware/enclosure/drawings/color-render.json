@@ -1,7 +1,7 @@
 {
-  "sha256": "e507a10f55fc1f1f7340c7df5203a91666335190cf97bc31325e94052f30bc4b",
-  "build_sha256": "49f8de8896ddecdd3e75678f964e466b7071e4174489ec3404c67d06fa61ac96",
-  "geometry_sha256": "3afafadc1be139b04f2dd10a72d707fa37c742e676a99462d104e48953cfb368",
+  "sha256": "fb24c86b81e000e9f2db58d3b2802ead2c5aad04e26171616b4c4fc6266ced1e",
+  "build_sha256": "83ae59583cf3ce359e122a810c22513db22f419e4908fa0350b7ab904ed5f5f2",
+  "geometry_sha256": "9e45ffab63e75e36c13aed7f5b81b02be3d611cc0645d2cfadb80a739e301881",
   "palette": {
     "ORANGE": [
       1.0,
@@ -100,10 +100,20 @@
       0.75,
       0.72
     ],
+    "DriveRetainer": [
+      0.025,
+      0.75,
+      0.72
+    ],
     "RearShell": [
       0.145,
       0.155,
       0.17
+    ],
+    "Bridge": [
+      0.07,
+      0.08,
+      0.09
     ],
     "Feet": [
       0.07,
@@ -189,11 +199,6 @@
       0.7,
       0.73,
       0.75
-    ],
-    "Bridge": [
-      0.14,
-      0.4,
-      0.32
     ],
     "DisplayPCB": [
       0.14,
@@ -296,50 +301,50 @@
     "front": {
       "file": "front-color.png",
       "size_px": [
-        1753,
-        2873
+        2041,
+        2920
       ]
     },
     "right": {
       "file": "right-color.png",
       "size_px": [
-        985,
-        2873
+        1117,
+        2920
       ]
     },
     "top": {
       "file": "top-color.png",
       "size_px": [
-        1753,
-        985
+        2041,
+        1117
       ]
     },
     "rear": {
       "file": "rear-color.png",
       "size_px": [
-        1753,
-        2873
+        2041,
+        2920
       ]
     },
     "section": {
       "file": "section-color.png",
       "size_px": [
-        985,
-        2873
+        1117,
+        2920
       ]
     },
     "exploded-shell": {
       "file": "exploded-shell-color.png",
       "size_px": [
-        3870,
-        4227
+        4185,
+        4368
       ]
     },
     "exploded-core": {
       "file": "exploded-core-color.png",
       "size_px": [
-        3524,
-        4807
+        4685,
+        5985
       ]
     }
   }
