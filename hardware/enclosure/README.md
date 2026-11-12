@@ -10,9 +10,9 @@
 
 以下有日期的旧版记录保留历史尺寸，当前参数以本节及下方尺寸表为准。
 
-**2026-11-11 后壳 5 mm：**后壁、侧壁、底板与后斜顶统一为 5 mm。按用户确认向外扩展，内壁 X=±68、Y=77、底板内面 Z=6 及电子零件位置保持；外壳底 Z=1、脚垫底 Z=−2。电池前后各 1 mm、DAC 侧隙 1 mm，光驱至后斜顶 1.659 mm。光驱侧转时的同步前移量改为 17.75 mm，四条拆装路径通过；下方背锁有效刀杆需至少约 68 mm。见 [ADR-0034](../../docs/decisions/0034-five-mm-rear-shell.md) 与[厚度检查](rear-thickness-checks.json)。以下有日期的旧版记录保留历史尺寸，当前值以本节和尺寸表为准。
+**2026-11-11 后壳 5 mm：**后壁、侧壁、底板与后斜顶统一为 5 mm。按用户确认向外扩展，内壁 X=±68、Y=77、底板内面 Z=6 及电子零件位置保持；外壳底 Z=1、脚垫底 Z=−2。电池前后各 1 mm、DAC 侧隙 1 mm，光驱至后斜顶 1.659 mm。光驱侧转时的同步前移量改为 17.75 mm，四条拆装路径通过；下方背锁有效刀杆需至少约 68 mm。见 [ADR-0034](../../docs/decisions/0034-five-mm-rear-shell.md) 与[厚度检查](rear-thickness-checks.json)。
 
-**2026-11-07 载板布局补充：**[100 × 55 mm 裁剪洞洞板候选](../../docs/perfboard-layout.md)已加入主控、DAC 和两块 DCE001 的包络试算，但尚未写入本模型。该次试算的前壳／屏幕／操控区及上层电子托架存在碰撞；上移上部组件的试算不是已闭合的新机箱，也不能继承下面的整机、对称或拆装验证。该候选尚未针对 2026-11-08 等斜面模型重算，最终载板安装仍需独立闭合。
+**2026-11-07 载板布局补充：**[100 × 55 mm 裁剪洞洞板候选](../../docs/perfboard-layout.md)已加入主控、DAC 和两块 DCE001 的包络试算，但尚未写入本模型。该次试算的前壳／屏幕／操控区及上层电子托架存在碰撞；上移上部组件的试算不是已闭合的新机箱，也不能继承下面的整机、对称或拆装验证。该候选尚未针对当前 170 mm 宽光驱实测适配版重算，最终载板安装仍需独立闭合。
 
 **2026-11-08 主体尺寸调整：**前壳竖直面板、顶部斜面主体及格栅统一为 5 mm，与提手一致。按用户确认将深度从 78 增至 80 mm，电池和内部安装结构沿 Y 后移 2 mm，保留电池前后各 1 mm 间隙。前后斜面仍等角、等宽，侧面保留直线接缝。后斜面、碟口与导向框归 P2，提手归 P1；仍为三主体。详见 [ADR-0021](../../docs/decisions/0021-five-mm-front-panel.md)。此前等斜面和分件决策见 [ADR-0019](../../docs/decisions/0019-matched-top-shoulders.md)、[ADR-0020](../../docs/decisions/0020-rear-roof-shell-ownership.md)。
 
@@ -36,9 +36,9 @@
 
 本机 Bambu Studio 02.09.01.70 使用 P2S 0.4 mm / 0.12 mm 配置完成双色切片：每键均有 5 层白色路径，共 60 层；整盘预估 34 分 20 秒，橙色 4.93 g、白色 2.49 g（含换色与擦拭塔消耗）。这是本地切片证据，未发送打印；白色遮盖、粘结和按压配合仍需实物确认。详见 [dual-color-key-checks.json](dual-color-key-checks.json)。
 
-前次双色键帽调整仅将四个键帽变为多材料复合体，其余 88 个形状资源在该阶段与原验收版本逐字节一致，键帽外包络和安装位置不变；四键对其余装配件无超过 0.001 mm³ 的碰撞。配色阶段曾关闭并重新打开验证橙白分面颜色，详见 `appearance-checks.json`。本次光驱适配后的整机、正面、侧面、操控区、退碟、内部布局、侧剖及图册直接从当前保存模型生成。其它局部图为历史细节图；尺寸以当前模型和图册为准。FreeCAD GUI 接口当前不可连接；本次保留其它 GUI 材质资源，为光驱压条和接头补全显示资源，核对双色键帽及旋钮面序，未完成交互界面读回。
+前次双色键帽调整仅将四个键帽变为多材料复合体，其余 88 个形状资源在该阶段与原验收版本逐字节一致，键帽外包络和安装位置不变；四键对其余装配件无超过 0.001 mm³ 的碰撞。配色阶段曾关闭并重新打开验证橙白分面颜色，详见 `appearance-checks.json`。本次光驱适配后的整机、正面、侧面、操控区、退碟、内部布局、侧剖及图册直接从当前保存模型生成。其它局部图为历史细节图；尺寸以当前模型和图册为准。光驱适配生成时 FreeCAD GUI 接口不可连接；该版保留其它 GUI 材质资源，为光驱压条和接头补全显示资源，核对双色键帽及旋钮面序，未完成交互界面读回。
 
-**FCStd 配色保存：**无界面保存后补回 GUI 数据时，材质资源必须按 `GuiDocument.xml` 的引用顺序写入；不能用集合的无序遍历写入压缩包，否则 FreeCAD 会跳过颜色资源。`repair-gui-order.py 输入.FCStd 输出.FCStd` 可修复顺序，并逐项核对包内数据完全一致。修复后须在 FreeCAD GUI 读回颜色、关闭并重新打开核对；外部渲染图不能代替此项验证。当前记录见 [appearance-checks.json](appearance-checks.json)。
+**FCStd 配色保存：**无界面保存后补回 GUI 数据时，材质资源必须按 `GuiDocument.xml` 的引用顺序写入；不能用集合的无序遍历写入压缩包，否则 FreeCAD 会跳过颜色资源。`repair-gui-order.py 输入.FCStd 输出.FCStd` 可修复顺序，并逐项核对包内数据完全一致。修复后须在 FreeCAD GUI 读回颜色、关闭并重新打开核对；外部渲染图不能代替此项验证。历史配色读回见 [appearance-checks.json](appearance-checks.json)；当前保存资源检查见 [drive-model-metadata-checks.json](drive-model-metadata-checks.json)，当前版本的 GUI 读回仍未完成。
 
 **背面锁紧：**正面四个螺丝孔已取消；后壁下方两孔、后斜面两孔锁紧前壳，名义螺钉 2×8 mm。下方通道深 78.8 mm，需细长螺丝刀。结构和工具边界见 [ADR-0024](../../docs/decisions/0024-rear-access-front-cover-fasteners.md) 与 [fastener-checks.json](fastener-checks.json)。
 
@@ -133,6 +133,8 @@
 底角调整前后可运行 [check-bottom-corners.py](check-bottom-corners.py) `--baseline <调整前.FCStd>`，核对 R4 曲面、修改区域、前后壳接缝、左右／侧视对称和其余成品不变。
 
 侧缘调整前后可运行 [check-side-seam.py](check-side-seam.py) `--baseline <调整前.FCStd>`；基准保存到忽略目录。该检查核对后壳侧视对称、侧缘法向厚度、侧孔平移及其余 29 个成品几何不变。
+
+光驱适配的日常复查使用 [check-drive-mount.py](check-drive-mount.py) `--output tmp/drive-mount-current-checks.json`，先创建 `tmp/`。完整前后对照须加 `--baseline <光驱适配前.FCStd>`；从 Git 恢复本版基准及保护图册追溯报告的方法见[打印说明](../../docs/enclosure-printing.md#重现)。本轮交付范围、验证边界和接收端复核入口见[交接记录](../../docs/current-work-handoff.md)。
 
 后壳厚度调整可运行 [check-rear-thickness.py](check-rear-thickness.py) `--baseline <调整前.FCStd>`。
 
