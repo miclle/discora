@@ -1,4 +1,4 @@
-"""Export the ten rigid PLA pieces in review orientations; no printer is contacted.
+"""Export the eleven rigid PLA pieces in review orientations; no printer is contacted.
 
 Run with FreeCAD Python. Output is intentionally temporary until physical fit is checked.
 Key STL files are single-material envelopes; export-dual-color-keys.py preserves their materials.
@@ -30,6 +30,7 @@ def main():
         'NextKey':A.Rotation(normal,A.Vector(0,0,1)),
         'ButtonRetainer':A.Rotation(normal,A.Vector(0,0,1)),
         'DisplayRetainer':A.Rotation(normal,A.Vector(0,0,1)),
+        'DriveRetainer':A.Rotation(A.Vector(0,1,0),A.Vector(0,0,1)),
         'Knob':A.Rotation(normal,A.Vector(0,0,1)),
     }
     report={'model_sha256':hashlib.sha256(args.model.read_bytes()).hexdigest(),

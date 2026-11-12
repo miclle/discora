@@ -49,7 +49,7 @@ def main():
     for name in ('RearShell','FrontShell','SpeakerCarrier','SmallParts'):
         target=out/name;target.mkdir(exist_ok=True)
         # Two-material keys and knob use their dedicated 3MF, not monochrome STL.
-        names=[name] if name!='SmallParts' else ['ButtonRetainer','DisplayRetainer']
+        names=[name] if name!='SmallParts' else ['ButtonRetainer','DisplayRetainer','DriveRetainer']
         for n in names:assert digest(meshes/(n+'.stl'))==report['parts'][n]['stl_sha256']
         command=[str(args.bambu.resolve()),'--datadir',str(out/('userdata-'+name)),
                  '--load-settings',str(settings['machine'])+';'+str(settings['process']),

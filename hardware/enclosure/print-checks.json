@@ -1,5 +1,5 @@
 {
-  "model_sha256": "e507a10f55fc1f1f7340c7df5203a91666335190cf97bc31325e94052f30bc4b",
+  "model_sha256": "fb24c86b81e000e9f2db58d3b2802ead2c5aad04e26171616b4c4fc6266ced1e",
   "freecad_version": [
     "1",
     "1",
@@ -21,9 +21,9 @@
     "FrontShell": {
       "file": "FrontShell.stl",
       "size_xyz_mm": [
-        236.35526315789477,
-        146.0000000000001,
-        43.50000000000008
+        240.26315789473685,
+        170.0000000000001,
+        49.000000000000085
       ],
       "facets": 241872,
       "closed_mesh": true,
@@ -34,16 +34,16 @@
         0.5,
         0.5000000000000001
       ],
-      "stl_sha256": "62855c3c5d3b5cd66aaef70b410c4ffa37e20d29ec5cc840c490fbd6bee47c98"
+      "stl_sha256": "12efa7d5091c65535de131874fb55048ea57f867c755ce36278a150d2a0d3001"
     },
     "RearShell": {
       "file": "RearShell.stl",
       "size_xyz_mm": [
-        146.0,
-        188.77428314694393,
-        77.00000000000007
+        170.0,
+        192.682177883786,
+        88.00000000000006
       ],
-      "facets": 5060,
+      "facets": 5420,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -52,16 +52,16 @@
         0.0,
         -0.7071067811865475
       ],
-      "stl_sha256": "4a1830a831352c16470c2566ce4056b4be2afdfe68b77c34f75695075826f1f8"
+      "stl_sha256": "afa10e7877805313bdf0c14c5a41d0f6dd0d859d7815ff20bdd00deef3514be7"
     },
     "SpeakerCarrier": {
       "file": "SpeakerCarrier.stl",
       "size_xyz_mm": [
         134.0,
         125.69999999999999,
-        56.50000000000003
+        57.50000000000002
       ],
-      "facets": 3476,
+      "facets": 2872,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -70,7 +70,7 @@
         0.0,
         -0.7071067811865475
       ],
-      "stl_sha256": "0bd218034a4046ac61803d1f5f795d1d7b2233fb508538762bd5d940f0a727a4"
+      "stl_sha256": "54d1602f02dc6b0b32e88972e0130df35141d6db121952990d4f38c921d9b170"
     },
     "PlayPauseKey": {
       "file": "PlayPauseKey.stl",
@@ -184,6 +184,24 @@
       ],
       "stl_sha256": "699b7962e736a43e40bf747c1254eb4b3a82e903334593d7c1832f5d60d9703f"
     },
+    "DriveRetainer": {
+      "file": "DriveRetainer.stl",
+      "size_xyz_mm": [
+        136.0,
+        10.0,
+        3.0
+      ],
+      "facets": 340,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        0.7071067811865475,
+        0.0,
+        0.0,
+        0.7071067811865476
+      ],
+      "stl_sha256": "1f807f99f6d98fa38614df28a997d6b686dc144ed879951b953959d0824a6760"
+    },
     "Knob": {
       "file": "Knob.stl",
       "size_xyz_mm": [
@@ -232,10 +250,10 @@
         "RearShell"
       ],
       "exit_code": 0,
-      "gcode_sha256": "7aa80ede425c2975d343b2cf7addb57c010bce753ccd9b0eab62e83be91c8569",
-      "total_estimated_time": "7h 54m 18s",
-      "filament_g": 243.72,
-      "layers": 385,
+      "gcode_sha256": "dc07959d0ea773f915c7b82306729fda556e9c45006aeaece3a03589bee4e463",
+      "total_estimated_time": "9h 33m 48s",
+      "filament_g": 297.06,
+      "layers": 440,
       "vendor_T65535_parser_notice": true
     },
     "FrontShell": {
@@ -243,40 +261,35 @@
         "FrontShell"
       ],
       "exit_code": 0,
-      "gcode_sha256": "f48b708e3e451f503484a15c978066cc77c4841f94323d27d2d2d07e0a3f6119",
-      "total_estimated_time": "13h 3m 55s",
-      "filament_g": 129.32,
-      "layers": 217,
-      "vendor_T65535_parser_notice": true,
-      "reused_from_model_sha256": "c2a6f6e7688aadbf636201ec5114228a52f45d27dfbfc7a5d58f642af80d6528",
-      "reuse_basis": "Identical STL bytes, profile hashes and slicer version; prior G-code hash verified after the side-port through-cut correction."
+      "gcode_sha256": "d04b0b66fd778d9219ea6ee460ddb0c8c14d14ee40d341a31f89eea189c92ae2",
+      "total_estimated_time": "14h 6m 34s",
+      "filament_g": 156.85,
+      "layers": 245,
+      "vendor_T65535_parser_notice": true
     },
     "SpeakerCarrier": {
       "parts": [
         "SpeakerCarrier"
       ],
       "exit_code": 0,
-      "gcode_sha256": "b4008603aa04eb1566a99c0b92398263d4f4229e6776dbcadb4f8b04a643ad29",
-      "total_estimated_time": "7h 1m 52s",
-      "filament_g": 158.97,
-      "layers": 282,
-      "vendor_T65535_parser_notice": true,
-      "reused_from_model_sha256": "c2a6f6e7688aadbf636201ec5114228a52f45d27dfbfc7a5d58f642af80d6528",
-      "reuse_basis": "Identical STL bytes, profile hashes and slicer version; prior G-code hash verified after the side-port through-cut correction."
+      "gcode_sha256": "17cea681a1e971e5b623003be70661c428bf4f87c84c2893f34bcd69dabcb952",
+      "total_estimated_time": "5h 0m 55s",
+      "filament_g": 149.65,
+      "layers": 287,
+      "vendor_T65535_parser_notice": true
     },
     "SmallParts": {
       "parts": [
         "ButtonRetainer",
-        "DisplayRetainer"
+        "DisplayRetainer",
+        "DriveRetainer"
       ],
       "exit_code": 0,
-      "gcode_sha256": "6d2d6acc697236fe2f108d63b86e60448d1ec6a6fd4470c27470cdc8388aa03b",
-      "total_estimated_time": "18m 12s",
-      "filament_g": 2.81,
+      "gcode_sha256": "f9e5ec511ff506e5e9345768fa3ea5e379b67296f889cdb9670319626bcd9fc4",
+      "total_estimated_time": "26m 9s",
+      "filament_g": 6.61,
       "layers": 32,
-      "vendor_T65535_parser_notice": true,
-      "reused_from_model_sha256": "c2a6f6e7688aadbf636201ec5114228a52f45d27dfbfc7a5d58f642af80d6528",
-      "reuse_basis": "Identical STL bytes, profile hashes and slicer version; prior G-code hash verified after the side-port through-cut correction."
+      "vendor_T65535_parser_notice": true
     }
   },
   "printer_profile_mapping": "User P2SC; installed Bambu P2S profile used for local slicing only",
@@ -284,5 +297,7 @@
   "gcode_execution_validated": false,
   "slicer_version": "02.09.01.70",
   "dual_color_keys": "Excluded here; see dual-color-key-checks.json and export-dual-color-keys.py",
-  "dual_color_knob": "Excluded here; see dual-color-knob-checks.json and export-dual-color-knob.py"
+  "dual_color_knob": "Excluded here; see dual-color-knob-checks.json and export-dual-color-knob.py",
+  "checked_model_sha256_before_label_update": "e3c210833fa65d05120980e36e6e09b129c157b12dc0736d2afed5298ba80301",
+  "metadata_only_update": "drive-model-metadata-checks.json"
 }

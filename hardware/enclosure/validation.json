@@ -1,13 +1,13 @@
 {
-  "date": "2026-11-11",
+  "date": "2026-11-12",
   "model": "Discora.FCStd",
-  "sha256": "e507a10f55fc1f1f7340c7df5203a91666335190cf97bc31325e94052f30bc4b",
+  "sha256": "fb24c86b81e000e9f2db58d3b2802ead2c5aad04e26171616b4c4fc6266ced1e",
   "version": [
     "1",
     "1",
     "4"
   ],
-  "items": 32,
+  "items": 33,
   "objects": [
     "FrontShell",
     "RearShell",
@@ -21,6 +21,7 @@
     "ButtonRetainer",
     "Knob",
     "DisplayRetainer",
+    "DriveRetainer",
     "SpeakerCarrier",
     "LDriver",
     "RDriver",
@@ -57,6 +58,7 @@
     "NextKey",
     "ButtonRetainer",
     "DisplayRetainer",
+    "DriveRetainer",
     "Knob"
   ],
   "rear_roof_ownership": {
@@ -69,85 +71,85 @@
       "missing_from_rear_mm3": 0.0
     }
   },
-  "shell_split_y_mm": 43.5,
+  "shell_split_y_mm": 49.0,
   "straight_side_seam_yz_mm": [
     [
       5.0,
       162.41901998904913
     ],
     [
-      43.5,
-      189.77428314694387
+      49.0,
+      193.68217788378598
     ]
   ],
   "side_seam_ownership_samples_xyz_mm": [
     [
-      -72,
+      -84,
       6,
       163.1295463048386
     ],
     [
-      -72,
+      -84,
       12,
       167.39270419957546
     ],
     [
-      -72,
+      -84,
       24,
       175.91901998904913
     ],
     [
-      -72,
+      -84,
       35,
       183.73480946273335
     ],
     [
-      -72,
+      -84,
       38,
       185.86638841010176
     ],
     [
-      -72,
+      -84,
       40,
       187.28744104168072
     ],
     [
-      -72,
+      -84,
       42.4,
       188.99270419957546
     ],
     [
-      72,
+      84,
       6,
       163.1295463048386
     ],
     [
-      72,
+      84,
       12,
       167.39270419957546
     ],
     [
-      72,
+      84,
       24,
       175.91901998904913
     ],
     [
-      72,
+      84,
       35,
       183.73480946273335
     ],
     [
-      72,
+      84,
       38,
       185.86638841010176
     ],
     [
-      72,
+      84,
       40,
       187.28744104168072
     ],
     [
-      72,
+      84,
       42.4,
       188.99270419957546
     ]
@@ -165,9 +167,9 @@
     }
   ],
   "assembly_size_xyz_mm": [
-    146.00000000000006,
-    82.00000000000001,
-    239.35526315789474
+    170.00000000000003,
+    93.00000000000001,
+    243.26315789473685
   ],
   "mirror_plane": "X=0",
   "mirror_difference_mm3": {
@@ -190,8 +192,8 @@
   "disc_sweep_mm": {
     "origin": [
       -60,
-      67.15,
-      34
+      78.45,
+      31.5
     ],
     "size": [
       120,
@@ -200,13 +202,13 @@
     ]
   },
   "side_port_handle_alignment": {
-    "handle_center_y_mm": 41.0,
-    "rear_outline_center_y_mm": 43.50000000000001,
+    "handle_center_y_mm": 46.5,
+    "rear_outline_center_y_mm": 49.00000000000001,
     "port_center_y_mm": {
-      "LPort": 43.5,
-      "RPort": 43.5
+      "LPort": 49.0,
+      "RPort": 49.0
     },
-    "shell_opening_center_y_mm": 43.5
+    "shell_opening_center_y_mm": 49.0
   },
   "side_air_paths": {
     "L": {
@@ -223,17 +225,17 @@
         ],
         [
           -56,
-          51.5,
+          57.0,
           76
         ],
         [
           -56,
-          51.5,
+          57.0,
           95
         ],
         [
-          -75,
-          51.5,
+          -87,
+          57.0,
           95
         ]
       ],
@@ -254,17 +256,17 @@
         ],
         [
           56,
-          51.5,
+          57.0,
           76
         ],
         [
           56,
-          51.5,
+          57.0,
           95
         ],
         [
-          75,
-          51.5,
+          87,
+          57.0,
           95
         ]
       ],
@@ -327,7 +329,7 @@
     },
     "dac_input": {
       "origin_mm": [
-        -67,
+        -79,
         33,
         122
       ],
@@ -340,7 +342,7 @@
     },
     "dac_output": {
       "origin_mm": [
-        -67,
+        -79,
         33,
         158
       ],
@@ -363,11 +365,11 @@
     }
   },
   "key_clearances_mm": {
-    "Battery / FrontShell": 0.9999999999999911,
+    "Battery / FrontShell": 0.999999999999992,
     "Battery / SpeakerCarrier": 3.5,
     "MCUChip / FrontShell": 9.482541138474271,
-    "Bridge / DAC": 4.512205669071396,
-    "Drive / MCUChip": 1.5
+    "Bridge / DAC": 146.64686324637154,
+    "Drive / MCUChip": 14.700000000000003
   },
   "battery_fit": {
     "supplier_size_xyz_mm": [
@@ -386,7 +388,7 @@
       8.0
     ],
     "front_inner_wall_gap_mm": 1.0,
-    "rear_inner_wall_gap_mm": 1.0,
+    "rear_inner_wall_gap_mm": 12.0,
     "cradle_side_gap_mm": 1,
     "lead_and_connector_envelope_verified": false,
     "retention_verified": false
@@ -398,41 +400,41 @@
   ],
   "top_shoulders": {
     "front": {
-      "horizontal_width_mm": 38.5,
-      "rise_mm": 27.35526315789474,
-      "surface_width_mm": 47.228809242216485,
+      "horizontal_width_mm": 44.0,
+      "rise_mm": 31.26315789473685,
+      "surface_width_mm": 53.975781991104554,
       "angle_deg": 35.39479584498706
     },
     "rear": {
-      "horizontal_width_mm": 38.5,
-      "rise_mm": 27.35526315789474,
-      "surface_width_mm": 47.228809242216485,
+      "horizontal_width_mm": 44.0,
+      "rise_mm": 31.26315789473685,
+      "surface_width_mm": 53.975781991104554,
       "angle_deg": 35.39479584498706
     }
   },
   "front_panel_thickness_samples_mm": {
-    "vertical_-60_150": 4.999999999999993,
-    "vertical_60_150": 4.999999999999993,
-    "vertical_-67_80": 5.0,
-    "vertical_67_80": 5.0,
-    "vertical_0_6": 5.000000000000009,
-    "slope_-30_8": 4.999999999999972,
-    "slope_30_8": 4.999999999999972,
-    "slope_-25_30": 4.999999999999968,
-    "slope_25_30": 4.999999999999968,
-    "slope_50_32": 4.999999999999998,
-    "slope_side_-72_5": 4.9999999999999725,
-    "slope_side_-72_12": 4.999999999999971,
-    "slope_side_-72_24": 4.99999999999997,
-    "slope_side_-72_32": 5.0000000000000036,
-    "slope_side_-72_37": 5.0000000000000036,
-    "slope_side_72_5": 4.999999999999997,
-    "slope_side_72_12": 4.999999999999969,
-    "slope_side_72_24": 4.99999999999997,
-    "slope_side_72_32": 4.999999999999998,
-    "slope_side_72_37": 4.999999999999998,
+    "vertical_-60_150": 4.999999999999991,
+    "vertical_60_150": 4.999999999999991,
+    "vertical_-67_80": 4.999999999999998,
+    "vertical_67_80": 4.999999999999998,
+    "vertical_0_6": 5.000000000000007,
+    "slope_-30_8": 5.000000000000008,
+    "slope_30_8": 5.000000000000006,
+    "slope_-25_30": 5.00000000000003,
+    "slope_25_30": 5.00000000000003,
+    "slope_50_32": 5.000000000000003,
+    "slope_side_-84_5": 5.000000000000037,
+    "slope_side_-84_12": 4.999999999999998,
+    "slope_side_-84_24": 5.000000000000006,
+    "slope_side_-84_32": 5.000000000000003,
+    "slope_side_-84_37": 5.000000000000003,
+    "slope_side_84_5": 5.00000000000003,
+    "slope_side_84_12": 4.999999999999998,
+    "slope_side_84_24": 4.99999999999998,
+    "slope_side_84_32": 5.000000000000003,
+    "slope_side_84_37": 5.000000000000003,
     "grille": 2.5,
-    "handle": 4.999999999999993
+    "handle": 5.000000000000014
   },
   "recessed_grille": {
     "opening_diameter_mm": 130,
@@ -469,5 +471,7 @@
     "Separate assembly-path report distinguishes continuous conservative sweeps from sampled cover motion.",
     "Battery leads, straps, connectors, bridge cables and power modules are not validated.",
     "Side passages remain untuned; geometric continuity is not acoustic validation."
-  ]
+  ],
+  "checked_model_sha256_before_label_update": "e3c210833fa65d05120980e36e6e09b129c157b12dc0736d2afed5298ba80301",
+  "metadata_only_update": "drive-model-metadata-checks.json"
 }

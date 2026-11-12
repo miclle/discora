@@ -1,0 +1,106 @@
+{
+  "model_sha256": "fb24c86b81e000e9f2db58d3b2802ead2c5aad04e26171616b4c4fc6266ced1e",
+  "measured_body_maximum_mm": [
+    128,
+    10.8,
+    130
+  ],
+  "physical_assembly_test": false,
+  "reservations_are_not_measurements": true,
+  "filled_maximum_envelope_clashes": [],
+  "rear_wall_pad_gap_mm": 1.0,
+  "roof_gap_mm": 0.854770699545665,
+  "adapter_battery_gap_mm": 2.75,
+  "adapter_floor_gap_mm": 3.1000000000000014,
+  "adapter_envelope_xyz_mm": [
+    40.7,
+    7.0,
+    20.4
+  ],
+  "lowered_0_1mm_shelf_intersection_mm3": 43.199999999999584,
+  "retainer_screws": [
+    {
+      "center_xz_mm": [
+        -66.15,
+        117
+      ],
+      "clearance_mm": 2.2,
+      "pilot_mm": 1.6,
+      "nominal_screw": "M2 x 10",
+      "nominal_engagement_mm": 7,
+      "head_and_tool_diameter_mm": 3.4,
+      "prerequisites": [
+        "Front cover and speaker carrier removed"
+      ],
+      "tool_clashes": []
+    },
+    {
+      "center_xz_mm": [
+        66.15,
+        117
+      ],
+      "clearance_mm": 2.2,
+      "pilot_mm": 1.6,
+      "nominal_screw": "M2 x 10",
+      "nominal_engagement_mm": 7,
+      "head_and_tool_diameter_mm": 3.4,
+      "prerequisites": [
+        "Front cover and speaker carrier removed"
+      ],
+      "tool_clashes": []
+    }
+  ],
+  "retainer_mirror_difference_mm3": 0.0,
+  "baseline_sha256": "e507a10f55fc1f1f7340c7df5203a91666335190cf97bc31325e94052f30bc4b",
+  "unchanged_parts_difference_mm3": {
+    "Battery": 0.0,
+    "Amp": 0.0,
+    "AmpChip": 0.0,
+    "MCU": 0.0,
+    "MCUChip": 0.0,
+    "LDriver": 0.0,
+    "RDriver": 0.0,
+    "Window": 0.0,
+    "StatusArt": 0.0,
+    "PlayPauseKey": 0.0,
+    "EjectKey": 0.0,
+    "PrevKey": 0.0,
+    "NextKey": 0.0,
+    "ButtonRetainer": 0.0,
+    "DisplayPCB": 0.0,
+    "DisplayHeader": 0.0,
+    "DisplayRetainer": 0.0,
+    "Knob": 0.0,
+    "Encoder": 0.0,
+    "VolumePot": 0.0
+  },
+  "key_and_knob_face_order_preserved": {
+    "PlayPauseKey": true,
+    "EjectKey": true,
+    "PrevKey": true,
+    "NextKey": true,
+    "Knob": true
+  },
+  "connector_clearances": {
+    "SataPlugClearance": {
+      "clashes": [],
+      "physical_fit_verified": false
+    },
+    "SataCableClearance": {
+      "clashes": [],
+      "physical_fit_verified": false
+    }
+  },
+  "cable_side_extent_mm": {
+    "measured_natural": 14.5,
+    "reserved_extent": 14.5,
+    "shell_clearance": 1.5
+  },
+  "limits": [
+    "Maximum-thickness filled-envelope checks do not certify the exact measured surface.",
+    "Protective pads and nominal M2 fasteners require physical fit and retention checks.",
+    "Adapter 37.7 x 7 and rear projection 20.4 are measured; vertical centering and the three-dimensional cable bend remain physical-fit checks.",
+    "Assembly path samples are documented separately; no physical insertion/ejection test performed."
+  ],
+  "all_pass": true
+}
