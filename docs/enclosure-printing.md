@@ -14,7 +14,7 @@
 
 在 Bambu Studio 中将材料 1 对应 PLA Lite 橙色、材料 2 对应 PLA Lite 白色，并映射实际 AMS 槽位；符号面朝上、止退沿贴板。已用本机 P2S 0.4 mm / 0.12 mm 配置切片，启用擦拭塔；每个按键生成 5 层白色路径，整盘 60 层，预估 34 分 20 秒、总耗材 7.42 g（含换色消耗）。本地原生项目在 `tmp/dual-color-keys/slicer/Discora-buttons-bambu.3mf`，不提交生成文件；复核配置后在自己的设备上打印。
 
-[双色验收记录](../hardware/enclosure/dual-color-key-checks.json)记录实体、网格、材料分配及实际生成的双色路径。切片器返回成功，同时保留安装版本的 `T65535` 解析提示；没有发送打印或验证设备执行。白色遮盖、材料粘结、按压行程及实物装配仍待验证。下面为提手加高后的四盘单色记录，四个键帽沿用本节的双色记录；键帽外包络保持；P2 的后续侧孔一体化见 [ADR-0029](decisions/0029-integral-side-ports.md)。常规 `slice-print-parts.py` 已排除四键及旋钮，避免误用丢失双色信息的单色 STL。
+[双色验收记录](../hardware/enclosure/dual-color-key-checks.json)记录实体、网格、材料分配及实际生成的双色路径。切片器返回成功，同时保留安装版本的 `T65535` 解析提示；没有发送打印或验证设备执行。白色遮盖、材料粘结、按压行程及实物装配仍待验证。下面为当前光驱实测适配版四盘单色记录，四个键帽沿用本节的双色记录；键帽外包络保持；P2 的后续侧孔一体化见 [ADR-0029](decisions/0029-integral-side-ports.md)。常规 `slice-print-parts.py` 已排除四键及旋钮，避免误用丢失双色信息的单色 STL。
 
 ## 当前单色件打印摆放和切片
 
@@ -44,7 +44,7 @@
 
 下方两处背锁通道深 78.8 mm，需细长螺丝刀；上方两处位于后斜面，轴向深约 30.5 mm。螺钉头径应不超过 4 mm，实际批头与刀杆须核对。详见 [ADR-0024](decisions/0024-rear-access-front-cover-fasteners.md)。
 
-侧饰片现为四点连接，筋截面 2×3 mm、饰片厚 2 mm；仍需避免扭撬清理支撑，打印强度未实测。单侧最窄采样通流面积约 3.84 cm²，本轮没有进一步缩孔；声学分析及参数缺口见 [ADR-0030](decisions/0030-side-inset-support-and-port-sizing.md)。
+侧饰片现为四点连接，筋截面 2×3 mm、饰片厚 2 mm；仍需避免扭撬清理支撑，打印强度未实测。历史加强阶段单侧最窄采样通流面积约 3.84 cm²；当前声腔加深和短管延长见 ADR-0035，声学效果待测；声学分析及参数缺口见 [ADR-0030](decisions/0030-side-inset-support-and-port-sizing.md)。
 
 ## 装配顺序
 
@@ -83,16 +83,29 @@ CAD 成品静态无干涉、网格闭合和切片成功，不代表喇叭安装�
 先运行外壳建模与静态检查，用可导入 FreeCAD、MeshPart 的 Python 导出十一件 STL，再用普通 Python 调用本机切片器：
 
 ```bash
+mkdir -p tmp
 "$DISCORA_FREECAD_PYTHON" hardware/enclosure/check-side-ports.py --output tmp/side-port-current-checks.json
 "$DISCORA_FREECAD_PYTHON" hardware/enclosure/check-oled.py
 "$DISCORA_FREECAD_PYTHON" hardware/enclosure/check-fasteners.py
 "$DISCORA_FREECAD_PYTHON" hardware/enclosure/check-buttons.py
 "$DISCORA_FREECAD_PYTHON" hardware/enclosure/check-assembly.py
-"$DISCORA_FREECAD_PYTHON" hardware/enclosure/check-drive-mount.py
+"$DISCORA_FREECAD_PYTHON" hardware/enclosure/check-drive-mount.py --output tmp/drive-mount-current-checks.json
 "$DISCORA_FREECAD_PYTHON" hardware/enclosure/export-print-parts.py
 python3 hardware/enclosure/slice-print-parts.py
 "$DISCORA_FREECAD_PYTHON" hardware/enclosure/export-dual-color-keys.py
 ```
+
+`drive-mount-checks.json` 含图册复用双色件所需的基线摘要、20 个不变对象和分面顺序证据；不带 `--baseline` 的检查不会生成这些字段，因此日常复查另存 `tmp/`。完整复核本版光驱适配比较时，从已提交的调整前版本恢复基准，并将新结果另存以供对照：
+
+```bash
+mkdir -p tmp/drive-baseline
+git show 0c3a117:hardware/enclosure/Discora.FCStd > tmp/drive-baseline/Discora.FCStd
+"$DISCORA_FREECAD_PYTHON" hardware/enclosure/check-drive-mount.py \
+  --baseline tmp/drive-baseline/Discora.FCStd \
+  --output tmp/drive-mount-baseline-checks.json
+```
+
+基准 SHA-256 应为 `e507a10f55fc1f1f7340c7df5203a91666335190cf97bc31325e94052f30bc4b`，当前模型摘要见[图册版本与证据](enclosure-drawings.md#版本与证据)。浅克隆若缺少 `0c3a117`，先获取相应历史；确认 `git show` 成功和摘要匹配后再检查。不要以当前模型充当调整前基准。未来修改模型时，应另存真正的修改前版本，并同步审查图册追溯链。
 
 切片器和配置目录可用 `--bambu`、`--profiles` 指定，临时网格目录可用 `--meshes` 指定。脚本核对模型与网格摘要、返回码及 G-code 统计；不会发起打印。
 
