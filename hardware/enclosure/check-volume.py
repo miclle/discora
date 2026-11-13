@@ -1,4 +1,4 @@
-"""Check saved B50K mounting, knob sweep and assembly; run with FreeCAD Python."""
+"""Check saved PCB B50K envelope, mounting and assembly with FreeCAD Python."""
 import argparse
 import hashlib
 import json
@@ -12,7 +12,7 @@ V=A.Vector
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--model',type=Path,default=ROOT/'Discora.FCStd')
 p.add_argument('--baseline',type=Path,required=True)
-p.add_argument('--output',type=Path,default=ROOT/'volume-checks.json')
+p.add_argument('--output',type=Path,default=ROOT/'volume-pcb-checks.json')
 args=p.parse_args()
 doc=A.openDocument(str(args.model.resolve()))
 old=A.openDocument(str(args.baseline.resolve()))
@@ -36,20 +36,28 @@ report=dict(model_sha256=hashlib.sha256(args.model.read_bytes()).hexdigest(),
             unchanged_finished_parts_difference_mm3={},physical_assembly_test=False)
 for n,o in objects.items():
     assert o.Shape.isValid() and o.Shape.Solids,n
-    if n in ('FrontShell','Knob','Encoder','VolumePot'):continue
+    if n in ('FrontShell','VolumePot'):continue
     d=delta(o.Shape,old.getObject(n).Shape)
     assert d<.001,(n,d)
     report['unchanged_finished_parts_difference_mm3'][n]=d
 print('UNCHANGED_PARTS',len(report['unchanged_finished_parts_difference_mm3']),flush=True)
-zone=world(Part.makeBox(26,40,28,V(-13,-16,-14)))
+zone=world(Part.makeBox(26,50,40,V(-13,-16,-20)))
 front=doc.FrontShell.Shape;before=old.FrontShell.Shape
-report['front_change_outside_mount_mm3']=front.cut(before).cut(zone).Volume+before.cut(front).cut(zone).Volume
+changes=[front.cut(before),before.cut(front)]
+# OCCT can return a non-null, empty compound for the no-added-material case.
+outside=[s.cut(zone) for s in changes if s.Solids]
+report['front_change_outside_mount_mm3']=sum(s.Volume for s in outside if s.Solids)
 assert report['front_change_outside_mount_mm3']<.001
-shell=local(front).common(Part.makeBox(30,25,30,V(-15,-1,-14)))
+shell=local(front).common(Part.makeBox(30,35,40,V(-15,-1,-20)))
 body=local(doc.VolumePot.Shape);b=body.BoundBox
-for actual,expected in zip((b.XLength,b.YLength,b.ZLength,b.YMin,b.ZMin),(9.5,14.5,11.2,3.6,-2.7)):equal(actual,expected)
-report['body_local_size_xyz_mm']=[b.XLength,b.YLength,b.ZLength]
-report['shaft_center_to_pin_face_mm']=-b.ZMin
+for actual,expected in zip((b.XLength,b.YLength,b.ZLength,b.XMin,b.YMin,b.ZMin),(15,26.2,35,-6.5,3.6,-17.5)):equal(actual,expected)
+assert len(body.Solids)==4
+pcb=body.Solids[1].BoundBox
+for actual,expected in zip((pcb.XLength,pcb.YLength,pcb.ZLength),(1.5,26.2,35)):equal(actual,expected)
+report.update(module_local_size_xyz_mm=[b.XLength,b.YLength,b.ZLength],
+              pcb_size_width_depth_thickness_mm=[pcb.ZLength,pcb.YLength,pcb.XLength],
+              module_rotation_about_shaft_deg=90,pcb_front_edge_flush_with_mount=True,
+              original_body_and_shaft_cross_section_retained_as_nominal=True)
 # Measure the saved shell web and outside thickness independently of build constants.
 web=Part.makeLine(V(4.5,-1,0),V(4.5,8,0)).common(shell)
 equal(sum(e.Length for e in web.Edges),2)
@@ -103,13 +111,30 @@ assert len(press.Solids)==6,len(press.Solids)
 report['press_fit']=dict(rib_count=6,radial_interference_max_mm=.1,
     intended_overlap_mm3=press.Volume,unintended_overlap_mm3=press.cut(band).Volume,
     printed_fit_verified=False)
-pins=Part.makeBox(9.5,14.5,3.5,V(-4.75,3.6,-6.2))
-wire=Part.makeBox(10.1,14.5,3.8,V(-5.05,3.6,-10))
-report['terminal_and_wire_clearance']={}
-for n,s in [('pin_envelope',pins),('wire_allowance',wire)]:
-    hits=clashes(world(s),('VolumePot','Encoder'))
-    assert not hits,(n,hits)
-    report['terminal_and_wire_clearance'][n]=dict(clashes=hits,footprint_verified=False)
+# Fill every gap in the simplified module; don't rely on invented connector voids.
+envelope=Part.makeBox(15,26.2,35,V(-6.5,3.6,-17.5))
+hits=clashes(world(envelope),('VolumePot','Encoder'))
+assert not hits,hits
+report['complete_module_envelope']={'clashes':hits,'plugged_connectors_included':True,
+    'extra_connector_thickness_mm':0,'exact_connector_footprint_verified':False}
+report['module_clearances_mm']={n:world(envelope).distToShape(o.Shape)[0] for n,o in objects.items()
+                               if n not in ('VolumePot','Encoder','Knob')}
+# Exact translational sweep of the filled convex box with the detached cover.
+# A global axis-aligned box would falsely occupy the space below the slope.
+moving=world(envelope);travel=V(0,-140,0)
+leading=[face.extrude(travel) for face in moving.Faces if face.normalAt(0,0).dot(travel)>1e-7]
+sweep=moving.multiFuse(leading).removeSplitter()
+assert sweep.isValid() and len(sweep.Solids)==1
+fixed=['RearShell','SpeakerCarrier','LDriver','RDriver','Amp','AmpChip','MCU','MCUChip',
+       'DAC','DACChip','Drive','DriveRetainer','Bridge','Battery','Feet']
+intersections={n:sweep.common(objects[n].Shape).Volume for n in fixed}
+assert all(v<.001 for v in intersections.values()),intersections
+report['module_front_cover_sweep']=dict(
+    method='continuous exact translation sweep of the filled box, formed by extruding its leading faces',
+    translation_xyz_mm=[0,-140,0],fixed=fixed,intersections_mm3=intersections,cables_disconnected=True)
+original=world(Part.makeBox(35,26.2,15,V(-17.5,3.6,-6.5)))
+report['original_orientation_baseline_clashes_mm3']={n:original.common(old.getObject(n).Shape).Volume
+    for n in ('FrontShell','MCUChip')}
 # Cylinder bounds every angular pose outside the shaft/nut. Remove the shared
 # axis hole and nut relief to avoid mistaking mating hardware for obstruction.
 sweep=Part.makeCylinder(12,13.9,V(0,-12.9,0),V(0,1,0))
@@ -119,15 +144,20 @@ hits=clashes(world(sweep),('Knob',))
 assert not hits,hits
 report['continuous_360_degree_knob_envelope_clashes']=hits
 # After removing knob and nut, withdraw the body/shaft inward along the axis.
-bare=body.fuse(Part.makeCylinder(3.4,5,V(0,-1.4,0),V(0,1,0))).fuse(
+# The front cover has already moved 140 mm forward (sweep checked above).
+# Its attached controls retain their relative poses; fixed chassis parts are
+# no longer next to the module. In-place inward removal is not the service path.
+bare=envelope.fuse(Part.makeCylinder(3.4,5,V(0,-1.4,0),V(0,1,0))).fuse(
     Part.makeCylinder(2.9,10,V(0,-11.4,0),V(0,1,0)))
 hits=[]
 for step in range(31):
     s=bare.copy();s.translate(V(0,step*.5,0))
-    found=clashes(world(s),('VolumePot','Encoder','Knob'))
+    found=clashes(world(s),('VolumePot','Encoder','Knob',*fixed))
     if found:hits.append(dict(inward_mm=step*.5,hits=found))
 assert not hits,hits
-report['pot_removal']=dict(method='31 exact B-rep samples at 0.5 mm; front cover detached before servicing',clashes=hits)
+report['pot_removal']=dict(method='31 exact B-rep samples at 0.5 mm relative to the detached front-cover assembly',
+    prerequisite='Front cover translated 140 mm forward and cables disconnected; remove knob and nut before withdrawing module',
+    fixed_chassis_excluded_after_cover_removal=fixed,clashes=hits)
 # Check a socket driver on the nut before fitting knob (12.5 mm outer diameter).
 tool=Part.makeCylinder(6.25,20,V(0,-20.3,0),V(0,1,0))
 hits=clashes(world(tool),('Knob','Encoder'))
@@ -139,10 +169,13 @@ for n in ('PlayPauseKey','EjectKey','PrevKey','NextKey'):
     same=len(a)==len(b) and all(abs(x.Area-y.Area)<1e-7 and (x.CenterOfMass-y.CenterOfMass).Length<1e-7 for x,y in zip(a,b))
     assert same,n
     report['key_face_order_preserved'][n]=same
-report['limits']=['Pin pitch/rows and wire bend radius are not measured; rectangular envelopes only.',
+report['limits']=['PCB dimensions, flush front edge and total 15 mm plugged thickness are user-confirmed; connector/pin shapes are rectangular envelopes.',
+                  'Original bare-B50K body, shaft diameter, bushing and body-to-PCB contact datum are retained as nominal assumptions; physical fit remains unverified.',
+                  'The module is rotated 90 degrees about its unchanged shaft axis; knob index must be aligned to the actual switch-off stop during assembly.',
+                  'Remote wire routing and service unplugging stroke are not included in the static plugged envelope.',
                   'Six sacrificial grip ribs intentionally enter the spline envelope by up to 0.1 mm radially; insertion force, torque and pull-out retention need a printed sample.',
                   'Nut threads and spline teeth are envelopes; switch electrical ratings/pinout are unverified.',
-                  'GUI unavailable; original GUI resource bytes retained, no interactive color readback.']
+                  'GUI unavailable; unrelated GUI resources retained, module materials updated; no interactive color readback.']
 report['all_pass']=True
 args.output.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
 print('VOLUME_CHECKS_OK',flush=True)

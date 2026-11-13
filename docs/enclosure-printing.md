@@ -29,18 +29,18 @@
 
 三主体各一盘，按键支架、OLED 压框和光驱压条合为一个单色小件盘；四键和旋钮分别使用双色盘。十一件 STL 均为闭合网格，单件在 256³ 空间内留有 5 mm brim 余量；四键和旋钮的 STL 只是单色包络，实际打印优先用双色 3MF。参考工艺：Generic PLA、0.4 mm 喷嘴、0.20 mm 层高、3 层壁、15% gyroid 填充、自动树状支撑（仅从底板生成）、30° 阈值、0.2 mm 顶部接触间隙、5 mm 外侧 brim。
 
-2026-11-12 光驱实测适配版四个单色盘均重新切片；四键和旋钮的实体及分面顺序未变，沿用双色切片证据，关联检查见 [光驱安装检查](../hardware/enclosure/drive-mount-checks.json)。Bambu Studio 02.09.01.70 当前估计值（含支撑和 brim，不含试错）：
+2026-11-12 光驱实测适配版四个单色盘均重新切片；2026-11-14 PCB音量模块版仅重切前壳，下表采用新前壳结果；四键和旋钮的实体及分面顺序未变，沿用双色切片证据，关联检查见 [光驱安装检查](../hardware/enclosure/drive-mount-checks.json)。Bambu Studio 02.09.01.70 当前估计值（含支撑和 brim，不含试错）：
 
 | 打印盘 | 估计总时间 | 耗材 / g | 层数 |
 | --- | --- | --- | --- |
-| P1 前壳 | 14h 6m 34s | 156.85 | 245 |
+| P1 前壳 | 14h 7m 19s | 156.65 | 245 |
 | P2 一体后壳 | 9h 33m 48s | 297.06 | 440 |
 | P3 支架 | 5h 0m 55s | 149.65 | 287 |
 | 3 个单色小件 | 26m 9s | 6.61 | 32 |
 
-四盘单色合计估计 **610.17 g**；加上四键双色盘 7.42 g 和旋钮双色盘 9.50 g，共约 **627.09 g**。实际时间、耗材及支撑清理效果以打印结果为准。
+四盘单色合计估计 **609.97 g**；加上四键双色盘 7.42 g 和旋钮双色盘 9.50 g，共约 **626.89 g**。实际时间、耗材及支撑清理效果以打印结果为准。
 
-[print-checks.json](../hardware/enclosure/print-checks.json)记录模型、网格、配置及 G-code 摘要。四盘返回码均为 0，保留安装版本对官方结束代码 `T65535` 的解析提示；未发送打印。本次旋钮双色文件位于被忽略的 `tmp/cad-volume-white/print/`，四个单色盘均位于 `tmp/cad-drive-measured/print/`。切片成功不代替侧孔窄筋、深孔和导音通道的支撑清理验证。
+2026-11-14 PCB 模块适配只改变前壳打印几何；新前壳切片及旧件复用依据见 [volume-pcb-print-checks.json](../hardware/enclosure/volume-pcb-print-checks.json)，文件位于 `tmp/cad-volume-pcb/print/`。[print-checks.json](../hardware/enclosure/print-checks.json)保留 2026-11-12 模型、网格、配置及 G-code 摘要。四盘返回码均为 0，保留安装版本对官方结束代码 `T65535` 的解析提示；未发送打印。本次旋钮双色文件位于被忽略的 `tmp/cad-volume-white/print/`，四个单色盘均位于 `tmp/cad-drive-measured/print/`。切片成功不代替侧孔窄筋、深孔和导音通道的支撑清理验证。
 
 下方两处背锁通道深 78.8 mm，需细长螺丝刀；上方两处位于后斜面，轴向深约 30.5 mm。螺钉头径应不超过 4 mm，实际批头与刀杆须核对。详见 [ADR-0024](decisions/0024-rear-access-front-cover-fasteners.md)。
 
@@ -121,4 +121,6 @@ git show 0c3a117:hardware/enclosure/Discora.FCStd > tmp/drive-baseline/Discora.F
 
 局部前壳试片需核对 Ø7.2 壳孔、2 mm 夹持面、9.8 对边螺母锁紧、底盘下沉 1 mm、距凹位底 0.6 mm 和径向 0.4 mm 间隙；还需检查偏心主体、焊点和引线余量及整个旋转／开关行程。CAD 中六条筋与花轴圆柱包络的过盈是设计预留，不能当作碰撞遗漏或实物保持力验收。
 
-安装试片可用 `hardware/enclosure/export-volume-coupon.py --output tmp/pla-print/VolumeMountCoupon.stl` 从当前保存模型重新导出（需 FreeCAD Python）；试片为 28×28×5 mm，外表面朝打印板，验证沉槽与螺母夹紧，不计入整机 11 件清单。
+拆卸 PCB 音量模块时先取下整个前壳，再拆旋钮、螺母并沿轴退出模块；机内直接后拔约6 mm后会碰支架。
+
+安装试片可用 `hardware/enclosure/export-volume-coupon.py --output tmp/pla-print/VolumeMountCoupon.stl` 从当前保存模型重新导出（需 FreeCAD Python）；PCB 模块版试片为 32×44×5 mm，外表面朝打印板，验证沉槽与螺母夹紧，不计入整机 11 件清单。

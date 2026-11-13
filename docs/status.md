@@ -1,6 +1,6 @@
 # 当前工程状态
 
-更新时间：2026-11-13。本文只维护当前结论；完整经过与失败窗口见[实验记录索引](records/README.md)，未完成工作见[路线图](roadmap.md)。
+更新时间：2026-11-14。本文只维护当前结论；完整经过与失败窗口见[实验记录索引](records/README.md)，未完成工作见[路线图](roadmap.md)。
 
 `planned` 表示计划，`implemented` 表示源码已实现，`bench-tested` 表示指定条件下有实验或用户反馈，`verified` 表示满足相应完整验收条件。编译、日志计数、用户听感和实物验收分别记录，不互相替代。
 
@@ -29,7 +29,7 @@
 | 四键基本操作 | 0.12.5 播放／暂停／上一曲／下一曲／退碟获用户确认 | 长按、上电按住、组合键、无盘／重插盘及暂停中首尾循环的实体键场景待专项验收；见[验收反馈](records/2026-11-09-usb-offline-recovery.md#四键基本操作验收2026-11-09用户实测反馈) |
 | 盘尾复位与循环选曲 | 0.12.3 的 UART 共用核心已验证首尾循环、暂停保持、末轨完整 EOF 后回首曲停止、再次 toggle 从首曲播放；用户确认尾音完整 | UART 证据不替代实体键手势或整盘稳定性；见[盘尾验证](records/2026-11-09-disc-rewind-reconnect.md) |
 | OLED | 0.12.6 中文显示及进度条获用户实屏确认；历史无介质与盘尾英文画面也有用户反馈 | 各异常状态、计时精度及长时间有声并行未完整验收；见[中文进度验收](records/2026-11-09-oled-progress.md)、[盘尾验证](records/2026-11-09-disc-rewind-reconnect.md) |
-| 外壳及供电集成 | 三主体 PLA 外壳、四键及背锁已有 CAD／网格／切片检查；提手高出斜肩已由 25 增至 45 mm，开口收至 90×24 mm、上下横梁各 10.5 mm，见 [ADR-0031](decisions/0031-taller-handle.md)；左右导音孔及饰片已并入后壳，见 [ADR-0029](decisions/0029-integral-side-ports.md)；后壳侧视轮廓与侧孔已居中对称，前壳以 5 mm 等厚贴合并取消顶部台阶，见 [ADR-0033](decisions/0033-uniform-front-side-seam.md)；后壳主体厚 5 mm，按光驱实测更新为 170×93×243.263 mm；光驱底面靠后壁，采用中央底托及两螺钉压条，实测线缆侧伸 14.5 并留 1.5 余量，见 [ADR-0035](decisions/0035-measured-drive-rear-wall-mount.md)；双路固定 5V 降压方案已记录；B50K 带开关电位器与十字旋钮机械适配见 [ADR-0032](decisions/0032-b50k-cross-knob.md) | 实物配合、承载、散热、负载供电及最终洞洞板布局待验证；见[外壳](../hardware/enclosure/README.md)、[布局](perfboard-layout.md)、[供电决策](decisions/0018-dual-5v-buck.md) |
+| 外壳及供电集成 | 三主体 PLA 外壳、四键及背锁已有 CAD／网格／切片检查；提手高出斜肩已由 25 增至 45 mm，开口收至 90×24 mm、上下横梁各 10.5 mm，见 [ADR-0031](decisions/0031-taller-handle.md)；左右导音孔及饰片已并入后壳，见 [ADR-0029](decisions/0029-integral-side-ports.md)；后壳侧视轮廓与侧孔已居中对称，前壳以 5 mm 等厚贴合并取消顶部台阶，见 [ADR-0033](decisions/0033-uniform-front-side-seam.md)；后壳主体厚 5 mm，按光驱实测更新为 170×93×243.263 mm；光驱底面靠后壁，采用中央底托及两螺钉压条，实测线缆侧伸 14.5 并留 1.5 余量，见 [ADR-0035](decisions/0035-measured-drive-rear-wall-mount.md)；双路固定 5V 降压方案已记录；B50K 已改用 PCB 插接模块，完整包络绕轴90°并扩大内槽，旋钮不变，见 [ADR-0036](decisions/0036-pcb-volume-module.md) | 实物配合、承载、散热、负载供电及最终洞洞板布局待验证；见[外壳](../hardware/enclosure/README.md)、[布局](perfboard-layout.md)、[供电决策](decisions/0018-dual-5v-buck.md) |
 | CD-R／CD-RW 刻录 | 研究目标，未实现 | 须先通过桥接兼容性、最低写速与实测吞吐门槛 |
 
 ## 仍然有效的失败证据

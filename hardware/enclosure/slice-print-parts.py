@@ -25,6 +25,8 @@ def main():
     p.add_argument('--bambu',type=Path,default=Path('/Applications/BambuStudio.app/Contents/MacOS/BambuStudio'))
     p.add_argument('--profiles',type=Path,default=Path('/Applications/BambuStudio.app/Contents/Resources/profiles/BBL'))
     p.add_argument('--output',type=Path,default=ROOT/'print-checks.json')
+    p.add_argument('--plates',nargs='+',choices=('RearShell','FrontShell','SpeakerCarrier','SmallParts'),
+                   default=['RearShell','FrontShell','SpeakerCarrier','SmallParts'])
     args=p.parse_args();meshes=args.meshes.resolve();out=meshes/'slicer';out.mkdir(exist_ok=True)
     report=json.loads((meshes/'mesh-report.json').read_text())
     assert report['model_sha256']==digest(args.model),'Mesh and model revisions differ'
@@ -46,7 +48,7 @@ def main():
                   profile_sha256={k:digest(v) for k,v in settings.items()},plates={},
                   printer_profile_mapping='User P2SC; installed Bambu P2S profile used for local slicing only',
                   printer_contacted=False,gcode_execution_validated=False)
-    for name in ('RearShell','FrontShell','SpeakerCarrier','SmallParts'):
+    for name in args.plates:
         target=out/name;target.mkdir(exist_ok=True)
         # Two-material keys and knob use their dedicated 3MF, not monochrome STL.
         names=[name] if name!='SmallParts' else ['ButtonRetainer','DisplayRetainer','DriveRetainer']

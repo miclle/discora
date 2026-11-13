@@ -1,0 +1,329 @@
+{
+  "model_sha256": "42ffc95778377ab470bfe3daa6ca2fa57693b16db6c63bb1e4dbcf4d8d993e30",
+  "freecad_version": [
+    "1",
+    "1",
+    "4"
+  ],
+  "printer_user_description": "Bambu P2SC",
+  "build_volume_mm": [
+    256,
+    256,
+    256
+  ],
+  "primary_nozzle_mm": 0.4,
+  "alternate_nozzle_mm": 0.2,
+  "brim_allowance_mm": 5,
+  "linear_deflection_mm": 0.1,
+  "angular_deflection_rad": 0.35,
+  "physical_print_test": false,
+  "parts": {
+    "FrontShell": {
+      "file": "FrontShell.stl",
+      "size_xyz_mm": [
+        240.26315789473685,
+        170.0000000000001,
+        49.000000000000085
+      ],
+      "facets": 241872,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        0.5,
+        0.4999999999999999,
+        0.5,
+        0.5000000000000001
+      ],
+      "stl_sha256": "e6b1d8c19ee0ea47760d46f5ef2d8f4d43057b4f0da99963b8e1e606ae34b3d8"
+    },
+    "RearShell": {
+      "file": "RearShell.stl",
+      "size_xyz_mm": [
+        170.0,
+        192.682177883786,
+        88.00000000000006
+      ],
+      "facets": 5420,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        0.7071067811865476,
+        0.0,
+        0.0,
+        -0.7071067811865475
+      ],
+      "stl_sha256": "afa10e7877805313bdf0c14c5a41d0f6dd0d859d7815ff20bdd00deef3514be7"
+    },
+    "SpeakerCarrier": {
+      "file": "SpeakerCarrier.stl",
+      "size_xyz_mm": [
+        134.0,
+        125.69999999999999,
+        57.50000000000002
+      ],
+      "facets": 2872,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        0.7071067811865476,
+        0.0,
+        0.0,
+        -0.7071067811865475
+      ],
+      "stl_sha256": "54d1602f02dc6b0b32e88972e0130df35141d6db121952990d4f38c921d9b170"
+    },
+    "PlayPauseKey": {
+      "file": "PlayPauseKey.stl",
+      "size_xyz_mm": [
+        12.800000000000011,
+        12.799999999999983,
+        7.200000000000055
+      ],
+      "facets": 284,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
+      "color_print_source": "export-dual-color-keys.py; STL is a single-material envelope"
+    },
+    "EjectKey": {
+      "file": "EjectKey.stl",
+      "size_xyz_mm": [
+        12.800000000000011,
+        12.799999999999983,
+        7.200000000000055
+      ],
+      "facets": 284,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
+      "color_print_source": "export-dual-color-keys.py; STL is a single-material envelope"
+    },
+    "PrevKey": {
+      "file": "PrevKey.stl",
+      "size_xyz_mm": [
+        12.800000000000011,
+        12.800000000000011,
+        7.200000000000055
+      ],
+      "facets": 284,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
+      "color_print_source": "export-dual-color-keys.py; STL is a single-material envelope"
+    },
+    "NextKey": {
+      "file": "NextKey.stl",
+      "size_xyz_mm": [
+        12.800000000000011,
+        12.800000000000011,
+        7.200000000000055
+      ],
+      "facets": 284,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
+      "color_print_source": "export-dual-color-keys.py; STL is a single-material envelope"
+    },
+    "ButtonRetainer": {
+      "file": "ButtonRetainer.stl",
+      "size_xyz_mm": [
+        34.0,
+        23.85427940565407,
+        6.50000000000005
+      ],
+      "facets": 724,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "17ee4f08323f8878f428092fc2ee6b63ead09915fa8c8baaa53f1bf010339011"
+    },
+    "DisplayRetainer": {
+      "file": "DisplayRetainer.stl",
+      "size_xyz_mm": [
+        46.977733291070834,
+        37.75000000000003,
+        4.800000000000038
+      ],
+      "facets": 1740,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "699b7962e736a43e40bf747c1254eb4b3a82e903334593d7c1832f5d60d9703f"
+    },
+    "DriveRetainer": {
+      "file": "DriveRetainer.stl",
+      "size_xyz_mm": [
+        136.0,
+        10.0,
+        3.0
+      ],
+      "facets": 340,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        0.7071067811865475,
+        0.0,
+        0.0,
+        0.7071067811865476
+      ],
+      "stl_sha256": "1f807f99f6d98fa38614df28a997d6b686dc144ed879951b953959d0824a6760"
+    },
+    "Knob": {
+      "file": "Knob.stl",
+      "size_xyz_mm": [
+        24.0,
+        24.00000000000003,
+        13.900000000000063
+      ],
+      "facets": 4848,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "6750cd2af285391a69026b12eae9556573489a25ba872e50767789bdb4e3d221",
+      "color_print_source": "export-dual-color-knob.py; STL is a single-material envelope"
+    }
+  },
+  "profile_names": {
+    "machine": "Bambu Lab P2S 0.4 nozzle",
+    "process": "0.20mm Standard @BBL P2S",
+    "filament": "Generic PLA @BBL P2S"
+  },
+  "process_overrides": {
+    "enable_support": "1",
+    "support_type": "tree(auto)",
+    "support_on_build_plate_only": "1",
+    "support_threshold_angle": "30",
+    "support_top_z_distance": "0.2",
+    "wall_loops": "3",
+    "sparse_infill_density": "15%",
+    "sparse_infill_pattern": "gyroid",
+    "brim_type": "outer_only",
+    "brim_width": "5"
+  },
+  "profile_sha256": {
+    "machine": "b7058cfe1a3d4cd505589443bc5b55d297f07bb973777a7fc67de96f8fe35a9b",
+    "process": "eb2a397e228585ebc5e78dcf7fb40629d5c5386ef7a8112cdec1905e09fd21ad",
+    "filament": "2c3746b6f61717d3023b58e846b10106f61534607644378063ac2a69db103355"
+  },
+  "plates": {
+    "FrontShell": {
+      "parts": [
+        "FrontShell"
+      ],
+      "exit_code": 0,
+      "gcode_sha256": "a5acfd3b5963ac22b7cade747f106a8eca5bce21d8994147a978ebeec7965d87",
+      "total_estimated_time": "14h 7m 19s",
+      "filament_g": 156.65,
+      "layers": 245,
+      "vendor_T65535_parser_notice": true
+    }
+  },
+  "printer_profile_mapping": "User P2SC; installed Bambu P2S profile used for local slicing only",
+  "printer_contacted": false,
+  "gcode_execution_validated": false,
+  "slicer_version": "02.09.01.70",
+  "dual_color_keys": "Excluded here; see dual-color-key-checks.json and export-dual-color-keys.py",
+  "dual_color_knob": "Excluded here; see dual-color-knob-checks.json and export-dual-color-knob.py",
+  "material_only_save": {
+    "geometry_checked_model_sha256": "ddb7753d095e3c49db93ec9f1dfd570dee1fbd0f55e17bc0ec93d6f19b1eeee9",
+    "geometry_resources_unchanged": true,
+    "changed_resource": "ShapeAppearance39",
+    "gui_readback": false
+  },
+  "reused_slicing": {
+    "source_report": "print-checks.json",
+    "source_model_sha256": "fb24c86b81e000e9f2db58d3b2802ead2c5aad04e26171616b4c4fc6266ced1e",
+    "unchanged_mesh_sha256": {
+      "RearShell": "afa10e7877805313bdf0c14c5a41d0f6dd0d859d7815ff20bdd00deef3514be7",
+      "SpeakerCarrier": "54d1602f02dc6b0b32e88972e0130df35141d6db121952990d4f38c921d9b170",
+      "PlayPauseKey": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
+      "EjectKey": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
+      "PrevKey": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
+      "NextKey": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
+      "ButtonRetainer": "17ee4f08323f8878f428092fc2ee6b63ead09915fa8c8baaa53f1bf010339011",
+      "DisplayRetainer": "699b7962e736a43e40bf747c1254eb4b3a82e903334593d7c1832f5d60d9703f",
+      "DriveRetainer": "1f807f99f6d98fa38614df28a997d6b686dc144ed879951b953959d0824a6760",
+      "Knob": "6750cd2af285391a69026b12eae9556573489a25ba872e50767789bdb4e3d221"
+    },
+    "plates": {
+      "RearShell": {
+        "parts": [
+          "RearShell"
+        ],
+        "exit_code": 0,
+        "gcode_sha256": "dc07959d0ea773f915c7b82306729fda556e9c45006aeaece3a03589bee4e463",
+        "total_estimated_time": "9h 33m 48s",
+        "filament_g": 297.06,
+        "layers": 440,
+        "vendor_T65535_parser_notice": true
+      },
+      "SpeakerCarrier": {
+        "parts": [
+          "SpeakerCarrier"
+        ],
+        "exit_code": 0,
+        "gcode_sha256": "17cea681a1e971e5b623003be70661c428bf4f87c84c2893f34bcd69dabcb952",
+        "total_estimated_time": "5h 0m 55s",
+        "filament_g": 149.65,
+        "layers": 287,
+        "vendor_T65535_parser_notice": true
+      },
+      "SmallParts": {
+        "parts": [
+          "ButtonRetainer",
+          "DisplayRetainer",
+          "DriveRetainer"
+        ],
+        "exit_code": 0,
+        "gcode_sha256": "f9e5ec511ff506e5e9345768fa3ea5e379b67296f889cdb9670319626bcd9fc4",
+        "total_estimated_time": "26m 9s",
+        "filament_g": 6.61,
+        "layers": 32,
+        "vendor_T65535_parser_notice": true
+      }
+    },
+    "dual_color_reports": [
+      "dual-color-key-checks.json",
+      "dual-color-knob-checks.json"
+    ]
+  }
+}
