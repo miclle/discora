@@ -1,5 +1,7 @@
 # Discora V4 整机尺寸与装配图册
 
+> 2026-11-14 已更新 FCStd 的 PCB 音量模块及前壳内槽。本文六页图册保留 2026-11-12 版本，外轮廓和操控位置未变；当前模块安装详见 [ADR-0036](decisions/0036-pcb-volume-module.md)及 [内侧近景](../hardware/enclosure/volume-pcb-mount.png)，不要按旧裸电位器槽位制作。
+
 当前保存模型的整机外包络为 **宽 170 × 深 93 × 高 243.263 mm**，包含脚垫和提手；**不含脚垫的总高为 240.263 mm**，仍包含提手。图册汇总外观尺寸、开孔、两层爆炸图、侧剖及模型对象清单，供外形评审与布局核对。
 
 **[打开彩色整机图册 PDF（6 页，A3 横向）](../hardware/enclosure/drawings/Discora-V4-drawing-book-color.pdf)**

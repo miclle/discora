@@ -85,7 +85,10 @@ def validate(folder):
             thickness[f'slope_side_{x}_{y}']=section_length('FrontShell',A.Vector(x,y,165+slope*y),normal)
     thickness['grille']=section_length('FrontGrille',A.Vector(1.45,0,76),A.Vector(0,1,0))
     thickness['handle']=section_length('FrontShell',A.Vector(60,46.5,211),A.Vector(0,1,0))
-    assert all(abs(value-(2.5 if name=='grille' else 5))<1e-6 for name,value in thickness.items()),thickness
+    # The PCB-module pocket extends beneath this shoulder sample; its local
+    # floor is 3.6 mm, while the recessed nut clamps 2 mm (check-volume.py).
+    expected_thickness={'grille':2.5,'slope_50_32':3.6}
+    assert all(abs(value-expected_thickness.get(name,5))<1e-6 for name,value in thickness.items()),thickness
     print('PANEL_THICKNESS',thickness,flush=True)
     # Check the finished front shell, not just its hidden circular cutter.
     mouth=Part.makeCylinder(65,2.5-2e-5,A.Vector(0,1e-5,76),A.Vector(0,1,0))
@@ -223,7 +226,7 @@ def validate(folder):
         A.closeDocument(baseline.Name)
     bb=Part.makeCompound([o.Shape for o in objects]).BoundBox
     handle=collisions(Part.makeBox(50,10,22,A.Vector(-25,handle_y-5,shoulder_z+11.5)),objects)
-    report={'date':'2026-11-12','model':model.name,'sha256':hashlib.sha256(model.read_bytes()).hexdigest(),
+    report={'date':'2026-11-14','model':model.name,'sha256':hashlib.sha256(model.read_bytes()).hexdigest(),
         'version':A.Version()[:3],'items':len(objects),'objects':[o.Name for o in objects],
         'main_pla_parts':connected,'rigid_pla_pieces':['FrontShell','RearShell','SpeakerCarrier','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','DisplayRetainer','DriveRetainer','Knob'],
         'rear_roof_ownership':roof_ownership,'shell_split_y_mm':49.0,

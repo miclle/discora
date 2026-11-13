@@ -1,4 +1,4 @@
-"""Export a 28x28 mm front-shell mounting sample, exterior face on bed.
+"""Export a 32x44 mm PCB-module mounting sample, exterior face on bed.
 
 Run with FreeCAD Python; no printer is contacted. Geometry comes from saved CAD.
 """
@@ -14,7 +14,7 @@ args=p.parse_args();model=args.model.resolve()
 doc=A.openDocument(str(model))
 pose=A.Placement(V(48,18,165+18*27/38),A.Rotation(V(0,1,0),V(0,27/38,-1)))
 s=doc.FrontShell.Shape.copy();s.Placement=pose.inverse().multiply(s.Placement)
-s=s.common(Part.makeBox(28,5,28,V(-14,0,-12)))
+s=s.common(Part.makeBox(32,5,44,V(-16,0,-22)))
 assert s.isValid() and len(s.Solids)==1
 s.Placement=A.Placement(V(),A.Rotation(V(0,1,0),V(0,0,1))).multiply(s.Placement)
 b=s.BoundBox;s.translate(V(128-b.Center.x,128-b.Center.y,-b.ZMin))

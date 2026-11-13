@@ -278,5 +278,11 @@
   },
   "drive_service_envelope": "Filled maximum 128 x 10.8 x 130 mm box; connector retains modeled housing and strain relief",
   "all_pass": true,
-  "model_sha256": "fb24c86b81e000e9f2db58d3b2802ead2c5aad04e26171616b4c4fc6266ced1e"
+  "model_sha256": "42ffc95778377ab470bfe3daa6ca2fa57693b16db6c63bb1e4dbcf4d8d993e30",
+  "material_only_save": {
+    "geometry_checked_model_sha256": "ddb7753d095e3c49db93ec9f1dfd570dee1fbd0f55e17bc0ec93d6f19b1eeee9",
+    "geometry_resources_unchanged": true,
+    "changed_resource": "ShapeAppearance39",
+    "gui_readback": false
+  }
 }

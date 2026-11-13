@@ -33,5 +33,30 @@
       "Do not replace selected 50K with sheet 10K or silently transfer ratings between variants.",
       "Original image retained; shaft push/pull strength row uses kgf.cm, requiring supplier clarification."
     ]
+  },
+  "pcb_module": {
+    "date": "2026-11-14",
+    "source": "User-provided photo, dimensions and alignment confirmation in conversation; new product URL not supplied",
+    "pcb_width_axial_depth_thickness_mm": [
+      35,
+      26.2,
+      1.5
+    ],
+    "total_thickness_including_pins_and_plugged_connectors_mm": 15,
+    "shaft_total_and_spline_length_mm": [
+      15,
+      10
+    ],
+    "shaft_width_centered": true,
+    "pcb_front_edge_flush_with_body_mount": true,
+    "cad_rotation_about_shaft_deg": 90,
+    "inherited_nominal_geometry": [
+      "body dimensions and 2.7 mm shaft-to-pin-face offset",
+      "shaft diameter, thread and nut",
+      "PCB upper surface placed at original body pin face"
+    ],
+    "physical_fit_verified": false,
+    "image": "pcb-module-reference.jpg",
+    "image_sha256": "c2ed63686783ef519cd3496402ba693b9736a8c093f02b826f8a0fc588ba952b"
   }
 }
