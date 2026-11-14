@@ -90,7 +90,11 @@ def main():
         print('PLATE_OK',name,count,flush=True)
     p3=json.loads((ROOT/'p3-terminal-mouth-checks.json').read_text())
     p2=json.loads((ROOT/'p2-trapezoid-outlet-checks.json').read_text())
-    assert p3['model_sha256']==manifest['model_sha256'] and p3['all_pass'] and p2['all_pass']
+    controls=json.loads((ROOT/'control-layout-checks.json').read_text())
+    assert controls['model_sha256']==manifest['model_sha256'] and controls['all_pass']
+    assert controls['baseline_sha256']==p3['model_sha256'] and p3['all_pass'] and p2['all_pass']
+    assert all(controls['unchanged_finished_parts_difference_mm3'][name]<.001
+               for name in ('RearShell','SpeakerCarrier'))
     assert p3['geometry']['baseline_sha256']==p2['model_sha256']
     assert p3['geometry']['p2_entire_shape_difference_mm3']<.001
     for name, audit in [('RearShell',p2['layers']),('SpeakerCarrier',p3['slice'])]:

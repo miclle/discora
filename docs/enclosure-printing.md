@@ -1,6 +1,6 @@
 # 正式打印文件与装配
 
-当前版本：ADR-0046 P3 短渐扩口，配套 ADR-0045 P2 圆角梯形开放侧口。正式文件统一在 [hardware/enclosure/print](../hardware/enclosure/print/README.md)，不再从历次 `tmp/` 目录选择零件。
+当前操控布局为 [ADR-0047](decisions/0047-control-spacing-and-knob.md)，前壳与28 mm旋钮已更新。主体版本：ADR-0046 P3 短渐扩口，配套 ADR-0045 P2 圆角梯形开放侧口。正式文件统一在 [hardware/enclosure/print](../hardware/enclosure/print/README.md)，不再从历次 `tmp/` 目录选择零件。
 
 这里的“正式版本”指本轮唯一配套交付版本，完整件打印、支撑拆除、装配、强度、气密和声学仍待实测。**P3 喇叭安装座试片已打印并确认装配无问题**，保留已通过的座面和孔位，不再要求打印试片。
 
@@ -8,14 +8,14 @@
 
 | 打印盘 | 3MF | 预计时间 | 耗材 / g | 层数 |
 | --- | --- | --- | --- | --- |
-| P1 前壳 | [Discora-P1-FrontShell.3mf](../hardware/enclosure/print/Discora-P1-FrontShell.3mf) | 14h 6m 53s | 156.65 | 245 |
+| P1 前壳 | [Discora-P1-FrontShell.3mf](../hardware/enclosure/print/Discora-P1-FrontShell.3mf) | 14h 7m 9s | 156.65 | 245 |
 | P2 后壳 | [Discora-P2-RearShell.3mf](../hardware/enclosure/print/Discora-P2-RearShell.3mf) | 9h 12m 0s | 286.84 | 440 |
 | P3 喇叭支架 | [Discora-P3-SpeakerCarrier.3mf](../hardware/enclosure/print/Discora-P3-SpeakerCarrier.3mf) | 5h 40m 46s | 181.00 | 287 |
 | 三个压框／支架 | [Discora-Retainers.3mf](../hardware/enclosure/print/Discora-Retainers.3mf) | 26m 9s | 6.61 | 32 |
 | 四个橙白双色按键 | [Discora-Keys-Orange-White.3mf](../hardware/enclosure/print/Discora-Keys-Orange-White.3mf) | 34m 44s | 7.54 | 60 |
-| 黑白双色旋钮 | [Discora-Knob-Black-White.3mf](../hardware/enclosure/print/Discora-Knob-Black-White.3mf) | 48m 44s | 9.50 | 116 |
+| 黑白双色旋钮 | [Discora-Knob-Black-White.3mf](../hardware/enclosure/print/Discora-Knob-Black-White.3mf) | 49m 28s | 9.82 | 116 |
 
-合计约 **648.14 g**，包含支撑、brim 和双色换料耗材。时间和用量来自 Bambu Studio 2.9.1.70 本地切片，不是实际打印记录。配置为 P2S / 0.4 mm，按用户提供的 P2SC、256³ mm 空间映射；0.2 mm 喷嘴未验证。
+合计约 **648.46 g**，包含支撑、brim 和双色换料耗材。时间和用量来自 Bambu Studio 2.9.1.70 本地切片，不是实际打印记录。配置为 P2S / 0.4 mm，按用户提供的 P2SC、256³ mm 空间映射；0.2 mm 喷嘴未验证。
 
 11 件刚性 PLA 零件均有 STL。四键和旋钮的 STL 仅为单色包络，双色打印优先打开上述 3MF，保留同一对象内的两个材料区域。软脚垫、OLED 玻璃、电子模块、螺钉、绑带和导线另购，不计入打印件。
 
@@ -33,7 +33,7 @@
 
 P3 双背板首层直接贴板；287 层审核未发现声腔、导管或渐扩口内支撑，原 18 条悬空告警对应位置已核对。P2 440 层侧口及开放结构需要支撑，从敞开的正面与侧口清理，实际拆除力待验证。两件的正式包保留已审核 STL 和 G-code，仅整理 3MF 文件名及本机导入路径元数据。
 
-P1、小件、四键和旋钮从同一正式 CAD 重新导出、切片。四键每键及旋钮标记各有 5 层白色走线，3MF 对象数、材料分配、网格修复计数和完整走线摘要已读回检查。官方结束代码仍有历史 `T65535` 解析提示，切片成功不代表已验证打印机执行。
+本轮 P1 和28 mm旋钮从当前 CAD 重新导出、切片；小件与四键按局部几何一致证据复用已审核项目。四键每键及旋钮标记各有 5 层白色走线，3MF 对象数、材料分配、网格修复计数和完整走线摘要已读回检查。官方结束代码仍有历史 `T65535` 解析提示，切片成功不代表已验证打印机执行。
 
 四键材料 1 为 PLA Lite 橙色，材料 2 为 PLA Lite 白色；旋钮材料 1 为 PLA Basic 黑色，材料 2 为 PLA Lite 白色。打印前按实际耗材映射 AMS 槽位。单色盘的绿色预览是 Generic PLA 默认显示色，不是零件配色要求。
 
@@ -61,9 +61,9 @@ OLED 玻璃前面内退 1.0 mm，沉槽前缘名义厚 0.8；外口经倒角收�
 
 ## 版本与验证
 
-模型 SHA-256：`80eede1e85eafe8aca6ba6702cb2e169b6f7b4d1c368eeca10f1e6647bacebe0`。详见 [文件清单与摘要](../hardware/enclosure/print/manifest.json)、[正式包检查](../hardware/enclosure/print-release-checks.json)、[P3 声道检查](../hardware/enclosure/p3-terminal-mouth-checks.json)、[P2 侧口检查](../hardware/enclosure/p2-trapezoid-outlet-checks.json)、[整机静态检查](../hardware/enclosure/validation.json)、[拆装路径](../hardware/enclosure/assembly-paths.json)和[当前线束检查](../hardware/enclosure/current-perfboard-checks.json)。
+模型 SHA-256：`2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003`。详见 [文件清单与摘要](../hardware/enclosure/print/manifest.json)、[正式包检查](../hardware/enclosure/print-release-checks.json)、[P3 声道检查](../hardware/enclosure/p3-terminal-mouth-checks.json)、[P2 侧口检查](../hardware/enclosure/p2-trapezoid-outlet-checks.json)、[整机静态检查](../hardware/enclosure/validation.json)、[拆装路径](../hardware/enclosure/assembly-paths.json)和[当前线束检查](../hardware/enclosure/current-perfboard-checks.json)。
 
-历史阶段的 `*-checks.json` 和 ADR 只证明其对应模型。当前 P2 通过与 ADR-0045 的实体零差集衔接，P3 直接对应当前模型；不把旧模型摘要改写成新版本。图册见[尺寸与装配图纸](enclosure-drawings.md)。
+历史阶段的 `*-checks.json` 和 ADR 只证明其对应模型。当前 P2 通过与 ADR-0045 的实体零差集衔接，P3 通过 control-layout-checks.json 的不变实体检查衔接至当前模型；不把旧模型摘要改写成新版本。图册见[尺寸与装配图纸](enclosure-drawings.md)。
 
 ## 重现
 

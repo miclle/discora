@@ -142,11 +142,11 @@ def volume_shapes(grip_tip_diameter=5.6):
         Part.makeCylinder(3.4,1.9,V(0,1.6,0),-Y))
     shaft=shaft.fuse(nut).removeSplitter()
     disk=Part.makeCylinder(12,1.4,V(0,1,0),-Y)
-    # Slender full-height lobes: 24 mm span, 6.8 mm arm width, R3.4 ends.
-    cross=Part.makeBox(17.2,12.5,6.8,V(-8.6,-12.9,-3.4)).fuse(
-        Part.makeBox(6.8,12.5,17.2,V(-3.4,-12.9,-8.6)))
+    # Slender full-height lobes: 28 mm span, 6.8 mm arm width, R3.4 ends.
+    cross=Part.makeBox(21.2,12.5,6.8,V(-10.6,-12.9,-3.4)).fuse(
+        Part.makeBox(6.8,12.5,21.2,V(-3.4,-12.9,-10.6)))
     cross=cross.multiFuse([Part.makeCylinder(3.4,12.5,V(x,-12.9,z),Y)
-                          for x,z in ((-8.6,0),(8.6,0),(0,-8.6),(0,8.6))]).removeSplitter()
+                          for x,z in ((-10.6,0),(10.6,0),(0,-10.6),(0,10.6))]).removeSplitter()
     inside=[e for e in cross.Edges if e.BoundBox.YLength>12
             and abs(abs(e.CenterOfMass.x)-3.4)<1e-6
             and abs(abs(e.CenterOfMass.z)-3.4)<1e-6]
@@ -154,11 +154,14 @@ def volume_shapes(grip_tip_diameter=5.6):
     top=[e for e in cross.Edges if abs(e.BoundBox.YMin+12.9)<1e-6
          and abs(e.BoundBox.YMax+12.9)<1e-6]
     cross=cross.makeFillet(.5,top)
-    # Round the feet slightly so the 24 mm lobes do not meet the 24 mm disk
-    # at a tangent-only vertex, which produces an open STL seam in OCCT.
+    # Round the arm feet before adding the underside taper.
     bottom=[e for e in cross.Edges if abs(e.BoundBox.YMin+.4)<1e-6
             and abs(e.BoundBox.YMax+.4)<1e-6]
     cross=cross.makeFillet(.25,bottom)
+    # Support the extended arms with a 45-degree underside transition.
+    ramp=Part.makeCone(11.7,14.01,2.31,V(0,-.4,0),-Y)
+    arm_limit=ramp.fuse(Part.makeCylinder(14.01,10.2,V(0,-2.71,0),-Y))
+    cross=cross.common(arm_limit).removeSplitter()
     # A short flared root closes the nut cavity between the slimmer arms.
     # At the cavity roof Y=-2.4 its radial wall remains over 0.57 mm.
     hub=Part.makeCone(7.2,6.2,3.2,V(0,-.4,0),-Y)
@@ -221,10 +224,10 @@ def oled_shapes():
         frame=frame.cut(Part.makeCylinder(1.1,2.2,V(x,6.3,-7),Y))
     return pcb.removeSplitter(),panel,header,left,pilots,frame.removeSplitter(),pocket.removeSplitter()
 # Centers on the exterior slope; front row then rear row.
-BUTTONS = [('PlayPause', '播放／暂停', -59.0, 9.0),
-           ('Eject', '退碟', -41.0, 9.0),
-           ('Prev', '上一曲', -59.0, 26.0),
-           ('Next', '下一曲', -41.0, 26.0)]
+BUTTONS = [('PlayPause', '播放／暂停', -63.0, 9.0),
+           ('Eject', '退碟', -45.0, 9.0),
+           ('Prev', '上一曲', -63.0, 26.0),
+           ('Next', '下一曲', -45.0, 26.0)]
 
 
 def button_retainer(row_offset):
@@ -413,9 +416,9 @@ def build(folder):
     symmetric_cowl.Base, symmetric_cowl.Tool = skin, common_tool
     skin.Visibility = common_tool.Visibility = False
     controls = [Part.makeCylinder(r,12,deck(x,y)-normal*7,normal)
-                for x,y,r in [(x,y,5.25) for _,_,x,y in BUTTONS]+[(48,18,3.6)]]
+                for x,y,r in [(x,y,5.25) for _,_,x,y in BUTTONS]+[(52,20,3.6)]]
     volume=volume_shapes()
-    volume_pose=A.Placement(deck(48,18),A.Rotation(Y,-normal))
+    volume_pose=A.Placement(deck(52,20),A.Rotation(Y,-normal))
     volume_pocket=volume['pocket'].copy()
     volume_pocket.Placement=volume_pose.multiply(volume_pocket.Placement)
     controls.append(volume_pocket)
@@ -555,7 +558,7 @@ def build(folder):
     # Local +Y is depth below the exterior face. Separate caps bridge the
     # 5 mm panel; a measured 2.8 mm actuator alone cannot pass through it.
     button_mounts=[]
-    button_pose=A.Placement(deck(-50,17.5),A.Rotation(Y,normal*-1))
+    button_pose=A.Placement(deck(-54,17.5),A.Rotation(Y,normal*-1))
     row_offset=8.5*math.sqrt(1+SHOULDER_SLOPE**2)
     retainer=button_retainer(row_offset)
     for key,label,x,y in BUTTONS:
@@ -586,7 +589,7 @@ def build(folder):
         boss.Placement=button_pose.multiply(boss.Placement);button_mounts.append(boss)
     retainer.Placement=button_pose.multiply(retainer.Placement)
     # Preserve the existing DAC connector allowance, with 0.5 mm side clearance.
-    retainer=retainer.cut(box(-67.5,32.5,157.5,9.6,18,11)).removeSplitter()
+    retainer=retainer.cut(box(-71.5,32.5,157.5,9.6,18,11)).removeSplitter()
     feature('ButtonRetainer','四键焊线支架 · 两侧敞开／双点支承',retainer,TEAL,ui)
     feature('ButtonMounts','四键定位座与压板螺柱 · 并入 P1',Part.makeCompound(button_mounts),TEAL,supports)
     for key,name,label,color,parent in (

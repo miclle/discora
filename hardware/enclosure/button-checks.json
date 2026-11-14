@@ -1,5 +1,5 @@
 {
-  "model_sha256": "fb24c86b81e000e9f2db58d3b2802ead2c5aad04e26171616b4c4fc6266ced1e",
+  "model_sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003",
   "user_dimensions_mm": {
     "width": 12,
     "length": 12,
@@ -22,7 +22,7 @@
   "buttons": {
     "PlayPause": {
       "exterior_center_xyz_mm": [
-        -59.0,
+        -63.0,
         9.0,
         171.39473684210526
       ],
@@ -66,7 +66,7 @@
     },
     "Eject": {
       "exterior_center_xyz_mm": [
-        -41.0,
+        -45.0,
         9.0,
         171.39473684210526
       ],
@@ -110,7 +110,7 @@
     },
     "Prev": {
       "exterior_center_xyz_mm": [
-        -59.0,
+        -63.0,
         26.0,
         183.47368421052633
       ],
@@ -154,7 +154,7 @@
     },
     "Next": {
       "exterior_center_xyz_mm": [
-        -41.0,
+        -45.0,
         26.0,
         183.47368421052633
       ],
@@ -367,5 +367,7 @@
     "Two plastic-base pads avoid the central molded features in the photo; exact bearing flatness requires a sample.",
     "Open terminal bands are clearance reservations, not measured solder joints, wire bends or pin positions.",
     "0.8 mm cap movement is sampled CAD clearance, not measured actuator stroke or a tolerance stack acceptance."
-  ]
+  ],
+  "validated_candidate_sha256": "01dc8f7849a6040cea1f1da26552f5e96c524a34f5b4749820fe3c19869ea0a7",
+  "geometry_reuse_evidence": "control-layout-checks.json"
 }

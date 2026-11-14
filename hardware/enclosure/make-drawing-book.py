@@ -18,7 +18,7 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = '80eede1e85eafe8aca6ba6702cb2e169b6f7b4d1c368eeca10f1e6647bacebe0'
+ANNOTATED_MODEL_SHA256 = '2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
@@ -54,7 +54,9 @@ def main():
     flat_back=json.loads((ROOT/'p3-flat-back-checks.json').read_text())
     current_perfboard=json.loads((ROOT/'current-perfboard-checks.json').read_text())
     drawing_baseline=json.loads((ROOT/'drawing-baseline-checks.json').read_text())
-    assert drawing_baseline['all_pass'] and drawing_baseline['model_sha256']==data['sha256']
+    controls=json.loads((ROOT/'control-layout-checks.json').read_text())
+    assert controls['all_pass'] and controls['model_sha256']==data['sha256']
+    assert controls['baseline_sha256']==drawing_baseline['model_sha256'] and drawing_baseline['all_pass']
     assert current_perfboard['model_sha256']==data['sha256']
     assert drawing_baseline['baseline_sha256']==flat_back['model_sha256']
     assert flat_back['baseline_sha256']==backlock['model_sha256']
@@ -73,7 +75,8 @@ def main():
     assert validation['items']==44 and not validation['invalid'] and not validation['clashes']
     assert all(v<.001 for v in validation['mirror_difference_mm3'].values()) and assembly['all_pass']
     assert pcb_volume['model_sha256']==perfboard['baseline_sha256'] and pcb_volume['all_pass']
-    assert pcb_volume['checker_sha256']==hashlib.sha256((ROOT/'check-volume.py').read_bytes()).hexdigest()
+    current_volume=json.loads((ROOT/'control-volume-checks.json').read_text())
+    assert current_volume['model_sha256']==data['sha256'] and current_volume['all_pass']
     assert mount['model_sha256']==pcb_volume['baseline_sha256'] and mount['all_pass']
     assert rear['model_sha256']==mount['baseline_sha256'] and rear['all_pass']
     assert bottom_check['model_sha256']==rear['baseline_sha256'] and bottom_check['all_pass']
@@ -83,6 +86,7 @@ def main():
     assert integration['model_sha256']==handle['baseline_sha256']
     def evidence_matches_geometry(report,owners):
         if report['model_sha256']==data['sha256']:return True
+        if any(controls['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
         if any(drawing_baseline['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
         if report['model_sha256']==drawing_baseline['baseline_sha256']:return True
         if any(n not in flat_back['unchanged_finished_objects'] for n in owners):return False
@@ -156,7 +160,7 @@ def main():
         line(12,16,408,16,LIGHT)
         text(12,10,'完整件试打 / CAD 静态几何 · 整机装配、声学与强度待实测',8,MUTED)
         text(245,10,'单位 mm  |  '+scale,8,MUTED)
-        text(408,10,f'DC-V4-GA-{num:02d}  ·  2026-11-14  ·  {num}/{TOTAL_PAGES}',8,MUTED,'right')
+        text(408,10,f'DC-V4-GA-{num:02d}  ·  2026-11-15  ·  {num}/{TOTAL_PAGES}',8,MUTED,'right')
 
     def view(name,x,y,scale=1,clip_bottom=0):
         info=data['views'][name]
@@ -297,8 +301,8 @@ def main():
         '四键孔 Ø10.5；键帽 Ø10，露出 1.2；背面止退沿 Ø12.8。',
         '橙白双色键帽：白色符号深 0.6，与键面齐平；分别指定两种 PLA Lite。',
         'OLED 外口 32.82 × 18.1，倒角深 0.8；玻璃内退 1.0，详见第 6 页。',
-        'B50K 壳孔 Ø7.2／局部壁厚 2；底盘 Ø24 下沉 1，十字 24×6.8，顶面高 12.9。',
-        '键中心 X=-59 / -41、Y=9 / 26；屏与旋钮 Y=18、X=0 / 48。',
+        'B50K 壳孔 Ø7.2／局部壁厚 2；底盘 Ø24 下沉 1，十字 28×6.8，顶面高 12.9。',
+        '键中心 X=-63 / -45、Y=9 / 26；屏 X=0、Y=18；旋钮 X=52、Y=20。',
         '前壳背锁：后壁 X=±79.4、Z=33；后斜面 X=±29、Z=179。',
         'P3 支架：4 孔，X=±64、Z=27 / 124；Ø2.8，沉头 Ø4.8。',
         'P2 圆角梯形开放侧口；P3 独立导管末端留隙 0.7，详见第 12 页。',
@@ -524,7 +528,7 @@ def main():
         ('至主控元件预留',f"{data['volume_module']['clearances_mm']['MCUChip']:.3f}"),
         ('至后壳',f"{data['volume_module']['clearances_mm']['RearShell']:.3f}"),
         ('至光驱',f"{data['volume_module']['clearances_mm']['Drive']:.3f}"),
-        ('至洞洞板',f"{data['volume_module']['clearances_mm']['Perfboard']:.3f}；外部旋钮与轴心保持"),
+        ('至洞洞板',f"{data['volume_module']['clearances_mm']['Perfboard']:.3f}；十字28，轴心X52/Y20"),
     ],split=75,height=10)
     notes(14,48,[
         '拆卸：按第9页拉开60并断开前壳线束，取下整个前壳；再拆旋钮、螺母，沿轴退出模块。',
@@ -566,7 +570,7 @@ def main():
         ('四键 5P','18×16×8；向机身左侧拔'),
         ('OLED 4P','13.5×8×11；向上拔'),
         ('开关 2P','8.5×8×11；向上拔'),
-        ('板至光驱 / B50K','1.200 / 1.250'),
+        ('板至光驱 / B50K','1.200 / 5.264'),
         ('板下走线至功放元件','1.200；板底走线深度预留2'),
     ],split=64,height=10)
     notes(14,68,[
@@ -593,7 +597,7 @@ def main():
         '1  断电、卸4枚背锁螺钉；托住前壳向前平移60 mm，三组回环释放余量。',
         '2  先向上拔音量开关2P并移开线，再向上拔OLED 4P，最后向机身左侧拔四键5P；开关余线经过OLED入口。',
         '3  断开其余前壳线束后移走前壳。拆载板先断数据、供电及DAC音频，再卸3枚M2螺钉；也可随P3整体拆出。',
-        '中心线路径：四键120.9、OLED 114.8、音量开关200.7 mm。制线另加端子压接、实际出口及固定余量。',
+        '中心线路径：四键122.0、OLED 114.8、音量开关205.7 mm。制线另加端子压接、实际出口及固定余量。',
         '验证范围：0…60 mm每2 mm采样；按上述次序校核拔出包络及12×10 mm入口，不代表手指操作或弯曲应力验收。',
         'B50K双声道模拟线束、最终电源线与端子短尾未完整建模；同样须留服务余量，并检查合壳压线与实物卡扣。',
         '图中的圆柱／球形转角是占位包络，不表示实际线束弯曲半径；接口线序仍以接线文档和实物丝印为准。',

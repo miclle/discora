@@ -1,7 +1,7 @@
 {
-  "date": "2026-11-14",
+  "date": "2026-11-15",
   "model": "Discora.FCStd",
-  "sha256": "80eede1e85eafe8aca6ba6702cb2e169b6f7b4d1c368eeca10f1e6647bacebe0",
+  "sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003",
   "version": [
     "1",
     "1",
@@ -172,7 +172,7 @@
     {
       "first": "Knob",
       "object": "Encoder",
-      "volume_mm3": 2.1292055481744283,
+      "volume_mm3": 2.129205548172317,
       "outside_allowed_band_mm3": 0.0,
       "physical_retention_verified": false
     }
@@ -334,11 +334,11 @@
     }
   },
   "key_clearances_mm": {
-    "Battery / FrontShell": 0.999999999999992,
+    "Battery / FrontShell": 0.9999999999999956,
     "Battery / SpeakerCarrier": 3.5,
-    "MCUChip / FrontShell": 9.039302411403131,
+    "MCUChip / FrontShell": 9.039302411403133,
     "Drive / Perfboard": 1.2000000000000028,
-    "VolumePot / Perfboard": 1.25
+    "VolumePot / Perfboard": 5.263881016650701
   },
   "battery_fit": {
     "supplier_size_xyz_mm": [
@@ -382,28 +382,28 @@
     }
   },
   "front_panel_thickness_samples_mm": {
-    "vertical_-60_150": 4.999999999999991,
-    "vertical_60_150": 4.999999999999991,
-    "vertical_-67_80": 4.999999999999998,
-    "vertical_67_80": 4.999999999999998,
-    "vertical_0_6": 5.000000000000007,
-    "slope_-30_8": 5.000000000000001,
-    "slope_30_8": 4.999999999999999,
-    "slope_-25_30": 5.000000000000003,
-    "slope_25_30": 5.000000000000003,
-    "slope_50_32": 3.6000000000000005,
-    "slope_side_-84_5": 5.000000000000009,
-    "slope_side_-84_12": 5.000000000000005,
-    "slope_side_-84_24": 5.000000000000003,
+    "vertical_-60_150": 4.999999999999995,
+    "vertical_60_150": 4.999999999999995,
+    "vertical_-67_80": 4.999999999999995,
+    "vertical_67_80": 4.999999999999995,
+    "vertical_0_6": 4.999999999999995,
+    "slope_-30_8": 5.000000000000003,
+    "slope_30_8": 5.000000000000001,
+    "slope_-25_30": 5.000000000000006,
+    "slope_25_30": 5.000000000000006,
+    "slope_50_32": 3.599999999999974,
+    "slope_side_-84_5": 5.0000000000000115,
+    "slope_side_-84_12": 4.999999999999973,
+    "slope_side_-84_24": 5.000000000000006,
     "slope_side_-84_32": 5.000000000000003,
     "slope_side_-84_37": 4.999999999999998,
-    "slope_side_84_5": 5.000000000000002,
-    "slope_side_84_12": 5.000000000000005,
-    "slope_side_84_24": 4.999999999999976,
+    "slope_side_84_5": 5.000000000000004,
+    "slope_side_84_12": 4.999999999999973,
+    "slope_side_84_24": 4.99999999999998,
     "slope_side_84_32": 5.000000000000003,
     "slope_side_84_37": 4.999999999999998,
     "grille": 2.5,
-    "handle": 5.000000000000014
+    "handle": 5.0
   },
   "recessed_grille": {
     "opening_diameter_mm": 130,
@@ -579,5 +579,7 @@
     "Separate assembly-path report distinguishes continuous conservative sweeps from sampled cover motion.",
     "Battery leads, straps, connectors, bridge cables and power modules are not validated.",
     "Side passages remain untuned; geometric continuity is not acoustic validation."
-  ]
+  ],
+  "validated_candidate_sha256": "463e2832e75caf80000fa912373440799039c4cf30f89ede09fe02b0806092c6",
+  "geometry_reuse_evidence": "control-layout-checks.json"
 }

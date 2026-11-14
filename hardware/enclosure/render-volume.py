@@ -10,7 +10,7 @@ spec=importlib.util.spec_from_file_location('colors',root/'render-drawing-colors
 m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 doc=A.openDocument(str(root/'Discora.FCStd'))
 V=A.Vector
-pose=A.Placement(V(48,18,165+18*27/38),A.Rotation(V(0,1,0),V(0,27/38,-1)))
+pose=A.Placement(V(52,20,165+20*27/38),A.Rotation(V(0,1,0),V(0,27/38,-1)))
 def local(s):
  s=s.copy();s.Placement=pose.inverse().multiply(s.Placement);return s
 palette=m.palette_from_build()

@@ -1,6 +1,6 @@
 # Discora 正式打印套件
 
-当前唯一配套版本：ADR-0046 P3 + ADR-0045 P2，来源为上一级 `Discora.FCStd`。11 件刚性 PLA 零件、11 个单色包络 STL、6 个带切片的 Bambu Studio 3MF。完整件实物验收待完成；已通过喇叭安装座试片装配。
+当前操控布局为 ADR-0047（四键外移、28 mm旋钮）。主体配套版本：ADR-0046 P3 + ADR-0045 P2，来源为上一级 `Discora.FCStd`。11 件刚性 PLA 零件、11 个单色包络 STL、6 个带切片的 Bambu Studio 3MF。完整件实物验收待完成；已通过喇叭安装座试片装配。
 
 | 打印盘 | 推荐打开的项目 | 预计耗材 |
 | --- | --- | --- |
@@ -9,7 +9,7 @@
 | P3 喇叭支架 | [Discora-P3-SpeakerCarrier.3mf](Discora-P3-SpeakerCarrier.3mf) | 181.00 g |
 | 三个压框／支架 | [Discora-Retainers.3mf](Discora-Retainers.3mf) | 6.61 g |
 | 四个橙白双色按键 | [Discora-Keys-Orange-White.3mf](Discora-Keys-Orange-White.3mf) | 7.54 g |
-| 黑白双色旋钮 | [Discora-Knob-Black-White.3mf](Discora-Knob-Black-White.3mf) | 9.50 g |
+| 黑白双色旋钮 | [Discora-Knob-Black-White.3mf](Discora-Knob-Black-White.3mf) | 9.82 g |
 
 P2 的“仅打印板支撑”和“仅关键区域”均关闭，P3 两项均开启。保持 3MF 保存姿态和支撑参数；四键与旋钮保留为双色对象，按实际 AMS 槽位映射材料。
 

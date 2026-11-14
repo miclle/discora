@@ -113,7 +113,9 @@ def main():
     backlock = json.loads((ROOT/'backlock-rib-checks.json').read_text())
     flat_back = json.loads((ROOT/'p3-flat-back-checks.json').read_text())
     current=json.loads((ROOT/'drawing-baseline-checks.json').read_text())
-    assert current['model_sha256']==source_hash and current['all_pass']
+    controls=json.loads((ROOT/'control-layout-checks.json').read_text())
+    assert controls['all_pass'] and controls['model_sha256']==source_hash
+    assert controls['baseline_sha256']==current['model_sha256'] and current['all_pass']
     assert current['baseline_sha256']==flat_back['model_sha256']
     assert flat_back['baseline_sha256'] == backlock['model_sha256']
     assert 'RearShell' in flat_back['unchanged_finished_objects']
@@ -203,7 +205,7 @@ def main():
                  'local_frame':'X right; Y inward normal; Z up slope toward header'}
 
     # PCB module details use its own shaft datum, not its world-aligned bounds.
-    volume_pose=A.Placement(V(48,18,a.y+18*slope),A.Rotation(V(0,1,0),V(0,slope,-1)))
+    volume_pose=A.Placement(V(52,20,a.y+20*slope),A.Rotation(V(0,1,0),V(0,slope,-1)))
     volume=doc.VolumePot.Shape.copy()
     volume.Placement=volume_pose.inverse().multiply(volume.Placement)
     unturned=volume.copy();unturned.rotate(V(),V(0,1,0),-90)
