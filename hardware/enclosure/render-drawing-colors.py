@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256 = '42ffc95778377ab470bfe3daa6ca2fa57693b16db6c63bb1e4dbcf4d8d993e30'
+MODEL_SHA256 = '9ef433e8437eef3b3aa45558a329a66d8422e0c9014894b763a873c1162eee05'
 
 
 def palette_from_build():
@@ -140,9 +140,11 @@ def main():
         'ORANGE':'FrontShell PlayPauseKey EjectKey PrevKey NextKey',
         'TEAL':'SpeakerCarrier ButtonRetainer DisplayRetainer DriveRetainer',
         'BLACK':'RearShell',
-        'RUBBER':'Bridge Feet LDriver RDriver VolumePot DisplayHeader AmpChip DACChip PlayPauseSwitch EjectSwitch PrevSwitch NextSwitch',
+        'RUBBER':'Bridge Feet LDriver RDriver VolumePot DisplayHeader MCUChip DACChip MCUSockets DACSockets PlayPauseSwitch EjectSwitch PrevSwitch NextSwitch',
         'GLASS':'Window','PIXEL':'StatusArt','KNOB_BLACK':'Knob',
-        'SILVER':'Drive Encoder MCUChip','PCB':'DisplayPCB Amp MCU DAC','BLUE':'Battery',
+        'SILVER':'Drive Encoder AmpChip PerfboardScrew1 PerfboardScrew2 PerfboardScrew3',
+        'PCB':'DisplayPCB Amp MCU DAC Perfboard BuckA BuckB','BLUE':'Battery',
+        'WHITE':'XHButtons XHOLED XHVolumeSwitch',
     }
     colors={name:palette[key] for key,names in assignments.items() for name in names.split()}
     assert set(colors)==set(data['objects'])
@@ -155,7 +157,11 @@ def main():
     rear=json.loads((ROOT/'rear-thickness-checks.json').read_text())
     mount=json.loads((ROOT/'drive-mount-checks.json').read_text())
     pcb_volume=json.loads((ROOT/'volume-pcb-checks.json').read_text())
-    assert pcb_volume['model_sha256']==MODEL_SHA256 and pcb_volume['all_pass']
+    perfboard=json.loads((ROOT/'perfboard-checks.json').read_text())
+    assert perfboard['model_sha256']==MODEL_SHA256
+    assert pcb_volume['model_sha256']==perfboard['baseline_sha256'] and pcb_volume['all_pass']
+    assert all(perfboard['unchanged_geometry_difference_mm3'][n]<.001
+               for n in ('PlayPauseKey','EjectKey','PrevKey','NextKey','Knob'))
     assert all(pcb_volume['unchanged_finished_parts_difference_mm3'][n]<.001
                for n in ('PlayPauseKey','EjectKey','PrevKey','NextKey','Knob'))
     assert all(pcb_volume['key_face_order_preserved'].values())
@@ -188,21 +194,26 @@ def main():
         'iso':((math.sqrt(3)/2,.5,0),(-.25,math.sqrt(3)/4,math.sqrt(3)/2),(math.sqrt(3)/4,-.75,.5)),
     }
     doc=A.openDocument(str(source))
+    # Distinct wire colours identify the three service circuits, not materials.
+    for name,color in {'Buttons':(.12,.33,.82),'OLED':(.60,.20,.72),'VolumeSwitch':(1,.40,.04)}.items():
+        for suffix in ('Closed','Open'):colors[name+'Harness'+suffix]=color
     meshes={}
     for name in colors:
         meshes[name]=surface_polygons(doc.getObject(name).Shape)
         print('SURFACES',name,len(meshes[name]),flush=True)
     outputs={}
     for name,view in data['views'].items():
-        if name=='control-cutouts' or name.startswith(('oled-','volume-')):continue  # Unfilled dimensional details.
+        if name in ('control-cutouts','perfboard-outline') or name.startswith(('oled-','volume-')):continue
         parts=[]
         if 'parts' in view:
             parts=[(n,p['offset_mm']) for p in view['parts'] for n in p['objects']]
-        elif name=='section':parts=[(n,(0,0,0)) for n in colors]
+        elif name=='section':parts=[(n,(0,0,0)) for n in data['objects']]
         else:parts=[(n,(0,0,0)) for g in ('Shell','Controls') for n in data['groups'][g]]
         render_parts=[]
         for obj,offset in parts:
             mesh=meshes[obj]
+            if name.startswith('harness-') and obj=='FrontShell':
+                mesh=surface_polygons(doc.FrontShell.Shape.common(Part.makeBox(170,100,100,A.Vector(-85,-1,140))))
             if name=='section':
                 shape=doc.getObject(obj).Shape.common(Part.makeBox(174,400,500,A.Vector(-200,-100,-100)))
                 if shape.isNull() or not shape.Faces:continue

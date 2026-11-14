@@ -18,12 +18,12 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = '42ffc95778377ab470bfe3daa6ca2fa57693b16db6c63bb1e4dbcf4d8d993e30'
+ANNOTATED_MODEL_SHA256 = '9ef433e8437eef3b3aa45558a329a66d8422e0c9014894b763a873c1162eee05'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
 LIGHT = HexColor('#d5e1e4')
-TOTAL_PAGES = 7
+TOTAL_PAGES = 9
 
 
 def main():
@@ -46,7 +46,17 @@ def main():
     rear=json.loads((ROOT/'rear-thickness-checks.json').read_text())
     mount=json.loads((ROOT/'drive-mount-checks.json').read_text())
     pcb_volume=json.loads((ROOT/'volume-pcb-checks.json').read_text())
-    assert pcb_volume['model_sha256']==data['sha256'] and pcb_volume['all_pass']
+    perfboard=json.loads((ROOT/'perfboard-checks.json').read_text())
+    assert perfboard['model_sha256']==data['sha256']
+    assert not perfboard['harness_path_clashes'] and not perfboard['lead_reservation_clashes']
+    assert perfboard['front_cover_opening_mm']==60
+    assert all(not failures for checks in perfboard['unplug_access'].values() for failures in checks.values())
+    validation=json.loads((ROOT/'validation.json').read_text())
+    assembly=json.loads((ROOT/'assembly-paths.json').read_text())
+    assert validation['sha256']==assembly['model_sha256']==data['sha256']
+    assert validation['items']==44 and not validation['invalid'] and not validation['clashes']
+    assert all(v<.001 for v in validation['mirror_difference_mm3'].values()) and assembly['all_pass']
+    assert pcb_volume['model_sha256']==perfboard['baseline_sha256'] and pcb_volume['all_pass']
     assert pcb_volume['checker_sha256']==hashlib.sha256((ROOT/'check-volume.py').read_bytes()).hexdigest()
     assert mount['model_sha256']==pcb_volume['baseline_sha256'] and mount['all_pass']
     assert rear['model_sha256']==mount['baseline_sha256'] and rear['all_pass']
@@ -57,6 +67,8 @@ def main():
     assert integration['model_sha256']==handle['baseline_sha256']
     def evidence_matches_geometry(report,owners):
         if report['model_sha256']==data['sha256']:return True
+        if any(perfboard['unchanged_geometry_difference_mm3'].get(n,1)>=.001 for n in owners):return False
+        if report['model_sha256']==perfboard['baseline_sha256']:return True
         if any(pcb_volume['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
         if report['model_sha256']==pcb_volume['baseline_sha256']:return True
         if any(mount['unchanged_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
@@ -88,6 +100,10 @@ def main():
     c.setSubject('Saved CAD geometry; concept dimensions and exploded assembly; not a production release')
 
     def text(x,y,s,size=9,color=INK,align='left',background=False):
+        # The bundled CJK font lacks subscript 2; keep the second letter block explicit.
+        s=s.replace('₂','(2)')
+        missing={ch for ch in s if ord(ch) not in pdfmetrics.getFont('CN').face.charToGlyph}
+        assert not missing, f'Font lacks drawing characters: {missing}'
         if background:
             width=pdfmetrics.stringWidth(s,'CN',size)/mm
             left=x-({'left':0,'center':width/2,'right':width}[align])
@@ -174,7 +190,7 @@ def main():
             y-=height
         return y
 
-    page(1,'整机外观尺寸','PCB 音量模块版 · 外部操控位置保持；模块安装详见第 7 页','主视图 0.9:1')
+    page(1,'整机外观尺寸','洞洞板与前壳线束版 · 外部操控保持；载板与维护详见第 8 / 9 页','主视图 0.9:1')
     shoulder_z=side['outer_profile_yz'][2][1]
     handle_top=side['outer_profile_yz'][3][1]
     rear_peak_z=side['outer_profile_yz'][5][1]
@@ -271,7 +287,7 @@ def main():
         c.setFillColor(HexColor(color));c.rect(sx*mm,258*mm,3*mm,3*mm,fill=1,stroke=0)
         text(sx+5,258.1,label,8,MUTED)
     line(210,38,210,251,LIGHT,.15)
-    for panel,name,title in [(12,'exploded-shell','结构层 · 01–08'),(214,'exploded-core','内部层 · A–L')]:
+    for panel,name,title in [(12,'exploded-shell','结构层 · 01–08'),(214,'exploded-core','内部层 · A–M')]:
         text(panel+97,250,title,10,TEAL,'center')
         info=data['views'][name]
         scale=min(150/info['bounds']['size'][0],147/info['bounds']['size'][1])
@@ -295,7 +311,7 @@ def main():
             x=panel+4+col*96;y=89-row*8
             badge(x,y+1,part['number']);text(x+5,y,part['label'].replace('见下一页','见右图'),8)
     notes(12,31,[
-        '左图覆盖 33 个成品对象，08 为硬件总成；右图展开 P3、光驱压条和 19 个硬件对象，共 12 组。三个主体均为单一连续实体。',
+        '左图覆盖 44 个成品对象，08 为硬件总成；右图展开 P3、光驱压条和 30 个硬件对象，共 13 组。三个主体均为单一连续实体。',
         '引线端点为组包络中心；展示位移不是拆装路径。侧孔已并入后壳，拆装顺序及检查边界见第 5 页；颜色不代表实物材料。',
     ],gap=7,size=8)
     c.showPage()
@@ -319,8 +335,8 @@ def main():
         ('光驱贴靠 / 固定','背面留 1 mm 保护垫；中央底托 + 可拆压条，两枚 M2×10'),
         ('SATA 接头 / 线缆','37.7 × 7，后伸 20.4；护线环 Ø6.5 × 3；侧伸 14.5'),
         ('功放 PCB / 元件预留','66 × 53 × 1.6 / 15；组件最高 Z=139.6'),
-        ('主控 PCB / 元件预留','63.39 × 27.94 × 1.6 / 7；组件最高 Z=157.3'),
-        ('DAC PCB / 元件预留','31 × 17 × 1.6 / 7；侧立，长边沿 Z'),
+        ('主控 PCB / 元件预留','63.39 × 27.94 × 1.6 / 7；排母高8.5，组件最高Z=161.5'),
+        ('DAC / 双路降压','DAC 水平装载板；两块 DCE001，载板底 Z=142.8，见第8页'),
         ('OLED PCB 局部尺寸','35.4 × 33.5 × 1.2；四孔 Ø3，孔距 30.4 × 28.5；图纸值'),
         ('5600 mAh 平排电池','112 × 70 × 20；X=±56，Y=6…76，Z=8…28'),
         ('电池周围名义净距','距后腔底 3.5；前 / 后内壁 1 / 12；托盘侧壁各 1'),
@@ -329,7 +345,7 @@ def main():
     notes(138,99,[
         '当前模型边界',
         '平排电池按商品标称包络；托盘并入后壳，预留 4 个绑带槽，绑带、线材及插头需实测。',
-        '电池名义包络已适配；充电及稳压板尚未纳入模型，整机电气与实物装配仍未验收。',
+        '两块 DCE001 已纳入载板；充电电路未建模，整机电气与实物装配仍未验收。',
         '喇叭未建盆架、磁铁和安装孔；显示内容为示意，电子板元件与接头高度含设计预留。',
         '剖图使用实际实体裁切、隐藏线消除；未施加材料剖面线，不能由线型判断材质。',
         '三个主体及拆装路径已做 CAD 检查、PLA 切片；仍需配合试片、螺钉试装、强度和走线实测。',
@@ -337,7 +353,7 @@ def main():
     ],gap=8,size=9)
     c.showPage()
 
-    page(5,'对象清单、打印与拆装','33 个成品对象 · 尺寸为装配坐标系 X × Y × Z 的轴对齐包络，非展开尺寸','清单尺寸 mm；无制造数量承诺')
+    page(5,'对象清单、打印与拆装','44 个成品对象 · 尺寸为装配坐标系 X × Y × Z 的轴对齐包络，非展开尺寸','清单尺寸 mm；无制造数量承诺')
     labels={
         'FrontShell':'P1 前壳 / 提手 / 格栅 / 屏幕座',
         'RearShell':'P2 一体后壳 / 碟口 / 导音孔及饰片 / 底架',
@@ -357,6 +373,11 @@ def main():
         'Drive':'UJ-898 包络','Bridge':'SATA 接头 / 护线环','DisplayPCB':'OLED PCB／四孔与缺口','DisplayHeader':'OLED 弯针接头预留',
         'Amp':'功放 PCB','AmpChip':'功放元件预留','MCU':'主控 PCB','MCUChip':'主控元件预留','DAC':'DAC PCB',
         'DACChip':'DAC 元件预留','Battery':'5600 mAh 平排电池',
+        'Perfboard':'洞洞板／右前缺口／左侧延伸',
+        'MCUSockets':'主控排母高度包络','DACSockets':'DAC 排母高度包络',
+        'BuckA':'DCE001 A／主控5Vin','BuckB':'DCE001 B／光驱及桥接器VBUS',
+        'XHButtons':'四键5芯侧插包络','XHOLED':'OLED 4芯直插包络','XHVolumeSwitch':'音量开关2芯直插包络',
+        'PerfboardScrew1':'M2×4／G₂-A','PerfboardScrew2':'M2×4／Q-N','PerfboardScrew3':'M2×4／A-P',
     }
     membership={n:part['number'] for key in ('exploded-shell','exploded-core')
                 for part in data['views'][key]['parts'] if part['number']!='08' for n in part['objects']}
@@ -366,25 +387,25 @@ def main():
         x=12+201*col
         text(x,257,'图号 · 对象 ID / 名称',10,TEAL)
         text(x+195,257,'X × Y × Z',10,TEAL,'right')
-        for i,(name,obj) in enumerate(items[col*17:(col+1)*17]):
-            y=250-i*6.6
+        for i,(name,obj) in enumerate(items[col*22:(col+1)*22]):
+            y=250-i*5.3
             if i%2==0:
-                c.setFillColor(HexColor('#f1f6f6'));c.rect(x*mm,(y-6.2)*mm,195*mm,6.6*mm,fill=1,stroke=0)
+                c.setFillColor(HexColor('#f1f6f6'));c.rect(x*mm,(y-5.0)*mm,195*mm,5.3*mm,fill=1,stroke=0)
             text(x+1,y-1.8,f'{membership[name]}  {name}',7)
-            text(x+1,y-4.8,labels[name],7,MUTED)
+            text(x+1,y-4.2,labels[name],6.3,MUTED)
             text(x+193,y-3.5,' × '.join(fmt(n) for n in obj['size']),7.5,INK,'right')
     text(12,127,'PLA 打印：3 主体 + 4 键帽 + 焊线支架 + 旋钮 + OLED 压框 + 光驱压条 = 11 件',11,TEAL)
-    printing=json.loads((ROOT/'volume-pcb-print-checks.json').read_text())
-    assert evidence_matches_geometry(printing,['FrontShell','RearShell','SpeakerCarrier']),'Main-body print geometry differs'
-    reused=printing['reused_slicing']
-    assert reused['source_model_sha256']==pcb_volume['baseline_sha256']
-    for name in ('RearShell','SpeakerCarrier'):
-        assert pcb_volume['unchanged_finished_parts_difference_mm3'][name]<.001
-        assert printing['parts'][name]['stl_sha256']==reused['unchanged_mesh_sha256'][name]
-    printing['plates']={**reused['plates'],**printing['plates']}
+    printing=json.loads((ROOT/'perfboard-print-checks.json').read_text())
+    assert printing['model_sha256']==data['sha256']
+    previous_print=json.loads((ROOT/'volume-pcb-print-checks.json').read_text())
+    assert evidence_matches_geometry(previous_print,['FrontShell'])
+    # Regenerated tessellation differs; reuse only the estimate for equivalent B-rep.
+    assert perfboard['unchanged_geometry_difference_mm3']['FrontShell']<.001
+    printing['plates']={'FrontShell':previous_print['plates']['FrontShell'],**printing['plates']}
+    assert all(p['exit_code']==0 for p in printing['plates'].values())
     keys=json.loads((ROOT/'dual-color-key-checks.json').read_text())
     assert evidence_matches_geometry(keys,['PlayPauseKey','EjectKey','PrevKey','NextKey']) and keys['slicing']['exit_code']==0
-    text(12,118,'用户设备 P2SC · 按 P2S 配置 / 256³ 空间 / 0.4 喷嘴 / 0.20 层高 / 3 壁 / 15% 填充 / 树状支撑',9)
+    text(12,118,'P2SC / P2S配置 · 0.4喷嘴 / 0.20层高 / 3壁 / 15%填充 / 树状支撑；P1沿用几何等价版估算，P2/P3新切片',8.5)
     for i,(name,label,pose) in enumerate([
         ('FrontShell','P1 前壳','正面朝下 / 板内转 90°'),('RearShell','P2 后壳','背面朝下'),
         ('SpeakerCarrier','P3 支架','声腔背面朝下')]):
@@ -392,7 +413,7 @@ def main():
         size=' × '.join(fmt(n) for n in part['size_xyz_mm'])
         text(14,106-i*9,f"{label}  ·  {pose}  ·  打印包络 {size} mm  ·  切片估重 {plate['filament_g']:.1f} g（含支撑）",9)
     notes(14,72,[
-        '拆卸：从后壁与后斜面深孔取出 4 螺钉，断开操控线，前壳向前退出。',
+        '前壳：断电卸4枚背锁螺钉，托住并前移60；按开关、OLED、四键次序拔线后移走，见第9页。',
         '光驱维护：拆 P3、两螺钉压条和电池；先前移 12，再前移 3 并抬高 9.5，进入接头拆卸位置。',
         'SATA 向下脱离、向内取出；光驱再前移 13，侧转 -30°并同步前移 20，最后抽出；安装逆序。',
         '光驱最大包络：抬升 31 姿态、侧转 61 姿态；前壳按 1 mm 抽样，其余直线段连续保守扫掠，实物未验收。',
@@ -449,7 +470,7 @@ def main():
     notes(274,122,[
         '深度从外斜面沿内法向量取。',
         '玻璃与前缘间隙0.2；PCB 孔周四点承压。',
-        '先卸前壳、断线；取下两螺钉和压框，',
+        '按第9页先拉开、拔线并卸前壳；取下压框，',
         '再沿内法向取出模组；两步均按0.5采样。',
     ],gap=7,size=8.5)
     notes(38,49,[
@@ -480,16 +501,83 @@ def main():
         ('轴总长 / 花轴长','15 / 10；轴径与螺纹沿用名义值'),
     ],split=66,height=10)
     table(218,120,190,[
-        ('完整包络至支架',f"{pcb_volume['module_clearances_mm']['SpeakerCarrier']:.3f}"),
-        ('至主控元件预留',f"{pcb_volume['module_clearances_mm']['MCUChip']:.3f}"),
-        ('至后壳',f"{pcb_volume['module_clearances_mm']['RearShell']:.3f}"),
-        ('至光驱',f"{pcb_volume['module_clearances_mm']['Drive']:.3f}"),
-        ('外部旋钮与轴心','保持；其余31个成品几何不变'),
+        ('完整包络至支架',f"{data['volume_module']['clearances_mm']['SpeakerCarrier']:.3f}"),
+        ('至主控元件预留',f"{data['volume_module']['clearances_mm']['MCUChip']:.3f}"),
+        ('至后壳',f"{data['volume_module']['clearances_mm']['RearShell']:.3f}"),
+        ('至光驱',f"{data['volume_module']['clearances_mm']['Drive']:.3f}"),
+        ('至洞洞板',f"{data['volume_module']['clearances_mm']['Perfboard']:.3f}；外部旋钮与轴心保持"),
     ],split=75,height=10)
     notes(14,48,[
-        '拆卸：先断线并向前取下整个前壳，再拆旋钮、螺母，沿轴退出模块；机内直接后拔约6 mm会碰支架。',
+        '拆卸：按第9页拉开60并断开前壳线束，取下整个前壳；再拆旋钮、螺母，沿轴退出模块。',
         '安装：先锁螺母，再按实物关断止挡对准指示条并压入旋钮；插拔线束时托住 PCB。',
-        '原主体、轴径、齿形、螺纹和 PCB 相对轴的高度仍为名义假设；远端走线、拔插行程与开关额定值待确认。',
+        '原主体、轴径、齿形、螺纹和 PCB 相对轴的高度仍为名义假设；模拟音量线束与开关额定值待确认。',
+    ],gap=8,size=9)
+    c.showPage()
+
+
+    page(8,'洞洞板板形、布局与固定','从保存 CAD 读取 · 顶视沿 -Z；上方为机身后方 +Y，右方为 +X','板形与布局 1.5:1')
+    text(105,258,'载板轮廓与三个固定孔',11,TEAL,'center')
+    p=view('perfboard-outline',24,165,1.5)
+    a0,a1=p(-43,75),p(57,75)
+    dh(a0[0],a1[0],a0[1],253,'100 基准板宽；左耳另加11')
+    lo,hi=p(-54,20),p(-54,75)
+    dv(lo[1],hi[1],lo[0],16,'55 基准深度')
+    for i,mount_info in enumerate(perfboard['mounts'],1):
+        x,y=p(*mount_info['center_xy_mm'])
+        badge(x+7,y+5,str(i));line(x,y,x+5,y+4,TEAL,.15)
+    text(305,258,'装配布局 · 接插件为插合包络',11,TEAL,'center')
+    q=view('perfboard-layout',226,165,1.5)
+    for obj,label in [('MCU','ESP32-S3'),('DAC','PCM5102'),('BuckA','A'),('BuckB','B'),
+                      ('XHButtons','5P'),('XHOLED','4P'),('XHVolumeSwitch','2P')]:
+        ob=data['objects'][obj]
+        x,y=q(*[(ob['min'][i]+ob['max'][i])/2 for i in (0,1)])
+        text(x,y-1,label,8,TEAL,'center',True)
+    table(12,150,190,[
+        ('载板底面 / 厚度','Z=142.8 / 1.6'),
+        ('右前避让缺口','X40.25…57，Y20…52；16.75×32'),
+        ('左侧延伸耳','X-54…-43，Y40.86…50.86；11×10'),
+        ('1 · G₂ / A','X=-27.28，Y=23.00'),
+        ('2 · Q / N','X=13.36，Y=56.02'),
+        ('3 · A / P','X=54.00，Y=61.10'),
+        ('固定孔与螺钉','板Ø2.2／托架导孔Ø1.6；3枚M2×4'),
+    ],split=53,height=10)
+    table(218,150,190,[
+        ('排母 / 模块PCB / 元件','8.5 / 1.6 / 7；顶部Z=161.5'),
+        ('双路 DCE001 A / B','本体各17.5×12；含支承高7.5'),
+        ('四键 5P','18×16×8；向机身左侧拔'),
+        ('OLED 4P','13.5×8×11；向上拔'),
+        ('开关 2P','8.5×8×11；向上拔'),
+        ('板至光驱 / B50K','1.200 / 1.250'),
+        ('板下走线至功放元件','1.200；板底走线深度预留2'),
+    ],split=64,height=10)
+    notes(14,68,[
+        '孔名为原板元件面丝印：X向右A至Z再A至P，图中第二段加(2)；Y向下A至Z再1至4。',
+        '布局水平转180°；原板毫米坐标换算 X=57-u、Y=20+v。三处支承留Ø5承压环，扩孔前核对铜皮与焊点。',
+        '5P候选孔：J₂ / B…F；4P：H₂…K₂ / J；2P：O₂…P₂ / J。不是原板切割模板。',
+        'XH类接插件按2.54孔位排布；实际针距、锁扣、脚位和插合尺寸须核对。DCE001绝缘固定、散热与短线待试装。',
+        '主控USB／COM插座留空；桥接数据与供电按接线文档连接。板上孔位与电气线序见 docs/perfboard-layout.md。',
+    ],gap=8,size=8.5)
+    c.showPage()
+
+    page(9,'前壳线束与 60 mm 维护位','当前 CAD 的隐藏线束预留 · 颜色用于区分回路；前壳只显示 Z≥140 的上部','顶视适配页面 NTS；位移按标注')
+    wire_colors=[('#2054D1','四键'),('#9933B8','OLED'),('#FF660A','音量开关')]
+    for i,(color,label) in enumerate(wire_colors):
+        x=126+i*64;c.setFillColor(HexColor(color));c.rect(x*mm,258*mm,3*mm,3*mm,fill=1,stroke=0)
+        text(x+5,258,label,9)
+    for left,name,title in [(12,'harness-closed','合壳位置 · U形回环'),(218,'harness-open','前壳沿 -Y 拉开60 · 托住前壳')]:
+        info=data['views'][name];w,h=info['bounds']['size'][:2]
+        scale=min(180/w,152/h)
+        x=left+(190-w*scale)/2;y=245-h*scale
+        view(name,x,y,scale)
+        text(left+95,250,title,10,TEAL,'center')
+    notes(14,82,[
+        '1  断电、卸4枚背锁螺钉；托住前壳向前平移60 mm，三组回环释放余量。',
+        '2  先向上拔音量开关2P并移开线，再向上拔OLED 4P，最后向机身左侧拔四键5P；开关余线经过OLED入口。',
+        '3  断开其余前壳线束后移走前壳。拆载板先断数据、供电及DAC音频，再卸3枚M2螺钉；也可随P3整体拆出。',
+        '中心线路径：四键120.9、OLED 114.8、音量开关200.7 mm。制线另加端子压接、实际出口及固定余量。',
+        '验证范围：0…60 mm每2 mm采样；按上述次序校核拔出包络及12×10 mm入口，不代表手指操作或弯曲应力验收。',
+        'B50K双声道模拟线束、最终电源线与端子短尾未完整建模；同样须留服务余量，并检查合壳压线与实物卡扣。',
+        '图中的圆柱／球形转角是占位包络，不表示实际线束弯曲半径；接口线序仍以接线文档和实物丝印为准。',
     ],gap=8,size=9)
     c.showPage()
 

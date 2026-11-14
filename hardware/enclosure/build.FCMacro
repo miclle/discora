@@ -1,6 +1,7 @@
 """Build the editable Discora V4 top-loading concept in FreeCAD. Units: mm."""
 import os
 import math
+import sys
 from pathlib import Path
 
 import FreeCAD as A
@@ -8,6 +9,9 @@ import FreeCADGui as G
 import Part
 import Sketcher
 from PySide import QtCore, QtWidgets
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import perfboard_geometry as perfboard
 
 V = A.Vector
 X, Y, Z = V(1, 0, 0), V(0, 1, 0), V(0, 0, 1)
@@ -30,7 +34,6 @@ REAR_THICKNESS = FRONT_THICKNESS
 INNER_HALF_WIDTH = WIDTH/2-REAR_THICKNESS
 LOWER_FASTENER_X = WIDTH/2-5.6
 LOWER_FASTENER_Z = 33.0
-DAC_X = -INNER_HALF_WIDTH+1
 # Keep the existing floor plane Z=6 and the 3 mm soft-foot height.
 BASE_Z = 1.0
 FEET_BOTTOM_Z = BASE_Z - 3.0
@@ -631,27 +634,39 @@ def build(folder):
     feature('DisplayCarrier','OLED 四孔定位座 · 孔距30.4×28.5／外侧压框螺柱',
             Part.makeCompound([left.Shape,right.Shape]),TEAL,supports)
 
-    # Amp stays horizontal; MCU sits in front of the raised drive.
-    # DAC stands on the left side. Only PCB sizes have documentary evidence.
+    # The integrated perfboard has its own seats above the unchanged amp shelf.
     lower=box(-51,5,120,102,54,2)
     feet=[box(x,yy,120.5,3,3,.5) for x in (-36,33) for yy in (5,57)]
     feature("AmpShelf","功放托板 · 支撑位置待测",
             lower.multiFuse(feet).removeSplitter(),TEAL,supports)
-    feature("ElectronicsSled","光驱上部前方主控托板",box(-34,32.5,147,68,29,1),TEAL,supports)
-    for key,label,x,y,z,w,d,h in [
-        ("Amp","TPA3118D2 · PCB 标称 66×53",-33,6,123,66,53,15),
-        ("MCU","ESP32-S3 N16R8 · PCB 63.39×27.94",-31.695,33.56,148.7,63.39,27.94,7)]:
-        block(key,label,(x,y,z),(w,d,1.6),PCB,hardware)
-        block(key+"Chip",label+" · 全板元件高度预留（未测）",(x,y,z+1.6),(w,d,h),
-              SILVER if key=="MCU" else RUBBER,hardware)
-        post_base=122 if key=="Amp" else 148
-        posts=[cylinder(1.5,z-post_base,(xx,yy,post_base),Z)
-               for xx in (x+2,x+w-2) for yy in (y+2,y+d-2)]
-        feature(key+"Pads",label+" · 支撑示意（非安装孔位）",Part.makeCompound(posts),TEAL,supports)
-    block("DAC","PCM5102 · 侧置 PCB 标称 31×17",(DAC_X,33,127),(1.6,17,31),PCB,hardware)
-    block("DACChip","PCM5102 · 元件高度 7 mm 预留",(DAC_X+1.6,33,127),(7,17,31),RUBBER,hardware)
-    posts=[cylinder(1.5,1,(-INNER_HALF_WIDTH,yy,zz),X) for yy in (35,48) for zz in (129,156)]
-    feature("DACPads","PCM5102 · 侧壁支撑示意（非安装孔位）",Part.makeCompound(posts),TEAL,supports)
+    block("Amp","TPA3118D2 · PCB 标称 66×53",(-33,6,123),(66,53,1.6),PCB,hardware)
+    block("AmpChip","功放元件高度 15 mm 预留",(-33,6,124.6),(66,53,15),SILVER,hardware)
+    posts=[cylinder(1.5,1,(xx,yy,122),Z) for xx in (-31,31) for yy in (8,57)]
+    feature("AmpPads","功放支撑示意（非安装孔位）",Part.makeCompound(posts),TEAL,supports)
+    board=feature("Perfboard","洞洞板 · 转 180°／右前缺口／左耳",perfboard.board_shape(),PCB,hardware)
+    board.addProperty("App::PropertyStringList","MountingHoles","Perfboard")
+    board.MountingHoles=[hole for _,_,_,hole in perfboard.MOUNTS]
+    board.addProperty("App::PropertyLength","BoardThickness","Perfboard")
+    board.BoardThickness=perfboard.BOARD_THICKNESS
+    module_labels={
+        "MCU":"ESP32-S3 N16R8 · PCB／USB 与 COM 插座留空",
+        "MCUChip":"ESP32-S3 元件高度预留",
+        "MCUSockets":"ESP32-S3 排母高度预留",
+        "DAC":"PCM5102 · PCB",
+        "DACChip":"PCM5102 元件高度预留",
+        "DACSockets":"PCM5102 排母高度预留",
+        "BuckA":"DCE001 A · 主控 5Vin",
+        "BuckB":"DCE001 B · 光驱／桥接器 VBUS",
+    }
+    module_shapes=perfboard.module_shapes()
+    for name,label in module_labels.items():
+        feature(name,label,module_shapes[name],PCB if name in ("MCU","DAC","BuckA","BuckB") else RUBBER,hardware)
+    for name,(plug,_,_) in perfboard.CONNECTORS.items():
+        label={"Buttons":"四键 5 芯侧插","OLED":"OLED 4 芯直插","VolumeSwitch":"音量开关 2 芯直插"}[name]
+        feature("XH"+name,"XH2.54 · "+label+"／插合包络",perfboard.box(*plug),WHITE,hardware)
+    for i,(x,y,length,_) in enumerate(perfboard.MOUNTS,1):
+        feature(f"PerfboardScrew{i}",f"洞洞板 M2×{length} 螺钉 {i} · 名义包络",
+                perfboard.screw_shape(x,y,length),SILVER,hardware)
     bx,by,_=BATTERY
     block("Battery","5600 mAh 平排电池包 · 商品标称 112×70×20",(-bx/2,6,8),BATTERY,BLUE,hardware)
     # A centered open-ended tray leaves 1 mm at each side of the pack.
@@ -710,9 +725,7 @@ def build(folder):
     core_tab_names=[source_part('CarrierTab'+str(i),shape) for i,shape in enumerate(core_tabs)]
     front_post_name=source_part('FrontFastenerPosts',Part.makeCompound(front_posts))
     rear_fastener_cuts=source_part('RearFastenerCuts',Part.makeCompound(access_wells+post_clearances))
-    column_shapes=[box(x,y,121.5,2,3,25.7) for x in (-51,49) for y in (37,55)]
-    column_shapes += [box(x,y,145,17,3,2.5) for x in (-51,34) for y in (37,55)]
-    column_names=[source_part('MCUColumn'+str(i),shape) for i,shape in enumerate(column_shapes)]
+    perfboard_sources=[source_part(name,shape) for name,shape in perfboard.carrier_sources().items()]
     oled_pilots.Placement=display_pose.multiply(oled_pilots.Placement)
     display_pilots=source_part('DisplayMountPilots',oled_pilots)
     oled_pocket.Placement=display_pose.multiply(oled_pocket.Placement)
@@ -749,12 +762,12 @@ def build(folder):
     front.ConstructionObjects=list(front.ConstructionObjects)+['DisplayCarrier']
     supports.removeObject(doc.DisplayCarrier);construction.addObject(doc.DisplayCarrier)
     visible.remove(doc.DisplayCarrier);doc.DisplayCarrier.Visibility=False
-    core=consolidate("SpeakerCarrier","P3 · 双声腔／前障板／功放桥接托板",
-                     ['LChamber','RChamber','LDriverFrame','RDriverFrame','FrontBaffle','AmpShelf','AmpPads',
-                      'ElectronicsSled','MCUPads']+core_tab_names+column_names,
+    core=consolidate("SpeakerCarrier","P3 · 双声腔／功放托板／洞洞板支架",
+                     ['LChamber','RChamber','LDriverFrame','RDriverFrame','FrontBaffle','AmpShelf','AmpPads']
+                     +core_tab_names+perfboard_sources,
                      [],TEAL,supports)
     rear=consolidate("RearShell","P2 · 一体后壳／左右导音孔及饰片",
-                     ['RearRoof','SlotGuide','LPanel','RPanel','Back','Base','BatteryCradle','DriveCarrier','DACPads','LPort','RPort'],rear_bosses,BLACK,shell)
+                     ['RearRoof','SlotGuide','LPanel','RPanel','Back','Base','BatteryCradle','DriveCarrier','LPort','RPort'],rear_bosses,BLACK,shell)
     rear.Shape=rear.Shape.cut(doc.getObject(rear_fastener_cuts).Shape).removeSplitter()
     # Strap slots are outside the 112 mm pack. Straps are removed before sliding the pack out.
     strap_slots=[box(x,y,BASE_Z-.5,3,8,20) for x in (-61,58) for y in (24,44)]
@@ -767,6 +780,29 @@ def build(folder):
     for obj in (front,rear,core):
         if len(obj.Shape.Solids)!=1:
             raise RuntimeError(f"{obj.Name}: expected one connected solid, got {len(obj.Shape.Solids)}")
+
+
+    cable_clearances=group("CableClearances","05 · 洞洞板线束和拔插预留")
+    volumes={
+        "PerfboardUnderWiring":perfboard.wiring_under_board(core.Shape),
+        **{name:module_shapes[name] for name in ("BuckAService","BuckBService","DACPowerConnector")},
+    }
+    for name,(_,lead,service) in perfboard.CONNECTORS.items():
+        volumes[name+"LeadBend"]=perfboard.box(*lead)
+        volumes[name+"Unplug"]=perfboard.box(*service)
+    for name in perfboard.HARNESS_ROUTES:
+        volumes[name+"HarnessClosed"]=perfboard.harness_shape(name)
+        volumes[name+"HarnessOpen"]=perfboard.harness_shape(name,perfboard.SERVICE_OPENING)
+    volumes.update({name:perfboard.fixed_wire_shape(name) for name in perfboard.FIXED_WIRE_ROUTES})
+    for name,shape in volumes.items():
+        item=raw(name,shape)
+        item.Label=name
+        if name.endswith(("HarnessClosed","HarnessOpen")):
+            item.Label=name.replace("HarnessClosed"," · 合壳线束").replace("HarnessOpen",f" · 前壳拉开 {perfboard.SERVICE_OPENING} mm")
+        cable_clearances.addObject(item)
+        item.ViewObject.ShapeColor=BLUE
+        item.ViewObject.Transparency=65
+        item.Visibility=False
 
 
     allowance=raw('SataPlugClearance',box(27.2,DRIVE_DATUM_Y-9.5,bottom-20.4,38.8,9.5,20.4))

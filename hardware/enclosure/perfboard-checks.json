@@ -1,0 +1,138 @@
+{
+  "model_sha256": "9ef433e8437eef3b3aa45558a329a66d8422e0c9014894b763a873c1162eee05",
+  "baseline_sha256": "42ffc95778377ab470bfe3daa6ca2fa57693b16db6c63bb1e4dbcf4d8d993e30",
+  "freecad_version": [
+    "1",
+    "1",
+    "4"
+  ],
+  "unchanged_geometry_difference_mm3": {
+    "FrontShell": 0.0,
+    "Window": 0.0,
+    "StatusArt": 0.0,
+    "PlayPauseKey": 0.0,
+    "EjectKey": 0.0,
+    "PrevKey": 0.0,
+    "NextKey": 0.0,
+    "ButtonRetainer": 0.0,
+    "DisplayRetainer": 0.0,
+    "Knob": 0.0,
+    "Encoder": 0.0,
+    "VolumePot": 0.0,
+    "DisplayPCB": 0.0,
+    "DisplayHeader": 0.0,
+    "PlayPauseSwitch": 0.0,
+    "EjectSwitch": 0.0,
+    "PrevSwitch": 0.0,
+    "NextSwitch": 0.0,
+    "Drive": 0.0,
+    "Bridge": 0.0,
+    "Battery": 0.0,
+    "Amp": 0.0,
+    "AmpChip": 0.0,
+    "LDriver": 0.0,
+    "RDriver": 0.0,
+    "LPort": 0.0,
+    "RPort": 0.0,
+    "LChamber": 0.0,
+    "RChamber": 0.0
+  },
+  "mounts": [
+    {
+      "hole": "G₂ / A",
+      "center_xy_mm": [
+        -27.28,
+        23.0
+      ],
+      "screw": "M2x4"
+    },
+    {
+      "hole": "Q / N",
+      "center_xy_mm": [
+        13.36,
+        56.02
+      ],
+      "screw": "M2x4"
+    },
+    {
+      "hole": "A / P",
+      "center_xy_mm": [
+        54.0,
+        61.1
+      ],
+      "screw": "M2x4"
+    }
+  ],
+  "clearances_mm": {
+    "board_to_drive": 1.2,
+    "underside_wiring_to_amp": 1.2,
+    "board_to_B50K": 1.25
+  },
+  "lead_reservation_clashes": {},
+  "front_cover_opening_mm": 60,
+  "front_cover_harness_samples_mm": [
+    0,
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20,
+    22,
+    24,
+    26,
+    28,
+    30,
+    32,
+    34,
+    36,
+    38,
+    40,
+    42,
+    44,
+    46,
+    48,
+    50,
+    52,
+    54,
+    56,
+    58,
+    60
+  ],
+  "harness_path_clashes": [],
+  "harness_centerline_mm": {
+    "Buttons": 120.9,
+    "OLED": 114.8,
+    "VolumeSwitch": 200.7
+  },
+  "unplug_order": [
+    "VolumeSwitch",
+    "OLED",
+    "Buttons"
+  ],
+  "unplug_access": {
+    "VolumeSwitch": {
+      "unplug_clashes": {},
+      "12x10_mm_grip_corridor_clashes": {}
+    },
+    "OLED": {
+      "unplug_clashes": {},
+      "12x10_mm_grip_corridor_clashes": {}
+    },
+    "Buttons": {
+      "unplug_clashes": {},
+      "12x10_mm_grip_corridor_clashes": {}
+    }
+  },
+  "physical_fit_verified": false,
+  "limits": [
+    "Nominal XH-style mated envelopes. Actual plug bodies, pitch, wire bundle and bend compliance require physical verification.",
+    "The forward path assumes all four rear screws are removed and the front cover is supported during service.",
+    "Flexible routes sampled at 2 mm; hand access is a 12x10 mm solid corridor, not an ergonomic or pinch test.",
+    "Terminal stubs, the B50K stereo harness, and final power harness beyond local envelopes are not included."
+  ]
+}

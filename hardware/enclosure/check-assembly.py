@@ -30,8 +30,15 @@ def check(doc):
         lo[axis]+=min(distance,0);hi[axis]+=max(distance,0)
         return Part.makeBox(*[h-l for l,h in zip(lo,hi)],V(*lo))
     report={'units':'mm','fasteners_and_straps_removed':True,'cables_disconnected':True,'physical_assembly_test':False,'paths':{}}
-    core_hw=['LDriver','RDriver','Amp','AmpChip','MCU','MCUChip']
+    core_hw=['LDriver','RDriver','Amp','AmpChip','MCU','MCUChip','DAC','DACChip']
+    if doc.getObject('Perfboard'):
+        core_hw.extend(['Perfboard','MCUSockets','DACSockets','BuckA','BuckB','XHButtons','XHOLED',
+                        'XHVolumeSwitch','PerfboardScrew1','PerfboardScrew2','PerfboardScrew3'])
+    else:
+        core_hw.remove('DAC')
+        core_hw.remove('DACChip')
     core_sources=list(doc.SpeakerCarrier.ConstructionObjects)+core_hw
+    stationary_dac=[n for n in ("DAC","DACChip") if n not in core_hw]
     fixed=[n for n in objects if n not in core_hw+['SpeakerCarrier','FrontShell','Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch','Knob','Encoder','VolumePot','DisplayPCB','DisplayHeader','DisplayRetainer']]
     hits=[]
     for name in core_sources:
@@ -42,7 +49,7 @@ def check(doc):
         'prerequisites':['Front cover removed and its cables disconnected','Four carrier screws removed'],
         'clashes':hits}
     print('PATH speaker_carrier_front',hits,flush=True)
-    fixed=[n for n in objects if n in ('RearShell','Battery','DAC','DACChip','Drive','Bridge','Feet')]
+    fixed=[n for n in objects if n in ['RearShell','Battery','Drive','Bridge','Feet']+stationary_dac]
     hits=[]
     for x,width in [(-68,4),(-64,128),(64,4)]:
         piece=doc.DriveRetainer.Shape.common(Part.makeBox(width,200,300,V(x,-10,0)))
@@ -53,7 +60,7 @@ def check(doc):
     print('PATH drive_retainer_front',hits,flush=True)
     # Remove the battery before moving the drive/adapter into the rear service
     # channel. The last 20 mm of both cradle side rails are open for this path.
-    fixed=['RearShell','DAC','DACChip','Feet']
+    fixed=['RearShell','Feet']+stationary_dac
     db=doc.Drive.Shape.BoundBox
     # Do not depend on the approximate notch or underside recess during service.
     drive=Part.makeBox(db.XLength,db.YLength,db.ZLength,V(db.XMin,db.YMin,db.ZMin))
@@ -109,7 +116,7 @@ def check(doc):
         'final_translation_xyz_mm':[0,-140,0],'moving':['Drive'],'fixed':fixed,
         'prerequisites':['Drive at service position','SATA adapter removed','Speaker carrier, battery and drive retainer removed'], 'clashes':hits}
     print('PATH drive_front',hits,flush=True)
-    fixed=['RearShell','SpeakerCarrier','LDriver','RDriver','Drive','Bridge','DAC','DACChip','Feet']
+    fixed=['RearShell','SpeakerCarrier','LDriver','RDriver','Drive','Bridge','Feet']+stationary_dac
     hits=collisions(box_sweep(doc.Battery.Shape,1,-150),fixed)
     report['paths']['battery_front']={'method':'continuous conservative bounding-box sweep',
         'translation_xyz_mm':[0,-150,0],'moving':['Battery'],'fixed':fixed,
