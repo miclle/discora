@@ -26,8 +26,8 @@ Thumbs.db
 *.swo
 *.bak
 
-# Host-side bench tooling bytecode
-/firmware/**/__pycache__/
+# Python bytecode cache directories
+__pycache__/
 
 # FreeCAD automatic backups; keep the primary .FCStd models
 /hardware/**/*.FCStd[0-9]*
