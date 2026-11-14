@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256 = 'fb24c86b81e000e9f2db58d3b2802ead2c5aad04e26171616b4c4fc6266ced1e'
+MODEL_SHA256 = '42ffc95778377ab470bfe3daa6ca2fa57693b16db6c63bb1e4dbcf4d8d993e30'
 
 
 def palette_from_build():
@@ -154,7 +154,12 @@ def main():
     bottom=json.loads((ROOT/'bottom-corner-checks.json').read_text())
     rear=json.loads((ROOT/'rear-thickness-checks.json').read_text())
     mount=json.loads((ROOT/'drive-mount-checks.json').read_text())
-    assert mount['model_sha256']==MODEL_SHA256 and mount['all_pass']
+    pcb_volume=json.loads((ROOT/'volume-pcb-checks.json').read_text())
+    assert pcb_volume['model_sha256']==MODEL_SHA256 and pcb_volume['all_pass']
+    assert all(pcb_volume['unchanged_finished_parts_difference_mm3'][n]<.001
+               for n in ('PlayPauseKey','EjectKey','PrevKey','NextKey','Knob'))
+    assert all(pcb_volume['key_face_order_preserved'].values())
+    assert mount['model_sha256']==pcb_volume['baseline_sha256'] and mount['all_pass']
     assert all(mount['key_and_knob_face_order_preserved'].values())
     assert rear['model_sha256']==mount['baseline_sha256'] and rear['all_pass']
     assert all(rear['key_and_knob_face_order_preserved'].values())
@@ -189,7 +194,7 @@ def main():
         print('SURFACES',name,len(meshes[name]),flush=True)
     outputs={}
     for name,view in data['views'].items():
-        if name=='control-cutouts' or name.startswith('oled-'):continue  # Unfilled dimensional details.
+        if name=='control-cutouts' or name.startswith(('oled-','volume-')):continue  # Unfilled dimensional details.
         parts=[]
         if 'parts' in view:
             parts=[(n,p['offset_mm']) for p in view['parts'] for n in p['objects']]
@@ -202,7 +207,10 @@ def main():
                 shape=doc.getObject(obj).Shape.common(Part.makeBox(174,400,500,A.Vector(-200,-100,-100)))
                 if shape.isNull() or not shape.Faces:continue
                 mesh=surface_polygons(shape)
-            if obj in white_marks and name!='section':
+            if obj=='VolumePot' and name!='section':
+                for solid,key in zip(doc.VolumePot.Shape.Solids,('RUBBER','PCB','WHITE','SILVER')):
+                    render_parts.append((surface_polygons(solid),palette[key],np.array(offset)))
+            elif obj in white_marks and name!='section':
                 shape=doc.getObject(obj).Shape
                 indices=set(white_marks[obj])
                 # Render the white PLA regions recorded in the saved GUI model.

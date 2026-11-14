@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="35.000000000000014mm" height="26.200000000000006mm" viewBox="-17.500000000000007 -29.800000000000008 35.000000000000014 26.200000000000006">
+<g   fill="none"
+   stroke="rgb(0, 0, 0)"
+   stroke-linecap="butt"
+   stroke-linejoin="miter"
+   stroke-width="0.18"
+   transform="scale(1, -1)"
+  >
+<path id= "1" d=" M -4.75 3.6 L -4.75 18.1 " />
+<path id= "2" d=" M 4.75 3.6 L 4.75 18.1 " />
+<path id= "3" d=" M -4.75 3.6 L 4.75 3.6 " />
+<path id= "4" d=" M -4.75 18.1 L 4.75 18.1 " />
+<path id= "5" d=" M -17.5 3.6 L -17.5 18.1 " />
+<path id= "6" d=" M 17.5 3.6 L 17.5 18.1 " />
+<path id= "7" d=" M -17.5 3.6 L -4.75 3.6 " />
+<path id= "8" d=" M 4.75 3.6 L 17.5 3.6 " />
+<path id= "9" d=" M -17.5 18.1 L -17.5 29.8 " />
+<path id= "10" d=" M 17.5 18.1 L 17.5 29.8 " />
+<path id= "11" d=" M -17.5 18.1 L 17.5 18.1 " />
+<path id= "12" d=" M -17.5 29.8 L 17.5 29.8 " />
+</g>
+</svg>
