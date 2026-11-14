@@ -1,7 +1,7 @@
 {
-  "sha256": "80eede1e85eafe8aca6ba6702cb2e169b6f7b4d1c368eeca10f1e6647bacebe0",
-  "build_sha256": "a963b85868b346abde06ef2da9997c8634625cd3eb8d03a5d1cd88e06cdfe44f",
-  "geometry_sha256": "c55570408bb3bfc199608000b39ed29f4732d8e3e69539744f888b22b7e43aff",
+  "sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003",
+  "build_sha256": "aec5b32cd95ca76c90441e76614f5b8dfbfab94f6ef6e9565c4fca89aa535505",
+  "geometry_sha256": "66d915c0b2a292a0793af1b60a880d36c8826cc8d0c4a510b5413563bfb9b3fb",
   "palette": {
     "ORANGE": [
       1.0,
@@ -371,12 +371,12 @@
       22
     ],
     "Knob": [
-      96,
-      97,
-      98,
-      99,
-      100,
-      101
+      104,
+      105,
+      106,
+      107,
+      108,
+      109
     ]
   },
   "tessellation_deflection_mm": 0.05,
@@ -456,8 +456,8 @@
     "exploded-core": {
       "file": "exploded-core-color.png",
       "size_px": [
-        4685,
-        5985
+        4726,
+        5997
       ]
     },
     "port-assembly": {

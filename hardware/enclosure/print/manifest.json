@@ -1,7 +1,7 @@
 {
   "model": "../Discora.FCStd",
-  "model_sha256": "80eede1e85eafe8aca6ba6702cb2e169b6f7b4d1c368eeca10f1e6647bacebe0",
-  "release": "ADR-0046",
+  "model_sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003",
+  "release": "ADR-0047",
   "slicer_version": "02.09.01.70",
   "profile_names": {
     "machine": "Bambu Lab P2S 0.4 nozzle",
@@ -29,7 +29,7 @@
         0.5,
         0.5000000000000001
       ],
-      "stl_sha256": "fc91dce8378e7b331fffbdc9f23902253e180e6626a31a49afbabccb164431f4"
+      "stl_sha256": "5a6018bde20a2aad0772668a2e2e8226d9779d79251b804301b198c688612232"
     },
     "RearShell": {
       "file": "RearShell.stl",
@@ -218,13 +218,13 @@
     "Knob": {
       "file": "Knob.stl",
       "size_xyz_mm": [
-        24.0,
-        24.00000000000003,
-        13.900000000000063
+        28.0,
+        28.0,
+        13.900000000000071
       ],
       "linear_deflection_mm": 0.1,
       "angular_deflection_rad": 0.35,
-      "facets": 4848,
+      "facets": 4316,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -233,7 +233,7 @@
         0.0,
         0.952675287877846
       ],
-      "stl_sha256": "6750cd2af285391a69026b12eae9556573489a25ba872e50767789bdb4e3d221",
+      "stl_sha256": "af785841449d19e7fae3f683efd6e23b1b75e9af0cea938867868281e449725d",
       "color_print_source": "export-dual-color-knob.py; STL is a single-material envelope"
     }
   },
@@ -243,10 +243,10 @@
       "parts": [
         "FrontShell"
       ],
-      "project_sha256": "5b11d9fa195d5776c6a93442070ec580c88a15b912fd3c9984570850d886047a",
-      "gcode_sha256": "dfaae2315034f417bf1187c28a6b3a27ec8b95ffc1e78dcecac702b5f3fbc71d",
+      "project_sha256": "2a5c8b8eb135d8e3479fb26f1cde3b817a1752af5bccf86e7f43841d721fb98b",
+      "gcode_sha256": "82c5dc7fa8b7ca829472c4cee6d0c32c76f585b93a9eeacf3f1ebefc55046316",
       "layers": 245,
-      "total_estimated_time": "14h 6m 53s",
+      "total_estimated_time": "14h 7m 9s",
       "filament_g": 156.65,
       "filament_g_by_material": [
         156.65
@@ -293,7 +293,8 @@
       "filament_colours": [
         "#00AE42"
       ],
-      "reused_audited_slice": true
+      "reused_audited_slice": true,
+      "reused_from_model_sha256": "80eede1e85eafe8aca6ba6702cb2e169b6f7b4d1c368eeca10f1e6647bacebe0"
     },
     "SpeakerCarrier": {
       "file": "Discora-P3-SpeakerCarrier.3mf",
@@ -322,7 +323,8 @@
       "filament_colours": [
         "#00AE42"
       ],
-      "reused_audited_slice": true
+      "reused_audited_slice": true,
+      "reused_from_model_sha256": "80eede1e85eafe8aca6ba6702cb2e169b6f7b4d1c368eeca10f1e6647bacebe0"
     },
     "SmallParts": {
       "file": "Discora-Retainers.3mf",
@@ -352,7 +354,8 @@
       "first_layer_height_mm": 0.2,
       "filament_colours": [
         "#00AE42"
-      ]
+      ],
+      "reused_from_model_sha256": "80eede1e85eafe8aca6ba6702cb2e169b6f7b4d1c368eeca10f1e6647bacebe0"
     },
     "Keys": {
       "file": "Discora-Keys-Orange-White.3mf",
@@ -655,20 +658,21 @@
             ]
           }
         }
-      }
+      },
+      "reused_from_model_sha256": "80eede1e85eafe8aca6ba6702cb2e169b6f7b4d1c368eeca10f1e6647bacebe0"
     },
     "Knob": {
       "file": "Discora-Knob-Black-White.3mf",
       "parts": [
         "Knob"
       ],
-      "project_sha256": "4ed1aa8cf02d94c318af2c6f77bb6dcfcf172fdbb7c1e1ebdc572398affd61d6",
-      "gcode_sha256": "657f7753225d074bdfe0d75e97103c815edaf34fdebde8adfb2c545b936dec73",
+      "project_sha256": "4bd33a8d3822c27018d22b2556faac42867f3ff0f3510ca7b5f55814a0fd956e",
+      "gcode_sha256": "fad2d852b714347ce8548736dad2150b015ea0b303a7cc44f17407fa5dfc5ee0",
       "layers": 116,
-      "total_estimated_time": "48m 44s",
-      "filament_g": 9.5,
+      "total_estimated_time": "49m 28s",
+      "filament_g": 9.82,
       "filament_g_by_material": [
-        6.58,
+        6.9,
         2.92
       ],
       "exit_code": 0,
@@ -691,12 +695,12 @@
           "extrusion_moves": 5,
           "xy_bounds_mm": [
             [
-              131.281,
-              132.41
+              133.759,
+              135.437
             ],
             [
-              119.859,
-              121.641
+              122.45,
+              123.812
             ]
           ]
         },
@@ -704,12 +708,12 @@
           "extrusion_moves": 5,
           "xy_bounds_mm": [
             [
-              131.281,
-              132.41
+              133.758,
+              135.437
             ],
             [
-              119.859,
-              121.641
+              122.45,
+              123.812
             ]
           ]
         },
@@ -717,12 +721,12 @@
           "extrusion_moves": 5,
           "xy_bounds_mm": [
             [
-              131.281,
-              132.41
+              133.758,
+              135.437
             ],
             [
-              119.859,
-              121.641
+              122.45,
+              123.812
             ]
           ]
         },
@@ -730,12 +734,12 @@
           "extrusion_moves": 5,
           "xy_bounds_mm": [
             [
-              131.281,
-              132.41
+              133.759,
+              135.437
             ],
             [
-              119.859,
-              121.641
+              122.45,
+              123.812
             ]
           ]
         },
@@ -743,25 +747,26 @@
           "extrusion_moves": 5,
           "xy_bounds_mm": [
             [
-              131.281,
-              132.41
+              133.758,
+              135.437
             ],
             [
-              119.859,
-              121.641
+              122.45,
+              123.812
             ]
           ]
         }
       }
     }
   },
-  "total_filament_g": 648.14,
+  "total_filament_g": 648.46,
   "evidence": {
     "p2": "../p2-trapezoid-outlet-checks.json",
     "p3": "../p3-terminal-mouth-checks.json",
     "assembly": "../assembly-paths.json",
     "static": "../validation.json",
-    "perfboard": "../current-perfboard-checks.json"
+    "perfboard": "../current-perfboard-checks.json",
+    "controls": "../control-layout-checks.json"
   },
   "all_pass": true,
   "printer_contacted": false,

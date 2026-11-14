@@ -1,6 +1,6 @@
 # Discora V4 · 三主体 PLA 外壳
 
-当前正式配套版本为 **ADR-0046 P3 短渐扩口 + ADR-0045 P2 圆角梯形开放侧口**。三主体、声道连通、左右镜像、装配路径和切片已检查；完整件的打印、支撑清理、装配、强度、温升、密封及声学仍待实测。P3 喇叭安装座试片已打印并确认装配无问题。
+当前操控布局采用 [ADR-0047](../../docs/decisions/0047-control-spacing-and-knob.md)，四键左移4 mm、旋钮右移4 mm并向提手移2 mm，十字增至28 mm。主体配套版本为 **ADR-0046 P3 短渐扩口 + ADR-0045 P2 圆角梯形开放侧口**。三主体、声道连通、左右镜像、装配路径和切片已检查；完整件的打印、支撑清理、装配、强度、温升、密封及声学仍待实测。P3 喇叭安装座试片已打印并确认装配无问题。
 
 - [正式打印套件：11 件 STL、6 盘 3MF](print/README.md)
 - [唯一彩色尺寸与装配图册：12 页 A3](drawings/Discora-V4-drawing-book-color.pdf)
@@ -59,7 +59,7 @@ P2 四处 P3 固定座保留 8×8×4 mm 三角筋，后斜面两处背锁座保�
 
 ## 验证与重现
 
-当前 CAD SHA-256：`80eede1e85eafe8aca6ba6702cb2e169b6f7b4d1c368eeca10f1e6647bacebe0`。
+当前 CAD SHA-256：`2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003`。
 
 - [正式打印包检查](print-release-checks.json)：11 个闭合网格、六盘 1180 层、材料与支撑参数、文件摘要、零网格修复。
 - [整机检查](validation.json)：44 个成品对象、有效实体、已定义干涉及左右对称检查。
@@ -68,6 +68,6 @@ P2 四处 P3 固定座保留 8×8×4 mm 三角筋，后斜面两处背锁座保�
 - [P3 声道及末端](p3-terminal-mouth-checks.json)：有效连通气路、独立声腔、完整出口投影、座面保持和原 18 处悬空复核。
 - [P2 开放侧口](p2-trapezoid-outlet-checks.json)：侧口收口支撑审核；通过 P3 报告的 P2 零差集衔接至当前版本。
 
-历次 ADR 与检查报告保留设计取舍和对应版本的证据，不作为当前打印文件入口。图册以当前保存实体重新投影，并以 [drawing-baseline-checks.json](drawing-baseline-checks.json) 证明 42 个其它成品不变及双色面序保持。
+历次 ADR 与检查报告保留设计取舍和对应版本的证据，不作为当前打印文件入口。图册以当前保存实体重新投影，通过 [操控布局检查](control-layout-checks.json) 衔接历史图册证据；旋钮的材料面序由当前双色导出检查记录。
 
 整机生成入口为 [build.FCMacro](build.FCMacro)，保存模型后用 [validate.FCMacro](validate.FCMacro) 及相关检查脚本验证。导出、切片命令见[打印说明](../../docs/enclosure-printing.md#重现)，出图命令见[图纸说明](../../docs/enclosure-drawings.md#更新图册)。日常复查输出到 `tmp/`，不要覆盖含调整前基线的历史报告。所有切片脚本仅在本机运行，不连接打印机。

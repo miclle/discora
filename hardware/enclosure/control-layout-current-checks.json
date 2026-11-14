@@ -1,0 +1,13 @@
+{
+  "model_sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003",
+  "cross_span_mm": [
+    28.0,
+    28.0
+  ],
+  "continuous_rotation_clashes": {},
+  "front_edge_gap_mm": 1.115702279031554,
+  "build_knob_difference_mm3": 0.0,
+  "closed_knob_mesh": true,
+  "all_pass": true,
+  "physical_fit_verified": false
+}

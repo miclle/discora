@@ -1,18 +1,18 @@
 {
-  "model_sha256": "03003ef9826f330a439a5d65ae9a22fef7aab73ffc10c6200de9ec1f7a7e5a65",
-  "build_sha256": "d8f8a1ba02681b8508df661601cfb4d7f64306586d7377cd402892c88c975e50",
+  "model_sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003",
+  "build_sha256": "bf6c9541143ad11e4882f77ba1afb5a7504df05ffff47ead794623fc562146cf",
   "white_mark_size_mm": [
     0.7,
     2.2,
     0.6
   ],
   "white_faces_zero_based": [
-    96,
-    97,
-    98,
-    99,
-    100,
-    101
+    104,
+    105,
+    106,
+    107,
+    108,
+    109
   ],
   "saved_gui_material_array_verified": true,
   "gui_reopen_verified": false,
@@ -30,8 +30,8 @@
       "name": "Knob_Black",
       "material": 1,
       "closed_mesh": true,
-      "facets": 21124,
-      "volume_mm3": 3286.38568599766
+      "facets": 16104,
+      "volume_mm3": 3920.0144684603833
     },
     {
       "name": "Knob_WhiteIndex",
@@ -41,43 +41,8 @@
       "volume_mm3": 0.9240000000000006
     }
   ],
-  "previous_model_sha256": "6eb82d8a43668dcf0f2d6537d5367b618900118fa0fe19d1f1e4de42e78b39fc",
-  "unchanged_finished_shape_brep": {
-    "FrontShell": true,
-    "RearShell": true,
-    "Feet": true,
-    "Window": true,
-    "StatusArt": true,
-    "PlayPauseKey": true,
-    "EjectKey": true,
-    "PrevKey": true,
-    "NextKey": true,
-    "ButtonRetainer": true,
-    "DisplayRetainer": true,
-    "SpeakerCarrier": true,
-    "LDriver": true,
-    "RDriver": true,
-    "PlayPauseSwitch": true,
-    "EjectSwitch": true,
-    "PrevSwitch": true,
-    "NextSwitch": true,
-    "Encoder": true,
-    "VolumePot": true,
-    "Drive": true,
-    "Bridge": true,
-    "DisplayPCB": true,
-    "DisplayHeader": true,
-    "Amp": true,
-    "AmpChip": true,
-    "MCU": true,
-    "MCUChip": true,
-    "DAC": true,
-    "DACChip": true,
-    "Battery": true
-  },
-  "change_outside_marker_mm3": 0.0,
   "file": "Discora-knob-black-white.3mf",
-  "file_sha256": "a3fc79eb3dc7199c01381ecd94f5840487ee44fd486bb0516ba19db2b070deb0",
+  "file_sha256": "c46d6ec3dab019fbd573242e43818c406b24ea858418df32b5846067a1100cca",
   "all_pass": true,
   "slicing": {
     "exit_code": 0,
@@ -85,9 +50,9 @@
     "layer_height_mm": 0.12,
     "first_layer_height_mm": 0.12,
     "layers": 116,
-    "estimated_time": "48m 42s",
+    "estimated_time": "49m 28s",
     "filament_g_including_purge": [
-      6.58,
+      6.9,
       2.92
     ],
     "white_toolpaths_by_height": {
@@ -95,12 +60,12 @@
         "extrusion_moves": 5,
         "xy_bounds_mm": [
           [
-            131.253,
-            132.41
+            133.759,
+            135.437
           ],
           [
-            119.859,
-            121.641
+            122.45,
+            123.812
           ]
         ]
       },
@@ -108,12 +73,12 @@
         "extrusion_moves": 5,
         "xy_bounds_mm": [
           [
-            131.253,
-            132.41
+            133.758,
+            135.437
           ],
           [
-            119.859,
-            121.641
+            122.45,
+            123.812
           ]
         ]
       },
@@ -121,12 +86,12 @@
         "extrusion_moves": 5,
         "xy_bounds_mm": [
           [
-            131.253,
-            132.41
+            133.758,
+            135.437
           ],
           [
-            119.859,
-            121.641
+            122.45,
+            123.812
           ]
         ]
       },
@@ -134,12 +99,12 @@
         "extrusion_moves": 5,
         "xy_bounds_mm": [
           [
-            131.253,
-            132.41
+            133.759,
+            135.437
           ],
           [
-            119.859,
-            121.641
+            122.45,
+            123.812
           ]
         ]
       },
@@ -147,17 +112,17 @@
         "extrusion_moves": 5,
         "xy_bounds_mm": [
           [
-            131.253,
-            132.41
+            133.758,
+            135.437
           ],
           [
-            119.859,
-            121.641
+            122.45,
+            123.812
           ]
         ]
       }
     },
-    "gcode_sha256": "6059060b9e8738092e9baf9bf5f8f5839e9d924013153e9e20c0ddf4cb48b576",
+    "gcode_sha256": "fad2d852b714347ce8548736dad2150b015ea0b303a7cc44f17407fa5dfc5ee0",
     "vendor_T65535_parser_notice": true,
     "printer_contacted": false,
     "physical_print_test": false,
@@ -191,7 +156,7 @@
   },
   "bambu_project": {
     "file": "Discora-knob-bambu.3mf",
-    "sha256": "81ae095919ef7021a1ded67ccaa0d9991999450712c9fb3961db66a0def79be0",
+    "sha256": "9feea9bcab63f8fccfc5c9777161eedc76515e4a9a4bbbdb8a21704816c1c6e4",
     "object_count": 1,
     "volumes_per_object": 2,
     "material_assignment_verified": true,

@@ -25,7 +25,7 @@ def main():
     slope=(edge.EndPoint.y-edge.StartPoint.y)/(edge.EndPoint.x-edge.StartPoint.x)
     outward=V(0,-slope,1);outward.normalize()
     objects=[o for g in ('Shell','Controls','Carrier','Hardware') for o in doc.getObject(g).Group]
-    specs=[('PlayPause',-59,9),('Eject',-41,9),('Prev',-59,26),('Next',-41,26)]
+    specs=[('PlayPause',-63,9),('Eject',-45,9),('Prev',-63,26),('Next',-45,26)]
     report=dict(model_sha256=hashlib.sha256(args.model.read_bytes()).hexdigest(),
                 user_dimensions_mm=dict(width=12,length=12,total_height=6,actuator_height=2.8,body_height=3.2,pin_length=3.7),
                 head_diameter_measured=False,pin_footprint_verified=False,actual_stroke_verified=False,
@@ -92,12 +92,9 @@ def main():
                 if band.BoundBox.intersect(o.Shape.BoundBox):
                     overlap=band.common(o.Shape).Volume
                     if overlap>.001:hits.append(dict(object=o.Name,volume_mm3=overlap))
-            # Preserve the existing 10 mm DAC output connector reservation.
-            dac=doc.DAC.Shape.BoundBox; chip=doc.DACChip.Shape.BoundBox
-            connector=Part.makeBox(chip.XMax-dac.XMin,dac.YLength,10,
-                                   V(dac.XMin,dac.YMin,dac.ZMax))
-            overlap=band.common(connector).Volume
-            if overlap>.001:hits.append(dict(object='DAC output connector allowance',volume_mm3=overlap))
+            # Use the current audio harness after the DAC moved to the perfboard.
+            overlap=band.common(doc.DACAudioWire.Shape).Volume
+            if overlap>.001:hits.append(dict(object='DAC audio wire envelope',volume_mm3=overlap))
             assert not hits,(key,sign,hits)
             wire_checks.append(dict(button=key,terminal_side=sign,local_x_mm=[-6.2,6.2],
                 local_z_mm=[z,z+4],depth_mm=[12.3,17.7],clashes=hits))

@@ -1,5 +1,5 @@
 {
-  "model_sha256": "80eede1e85eafe8aca6ba6702cb2e169b6f7b4d1c368eeca10f1e6647bacebe0",
+  "model_sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003",
   "baseline_sha256": null,
   "freecad_version": [
     "1",
@@ -36,7 +36,7 @@
   "clearances_mm": {
     "board_to_drive": 1.2,
     "underside_wiring_to_amp": 1.2,
-    "board_to_B50K": 1.25
+    "board_to_B50K": 5.264
   },
   "lead_reservation_clashes": {},
   "front_cover_opening_mm": 60,
@@ -75,9 +75,9 @@
   ],
   "harness_path_clashes": [],
   "harness_centerline_mm": {
-    "Buttons": 120.9,
+    "Buttons": 122.0,
     "OLED": 114.8,
-    "VolumeSwitch": 200.7
+    "VolumeSwitch": 205.7
   },
   "unplug_order": [
     "VolumeSwitch",
