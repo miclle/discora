@@ -1,7 +1,7 @@
 {
-  "sha256": "18465e0f33991e9cc823121332007fdb2d9f2d6cb1137f592e641f953dd327bc",
-  "build_sha256": "8a84fa1a77952a6750f6db2fbab70843d1032475b2cbf789950d14cd0fcaf94d",
-  "geometry_sha256": "2c1c562c54b6136059829ec752d588b205e1a8f67ee4c20c81cd7f7360ebb1a9",
+  "sha256": "d9b9109b30a28f0ca4953c45178e5b827769192c2d49d4ab56ace42414adc6db",
+  "build_sha256": "33e832cee6fe45ed625a5308471c7086bcb6ba1ce00c8bd8c133667fc975580a",
+  "geometry_sha256": "e86930646cd7189c222cd4b93c795bd2a2653e71057da01f576714829a46025a",
   "palette": {
     "ORANGE": [
       1.0,
@@ -409,6 +409,13 @@
       "size_px": [
         2041,
         2920
+      ]
+    },
+    "p2-interior": {
+      "file": "p2-interior-color.png",
+      "size_px": [
+        2041,
+        2313
       ]
     },
     "section": {

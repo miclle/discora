@@ -18,12 +18,12 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = '18465e0f33991e9cc823121332007fdb2d9f2d6cb1137f592e641f953dd327bc'
+ANNOTATED_MODEL_SHA256 = 'd9b9109b30a28f0ca4953c45178e5b827769192c2d49d4ab56ace42414adc6db'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
 LIGHT = HexColor('#d5e1e4')
-TOTAL_PAGES = 9
+TOTAL_PAGES = 11
 
 
 def main():
@@ -48,7 +48,13 @@ def main():
     pcb_volume=json.loads((ROOT/'volume-pcb-checks.json').read_text())
     perfboard=json.loads((ROOT/'perfboard-checks.json').read_text())
     speaker=json.loads((ROOT/'speaker-scope-checks.json').read_text())
-    assert speaker['model_sha256']==data['sha256'] and speaker['baseline_sha256']==perfboard['model_sha256']
+    rib_check=json.loads((ROOT/'p3-seat-rib-checks.json').read_text())
+    backlock=json.loads((ROOT/'backlock-rib-checks.json').read_text())
+    fasteners=json.loads((ROOT/'fastener-checks.json').read_text())
+    assert backlock['model_sha256']==fasteners['model_sha256']==data['sha256']
+    assert backlock['baseline_sha256']==rib_check['model_sha256']
+    assert rib_check['baseline_sha256']==speaker['model_sha256']
+    assert speaker['baseline_sha256']==perfboard['model_sha256']
     assert speaker['upper_p3_geometry_unchanged']
     assert not perfboard['harness_path_clashes'] and not perfboard['lead_reservation_clashes']
     assert perfboard['front_cover_opening_mm']==60
@@ -69,6 +75,10 @@ def main():
     assert integration['model_sha256']==handle['baseline_sha256']
     def evidence_matches_geometry(report,owners):
         if report['model_sha256']==data['sha256']:return True
+        if any(n not in backlock['unchanged_finished_objects'] for n in owners):return False
+        if report['model_sha256']==backlock['baseline_sha256']:return True
+        if any(n not in rib_check['unchanged_finished_objects'] for n in owners):return False
+        if report['model_sha256']==rib_check['baseline_sha256']:return True
         if any(speaker['finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
         if report['model_sha256']==speaker['baseline_sha256']:return True
         if any(perfboard['unchanged_geometry_difference_mm3'].get(n,1)>=.001 for n in owners):return False
@@ -194,7 +204,7 @@ def main():
             y-=height
         return y
 
-    page(1,'整机外观尺寸','洞洞板与前壳线束版 · 外部操控保持；载板与维护详见第 8 / 9 页','主视图 0.9:1')
+    page(1,'整机外观尺寸','载板与线束维护见第 8 / 9 页，后壳加强筋见第 10 / 11 页','主视图 0.9:1')
     shoulder_z=side['outer_profile_yz'][2][1]
     handle_top=side['outer_profile_yz'][3][1]
     rear_peak_z=side['outer_profile_yz'][5][1]
@@ -399,20 +409,19 @@ def main():
             text(x+1,y-4.2,labels[name],6.3,MUTED)
             text(x+193,y-3.5,' × '.join(fmt(n) for n in obj['size']),7.5,INK,'right')
     text(12,127,'PLA 打印：3 主体 + 4 键帽 + 焊线支架 + 旋钮 + OLED 压框 + 光驱压条 = 11 件',11,TEAL)
-    printing=json.loads((ROOT/'speaker-print-checks.json').read_text())
+    printing=json.loads((ROOT/'backlock-rib-print-checks.json').read_text())
+    speaker_print=json.loads((ROOT/'speaker-print-checks.json').read_text())
     assert printing['model_sha256']==data['sha256']
+    assert evidence_matches_geometry(speaker_print,['SpeakerCarrier'])
     previous_print=json.loads((ROOT/'volume-pcb-print-checks.json').read_text())
-    perfboard_print=json.loads((ROOT/'perfboard-print-checks.json').read_text())
     assert evidence_matches_geometry(previous_print,['FrontShell'])
-    assert evidence_matches_geometry(perfboard_print,['RearShell'])
     # Regenerated tessellation differs; reuse only the estimate for equivalent B-rep.
-    assert perfboard['unchanged_geometry_difference_mm3']['FrontShell']<.001
     printing['plates']={'FrontShell':previous_print['plates']['FrontShell'],
-                       'RearShell':perfboard_print['plates']['RearShell'],**printing['plates']}
+                       'SpeakerCarrier':speaker_print['plates']['SpeakerCarrier'],**printing['plates']}
     assert all(p['exit_code']==0 for p in printing['plates'].values())
     keys=json.loads((ROOT/'dual-color-key-checks.json').read_text())
     assert evidence_matches_geometry(keys,['PlayPauseKey','EjectKey','PrevKey','NextKey']) and keys['slicing']['exit_code']==0
-    text(12,118,'P2SC / P2S配置 · 0.4喷嘴 / 0.20层高 / 3壁 / 15%填充 / 树状支撑；P1/P2沿用几何等价版估算，P3新切片',8.5)
+    text(12,118,'P2SC / P2S配置 · 0.4喷嘴 / 0.20层高 / 3壁 / 15%填充 / 树状支撑；P2加筋后重切，P1 / P3沿用几何等价版估算',8.5)
     for i,(name,label,pose) in enumerate([
         ('FrontShell','P1 前壳','正面朝下 / 板内转 90°'),('RearShell','P2 后壳','背面朝下'),
         ('SpeakerCarrier','P3 支架','声腔背面朝下')]):
@@ -586,6 +595,137 @@ def main():
         'B50K双声道模拟线束、最终电源线与端子短尾未完整建模；同样须留服务余量，并检查合壳压线与实物卡扣。',
         '图中的圆柱／球形转角是占位包络，不表示实际线束弯曲半径；接口线序仍以接线文档和实物丝印为准。',
     ],gap=8,size=9)
+    c.showPage()
+
+    page(10,'后壳 P3 螺丝座加强筋','从机身正面看 P2 内侧 · 四处定位与右上座剖面详图','内侧正视 1:1 · 局部 4:1')
+    ribs=data['p3_seat_ribs']
+    text(117,253,'P2 内侧正视  /  沿 +Y 观察',11,TEAL,'center')
+    inside=view('p2-interior',32,51,1)
+    axis_x,_=inside(0,0)
+    line(axis_x,46,axis_x,246,LIGHT,.2,[5,2,1,2])
+    text(axis_x,42,'X=0 镜像基准',9,TEAL,'center')
+    for i,rib in enumerate(ribs,1):
+        x0,_,z0=rib['bounds']['min']
+        x1,_,z1=rib['bounds']['max']
+        x,y=inside(x0,z0)
+        w,h=x1-x0,z1-z0
+        c.setFillColor(TEAL); c.setStrokeColor(white); c.setLineWidth(.25*mm)
+        c.rect(x*mm,y*mm,w*mm,h*mm,stroke=1,fill=1)
+        badge_x=19 if x0<0 else 215
+        center_y=y+h/2
+        line(badge_x,center_y,x+w/2,center_y,TEAL,.16)
+        badge(badge_x,center_y,str(i))
+
+    line(228,37,228,250,LIGHT,.15)
+    text(321,253,'右上座水平剖面  /  Z=124',11,TEAL,'center')
+    top=view('p3-seat-section',271,145,4)
+    rib=ribs[3]
+    tri=c.beginPath()
+    for i,(x,y) in enumerate(rib['plan_vertices']):
+        tx,ty=top(x,y)
+        (tri.moveTo if i==0 else tri.lineTo)(tx*mm,ty*mm)
+    tri.close()
+    c.setFillColor(HexColor('#c7e4e6')); c.setStrokeColor(TEAL); c.setLineWidth(.25*mm)
+    c.drawPath(tri,stroke=1,fill=1)
+    x0,y0,_=rib['bounds']['min']
+    x1,y1,_=rib['bounds']['max']
+    x,y=top(x0,y0)
+    end_x,end_y=top(x1,y1)
+    dh(x,end_x,y,237,fmt(x1-x0))
+    dv(y,end_y,end_x,389,fmt(y1-y0))
+    text(373,223,'侧壁',9,MUTED,'center')
+    text(315,161,'螺丝座',9,MUTED,'center')
+    text(302,140,'前方 -Y',9,MUTED,'center')
+    text(281,219,'后方 +Y',9,MUTED,'center')
+
+    _,leg,thickness=rib['bounds']['size']
+    text(244,118,'筋条侧视',10,TEAL)
+    c.setFillColor(HexColor('#c7e4e6')); c.setStrokeColor(TEAL); c.setLineWidth(.25*mm)
+    c.rect(282*mm,110*mm,4*leg*mm,4*thickness*mm,stroke=1,fill=1)
+    dv(110,110+4*thickness,282+4*leg,327,fmt(thickness))
+    text(340,122,'四处相同',10,TEAL)
+    text(340,113,'两直角边各外露 8',9)
+    text(340,105,'Z 向厚 4',9)
+
+    text(244,94,'四条筋坐标范围',10,TEAL)
+    for i,rib in enumerate(ribs,1):
+        lo,hi=rib['bounds']['min'],rib['bounds']['max']
+        y=81-(i-1)*8
+        badge(247,y+1,str(i))
+        text(254,y,rib['location'],9)
+        text(269,y,f'X {fmt(lo[0])} 至 {fmt(hi[0])}',9)
+        text(324,y,f'Y {fmt(lo[1])} 至 {fmt(hi[1])}',9)
+        text(365,y,f'Z {fmt(lo[2])} 至 {fmt(hi[2])}',9)
+    carrier=assembly['paths']['speaker_carrier_front']
+    assert not carrier['clashes'] and carrier['translation_xyz_mm']==[0,-140,0]
+    minimum=min(r['minimum_distance_mm'] for r in rib_check['ribs'])
+    text(12,29,f'拆下前壳、断线并卸除四颗 P3 固定螺钉后，P3 总成沿 -Y 前移 140 mm 连续扫掠无干涉，距新增筋最近 {minimum:.2f} mm。',9)
+    text(12,21,'尺寸为 CAD 名义值。打印配合与锁紧强度待实物验证。',8.5,MUTED)
+    c.showPage()
+
+    page(11,'后斜面背锁深孔座加强筋','P2 内侧正视与右侧孔座轴向剖面 · 两条筋关于 X=0 镜像','内侧正视 1:1 · 轴向剖面 3:1')
+    ribs=backlock['ribs']
+    text(117,253,'P2 内侧正视  /  沿 +Y 观察',11,TEAL,'center')
+    inside=view('p2-interior',32,51,1)
+    axis_x,_=inside(0,0)
+    line(axis_x,46,axis_x,246,LIGHT,.2,[5,2,1,2])
+    text(axis_x,42,'X=0 镜像基准',9,TEAL,'center')
+    for i,rib in enumerate(ribs,1):
+        x0,_,z0,x1,_,z1=rib['bounds_xyz_mm']
+        x,y=inside(x0,z0)
+        c.setFillColor(TEAL); c.setStrokeColor(white); c.setLineWidth(.25*mm)
+        c.rect(x*mm,y*mm,(x1-x0)*mm,(z1-z0)*mm,stroke=1,fill=1)
+        badge_x=20 if x0<0 else 214
+        center_y=y+(z1-z0)/2
+        line(badge_x,center_y,x+(x1-x0)/2,center_y,TEAL,.16)
+        badge(badge_x,center_y,str(i))
+
+    line(228,37,228,250,LIGHT,.15)
+    access=[item for item in fasteners['rear_access'] if item['rear_center_xyz_mm'][2]==179]
+    assert len(access)==2 and all(not item['clashes'] for item in access)
+    right=access[1]
+    axis_x,entry,axis_z=right['rear_center_xyz_mm']
+    seat=right['seat_y_mm']
+    text(321,253,f'右侧孔座轴向剖面  /  X={fmt(axis_x)}',11,TEAL,'center')
+    section=view('upper-backlock-section',255,152,3)
+    tri=c.beginPath()
+    for i,(y,z) in enumerate(data['upper_backlock_rib_section_yz']):
+        sx,sy=section(y,z)
+        (tri.moveTo if i==0 else tri.lineTo)(sx*mm,sy*mm)
+    tri.close()
+    c.setFillColor(HexColor('#c7e4e6')); c.setStrokeColor(TEAL); c.setLineWidth(.25*mm)
+    c.drawPath(tri,stroke=1,fill=1)
+    x0,y0,z0,x1,y1,z1=ribs[1]['bounds_xyz_mm']
+    rib_start,rib_z=section(y0,z1)
+    rib_end,_=section(y1,z1)
+    dh(rib_start,rib_end,rib_z,234,fmt(y1-y0))
+    text((rib_start+rib_end)/2,241,'新增材料 Y 向范围',8.5,MUTED,'center')
+    seat_x,bore_y=section(seat,axis_z)
+    entry_x,_=section(entry,axis_z)
+    line(seat_x,bore_y,392,bore_y,TEAL,.2,[4,2])
+    arrow(entry_x+3,bore_y,1,0)
+    text(391,bore_y+4,'后方进刀',8.5,TEAL,'right')
+    dh(seat_x,entry_x,bore_y,145,f"{right['well_depth_mm']:.2f}")
+    text((seat_x+entry_x)/2,134,'螺钉承压面至斜面外表面轴心',8.5,MUTED,'center')
+
+    text(242,123,'两条加强筋坐标与尺寸',10,TEAL)
+    for i,rib in enumerate(ribs,1):
+        x0,y0,z0,x1,y1,z1=rib['bounds_xyz_mm']
+        row=111-(i-1)*8
+        badge(246,row+1,str(i))
+        text(254,row,f'X {fmt(x0)} 至 {fmt(x1)}',9)
+        text(298,row,f'Y {fmt(y0)} 至 {fmt(y1)}',9)
+        text(350,row,f'Z {fmt(z0)} 至 {fmt(z1)}',9)
+    text(242,92,f'每条 X 向宽 {fmt(x1-x0)}，融合后新增材料的 Z 向包络高 {fmt(z1-z0)}。',9)
+    driver_gap=min(r['minimum_distance_to_driver_mm'] for r in ribs)
+    sampled_gap=min(r['minimum_sampled_front_clearance_mm'] for r in ribs)
+    continuous_gap=min(r['continuous_front_clearance_lower_bound_mm'] for r in ribs)
+    text(242,77,'螺丝刀通路',10,TEAL)
+    text(242,69,f"Ø{fmt(right['tool_diameter_mm'])} 刀杆通过 Ø{fmt(fasteners['head_well_diameter_mm'])} 工具孔，距新增筋最近 {driver_gap:.2f} mm。",9)
+    text(242,54,'前壳抽出净空',10,TEAL)
+    text(242,46,f"断线并卸除四颗背锁螺钉后，沿 -Y 抽出 {backlock['front_cover_travel_mm']:g} mm。",9)
+    text(242,38,f'距新增筋最小采样净距 {sampled_gap:.3f} mm，连续净距下界 {continuous_gap:.3f} mm。',9)
+    text(12,23,'净空采用 CAD 刚体包络。实际批头配合、打印精度和锁紧强度待实物验证。',8.5,MUTED)
     c.showPage()
 
     c.save()

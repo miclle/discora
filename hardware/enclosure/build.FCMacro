@@ -737,10 +737,19 @@ def build(folder):
             access_wells.extend([cylinder(1.1,3,(x,end+.3,z),Y),
                                  cylinder(2.2,CASE_DEPTH-end-3.1,(x,end+3.2,z),Y)])
             post_clearances.append(cylinder(2.55,end-start+.5,(x,start-.1,z),Y))
+        # Bridge the upper well to the rear slope from above, clear of the tool bore.
+        rear_bosses.append(prism_yz([(44,181.3),(56,181.3),(56,188.3)],sign*29-2,4))
         for z in (27,124):
             x=sign*64
             boss=box(-INNER_HALF_WIDTH if sign<0 else 62,7,23 if z==27 else 120.5,INNER_HALF_WIDTH-62,7,8 if z==27 else 7.5)
             rear_bosses.append(boss.cut(cylinder(1.0,8,(x,6.5,z),Y)))
+            # Brace the back of the seat with a 45-degree taper for rear-wall-down printing.
+            # The extra millimetre overlaps the wall and seat; 8 mm of each leg is exposed.
+            wall = INNER_HALF_WIDTH
+            corners = [V(sign * px, y, z - 2) for px, y in
+                       ((wall + 1, 13), (wall - 9, 13), (wall + 1, 23))]
+            rib = Part.Face(Part.makePolygon(corners + corners[:1])).extrude(Z * 4)
+            rear_bosses.append(rib)
             tab=box(-67 if sign<0 else 60,5,z-4,7,2,8)
             if z==27:tab=tab.fuse(box(-67 if sign<0 else 60,5,31,7,2,3))
             tab=tab.cut(cylinder(1.4,3,(x,4.5,z),Y)).cut(

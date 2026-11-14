@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="23.0mm" height="21.0mm" viewBox="62.0 -26.0 23.0 21.0">
+<g   fill="none"
+   stroke="rgb(0, 0, 0)"
+   stroke-linecap="butt"
+   stroke-linejoin="miter"
+   stroke-width="0.18"
+   transform="scale(1, -1)"
+  >
+<path id= "1" d=" M 80 5 L 85 5 " />
+<path id= "2" d=" M 80 5 L 80 7 " />
+<path id= "3" d=" M 80 26 L 85 26 " />
+<path id= "4" d=" M 85 5 L 85 26 " />
+<path id= "5" d=" M 64.9987 7 L 80 7 " />
+<path id= "6" d=" M 64.9987 7 L 64.9987 14 " />
+<path id= "7" d=" M 64.9987 14 L 72 14 " />
+<path id= "8" d=" M 72 14 L 80 22 " />
+<path id= "9" d=" M 80 22 L 80 26 " />
+<path id= "10" d=" M 62 7 L 63.0013 7 " />
+<path id= "11" d=" M 63.0013 7 L 63.0013 14 " />
+<path id= "12" d=" M 62 14 L 62 7 " />
+<path id= "13" d=" M 62 14 L 63.0013 14 " />
+</g>
+</svg>

@@ -107,6 +107,50 @@ def main():
     for direction in ('front','right','top','rear'):
         projection(direction,exterior,direction)
 
+    # The measured delta bounds isolate the four added prisms in the saved shell.
+    rear_shell = shapes['RearShell']
+    rib_check = json.loads((ROOT/'p3-seat-rib-checks.json').read_text())
+    backlock = json.loads((ROOT/'backlock-rib-checks.json').read_text())
+    assert backlock['model_sha256'] == source_hash
+    assert backlock['baseline_sha256'] == rib_check['model_sha256']
+    ribs = []
+    for entry, location in zip(rib_check['ribs'], ('左下', '右下', '左上', '右上'), strict=True):
+        low, high = V(*entry['bounds_xyz_mm'][:3]), V(*entry['bounds_xyz_mm'][3:])
+        size = high - low
+        rib = rear_shell.common(Part.makeBox(*size, low))
+        assert len(rib.Solids) == 1 and abs(rib.Volume - entry['added_volume_mm3']) < .001
+        assert all(abs(a - b) < 1e-6 for a,b in zip(bounds(rib)['size'], (8, 8, 4)))
+        vertices = sorted({(round(v.Point.x, 6), round(v.Point.y, 6)) for v in rib.Vertexes})
+        assert len(vertices) == 3 and len(rib.Vertexes) == 6
+        ribs.append(dict(location=location, bounds=bounds(rib), plan_vertices=vertices))
+    assert len(ribs) == 4
+    data['p3_seat_ribs'] = ribs
+    projection('p2-interior', rear_shell, 'front')
+    data['views']['p2-interior']['parts'] = [dict(objects=['RearShell'], offset_mm=[0,0,0])]
+    upper_right = ribs[-1]['bounds']
+    rib_mid_z = (upper_right['min'][2] + upper_right['max'][2]) / 2
+    # Cut through the upper-right pilot axis, with room to see the seat and side wall.
+    seat_section = rear_shell.common(Part.makeBox(25, 21, .1, V(60, 5, rib_mid_z - .05)))
+    projection('p3-seat-section', seat_section, 'top')
+
+    # Cut on the right-hand tool axis. Undo the pre-existing slope and tube
+    # locally to highlight only the material added by the triangular prism.
+    upper_ribs = backlock['ribs']
+    assert len(upper_ribs) == 2
+    low, high = V(*upper_ribs[1]['bounds_xyz_mm'][:3]), V(*upper_ribs[1]['bounds_xyz_mm'][3:])
+    axis_x = (low.x + high.x) / 2
+    section_x = axis_x - .01
+    section_box = Part.makeBox(.02, 44, 24, V(section_x, 31, 169))
+    well_section = rear_shell.common(section_box)
+    rib_box = Part.makeBox(.02, high.y-low.y, high.z-low.z, V(section_x, low.y, low.z))
+    tube = Part.makeCylinder(3.5, 40, V(axis_x, 36.4, 179), V(0,1,0))
+    rib_section = well_section.common(rib_box).cut([doc.RearRoof.Shape, tube]).removeSplitter()
+    assert len(rib_section.Solids) == 1
+    face = max(rib_section.Faces, key=lambda f: f.CenterOfMass.x)
+    assert abs(face.CenterOfMass.x - (axis_x + .01)) < 1e-6
+    data['upper_backlock_rib_section_yz'] = [[v.Point.y, v.Point.z] for v in face.OuterWire.OrderedVertexes]
+    projection('upper-backlock-section', well_section, 'right')
+
     # A true section at X=-26, the left driver centre; keep the -X half.
     clip = Part.makeBox(174,400,500,V(-200,-100,-100))
     section = compound(shapes).common(clip)
@@ -262,6 +306,7 @@ def main():
         'pcb_module_local_15_26_2_35':all(abs(x-y)<1e-6 for x,y in zip(bounds(volume)['size'],(15,26.2,35))),
         'pcb_module_unturned_35_26_2_15':all(abs(x-y)<1e-6 for x,y in zip(bounds(unturned)['size'],(35,26.2,15))),
         'three_connected_main_parts':all(len(doc.getObject(n).Shape.Solids)==1 for n in ('FrontShell','RearShell','SpeakerCarrier')),
+        'four_p3_seat_ribs':len(ribs)==4,
         'source_unchanged':hashlib.sha256(source.read_bytes()).hexdigest()==source_hash,
     }
     data['checks']=checks

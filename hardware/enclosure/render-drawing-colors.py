@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256 = '18465e0f33991e9cc823121332007fdb2d9f2d6cb1137f592e641f953dd327bc'
+MODEL_SHA256 = 'd9b9109b30a28f0ca4953c45178e5b827769192c2d49d4ab56ace42414adc6db'
 
 
 def palette_from_build():
@@ -159,7 +159,13 @@ def main():
     pcb_volume=json.loads((ROOT/'volume-pcb-checks.json').read_text())
     perfboard=json.loads((ROOT/'perfboard-checks.json').read_text())
     speaker=json.loads((ROOT/'speaker-scope-checks.json').read_text())
-    assert speaker['model_sha256']==MODEL_SHA256 and speaker['baseline_sha256']==perfboard['model_sha256']
+    ribs=json.loads((ROOT/'p3-seat-rib-checks.json').read_text())
+    backlock=json.loads((ROOT/'backlock-rib-checks.json').read_text())
+    assert backlock['model_sha256']==MODEL_SHA256 and backlock['baseline_sha256']==ribs['model_sha256']
+    assert ribs['baseline_sha256']==speaker['model_sha256']
+    assert speaker['baseline_sha256']==perfboard['model_sha256']
+    assert all(ribs['two_color_brep_identical'].values())
+    assert set(ribs['two_color_brep_identical']) <= set(backlock['unchanged_finished_objects'])
     assert all(speaker['two_color_brep_identical'][name]
                for name in ('PlayPauseKey','EjectKey','PrevKey','NextKey','Knob'))
     assert pcb_volume['model_sha256']==perfboard['baseline_sha256'] and pcb_volume['all_pass']
@@ -206,7 +212,7 @@ def main():
         print('SURFACES',name,len(meshes[name]),flush=True)
     outputs={}
     for name,view in data['views'].items():
-        if name in ('control-cutouts','perfboard-outline') or name.startswith(('oled-','volume-')):continue
+        if name in ('control-cutouts','perfboard-outline','p3-seat-section','upper-backlock-section') or name.startswith(('oled-','volume-')):continue
         parts=[]
         if 'parts' in view:
             parts=[(n,p['offset_mm']) for p in view['parts'] for n in p['objects']]
