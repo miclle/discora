@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256 = '9ef433e8437eef3b3aa45558a329a66d8422e0c9014894b763a873c1162eee05'
+MODEL_SHA256 = '18465e0f33991e9cc823121332007fdb2d9f2d6cb1137f592e641f953dd327bc'
 
 
 def palette_from_build():
@@ -158,7 +158,10 @@ def main():
     mount=json.loads((ROOT/'drive-mount-checks.json').read_text())
     pcb_volume=json.loads((ROOT/'volume-pcb-checks.json').read_text())
     perfboard=json.loads((ROOT/'perfboard-checks.json').read_text())
-    assert perfboard['model_sha256']==MODEL_SHA256
+    speaker=json.loads((ROOT/'speaker-scope-checks.json').read_text())
+    assert speaker['model_sha256']==MODEL_SHA256 and speaker['baseline_sha256']==perfboard['model_sha256']
+    assert all(speaker['two_color_brep_identical'][name]
+               for name in ('PlayPauseKey','EjectKey','PrevKey','NextKey','Knob'))
     assert pcb_volume['model_sha256']==perfboard['baseline_sha256'] and pcb_volume['all_pass']
     assert all(perfboard['unchanged_geometry_difference_mm3'][n]<.001
                for n in ('PlayPauseKey','EjectKey','PrevKey','NextKey','Knob'))

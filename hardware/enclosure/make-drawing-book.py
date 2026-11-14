@@ -18,7 +18,7 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = '9ef433e8437eef3b3aa45558a329a66d8422e0c9014894b763a873c1162eee05'
+ANNOTATED_MODEL_SHA256 = '18465e0f33991e9cc823121332007fdb2d9f2d6cb1137f592e641f953dd327bc'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
@@ -47,7 +47,9 @@ def main():
     mount=json.loads((ROOT/'drive-mount-checks.json').read_text())
     pcb_volume=json.loads((ROOT/'volume-pcb-checks.json').read_text())
     perfboard=json.loads((ROOT/'perfboard-checks.json').read_text())
-    assert perfboard['model_sha256']==data['sha256']
+    speaker=json.loads((ROOT/'speaker-scope-checks.json').read_text())
+    assert speaker['model_sha256']==data['sha256'] and speaker['baseline_sha256']==perfboard['model_sha256']
+    assert speaker['upper_p3_geometry_unchanged']
     assert not perfboard['harness_path_clashes'] and not perfboard['lead_reservation_clashes']
     assert perfboard['front_cover_opening_mm']==60
     assert all(not failures for checks in perfboard['unplug_access'].values() for failures in checks.values())
@@ -67,6 +69,8 @@ def main():
     assert integration['model_sha256']==handle['baseline_sha256']
     def evidence_matches_geometry(report,owners):
         if report['model_sha256']==data['sha256']:return True
+        if any(speaker['finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
+        if report['model_sha256']==speaker['baseline_sha256']:return True
         if any(perfboard['unchanged_geometry_difference_mm3'].get(n,1)>=.001 for n in owners):return False
         if report['model_sha256']==perfboard['baseline_sha256']:return True
         if any(pcb_volume['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
@@ -319,7 +323,7 @@ def main():
     page(4,'侧剖与内部空间','截面 X=-26：穿过左喇叭中心，保留 -X 半体，沿 -X 观察','剖视 1:1；表格为模型读数')
     view('section',26,20)
     text(63,263,'A-A 侧剖',11,TEAL,'center')
-    dh(34,76,98,131,'42 喇叭总深度')
+    dh(34,75,98,131,'41 喇叭总深度')
     dh(102.2,113,156,208,'10.8 光驱最大厚度')
     dv(58,138,26,13,'80 单元高度')
     dh(32,102,30,18,'70 电池深度')
@@ -327,10 +331,10 @@ def main():
     text(65,38,'5600 mAh',8,white,'center')
     text(138,253,'主要包络 / 关键净距',12,TEAL)
     table(136,246,272,[
-        ('单只喇叭 X × Y × Z','45 × 42 × 80；中心 X=±26，Z=76；总包络，安装面待测'),
-        ('双喇叭中心距','52；两只均朝 -Y，不代表声道分离或声学验收'),
+        ('单只喇叭 X × Y × Z','45 × 41 × 80 试装包络；中心 X=±26，Z=76；贴合面 Y=10'),
+        ('P3 喇叭座','开口 71.5 × 39.3 / R12.5；每只四孔距 70 × 36，Ø2.3 底孔深 10.5'),
         ('单侧后腔外包络','65 × 57.5 × 89；容积、调谐、气密及振膜行程待验证'),
-        ('喇叭后方至腔体内壁','10（Y=50 至 Y=60）；不是插头或导线预留验证'),
+        ('喇叭前 / 后净距','格栅后面至喇叭 3，喇叭至后腔内壁 11；端子、走线及行程待试'),
         ('UJ-898 光驱','128 × 10.8 × 130；Y=76.2…87，Z=29.5…159.5'),
         ('光驱贴靠 / 固定','背面留 1 mm 保护垫；中央底托 + 可拆压条，两枚 M2×10'),
         ('SATA 接头 / 线缆','37.7 × 7，后伸 20.4；护线环 Ø6.5 × 3；侧伸 14.5'),
@@ -346,7 +350,7 @@ def main():
         '当前模型边界',
         '平排电池按商品标称包络；托盘并入后壳，预留 4 个绑带槽，绑带、线材及插头需实测。',
         '两块 DCE001 已纳入载板；充电电路未建模，整机电气与实物装配仍未验收。',
-        '喇叭未建盆架、磁铁和安装孔；显示内容为示意，电子板元件与接头高度含设计预留。',
+        '喇叭采用圆角盆架试装包络；喇叭静态前 / 后深 2 / 39；角部、螺丝及密封需实物试装。',
         '剖图使用实际实体裁切、隐藏线消除；未施加材料剖面线，不能由线型判断材质。',
         '三个主体及拆装路径已做 CAD 检查、PLA 切片；仍需配合试片、螺钉试装、强度和走线实测。',
         '侧饰片厚 2 mm，四处 2×3 连接筋；通流几何来自当前 CAD，尚未完成声学调谐。',
@@ -365,7 +369,7 @@ def main():
         'DisplayRetainer':'OLED 可拆压框（四点承压／两侧锁紧）',
         'DriveRetainer':'光驱可拆压条（两枚名义 M2×10）',
         'PlayPauseSwitch':'播放／暂停开关包络','EjectSwitch':'退碟开关包络','PrevSwitch':'上一曲开关包络','NextSwitch':'下一曲开关包络','Knob':'音量旋钮 · 黑白双色',
-        'LChamber':'左后腔','RChamber':'右后腔','LDriverFrame':'左喇叭预留框','RDriverFrame':'右喇叭预留框',
+        'LChamber':'左后腔','RChamber':'右后腔','LDriverFrame':'左喇叭试装座','RDriverFrame':'右喇叭试装座',
         'FrontBaffle':'双开口前障板','RearTopMount':'上固定耳（2 个）','DriveCarrier':'光驱底托 / 导轨','SlotGuide':'碟口导向框',
         'DisplayCarrier':'屏幕安装座','AmpShelf':'功放 / 桥接器托板','ElectronicsSled':'主控托板','AmpPads':'功放支撑复合件',
         'MCUPads':'主控支撑复合件','DACPads':'DAC 支撑复合件','BatteryCradle':'平排电池托盘',
@@ -395,17 +399,20 @@ def main():
             text(x+1,y-4.2,labels[name],6.3,MUTED)
             text(x+193,y-3.5,' × '.join(fmt(n) for n in obj['size']),7.5,INK,'right')
     text(12,127,'PLA 打印：3 主体 + 4 键帽 + 焊线支架 + 旋钮 + OLED 压框 + 光驱压条 = 11 件',11,TEAL)
-    printing=json.loads((ROOT/'perfboard-print-checks.json').read_text())
+    printing=json.loads((ROOT/'speaker-print-checks.json').read_text())
     assert printing['model_sha256']==data['sha256']
     previous_print=json.loads((ROOT/'volume-pcb-print-checks.json').read_text())
+    perfboard_print=json.loads((ROOT/'perfboard-print-checks.json').read_text())
     assert evidence_matches_geometry(previous_print,['FrontShell'])
+    assert evidence_matches_geometry(perfboard_print,['RearShell'])
     # Regenerated tessellation differs; reuse only the estimate for equivalent B-rep.
     assert perfboard['unchanged_geometry_difference_mm3']['FrontShell']<.001
-    printing['plates']={'FrontShell':previous_print['plates']['FrontShell'],**printing['plates']}
+    printing['plates']={'FrontShell':previous_print['plates']['FrontShell'],
+                       'RearShell':perfboard_print['plates']['RearShell'],**printing['plates']}
     assert all(p['exit_code']==0 for p in printing['plates'].values())
     keys=json.loads((ROOT/'dual-color-key-checks.json').read_text())
     assert evidence_matches_geometry(keys,['PlayPauseKey','EjectKey','PrevKey','NextKey']) and keys['slicing']['exit_code']==0
-    text(12,118,'P2SC / P2S配置 · 0.4喷嘴 / 0.20层高 / 3壁 / 15%填充 / 树状支撑；P1沿用几何等价版估算，P2/P3新切片',8.5)
+    text(12,118,'P2SC / P2S配置 · 0.4喷嘴 / 0.20层高 / 3壁 / 15%填充 / 树状支撑；P1/P2沿用几何等价版估算，P3新切片',8.5)
     for i,(name,label,pose) in enumerate([
         ('FrontShell','P1 前壳','正面朝下 / 板内转 90°'),('RearShell','P2 后壳','背面朝下'),
         ('SpeakerCarrier','P3 支架','声腔背面朝下')]):

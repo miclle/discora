@@ -1,6 +1,6 @@
 # Discora V4 整机尺寸与装配图册
 
-> 2026-11-14 图册已同步当前洞洞板与前壳线束版 CAD，共九页。新增第 8 页载板板形、固定孔和装配布局，第 9 页合壳／60 mm 维护位线束图；爆炸图、侧剖、44 个对象清单、音量模块净距及切片数据同步更新。设计依据见 [ADR-0037](decisions/0037-perfboard-carrier-and-front-harness.md)和[洞洞板布局](perfboard-layout.md)。
+> 2026-11-14 图册已同步 P3 喇叭试装版 CAD，共九页。第 4 页更新喇叭侧剖、贴合面、开口及孔位，第 5 页更新 P3 切片。新增第 8 页载板板形、固定孔和装配布局，第 9 页合壳／60 mm 维护位线束图；爆炸图、侧剖、44 个对象清单、音量模块净距及切片数据同步更新。设计依据见 [ADR-0037](decisions/0037-perfboard-carrier-and-front-harness.md)和[洞洞板布局](perfboard-layout.md)。
 
 当前保存模型的整机外包络为 **宽 170 × 深 93 × 高 243.263 mm**，包含脚垫和提手；**不含脚垫的总高为 240.263 mm**，仍包含提手。图册汇总外观尺寸、开孔、两层爆炸图、侧剖及模型对象清单，供外形评审与布局核对。
 
@@ -125,11 +125,11 @@ P1 前壳合并前斜面、提手、格栅、屏幕座和四键定位座；P2 �
 
 四键设计与尺寸假设见 [ADR-0023](decisions/0023-four-button-front-panel.md)，[button-checks.json](../hardware/enclosure/button-checks.json)记录孔径、局部尺寸和键帽活动余量；引脚面照片和直接焊线要求对应的镂空支架见 [ADR-0025](decisions/0025-open-button-wire-retainer.md)；精确脚距、实际行程和支承面配合待实测。
 
-电池当前位置为 X=−56…56、Y=6…76、Z=8…28；此前前壳加厚并将深度增至 80 mm，详见 [ADR-0021](decisions/0021-five-mm-front-panel.md)。此前顶部等斜面与操控上移 15 mm 的决策见 [ADR-0019](decisions/0019-matched-top-shoulders.md)。后斜面及碟口导向现已并入后壳，光驱整件从前方拆装，见 [ADR-0020](decisions/0020-rear-roof-shell-ownership.md)。托盘已并入后壳并增加绑带槽。前障板并入 P3，后盖孔取消，侧孔与饰片并入后壳，取消侧孔安装耳及其固定孔。取舍见 [ADR-0016](decisions/0016-three-part-pla-enclosure.md)，此前电池布局见 [ADR-0015](decisions/0015-flat-battery-enclosure.md)。喇叭安装面／孔位、实物屏幕、桥接连接、电池线材和外围供电模块、密封与热性能、提手强度、打印补偿及螺钉耐久仍待实测。
+电池当前位置为 X=−56…56、Y=6…76、Z=8…28；此前前壳加厚并将深度增至 80 mm，详见 [ADR-0021](decisions/0021-five-mm-front-panel.md)。此前顶部等斜面与操控上移 15 mm 的决策见 [ADR-0019](decisions/0019-matched-top-shoulders.md)。后斜面及碟口导向现已并入后壳，光驱整件从前方拆装，见 [ADR-0020](decisions/0020-rear-roof-shell-ownership.md)。托盘已并入后壳并增加绑带槽。前障板并入 P3，后盖孔取消，侧孔与饰片并入后壳，取消侧孔安装耳及其固定孔。取舍见 [ADR-0016](decisions/0016-three-part-pla-enclosure.md)，此前电池布局见 [ADR-0015](decisions/0015-flat-battery-enclosure.md)。喇叭座实际配合及振膜活动空间、实物屏幕、桥接连接、电池线材和外围供电模块、密封与热性能、提手强度、打印补偿及螺钉耐久仍待实测。
 
 ## 更新图册
 
-生成流程只读取保存的 FCStd，先导出几何，再排版 PDF。本版通过 `perfboard-checks.json` → `volume-pcb-checks.json` → `drive-mount-checks.json` → `rear-thickness-checks.json` → `bottom-corner-checks.json` → `side-seam-checks.json` → `volume-checks.json` → `handle-checks.json` → `side-port-checks.json` 的模型摘要与逐件差集证据复用既有双色键帽的分面颜色和切片；各比较报告须使用对应阶段的调整前模型：`check-drive-mount.py --baseline` 接受光驱适配前模型，恢复方法见[打印说明](enclosure-printing.md#重现)；`check-side-ports.py --baseline` 接受侧孔合并前模型，不能混用。普通复查请输出到 `tmp/`，不要覆盖带基线摘要与不变对象证据的已提交报告。矢量投影保存在 `hardware/enclosure/drawings/*.svg`，尺寸标注在 PDF 中；不要把无标注 SVG 当作完整尺寸图。
+生成流程只读取保存的 FCStd，先导出几何，再排版 PDF。本版通过 `speaker-scope-checks.json` → `perfboard-checks.json` → `volume-pcb-checks.json` → `drive-mount-checks.json` → `rear-thickness-checks.json` → `bottom-corner-checks.json` → `side-seam-checks.json` → `volume-checks.json` → `handle-checks.json` → `side-port-checks.json` 的模型摘要与逐件差集证据复用既有双色键帽的分面颜色和切片；各比较报告须使用对应阶段的调整前模型：`check-drive-mount.py --baseline` 接受光驱适配前模型，恢复方法见[打印说明](enclosure-printing.md#重现)；`check-side-ports.py --baseline` 接受侧孔合并前模型，不能混用。普通复查请输出到 `tmp/`，不要覆盖带基线摘要与不变对象证据的已提交报告。矢量投影保存在 `hardware/enclosure/drawings/*.svg`，尺寸标注在 PDF 中；不要把无标注 SVG 当作完整尺寸图。
 
 1. 准备可导入 `FreeCAD`、`Part`、`TechDraw` 的 FreeCAD Python，运行：
    ```bash

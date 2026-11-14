@@ -1,7 +1,7 @@
 {
   "date": "2026-11-14",
   "model": "Discora.FCStd",
-  "sha256": "9ef433e8437eef3b3aa45558a329a66d8422e0c9014894b763a873c1162eee05",
+  "sha256": "18465e0f33991e9cc823121332007fdb2d9f2d6cb1137f592e641f953dd327bc",
   "version": [
     "1",
     "1",
@@ -415,6 +415,145 @@
     "continuous_visible_rim": false,
     "minimum_hole_web_mm": 1.02
   },
+  "speaker_mount": {
+    "seat_y_mm": 10,
+    "trial_opening_zx_mm": [
+      71.5,
+      39.3
+    ],
+    "opening_corner_radius_mm": 12.5,
+    "hole_pitch_zx_mm": [
+      70,
+      36
+    ],
+    "driver_hole_diameter_mm": 3.3,
+    "pilot_diameter_mm": 2.3,
+    "pilot_depth_mm": 10.5,
+    "screw_thread_diameter_mm": 2.8,
+    "screw_thread_length_mm": 9.5,
+    "screw_head_height_mm": 1.9,
+    "reserved_screw_head_diameter_mm": 6,
+    "screw_head_diameter_measured": false,
+    "mounts": {
+      "LDriver": {
+        "entry_clash_mm3": 0.0,
+        "basket_sweep_clash_mm3": 0.0,
+        "holes": [
+          {
+            "center_xz_mm": [
+              -44,
+              41
+            ],
+            "pilot_obstruction_mm3": 0.0,
+            "missing_pilot_wall_mm3": 0.0,
+            "missing_pilot_bottom_mm3": 0.0,
+            "seat_obstruction_mm3": 0.0,
+            "screw_shank_obstruction_mm3": 0.0,
+            "reserved_head_clashes": [],
+            "front_tool_clashes": []
+          },
+          {
+            "center_xz_mm": [
+              -44,
+              111
+            ],
+            "pilot_obstruction_mm3": 0.0,
+            "missing_pilot_wall_mm3": 0.0,
+            "missing_pilot_bottom_mm3": 0.0,
+            "seat_obstruction_mm3": 0.0,
+            "screw_shank_obstruction_mm3": 0.0,
+            "reserved_head_clashes": [],
+            "front_tool_clashes": []
+          },
+          {
+            "center_xz_mm": [
+              -8,
+              41
+            ],
+            "pilot_obstruction_mm3": 0.0,
+            "missing_pilot_wall_mm3": 0.0,
+            "missing_pilot_bottom_mm3": 0.0,
+            "seat_obstruction_mm3": 0.0,
+            "screw_shank_obstruction_mm3": 0.0,
+            "reserved_head_clashes": [],
+            "front_tool_clashes": []
+          },
+          {
+            "center_xz_mm": [
+              -8,
+              111
+            ],
+            "pilot_obstruction_mm3": 0.0,
+            "missing_pilot_wall_mm3": 0.0,
+            "missing_pilot_bottom_mm3": 0.0,
+            "seat_obstruction_mm3": 0.0,
+            "screw_shank_obstruction_mm3": 0.0,
+            "reserved_head_clashes": [],
+            "front_tool_clashes": []
+          }
+        ]
+      },
+      "RDriver": {
+        "entry_clash_mm3": 0.0,
+        "basket_sweep_clash_mm3": 0.0,
+        "holes": [
+          {
+            "center_xz_mm": [
+              8,
+              41
+            ],
+            "pilot_obstruction_mm3": 0.0,
+            "missing_pilot_wall_mm3": 0.0,
+            "missing_pilot_bottom_mm3": 0.0,
+            "seat_obstruction_mm3": 0.0,
+            "screw_shank_obstruction_mm3": 0.0,
+            "reserved_head_clashes": [],
+            "front_tool_clashes": []
+          },
+          {
+            "center_xz_mm": [
+              8,
+              111
+            ],
+            "pilot_obstruction_mm3": 0.0,
+            "missing_pilot_wall_mm3": 0.0,
+            "missing_pilot_bottom_mm3": 0.0,
+            "seat_obstruction_mm3": 0.0,
+            "screw_shank_obstruction_mm3": 0.0,
+            "reserved_head_clashes": [],
+            "front_tool_clashes": []
+          },
+          {
+            "center_xz_mm": [
+              44,
+              41
+            ],
+            "pilot_obstruction_mm3": 0.0,
+            "missing_pilot_wall_mm3": 0.0,
+            "missing_pilot_bottom_mm3": 0.0,
+            "seat_obstruction_mm3": 0.0,
+            "screw_shank_obstruction_mm3": 0.0,
+            "reserved_head_clashes": [],
+            "front_tool_clashes": []
+          },
+          {
+            "center_xz_mm": [
+              44,
+              111
+            ],
+            "pilot_obstruction_mm3": 0.0,
+            "missing_pilot_wall_mm3": 0.0,
+            "missing_pilot_bottom_mm3": 0.0,
+            "seat_obstruction_mm3": 0.0,
+            "screw_shank_obstruction_mm3": 0.0,
+            "reserved_head_clashes": [],
+            "front_tool_clashes": []
+          }
+        ]
+      }
+    },
+    "rear_gap_mm": 11.0
+  },
   "original_controls_difference_mm3": {},
   "handle_opening_mm": [
     90,
@@ -424,7 +563,7 @@
   "physical_validation": false,
   "acoustic_tuning_verified": false,
   "limits": [
-    "Speaker mounting plane, actual mounting holes, terminals, gaskets and excursion remain unmeasured.",
+    "Speaker trial uses measured depth, hole pitch and basket extrema; exact profile, screw head diameter/thread type, terminals, gaskets and excursion remain unverified.",
     "PCB sizes are documented; component heights and connector reservations are provisional.",
     "Three main PLA solids and nominal screw/pilot bores do not validate printed strength or screw fit.",
     "Separate assembly-path report distinguishes continuous conservative sweeps from sampled cover motion.",
