@@ -1,5 +1,5 @@
 {
-  "model_sha256": "fb24c86b81e000e9f2db58d3b2802ead2c5aad04e26171616b4c4fc6266ced1e",
+  "model_sha256": "d9b9109b30a28f0ca4953c45178e5b827769192c2d49d4ab56ace42414adc6db",
   "former_front_holes_sealed": [
     {
       "former_center_xz_mm": [
@@ -89,7 +89,5 @@
     "Screw head diameter must not exceed 4 mm; select length, thread form and PLA pilot fit with a sample.",
     "Use a slim driver with at least 79 mm usable reach; actual handle and bit geometry are not modeled.",
     "Integral side-wall wells do not establish printed strength, repeated assembly life or wire clearance."
-  ],
-  "checked_model_sha256_before_label_update": "e3c210833fa65d05120980e36e6e09b129c157b12dc0736d2afed5298ba80301",
-  "metadata_only_update": "drive-model-metadata-checks.json"
+  ]
 }

@@ -1,0 +1,122 @@
+{
+  "baseline_sha256": "18465e0f33991e9cc823121332007fdb2d9f2d6cb1137f592e641f953dd327bc",
+  "model_sha256": "5cb4e991d4689aeac5355ef668d84960e43f043a00879653eb3b22dc2cd5310a",
+  "unchanged_finished_objects": [
+    "FrontShell",
+    "Feet",
+    "Window",
+    "StatusArt",
+    "PlayPauseKey",
+    "EjectKey",
+    "PrevKey",
+    "NextKey",
+    "ButtonRetainer",
+    "Knob",
+    "DisplayRetainer",
+    "DriveRetainer",
+    "SpeakerCarrier",
+    "LDriver",
+    "RDriver",
+    "PlayPauseSwitch",
+    "EjectSwitch",
+    "PrevSwitch",
+    "NextSwitch",
+    "Encoder",
+    "VolumePot",
+    "Drive",
+    "Bridge",
+    "DisplayPCB",
+    "DisplayHeader",
+    "Amp",
+    "AmpChip",
+    "Perfboard",
+    "MCU",
+    "MCUChip",
+    "MCUSockets",
+    "DAC",
+    "DACChip",
+    "DACSockets",
+    "BuckA",
+    "BuckB",
+    "XHButtons",
+    "XHOLED",
+    "XHVolumeSwitch",
+    "PerfboardScrew1",
+    "PerfboardScrew2",
+    "PerfboardScrew3",
+    "Battery"
+  ],
+  "rear_shell_solid_count": 1,
+  "two_color_brep_identical": {
+    "PlayPauseKey": true,
+    "EjectKey": true,
+    "PrevKey": true,
+    "NextKey": true,
+    "Knob": true
+  },
+  "rear_shell_removed_volume_mm3": 0.0,
+  "rear_shell_mirror_plane": "X=0",
+  "rear_shell_mirror_difference_mm3": 0.0,
+  "carrier_path_translation_xyz_mm": [
+    0,
+    -140,
+    0
+  ],
+  "carrier_clearance_method": "continuous conservative bounding-box sweep per construction component",
+  "ribs": [
+    {
+      "bounds_xyz_mm": [
+        -80.0,
+        14.0,
+        25.0,
+        -72.0,
+        22.0,
+        29.0
+      ],
+      "added_volume_mm3": 128.0,
+      "closest_carrier_sweep": "LChamber",
+      "minimum_distance_mm": 7.433034
+    },
+    {
+      "bounds_xyz_mm": [
+        72.0,
+        14.0,
+        25.0,
+        80.0,
+        22.0,
+        29.0
+      ],
+      "added_volume_mm3": 128.0,
+      "closest_carrier_sweep": "RChamber",
+      "minimum_distance_mm": 7.433034
+    },
+    {
+      "bounds_xyz_mm": [
+        -80.0,
+        14.0,
+        122.0,
+        -72.0,
+        22.0,
+        126.0
+      ],
+      "added_volume_mm3": 128.0,
+      "closest_carrier_sweep": "LChamber",
+      "minimum_distance_mm": 7.158911
+    },
+    {
+      "bounds_xyz_mm": [
+        72.0,
+        14.0,
+        122.0,
+        80.0,
+        22.0,
+        126.0
+      ],
+      "added_volume_mm3": 128.0,
+      "closest_carrier_sweep": "RChamber",
+      "minimum_distance_mm": 7.158911
+    }
+  ],
+  "physical_strength_test": false,
+  "physical_assembly_test": false
+}

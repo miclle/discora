@@ -1,10 +1,10 @@
 # Discora V4 整机尺寸与装配图册
 
-> 2026-11-14 图册已同步 P3 喇叭试装版 CAD，共九页。第 4 页更新喇叭侧剖、贴合面、开口及孔位，第 5 页更新 P3 切片。新增第 8 页载板板形、固定孔和装配布局，第 9 页合壳／60 mm 维护位线束图；爆炸图、侧剖、44 个对象清单、音量模块净距及切片数据同步更新。设计依据见 [ADR-0037](decisions/0037-perfboard-carrier-and-front-harness.md)和[洞洞板布局](perfboard-layout.md)。
+> 2026-11-14 图册已同步 P2 上方背锁加筋版 CAD，共十一页。第 10 页标出四条 P3 螺丝座加强筋，第 11 页标出两条上方背锁加强筋、刀杆通路及前壳抽出净空，第 5 页采用最新版后壳切片数据。
 
 当前保存模型的整机外包络为 **宽 170 × 深 93 × 高 243.263 mm**，包含脚垫和提手；**不含脚垫的总高为 240.263 mm**，仍包含提手。图册汇总外观尺寸、开孔、两层爆炸图、侧剖及模型对象清单，供外形评审与布局核对。
 
-**[打开彩色整机图册 PDF（9 页，A3 横向）](../hardware/enclosure/drawings/Discora-V4-drawing-book-color.pdf)**
+**[打开彩色整机图册 PDF（11 页，A3 横向）](../hardware/enclosure/drawings/Discora-V4-drawing-book-color.pdf)**
 
 彩色版的实体填色沿用 CAD 建模脚本配色，两张爆炸图增加了明暗层次、颜色图例和带白色描边的编号引线。图形轮廓、尺寸线与文字仍为矢量，填色层从同一 CAD 实体的平面轮廓和曲面网格正投影生成，使用逐像素深度检查保留遮挡和孔洞；配色仅帮助辨认，不代表实物材料；第 9 页蓝／紫／橙分别标识四键、OLED 和音量开关回路。
 
@@ -23,6 +23,8 @@
 | 7 / DC-V4-GA-07 | PCB 音量模块板面、安装局部剖视、转向与避让槽、净距及维护顺序 | 板面 3:1、安装剖视 2.6:1 |
 | 8 / DC-V4-GA-08 | 洞洞板板形、三点固定、模块布局、接插件和净距 | 板形／布局 1.5:1 |
 | 9 / DC-V4-GA-09 | 合壳回环、前壳拉开 60 mm 的线束维护位、拔插次序与验证边界 | NTS |
+| 10 / DC-V4-GA-10 | P2 内侧四条 P3 螺丝座加强筋的编号、坐标、水平剖面及厚度 | 内侧正视 1:1，局部 4:1 |
+| 11 / DC-V4-GA-11 | 上方背锁两条加强筋的位置及轴向剖面，刀杆通路与前壳抽出净空 | 内侧正视 1:1，轴向剖面 3:1 |
 
 NTS 表示不按装配距离比例读取。打印时选择 **A3、实际大小 / 100%**，关闭“适合页面”；打印缩放会改变纸面比例，始终以标注数值为准。各正投影独立标明观察方向，不按视图排列推断第一角或第三角投影法。
 
@@ -105,23 +107,27 @@ P1 前壳合并前斜面、提手、格栅、屏幕座和四键定位座；P2 �
 
 ![前壳线束与维护位](../hardware/enclosure/drawings/front-harness-preview.png)
 
+第 10 页从正面标出 P2 左下、右下、左上、右上的四条加强筋。右上座水平剖面标注两条各外露 8 mm 的直角边，筋条侧视标注 Z 向厚 4 mm。四处均位于 Y=14…22，沿 X=0 左右镜像。P3 按拆卸顺序向前抽出时，四条筋到连续扫掠包络的最近距离约 7.16 mm。 [加强筋检查](../hardware/enclosure/p3-seat-rib-checks.json)
+
+第 11 页标出后斜面上方两个背锁深孔座的加强筋。每条沿 X 宽 4 mm，融合后新增材料沿 Y 约长 11.02 mm、Z 向包络约高 3.85 mm。Ø4 mm 刀杆通过上方深孔，距新增筋 1.50 mm。前壳沿 −Y 抽出 140 mm，距新增筋的连续净距下界为 2.378 mm。 [背锁加强检查](../hardware/enclosure/backlock-rib-checks.json)
+
 ## 版本与证据
 
-- 图册来源为当前保存的 [Discora.FCStd](../hardware/enclosure/Discora.FCStd)，图册日期 2026-11-14。
-- 模型 SHA-256：`9ef433e8437eef3b3aa45558a329a66d8422e0c9014894b763a873c1162eee05`。
+- 图册来源为上方背锁加筋后的 [Discora.FCStd](../hardware/enclosure/Discora.FCStd)，图册日期 2026-11-14。
+- 图册模型 SHA-256：`d9b9109b30a28f0ca4953c45178e5b827769192c2d49d4ab56ace42414adc6db`。
 - P1 前壳及四键采用 PLA Lite 橙色 16301（`#FF671F`），旋钮主体采用 PLA Basic 黑色 10101（`#000000`），0.7×2.2 mm 指示条为深 0.6 mm 的白色 PLA 区域，与顶面齐平；白色符号为独立 PLA Lite 实体，深 0.6 mm、与键面齐平。四个键帽沿用既有复合形状；音量适配阶段的其余 28 个成品几何比较见 `volume-checks.json`；此前侧缘调整的其余 29 个成品及双色件面序核对见 `side-seam-checks.json`；此前底角调整见 `bottom-corner-checks.json`；此前后壳加厚的 28 个其余成品、R4 曲面、内壁、净距和双色件面序核对见 `rear-thickness-checks.json`。此前光驱适配的 20 个既有硬件／操控对象及双色件面序比较见 `drive-mount-checks.json`；此前 PCB 模块适配的 31 个不变成品及前壳局部改动范围见 `volume-pcb-checks.json`。配色阶段曾在 FreeCAD 1.1.4 关闭并重开验证各材料面的颜色；光驱适配生成时 GUI 接口不可连接，未完成该版本的交互界面读回，当前几何投影和填色图由保存模型无界面生成。
 - [dual-color-key-checks.json](../hardware/enclosure/dual-color-key-checks.json)：四键的橙白网格闭合、材料体积不重叠、合并为连续实体；Bambu Studio 识别四个对象、每个两个材料区域，并以 0.4 mm 喷嘴 / 0.12 mm 层高切片。每键均生成 5 层白色路径；白色遮盖和实际成型未验。其余装配碰撞与历史几何等价性见 `appearance-checks.json`。
 - 出图检查核对整机 170/93/243.263、提手净开口 90/24、正面圆孔直径 130、护网内凹 2.5、厚 2.5、碟口水平投影 124/5.5、屏窗外口 32.82/18.1、内喉口 30.42/15.7、电池 112/70/20，以及光驱、碟口坐标和左右侧孔 Y=49 与后壳侧视对称轴对齐；读回壳体截面、外壳底面和脚垫底面核对双基准高度。最终前壳在 Y=0…2.5 保留完整 Ø130 圆口，检查该区域无材料侵入。
 - [rear-thickness-checks.json](../hardware/enclosure/rear-thickness-checks.json)：历史 5 mm 加厚阶段的主体壁厚、内壁位置、关键间隙、R4 和侧视对称通过；当时后壳顶点 Z=189.774，前壳接缝无台阶，28 个其它成品保持。历史侧缘比较仍见 `side-seam-checks.json`，加厚决策见 [ADR-0034](decisions/0034-five-mm-rear-shell.md)。
 - [drive-mount-checks.json](../hardware/enclosure/drive-mount-checks.json)：光驱适配阶段的最大填充包络、1 mm 后壁保护垫间隙、接头／线缆净空、压条与工具通路通过；20 个既有硬件／操控对象差集为零，四键和旋钮面序保持。光驱适配阶段的侧孔检查见 [drive-side-port-checks.json](../hardware/enclosure/drive-side-port-checks.json)，保存后的 GUI 资源与元数据检查见 [drive-model-metadata-checks.json](../hardware/enclosure/drive-model-metadata-checks.json)；后者不替代 GUI 打开读回。设计与未测边界见 [ADR-0035](decisions/0035-measured-drive-rear-wall-mount.md)。
-- [validation.json](../hardware/enclosure/validation.json) 对应当前洞洞板版的三主体、干涉、对称及退碟检查。音量模块和前壳继承的几何见 [volume-pcb-checks.json](../hardware/enclosure/volume-pcb-checks.json)。
+- [validation.json](../hardware/enclosure/validation.json) 记录当前模型的三主体、干涉、对称及退碟检查。加筋阶段的几何改动集中在后壳，见 [加强筋检查](../hardware/enclosure/p3-seat-rib-checks.json)；音量模块和前壳继承的几何见 [volume-pcb-checks.json](../hardware/enclosure/volume-pcb-checks.json)。
 - [oled-checks.json](../hardware/enclosure/oled-checks.json)：孔位、玻璃深度、沉槽／倒角、选定正视及斜视方向无遮挡、定位柱与压框、左右对称、接头／插线、工具通路及先卸压框再取屏的两步路径通过；实际模块、线材和螺钉配合待验。
 - [assembly-paths.json](../hardware/enclosure/assembly-paths.json)：该报告覆盖断线后的刚性部件路径，前壳按 1 mm 步长检查；带线拉开及拔插次序以 `perfboard-checks.json` 为准；支架和电池用连续保守扫掠，侧孔随后壳保持固定；光驱先前移／抬升进入接头维护位置，拔出接头后前向侧转拆出；平移及接头退出用连续保守扫掠，光驱抬升检查 31 个姿态、转动按 0.5° 步长检查 61 个姿态，均采用填满的最大主体包络。抬升和转动采样不是连续运动证明；以前置拆卸 P3、压条、电池、卸紧固件及断线为条件；详细顺序和限制见[打印与装配说明](enclosure-printing.md)。
 - [volume-pcb-print-checks.json](../hardware/enclosure/volume-pcb-print-checks.json)：前壳切片为14h 7m 19s、156.65 g；本次前壳B-rep几何等价，但重导出的STL摘要不同，图册沿用原盘估算，不声称新网格已重新切片。
-- [perfboard-print-checks.json](../hardware/enclosure/perfboard-print-checks.json)：当前后壳9h 33m 26s、297.00 g；P3 支架6h 36m 52s、163.85 g。两盘已重新切片，未实物打印。
+- [backlock-rib-print-checks.json](../hardware/enclosure/backlock-rib-print-checks.json)：上方背锁加筋后壳切片估计 9h 35m 36s、297.50 g。
 - [perfboard-checks.json](../hardware/enclosure/perfboard-checks.json)：前壳与操控件保持；载板三点固定、局部走线、60 mm 服务位及按序拔插检查通过。线束0…60 mm每2 mm采样，12×10 mm入口仅为包络检查，未验证真实手指握持、线材应力或卡扣。
 - [print-checks.json](../hardware/enclosure/print-checks.json)：历史单色记录，170 mm 光驱适配版四个单色盘均重新切片，新增光驱压条进入小件盘，四键与旋钮分别使用双色记录。十一个闭合包络网格适合用户给定的 256³ 空间，Bambu Studio 使用 P2S / 0.4 mm 配置完成四盘 PLA 切片；未用 0.2 mm 喷嘴切片，未实物打印。
-- 图册只保留这一份彩色 PDF，共 9 页 A3 横向，已逐页渲染检查文字、标注及爆炸编号；实体颜色沿用 CAD，线图和填色共享同一模型及投影。颜色、网格精度及输出尺寸见 [color-render.json](../hardware/enclosure/drawings/color-render.json)。临时渲染和切片在被忽略的 `tmp/`，未向打印机发送任务。
+- 图册只保留这一份彩色 PDF，共 11 页 A3 横向，已逐页渲染检查文字、标注及爆炸编号；实体颜色沿用 CAD，第 10 / 11 页以青色标示加强筋。颜色、网格精度及输出尺寸见 [color-render.json](../hardware/enclosure/drawings/color-render.json)。临时渲染和切片在被忽略的 `tmp/`，未向打印机发送任务。
 
 四键设计与尺寸假设见 [ADR-0023](decisions/0023-four-button-front-panel.md)，[button-checks.json](../hardware/enclosure/button-checks.json)记录孔径、局部尺寸和键帽活动余量；引脚面照片和直接焊线要求对应的镂空支架见 [ADR-0025](decisions/0025-open-button-wire-retainer.md)；精确脚距、实际行程和支承面配合待实测。
 
@@ -129,7 +135,7 @@ P1 前壳合并前斜面、提手、格栅、屏幕座和四键定位座；P2 �
 
 ## 更新图册
 
-生成流程只读取保存的 FCStd，先导出几何，再排版 PDF。本版通过 `speaker-scope-checks.json` → `perfboard-checks.json` → `volume-pcb-checks.json` → `drive-mount-checks.json` → `rear-thickness-checks.json` → `bottom-corner-checks.json` → `side-seam-checks.json` → `volume-checks.json` → `handle-checks.json` → `side-port-checks.json` 的模型摘要与逐件差集证据复用既有双色键帽的分面颜色和切片；各比较报告须使用对应阶段的调整前模型：`check-drive-mount.py --baseline` 接受光驱适配前模型，恢复方法见[打印说明](enclosure-printing.md#重现)；`check-side-ports.py --baseline` 接受侧孔合并前模型，不能混用。普通复查请输出到 `tmp/`，不要覆盖带基线摘要与不变对象证据的已提交报告。矢量投影保存在 `hardware/enclosure/drawings/*.svg`，尺寸标注在 PDF 中；不要把无标注 SVG 当作完整尺寸图。
+生成流程只读取保存的 FCStd，先导出几何，再排版 PDF。本版通过 `backlock-rib-checks.json` → `p3-seat-rib-checks.json` → `speaker-scope-checks.json` → `perfboard-checks.json` → `volume-pcb-checks.json` → `drive-mount-checks.json` → `rear-thickness-checks.json` → `bottom-corner-checks.json` → `side-seam-checks.json` → `volume-checks.json` → `handle-checks.json` → `side-port-checks.json` 的模型摘要与逐件差集证据复用既有双色键帽的分面颜色和切片；各比较报告须使用对应阶段的调整前模型：`check-drive-mount.py --baseline` 接受光驱适配前模型，恢复方法见[打印说明](enclosure-printing.md#重现)；`check-side-ports.py --baseline` 接受侧孔合并前模型，不能混用。普通复查请输出到 `tmp/`，不要覆盖带基线摘要与不变对象证据的已提交报告。矢量投影保存在 `hardware/enclosure/drawings/*.svg`，尺寸标注在 PDF 中；不要把无标注 SVG 当作完整尺寸图。
 
 1. 准备可导入 `FreeCAD`、`Part`、`TechDraw` 的 FreeCAD Python，运行：
    ```bash
@@ -150,11 +156,11 @@ P1 前壳合并前斜面、提手、格栅、屏幕座和四键定位座；P2 �
    ```bash
    mkdir -p tmp/drawings
    pdftoppm -scale-to 1800 -png hardware/enclosure/drawings/Discora-V4-drawing-book-color.pdf tmp/drawings/color-page
-   cp tmp/drawings/color-page-1.png hardware/enclosure/drawings/dimensions-color-preview.png
-   cp tmp/drawings/color-page-3.png hardware/enclosure/drawings/exploded-color-preview.png
-   cp tmp/drawings/color-page-6.png hardware/enclosure/drawings/oled-dimensions-preview.png
-   cp tmp/drawings/color-page-7.png hardware/enclosure/drawings/volume-module-preview.png
-   cp tmp/drawings/color-page-8.png hardware/enclosure/drawings/perfboard-layout-preview.png
-   cp tmp/drawings/color-page-9.png hardware/enclosure/drawings/front-harness-preview.png
+   cp tmp/drawings/color-page-01.png hardware/enclosure/drawings/dimensions-color-preview.png
+   cp tmp/drawings/color-page-03.png hardware/enclosure/drawings/exploded-color-preview.png
+   cp tmp/drawings/color-page-06.png hardware/enclosure/drawings/oled-dimensions-preview.png
+   cp tmp/drawings/color-page-07.png hardware/enclosure/drawings/volume-module-preview.png
+   cp tmp/drawings/color-page-08.png hardware/enclosure/drawings/perfboard-layout-preview.png
+   cp tmp/drawings/color-page-09.png hardware/enclosure/drawings/front-harness-preview.png
    ```
 5. 更新本文版本、对应尺寸及验证证据。修改 CAD 时仍须按项目约定运行相关几何与左右对称检查；出图本身不能替代设计验收。

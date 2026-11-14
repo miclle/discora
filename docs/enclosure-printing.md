@@ -6,7 +6,7 @@
 
 当前整机 170×93×243.263 mm，主体壁厚均为 5 mm；按 UJ-898 实测调整光驱底托、可拆压条、SATA 与线缆空间，详见 [ADR-0035](decisions/0035-measured-drive-rear-wall-mount.md)。
 
-当前洞洞板固定及前壳线束维护见[布局](perfboard-layout.md)。P2 沿用洞洞板版切片，P3 按喇叭试装版重新导出和切片。模型与图纸见[外壳说明](../hardware/enclosure/README.md)和[唯一彩色图册](../hardware/enclosure/drawings/Discora-V4-drawing-book-color.pdf)。三个主体均为单一连续实体；两侧孔已并入后壳，另有四键帽、按键支架、OLED 压框、光驱压条和旋钮，共 11 件刚性 PLA 零件，软脚垫与 OLED 自带玻璃另计；本版没有独立透明保护片。
+当前洞洞板固定及前壳线束维护见[布局](perfboard-layout.md)。P2 按螺丝座加筋版重新导出和切片，P3 沿用喇叭试装版切片。模型与图纸见[外壳说明](../hardware/enclosure/README.md)和[彩色图册](../hardware/enclosure/drawings/Discora-V4-drawing-book-color.pdf)。三个主体均为单一连续实体；两侧孔已并入后壳，另有四键帽、按键支架、OLED 压框、光驱压条和旋钮，共 11 件刚性 PLA 零件，软脚垫与 OLED 自带玻璃另计；本版没有独立透明保护片。
 
 ## 橙白双色键帽（2026-11-10）
 
@@ -40,11 +40,11 @@
 
 四盘单色合计估计 **609.97 g**；加上四键双色盘 7.42 g 和旋钮双色盘 9.50 g，共约 **626.89 g**。实际时间、耗材及支撑清理效果以打印结果为准。
 
-洞洞板版的 P2 与 P3 已重新导出闭合网格并切片。P2 估计 9h 33m 26s、297.00 g，当时 P3 估计 6h 36m 52s、163.85 g，见 [perfboard-print-checks.json](../hardware/enclosure/perfboard-print-checks.json)。当前喇叭试装版 P3 估计 7h 0m 56s、170.45 g，见 [speaker-print-checks.json](../hardware/enclosure/speaker-print-checks.json)。
+当前 P2 上方背锁加筋版闭合网格已切片，估计 9h 35m 36s、297.50 g，见 [P2 切片报告](../hardware/enclosure/backlock-rib-print-checks.json)。喇叭试装版 P3 估计 7h 0m 56s、170.45 g，见 [P3 切片报告](../hardware/enclosure/speaker-print-checks.json)。此前洞洞板版的 P2 与 P3 记录见 [perfboard-print-checks.json](../hardware/enclosure/perfboard-print-checks.json)。
 
 此前 PCB 音量模块适配后，新前壳切片及旧件复用依据见 [volume-pcb-print-checks.json](../hardware/enclosure/volume-pcb-print-checks.json)，文件位于 `tmp/cad-volume-pcb/print/`。[print-checks.json](../hardware/enclosure/print-checks.json)保留 2026-11-12 模型、网格、配置及 G-code 摘要。四盘返回码均为 0，保留安装版本对官方结束代码 `T65535` 的解析提示；未发送打印。本次旋钮双色文件位于被忽略的 `tmp/cad-volume-white/print/`，四个单色盘均位于 `tmp/cad-drive-measured/print/`。切片成功不代替侧孔窄筋、深孔和导音通道的支撑清理验证。
 
-下方两处背锁通道深 78.8 mm，需细长螺丝刀；上方两处位于后斜面，轴向深约 30.5 mm。螺钉头径应不超过 4 mm，实际批头与刀杆须核对。详见 [ADR-0024](decisions/0024-rear-access-front-cover-fasteners.md)。
+下方两处背锁通道深 78.8 mm，沿侧壁一体成形，需细长螺丝刀。上方两处位于后斜面，轴向深约 30.5 mm，已各加一条短三角筋。四处 Ø4 mm 刀杆包络均通过检查，螺钉头径应不超过 4 mm，实际批头与刀杆须试装。详见 [ADR-0024](decisions/0024-rear-access-front-cover-fasteners.md)。
 
 侧饰片现为四点连接，筋截面 2×3 mm、饰片厚 2 mm；仍需避免扭撬清理支撑，打印强度未实测。历史加强阶段单侧最窄采样通流面积约 3.84 cm²；当前声腔加深和短管延长见 ADR-0035，声学效果待测；声学分析及参数缺口见 [ADR-0030](decisions/0030-side-inset-support-and-port-sizing.md)。
 
@@ -66,7 +66,7 @@ OLED 玻璃前面内退 1.0 mm，沉槽前缘名义厚 0.8；外口经倒角收�
 
 [assembly-paths.json](../hardware/enclosure/assembly-paths.json)记录以下条件和结果：
 
-- P3 连同喇叭、功放、洞洞板向前：按各构造件的包围盒连续保守扫掠；前壳和螺钉已取下，侧孔随 P2 固定。
+- P3 连同喇叭、功放、洞洞板向前：断线、拆下前壳并卸掉 P3 四颗固定螺钉后，按各构造件的包围盒沿 −Y 连续保守扫掠 140 mm，全程无干涉。侧孔和四条螺丝座加强筋随 P2 固定，新增筋距扫掠包络最近约 7.16 mm。打印配合及锁紧强度待实测。 [净距记录](../hardware/enclosure/p3-seat-rib-checks.json)
 - 光驱压条：拆前壳和 P3、卸两螺钉后向前取出，腰部及两耳分别连续保守扫掠。
 - 光驱进入维护位置：移除压条和电池，先连续前移 12，再按 31 个姿态检查前移 3／抬高 9.5。
 - SATA 拔出及向前取出：三个连续保守包络扫掠；10 mm 拔出行程是设计预留，线缆须释放。
