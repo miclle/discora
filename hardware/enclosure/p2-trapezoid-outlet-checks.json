@@ -1,0 +1,828 @@
+{
+  "model_sha256": "0e3217172e88542d0803357c684469d1865eaee0b906c6a52ee9af0dc7779b81",
+  "decision": "ADR-0045",
+  "geometry": {
+    "model_sha256": "0e3217172e88542d0803357c684469d1865eaee0b906c6a52ee9af0dc7779b81",
+    "baseline_sha256": "623a0f6cdcb73140d6a54620b82627d4820494549455f3c8316ba74fa61b35a5",
+    "profile": "trapezoid",
+    "all_unmodified_shapes_difference_mm3": {
+      "FoldSection": 0.0,
+      "FoldedSkin": 0.0,
+      "CowlEdges": 0.0,
+      "SymmetricCowlTool": 0.0,
+      "SymmetricCowl": 0.0,
+      "CowlTool": 0.0,
+      "Cowl": 0.0,
+      "LPanelBlank": 0.0,
+      "LChamber": 0.0,
+      "RChamber": 0.0,
+      "FrontBezel": 0.0,
+      "FrontGrille": 0.0,
+      "LDriver": 0.0,
+      "RDriver": 0.0,
+      "LDriverFrame": 0.0,
+      "RDriverFrame": 0.0,
+      "FrontBaffle": 0.0,
+      "Back": 0.0,
+      "Base": 0.0,
+      "Feet": 0.0,
+      "Window": 0.0,
+      "StatusArt": 0.0,
+      "PlayPauseKey": 0.0,
+      "PlayPauseSwitch": 0.0,
+      "EjectKey": 0.0,
+      "EjectSwitch": 0.0,
+      "PrevKey": 0.0,
+      "PrevSwitch": 0.0,
+      "NextKey": 0.0,
+      "NextSwitch": 0.0,
+      "ButtonRetainer": 0.0,
+      "ButtonMounts": 0.0,
+      "Knob": 0.0,
+      "Encoder": 0.0,
+      "VolumePot": 0.0,
+      "DriveBlank": 0.0,
+      "DriveTool": 0.0,
+      "Drive": 0.0,
+      "Bridge": 0.0,
+      "DriveCarrier": 0.0,
+      "DriveRetainer": 0.0,
+      "SlotGuide": 0.0,
+      "DisplayPCB": 0.0,
+      "DisplayHeader": 0.0,
+      "DisplayRetainer": 0.0,
+      "DisplayMountLeft": 0.0,
+      "DisplayMountRight": 0.0,
+      "DisplayCarrier": 0.0,
+      "AmpShelf": 0.0,
+      "Amp": 0.0,
+      "AmpChip": 0.0,
+      "AmpPads": 0.0,
+      "Perfboard": 0.0,
+      "MCU": 0.0,
+      "MCUChip": 0.0,
+      "MCUSockets": 0.0,
+      "DAC": 0.0,
+      "DACChip": 0.0,
+      "DACSockets": 0.0,
+      "BuckA": 0.0,
+      "BuckB": 0.0,
+      "XHButtons": 0.0,
+      "XHOLED": 0.0,
+      "XHVolumeSwitch": 0.0,
+      "PerfboardScrew1": 0.0,
+      "PerfboardScrew2": 0.0,
+      "PerfboardScrew3": 0.0,
+      "Battery": 0.0,
+      "BatteryCradle": 0.0,
+      "CarrierTab0": 0.0,
+      "CarrierTab1": 0.0,
+      "CarrierTab2": 0.0,
+      "CarrierTab3": 0.0,
+      "FrontFastenerPosts": 0.0,
+      "RearFastenerCuts": 0.0,
+      "PerfboardFrontRib": 0.0,
+      "PerfboardLeftRib": 0.0,
+      "PerfboardRightRib": 0.0,
+      "PerfboardRearRail": 0.0,
+      "PerfboardSeats": 0.0,
+      "PerfboardEdgePad": 0.0,
+      "DisplayMountPilots": 0.0,
+      "DisplayPocket": 0.0,
+      "RearRoofRegion": 0.0,
+      "FrontCowl": 0.0,
+      "RearRoof": 0.0,
+      "FrontShell": 0.0,
+      "SpeakerCarrier": 0.0,
+      "PerfboardUnderWiring": 0.0,
+      "BuckAService": 0.0,
+      "BuckBService": 0.0,
+      "DACPowerConnector": 0.0,
+      "ButtonsLeadBend": 0.0,
+      "ButtonsUnplug": 0.0,
+      "OLEDLeadBend": 0.0,
+      "OLEDUnplug": 0.0,
+      "VolumeSwitchLeadBend": 0.0,
+      "VolumeSwitchUnplug": 0.0,
+      "ButtonsHarnessClosed": 0.0,
+      "ButtonsHarnessOpen": 0.0,
+      "OLEDHarnessClosed": 0.0,
+      "OLEDHarnessOpen": 0.0,
+      "VolumeSwitchHarnessClosed": 0.0,
+      "VolumeSwitchHarnessOpen": 0.0,
+      "DriveDataWire": 0.0,
+      "DACAudioWire": 0.0,
+      "SataPlugClearance": 0.0,
+      "SataCableClearance": 0.0,
+      "DiscReference": 0.0
+    },
+    "p3_whole_shape_difference_mm3": 0.0,
+    "p2_actual_opening_sections_mm2": {
+      "-84.99": 949.156183717722,
+      "-84.49199999999999": 929.9818427048342,
+      "-83.994": 910.9770896625854,
+      "-83.496": 892.1419245904638,
+      "-82.99799999999999": 873.4763474885197,
+      "-82.5": 854.9803583564685,
+      "-82.002": 836.6539571941123,
+      "-81.50399999999999": 818.4971440031865,
+      "-81.006": 800.5099187819864,
+      "-80.508": 782.6922815303328,
+      "-80.00999999999999": 769.9883948160658
+    },
+    "section_method": "mean area of a 0.002 mm thick solid slab at each of 11 X stations",
+    "inner_throat_projection_obstruction_mm2": {
+      "-84.99": 0.0,
+      "-84.49199999999999": 0.0,
+      "-83.994": 0.0,
+      "-83.496": 0.0,
+      "-82.99799999999999": 0.0,
+      "-82.5": 0.0,
+      "-82.002": 0.0,
+      "-81.50399999999999": 0.0,
+      "-81.006": 0.0,
+      "-80.508": 0.0,
+      "-80.00999999999999": 0.0
+    },
+    "full_482mm2_throat_projection_obstruction_mm3": 0.0,
+    "sliding_gap_mm": 0.7000000000000028,
+    "p2_symmetry_difference_mm3": 0.0,
+    "p2_outside_port_zone_difference_mm3": 0.0,
+    "outer_mouth_size_yz_mm": [
+      38.477864045000416,
+      28.199999999999996
+    ],
+    "outer_mouth_bounds_yz_mm": [
+      25.62213595499958,
+      64.1,
+      50.9,
+      79.1
+    ],
+    "outer_mouth_radius_mm": 5.6,
+    "outer_mouth_area_mm2": 949.5429474145775,
+    "only_p2_outlet_changed": true,
+    "p3_acoustic_and_print_evidence": "p2-p3-duct-checks.json; unchanged entire P3 and construction sources verified by exact B-rep difference",
+    "all_pass": true
+  },
+  "mesh": {
+    "RearShell": {
+      "stl_sha256": "b0735c1a5c74dfdd745df7b90a38965c253bf400d36a118d5465b5c6fb972edf",
+      "facets": 7032,
+      "closed": true,
+      "translation_after_rotation_mm": [
+        128.0,
+        30.658911058107023,
+        93.00000000000006
+      ],
+      "size_mm": [
+        170.0,
+        192.682177883786,
+        88.00000000000006
+      ]
+    },
+    "port_construction_union_difference_mm3": 0.0,
+    "model_sha256": "0e3217172e88542d0803357c684469d1865eaee0b906c6a52ee9af0dc7779b81"
+  },
+  "layers": {
+    "model_sha256": "0e3217172e88542d0803357c684469d1865eaee0b906c6a52ee9af0dc7779b81",
+    "layers": 440,
+    "warnings": "",
+    "new_overhang_regions": [
+      {
+        "layer": 329,
+        "z": 65.8,
+        "area_mm2": 0.12211259709645778,
+        "bounds": [
+          46.891005715445395,
+          87.92857360839844,
+          48.0,
+          88.93162671127183
+        ],
+        "support_coverage_ratio": 1.0000000000000004,
+        "unsupported_area_mm2": 0.0
+      },
+      {
+        "layer": 329,
+        "z": 65.8,
+        "area_mm2": 0.1178027733551251,
+        "bounds": [
+          47.01456622936811,
+          85.48515796892106,
+          48.0,
+          86.38919830322266
+        ],
+        "support_coverage_ratio": 0.9712205515258736,
+        "unsupported_area_mm2": 0.003390298845883001
+      },
+      {
+        "layer": 329,
+        "z": 65.8,
+        "area_mm2": 0.12212001486040944,
+        "bounds": [
+          208.0,
+          87.92857360839844,
+          209.10898449211237,
+          88.9316297555571
+        ],
+        "support_coverage_ratio": 0.9999999999999999,
+        "unsupported_area_mm2": 0.0
+      },
+      {
+        "layer": 329,
+        "z": 65.8,
+        "area_mm2": 0.1178032206347868,
+        "bounds": [
+          208.0,
+          85.48514314881074,
+          208.9854620668431,
+          86.38919830322266
+        ],
+        "support_coverage_ratio": 0.8310237543756159,
+        "unsupported_area_mm2": 0.019905945945327186
+      },
+      {
+        "layer": 330,
+        "z": 66.0,
+        "area_mm2": 0.8045541750450238,
+        "bounds": [
+          46.21308856874849,
+          85.39417466483029,
+          48.0,
+          89.03171480771854
+        ],
+        "support_coverage_ratio": 0.9999999999999998,
+        "unsupported_area_mm2": 0.0
+      },
+      {
+        "layer": 330,
+        "z": 66.0,
+        "area_mm2": 0.8045755900921254,
+        "bounds": [
+          208.0,
+          85.3941893387722,
+          209.7869007117671,
+          89.03170666624507
+        ],
+        "support_coverage_ratio": 1.0,
+        "unsupported_area_mm2": 0.0
+      },
+      {
+        "layer": 331,
+        "z": 66.2,
+        "area_mm2": 0.5804751587556591,
+        "bounds": [
+          45.535394710195995,
+          85.29481750127563,
+          47.110352421311966,
+          89.13161857924986
+        ],
+        "support_coverage_ratio": 0.9999999999999997,
+        "unsupported_area_mm2": 0.0
+      },
+      {
+        "layer": 331,
+        "z": 66.2,
+        "area_mm2": 0.5804709290094112,
+        "bounds": [
+          208.88965190798652,
+          85.29482606589673,
+          210.46457384312066,
+          89.13159285483314
+        ],
+        "support_coverage_ratio": 0.9999999999999994,
+        "unsupported_area_mm2": 0.0
+      },
+      {
+        "layer": 332,
+        "z": 66.4,
+        "area_mm2": 0.5797060410180276,
+        "bounds": [
+          44.85761417771733,
+          85.19548676138261,
+          46.476444280691645,
+          89.23160327298116
+        ],
+        "support_coverage_ratio": 1.0,
+        "unsupported_area_mm2": 0.0
+      },
+      {
+        "layer": 332,
+        "z": 66.4,
+        "area_mm2": 0.579683561607783,
+        "bounds": [
+          209.52355991558647,
+          85.19550635369914,
+          211.1423728928787,
+          89.23159373540062
+        ],
+        "support_coverage_ratio": 1.0000000000000002,
+        "unsupported_area_mm2": 0.0
+      },
+      {
+        "layer": 333,
+        "z": 66.6,
+        "area_mm2": 0.6025693705532205,
+        "bounds": [
+          44.17968770177882,
+          85.09607690522596,
+          45.86004018416618,
+          89.3316965056091
+        ],
+        "support_coverage_ratio": 1.0,
+        "unsupported_area_mm2": 0.0
+      },
+      {
+        "layer": 333,
+        "z": 66.6,
+        "area_mm2": 0.6025697217737722,
+        "bounds": [
+          210.13996142879208,
+          85.09605458439476,
+          211.82032846486578,
+          89.33170843109119
+        ],
+        "support_coverage_ratio": 1.0000000000000002,
+        "unsupported_area_mm2": 0.0
+      },
+      {
+        "layer": 334,
+        "z": 66.8,
+        "area_mm2": 0.6256118532209831,
+        "bounds": [
+          43.502013938402705,
+          85.01884366684689,
+          45.251248504648295,
+          89.43158193082932
+        ],
+        "support_coverage_ratio": 1.0,
+        "unsupported_area_mm2": 0.0
+      },
+      {
+        "layer": 334,
+        "z": 66.8,
+        "area_mm2": 0.6256119168443366,
+        "bounds": [
+          210.74874402639995,
+          85.01882858296489,
+          212.49804128136245,
+          89.43162595492026
+        ],
+        "support_coverage_ratio": 1.0000000000000002,
+        "unsupported_area_mm2": 0.0
+      },
+      {
+        "layer": 335,
+        "z": 67.0,
+        "area_mm2": 0.6093549640943752,
+        "bounds": [
+          43.027196474360686,
+          85.0513622793162,
+          44.642454419479044,
+          89.38185054311658
+        ],
+        "support_coverage_ratio": 1.0,
+        "unsupported_area_mm2": 0.0
+      },
+      {
+        "layer": 335,
+        "z": 67.0,
+        "area_mm2": 0.6093797572683706,
+        "bounds": [
+          211.3575379563198,
+          85.05136651753111,
+          212.9728105436943,
+          89.38185638131934
+        ],
+        "support_coverage_ratio": 0.9999999999999997,
+        "unsupported_area_mm2": 0.0
+      },
+      {
+        "layer": 336,
+        "z": 67.2,
+        "area_mm2": 0.591500896289253,
+        "bounds": [
+          43.0,
+          85.37472450666486,
+          44.033662814796266,
+          88.93476128692473
+        ],
+        "support_coverage_ratio": 0.9999999999999994,
+        "unsupported_area_mm2": 0.0
+      },
+      {
+        "layer": 336,
+        "z": 67.2,
+        "area_mm2": 0.5914939657699327,
+        "bounds": [
+          211.96633374208426,
+          85.37472869800871,
+          213.0,
+          88.93475696042826
+        ],
+        "support_coverage_ratio": 0.9999999999999997,
+        "unsupported_area_mm2": 0.0
+      },
+      {
+        "layer": 337,
+        "z": 67.4,
+        "area_mm2": 0.46071047015603195,
+        "bounds": [
+          43.0,
+          85.97124262874705,
+          43.448083096654095,
+          88.35253375350294
+        ],
+        "support_coverage_ratio": 1.0,
+        "unsupported_area_mm2": 0.0
+      },
+      {
+        "layer": 337,
+        "z": 67.4,
+        "area_mm2": 0.4607132225751414,
+        "bounds": [
+          212.5519173727698,
+          85.97124415707357,
+          213.0,
+          88.35252958473968
+        ],
+        "support_coverage_ratio": 0.9999999999999999,
+        "unsupported_area_mm2": 0.0
+      }
+    ],
+    "new_overhang_outside_outlet": [],
+    "uncovered_new_islands": [],
+    "outlet_paths_without_previous_model_over_1mm": [
+      {
+        "a": [
+          47.79,
+          87.728
+        ],
+        "b": [
+          47.79,
+          86.59
+        ],
+        "feature": "Overhang wall",
+        "width": 0.45,
+        "layer": 330,
+        "z": 66.0,
+        "free": 1.137999999999991,
+        "a_on_model": false,
+        "b_on_model": false,
+        "free_line_supported_ratio": 1.0
+      },
+      {
+        "a": [
+          208.21,
+          86.59
+        ],
+        "b": [
+          208.21,
+          87.728
+        ],
+        "feature": "Overhang wall",
+        "width": 0.45,
+        "layer": 330,
+        "z": 66.0,
+        "free": 1.137999999999991,
+        "a_on_model": false,
+        "b_on_model": false,
+        "free_line_supported_ratio": 1.0
+      },
+      {
+        "a": [
+          45.306,
+          85.764
+        ],
+        "b": [
+          45.812,
+          86.673
+        ],
+        "feature": "Overhang wall",
+        "width": 0.45,
+        "layer": 333,
+        "z": 66.6,
+        "free": 1.040344654429488,
+        "a_on_model": false,
+        "b_on_model": false,
+        "free_line_supported_ratio": 1.0
+      },
+      {
+        "a": [
+          45.808,
+          87.658
+        ],
+        "b": [
+          45.298,
+          88.563
+        ],
+        "feature": "Overhang wall",
+        "width": 0.45,
+        "layer": 333,
+        "z": 66.6,
+        "free": 1.0388094146666174,
+        "a_on_model": false,
+        "b_on_model": false,
+        "free_line_supported_ratio": 1.0
+      },
+      {
+        "a": [
+          210.702,
+          88.563
+        ],
+        "b": [
+          210.192,
+          87.658
+        ],
+        "feature": "Overhang wall",
+        "width": 0.45,
+        "layer": 333,
+        "z": 66.6,
+        "free": 1.0388094146666138,
+        "a_on_model": false,
+        "b_on_model": false,
+        "free_line_supported_ratio": 1.0
+      },
+      {
+        "a": [
+          210.189,
+          86.673
+        ],
+        "b": [
+          210.694,
+          85.764
+        ],
+        "feature": "Overhang wall",
+        "width": 0.45,
+        "layer": 333,
+        "z": 66.6,
+        "free": 1.03985864423969,
+        "a_on_model": false,
+        "b_on_model": false,
+        "free_line_supported_ratio": 1.0
+      },
+      {
+        "a": [
+          44.676,
+          85.707
+        ],
+        "b": [
+          45.203,
+          86.655
+        ],
+        "feature": "Overhang wall",
+        "width": 0.45,
+        "layer": 334,
+        "z": 66.8,
+        "free": 1.0846349616345654,
+        "a_on_model": false,
+        "b_on_model": false,
+        "free_line_supported_ratio": 1.0
+      },
+      {
+        "a": [
+          45.203,
+          86.655
+        ],
+        "b": [
+          45.199,
+          87.677
+        ],
+        "feature": "Overhang wall",
+        "width": 0.45,
+        "layer": 334,
+        "z": 66.8,
+        "free": 1.022007827758678,
+        "a_on_model": false,
+        "b_on_model": false,
+        "free_line_supported_ratio": 1.0
+      },
+      {
+        "a": [
+          45.199,
+          87.677
+        ],
+        "b": [
+          44.667,
+          88.62
+        ],
+        "feature": "Overhang wall",
+        "width": 0.45,
+        "layer": 334,
+        "z": 66.8,
+        "free": 1.0827155674506541,
+        "a_on_model": false,
+        "b_on_model": false,
+        "free_line_supported_ratio": 1.0
+      },
+      {
+        "a": [
+          211.333,
+          88.62
+        ],
+        "b": [
+          210.801,
+          87.677
+        ],
+        "feature": "Overhang wall",
+        "width": 0.45,
+        "layer": 334,
+        "z": 66.8,
+        "free": 1.0827155674506612,
+        "a_on_model": false,
+        "b_on_model": false,
+        "free_line_supported_ratio": 1.0
+      },
+      {
+        "a": [
+          210.801,
+          87.677
+        ],
+        "b": [
+          210.797,
+          86.655
+        ],
+        "feature": "Overhang wall",
+        "width": 0.45,
+        "layer": 334,
+        "z": 66.8,
+        "free": 1.022007827758678,
+        "a_on_model": false,
+        "b_on_model": false,
+        "free_line_supported_ratio": 1.0
+      },
+      {
+        "a": [
+          210.797,
+          86.655
+        ],
+        "b": [
+          211.324,
+          85.707
+        ],
+        "feature": "Overhang wall",
+        "width": 0.45,
+        "layer": 334,
+        "z": 66.8,
+        "free": 1.0846349616345723,
+        "a_on_model": false,
+        "b_on_model": false,
+        "free_line_supported_ratio": 1.0
+      },
+      {
+        "a": [
+          44.079,
+          85.681
+        ],
+        "b": [
+          44.594,
+          86.638
+        ],
+        "feature": "Overhang wall",
+        "width": 0.45,
+        "layer": 335,
+        "z": 67.0,
+        "free": 1.0867722852557549,
+        "a_on_model": false,
+        "b_on_model": false,
+        "free_line_supported_ratio": 1.0
+      },
+      {
+        "a": [
+          44.594,
+          86.638
+        ],
+        "b": [
+          44.59,
+          87.696
+        ],
+        "feature": "Overhang wall",
+        "width": 0.45,
+        "layer": 335,
+        "z": 67.0,
+        "free": 1.0580075614096454,
+        "a_on_model": false,
+        "b_on_model": false,
+        "free_line_supported_ratio": 1.0
+      },
+      {
+        "a": [
+          44.59,
+          87.696
+        ],
+        "b": [
+          44.045,
+          88.67
+        ],
+        "feature": "Overhang wall",
+        "width": 0.45,
+        "layer": 335,
+        "z": 67.0,
+        "free": 1.116109761627417,
+        "a_on_model": false,
+        "b_on_model": false,
+        "free_line_supported_ratio": 1.0
+      },
+      {
+        "a": [
+          211.955,
+          88.67
+        ],
+        "b": [
+          211.41,
+          87.696
+        ],
+        "feature": "Overhang wall",
+        "width": 0.45,
+        "layer": 335,
+        "z": 67.0,
+        "free": 1.1161097616274238,
+        "a_on_model": false,
+        "b_on_model": false,
+        "free_line_supported_ratio": 1.0
+      },
+      {
+        "a": [
+          211.41,
+          87.696
+        ],
+        "b": [
+          211.406,
+          86.638
+        ],
+        "feature": "Overhang wall",
+        "width": 0.45,
+        "layer": 335,
+        "z": 67.0,
+        "free": 1.0580075614096454,
+        "a_on_model": false,
+        "b_on_model": false,
+        "free_line_supported_ratio": 1.0
+      },
+      {
+        "a": [
+          211.406,
+          86.638
+        ],
+        "b": [
+          211.921,
+          85.681
+        ],
+        "feature": "Overhang wall",
+        "width": 0.45,
+        "layer": 335,
+        "z": 67.0,
+        "free": 1.086772285255748,
+        "a_on_model": false,
+        "b_on_model": false,
+        "free_line_supported_ratio": 1.0
+      }
+    ],
+    "unsupported_outlet_paths": [],
+    "new_overhang_regions_without_support": [],
+    "time": "9h 12m 0s",
+    "filament_g": 286.84,
+    "stl_sha256": "b0735c1a5c74dfdd745df7b90a38965c253bf400d36a118d5465b5c6fb972edf",
+    "gcode_sha256": "0d3539481fbd8806eccee7a2306d15c663488bbd059cfc503339ca495da163b8",
+    "3mf_sha256": "0a4613b3b06c7e281228e14db6c4e2072209f5f1351c0f90cc3e5b844e49d09a"
+  },
+  "assembly_paths": {
+    "all_pass": true,
+    "path_count": 7,
+    "report": "assembly-paths.json"
+  },
+  "static_validation": {
+    "invalid": [],
+    "clashes": [],
+    "report": "validation.json"
+  },
+  "gui": {
+    "opened_final_3mf": true,
+    "resliced": true,
+    "inspected_layers": [
+      322,
+      335
+    ],
+    "final_view": "Prepare, left side exterior",
+    "support_type": "tree(auto)",
+    "threshold_degrees": 30,
+    "critical_regions_only": false,
+    "build_plate_only": false,
+    "visible_warning": false,
+    "estimate": "9h 9m / 286.60 g; GUI reslice was not saved over the audited CLI file",
+    "screenshots": {
+      "tmp/cad-p2-trapezoid-outlet/bambu-exterior-final.png": "922e0707f960fcb95e21577ece349d1bdbffb904ec2cf18aae9aaa6f5c97f67f",
+      "tmp/cad-p2-trapezoid-outlet/bambu-support-layer-335.png": "df0363166cc1762c0a948c80826b44b10a997b173550b861dafa824a95a71bec",
+      "tmp/cad-p2-trapezoid-outlet/bambu-side-layer-335.png": "d301f8363b9efb5768b5fe4efa3126f71044f4d42571bc04d19b5da18963376c"
+    }
+  },
+  "p3_unchanged_3mf": "tmp/cad-p3-duct-outlet/SpeakerCarrier/Discora-P3-Duct.3mf",
+  "p2_3mf": "tmp/cad-p2-trapezoid-outlet/RearShell/Discora-P2-Trapezoid-Outlet.3mf",
+  "p2_stl": "tmp/cad-p2-trapezoid-outlet/print/RearShell.stl",
+  "limits": [
+    "Physical print, support removal force and acoustics are not verified.",
+    "P2 open rear-shell and side-outlet supports remain; support count increases with critical-only disabled.",
+    "Significant new unsupported area threshold is 0.05 mm2; adjacent-layer envelope is 0.35 mm.",
+    "Toolpath support coverage uses lower-layer extrusion footprints with the documented 0.35 mm envelope."
+  ],
+  "all_pass": true
+}

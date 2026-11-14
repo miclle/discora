@@ -1,0 +1,459 @@
+{
+  "status": "CAD and slicing checked; full print and acoustic performance unverified",
+  "model_sha256": "5ba3b6c8d656ecfeb9e8c3cce01033df42622be426691f4662630de43c48bfca",
+  "geometry": {
+    "model_sha256": "5ba3b6c8d656ecfeb9e8c3cce01033df42622be426691f4662630de43c48bfca",
+    "baseline_sha256": "b7a0ae893055d53e53d775522b112aef683b7cced73069f6f60b74c9f59b85f8",
+    "unchanged_shapes_difference_mm3": {
+      "FoldSection": 0.0,
+      "FoldedSkin": 0.0,
+      "CowlEdges": 0.0,
+      "SymmetricCowlTool": 0.0,
+      "SymmetricCowl": 0.0,
+      "CowlTool": 0.0,
+      "Cowl": 0.0,
+      "LPanelBlank": 0.0,
+      "FrontBezel": 0.0,
+      "FrontGrille": 0.0,
+      "LDriver": 0.0,
+      "RDriver": 0.0,
+      "LDriverFrame": 0.0,
+      "RDriverFrame": 0.0,
+      "FrontBaffle": 0.0,
+      "Back": 0.0,
+      "Base": 0.0,
+      "Feet": 0.0,
+      "Window": 0.0,
+      "StatusArt": 0.0,
+      "PlayPauseKey": 0.0,
+      "PlayPauseSwitch": 0.0,
+      "EjectKey": 0.0,
+      "EjectSwitch": 0.0,
+      "PrevKey": 0.0,
+      "PrevSwitch": 0.0,
+      "NextKey": 0.0,
+      "NextSwitch": 0.0,
+      "ButtonRetainer": 0.0,
+      "ButtonMounts": 0.0,
+      "Knob": 0.0,
+      "Encoder": 0.0,
+      "VolumePot": 0.0,
+      "DriveBlank": 0.0,
+      "DriveTool": 0.0,
+      "Drive": 0.0,
+      "Bridge": 0.0,
+      "DriveCarrier": 0.0,
+      "DriveRetainer": 0.0,
+      "SlotGuide": 0.0,
+      "DisplayPCB": 0.0,
+      "DisplayHeader": 0.0,
+      "DisplayRetainer": 0.0,
+      "DisplayMountLeft": 0.0,
+      "DisplayMountRight": 0.0,
+      "DisplayCarrier": 0.0,
+      "AmpShelf": 0.0,
+      "Amp": 0.0,
+      "AmpChip": 0.0,
+      "AmpPads": 0.0,
+      "Perfboard": 0.0,
+      "MCU": 0.0,
+      "MCUChip": 0.0,
+      "MCUSockets": 0.0,
+      "DAC": 0.0,
+      "DACChip": 0.0,
+      "DACSockets": 0.0,
+      "BuckA": 0.0,
+      "BuckB": 0.0,
+      "XHButtons": 0.0,
+      "XHOLED": 0.0,
+      "XHVolumeSwitch": 0.0,
+      "PerfboardScrew1": 0.0,
+      "PerfboardScrew2": 0.0,
+      "PerfboardScrew3": 0.0,
+      "Battery": 0.0,
+      "BatteryCradle": 0.0,
+      "CarrierTab0": 0.0,
+      "CarrierTab1": 0.0,
+      "CarrierTab2": 0.0,
+      "CarrierTab3": 0.0,
+      "FrontFastenerPosts": 0.0,
+      "RearFastenerCuts": 0.0,
+      "PerfboardFrontRib": 0.0,
+      "PerfboardLeftRib": 0.0,
+      "PerfboardRightRib": 0.0,
+      "PerfboardRearRail": 0.0,
+      "PerfboardSeats": 0.0,
+      "PerfboardEdgePad": 0.0,
+      "DisplayMountPilots": 0.0,
+      "DisplayPocket": 0.0,
+      "RearRoofRegion": 0.0,
+      "FrontCowl": 0.0,
+      "RearRoof": 0.0,
+      "FrontShell": 0.0,
+      "PerfboardUnderWiring": 0.0,
+      "BuckAService": 0.0,
+      "BuckBService": 0.0,
+      "DACPowerConnector": 0.0,
+      "ButtonsLeadBend": 0.0,
+      "ButtonsUnplug": 0.0,
+      "OLEDLeadBend": 0.0,
+      "OLEDUnplug": 0.0,
+      "VolumeSwitchLeadBend": 0.0,
+      "VolumeSwitchUnplug": 0.0,
+      "ButtonsHarnessClosed": 0.0,
+      "ButtonsHarnessOpen": 0.0,
+      "OLEDHarnessClosed": 0.0,
+      "OLEDHarnessOpen": 0.0,
+      "VolumeSwitchHarnessClosed": 0.0,
+      "VolumeSwitchHarnessOpen": 0.0,
+      "DriveDataWire": 0.0,
+      "DACAudioWire": 0.0,
+      "SataPlugClearance": 0.0,
+      "SataCableClearance": 0.0,
+      "DiscReference": 0.0
+    },
+    "symmetry_difference_mm3": {
+      "LChamber": 0.0,
+      "LPort": 0.0,
+      "RearShell": 0.0
+    },
+    "trial_seat_difference_mm3": 0.0,
+    "eight_bosses_difference_mm3": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "wire_corridor": {
+      "pair_envelope_mm": [
+        3.6,
+        1.8
+      ],
+      "right_waypoints_xyz_mm": [
+        [
+          26,
+          24,
+          114
+        ],
+        [
+          26,
+          55,
+          114
+        ],
+        [
+          59,
+          55,
+          114
+        ],
+        [
+          59,
+          47,
+          114
+        ],
+        [
+          59,
+          47,
+          118
+        ]
+      ],
+      "left_mirrored": true,
+      "collision_mm3": 0,
+      "terminal_and_bend_radius_verified": false
+    },
+    "normal_air_sections_mm2": {
+      "Z=55.01": 467.54504657572244,
+      "Z=60": 502.0639534883719,
+      "Z=65": 562.5000000000002,
+      "Z=70": 501.19186046511595,
+      "Z=75.01": 399.99999999999994,
+      "Z=80": 400.0,
+      "Z=85": 400.0000000000001,
+      "Z=90": 400.0000000000001,
+      "Z=97.99": 400.0,
+      "X=-79.29": 399.99999999999983,
+      "X=-78": 399.99999999999983,
+      "X=-76": 399.99999999999983,
+      "X=-75.49": 770.6937851675467,
+      "X=-70": 898.840420625651,
+      "X=-65.51": 1042.512919572425,
+      "45deg_elbow": 567.1243050284147
+    },
+    "p2_projected_exit_area_mm2": {
+      "-84.99": 400.0,
+      "-84.5": 400.0,
+      "-84": 400.0,
+      "-83": 400.0,
+      "-82": 400.0,
+      "-81": 400.0,
+      "-80.01": 400.0
+    },
+    "p2_throat_area_mm2": 482.112698372208,
+    "p2_projected_exit_obstruction_mm3": 0.0,
+    "sliding_clearance_mm": 0.6999999999999886,
+    "left_right_and_exterior_separate_when_capped": true,
+    "blocking_inlet_disconnects_duct": true,
+    "open_outlet_connects_exterior": true,
+    "rear_contact_area_mm2": {
+      "LChamber": 6929.0,
+      "RChamber": 6929.0
+    },
+    "p2_outside_port_zone_difference_mm3": 0.0,
+    "left_capped_air_mm3": 286031.24838537554,
+    "left_duct_air_mm3": 19041.864980934646,
+    "left_main_air_minus_entire_driver_envelope_mm3": 159372.77193804944,
+    "nominal_centerline_length_mm": 46.8,
+    "physical_acoustics_verified": false,
+    "volume_caveat": "Full conservative driver envelope deducted; not measured net acoustic volume.",
+    "all_pass": true
+  },
+  "mesh": {
+    "SpeakerCarrier": {
+      "stl_sha256": "f9c0e9d40fd01abafe9f73b9063170a795a0f4e5fc1bb6889e26c27559146dc8",
+      "facets": 7296,
+      "closed": true,
+      "translation_after_rotation_mm": [
+        128.0,
+        45.099999999999994,
+        62.500000000000036
+      ],
+      "size_mm": [
+        158.60000000000002,
+        119.80000000000001,
+        57.50000000000003
+      ]
+    },
+    "RearShell": {
+      "stl_sha256": "42356581761397b3d7ffd290ff09c9285f1201983340f6e97c11b8508b18e444",
+      "facets": 3648,
+      "closed": true,
+      "translation_after_rotation_mm": [
+        128.0,
+        30.658911058107023,
+        93.00000000000006
+      ],
+      "size_mm": [
+        170.0,
+        192.682177883786,
+        88.00000000000006
+      ]
+    },
+    "model_sha256": "5ba3b6c8d656ecfeb9e8c3cce01033df42622be426691f4662630de43c48bfca"
+  },
+  "plates": {
+    "SpeakerCarrier": {
+      "layers": 287,
+      "new_overhang_regions": [],
+      "uncovered_new_islands": [],
+      "all_new_islands": [
+        {
+          "layer": 186,
+          "z": 37.2,
+          "area": 3.5071074014995247,
+          "bounds": [
+            100.03932189941406,
+            185.3000030517578,
+            101.38821411132812,
+            187.89999389648438
+          ],
+          "support_ratio": 1.0
+        }
+      ],
+      "internal_support_segments": [],
+      "duct_or_outlet_unbacked_paths_over_1mm": [],
+      "first_layer_bottom_segments": {
+        "left": 227,
+        "right": 227
+      },
+      "warnings": "",
+      "time": "5h 36m 48s",
+      "filament_g": 180.85,
+      "stl_sha256": "f9c0e9d40fd01abafe9f73b9063170a795a0f4e5fc1bb6889e26c27559146dc8",
+      "gcode_sha256": "6883fcd13a0c4c52fce4246d0d4c83150c98bf8a4826e0f7473c21384e21179d",
+      "3mf_sha256": "76d1b4ad544326b0f93ed3bf4145590d11b8f8005328551eceb3a887d4701210",
+      "outlet_support_segment_count": 0,
+      "support_on_build_plate_only": true,
+      "support_critical_regions_only": true
+    },
+    "RearShell": {
+      "layers": 440,
+      "new_overhang_regions": [],
+      "uncovered_new_islands": [],
+      "all_new_islands": [],
+      "internal_support_segments": [],
+      "duct_or_outlet_unbacked_paths_over_1mm": [],
+      "first_layer_bottom_segments": null,
+      "warnings": "",
+      "time": "8h 36m 23s",
+      "filament_g": 282.45,
+      "stl_sha256": "42356581761397b3d7ffd290ff09c9285f1201983340f6e97c11b8508b18e444",
+      "gcode_sha256": "7562073b53987807ece14addbb098408aec4b4fc7664eed6726a32317c418281",
+      "3mf_sha256": "f7a67675e9ae9cafde795af27a66d824a67deefc2d872c458c0de65152d44767",
+      "outlet_support_segment_count": 1898,
+      "outlet_support_xyz_bounds_mm": [
+        [
+          -85.679,
+          85.958
+        ],
+        [
+          48.6,
+          61.2
+        ],
+        [
+          54.367088941892995,
+          61.171088941893
+        ]
+      ],
+      "support_on_build_plate_only": false,
+      "support_critical_regions_only": true
+    }
+  },
+  "original_18_warning_groups": [
+    {
+      "audit_ids": [
+        1
+      ],
+      "label": "左安装框后缘",
+      "resolved": true,
+      "frame_unbacked_paths_over_1mm": 0
+    },
+    {
+      "audit_ids": [
+        2
+      ],
+      "label": "右安装框后缘",
+      "resolved": true,
+      "frame_unbacked_paths_over_1mm": 0
+    },
+    {
+      "audit_ids": [
+        3,
+        4
+      ],
+      "label": "左喇叭外侧下螺柱",
+      "resolved": true,
+      "boss_layer_206_covered_by_205_ratio": 1.0
+    },
+    {
+      "audit_ids": [
+        5,
+        6
+      ],
+      "label": "左喇叭外侧上螺柱",
+      "resolved": true,
+      "boss_layer_206_covered_by_205_ratio": 1.0
+    },
+    {
+      "audit_ids": [
+        7,
+        8
+      ],
+      "label": "左喇叭内侧下螺柱",
+      "resolved": true,
+      "boss_layer_206_covered_by_205_ratio": 1.0
+    },
+    {
+      "audit_ids": [
+        9,
+        10
+      ],
+      "label": "左喇叭内侧上螺柱",
+      "resolved": true,
+      "boss_layer_206_covered_by_205_ratio": 1.0
+    },
+    {
+      "audit_ids": [
+        11,
+        12
+      ],
+      "label": "右喇叭内侧下螺柱",
+      "resolved": true,
+      "boss_layer_206_covered_by_205_ratio": 1.0
+    },
+    {
+      "audit_ids": [
+        13,
+        14
+      ],
+      "label": "右喇叭内侧上螺柱",
+      "resolved": true,
+      "boss_layer_206_covered_by_205_ratio": 1.0
+    },
+    {
+      "audit_ids": [
+        15,
+        16
+      ],
+      "label": "右喇叭外侧下螺柱",
+      "resolved": true,
+      "boss_layer_206_covered_by_205_ratio": 1.0
+    },
+    {
+      "audit_ids": [
+        17,
+        18
+      ],
+      "label": "右喇叭外侧上螺柱",
+      "resolved": true,
+      "boss_layer_206_covered_by_205_ratio": 1.0
+    }
+  ],
+  "assembly_all_seven_paths_pass": true,
+  "static_clashes": [],
+  "gui_review_complete": true,
+  "printer_contacted": false,
+  "limits": [
+    "400 mm² and 46.8 mm describe nominal duct geometry, not measured acoustic tuning or effective length.",
+    "Corner uses an expanded single-turn junction; no CFD or acoustic optimization claim.",
+    "P2 supports may start on the shell; its open face and 5 mm outlet wall give access, but real removal force is untested.",
+    "Full driver envelope subtraction is a space budget, not measured acoustic volume.",
+    "Physical print, porosity, seals, terminals, shrinkage and sound remain to be tested."
+  ],
+  "gui_review": {
+    "scope": "Bambu Studio final P2/P3 settings and key-layer preview; complements saved G-code all-layer audit",
+    "support_settings_confirmed": {
+      "P2_build_plate_only": false,
+      "P3_build_plate_only": true,
+      "critical_regions_only": true,
+      "tree_auto": true,
+      "threshold_degrees": 30
+    },
+    "P2": {
+      "layers_viewed": [
+        200,
+        260,
+        261
+      ],
+      "total_layers": 440,
+      "visible_warning": false,
+      "displayed_estimate": "8h36m / 282.42g",
+      "observation": "Outlet access is open; tree branches are accessible from the open rear-shell interior. Physical removal force remains untested."
+    },
+    "P3": {
+      "layers_viewed": [
+        1,
+        90,
+        91,
+        137,
+        138
+      ],
+      "total_layers": 287,
+      "visible_warning": false,
+      "displayed_estimate": "5h37m / 180.86g",
+      "observation": "Both chamber back surfaces contact the first layer. Duct roof closure is visible; supports remain outside the acoustic cavities."
+    },
+    "screenshots": [
+      "tmp/cad-p3-duct-outlet/bambu-p2-layer-200.png",
+      "tmp/cad-p3-duct-outlet/bambu-p2-layer-260.png",
+      "tmp/cad-p3-duct-outlet/bambu-p3-layer-001.png",
+      "tmp/cad-p3-duct-outlet/bambu-p3-layer-090.png",
+      "tmp/cad-p3-duct-outlet/bambu-p3-layer-138.png"
+    ],
+    "saved_3mf_unchanged": true,
+    "native_cad_appearance_review_complete": false,
+    "final_display": "P3 layer 138 / 27.6 mm; lower layer 1; full toolpath progress; line type colors"
+  }
+}

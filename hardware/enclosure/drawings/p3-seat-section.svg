@@ -6,11 +6,11 @@
    stroke-width="0.18"
    transform="scale(1, -1)"
   >
-<path id= "1" d=" M 80 5 L 85 5 " />
-<path id= "2" d=" M 80 5 L 80 7 " />
-<path id= "3" d=" M 80 26 L 85 26 " />
-<path id= "4" d=" M 85 5 L 85 26 " />
-<path id= "5" d=" M 64.9987 7 L 80 7 " />
+<path id= "1" d=" M 80 5 L 80 7 " />
+<path id= "2" d=" M 80 5 L 85 5 " />
+<path id= "3" d=" M 64.9987 7 L 80 7 " />
+<path id= "4" d=" M 80 26 L 85 26 " />
+<path id= "5" d=" M 85 5 L 85 26 " />
 <path id= "6" d=" M 64.9987 7 L 64.9987 14 " />
 <path id= "7" d=" M 64.9987 14 L 72 14 " />
 <path id= "8" d=" M 72 14 L 80 22 " />

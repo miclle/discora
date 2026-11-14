@@ -1,0 +1,59 @@
+{
+  "slicing_warnings": [],
+  "model_sha256": "b7a0ae893055d53e53d775522b112aef683b7cced73069f6f60b74c9f59b85f8",
+  "stl_sha256": "5f0d19821aaa5b2d9665bb6153d728442c0422cd178d5dfe38800741074a6e16",
+  "gcode_sha256": "34eb33cfe744b4324aeaab49c2530dfb76e9e787c11634eba74731854b5f647a",
+  "3mf_sha256": "228d057ef9ec1d88560f649ced696606e87c4589278128fb06ce6fb1fba3475f",
+  "profile": "Bambu Studio 2.9.1.70 / P2S 0.4 mm / Generic PLA / 0.20 mm",
+  "support_on_build_plate_only": true,
+  "support_critical_regions_only": true,
+  "time": "5h 4m 14s",
+  "filament_g": 161.6,
+  "first_layer_moves": {
+    "left": {
+      "Inner wall": 1,
+      "Bottom surface": 285
+    },
+    "right": {
+      "Inner wall": 1,
+      "Bottom surface": 286
+    }
+  },
+  "rear_faces_direct_on_bed": true,
+  "chamber_support_segments": 0,
+  "wire_exit_support_segments": 0,
+  "nearby_external_support_segments": 161,
+  "extrusion_centerlines_crossing_nominal_wire_cores": 0,
+  "exit_region_bridge_lengths_mm": [
+    1.0080000000000098,
+    0.3930000000000007,
+    0.8379999999999939,
+    0.3930000000000007,
+    0.8379999999999939,
+    0.3930000000000007,
+    0.8379999999999939,
+    0.3930000000000007,
+    0.8379999999999939,
+    0.3930000000000007,
+    1.0080000000000098,
+    1.0079999999999814,
+    0.3930000000000007,
+    0.8379999999999939,
+    0.3930000000000007,
+    0.8379999999999939,
+    0.3930000000000007,
+    0.8379999999999939,
+    0.3930000000000007,
+    0.8379999999999939,
+    0.3930000000000007,
+    1.0079999999999814
+  ],
+  "all_pass": true,
+  "physical_print_test": false,
+  "printer_contacted": false,
+  "limitations": [
+    "G-code segment checks do not prove printed dimensional fit, bridging quality or airtightness.",
+    "Installed vendor end-G-code emits T65535 parser notice; CLI exit status is zero.",
+    "Current version validated by CLI and G-code; earlier widened version also viewed in GUI."
+  ]
+}

@@ -15,7 +15,7 @@ MOUNTS = (
     # World X, Y, screw length, and silkscreen hole.
     (-27.28, 23.00, 4, "G₂ / A"),
     (13.36, 56.02, 4, "Q / N"),
-    (54.00, 61.10, 4, "A / P"),
+    (54.00, 58.56, 4, "A / O"),
 )
 CONNECTORS = {
     # Plugged envelope, local wire bend, and unplug/grip envelope.
@@ -57,13 +57,14 @@ def board_shape():
     return blank.cut(Part.makeCompound(holes)).removeSplitter()
 
 
-def carrier_sources():
+def carrier_sources(chamber_rear_y: float) -> dict[str, Part.Shape]:
     # Two cantilever seats clear the top of the amp and its plug allowances.
     # The rear rail is behind the amp, tying both upright ribs together.
     front_rib = box(-53, 20.5, 121.8, 4, 8, 21)
     left_rib = box(-53, 51.5, 121.8, 4, 11, 19)
     right_rib = box(49, 51.5, 121.8, 5, 11, 19)
-    rear_rail = box(-53, 60, 136.8, 110, 5, 4)
+    # End at the chamber back so both surfaces can contact the print bed.
+    rear_rail = box(-53, 60, 134.8, 110, chamber_rear_y - 60, 6)
     # Keep the sub-board copper above this front ledge clear of added wires.
     front_pad = bore(-27.28, 23, 140.2, 2.5, 2.6).fuse(
         box(-51, 20.5, 140.2, 23.72, 3.5, 2.6)
@@ -71,7 +72,9 @@ def carrier_sources():
     mid_pad = bore(13.36, 56.02, 140.2, 2.5, 2.6).fuse(
         box(10.86, 56.02, 140.2, 5, 5.98, 2.6)
     )
-    rear_pad = bore(54, 61.1, 140.2, 2.5, 2.6)
+    rear_x, rear_y, _, _ = MOUNTS[2]
+    # Extend the moved seat into the rib and rail while keeping a blind pilot.
+    rear_pad = bore(rear_x, rear_y, 138.8, 2.5, 4)
     seats = front_pad.fuse(mid_pad).fuse(rear_pad)
     pilots = Part.makeCompound(
         [bore(x, y, 142.8-(length-1.6)-.25, .8, length-1.6+.35)

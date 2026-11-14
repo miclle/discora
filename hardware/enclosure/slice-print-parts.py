@@ -9,11 +9,12 @@ import json
 from pathlib import Path
 import re
 import subprocess
+import zipfile
 
 ROOT=Path(__file__).resolve().parent
 PROFILES={'machine':'Bambu Lab P2S 0.4 nozzle','process':'0.20mm Standard @BBL P2S','filament':'Generic PLA @BBL P2S'}
 OVERRIDES=dict(enable_support='1',support_type='tree(auto)',support_on_build_plate_only='1',
-               support_threshold_angle='30',support_top_z_distance='0.2',wall_loops='3',
+               support_critical_regions_only='1',support_threshold_angle='30',support_top_z_distance='0.2',wall_loops='3',
                sparse_infill_density='15%',sparse_infill_pattern='gyroid',brim_type='outer_only',brim_width='5')
 
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -50,21 +51,36 @@ def main():
                   printer_contacted=False,gcode_execution_validated=False)
     for name in args.plates:
         target=out/name;target.mkdir(exist_ok=True)
+        process=json.loads(settings['process'].read_text())
+        if name=='RearShell':
+            process.update(support_on_build_plate_only='0',support_critical_regions_only='0')
+        process_path=target/'process.json'
+        process_path.write_text(json.dumps(process,indent=2)+'\n')
         # Two-material keys and knob use their dedicated 3MF, not monochrome STL.
         names=[name] if name!='SmallParts' else ['ButtonRetainer','DisplayRetainer','DriveRetainer']
         for n in names:assert digest(meshes/(n+'.stl'))==report['parts'][n]['stl_sha256']
         command=[str(args.bambu.resolve()),'--datadir',str(out/('userdata-'+name)),
-                 '--load-settings',str(settings['machine'])+';'+str(settings['process']),
-                 '--load-filaments',str(settings['filament']),'--slice','0','--outputdir',str(target)]
+                 '--load-settings',str(settings['machine'])+';'+str(process_path),
+                 '--load-filaments',str(settings['filament']),'--slice','0','--outputdir',str(target),'--export-3mf','Discora-'+name+'.3mf']
         if name=='SmallParts':command+=['--arrange','1']
-        if name=='FrontShell':
+        if name!='SmallParts':
             # Preserve the checked bed placement: automatic tree-support packing
-            # reserves 12 mm per edge and rejects this 233.645 mm part.
+            # reserves 12 mm per edge and rejects the 240.263 mm front shell.
             command+=['--arrange','0','--orient','0','--ensure-on-bed']
         command += [str(meshes/(n+'.stl')) for n in names]
         log=out/(name+'.log')
         with log.open('w') as stream:run=subprocess.run(command,cwd=out,stdout=stream,stderr=subprocess.STDOUT)
         assert run.returncode==0,f'{name}: slicing failed; see {log}'
+        project=target/('Discora-'+name+'.3mf')
+        with zipfile.ZipFile(project) as z:
+            members={n:z.read(n) for n in z.namelist()}
+        config=json.loads(members['Metadata/project_settings.config'])
+        fields=set(OVERRIDES)
+        config['different_settings_to_system'][0]=';'.join(sorted(set(filter(None,config['different_settings_to_system'][0].split(';')))|fields))
+        for key in fields:assert config[key]==process[key],(name,key)
+        members['Metadata/project_settings.config']=json.dumps(config,indent=2).encode()
+        with zipfile.ZipFile(project,'w',zipfile.ZIP_DEFLATED) as z:
+            for n,b in members.items():z.writestr(n,b)
         gcode=target/'plate_1.gcode';content=gcode.read_text()
         def field(pattern):
             found=re.search(pattern,content)
@@ -72,6 +88,8 @@ def main():
             return found.group(1)
         report['slicer_version']=field(r'; BambuStudio ([^\n]+)')
         report['plates'][name]=dict(parts=names,exit_code=run.returncode,gcode_sha256=digest(gcode),
+            project_file=project.name,project_sha256=digest(project),
+            support_settings={k:process[k] for k in OVERRIDES if k.startswith('support') or k=='enable_support'},
             total_estimated_time=field(r'total estimated time: ([^\n]+)'),
             filament_g=float(field(r'total filament weight \[g\] : ([\d.]+)')),
             layers=int(field(r'total layer number: (\d+)')),

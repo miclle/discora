@@ -35,7 +35,7 @@ def main():
         gap = (chamber.Shape.BoundBox.XMin-port.Shape.BoundBox.XMax if sign < 0
                else port.Shape.BoundBox.XMin-chamber.Shape.BoundBox.XMax)
         distance = port.Shape.distToShape(chamber.Shape)[0]
-        assert missing < .001 and abs(gap-.3) < 1e-6, (name, missing, gap)
+        assert missing < .001 and abs(gap-.7) < 1e-6, (name, missing, gap)
         # The corresponding former ear heights must be solid at the current wall.
         sealed = []
         for z in (39, 117):
@@ -79,7 +79,7 @@ def main():
         report['unchanged_finished_parts_difference_mm3'] = differences
         A.closeDocument(baseline.Name)
     report['limits'] = [
-        'Shortened tubes butt against the chamber with 0.3 mm nominal clearance; no gasket is modeled.',
+        'Ports end flush with the inner sidewall; widened chambers have 0.7 mm nominal sliding clearance. No gasket is modeled.',
         'Air-path continuity is checked in validation.json; acoustic tuning and leakage require physical tests.',
         'Printing, support removal and strength are not established by B-rep or mesh checks.']
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n')

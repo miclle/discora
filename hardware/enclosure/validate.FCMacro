@@ -234,10 +234,9 @@ def validate(folder):
         'shell_opening_center_y_mm':doc.LPanelTool.Shape.BoundBox.Center.y}
     paths={}
     for side,sign in [('L',-1),('R',1)]:
-        # Pass behind the driver frame, then turn before entering the shifted tube.
-        air_y=doc.LPort.Shape.BoundBox.Center.y+8
-        points=[(sign*26,54,76),(sign*56,54,76),(sign*56,air_y,76),
-                (sign*56,air_y,95),(sign*87,air_y,95)]
+        # Enter the independent duct above Z=98, descend, then exit at Z=65.
+        points=[(sign*26,55,76),(sign*52,55,76),(sign*52,55,103),
+                (sign*65.5,55,103),(sign*65.5,55,65),(sign*87,55,65)]
         parts=[]
         for a,b in zip(points,points[1:]):
             a,b=A.Vector(*a),A.Vector(*b);parts.append(Part.makeCylinder(.4,(b-a).Length,a,b-a))
@@ -303,8 +302,10 @@ def validate(folder):
                   'Side passages remain untuned; geometric continuity is not acoustic validation.']}
     (folder/'validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
     assert abs(handle_y-46.5)<1e-7
-    assert all(abs(y-port_alignment['rear_outline_center_y_mm'])<1e-7 for y in port_alignment['port_center_y_mm'].values())
-    assert abs(port_alignment['shell_opening_center_y_mm']-port_alignment['rear_outline_center_y_mm'])<1e-7
+    # Port placement now follows the P3 duct, not the side-panel midpoint.
+    assert abs(port_alignment['port_center_y_mm']['LPort']-port_alignment['port_center_y_mm']['RPort'])<1e-7
+    assert abs(doc.LPort.Shape.BoundBox.Center.z-65)<1e-7
+    assert abs(doc.LPanelTool.Shape.BoundBox.Center.z-65)<1e-7
     assert not clashes and not disc and not handle,(clashes,disc,handle)
     assert all(v<=tolerance for v in symmetry.values()),symmetry
     assert all(links.values()),links

@@ -1,0 +1,53 @@
+{
+  "model_sha256": "c8d11055380ada2de7f6bf6f4ac1e82fc85f75441430a4c0f67070294bb889f1",
+  "profile": "Bambu P2S 0.4 mm / Generic PLA / 0.20 mm",
+  "support_on_build_plate_only": true,
+  "support_critical_regions_only": true,
+  "plates": {
+    "RearShell": {
+      "time": "8h 28m 30s",
+      "filament_g": 278.96,
+      "gcode_sha256": "758f7381f2d51cf156d31ccd5e248651c654efa398fe4d43d8e7d22745a05117",
+      "stl_sha256": "9db34f6b09c451da0b25d31e44062024eefeb4bfbc8bddf050c3645464c48e3b",
+      "side_decoration_support_depth_mm": [
+        0.0004999999999881766,
+        4.992999999999995
+      ]
+    },
+    "SpeakerCarrier": {
+      "time": "5h 0m 2s",
+      "filament_g": 164.57,
+      "gcode_sha256": "857bcdb4c72703f457f264a90c9b18ea7ab3043d9aa7db48ba7cebdf8f083d75",
+      "stl_sha256": "836a38753d9ce03e37529509c2cf861d986a3998e50cc30bfd5bd73ae90a3dbb",
+      "first_layer_moves": {
+        "left": {
+          "Inner wall": 1,
+          "Bottom surface": 228
+        },
+        "right": {
+          "Inner wall": 1,
+          "Bottom surface": 221
+        }
+      },
+      "chamber_support_extrusion_moves": 0,
+      "sloped_front_bridge_max_mm": 77.48500000000001,
+      "rear_faces_direct_on_bed": true,
+      "long_bridge_tracks_previous_layer_envelope": [
+        {
+          "length_mm": 77.48500000000001,
+          "outside_previous_solid_envelope_mm": 0.0
+        },
+        {
+          "length_mm": 77.48500000000001,
+          "outside_previous_solid_envelope_mm": 0.0
+        }
+      ],
+      "long_bridge_note": "77.485 mm paths lie over the solid wall envelope with sparse infill. The sloped boundary advances 0.1 mm per 0.2 mm layer."
+    }
+  },
+  "printer_contacted": false,
+  "limitations": [
+    "Slicer emits the installed vendor end-G-code T65535 parser notice. No printer execution test.",
+    "Side decorations retain shallow supports; removal force, PLA shrinkage and acoustic leakage remain physical checks."
+  ]
+}

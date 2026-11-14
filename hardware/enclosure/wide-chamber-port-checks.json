@@ -1,0 +1,54 @@
+{
+  "model_sha256": "c8d11055380ada2de7f6bf6f4ac1e82fc85f75441430a4c0f67070294bb889f1",
+  "freecad_version": [
+    "1",
+    "1",
+    "4"
+  ],
+  "rear_valid": true,
+  "rear_solids": 1,
+  "rigid_pla_pieces": 11,
+  "ports": {
+    "LPort": {
+      "missing_from_rear_mm3": 0.0,
+      "axial_chamber_clearance_mm": 0.7000000000000028,
+      "minimum_chamber_distance_mm": 0.7000000000000028,
+      "former_screw_holes_sealed": [
+        {
+          "center_z_mm": 39,
+          "missing_wall_mm3": 0.0
+        },
+        {
+          "center_z_mm": 117,
+          "missing_wall_mm3": 0.0
+        }
+      ]
+    },
+    "RPort": {
+      "missing_from_rear_mm3": 0.0,
+      "axial_chamber_clearance_mm": 0.7000000000000028,
+      "minimum_chamber_distance_mm": 0.7000000000000028,
+      "former_screw_holes_sealed": [
+        {
+          "center_z_mm": 39,
+          "missing_wall_mm3": 0.0
+        },
+        {
+          "center_z_mm": 117,
+          "missing_wall_mm3": 0.0
+        }
+      ]
+    }
+  },
+  "physical_print_test": false,
+  "acoustic_sealing_verified": false,
+  "mirror_difference_mm3": {
+    "ports": 0.0,
+    "rear": 0.0
+  },
+  "limits": [
+    "Ports end flush with the inner sidewall; widened chambers have 0.7 mm nominal sliding clearance. No gasket is modeled.",
+    "Air-path continuity is checked in validation.json; acoustic tuning and leakage require physical tests.",
+    "Printing, support removal and strength are not established by B-rep or mesh checks."
+  ]
+}

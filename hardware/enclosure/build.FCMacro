@@ -12,6 +12,9 @@ from PySide import QtCore, QtWidgets
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import perfboard_geometry as perfboard
+import speaker_wire_geometry as speaker_wires
+import speaker_print_geometry as speaker_print
+import speaker_duct_geometry as speaker_duct
 
 V = A.Vector
 X, Y, Z = V(1, 0, 0), V(0, 1, 0), V(0, 0, 1)
@@ -67,9 +70,10 @@ FRONT_INNER_EAVE_Z = EAVE_Z + FRONT_THICKNESS * SHOULDER_SLOPE - FRONT_OFFSET_Z
 INNER_EAVE_Z = REAR_EAVE_Z + REAR_THICKNESS * SHOULDER_SLOPE - ROOF_OFFSET_Z
 # Two front-facing drivers share one circular grille, but separate rear cavities.
 SPEAKER_CENTER_X, SPEAKER_CENTER_Z = 26.0, 76.0
-# Center the ports on the rear housing's side outline, excluding the front skin.
-PORT_CENTER_Y, PORT_CENTER_Z = REAR_CENTER_Y, 80.0
+# Independent P3 ducts exit at Z=65; P2 provides a clear, flush rim.
+PORT_CENTER_Y, PORT_CENTER_Z = 47.5, speaker_duct.ELBOW_Z
 CHAMBER_DEPTH = 52.0 + (CASE_DEPTH - 82.0) / 2
+CHAMBER_SIDE_X = INNER_HALF_WIDTH - 0.7
 FRONT_GRILLE_RADIUS = 65.0
 # A true circular mouth precedes the grille; +Y is inward from the front face.
 FRONT_GRILLE_RECESS = 2.5
@@ -421,38 +425,42 @@ def build(folder):
     native_cut("Cowl","整片折壳构造源 · 对称主体＋原操控开孔",symmetric_cowl,
                Part.makeCompound(controls),TEAL,shell)
 
-    # Integral side ports retain open peripheral air passages.
+    # P2 outlets are open through the full sidewall, without inset obstruction.
     panel_profile = [(FRONT_THICKNESS,BASE_Z),(CASE_DEPTH-REAR_THICKNESS,BASE_Z),(CASE_DEPTH-REAR_THICKNESS,INNER_EAVE_Z),
                      (INNER_REAR,INNER_PEAK_Z),(INNER_FRONT,INNER_PEAK_Z),(FRONT_THICKNESS,FRONT_INNER_EAVE_Z)]
     cy, cz = PORT_CENTER_Y, PORT_CENTER_Z
     x = -WIDTH/2
     base = raw("LPanelBlank",prism_yz(panel_profile,x,REAR_THICKNESS))
     left_panel = native_cut("LPanel","左侧壳 · 镜像源",base,
-                            side_capsule(x-1,cy,cz,74,29,REAR_THICKNESS+2),BLACK,shell)
+                            speaker_duct.left_panel_opening(),BLACK,shell)
     mirrored("RPanel","右侧壳 · 关联镜像",left_panel,BLACK,shell)
 
     # Build the left port and cavity, then mirror them exactly for the right.
     left=-WIDTH/2
-    # Overlap the panel opening by 0.3 mm instead of leaving an assembly seam.
-    ring=side_capsule(left,cy,cz,74.6,29.6,REAR_THICKNESS).cut(side_capsule(left-1,cy,cz,67,22,REAR_THICKNESS+2))
-    # Stop 0.3 mm outside the chamber wall so P3 can slide forward with P2 fixed.
-    tube_depth=-65.3-(left+2)
-    tube=side_capsule(left+2,cy,cz,67,22,tube_depth).cut(
-        side_capsule(left+1,cy,cz,63,18,tube_depth+2))
-    inset=side_capsule(left+1.5,cy,cz,56,12,2)
-    # Four connections support both ends as well as the middle of the long inset.
-    # All ribs stay behind the recessed face and outside the carrier's sweep.
-    bridge=box(left+2,cy-11,cz-1.5,2,22,3)
-    end_bridges=[box(left+2,cy-1.5,z,2,3,9) for z in (cz-34.5,cz+25.5)]
-    port=ring.multiFuse([tube,inset,bridge]+end_bridges).removeSplitter()
+    port=speaker_duct.left_port()
     # Compact symmetric cavities retain the complete driver envelopes.
     outer=box(-65,5,31.5,65,CHAMBER_DEPTH,89)
     inner=box(-62.5,4,34,61,CHAMBER_DEPTH-1.5,84)
-    cavity=outer.cut(inner).cut(side_capsule(left-1,cy,cz,67.6,22.6,-60.8-(left-1))).removeSplitter()
-    left_port = feature("LPort","左侧 · 导音孔及饰片构造源（并入 P2）",port,BLACK,shell)
-    mirrored("RPort","右侧 · 导音孔及饰片镜像源（并入 P2）",left_port,BLACK,shell)
-    left_chamber = feature("LChamber","左声道 · 后腔及侧向通道（未调谐）",cavity,TEAL,supports)
-    mirrored("RChamber","右声道 · 后腔关联镜像（未调谐）",left_chamber,TEAL,supports)
+    # The 63.4-degree front wall closes progressively in rear-down printing.
+    # Its parallel inner face leaves 2.5 mm normal thickness without a long bridge.
+    wing_points=[V(-CHAMBER_SIDE_X,5+2*(CHAMBER_SIDE_X-65),38),V(-65,5,38),
+                 V(-64,5,38),V(-64,62.5,38),V(-CHAMBER_SIDE_X,62.5,38)]
+    wing=Part.Face(Part.makePolygon(wing_points+[wing_points[0]])).extrude(Z*80)
+    inner_front=5+2*(CHAMBER_SIDE_X-2.5-65)+2.5*math.sqrt(5)
+    air_points=[V(-CHAMBER_SIDE_X+2.5,inner_front,40.5),
+                V(-64,3+2.5*math.sqrt(5),40.5),V(-60,3+2.5*math.sqrt(5),40.5),
+                V(-60,60,40.5),V(-CHAMBER_SIDE_X+2.5,60,40.5)]
+    wing_air=Part.Face(Part.makePolygon(air_points+[air_points[0]])).extrude(Z*75)
+    cavity=outer.fuse(wing).cut(inner.fuse(wing_air)).removeSplitter()
+    # The shallow outer pocket accepts removable sealing putty after wiring.
+    # Leave the proven driver seat and the rear-down print datum untouched.
+    cavity=cavity.cut(Part.makeCompound(speaker_wires.exit_tools(-1))).removeSplitter()
+    cavity=speaker_print.smooth_left_wing(cavity)
+    cavity=speaker_duct.left_chamber(cavity)
+    left_port = feature("LPort","左侧 · 圆角梯形开放出口及连续内斜面（并入 P2）",port,BLACK,shell)
+    mirrored("RPort","右侧 · 圆角梯形开放出口及连续内斜面（并入 P2）",left_port,BLACK,shell)
+    left_chamber = feature("LChamber","左声道 · 独立导管及圆角梯形短渐扩口（未调谐）",cavity,TEAL,supports)
+    mirrored("RChamber","右声道 · 独立导管及圆角梯形短渐扩口（未调谐）",left_chamber,TEAL,supports)
 
     # Front grille, baffle and two rectangular driver envelopes.
     zc=SPEAKER_CENTER_Z
@@ -504,6 +512,7 @@ def build(folder):
     pilots=[cylinder(SPEAKER_PILOT_DIAMETER/2,SPEAKER_PILOT_DEPTH+.1,(x,seat-.1,z),Y)
             for x,z in screw_axes]
     frame=rim.fuse([plate]+bosses).cut([basket_prism(gap,seat-.1,43)]+pilots).removeSplitter()
+    frame=speaker_print.make_left_frame_printable(frame)
     left_frame=feature("LDriverFrame","左喇叭试装座 · 四处盲底孔",frame,TEAL,supports)
     mirrored("RDriverFrame","右喇叭试装座 · 关联镜像",left_frame,TEAL,supports)
     apertures=[box(x-width/2-gap,4.5,sz-gap,width+2*gap,3,height+2*gap)
@@ -761,7 +770,8 @@ def build(folder):
     core_tab_names=[source_part('CarrierTab'+str(i),shape) for i,shape in enumerate(core_tabs)]
     front_post_name=source_part('FrontFastenerPosts',Part.makeCompound(front_posts))
     rear_fastener_cuts=source_part('RearFastenerCuts',Part.makeCompound(access_wells+post_clearances))
-    perfboard_sources=[source_part(name,shape) for name,shape in perfboard.carrier_sources().items()]
+    perfboard_sources=[source_part(name,shape) for name,shape in
+                       perfboard.carrier_sources(left_chamber.Shape.BoundBox.YMax).items()]
     oled_pilots.Placement=display_pose.multiply(oled_pilots.Placement)
     display_pilots=source_part('DisplayMountPilots',oled_pilots)
     oled_pocket.Placement=display_pose.multiply(oled_pocket.Placement)
@@ -802,7 +812,7 @@ def build(folder):
                      ['LChamber','RChamber','LDriverFrame','RDriverFrame','FrontBaffle','AmpShelf','AmpPads']
                      +core_tab_names+perfboard_sources,
                      [],TEAL,supports)
-    rear=consolidate("RearShell","P2 · 一体后壳／左右导音孔及饰片",
+    rear=consolidate("RearShell","P2 · 一体后壳／左右圆角梯形开放出口",
                      ['RearRoof','SlotGuide','LPanel','RPanel','Back','Base','BatteryCradle','DriveCarrier','LPort','RPort'],rear_bosses,BLACK,shell)
     rear.Shape=rear.Shape.cut(doc.getObject(rear_fastener_cuts).Shape).removeSplitter()
     # Strap slots are outside the 112 mm pack. Straps are removed before sliding the pack out.

@@ -1,0 +1,2289 @@
+{
+  "date": "2026-11-14",
+  "status": "audit_complete_design_adjustment_required",
+  "model_modified": false,
+  "production_3mf_modified": false,
+  "print_ready": false,
+  "slicer": "Bambu Studio 02.09.01.70",
+  "inputs": {
+    "model": {
+      "path": "hardware/enclosure/Discora.FCStd",
+      "sha256": "ddacd53dfa296812248e596894b91c4155806490f06fc09c39c056a13bfb0dfa"
+    },
+    "stl": {
+      "path": "tmp/cad-p3-acoustics/print/SpeakerCarrier.stl",
+      "sha256": "e749181961a91c5d039c88e8323dfb84915cb6357d65ac19119d5d04599193ae"
+    },
+    "3mf": {
+      "path": "tmp/cad-p3-acoustics/SpeakerCarrier/Discora-P3-Wire-Exits.3mf",
+      "sha256": "5ccbe7d514419c7119447d0f6307ac66e7dc4ed01d512ce46eab5fb6e6247166"
+    },
+    "gcode": {
+      "path": "tmp/cad-p3-acoustics/SpeakerCarrier/plate_1.gcode",
+      "sha256": "a1ee89c6bf8680fffe0a0b7be72238f583f60cd6bf878620e11aa2a5f45adc3b"
+    }
+  },
+  "baseline_warning_count": 18,
+  "baseline_significant_regions": 26,
+  "baseline_reported_area_mm2": 1442.03,
+  "physical_regions": 10,
+  "safe_to_bridge_without_change": 0,
+  "audit_numbering": "Assigned for this review; the slicer does not expose stable per-warning IDs. Two counts at each boss map to the same physical footprint.",
+  "regions": [
+    {
+      "audit_id": 1,
+      "physical_region": "rim_L",
+      "label": "左安装框后缘",
+      "layer": 54,
+      "height_mm": 10.8,
+      "same_physical_region_ids": [
+        1
+      ],
+      "disposition": "geometry_adjustment_required"
+    },
+    {
+      "audit_id": 2,
+      "physical_region": "rim_R",
+      "label": "右安装框后缘",
+      "layer": 54,
+      "height_mm": 10.8,
+      "same_physical_region_ids": [
+        2
+      ],
+      "disposition": "geometry_adjustment_required"
+    },
+    {
+      "audit_id": 3,
+      "physical_region": "boss_L_outer_lower",
+      "label": "左喇叭外侧下螺柱",
+      "layer": 206,
+      "height_mm": 41.2,
+      "same_physical_region_ids": [
+        3,
+        4
+      ],
+      "disposition": "geometry_adjustment_required"
+    },
+    {
+      "audit_id": 4,
+      "physical_region": "boss_L_outer_lower",
+      "label": "左喇叭外侧下螺柱",
+      "layer": 206,
+      "height_mm": 41.2,
+      "same_physical_region_ids": [
+        3,
+        4
+      ],
+      "disposition": "geometry_adjustment_required"
+    },
+    {
+      "audit_id": 5,
+      "physical_region": "boss_L_outer_upper",
+      "label": "左喇叭外侧上螺柱",
+      "layer": 206,
+      "height_mm": 41.2,
+      "same_physical_region_ids": [
+        5,
+        6
+      ],
+      "disposition": "geometry_adjustment_required"
+    },
+    {
+      "audit_id": 6,
+      "physical_region": "boss_L_outer_upper",
+      "label": "左喇叭外侧上螺柱",
+      "layer": 206,
+      "height_mm": 41.2,
+      "same_physical_region_ids": [
+        5,
+        6
+      ],
+      "disposition": "geometry_adjustment_required"
+    },
+    {
+      "audit_id": 7,
+      "physical_region": "boss_L_inner_lower",
+      "label": "左喇叭内侧下螺柱",
+      "layer": 206,
+      "height_mm": 41.2,
+      "same_physical_region_ids": [
+        7,
+        8
+      ],
+      "disposition": "geometry_adjustment_required"
+    },
+    {
+      "audit_id": 8,
+      "physical_region": "boss_L_inner_lower",
+      "label": "左喇叭内侧下螺柱",
+      "layer": 206,
+      "height_mm": 41.2,
+      "same_physical_region_ids": [
+        7,
+        8
+      ],
+      "disposition": "geometry_adjustment_required"
+    },
+    {
+      "audit_id": 9,
+      "physical_region": "boss_L_inner_upper",
+      "label": "左喇叭内侧上螺柱",
+      "layer": 206,
+      "height_mm": 41.2,
+      "same_physical_region_ids": [
+        9,
+        10
+      ],
+      "disposition": "geometry_adjustment_required"
+    },
+    {
+      "audit_id": 10,
+      "physical_region": "boss_L_inner_upper",
+      "label": "左喇叭内侧上螺柱",
+      "layer": 206,
+      "height_mm": 41.2,
+      "same_physical_region_ids": [
+        9,
+        10
+      ],
+      "disposition": "geometry_adjustment_required"
+    },
+    {
+      "audit_id": 11,
+      "physical_region": "boss_R_inner_lower",
+      "label": "右喇叭内侧下螺柱",
+      "layer": 206,
+      "height_mm": 41.2,
+      "same_physical_region_ids": [
+        11,
+        12
+      ],
+      "disposition": "geometry_adjustment_required"
+    },
+    {
+      "audit_id": 12,
+      "physical_region": "boss_R_inner_lower",
+      "label": "右喇叭内侧下螺柱",
+      "layer": 206,
+      "height_mm": 41.2,
+      "same_physical_region_ids": [
+        11,
+        12
+      ],
+      "disposition": "geometry_adjustment_required"
+    },
+    {
+      "audit_id": 13,
+      "physical_region": "boss_R_inner_upper",
+      "label": "右喇叭内侧上螺柱",
+      "layer": 206,
+      "height_mm": 41.2,
+      "same_physical_region_ids": [
+        13,
+        14
+      ],
+      "disposition": "geometry_adjustment_required"
+    },
+    {
+      "audit_id": 14,
+      "physical_region": "boss_R_inner_upper",
+      "label": "右喇叭内侧上螺柱",
+      "layer": 206,
+      "height_mm": 41.2,
+      "same_physical_region_ids": [
+        13,
+        14
+      ],
+      "disposition": "geometry_adjustment_required"
+    },
+    {
+      "audit_id": 15,
+      "physical_region": "boss_R_outer_lower",
+      "label": "右喇叭外侧下螺柱",
+      "layer": 206,
+      "height_mm": 41.2,
+      "same_physical_region_ids": [
+        15,
+        16
+      ],
+      "disposition": "geometry_adjustment_required"
+    },
+    {
+      "audit_id": 16,
+      "physical_region": "boss_R_outer_lower",
+      "label": "右喇叭外侧下螺柱",
+      "layer": 206,
+      "height_mm": 41.2,
+      "same_physical_region_ids": [
+        15,
+        16
+      ],
+      "disposition": "geometry_adjustment_required"
+    },
+    {
+      "audit_id": 17,
+      "physical_region": "boss_R_outer_upper",
+      "label": "右喇叭外侧上螺柱",
+      "layer": 206,
+      "height_mm": 41.2,
+      "same_physical_region_ids": [
+        17,
+        18
+      ],
+      "disposition": "geometry_adjustment_required"
+    },
+    {
+      "audit_id": 18,
+      "physical_region": "boss_R_outer_upper",
+      "label": "右喇叭外侧上螺柱",
+      "layer": 206,
+      "height_mm": 41.2,
+      "same_physical_region_ids": [
+        17,
+        18
+      ],
+      "disposition": "geometry_adjustment_required"
+    }
+  ],
+  "groups": [
+    {
+      "name": "rim_L",
+      "layer": 54,
+      "height": 10.8,
+      "bounds": [
+        77.4,
+        79,
+        126.6,
+        163
+      ],
+      "features": {
+        "Overhang wall": 17,
+        "Inner wall": 4,
+        "Outer wall": 2,
+        "Bridge": 336
+      },
+      "max_free_piece": 83.60000000000001,
+      "longest": [
+        {
+          "a": [
+            78.102,
+            79.3
+          ],
+          "b": [
+            78.102,
+            162.9
+          ],
+          "feature": "Overhang wall",
+          "width": 0.45,
+          "length": 83.60000000000001,
+          "unsupported_length": 83.60000000000001,
+          "max_free_piece": 83.60000000000001,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            77.71,
+            79.3
+          ],
+          "b": [
+            77.71,
+            162.9
+          ],
+          "feature": "Overhang wall",
+          "width": 0.45,
+          "length": 83.60000000000001,
+          "unsupported_length": 83.60000000000001,
+          "max_free_piece": 83.60000000000001,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            126.009,
+            79.591
+          ],
+          "b": [
+            126.009,
+            162.609
+          ],
+          "feature": "Overhang wall",
+          "width": 0.45,
+          "length": 83.01800000000001,
+          "unsupported_length": 83.01800000000001,
+          "max_free_piece": 83.01800000000001,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            78.398,
+            79.998
+          ],
+          "b": [
+            78.398,
+            162.202
+          ],
+          "feature": "Overhang wall",
+          "width": 0.45,
+          "length": 82.204,
+          "unsupported_length": 82.204,
+          "max_free_piece": 82.204,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            78.79,
+            80.39
+          ],
+          "b": [
+            78.79,
+            161.81
+          ],
+          "feature": "Overhang wall",
+          "width": 0.45,
+          "length": 81.42,
+          "unsupported_length": 81.42,
+          "max_free_piece": 81.42,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            125.602,
+            162.202
+          ],
+          "b": [
+            125.602,
+            85.45
+          ],
+          "feature": "Overhang wall",
+          "width": 0.45,
+          "length": 76.752,
+          "unsupported_length": 76.752,
+          "max_free_piece": 76.752,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            125.21,
+            161.81
+          ],
+          "b": [
+            125.21,
+            85.45
+          ],
+          "feature": "Overhang wall",
+          "width": 0.45,
+          "length": 76.36,
+          "unsupported_length": 76.36,
+          "max_free_piece": 76.36,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            78.509,
+            79.591
+          ],
+          "b": [
+            126.009,
+            79.591
+          ],
+          "feature": "Overhang wall",
+          "width": 0.45,
+          "length": 47.5,
+          "unsupported_length": 47.5,
+          "max_free_piece": 47.5,
+          "a_supported": false,
+          "b_supported": false
+        }
+      ],
+      "label": "左安装框后缘",
+      "audit_ids": [
+        1
+      ],
+      "warning_count": 1,
+      "diagnostic_remaining": 17,
+      "disposition": "geometry_adjustment_required",
+      "safe_to_bridge_as_sliced": false
+    },
+    {
+      "name": "rim_R",
+      "layer": 54,
+      "height": 10.8,
+      "bounds": [
+        129.4,
+        79,
+        178.6,
+        163
+      ],
+      "features": {
+        "Overhang wall": 17,
+        "Inner wall": 4,
+        "Outer wall": 2,
+        "Bridge": 335
+      },
+      "max_free_piece": 83.60000000000001,
+      "longest": [
+        {
+          "a": [
+            177.898,
+            162.9
+          ],
+          "b": [
+            177.898,
+            79.3
+          ],
+          "feature": "Overhang wall",
+          "width": 0.45,
+          "length": 83.60000000000001,
+          "unsupported_length": 83.60000000000001,
+          "max_free_piece": 83.60000000000001,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            178.29,
+            162.9
+          ],
+          "b": [
+            178.29,
+            79.3
+          ],
+          "feature": "Overhang wall",
+          "width": 0.45,
+          "length": 83.60000000000001,
+          "unsupported_length": 83.60000000000001,
+          "max_free_piece": 83.60000000000001,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            129.991,
+            162.609
+          ],
+          "b": [
+            129.991,
+            79.591
+          ],
+          "feature": "Overhang wall",
+          "width": 0.45,
+          "length": 83.01800000000001,
+          "unsupported_length": 83.01800000000001,
+          "max_free_piece": 83.01800000000001,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            130.398,
+            79.998
+          ],
+          "b": [
+            130.398,
+            162.202
+          ],
+          "feature": "Overhang wall",
+          "width": 0.45,
+          "length": 82.204,
+          "unsupported_length": 82.204,
+          "max_free_piece": 82.204,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            130.79,
+            80.39
+          ],
+          "b": [
+            130.79,
+            161.81
+          ],
+          "feature": "Overhang wall",
+          "width": 0.45,
+          "length": 81.42,
+          "unsupported_length": 81.42,
+          "max_free_piece": 81.42,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            177.602,
+            162.202
+          ],
+          "b": [
+            177.602,
+            85.45
+          ],
+          "feature": "Overhang wall",
+          "width": 0.45,
+          "length": 76.752,
+          "unsupported_length": 76.752,
+          "max_free_piece": 76.752,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            177.21,
+            161.81
+          ],
+          "b": [
+            177.21,
+            85.45
+          ],
+          "feature": "Overhang wall",
+          "width": 0.45,
+          "length": 76.36,
+          "unsupported_length": 76.36,
+          "max_free_piece": 76.36,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            177.491,
+            162.609
+          ],
+          "b": [
+            129.991,
+            162.609
+          ],
+          "feature": "Overhang wall",
+          "width": 0.45,
+          "length": 47.5,
+          "unsupported_length": 47.5,
+          "max_free_piece": 47.5,
+          "a_supported": false,
+          "b_supported": false
+        }
+      ],
+      "label": "右安装框后缘",
+      "audit_ids": [
+        2
+      ],
+      "warning_count": 1,
+      "diagnostic_remaining": 17,
+      "disposition": "geometry_adjustment_required",
+      "safe_to_bridge_as_sliced": false
+    },
+    {
+      "name": "boss_L_outer_lower",
+      "layer": 206,
+      "height": 41.2,
+      "bounds": [
+        79.95,
+        82.05,
+        88.05,
+        90.14999999999999
+      ],
+      "features": {
+        "Overhang wall": 107,
+        "Bridge": 35
+      },
+      "max_free_piece": 5.277754257257531,
+      "longest": [
+        {
+          "a": [
+            81.924,
+            87.738
+          ],
+          "b": [
+            85.801,
+            84.157
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 5.277754257257531,
+          "unsupported_length": 5.277754257257531,
+          "max_free_piece": 5.277754257257531,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            86.075,
+            84.456
+          ],
+          "b": [
+            82.199,
+            88.035
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 5.275662707186652,
+          "unsupported_length": 5.275662707186652,
+          "max_free_piece": 5.275662707186652,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            85.482,
+            83.9
+          ],
+          "b": [
+            81.694,
+            87.398
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 5.15605934799047,
+          "unsupported_length": 5.15605934799047,
+          "max_free_piece": 5.15605934799047,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            82.52,
+            88.29
+          ],
+          "b": [
+            86.302,
+            84.798
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 5.147580791012426,
+          "unsupported_length": 5.147580791012426,
+          "max_free_piece": 5.147580791012426,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            81.515,
+            87.011
+          ],
+          "b": [
+            85.109,
+            83.692
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 4.892095358841646,
+          "unsupported_length": 4.892095358841646,
+          "max_free_piece": 4.892095358841646,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            86.481,
+            85.185
+          ],
+          "b": [
+            82.892,
+            88.5
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 4.885708341683934,
+          "unsupported_length": 4.885708341683934,
+          "max_free_piece": 4.885708341683934,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            84.679,
+            83.537
+          ],
+          "b": [
+            81.395,
+            86.569
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 4.469639806516854,
+          "unsupported_length": 4.469639806516854,
+          "max_free_piece": 4.469639806516854,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            83.322,
+            88.654
+          ],
+          "b": [
+            86.602,
+            85.626
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 4.463987455179501,
+          "unsupported_length": 4.463987455179501,
+          "max_free_piece": 4.463987455179501,
+          "a_supported": false,
+          "b_supported": false
+        }
+      ],
+      "label": "左喇叭外侧下螺柱",
+      "audit_ids": [
+        3,
+        4
+      ],
+      "warning_count": 2,
+      "diagnostic_remaining": 16,
+      "disposition": "geometry_adjustment_required",
+      "safe_to_bridge_as_sliced": false
+    },
+    {
+      "name": "boss_L_outer_upper",
+      "layer": 206,
+      "height": 41.2,
+      "bounds": [
+        79.95,
+        152.04999999999998,
+        88.05,
+        160.15
+      ],
+      "features": {
+        "Overhang wall": 105,
+        "Bridge": 35
+      },
+      "max_free_piece": 5.281315082439227,
+      "longest": [
+        {
+          "a": [
+            85.799,
+            158.039
+          ],
+          "b": [
+            81.919,
+            154.456
+          ],
+          "feature": "Bridge",
+          "width": 0.44803,
+          "length": 5.281315082439227,
+          "unsupported_length": 5.281315082439227,
+          "max_free_piece": 5.281315082439227,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            82.196,
+            154.16
+          ],
+          "b": [
+            86.074,
+            157.741
+          ],
+          "feature": "Bridge",
+          "width": 0.44803,
+          "length": 5.27848889361341,
+          "unsupported_length": 5.27848889361341,
+          "max_free_piece": 5.27848889361341,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            81.693,
+            154.799
+          ],
+          "b": [
+            85.478,
+            158.294
+          ],
+          "feature": "Bridge",
+          "width": 0.44803,
+          "length": 5.151820066733698,
+          "unsupported_length": 5.151820066733698,
+          "max_free_piece": 5.151820066733698,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            86.302,
+            157.401
+          ],
+          "b": [
+            82.519,
+            153.907
+          ],
+          "feature": "Bridge",
+          "width": 0.44803,
+          "length": 5.14967231967239,
+          "unsupported_length": 5.14967231967239,
+          "max_free_piece": 5.14967231967239,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            85.107,
+            158.503
+          ],
+          "b": [
+            81.516,
+            155.186
+          ],
+          "feature": "Bridge",
+          "width": 0.44803,
+          "length": 4.888534545239485,
+          "unsupported_length": 4.888534545239485,
+          "max_free_piece": 4.888534545239485,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            82.891,
+            153.699
+          ],
+          "b": [
+            86.481,
+            157.015
+          ],
+          "feature": "Bridge",
+          "width": 0.44803,
+          "length": 4.8871214431400976,
+          "unsupported_length": 4.8871214431400976,
+          "max_free_piece": 4.8871214431400976,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            86.602,
+            156.574
+          ],
+          "b": [
+            83.32,
+            153.544
+          ],
+          "feature": "Bridge",
+          "width": 0.44803,
+          "length": 4.466813629423113,
+          "unsupported_length": 4.466813629423113,
+          "max_free_piece": 4.466813629423113,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            81.396,
+            155.627
+          ],
+          "b": [
+            84.677,
+            158.657
+          ],
+          "feature": "Bridge",
+          "width": 0.44803,
+          "length": 4.466078928993535,
+          "unsupported_length": 4.466078928993535,
+          "max_free_piece": 4.466078928993535,
+          "a_supported": false,
+          "b_supported": false
+        }
+      ],
+      "label": "左喇叭外侧上螺柱",
+      "audit_ids": [
+        5,
+        6
+      ],
+      "warning_count": 2,
+      "diagnostic_remaining": 16,
+      "disposition": "geometry_adjustment_required",
+      "safe_to_bridge_as_sliced": false
+    },
+    {
+      "name": "boss_L_inner_lower",
+      "layer": 206,
+      "height": 41.2,
+      "bounds": [
+        115.95,
+        82.05,
+        124.05,
+        90.14999999999999
+      ],
+      "features": {
+        "Overhang wall": 107,
+        "Bridge": 37
+      },
+      "max_free_piece": 5.277754257257531,
+      "longest": [
+        {
+          "a": [
+            118.199,
+            84.157
+          ],
+          "b": [
+            122.076,
+            87.738
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 5.277754257257531,
+          "unsupported_length": 5.277754257257531,
+          "max_free_piece": 5.277754257257531,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            121.801,
+            88.035
+          ],
+          "b": [
+            117.925,
+            84.456
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 5.275662707186652,
+          "unsupported_length": 5.275662707186652,
+          "max_free_piece": 5.275662707186652,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            122.306,
+            87.398
+          ],
+          "b": [
+            118.518,
+            83.9
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 5.15605934799047,
+          "unsupported_length": 5.15605934799047,
+          "max_free_piece": 5.15605934799047,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            117.698,
+            84.798
+          ],
+          "b": [
+            121.48,
+            88.29
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 5.147580791012426,
+          "unsupported_length": 5.147580791012426,
+          "max_free_piece": 5.147580791012426,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            118.891,
+            83.692
+          ],
+          "b": [
+            122.485,
+            87.011
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 4.892095358841646,
+          "unsupported_length": 4.892095358841646,
+          "max_free_piece": 4.892095358841646,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            121.108,
+            88.5
+          ],
+          "b": [
+            117.519,
+            85.185
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 4.885708341683934,
+          "unsupported_length": 4.885708341683934,
+          "max_free_piece": 4.885708341683934,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            122.605,
+            86.569
+          ],
+          "b": [
+            119.321,
+            83.538
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 4.468961512476928,
+          "unsupported_length": 4.468961512476928,
+          "max_free_piece": 4.468961512476928,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            117.398,
+            85.626
+          ],
+          "b": [
+            120.679,
+            88.655
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 4.4654005419447,
+          "unsupported_length": 4.4654005419447,
+          "max_free_piece": 4.4654005419447,
+          "a_supported": false,
+          "b_supported": false
+        }
+      ],
+      "label": "左喇叭内侧下螺柱",
+      "audit_ids": [
+        7,
+        8
+      ],
+      "warning_count": 2,
+      "diagnostic_remaining": 16,
+      "disposition": "geometry_adjustment_required",
+      "safe_to_bridge_as_sliced": false
+    },
+    {
+      "name": "boss_L_inner_upper",
+      "layer": 206,
+      "height": 41.2,
+      "bounds": [
+        115.95,
+        152.04999999999998,
+        124.05,
+        160.15
+      ],
+      "features": {
+        "Overhang wall": 105,
+        "Bridge": 36
+      },
+      "max_free_piece": 5.281315082439227,
+      "longest": [
+        {
+          "a": [
+            118.201,
+            158.039
+          ],
+          "b": [
+            122.081,
+            154.456
+          ],
+          "feature": "Bridge",
+          "width": 0.44803,
+          "length": 5.281315082439227,
+          "unsupported_length": 5.281315082439227,
+          "max_free_piece": 5.281315082439227,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            121.804,
+            154.16
+          ],
+          "b": [
+            117.926,
+            157.741
+          ],
+          "feature": "Bridge",
+          "width": 0.44803,
+          "length": 5.27848889361341,
+          "unsupported_length": 5.27848889361341,
+          "max_free_piece": 5.27848889361341,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            122.307,
+            154.799
+          ],
+          "b": [
+            118.522,
+            158.294
+          ],
+          "feature": "Bridge",
+          "width": 0.44803,
+          "length": 5.151820066733698,
+          "unsupported_length": 5.151820066733698,
+          "max_free_piece": 5.151820066733698,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            117.698,
+            157.401
+          ],
+          "b": [
+            121.481,
+            153.907
+          ],
+          "feature": "Bridge",
+          "width": 0.44803,
+          "length": 5.14967231967239,
+          "unsupported_length": 5.14967231967239,
+          "max_free_piece": 5.14967231967239,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            121.11,
+            153.699
+          ],
+          "b": [
+            117.519,
+            157.015
+          ],
+          "feature": "Bridge",
+          "width": 0.44803,
+          "length": 4.88785607398579,
+          "unsupported_length": 4.88785607398579,
+          "max_free_piece": 4.88785607398579,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            118.894,
+            158.502
+          ],
+          "b": [
+            122.484,
+            155.186
+          ],
+          "feature": "Bridge",
+          "width": 0.44803,
+          "length": 4.887121443140117,
+          "unsupported_length": 4.887121443140117,
+          "max_free_piece": 4.887121443140117,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            122.605,
+            155.627
+          ],
+          "b": [
+            119.323,
+            158.657
+          ],
+          "feature": "Bridge",
+          "width": 0.44803,
+          "length": 4.466813629423113,
+          "unsupported_length": 4.466813629423113,
+          "max_free_piece": 4.466813629423113,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            117.398,
+            156.574
+          ],
+          "b": [
+            120.68,
+            153.545
+          ],
+          "feature": "Bridge",
+          "width": 0.44803,
+          "length": 4.466135353972181,
+          "unsupported_length": 4.466135353972181,
+          "max_free_piece": 4.466135353972181,
+          "a_supported": false,
+          "b_supported": false
+        }
+      ],
+      "label": "左喇叭内侧上螺柱",
+      "audit_ids": [
+        9,
+        10
+      ],
+      "warning_count": 2,
+      "diagnostic_remaining": 16,
+      "disposition": "geometry_adjustment_required",
+      "safe_to_bridge_as_sliced": false
+    },
+    {
+      "name": "boss_R_inner_lower",
+      "layer": 206,
+      "height": 41.2,
+      "bounds": [
+        131.95,
+        82.05,
+        140.05,
+        90.14999999999999
+      ],
+      "features": {
+        "Overhang wall": 107,
+        "Bridge": 35
+      },
+      "max_free_piece": 5.27775425725752,
+      "longest": [
+        {
+          "a": [
+            133.924,
+            87.738
+          ],
+          "b": [
+            137.801,
+            84.157
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 5.27775425725752,
+          "unsupported_length": 5.27775425725752,
+          "max_free_piece": 5.27775425725752,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            138.075,
+            84.456
+          ],
+          "b": [
+            134.199,
+            88.035
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 5.275662707186631,
+          "unsupported_length": 5.275662707186631,
+          "max_free_piece": 5.275662707186631,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            137.482,
+            83.9
+          ],
+          "b": [
+            133.694,
+            87.398
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 5.156059347990481,
+          "unsupported_length": 5.156059347990481,
+          "max_free_piece": 5.156059347990481,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            134.52,
+            88.29
+          ],
+          "b": [
+            138.303,
+            84.798
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 5.148315549769646,
+          "unsupported_length": 5.148315549769646,
+          "max_free_piece": 5.148315549769646,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            133.515,
+            87.011
+          ],
+          "b": [
+            137.109,
+            83.692
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 4.892095358841667,
+          "unsupported_length": 4.892095358841667,
+          "max_free_piece": 4.892095358841667,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            138.481,
+            85.185
+          ],
+          "b": [
+            134.892,
+            88.499
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 4.885029887319006,
+          "unsupported_length": 4.885029887319006,
+          "max_free_piece": 4.885029887319006,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            136.679,
+            83.538
+          ],
+          "b": [
+            133.395,
+            86.569
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 4.468961512476918,
+          "unsupported_length": 4.468961512476918,
+          "max_free_piece": 4.468961512476918,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            135.321,
+            88.655
+          ],
+          "b": [
+            138.601,
+            85.626
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 4.464665832959953,
+          "unsupported_length": 4.464665832959953,
+          "max_free_piece": 4.464665832959953,
+          "a_supported": false,
+          "b_supported": false
+        }
+      ],
+      "label": "右喇叭内侧下螺柱",
+      "audit_ids": [
+        11,
+        12
+      ],
+      "warning_count": 2,
+      "diagnostic_remaining": 16,
+      "disposition": "geometry_adjustment_required",
+      "safe_to_bridge_as_sliced": false
+    },
+    {
+      "name": "boss_R_inner_upper",
+      "layer": 206,
+      "height": 41.2,
+      "bounds": [
+        131.95,
+        152.04999999999998,
+        140.05,
+        160.15
+      ],
+      "features": {
+        "Overhang wall": 107,
+        "Bridge": 35
+      },
+      "max_free_piece": 5.281315082439217,
+      "longest": [
+        {
+          "a": [
+            133.919,
+            154.456
+          ],
+          "b": [
+            137.799,
+            158.039
+          ],
+          "feature": "Bridge",
+          "width": 0.44802,
+          "length": 5.281315082439217,
+          "unsupported_length": 5.281315082439217,
+          "max_free_piece": 5.281315082439217,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            138.074,
+            157.741
+          ],
+          "b": [
+            134.196,
+            154.16
+          ],
+          "feature": "Bridge",
+          "width": 0.44802,
+          "length": 5.278488893613421,
+          "unsupported_length": 5.278488893613421,
+          "max_free_piece": 5.278488893613421,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            137.478,
+            158.294
+          ],
+          "b": [
+            133.693,
+            154.799
+          ],
+          "feature": "Bridge",
+          "width": 0.44802,
+          "length": 5.151820066733698,
+          "unsupported_length": 5.151820066733698,
+          "max_free_piece": 5.151820066733698,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            134.519,
+            153.907
+          ],
+          "b": [
+            138.302,
+            157.401
+          ],
+          "feature": "Bridge",
+          "width": 0.44802,
+          "length": 5.149672319672379,
+          "unsupported_length": 5.149672319672379,
+          "max_free_piece": 5.149672319672379,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            133.516,
+            155.186
+          ],
+          "b": [
+            137.107,
+            158.503
+          ],
+          "feature": "Bridge",
+          "width": 0.44802,
+          "length": 4.888534545239495,
+          "unsupported_length": 4.888534545239495,
+          "max_free_piece": 4.888534545239495,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            138.481,
+            157.015
+          ],
+          "b": [
+            134.89,
+            153.699
+          ],
+          "feature": "Bridge",
+          "width": 0.44802,
+          "length": 4.887856073985801,
+          "unsupported_length": 4.887856073985801,
+          "max_free_piece": 4.887856073985801,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            135.32,
+            153.544
+          ],
+          "b": [
+            138.602,
+            156.574
+          ],
+          "feature": "Bridge",
+          "width": 0.44802,
+          "length": 4.466813629423113,
+          "unsupported_length": 4.466813629423113,
+          "max_free_piece": 4.466813629423113,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            136.676,
+            158.656
+          ],
+          "b": [
+            133.396,
+            155.627
+          ],
+          "feature": "Bridge",
+          "width": 0.44802,
+          "length": 4.464665832959953,
+          "unsupported_length": 4.464665832959953,
+          "max_free_piece": 4.464665832959953,
+          "a_supported": false,
+          "b_supported": false
+        }
+      ],
+      "label": "右喇叭内侧上螺柱",
+      "audit_ids": [
+        13,
+        14
+      ],
+      "warning_count": 2,
+      "diagnostic_remaining": 16,
+      "disposition": "geometry_adjustment_required",
+      "safe_to_bridge_as_sliced": false
+    },
+    {
+      "name": "boss_R_outer_lower",
+      "layer": 206,
+      "height": 41.2,
+      "bounds": [
+        167.95,
+        82.05,
+        176.05,
+        90.14999999999999
+      ],
+      "features": {
+        "Overhang wall": 107,
+        "Bridge": 37
+      },
+      "max_free_piece": 5.27775425725752,
+      "longest": [
+        {
+          "a": [
+            174.076,
+            87.738
+          ],
+          "b": [
+            170.199,
+            84.157
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 5.27775425725752,
+          "unsupported_length": 5.27775425725752,
+          "max_free_piece": 5.27775425725752,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            169.925,
+            84.456
+          ],
+          "b": [
+            173.801,
+            88.035
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 5.275662707186631,
+          "unsupported_length": 5.275662707186631,
+          "max_free_piece": 5.275662707186631,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            170.518,
+            83.9
+          ],
+          "b": [
+            174.306,
+            87.398
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 5.156059347990481,
+          "unsupported_length": 5.156059347990481,
+          "max_free_piece": 5.156059347990481,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            173.48,
+            88.29
+          ],
+          "b": [
+            169.698,
+            84.798
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 5.147580791012405,
+          "unsupported_length": 5.147580791012405,
+          "max_free_piece": 5.147580791012405,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            174.485,
+            87.011
+          ],
+          "b": [
+            170.892,
+            83.693
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 4.890682263243045,
+          "unsupported_length": 4.890682263243045,
+          "max_free_piece": 4.890682263243045,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            169.519,
+            85.185
+          ],
+          "b": [
+            173.108,
+            88.5
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 4.885708341683934,
+          "unsupported_length": 4.885708341683934,
+          "max_free_piece": 4.885708341683934,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            171.321,
+            83.537
+          ],
+          "b": [
+            174.605,
+            86.569
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 4.4696398065168434,
+          "unsupported_length": 4.4696398065168434,
+          "max_free_piece": 4.4696398065168434,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            172.679,
+            88.655
+          ],
+          "b": [
+            169.398,
+            85.626
+          ],
+          "feature": "Bridge",
+          "width": 0.44844,
+          "length": 4.4654005419447,
+          "unsupported_length": 4.4654005419447,
+          "max_free_piece": 4.4654005419447,
+          "a_supported": false,
+          "b_supported": false
+        }
+      ],
+      "label": "右喇叭外侧下螺柱",
+      "audit_ids": [
+        15,
+        16
+      ],
+      "warning_count": 2,
+      "diagnostic_remaining": 16,
+      "disposition": "geometry_adjustment_required",
+      "safe_to_bridge_as_sliced": false
+    },
+    {
+      "name": "boss_R_outer_upper",
+      "layer": 206,
+      "height": 41.2,
+      "bounds": [
+        167.95,
+        152.04999999999998,
+        176.05,
+        160.15
+      ],
+      "features": {
+        "Overhang wall": 105,
+        "Bridge": 36
+      },
+      "max_free_piece": 5.281315082439217,
+      "longest": [
+        {
+          "a": [
+            174.081,
+            154.456
+          ],
+          "b": [
+            170.201,
+            158.039
+          ],
+          "feature": "Bridge",
+          "width": 0.44801,
+          "length": 5.281315082439217,
+          "unsupported_length": 5.281315082439217,
+          "max_free_piece": 5.281315082439217,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            169.926,
+            157.741
+          ],
+          "b": [
+            173.804,
+            154.16
+          ],
+          "feature": "Bridge",
+          "width": 0.44801,
+          "length": 5.278488893613421,
+          "unsupported_length": 5.278488893613421,
+          "max_free_piece": 5.278488893613421,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            170.522,
+            158.294
+          ],
+          "b": [
+            174.307,
+            154.799
+          ],
+          "feature": "Bridge",
+          "width": 0.44801,
+          "length": 5.151820066733698,
+          "unsupported_length": 5.151820066733698,
+          "max_free_piece": 5.151820066733698,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            173.481,
+            153.907
+          ],
+          "b": [
+            169.698,
+            157.401
+          ],
+          "feature": "Bridge",
+          "width": 0.44801,
+          "length": 5.149672319672379,
+          "unsupported_length": 5.149672319672379,
+          "max_free_piece": 5.149672319672379,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            174.484,
+            155.186
+          ],
+          "b": [
+            170.893,
+            158.502
+          ],
+          "feature": "Bridge",
+          "width": 0.44801,
+          "length": 4.88785607398582,
+          "unsupported_length": 4.88785607398582,
+          "max_free_piece": 4.88785607398582,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            169.519,
+            157.015
+          ],
+          "b": [
+            173.109,
+            153.699
+          ],
+          "feature": "Bridge",
+          "width": 0.44801,
+          "length": 4.887121443140108,
+          "unsupported_length": 4.887121443140108,
+          "max_free_piece": 4.887121443140108,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            172.68,
+            153.544
+          ],
+          "b": [
+            169.398,
+            156.574
+          ],
+          "feature": "Bridge",
+          "width": 0.44801,
+          "length": 4.466813629423113,
+          "unsupported_length": 4.466813629423113,
+          "max_free_piece": 4.466813629423113,
+          "a_supported": false,
+          "b_supported": false
+        },
+        {
+          "a": [
+            171.323,
+            158.657
+          ],
+          "b": [
+            174.604,
+            155.627
+          ],
+          "feature": "Bridge",
+          "width": 0.44801,
+          "length": 4.466078928993535,
+          "unsupported_length": 4.466078928993535,
+          "max_free_piece": 4.466078928993535,
+          "a_supported": false,
+          "b_supported": false
+        }
+      ],
+      "label": "右喇叭外侧上螺柱",
+      "audit_ids": [
+        17,
+        18
+      ],
+      "warning_count": 2,
+      "diagnostic_remaining": 16,
+      "disposition": "geometry_adjustment_required",
+      "safe_to_bridge_as_sliced": false
+    }
+  ],
+  "diagnostics": {
+    "boss_L_inner_lower": {
+      "name": "boss_L_inner_lower",
+      "exit": 0,
+      "checks": [
+        "Uncovered overhang check on object SpeakerCarrier.stl: 16 of 24 region(s) uncovered, 1344.19 mm2, lowest_z=10.8"
+      ],
+      "boxes": [
+        [
+          115.5,
+          81.6,
+          40.99,
+          124.5,
+          90.6,
+          41.19
+        ]
+      ]
+    },
+    "block_z_55.8": {
+      "name": "block_z_55.8",
+      "exit": 0,
+      "checks": [
+        "Uncovered overhang check on object SpeakerCarrier.stl: 18 of 22 region(s) uncovered, 1442.03 mm2, lowest_z=10.8"
+      ],
+      "boxes": [
+        [
+          0,
+          0,
+          55.589999999999996,
+          256,
+          256,
+          55.79
+        ]
+      ]
+    },
+    "boss_L_outer_upper": {
+      "name": "boss_L_outer_upper",
+      "exit": 0,
+      "checks": [
+        "Uncovered overhang check on object SpeakerCarrier.stl: 16 of 24 region(s) uncovered, 1344.19 mm2, lowest_z=10.8"
+      ],
+      "boxes": [
+        [
+          79.5,
+          151.6,
+          40.99,
+          88.5,
+          160.6,
+          41.19
+        ]
+      ]
+    },
+    "rim_L": {
+      "name": "rim_L",
+      "exit": 0,
+      "checks": [
+        "Uncovered overhang check on object SpeakerCarrier.stl: 17 of 25 region(s) uncovered, 1112.39 mm2, lowest_z=10.8"
+      ],
+      "boxes": [
+        [
+          77,
+          79,
+          10.59,
+          127,
+          163,
+          10.79
+        ]
+      ]
+    },
+    "boss_L_inner_upper": {
+      "name": "boss_L_inner_upper",
+      "exit": 0,
+      "checks": [
+        "Uncovered overhang check on object SpeakerCarrier.stl: 16 of 24 region(s) uncovered, 1344.19 mm2, lowest_z=10.8"
+      ],
+      "boxes": [
+        [
+          115.5,
+          151.6,
+          40.99,
+          124.5,
+          160.6,
+          41.19
+        ]
+      ]
+    },
+    "all_identified": {
+      "name": "all_identified",
+      "exit": 0,
+      "checks": [],
+      "boxes": [
+        [
+          77,
+          79,
+          10.59,
+          127,
+          163,
+          10.79
+        ],
+        [
+          129,
+          79,
+          10.59,
+          179,
+          163,
+          10.79
+        ],
+        [
+          79.5,
+          81.6,
+          40.99,
+          88.5,
+          90.6,
+          41.19
+        ],
+        [
+          79.5,
+          151.6,
+          40.99,
+          88.5,
+          160.6,
+          41.19
+        ],
+        [
+          115.5,
+          81.6,
+          40.99,
+          124.5,
+          90.6,
+          41.19
+        ],
+        [
+          115.5,
+          151.6,
+          40.99,
+          124.5,
+          160.6,
+          41.19
+        ],
+        [
+          131.5,
+          81.6,
+          40.99,
+          140.5,
+          90.6,
+          41.19
+        ],
+        [
+          131.5,
+          151.6,
+          40.99,
+          140.5,
+          160.6,
+          41.19
+        ],
+        [
+          167.5,
+          81.6,
+          40.99,
+          176.5,
+          90.6,
+          41.19
+        ],
+        [
+          167.5,
+          151.6,
+          40.99,
+          176.5,
+          160.6,
+          41.19
+        ]
+      ]
+    },
+    "block_z_7.8": {
+      "name": "block_z_7.8",
+      "exit": 0,
+      "checks": [
+        "Uncovered overhang check on object SpeakerCarrier.stl: 18 of 25 region(s) uncovered, 1442.03 mm2, lowest_z=10.8"
+      ],
+      "boxes": [
+        [
+          0,
+          0,
+          7.59,
+          256,
+          256,
+          7.79
+        ]
+      ]
+    },
+    "block_all": {
+      "name": "block_all",
+      "exit": 0,
+      "checks": [],
+      "boxes": [
+        [
+          0,
+          0,
+          0,
+          256,
+          256,
+          60
+        ]
+      ]
+    },
+    "boss_L_outer_lower": {
+      "name": "boss_L_outer_lower",
+      "exit": 0,
+      "checks": [
+        "Uncovered overhang check on object SpeakerCarrier.stl: 16 of 24 region(s) uncovered, 1344.18 mm2, lowest_z=10.8"
+      ],
+      "boxes": [
+        [
+          79.5,
+          81.6,
+          40.99,
+          88.5,
+          90.6,
+          41.19
+        ]
+      ]
+    },
+    "boss_R_outer_upper": {
+      "name": "boss_R_outer_upper",
+      "exit": 0,
+      "checks": [
+        "Uncovered overhang check on object SpeakerCarrier.stl: 16 of 24 region(s) uncovered, 1344.19 mm2, lowest_z=10.8"
+      ],
+      "boxes": [
+        [
+          167.5,
+          151.6,
+          40.99,
+          176.5,
+          160.6,
+          41.19
+        ]
+      ]
+    },
+    "block_z_41.2": {
+      "name": "block_z_41.2",
+      "exit": 0,
+      "checks": [
+        "Uncovered overhang check on object SpeakerCarrier.stl: 2 of 10 region(s) uncovered, 659.283 mm2, lowest_z=10.8"
+      ],
+      "boxes": [
+        [
+          0,
+          0,
+          40.99,
+          256,
+          256,
+          41.190000000000005
+        ]
+      ]
+    },
+    "block_z_22.6": {
+      "name": "block_z_22.6",
+      "exit": 0,
+      "checks": [
+        "Uncovered overhang check on object SpeakerCarrier.stl: 18 of 26 region(s) uncovered, 1442.03 mm2, lowest_z=10.8"
+      ],
+      "boxes": [
+        [
+          0,
+          0,
+          22.39,
+          256,
+          256,
+          22.59
+        ]
+      ]
+    },
+    "block_z_34.2": {
+      "name": "block_z_34.2",
+      "exit": 0,
+      "checks": [
+        "Uncovered overhang check on object SpeakerCarrier.stl: 18 of 25 region(s) uncovered, 1442.03 mm2, lowest_z=10.8"
+      ],
+      "boxes": [
+        [
+          0,
+          0,
+          33.99,
+          256,
+          256,
+          34.190000000000005
+        ]
+      ]
+    },
+    "rim_R": {
+      "name": "rim_R",
+      "exit": 0,
+      "checks": [
+        "Uncovered overhang check on object SpeakerCarrier.stl: 17 of 25 region(s) uncovered, 1112.39 mm2, lowest_z=10.8"
+      ],
+      "boxes": [
+        [
+          129,
+          79,
+          10.59,
+          179,
+          163,
+          10.79
+        ]
+      ]
+    },
+    "boss_R_inner_lower": {
+      "name": "boss_R_inner_lower",
+      "exit": 0,
+      "checks": [
+        "Uncovered overhang check on object SpeakerCarrier.stl: 16 of 24 region(s) uncovered, 1344.18 mm2, lowest_z=10.8"
+      ],
+      "boxes": [
+        [
+          131.5,
+          81.6,
+          40.99,
+          140.5,
+          90.6,
+          41.19
+        ]
+      ]
+    },
+    "boss_R_outer_lower": {
+      "name": "boss_R_outer_lower",
+      "exit": 0,
+      "checks": [
+        "Uncovered overhang check on object SpeakerCarrier.stl: 16 of 24 region(s) uncovered, 1344.19 mm2, lowest_z=10.8"
+      ],
+      "boxes": [
+        [
+          167.5,
+          81.6,
+          40.99,
+          176.5,
+          90.6,
+          41.19
+        ]
+      ]
+    },
+    "block_z_10.8": {
+      "name": "block_z_10.8",
+      "exit": 0,
+      "checks": [
+        "Uncovered overhang check on object SpeakerCarrier.stl: 16 of 24 region(s) uncovered, 782.749 mm2, lowest_z=41.2"
+      ],
+      "boxes": [
+        [
+          0,
+          0,
+          10.59,
+          256,
+          256,
+          10.790000000000001
+        ]
+      ]
+    },
+    "block_z_37.2": {
+      "name": "block_z_37.2",
+      "exit": 0,
+      "checks": [
+        "Uncovered overhang check on object SpeakerCarrier.stl: 18 of 24 region(s) uncovered, 1442.03 mm2, lowest_z=10.8"
+      ],
+      "boxes": [
+        [
+          0,
+          0,
+          36.99,
+          256,
+          256,
+          37.190000000000005
+        ]
+      ]
+    },
+    "control": {
+      "name": "control",
+      "exit": 0,
+      "checks": [
+        "Uncovered overhang check on object SpeakerCarrier.stl: 18 of 26 region(s) uncovered, 1442.03 mm2, lowest_z=10.8"
+      ],
+      "boxes": []
+    },
+    "boss_R_inner_upper": {
+      "name": "boss_R_inner_upper",
+      "exit": 0,
+      "checks": [
+        "Uncovered overhang check on object SpeakerCarrier.stl: 16 of 24 region(s) uncovered, 1344.19 mm2, lowest_z=10.8"
+      ],
+      "boxes": [
+        [
+          131.5,
+          151.6,
+          40.99,
+          140.5,
+          160.6,
+          41.19
+        ]
+      ]
+    }
+  },
+  "source": "https://github.com/bambulab/BambuStudio/blob/v02.09.01.70/src/libslic3r/PrintObject.cpp#L5947-L6340",
+  "limitations": [
+    "Diagnostic support blockers isolate warnings only. They are not a printing solution or a production profile.",
+    "G-code footprint reconstruction uses recorded line widths plus 0.03 mm tolerance; it is not a physical extrusion simulation.",
+    "No physical print, geometry repair, or machine execution was performed."
+  ]
+}

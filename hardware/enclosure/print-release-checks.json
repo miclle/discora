@@ -1,0 +1,118 @@
+{
+  "model_sha256": "80eede1e85eafe8aca6ba6702cb2e169b6f7b4d1c368eeca10f1e6647bacebe0",
+  "manifest_sha256": "68e39016e1454bc9abd277688f4bf9b44668438656f2ae47b37faf759dee37c1",
+  "meshes": {
+    "FrontShell": {
+      "closed": true,
+      "relative_cad_volume_error": 0.0009853697365088496,
+      "on_bed": true,
+      "fits_bed": true
+    },
+    "RearShell": {
+      "closed": true,
+      "relative_cad_volume_error": 5.306357306673178e-07,
+      "on_bed": true,
+      "fits_bed": true
+    },
+    "SpeakerCarrier": {
+      "closed": true,
+      "relative_cad_volume_error": 9.946772690335542e-05,
+      "on_bed": true,
+      "fits_bed": true
+    },
+    "PlayPauseKey": {
+      "closed": true,
+      "relative_cad_volume_error": 0.005078887031762945,
+      "on_bed": true,
+      "fits_bed": true
+    },
+    "EjectKey": {
+      "closed": true,
+      "relative_cad_volume_error": 0.005078887031763132,
+      "on_bed": true,
+      "fits_bed": true
+    },
+    "PrevKey": {
+      "closed": true,
+      "relative_cad_volume_error": 0.005078887031762945,
+      "on_bed": true,
+      "fits_bed": true
+    },
+    "NextKey": {
+      "closed": true,
+      "relative_cad_volume_error": 0.005078887031763319,
+      "on_bed": true,
+      "fits_bed": true
+    },
+    "ButtonRetainer": {
+      "closed": true,
+      "relative_cad_volume_error": 0.00021699169309909885,
+      "on_bed": true,
+      "fits_bed": true
+    },
+    "DisplayRetainer": {
+      "closed": true,
+      "relative_cad_volume_error": 0.0007284975260227302,
+      "on_bed": true,
+      "fits_bed": true
+    },
+    "DriveRetainer": {
+      "closed": true,
+      "relative_cad_volume_error": 2.7851445737167572e-05,
+      "on_bed": true,
+      "fits_bed": true
+    },
+    "Knob": {
+      "closed": true,
+      "relative_cad_volume_error": 0.00173633758161139,
+      "on_bed": true,
+      "fits_bed": true
+    }
+  },
+  "plates": {
+    "FrontShell": {
+      "layers": 245,
+      "extrusion_moves": 2859021,
+      "mesh_repairs": 0,
+      "settings_persisted": true,
+      "archive_valid": true
+    },
+    "RearShell": {
+      "layers": 440,
+      "extrusion_moves": 1308961,
+      "mesh_repairs": 0,
+      "settings_persisted": true,
+      "archive_valid": true
+    },
+    "SpeakerCarrier": {
+      "layers": 287,
+      "extrusion_moves": 595392,
+      "mesh_repairs": 0,
+      "settings_persisted": true,
+      "archive_valid": true
+    },
+    "SmallParts": {
+      "layers": 32,
+      "extrusion_moves": 32796,
+      "mesh_repairs": 0,
+      "settings_persisted": true,
+      "archive_valid": true
+    },
+    "Keys": {
+      "layers": 60,
+      "extrusion_moves": 52849,
+      "mesh_repairs": 0,
+      "settings_persisted": true,
+      "archive_valid": true
+    },
+    "Knob": {
+      "layers": 116,
+      "extrusion_moves": 86265,
+      "mesh_repairs": 0,
+      "settings_persisted": true,
+      "archive_valid": true
+    }
+  },
+  "all_pass": true,
+  "printer_contacted": false
+}
