@@ -107,6 +107,61 @@ def validate(folder):
     assert circles and all(abs(r-65)<1e-6 for r in circles),grille_check
     assert mouth_obstruction<=tolerance and abs(recess-2.5)<1e-6,grille_check
     assert abs(grille_check['grille_back_y_mm']-5)<1e-6 and abs(grille_check['driver_front_gap_mm']-3)<1e-6,grille_check
+    # Check the final P3, where fusion could otherwise fill a pilot or aperture.
+    axis=A.Vector(0,1,0)
+    carrier=doc.SpeakerCarrier.Shape
+    speaker_mount={'seat_y_mm':10,'trial_opening_zx_mm':[71.5,39.3],
+                   'opening_corner_radius_mm':12.5,'hole_pitch_zx_mm':[70,36],
+                   'driver_hole_diameter_mm':3.3,'pilot_diameter_mm':2.3,'pilot_depth_mm':10.5,
+                   'screw_thread_diameter_mm':2.8,'screw_thread_length_mm':9.5,'screw_head_height_mm':1.9,
+                   'reserved_screw_head_diameter_mm':6,'screw_head_diameter_measured':False,
+                   'mounts':{}}
+    for name,cx in [('LDriver',-26),('RDriver',26)]:
+        driver=doc.getObject(name).Shape
+        bb=driver.BoundBox
+        assert abs(bb.YMin-8)<1e-7 and abs(bb.YMax-49)<1e-7
+        footprint=Part.makeBox(46,0.2,81,A.Vector(cx-23,10.8,35.5))
+        clear_sections=footprint.cut(carrier).Solids
+        aperture=next(solid for solid in clear_sections if solid.isInside(A.Vector(cx,10.9,76),1e-7,False))
+        opening=aperture.BoundBox
+        assert abs(opening.XLength-39.3)<1e-7 and abs(opening.ZLength-71.5)<1e-7
+        assert any(isinstance(face.Surface,Part.Cylinder) and abs(face.Surface.Radius-12.5)<1e-7
+                   for face in aperture.Faces)
+        entry=Part.makeBox(bb.XLength,10,bb.ZLength,A.Vector(bb.XMin,0,bb.ZMin))
+        basket=driver.common(Part.makeBox(46,40,81,A.Vector(cx-23,10,35.5)))
+        # Extruded basket proxy: sweep the maximum modeled section from the front
+        # along the insertion axis to its fully seated position.
+        section=[face for face in basket.Faces if abs(face.BoundBox.YMin-10)<1e-7 and face.BoundBox.YLength<1e-7]
+        assert len(section)==1
+        entry_clash=entry.common(carrier).Volume
+        basket_sweep=section[0].translated(A.Vector(0,-10,0)).extrude(axis*49)
+        basket_clash=basket_sweep.common(carrier).Volume
+        assert max(entry_clash,basket_clash)<=tolerance
+        holes=[]
+        for x in (cx-18,cx+18):
+            for z in (41,111):
+                def bore(radius,y,height):
+                    return Part.makeCylinder(radius,height,A.Vector(x,y,z),axis)
+                pilot=bore(1.15,10,10.5)
+                wall=bore(3,10,10.5).cut(pilot)
+                bottom=bore(1.15,20.5,1)
+                shank=bore(1.4,8,2)
+                head=bore(3,6.1,1.9)
+                tool=bore(3,0,8)
+                seat=bore(3,10,.1).cut(bore(1.65,10,.1))
+                hole=dict(center_xz_mm=[x,z],pilot_obstruction_mm3=pilot.common(carrier).Volume,
+                          missing_pilot_wall_mm3=wall.cut(carrier).Volume,
+                          missing_pilot_bottom_mm3=bottom.cut(carrier).Volume,
+                          seat_obstruction_mm3=seat.cut(carrier).Volume,
+                          screw_shank_obstruction_mm3=shank.common(driver).Volume,
+                          reserved_head_clashes=collisions(head,objects),
+                          front_tool_clashes=collisions(tool,[obj for obj in objects if obj.Name!='FrontShell']))
+                assert all(value<=tolerance for key,value in hole.items() if key.endswith('_mm3')),hole
+                assert not hole['reserved_head_clashes'] and not hole['front_tool_clashes'],hole
+                holes.append(hole)
+        speaker_mount['mounts'][name]={'entry_clash_mm3':entry_clash,'basket_sweep_clash_mm3':basket_clash,'holes':holes}
+    speaker_mount['rear_gap_mm']=doc.LChamber.Shape.BoundBox.YMax-2.5-doc.LDriver.Shape.BoundBox.YMax
+    assert abs(speaker_mount['rear_gap_mm']-11)<1e-7
     # The larger sheet is masked by the smaller panel opening. Read the final
     # hole walls to distinguish complete circles from exposed circular segments.
     hole_walls=[f for f in doc.FrontShell.Shape.Faces
@@ -237,10 +292,10 @@ def validate(folder):
         'side_port_handle_alignment':port_alignment,'side_air_paths':paths,'connector_allowances':keepouts,'key_clearances_mm':clearances,
         'battery_fit':battery_fit,'controls_translation_xyz_mm':[0,0,15],
         'top_shoulders':shoulders,'front_panel_thickness_samples_mm':thickness,
-        'recessed_grille':grille_check,
+        'recessed_grille':grille_check,'speaker_mount':speaker_mount,
         'original_controls_difference_mm3':controls,'handle_opening_mm':[90,24],'handle_passage_clashes':handle,
         'physical_validation':False,'acoustic_tuning_verified':False,
-        'limits':['Speaker mounting plane, actual mounting holes, terminals, gaskets and excursion remain unmeasured.',
+        'limits':['Speaker trial uses measured depth, hole pitch and basket extrema; exact profile, screw head diameter/thread type, terminals, gaskets and excursion remain unverified.',
                   'PCB sizes are documented; component heights and connector reservations are provisional.',
                   'Three main PLA solids and nominal screw/pilot bores do not validate printed strength or screw fit.',
                   'Separate assembly-path report distinguishes continuous conservative sweeps from sampled cover motion.',

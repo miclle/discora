@@ -23,9 +23,16 @@ KNOB_BLACK, WHITE, SILVER, PCB, BLUE = (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), (0.70, 
 # The drive face is parallel to XZ and the disc moves vertically behind the handle.
 WIDTH = 170.0
 DRIVE = (128.0, 10.8, 130.0)  # measured maximum envelope; front lip is thicker than the 9.5 mm rear
-# User-supplied total envelope, oriented upright: depth, width, height.
-# Frontmost diaphragm to rearmost magnet; mounting plane remains unmeasured.
-SPEAKER = (42.0, 45.0, 80.0)
+# The flange keeps the original nominal outside width/height as an envelope.
+SPEAKER_FLANGE = (45.0, 80.0)
+SPEAKER_BASKET = (38.3, 70.5)  # width, height of the measured maximum section
+SPEAKER_FRONT_DEPTH, SPEAKER_REAR_DEPTH = 2.0, 39.0
+SPEAKER_SEAT_Y = 10.0
+SPEAKER_CORNER_RADIUS = 12.0  # trial radius; the basket outline is unmeasured
+SPEAKER_FIT_CLEARANCE = 0.5  # per side at the straight edges
+SPEAKER_HOLE_PITCH = (36.0, 70.0)
+SPEAKER_HOLE_DIAMETER = 3.3
+SPEAKER_PILOT_DIAMETER, SPEAKER_PILOT_DEPTH = 2.3, 10.5
 CASE_DEPTH = 93.0
 # The rear housing is symmetric in side elevation; the front skin overlays it.
 HANDLE_THICKNESS = 5.0
@@ -466,21 +473,41 @@ def build(folder):
             if math.hypot(dx,dz)+GRILLE_HOLE_RADIUS<=mesh_radius-1:
                 vents.append(cylinder(GRILLE_HOLE_RADIUS,FRONT_THICKNESS+1,(dx,FRONT_GRILLE_RECESS-.1,zc+dz),Y))
     feature("FrontGrille","中央双喇叭 · 内凹 2.5 mm 通孔护网",grille.cut(Part.makeCompound(vents)),TEAL,shell)
-    depth,width,height=SPEAKER
-    apertures=[]
-    for right in [False,True]:
-        prefix,label=("R","右") if right else ("L","左")
-        cx=SPEAKER_CENTER_X if right else -SPEAKER_CENTER_X
-        sx,sz=cx-width/2,zc-height/2
-        if not right:
-            left_driver=block("LDriver","左声道 · 80×45×42 喇叭总包络",(sx,8,sz),(width,depth,height),RUBBER,hardware)
-            frame=box(sx-2,5,sz-2,width+4,depth+5,height+4).cut(
-                box(sx-.2,4.5,sz-.2,width+.4,depth+6,height+.4))
-            left_frame=feature("LDriverFrame","左喇叭预留框 · 安装面与孔位待测",frame,TEAL,supports)
-        else:
-            mirrored("RDriver","右声道 · 喇叭包络关联镜像",left_driver,RUBBER,hardware)
-            mirrored("RDriverFrame","右喇叭预留框 · 关联镜像",left_frame,TEAL,supports)
-        apertures.append(box(sx-.2,4.5,sz-.2,width+.4,3,height+.4))
+    width,height=SPEAKER_FLANGE
+    cx=-SPEAKER_CENTER_X
+    sx,sz=cx-width/2,zc-height/2
+    seat=SPEAKER_SEAT_Y
+    gap=SPEAKER_FIT_CLEARANCE
+
+    def basket_prism(clearance, y, length):
+        bw,bh=(size+2*clearance for size in SPEAKER_BASKET)
+        blank=box(cx-bw/2,y,zc-bh/2,bw,length,bh)
+        return blank.makeFillet(SPEAKER_CORNER_RADIUS+clearance,
+                                [edge for edge in blank.Edges if edge.BoundBox.YLength>0])
+
+    pitch_x,pitch_z=SPEAKER_HOLE_PITCH
+    screw_axes=[(cx+dx,zc+dz) for dx in (-pitch_x/2,pitch_x/2) for dz in (-pitch_z/2,pitch_z/2)]
+    flange=box(sx,seat-SPEAKER_FRONT_DEPTH,sz,width,SPEAKER_FRONT_DEPTH,height)
+    flange=flange.cut([cylinder(SPEAKER_HOLE_DIAMETER/2,SPEAKER_FRONT_DEPTH+2,(x,seat-SPEAKER_FRONT_DEPTH-1,z),Y)
+                       for x,z in screw_axes])
+    driver=flange.fuse(basket_prism(0,seat,SPEAKER_REAR_DEPTH)).removeSplitter()
+    left_driver=feature("LDriver","左声道 · 实测喇叭试装包络",driver,RUBBER,hardware)
+    mirrored("RDriver","右声道 · 喇叭试装包络关联镜像",left_driver,RUBBER,hardware)
+
+    # Front loading: a full flange entry leads to a 3 mm seat plate.
+    # The four blind bosses remain part of P3; cut the basket opening last
+    # so neither the bosses nor the seat can project into the trial profile.
+    rim=box(sx-2,5,sz-2,width+4,47,height+4).cut(
+        box(sx-gap,4.5,sz-gap,width+2*gap,48,height+2*gap))
+    plate=box(sx-1,seat,sz-1,width+2,3,height+2)
+    bosses=[cylinder(4,11.5,(x,seat,z),Y) for x,z in screw_axes]
+    pilots=[cylinder(SPEAKER_PILOT_DIAMETER/2,SPEAKER_PILOT_DEPTH+.1,(x,seat-.1,z),Y)
+            for x,z in screw_axes]
+    frame=rim.fuse([plate]+bosses).cut([basket_prism(gap,seat-.1,43)]+pilots).removeSplitter()
+    left_frame=feature("LDriverFrame","左喇叭试装座 · 四处盲底孔",frame,TEAL,supports)
+    mirrored("RDriverFrame","右喇叭试装座 · 关联镜像",left_frame,TEAL,supports)
+    apertures=[box(x-width/2-gap,4.5,sz-gap,width+2*gap,3,height+2*gap)
+               for x in (-SPEAKER_CENTER_X,SPEAKER_CENTER_X)]
     baffle=box(-65,5,31.5,130,2,89).cut(Part.makeCompound(apertures))
     feature("FrontBaffle","双单元前障板",baffle,RUBBER,supports)
 
