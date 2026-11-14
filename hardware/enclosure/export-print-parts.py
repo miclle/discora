@@ -1,6 +1,6 @@
 """Export the eleven rigid PLA pieces in review orientations; no printer is contacted.
 
-Run with FreeCAD Python. Output is intentionally temporary until physical fit is checked.
+Run with FreeCAD Python. Exports follow the saved CAD revision; physical fit is checked separately.
 Key STL files are single-material envelopes; export-dual-color-keys.py preserves their materials.
 """
 import argparse
@@ -49,13 +49,15 @@ def main():
         b=shape.BoundBox
         shape.translate(A.Vector(128-b.Center.x,128-b.Center.y,-b.ZMin))
         print('MESH_START',name,flush=True)
-        mesh=MeshPart.meshFromShape(Shape=shape,LinearDeflection=.1,AngularDeflection=.35,Relative=False)
+        linear,angular=(.05,.2) if name in ('RearShell','SpeakerCarrier') else (.1,.35)
+        mesh=MeshPart.meshFromShape(Shape=shape,LinearDeflection=linear,AngularDeflection=angular,Relative=False)
         assert mesh.isSolid(),name
         target=args.output/(name+'.stl');mesh.write(str(target))
         b=shape.BoundBox
         fits=min(b.XMin,b.YMin)>=5 and max(b.XMax,b.YMax)<=251 and b.ZMax<=256
         assert fits,(name,b)
         report['parts'][name]={'file':target.name,'size_xyz_mm':[b.XLength,b.YLength,b.ZLength],
+            'linear_deflection_mm':linear,'angular_deflection_rad':angular,
             'facets':mesh.CountFacets,'closed_mesh':True,'fits_with_5mm_brim':fits,
             'rotation_quaternion_xyzw':list(rotation.Q),
             'stl_sha256':hashlib.sha256(target.read_bytes()).hexdigest()}

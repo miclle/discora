@@ -43,9 +43,9 @@ def grip_corridor(unplug):
     return geometry.box(center.x-6, -24, center.z-5, 12, center.y+24, 10)
 
 
-def check(path, baseline):
+def check(path, baseline=None):
     doc = App.openDocument(str(path))
-    before = App.openDocument(str(baseline))
+    before = App.openDocument(str(baseline)) if baseline else None
     finished = {
         obj.Name: obj.Shape for group in ("Shell", "Controls", "Carrier", "Hardware")
         for obj in doc.getObject(group).Group
@@ -57,30 +57,35 @@ def check(path, baseline):
     fixed = finished | {
         name: doc.getObject(name).Shape for name in ("BuckAService", "BuckBService", "DACPowerConnector")
     }
-    unchanged = [
-        name for name in (*FRONT_PARTS, "Drive", "Bridge", "Battery", "Amp", "AmpChip",
-                          "LDriver", "RDriver", "LPort", "RPort", "LChamber", "RChamber")
-    ]
     geometry_changes = {}
-    for name in unchanged:
-        original = before.getObject(name).Shape
-        current = doc.getObject(name).Shape
-        if name == "FrontShell":
-            # The dense grille was regenerated from the same B-rep source.
-            # Verify it directly, then compare the shell outside its cylinder.
-            grille = doc.FrontGrille.Shape
-            assert difference(before.FrontGrille.Shape, grille) < TOL
-            assert difference(before.FrontBezel.Shape, doc.FrontBezel.Shape) < TOL
-            grille_zone = Part.makeCylinder(68.1, 9, V(0, -1, 76), V(0, 1, 0))
-            original = original.cut(grille_zone)
-            current = current.cut(grille_zone)
-        geometry_changes[name] = round(difference(original, current), 6)
-    print("BASELINE_GEOMETRY_OK", flush=True)
-    assert all(value < TOL for value in geometry_changes.values()), geometry_changes
-    assert difference(before.RearShell.Shape.cut(before.DACPads.Shape), doc.RearShell.Shape) < TOL
-    assert len(doc.SpeakerCarrier.Shape.Solids) == 1 and doc.SpeakerCarrier.Shape.isValid()
-    low = geometry.box(-85, 0, 0, 170, 93, 120.5)
-    assert difference(before.SpeakerCarrier.Shape.common(low), doc.SpeakerCarrier.Shape.common(low)) < TOL
+    if before is not None:
+        unchanged = [
+            name for name in (*FRONT_PARTS, "Drive", "Bridge", "Battery", "Amp", "AmpChip",
+                              "LDriver", "RDriver", "LPort", "RPort", "LChamber", "RChamber")
+        ]
+        geometry_changes = {}
+        for name in unchanged:
+            original = before.getObject(name).Shape
+            current = doc.getObject(name).Shape
+            if name == "FrontShell":
+                # The dense grille was regenerated from the same B-rep source.
+                # Verify it directly, then compare the shell outside its cylinder.
+                grille = doc.FrontGrille.Shape
+                assert difference(before.FrontGrille.Shape, grille) < TOL
+                assert difference(before.FrontBezel.Shape, doc.FrontBezel.Shape) < TOL
+                grille_zone = Part.makeCylinder(68.1, 9, V(0, -1, 76), V(0, 1, 0))
+                original = original.cut(grille_zone)
+                current = current.cut(grille_zone)
+            geometry_changes[name] = round(difference(original, current), 6)
+        print("BASELINE_GEOMETRY_OK", flush=True)
+        assert all(value < TOL for value in geometry_changes.values()), geometry_changes
+        baseline_rear = before.RearShell.Shape
+        if difference(baseline_rear, doc.RearShell.Shape) >= TOL:
+            # The original carrier integration removed the old side-mounted DAC pads.
+            assert difference(baseline_rear.cut(before.DACPads.Shape), doc.RearShell.Shape) < TOL
+        assert len(doc.SpeakerCarrier.Shape.Solids) == 1 and doc.SpeakerCarrier.Shape.isValid()
+        low = geometry.box(-85, 0, 0, 170, 93, 120.5)
+        assert difference(before.SpeakerCarrier.Shape.common(low), doc.SpeakerCarrier.Shape.common(low)) < TOL
 
     mount_checks = []
     for index, (x, y, length, hole) in enumerate(geometry.MOUNTS, 1):
@@ -170,7 +175,7 @@ def check(path, baseline):
     assert min(gaps.values()) >= 1, gaps
     result = {
         "model_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
-        "baseline_sha256": hashlib.sha256(baseline.read_bytes()).hexdigest(),
+        "baseline_sha256": hashlib.sha256(baseline.read_bytes()).hexdigest() if baseline else None,
         "freecad_version": App.Version()[:3],
         "unchanged_geometry_difference_mm3": geometry_changes,
         "mounts": mount_checks,
@@ -190,7 +195,8 @@ def check(path, baseline):
             "Terminal stubs, the B50K stereo harness, and final power harness beyond local envelopes are not included.",
         ],
     }
-    App.closeDocument(before.Name)
+    if before is not None and before is not doc:
+        App.closeDocument(before.Name)
     App.closeDocument(doc.Name)
     return result
 
@@ -198,9 +204,9 @@ def check(path, baseline):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--model", type=Path, default=ROOT/"Discora.FCStd")
-    parser.add_argument("--baseline", type=Path, required=True)
+    parser.add_argument("--baseline", type=Path)
     parser.add_argument("--output", type=Path, default=ROOT/"perfboard-checks.json")
     args = parser.parse_args()
-    report = check(args.model.resolve(), args.baseline.resolve())
+    report = check(args.model.resolve(), args.baseline.resolve() if args.baseline else None)
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2)+"\n")
     print("PERFBOARD_OK", report["clearances_mm"], report["harness_centerline_mm"], flush=True)

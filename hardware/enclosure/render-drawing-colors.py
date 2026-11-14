@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256 = 'd9b9109b30a28f0ca4953c45178e5b827769192c2d49d4ab56ace42414adc6db'
+MODEL_SHA256 = '80eede1e85eafe8aca6ba6702cb2e169b6f7b4d1c368eeca10f1e6647bacebe0'
 
 
 def palette_from_build():
@@ -161,7 +161,14 @@ def main():
     speaker=json.loads((ROOT/'speaker-scope-checks.json').read_text())
     ribs=json.loads((ROOT/'p3-seat-rib-checks.json').read_text())
     backlock=json.loads((ROOT/'backlock-rib-checks.json').read_text())
-    assert backlock['model_sha256']==MODEL_SHA256 and backlock['baseline_sha256']==ribs['model_sha256']
+    flat_back=json.loads((ROOT/'p3-flat-back-checks.json').read_text())
+    current=json.loads((ROOT/'drawing-baseline-checks.json').read_text())
+    assert current['model_sha256']==MODEL_SHA256 and current['all_pass']
+    assert all(current['color_face_order_preserved'].values())
+    assert current['baseline_sha256']==flat_back['model_sha256']
+    assert flat_back['baseline_sha256']==backlock['model_sha256']
+    assert backlock['baseline_sha256']==ribs['model_sha256']
+    assert flat_back['two_color_face_order_unchanged']
     assert ribs['baseline_sha256']==speaker['model_sha256']
     assert speaker['baseline_sha256']==perfboard['model_sha256']
     assert all(ribs['two_color_brep_identical'].values())
@@ -212,7 +219,7 @@ def main():
         print('SURFACES',name,len(meshes[name]),flush=True)
     outputs={}
     for name,view in data['views'].items():
-        if name in ('control-cutouts','perfboard-outline','p3-seat-section','upper-backlock-section') or name.startswith(('oled-','volume-')):continue
+        if name in ('control-cutouts','perfboard-outline','p3-seat-section','upper-backlock-section','duct-section') or name.startswith(('oled-','volume-')):continue
         parts=[]
         if 'parts' in view:
             parts=[(n,p['offset_mm']) for p in view['parts'] for n in p['objects']]

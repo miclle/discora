@@ -1,0 +1,1581 @@
+{
+  "model_sha256": "b7a0ae893055d53e53d775522b112aef683b7cced73069f6f60b74c9f59b85f8",
+  "stl_sha256": "5f0d19821aaa5b2d9665bb6153d728442c0422cd178d5dfe38800741074a6e16",
+  "gcode_sha256": "34eb33cfe744b4324aeaab49c2530dfb76e9e787c11634eba74731854b5f647a",
+  "layers_checked": 287,
+  "all_18_warnings_resolved": true,
+  "original_warning_groups": [
+    {
+      "audit_ids": [
+        1
+      ],
+      "label": "左安装框后缘",
+      "old_layer": 54,
+      "resolved": true,
+      "unbacked_paths_over_1mm_in_frame_all_layers": 0,
+      "method": "progressive arch, closing before seat transition"
+    },
+    {
+      "audit_ids": [
+        2
+      ],
+      "label": "右安装框后缘",
+      "old_layer": 54,
+      "resolved": true,
+      "unbacked_paths_over_1mm_in_frame_all_layers": 0,
+      "method": "progressive arch, closing before seat transition"
+    },
+    {
+      "audit_ids": [
+        3,
+        4
+      ],
+      "label": "左喇叭外侧下螺柱",
+      "old_layer": 206,
+      "resolved": true,
+      "layer_206_boss_footprint_supported_by_layer_205_ratio": 1.0,
+      "method": "permanent 45-degree gusset"
+    },
+    {
+      "audit_ids": [
+        5,
+        6
+      ],
+      "label": "左喇叭外侧上螺柱",
+      "old_layer": 206,
+      "resolved": true,
+      "layer_206_boss_footprint_supported_by_layer_205_ratio": 1.0,
+      "method": "permanent 45-degree gusset"
+    },
+    {
+      "audit_ids": [
+        7,
+        8
+      ],
+      "label": "左喇叭内侧下螺柱",
+      "old_layer": 206,
+      "resolved": true,
+      "layer_206_boss_footprint_supported_by_layer_205_ratio": 1.0,
+      "method": "permanent 45-degree gusset"
+    },
+    {
+      "audit_ids": [
+        9,
+        10
+      ],
+      "label": "左喇叭内侧上螺柱",
+      "old_layer": 206,
+      "resolved": true,
+      "layer_206_boss_footprint_supported_by_layer_205_ratio": 1.0,
+      "method": "permanent 45-degree gusset"
+    },
+    {
+      "audit_ids": [
+        11,
+        12
+      ],
+      "label": "右喇叭内侧下螺柱",
+      "old_layer": 206,
+      "resolved": true,
+      "layer_206_boss_footprint_supported_by_layer_205_ratio": 1.0,
+      "method": "permanent 45-degree gusset"
+    },
+    {
+      "audit_ids": [
+        13,
+        14
+      ],
+      "label": "右喇叭内侧上螺柱",
+      "old_layer": 206,
+      "resolved": true,
+      "layer_206_boss_footprint_supported_by_layer_205_ratio": 1.0,
+      "method": "permanent 45-degree gusset"
+    },
+    {
+      "audit_ids": [
+        15,
+        16
+      ],
+      "label": "右喇叭外侧下螺柱",
+      "old_layer": 206,
+      "resolved": true,
+      "layer_206_boss_footprint_supported_by_layer_205_ratio": 1.0,
+      "method": "permanent 45-degree gusset"
+    },
+    {
+      "audit_ids": [
+        17,
+        18
+      ],
+      "label": "右喇叭外侧上螺柱",
+      "old_layer": 206,
+      "resolved": true,
+      "layer_206_boss_footprint_supported_by_layer_205_ratio": 1.0,
+      "method": "permanent 45-degree gusset"
+    }
+  ],
+  "slicer_warning_message": "",
+  "uncovered_new_islands": [],
+  "remaining_supported_islands": [
+    {
+      "layer": 186,
+      "z": 37.2,
+      "area": 3.5071074014995247,
+      "bounds": [
+        100.03932189941406,
+        185.3000030517578,
+        101.38821411132812,
+        187.89999389648438
+      ],
+      "support_ratio": 1.0
+    }
+  ],
+  "new_overhang_regions_vs_baseline": [],
+  "layer_checks": [
+    {
+      "layer": 2,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 3,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 4,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 4.5800000000000125
+    },
+    {
+      "layer": 5,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 6,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 7,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 8,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 1.5900028301861637
+    },
+    {
+      "layer": 9,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 1.5900314462299199
+    },
+    {
+      "layer": 10,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 11,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 12,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 13,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 14,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 2.5800000000000125
+    },
+    {
+      "layer": 15,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 16,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 17,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 18,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 19,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 99.20400000000001
+    },
+    {
+      "layer": 20,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 21,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 22,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 23,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 24,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 25,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 26,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 27,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 28,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 29,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 30,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 31,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 32,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 33,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 34,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 35,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 36,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 37,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 38,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 39,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 4.5800000000000125
+    },
+    {
+      "layer": 40,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 41,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 42,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 43,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 44,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 45,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 46,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 47,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 48,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 49,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 50,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 51,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 52,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 53,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 54,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 55,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 56,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 57,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 58,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 59,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 60,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 61,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 62,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 63,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 64,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 65,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 66,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 67,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 68,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 69,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 70,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 71,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 72,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 73,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 74,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 75,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 76,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 77,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 78,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 79,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 80,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 81,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 82,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 83,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 84,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 85,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 1.4799999999999898
+    },
+    {
+      "layer": 86,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 1.4000000000000057
+    },
+    {
+      "layer": 87,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 88,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 89,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 90,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 91,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 92,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 93,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 94,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 95,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 96,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 1.4000000000000057
+    },
+    {
+      "layer": 97,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 98,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 99,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 100,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 101,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 102,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 103,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 104,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 105,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 106,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 107,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 108,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 2.0800000000000125
+    },
+    {
+      "layer": 109,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 2.0800000000000125
+    },
+    {
+      "layer": 110,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 2.0800000000000125
+    },
+    {
+      "layer": 111,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 2.0800000000000125
+    },
+    {
+      "layer": 112,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 2.0800000000000125
+    },
+    {
+      "layer": 113,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 2.0800000000000125
+    },
+    {
+      "layer": 114,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 44.60000000000001
+    },
+    {
+      "layer": 115,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 116,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 117,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 118,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 119,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 120,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 121,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 122,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 123,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 124,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 125,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 126,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 127,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 128,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 129,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 130,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 131,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 132,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 133,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 134,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 135,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 136,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 137,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 138,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 139,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 140,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 141,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 142,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 143,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 144,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 145,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 146,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 147,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 148,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 149,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 150,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 151,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 152,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 153,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 154,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 155,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 156,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 157,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 158,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 159,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 160,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 161,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 162,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 163,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 164,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 165,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 166,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 167,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 168,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 169,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 170,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 171,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 20.579999999999984
+    },
+    {
+      "layer": 172,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 173,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 174,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 175,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 176,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 177,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 178,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 179,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 180,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 181,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 182,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 183,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 184,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 185,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 186,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 2.180000000000007
+    },
+    {
+      "layer": 187,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 2.180000000000007
+    },
+    {
+      "layer": 188,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 189,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 190,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 191,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 192,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 193,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 194,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 19.028999999999996
+    },
+    {
+      "layer": 195,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 196,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 197,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 198,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 199,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 200,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 201,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 202,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 203,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 204,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 205,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 206,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 207,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 208,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 209,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 210,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 211,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 212,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 213,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 214,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 215,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 216,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 217,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 218,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 219,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 220,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 221,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 222,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 223,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 224,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 225,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 226,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 227,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 228,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 229,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 230,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 231,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 232,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 233,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 234,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 235,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 236,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 237,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 238,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 239,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 240,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 241,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 242,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 243,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 244,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 245,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 246,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 247,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 248,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 249,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 250,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 251,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 252,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 253,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 254,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 255,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 256,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 257,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 258,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 259,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 260,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 261,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 262,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 263,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 264,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 265,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 266,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 267,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 268,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 269,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 270,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 271,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 272,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 273,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 274,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 275,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 276,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 277,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 278,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 279,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 11.939999935945508
+    },
+    {
+      "layer": 280,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 281,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 282,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 283,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 284,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 285,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 286,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    },
+    {
+      "layer": 287,
+      "new_overhang_components_above_0_05mm2": [],
+      "max_unbacked_path_mm": 0
+    }
+  ],
+  "support_segments": 78444,
+  "support_segments_identical_to_baseline": false,
+  "changed_support_segments": 231,
+  "extra_fixed_layers": [
+    249,
+    271
+  ],
+  "frame_unbacked_paths_over_1mm_all_layers": 0,
+  "all_pass": true,
+  "physical_print_test": false,
+  "limitations": [
+    "Mesh sections use a small below-plane offset to avoid coincident triangles; this is geometric analysis, not deposition simulation.",
+    "0.35 mm adjacent-layer growth corresponds to the existing 30-degree support threshold at 0.20 mm layer height.",
+    "Existing side-port roof span (~44.6 mm at layer 114) and external supported features are unchanged; physical bridge quality remains untested."
+  ]
+}

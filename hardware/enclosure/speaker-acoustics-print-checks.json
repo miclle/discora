@@ -1,0 +1,52 @@
+{
+  "model_sha256": "ddacd53dfa296812248e596894b91c4155806490f06fc09c39c056a13bfb0dfa",
+  "stl_sha256": "e749181961a91c5d039c88e8323dfb84915cb6357d65ac19119d5d04599193ae",
+  "gcode_sha256": "a1ee89c6bf8680fffe0a0b7be72238f583f60cd6bf878620e11aa2a5f45adc3b",
+  "3mf_sha256": "5ccbe7d514419c7119447d0f6307ac66e7dc4ed01d512ce46eab5fb6e6247166",
+  "profile": "Bambu Studio 2.9.1.70 / P2S 0.4 mm / Generic PLA / 0.20 mm",
+  "support_on_build_plate_only": true,
+  "support_critical_regions_only": true,
+  "time": "5h 0m 44s",
+  "filament_g": 164.44,
+  "first_layer_moves": {
+    "left": {
+      "Inner wall": 1,
+      "Bottom surface": 285
+    },
+    "right": {
+      "Inner wall": 1,
+      "Bottom surface": 286
+    }
+  },
+  "rear_faces_direct_on_bed": true,
+  "chamber_support_segments": 0,
+  "wire_exit_support_segments": 0,
+  "nearby_external_support_segments": 161,
+  "extrusion_centerlines_crossing_nominal_wire_cores": 0,
+  "exit_region_bridge_lengths_mm": [
+    1.0080000000000098,
+    0.3930000000000007,
+    0.8379999999999939,
+    0.3930000000000007,
+    0.8379999999999939,
+    0.3930000000000007,
+    0.8379999999999939,
+    0.3930000000000007,
+    0.8379999999999939,
+    0.3930000000000007,
+    1.0080000000000098
+  ],
+  "all_pass": false,
+  "physical_print_test": false,
+  "printer_contacted": false,
+  "limitations": [
+    "G-code segment checks do not prove printed dimensional fit, bridging quality or airtightness.",
+    "Installed vendor end-G-code emits T65535 parser notice; CLI exit status is zero.",
+    "Current version validated by CLI and G-code; earlier widened version also viewed in GUI.",
+    "Subsequent complete overhang audit found 18 warnings at 10 physical locations. Geometry adjustment is required despite passing local bed-contact and support-clearance checks."
+  ],
+  "local_checks_pass": true,
+  "print_ready": false,
+  "unsupported_overhang_regions": 18,
+  "overhang_audit": "p3-overhang-audit.json"
+}

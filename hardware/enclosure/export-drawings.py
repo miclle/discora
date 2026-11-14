@@ -111,7 +111,12 @@ def main():
     rear_shell = shapes['RearShell']
     rib_check = json.loads((ROOT/'p3-seat-rib-checks.json').read_text())
     backlock = json.loads((ROOT/'backlock-rib-checks.json').read_text())
-    assert backlock['model_sha256'] == source_hash
+    flat_back = json.loads((ROOT/'p3-flat-back-checks.json').read_text())
+    current=json.loads((ROOT/'drawing-baseline-checks.json').read_text())
+    assert current['model_sha256']==source_hash and current['all_pass']
+    assert current['baseline_sha256']==flat_back['model_sha256']
+    assert flat_back['baseline_sha256'] == backlock['model_sha256']
+    assert 'RearShell' in flat_back['unchanged_finished_objects']
     assert backlock['baseline_sha256'] == rib_check['model_sha256']
     ribs = []
     for entry, location in zip(rib_check['ribs'], ('左下', '右下', '左上', '右上'), strict=True):
@@ -262,7 +267,7 @@ def main():
     core = groups['Carrier'] + groups['Hardware']
     exploded('exploded-shell',[
         ('01','P1 一体前壳／提手／护网',['FrontShell'],(0,-150,0)),
-        ('02','P2 一体后壳／左右导音孔及饰片',['RearShell'],(0,160,0)),
+        ('02','P2 一体后壳／圆角梯形开放侧口',['RearShell'],(0,160,0)),
         ('03','P3 双喇叭与电路板支架',['SpeakerCarrier'],(0,0,0)),
         ('04','光驱可拆压条',['DriveRetainer'],(0,70,0)),
         ('06','四个软质脚垫',['Feet'],(0,0,-65)),
@@ -285,6 +290,18 @@ def main():
         ('M','洞洞板／双降压／接插件／螺钉',
          [n for n in board_parts if n not in ('MCU','MCUChip','MCUSockets','DAC','DACChip','DACSockets')],(100,-55,55)),
     ],core)
+    import speaker_duct_geometry as duct
+    # The 0.1 mm section at X=-70 intersects the actual return duct.
+    acoustic_section = shapes['SpeakerCarrier'].common(Part.makeBox(.1,80,100,V(-70.05,0,25)))
+    projection('duct-section', acoustic_section, 'right')
+    data['views']['duct-section']['parts']=[dict(objects=['SpeakerCarrier'],offset_mm=[0,0,0])]
+    projection('port-assembly', compound(['RearShell','SpeakerCarrier']), 'right')
+    data['views']['port-assembly']['parts']=[dict(objects=['RearShell','SpeakerCarrier'],offset_mm=[0,0,0])]
+    data['acoustics'] = dict(chamber_bounds=bounds(doc.LChamber.Shape),
+        outlet_area_mm2=Part.Face(duct.trapezoid_outlet_wire(duct.EXIT_X,-1.8)).Area,
+        p2_inner_area_mm2=Part.Face(duct.trapezoid_outlet_wire(-80)).Area,
+        p2_outer_bounds=bounds(Part.Face(duct.trapezoid_outlet_wire(-85,1.6))),
+        nominal_duct_area_mm2=400, terminal_length_mm=4, interface_gap_mm=.7)
     # Validate critical annotations against the saved B-rep snapshot.
     checks = {
         'overall_170_93_243_263': all(abs(a-b)<1e-5 for a,b in zip(data['overall']['size'],(170,93,165+44*27/38+45+2))),
@@ -300,7 +317,8 @@ def main():
         'grille_thickness_2_5':abs(doc.FrontGrille.Shape.BoundBox.YLength-2.5)<1e-5,
         'grille_recess_2_5':abs(doc.FrontGrille.Shape.BoundBox.YMin-2.5)<1e-5,
         'circular_mouth_clear':doc.FrontShell.Shape.common(Part.makeCylinder(65,2.49998,A.Vector(0,.00001,76),A.Vector(0,1,0))).Volume<.001,
-        'side_ports_rear_outline_y49':all(abs(doc.getObject(n).Shape.BoundBox.Center.y-49)<1e-5 for n in ('LPort','RPort','LPanelTool')),
+        'current_outlet_outer_size':all(abs(a-b)<1e-4 for a,b in zip(data['acoustics']['p2_outer_bounds']['size'][1:],(38.477864,28.2))),
+        'current_terminal_area':abs(data['acoustics']['outlet_area_mm2']-587.216)<.01,
         '44_finished_objects':len(objects)==44,
         'perfboard_bounds_111_55_1_6':all(abs(x-y)<1e-6 for x,y in zip(bounds(shapes['Perfboard'])['size'],(111,55,1.6))),
         'pcb_module_local_15_26_2_35':all(abs(x-y)<1e-6 for x,y in zip(bounds(volume)['size'],(15,26.2,35))),

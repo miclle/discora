@@ -18,12 +18,12 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = 'd9b9109b30a28f0ca4953c45178e5b827769192c2d49d4ab56ace42414adc6db'
+ANNOTATED_MODEL_SHA256 = '80eede1e85eafe8aca6ba6702cb2e169b6f7b4d1c368eeca10f1e6647bacebe0'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
 LIGHT = HexColor('#d5e1e4')
-TOTAL_PAGES = 11
+TOTAL_PAGES = 12
 
 
 def main():
@@ -51,14 +51,22 @@ def main():
     rib_check=json.loads((ROOT/'p3-seat-rib-checks.json').read_text())
     backlock=json.loads((ROOT/'backlock-rib-checks.json').read_text())
     fasteners=json.loads((ROOT/'fastener-checks.json').read_text())
-    assert backlock['model_sha256']==fasteners['model_sha256']==data['sha256']
+    flat_back=json.loads((ROOT/'p3-flat-back-checks.json').read_text())
+    current_perfboard=json.loads((ROOT/'current-perfboard-checks.json').read_text())
+    drawing_baseline=json.loads((ROOT/'drawing-baseline-checks.json').read_text())
+    assert drawing_baseline['all_pass'] and drawing_baseline['model_sha256']==data['sha256']
+    assert current_perfboard['model_sha256']==data['sha256']
+    assert drawing_baseline['baseline_sha256']==flat_back['model_sha256']
+    assert flat_back['baseline_sha256']==backlock['model_sha256']
+    assert backlock['model_sha256']==fasteners['model_sha256']
+    assert {'FrontShell', 'RearShell'} <= set(flat_back['unchanged_finished_objects'])
     assert backlock['baseline_sha256']==rib_check['model_sha256']
     assert rib_check['baseline_sha256']==speaker['model_sha256']
     assert speaker['baseline_sha256']==perfboard['model_sha256']
     assert speaker['upper_p3_geometry_unchanged']
-    assert not perfboard['harness_path_clashes'] and not perfboard['lead_reservation_clashes']
-    assert perfboard['front_cover_opening_mm']==60
-    assert all(not failures for checks in perfboard['unplug_access'].values() for failures in checks.values())
+    assert not current_perfboard['harness_path_clashes'] and not current_perfboard['lead_reservation_clashes']
+    assert current_perfboard['front_cover_opening_mm']==60
+    assert all(not failures for checks in current_perfboard['unplug_access'].values() for failures in checks.values())
     validation=json.loads((ROOT/'validation.json').read_text())
     assembly=json.loads((ROOT/'assembly-paths.json').read_text())
     assert validation['sha256']==assembly['model_sha256']==data['sha256']
@@ -75,6 +83,10 @@ def main():
     assert integration['model_sha256']==handle['baseline_sha256']
     def evidence_matches_geometry(report,owners):
         if report['model_sha256']==data['sha256']:return True
+        if any(drawing_baseline['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
+        if report['model_sha256']==drawing_baseline['baseline_sha256']:return True
+        if any(n not in flat_back['unchanged_finished_objects'] for n in owners):return False
+        if report['model_sha256']==flat_back['baseline_sha256']:return True
         if any(n not in backlock['unchanged_finished_objects'] for n in owners):return False
         if report['model_sha256']==backlock['baseline_sha256']:return True
         if any(n not in rib_check['unchanged_finished_objects'] for n in owners):return False
@@ -142,7 +154,7 @@ def main():
         text(408,282,f'V4  /  {num:02d}  彩色版',14,TEAL,'right')
         line(12,269,408,269,LIGHT)
         line(12,16,408,16,LIGHT)
-        text(12,10,'概念设计 / CAD 静态几何 · 未经实物装配、声学或生产验收',8,MUTED)
+        text(12,10,'完整件试打 / CAD 静态几何 · 整机装配、声学与强度待实测',8,MUTED)
         text(245,10,'单位 mm  |  '+scale,8,MUTED)
         text(408,10,f'DC-V4-GA-{num:02d}  ·  2026-11-14  ·  {num}/{TOTAL_PAGES}',8,MUTED,'right')
 
@@ -223,9 +235,10 @@ def main():
     x,y=pf(0,76)
     text(x,y,'Ø130 · 护网内凹 2.5',9,TEAL,'center',background=True)
     line(x,34,x,246,LIGHT,.15,[5,2,1,2])
-    xa,ya=pr(38,46.5);xb,yb=pr(60,113.5)
-    dh(xa,xb,yb,yb+8,'22')
-    dv(ya,yb,xb,xb+10,'67')
+    port=data['acoustics']['p2_outer_bounds']
+    xa,ya=pr(port['min'][1],port['min'][2]);xb,yb=pr(port['max'][1],port['max'][2])
+    dh(xa,xb,yb,yb+8,f"{port['size'][1]:.2f}")
+    dv(ya,yb,xb,xb+10,f"{port['size'][2]:.2f}")
     axis,_=pr(49,0);line(axis,34,axis,235,TEAL,.15,[4,2])
     text(306,258,'主要尺寸 / mm',12,TEAL)
     table(304,249,104,[
@@ -234,7 +247,7 @@ def main():
         ('不含脚垫总高',f'{handle_top-1:.3f}'),
         ('提手净口 / 厚','90 × 24 / 5'),
         ('前 / 后壳主体','5 / 5'),
-        ('侧孔中心 Y / Z','49 / 80'),
+        ('侧口包络中心 Y / Z','44.861 / 65'),
         ('前后斜肩水平宽','44 / 44'),
         ('斜肩高差',f'{44*27/38:.3f}'),
         ('前 / 后斜角',f"{side['front_angle_deg']:.3f}°"),
@@ -288,7 +301,7 @@ def main():
         '键中心 X=-59 / -41、Y=9 / 26；屏与旋钮 Y=18、X=0 / 48。',
         '前壳背锁：后壁 X=±79.4、Z=33；后斜面 X=±29、Z=179。',
         'P3 支架：4 孔，X=±64、Z=27 / 124；Ø2.8，沉头 Ø4.8。',
-        '侧孔饰片四点连接：筋 2×3，饰片厚 2；短管与声腔轴向留隙 0.3。',
+        'P2 圆角梯形开放侧口；P3 独立导管末端留隙 0.7，详见第 12 页。',
         '背锁孔 Ø4.4／通孔 Ø2.2／盲底孔 Ø1.6；下孔深 78.8，名义螺钉 2×8。',
     ],gap=6.5,size=8.5)
     c.showPage()
@@ -343,7 +356,7 @@ def main():
     table(136,246,272,[
         ('单只喇叭 X × Y × Z','45 × 41 × 80 试装包络；中心 X=±26，Z=76；贴合面 Y=10'),
         ('P3 喇叭座','开口 71.5 × 39.3 / R12.5；每只四孔距 70 × 36，Ø2.3 底孔深 10.5'),
-        ('单侧后腔外包络','65 × 57.5 × 89；容积、调谐、气密及振膜行程待验证'),
+        ('单侧后腔外包络',' × '.join(f'{v:.1f}' for v in data['acoustics']['chamber_bounds']['size'])+'；含一体导管；净容积和调谐待实测'),
         ('喇叭前 / 后净距','格栅后面至喇叭 3，喇叭至后腔内壁 11；端子、走线及行程待试'),
         ('UJ-898 光驱','128 × 10.8 × 130；Y=76.2…87，Z=29.5…159.5'),
         ('光驱贴靠 / 固定','背面留 1 mm 保护垫；中央底托 + 可拆压条，两枚 M2×10'),
@@ -362,17 +375,17 @@ def main():
         '两块 DCE001 已纳入载板；充电电路未建模，整机电气与实物装配仍未验收。',
         '喇叭采用圆角盆架试装包络；喇叭静态前 / 后深 2 / 39；角部、螺丝及密封需实物试装。',
         '剖图使用实际实体裁切、隐藏线消除；未施加材料剖面线，不能由线型判断材质。',
-        '三个主体及拆装路径已做 CAD 检查、PLA 切片；仍需配合试片、螺钉试装、强度和走线实测。',
-        '侧饰片厚 2 mm，四处 2×3 连接筋；通流几何来自当前 CAD，尚未完成声学调谐。',
+        '喇叭安装座试片已通过；直接验证完整件的装配、支撑清理、强度和走线。',
+        'P3 主通路 400 mm²，末端 4 mm 渐扩至约 587 mm²；气密和声学待实测。',
     ],gap=8,size=9)
     c.showPage()
 
     page(5,'对象清单、打印与拆装','44 个成品对象 · 尺寸为装配坐标系 X × Y × Z 的轴对齐包络，非展开尺寸','清单尺寸 mm；无制造数量承诺')
     labels={
         'FrontShell':'P1 前壳 / 提手 / 格栅 / 屏幕座',
-        'RearShell':'P2 一体后壳 / 碟口 / 导音孔及饰片 / 底架',
+        'RearShell':'P2 一体后壳 / 碟口 / 开放侧口 / 底架',
         'SpeakerCarrier':'P3 双声腔 / 前障板 / 电子托架',
-        'Cowl':'前壳 / 提手','LPanel':'左侧壳','RPanel':'右侧壳','LPort':'左导音孔 / 饰片','RPort':'右导音孔 / 饰片',
+        'Cowl':'前壳 / 提手','LPanel':'左侧壳','RPanel':'右侧壳','LPort':'左开放侧口','RPort':'右开放侧口',
         'FrontBezel':'中央格栅压圈','FrontGrille':'通孔护网','Back':'后盖','Base':'底架 / 下固定座','Feet':'脚垫复合件（4 个）',
         'Window':'OLED 玻璃面板','StatusArt':'显示内容示意','PlayPauseKey':'播放／暂停键帽','EjectKey':'退碟键帽','PrevKey':'上一曲键帽','NextKey':'下一曲键帽',
         'ButtonRetainer':'四键焊线支架（两侧敞开／双点支承）',
@@ -391,7 +404,7 @@ def main():
         'MCUSockets':'主控排母高度包络','DACSockets':'DAC 排母高度包络',
         'BuckA':'DCE001 A／主控5Vin','BuckB':'DCE001 B／光驱及桥接器VBUS',
         'XHButtons':'四键5芯侧插包络','XHOLED':'OLED 4芯直插包络','XHVolumeSwitch':'音量开关2芯直插包络',
-        'PerfboardScrew1':'M2×4／G₂-A','PerfboardScrew2':'M2×4／Q-N','PerfboardScrew3':'M2×4／A-P',
+        'PerfboardScrew1':'M2×4／G₂-A','PerfboardScrew2':'M2×4／Q-N','PerfboardScrew3':'M2×4／A-O',
     }
     membership={n:part['number'] for key in ('exploded-shell','exploded-core')
                 for part in data['views'][key]['parts'] if part['number']!='08' for n in part['objects']}
@@ -409,19 +422,9 @@ def main():
             text(x+1,y-4.2,labels[name],6.3,MUTED)
             text(x+193,y-3.5,' × '.join(fmt(n) for n in obj['size']),7.5,INK,'right')
     text(12,127,'PLA 打印：3 主体 + 4 键帽 + 焊线支架 + 旋钮 + OLED 压框 + 光驱压条 = 11 件',11,TEAL)
-    printing=json.loads((ROOT/'backlock-rib-print-checks.json').read_text())
-    speaker_print=json.loads((ROOT/'speaker-print-checks.json').read_text())
-    assert printing['model_sha256']==data['sha256']
-    assert evidence_matches_geometry(speaker_print,['SpeakerCarrier'])
-    previous_print=json.loads((ROOT/'volume-pcb-print-checks.json').read_text())
-    assert evidence_matches_geometry(previous_print,['FrontShell'])
-    # Regenerated tessellation differs; reuse only the estimate for equivalent B-rep.
-    printing['plates']={'FrontShell':previous_print['plates']['FrontShell'],
-                       'SpeakerCarrier':speaker_print['plates']['SpeakerCarrier'],**printing['plates']}
-    assert all(p['exit_code']==0 for p in printing['plates'].values())
-    keys=json.loads((ROOT/'dual-color-key-checks.json').read_text())
-    assert evidence_matches_geometry(keys,['PlayPauseKey','EjectKey','PrevKey','NextKey']) and keys['slicing']['exit_code']==0
-    text(12,118,'P2SC / P2S配置 · 0.4喷嘴 / 0.20层高 / 3壁 / 15%填充 / 树状支撑；P2加筋后重切，P1 / P3沿用几何等价版估算',8.5)
+    printing=json.loads((ROOT/'print'/'manifest.json').read_text())
+    assert printing['model_sha256']==data['sha256'] and printing['all_pass']
+    text(12,118,'P2SC / P2S配置 · 0.4喷嘴 / 0.20层高 / 3壁 / 15%填充 / 树状支撑；P3 双声腔背面直接贴板',8.5)
     for i,(name,label,pose) in enumerate([
         ('FrontShell','P1 前壳','正面朝下 / 板内转 90°'),('RearShell','P2 后壳','背面朝下'),
         ('SpeakerCarrier','P3 支架','声腔背面朝下')]):
@@ -538,7 +541,7 @@ def main():
     dh(a0[0],a1[0],a0[1],253,'100 基准板宽；左耳另加11')
     lo,hi=p(-54,20),p(-54,75)
     dv(lo[1],hi[1],lo[0],16,'55 基准深度')
-    for i,mount_info in enumerate(perfboard['mounts'],1):
+    for i,mount_info in enumerate(current_perfboard['mounts'],1):
         x,y=p(*mount_info['center_xy_mm'])
         badge(x+7,y+5,str(i));line(x,y,x+5,y+4,TEAL,.15)
     text(305,258,'装配布局 · 接插件为插合包络',11,TEAL,'center')
@@ -554,7 +557,7 @@ def main():
         ('左侧延伸耳','X-54…-43，Y40.86…50.86；11×10'),
         ('1 · G₂ / A','X=-27.28，Y=23.00'),
         ('2 · Q / N','X=13.36，Y=56.02'),
-        ('3 · A / P','X=54.00，Y=61.10'),
+        ('3 · A / O','X=54.00，Y=58.56'),
         ('固定孔与螺钉','板Ø2.2／托架导孔Ø1.6；3枚M2×4'),
     ],split=53,height=10)
     table(218,150,190,[
@@ -658,8 +661,7 @@ def main():
         text(365,y,f'Z {fmt(lo[2])} 至 {fmt(hi[2])}',9)
     carrier=assembly['paths']['speaker_carrier_front']
     assert not carrier['clashes'] and carrier['translation_xyz_mm']==[0,-140,0]
-    minimum=min(r['minimum_distance_mm'] for r in rib_check['ribs'])
-    text(12,29,f'拆下前壳、断线并卸除四颗 P3 固定螺钉后，P3 总成沿 -Y 前移 140 mm 连续扫掠无干涉，距新增筋最近 {minimum:.2f} mm。',9)
+    text(12,29,'拆下前壳、断线并卸除四颗 P3 固定螺钉后，当前 P3 总成沿 -Y 前移 140 mm 连续保守扫掠无干涉。',9)
     text(12,21,'尺寸为 CAD 名义值。打印配合与锁紧强度待实物验证。',8.5,MUTED)
     c.showPage()
 
@@ -726,6 +728,35 @@ def main():
     text(242,46,f"断线并卸除四颗背锁螺钉后，沿 -Y 抽出 {backlock['front_cover_travel_mm']:g} mm。",9)
     text(242,38,f'距新增筋最小采样净距 {sampled_gap:.3f} mm，连续净距下界 {continuous_gap:.3f} mm。',9)
     text(12,23,'净空采用 CAD 刚体包络。实际批头配合、打印精度和锁紧强度待实物验证。',8.5,MUTED)
+    c.showPage()
+
+    page(12,'P2 开放侧口与 P3 独立导管','ADR-0045 / ADR-0046 · 左右按 X=0 镜像 · 已试装的喇叭安装座保留','侧视 1:1 · 导管剖视 2:1')
+    text(67,255,'P2 / P3 实际装配侧视',11,TEAL,'center')
+    view('port-assembly',22,48,1)
+    text(185,255,'P3 导管截面 X=-70',11,TEAL,'center')
+    view('duct-section',136,60,2)
+    text(283,255,'声道与装配名义尺寸',11,TEAL)
+    table(265,244,143,[
+        ('P2 外口包络','38.48 × 28.20 mm'),
+        ('P2 外圆角','R5.6；内圆角 R4'),
+        ('P2 渐收段','4.85 mm + 0.15 mm 直段'),
+        ('P3 主通路','400 mm²；一转弯回路'),
+        ('P3 短渐扩段','长 4 mm；末端 R2.2'),
+        ('P3 末端净面积',f"{data['acoustics']['outlet_area_mm2']:.2f} mm²"),
+        ('P3 末端口沿','横截面名义厚 1.8 mm'),
+        ('P2 / P3 间隙','0.7 mm；不跨件粘接'),
+    ],split=48,height=12)
+    notes(265,135,[
+        'P3 背面朝下：双背板首层直接贴板。',
+        'P3：仅底板支撑 ON，关键区域 ON。',
+        'P2：仅底板支撑 OFF，关键区域 OFF。',
+        'P2 支撑由敞开正面和侧口清理。',
+        'P3 声腔、导管内未生成支撑走线。',
+        '喇叭座外周与出线处采用可移除封堵。',
+        'P2 为外壳，不承担 P3 导管密封。',
+    ],gap=10,size=8.5)
+    text(14,30,'左图保留真实遮挡；中图仅按标注剖切真实 P3 实体。没有为图示移动导管或扩大通道。',8.5,MUTED)
+    text(14,22,'当前为完整件试打版本；喇叭安装座试片已通过。整机装配、拆撑、气密、承载与声学仍待实测。',8.5,MUTED)
     c.showPage()
 
     c.save()

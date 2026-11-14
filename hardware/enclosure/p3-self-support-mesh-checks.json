@@ -1,0 +1,19 @@
+{
+  "model_sha256": "b7a0ae893055d53e53d775522b112aef683b7cced73069f6f60b74c9f59b85f8",
+  "stl_sha256": "5f0d19821aaa5b2d9665bb6153d728442c0422cd178d5dfe38800741074a6e16",
+  "facets": 7244,
+  "closed_mesh": true,
+  "fits_with_5mm_brim": true,
+  "rotation_rx_deg": -90,
+  "translation_xyz_mm": [
+    128,
+    45.1,
+    62.5
+  ],
+  "size_xyz_mm": [
+    158.60000228881836,
+    119.79999542236328,
+    57.49999999999999
+  ],
+  "all_pass": true
+}

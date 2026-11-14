@@ -1,8 +1,8 @@
 # 机内洞洞板、固定托架与 XH2.54 线束
 
-更新：2026-11-14。**机内装配 CAD 已实现，实物试装待验收。** ESP32-S3、PCM5102 和两块 DCE001 共用洞洞板，功放仍在下层。状态、孔位和拆装依据见 [FreeCAD 模型](../hardware/enclosure/Discora.FCStd)、[检查报告](../hardware/enclosure/perfboard-checks.json)和 [ADR-0037](decisions/0037-perfboard-carrier-and-front-harness.md)。
+更新：2026-11-14。**机内装配 CAD 已实现，实物试装待验收。** ESP32-S3、PCM5102 和两块 DCE001 共用洞洞板，功放仍在下层。状态、孔位和拆装依据见 [FreeCAD 模型](../hardware/enclosure/Discora.FCStd)、[检查报告](../hardware/enclosure/current-perfboard-checks.json)和 [ADR-0037](decisions/0037-perfboard-carrier-and-front-harness.md)。
 
-[九页图册](../hardware/enclosure/drawings/Discora-V4-drawing-book-color.pdf)已同步当前模型，第 8 页为载板板形与装配布局，第 9 页为前壳线束和 60 mm 维护位。
+[装配图册](../hardware/enclosure/drawings/Discora-V4-drawing-book-color.pdf)第 8 页为载板板形与装配布局，第 9 页为前壳线束和 60 mm 维护位。
 
 ## 板形与托架
 
@@ -14,7 +14,9 @@
 | 音量板避让缺口 | 右前角 X=40.25…57，Y=20…52，16.75 × 32 |
 | 2 芯插座延伸边 | 左侧 X=−54…−43，Y=40.86…50.86，11 × 10 |
 | P3 洞洞板托架 | 三个支承与螺钉座、后连梁及左侧插座承压面，与双声腔支架一体 |
-| 名义固定位置 | （G₂，A）、（Q，N）、（A，P）；载板 Ø2.2 通孔、托架 Ø1.6 导孔，名义 M2×4 |
+| 名义固定位置 | （G₂，A）、（Q，N）、（A，O）；载板 Ø2.2 通孔、托架 Ø1.6 导孔，名义 M2×4 |
+
+后侧固定点从（A，P）朝机身前方移 2.54 mm 至（A，O），机身坐标为 X=54、Y=58.56 mm。后横梁与声腔背面齐平，详见 [ADR-0039](decisions/0039-p3-flat-back-printing.md)。
 
 三处固定点使用空孔附近的铜箔区域，留出 Ø5 mm 承压环和顶部刀杆通道。扩孔前确认该圆周内没有排母、线路或焊点。板底预留 2 mm，三处压脚及边缘支承接触区留空。后缘到光驱名义净距 1.2 mm；板底的走线包络到功放元件为 1.2 mm。若实物已裁成 100 × 55 mm，左侧 2 芯插座的候选位置会超出现有板边。
 
@@ -92,8 +94,7 @@ ESP32 的 USB 和 COM 插座在整机运行时留空。按 V1.4 针表，光驱�
 
 ```bash
 mkdir -p tmp/perfboard-baseline
-git show e290b33:hardware/enclosure/Discora.FCStd > tmp/perfboard-baseline/Discora.FCStd
-"$DISCORA_FREECAD_PYTHON" hardware/enclosure/check-perfboard.py   --baseline tmp/perfboard-baseline/Discora.FCStd
+"$DISCORA_FREECAD_PYTHON" hardware/enclosure/check-perfboard.py   --output tmp/perfboard-current-checks.json
 ```
 
 ## 历史机箱包络复核（2026-11-07）

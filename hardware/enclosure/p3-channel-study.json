@@ -1,0 +1,423 @@
+{
+  "status": "layout study only; not a released P2/P3 print pair",
+  "baseline": {
+    "model_sha256": "b7a0ae893055d53e53d775522b112aef683b7cced73069f6f60b74c9f59b85f8",
+    "left_gross_capped_air_mm3": 291375.8427266591,
+    "left_minus_full_driver_envelope_mm3": 183759.23160043522,
+    "driver_envelope_in_air_mm3": 107616.61045456509,
+    "lateral_air_x_minus76p8_to_minus50p5_mm3": 95656.50538119228
+  },
+  "candidate": {
+    "model_kind": "candidate only; P2 outlet not redesigned",
+    "baseline_sha256": "b7a0ae893055d53e53d775522b112aef683b7cced73069f6f60b74c9f59b85f8",
+    "nominal_straight_section_mm2": 400,
+    "roof_ridge_rake_mm": 1.5,
+    "centerline_from_inlet_to_p3_exit_mm": 46.8,
+    "inlet_roof_clearance_mm": 20.0,
+    "outer_pipe_width_mm": 25,
+    "left_total_capped_air_mm3": 285111.6483476017,
+    "left_air_minus_full_driver_mm3": 177495.0368861839,
+    "left_duct_air_in_capped_domain_mm3": 18122.26495688455,
+    "left_main_box_gross_excluding_duct_mm3": 266989.38339071715,
+    "left_main_box_minus_full_driver_and_duct_mm3": 159372.77192929934,
+    "added_material_per_side_mm3": 8596.014064559917,
+    "removed_material_per_side_mm3": 163.2319918575921,
+    "inlet_cap_disconnects_duct": true,
+    "left_right_separate": true,
+    "driver_clashes_mm3": [
+      0.0,
+      0.0
+    ],
+    "wire_corridor_pass": true,
+    "p2_blocks_candidate_air_mm3": 684.7293008926123,
+    "structural_p2_overlap_mm3": 0.0,
+    "needs_p2_outlet_redesign": true,
+    "physical_acoustics_verified": false
+  },
+  "checks": {
+    "model_sha256": "5ab54d2b8261d3670305afa681ff18e7b7dbde3797604b6393bccf0615316316",
+    "stl_sha256": "0b0264fb126662c495eb798c818dfa89e6e16ca71b8064991281717d72a80c4c",
+    "gcode_sha256": "d9face9672846431ba946afad0224426924c93453966180575bed6c2eb71dbc3",
+    "layers": 287,
+    "new_overhang_regions": [],
+    "internal_support_segments": [],
+    "unsupported_islands": [],
+    "other_objects_changed": {},
+    "chamber_symmetry_delta_mm3": 0.0,
+    "physical_or_acoustic_test": false,
+    "release_status": "layout comparison candidate; original P2 outlet is not compatible acoustically",
+    "support_check_method": "segment intersection with conservative XZ chamber box at each extrusion height",
+    "normal_duct_sections_mm2": {
+      "76": 400.0,
+      "85": 400.0000000000001,
+      "97": 399.9999999999999
+    },
+    "first_layer_bottom_segments": {
+      "left": 227,
+      "right": 227
+    },
+    "duct_roof_unbacked_paths_over_1mm": [],
+    "duct_roof_check_world_y_range_mm": [
+      31.46446609399999,
+      62.5
+    ]
+  },
+  "assembly": {
+    "units": "mm",
+    "fasteners_and_straps_removed": true,
+    "cables_disconnected": true,
+    "physical_assembly_test": false,
+    "paths": {
+      "speaker_carrier_front": {
+        "method": "continuous conservative bounding-box sweep per construction component",
+        "translation_xyz_mm": [
+          0,
+          -140,
+          0
+        ],
+        "moving": [
+          "SpeakerCarrier",
+          "LDriver",
+          "RDriver",
+          "Amp",
+          "AmpChip",
+          "MCU",
+          "MCUChip",
+          "DAC",
+          "DACChip",
+          "Perfboard",
+          "MCUSockets",
+          "DACSockets",
+          "BuckA",
+          "BuckB",
+          "XHButtons",
+          "XHOLED",
+          "XHVolumeSwitch",
+          "PerfboardScrew1",
+          "PerfboardScrew2",
+          "PerfboardScrew3"
+        ],
+        "fixed": [
+          "RearShell",
+          "Feet",
+          "DriveRetainer",
+          "Drive",
+          "Bridge",
+          "Battery"
+        ],
+        "prerequisites": [
+          "Front cover removed and its cables disconnected",
+          "Four carrier screws removed"
+        ],
+        "clashes": []
+      },
+      "drive_retainer_front": {
+        "method": "continuous conservative bounding-box sweeps of waist and two ears",
+        "translation_xyz_mm": [
+          0,
+          -140,
+          0
+        ],
+        "moving": [
+          "DriveRetainer"
+        ],
+        "fixed": [
+          "RearShell",
+          "Feet",
+          "Drive",
+          "Bridge",
+          "Battery"
+        ],
+        "prerequisites": [
+          "Front cover and speaker carrier removed",
+          "Two retainer screws removed"
+        ],
+        "clashes": []
+      },
+      "drive_service_position": {
+        "method": "continuous initial translation then 31 maximum-envelope B-rep lift/translation samples; not a continuous lift proof",
+        "waypoints_xyz_mm": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            -12,
+            0
+          ],
+          [
+            0,
+            -15,
+            9.5
+          ]
+        ],
+        "moving": [
+          "Drive",
+          "Bridge"
+        ],
+        "fixed": [
+          "RearShell",
+          "Feet"
+        ],
+        "prerequisites": [
+          "Front cover and speaker carrier removed",
+          "Drive retainer removed",
+          "Battery removed",
+          "Cable slack released"
+        ],
+        "clashes": []
+      },
+      "sata_removal": {
+        "method": "continuous conservative bounding-box sweeps",
+        "relative_waypoints_xyz_mm": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            -10
+          ],
+          [
+            -14,
+            0,
+            -10
+          ],
+          [
+            -14,
+            -140,
+            -10
+          ]
+        ],
+        "start_offset_xyz_mm": [
+          0,
+          -15,
+          9.5
+        ],
+        "moving": [
+          "Bridge"
+        ],
+        "fixed": [
+          "RearShell",
+          "Feet",
+          "Drive at service position"
+        ],
+        "prerequisites": [
+          "Drive held at service position",
+          "Cable released"
+        ],
+        "connector_release_allowance_mm": 10,
+        "actual_cable_bend_verified": false,
+        "clashes": []
+      },
+      "drive_front": {
+        "method": "continuous conservative translation sweeps before/after 61 maximum-envelope B-rep yaw/translation samples; rotation is not a continuous proof",
+        "start_offset_xyz_mm": [
+          0,
+          -15,
+          9.5
+        ],
+        "initial_translation_xyz_mm": [
+          0,
+          -13,
+          0
+        ],
+        "yaw_axis": "Z",
+        "yaw_deg": -30,
+        "yaw_step_deg": 0.5,
+        "yaw_pivot_xyz_mm": [
+          0.0,
+          53.599999999999994,
+          104.0
+        ],
+        "translation_during_yaw_xyz_mm": [
+          0,
+          -20,
+          0
+        ],
+        "final_translation_xyz_mm": [
+          0,
+          -140,
+          0
+        ],
+        "moving": [
+          "Drive"
+        ],
+        "fixed": [
+          "RearShell",
+          "Feet"
+        ],
+        "prerequisites": [
+          "Drive at service position",
+          "SATA adapter removed",
+          "Speaker carrier, battery and drive retainer removed"
+        ],
+        "clashes": []
+      },
+      "battery_front": {
+        "method": "continuous conservative bounding-box sweep",
+        "translation_xyz_mm": [
+          0,
+          -150,
+          0
+        ],
+        "moving": [
+          "Battery"
+        ],
+        "fixed": [
+          "RearShell",
+          "SpeakerCarrier",
+          "LDriver",
+          "RDriver",
+          "Drive",
+          "Bridge",
+          "Feet"
+        ],
+        "prerequisites": [
+          "Front cover removed",
+          "Battery straps and cables removed"
+        ],
+        "clashes": []
+      },
+      "front_cover": {
+        "method": "exact per-part B-rep samples; 1 mm forward steps",
+        "waypoints_xyz_mm": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            -140,
+            0
+          ]
+        ],
+        "moving": [
+          "FrontShell",
+          "Window",
+          "StatusArt",
+          "PlayPauseKey",
+          "EjectKey",
+          "PrevKey",
+          "NextKey",
+          "ButtonRetainer",
+          "PlayPauseSwitch",
+          "EjectSwitch",
+          "PrevSwitch",
+          "NextSwitch",
+          "Knob",
+          "Encoder",
+          "VolumePot",
+          "DisplayPCB",
+          "DisplayHeader",
+          "DisplayRetainer"
+        ],
+        "fixed": [
+          "RearShell",
+          "Feet",
+          "DriveRetainer",
+          "SpeakerCarrier",
+          "LDriver",
+          "RDriver",
+          "Drive",
+          "Bridge",
+          "Amp",
+          "AmpChip",
+          "Perfboard",
+          "MCU",
+          "MCUChip",
+          "MCUSockets",
+          "DAC",
+          "DACChip",
+          "DACSockets",
+          "BuckA",
+          "BuckB",
+          "XHButtons",
+          "XHOLED",
+          "XHVolumeSwitch",
+          "PerfboardScrew1",
+          "PerfboardScrew2",
+          "PerfboardScrew3",
+          "Battery"
+        ],
+        "prerequisites": [
+          "Four recessed rear-access front-cover screws removed",
+          "Control/display cables disconnected"
+        ],
+        "clashes": []
+      }
+    },
+    "drive_service_envelope": "Filled maximum 128 x 10.8 x 130 mm box; connector retains modeled housing and strain relief",
+    "all_pass": true,
+    "model_sha256": "5ab54d2b8261d3670305afa681ff18e7b7dbde3797604b6393bccf0615316316"
+  },
+  "p2_projected_exit": {
+    "samples": [
+      {
+        "x_mm": -84.99,
+        "nominal_mm2": 399.99999999906777,
+        "blocked_by_p2_mm2": 9.238611402014829,
+        "free_mm2": 390.76138859798516
+      },
+      {
+        "x_mm": -84,
+        "nominal_mm2": 399.99999999906777,
+        "blocked_by_p2_mm2": 9.238611402014829,
+        "free_mm2": 390.76138859798516
+      },
+      {
+        "x_mm": -83,
+        "nominal_mm2": 399.99999999906777,
+        "blocked_by_p2_mm2": 272.4525480012916,
+        "free_mm2": 127.54745199870842
+      },
+      {
+        "x_mm": -82.5,
+        "nominal_mm2": 399.99999999906777,
+        "blocked_by_p2_mm2": 300.47964067205584,
+        "free_mm2": 99.52035932794416
+      },
+      {
+        "x_mm": -82,
+        "nominal_mm2": 399.99999999906777,
+        "blocked_by_p2_mm2": 300.47964067205584,
+        "free_mm2": 99.52035932794416
+      },
+      {
+        "x_mm": -81,
+        "nominal_mm2": 399.99999999906777,
+        "blocked_by_p2_mm2": 65.29279674287949,
+        "free_mm2": 334.7072032571205
+      },
+      {
+        "x_mm": -80.01,
+        "nominal_mm2": 399.99999999906777,
+        "blocked_by_p2_mm2": 65.29279674287947,
+        "free_mm2": 334.7072032571205
+      }
+    ],
+    "minimum_sampled_free_mm2": 99.52035932794416
+  },
+  "bambu": {
+    "version": "2.9.1.70",
+    "profile": "P2S 0.4 mm / Generic PLA / 0.20 mm / 3 walls / 15% gyroid",
+    "warnings": "",
+    "3mf_sha256": "195f04b9f2308d3a7538ebbc85a0440c18d1f81d240ee4b21372b9b4e96c646c",
+    "estimated_total_time": "5h 37m 4s",
+    "estimated_filament_g": 180.86
+  },
+  "unresolved": [
+    "P2 inset blocks the projected candidate exit; P2 not redesigned in this study.",
+    "400 mm2 and 46.8 mm nominal path are comparison parameters, not a validated tuning.",
+    "Entry and bend transitions are study geometry; final radii not optimized.",
+    "No acoustic simulation, physical print, leak or sound test performed.",
+    "CAD appearance not verified by reopening in GUI."
+  ],
+  "official_cad_changed": false,
+  "printer_contacted": false
+}

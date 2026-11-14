@@ -42,8 +42,17 @@ def check(doc):
     fixed=[n for n in objects if n not in core_hw+['SpeakerCarrier','FrontShell','Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch','Knob','Encoder','VolumePot','DisplayPCB','DisplayHeader','DisplayRetainer']]
     hits=[]
     for name in core_sources:
-        hit=collisions(box_sweep(doc.getObject(name).Shape,1,-140),fixed)
-        if hit:hits.append({'moving_source':name,'hits':hit})
+        shape=doc.getObject(name).Shape
+        pieces=[shape]
+        if name in ('LChamber','RChamber'):
+            # Separate the widened middle from the narrow mounting ends.
+            # Each box remains a conservative continuous translation sweep.
+            pieces=[shape.common(Part.makeBox(width,200,300,V(x,-50,0)))
+                    for x,width in ((-100,35),(-65,130),(65,35))]
+        for piece in pieces:
+            if piece.isNull() or not piece.Solids:continue
+            hit=collisions(box_sweep(piece,1,-140),fixed)
+            if hit:hits.append({'moving_source':name,'hits':hit})
     report['paths']['speaker_carrier_front']={'method':'continuous conservative bounding-box sweep per construction component',
         'translation_xyz_mm':[0,-140,0],'moving':['SpeakerCarrier']+core_hw,'fixed':fixed,
         'prerequisites':['Front cover removed and its cables disconnected','Four carrier screws removed'],

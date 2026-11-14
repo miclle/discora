@@ -1,0 +1,774 @@
+{
+  "model": "../Discora.FCStd",
+  "model_sha256": "80eede1e85eafe8aca6ba6702cb2e169b6f7b4d1c368eeca10f1e6647bacebe0",
+  "release": "ADR-0046",
+  "slicer_version": "02.09.01.70",
+  "profile_names": {
+    "machine": "Bambu Lab P2S 0.4 nozzle",
+    "process": "0.20mm Standard @BBL P2S",
+    "filament": "Generic PLA @BBL P2S"
+  },
+  "printer_profile_mapping": "User P2SC; installed Bambu P2S profile used for local slicing only",
+  "nozzle_mm": 0.4,
+  "parts": {
+    "FrontShell": {
+      "file": "FrontShell.stl",
+      "size_xyz_mm": [
+        240.26315789473685,
+        170.0000000000001,
+        49.000000000000085
+      ],
+      "linear_deflection_mm": 0.1,
+      "angular_deflection_rad": 0.35,
+      "facets": 241872,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        0.5,
+        0.4999999999999999,
+        0.5,
+        0.5000000000000001
+      ],
+      "stl_sha256": "fc91dce8378e7b331fffbdc9f23902253e180e6626a31a49afbabccb164431f4"
+    },
+    "RearShell": {
+      "file": "RearShell.stl",
+      "size_xyz_mm": [
+        170.0,
+        192.682177883786,
+        88.00000000000006
+      ],
+      "linear_deflection_mm": 0.05,
+      "angular_deflection_rad": 0.2,
+      "facets": 7032,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        0.7071067811865476,
+        0.0,
+        0.0,
+        -0.7071067811865475
+      ],
+      "stl_sha256": "b0735c1a5c74dfdd745df7b90a38965c253bf400d36a118d5465b5c6fb972edf"
+    },
+    "SpeakerCarrier": {
+      "file": "SpeakerCarrier.stl",
+      "size_xyz_mm": [
+        158.60000000000002,
+        119.80000000000001,
+        57.50000000000003
+      ],
+      "linear_deflection_mm": 0.05,
+      "angular_deflection_rad": 0.2,
+      "facets": 14536,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        0.7071067811865476,
+        0.0,
+        0.0,
+        -0.7071067811865475
+      ],
+      "stl_sha256": "b94d6c6b871114425b83d9b182fd1e3fc972605c357245eaeac170e9564c7ede"
+    },
+    "PlayPauseKey": {
+      "file": "PlayPauseKey.stl",
+      "size_xyz_mm": [
+        12.800000000000011,
+        12.799999999999983,
+        7.200000000000055
+      ],
+      "linear_deflection_mm": 0.1,
+      "angular_deflection_rad": 0.35,
+      "facets": 284,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
+      "color_print_source": "export-dual-color-keys.py; STL is a single-material envelope"
+    },
+    "EjectKey": {
+      "file": "EjectKey.stl",
+      "size_xyz_mm": [
+        12.800000000000011,
+        12.799999999999983,
+        7.200000000000055
+      ],
+      "linear_deflection_mm": 0.1,
+      "angular_deflection_rad": 0.35,
+      "facets": 284,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
+      "color_print_source": "export-dual-color-keys.py; STL is a single-material envelope"
+    },
+    "PrevKey": {
+      "file": "PrevKey.stl",
+      "size_xyz_mm": [
+        12.800000000000011,
+        12.800000000000011,
+        7.200000000000055
+      ],
+      "linear_deflection_mm": 0.1,
+      "angular_deflection_rad": 0.35,
+      "facets": 284,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
+      "color_print_source": "export-dual-color-keys.py; STL is a single-material envelope"
+    },
+    "NextKey": {
+      "file": "NextKey.stl",
+      "size_xyz_mm": [
+        12.800000000000011,
+        12.800000000000011,
+        7.200000000000055
+      ],
+      "linear_deflection_mm": 0.1,
+      "angular_deflection_rad": 0.35,
+      "facets": 284,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
+      "color_print_source": "export-dual-color-keys.py; STL is a single-material envelope"
+    },
+    "ButtonRetainer": {
+      "file": "ButtonRetainer.stl",
+      "size_xyz_mm": [
+        34.0,
+        23.85427940565407,
+        6.50000000000005
+      ],
+      "linear_deflection_mm": 0.1,
+      "angular_deflection_rad": 0.35,
+      "facets": 724,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "17ee4f08323f8878f428092fc2ee6b63ead09915fa8c8baaa53f1bf010339011"
+    },
+    "DisplayRetainer": {
+      "file": "DisplayRetainer.stl",
+      "size_xyz_mm": [
+        46.977733291070834,
+        37.75000000000003,
+        4.800000000000038
+      ],
+      "linear_deflection_mm": 0.1,
+      "angular_deflection_rad": 0.35,
+      "facets": 1740,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "699b7962e736a43e40bf747c1254eb4b3a82e903334593d7c1832f5d60d9703f"
+    },
+    "DriveRetainer": {
+      "file": "DriveRetainer.stl",
+      "size_xyz_mm": [
+        136.0,
+        10.0,
+        3.0
+      ],
+      "linear_deflection_mm": 0.1,
+      "angular_deflection_rad": 0.35,
+      "facets": 340,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        0.7071067811865475,
+        0.0,
+        0.0,
+        0.7071067811865476
+      ],
+      "stl_sha256": "1f807f99f6d98fa38614df28a997d6b686dc144ed879951b953959d0824a6760"
+    },
+    "Knob": {
+      "file": "Knob.stl",
+      "size_xyz_mm": [
+        24.0,
+        24.00000000000003,
+        13.900000000000063
+      ],
+      "linear_deflection_mm": 0.1,
+      "angular_deflection_rad": 0.35,
+      "facets": 4848,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "6750cd2af285391a69026b12eae9556573489a25ba872e50767789bdb4e3d221",
+      "color_print_source": "export-dual-color-knob.py; STL is a single-material envelope"
+    }
+  },
+  "plates": {
+    "FrontShell": {
+      "file": "Discora-P1-FrontShell.3mf",
+      "parts": [
+        "FrontShell"
+      ],
+      "project_sha256": "5b11d9fa195d5776c6a93442070ec580c88a15b912fd3c9984570850d886047a",
+      "gcode_sha256": "dfaae2315034f417bf1187c28a6b3a27ec8b95ffc1e78dcecac702b5f3fbc71d",
+      "layers": 245,
+      "total_estimated_time": "14h 6m 53s",
+      "filament_g": 156.65,
+      "filament_g_by_material": [
+        156.65
+      ],
+      "exit_code": 0,
+      "support_settings": {
+        "enable_support": "1",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "1",
+        "support_critical_regions_only": "1",
+        "support_threshold_angle": "30",
+        "support_top_z_distance": "0.2"
+      },
+      "layer_height_mm": 0.2,
+      "first_layer_height_mm": 0.2,
+      "filament_colours": [
+        "#00AE42"
+      ]
+    },
+    "RearShell": {
+      "file": "Discora-P2-RearShell.3mf",
+      "parts": [
+        "RearShell"
+      ],
+      "project_sha256": "a254d0cd5713b742481667dbab85bcaf1a811ca57402d1c7de3895d0c8cbe27e",
+      "gcode_sha256": "0d3539481fbd8806eccee7a2306d15c663488bbd059cfc503339ca495da163b8",
+      "layers": 440,
+      "total_estimated_time": "9h 12m 0s",
+      "filament_g": 286.84,
+      "filament_g_by_material": [
+        286.84
+      ],
+      "exit_code": 0,
+      "support_settings": {
+        "enable_support": "1",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0",
+        "support_critical_regions_only": "0",
+        "support_threshold_angle": "30",
+        "support_top_z_distance": "0.2"
+      },
+      "layer_height_mm": 0.2,
+      "first_layer_height_mm": 0.2,
+      "filament_colours": [
+        "#00AE42"
+      ],
+      "reused_audited_slice": true
+    },
+    "SpeakerCarrier": {
+      "file": "Discora-P3-SpeakerCarrier.3mf",
+      "parts": [
+        "SpeakerCarrier"
+      ],
+      "project_sha256": "0f662b2b4f390ae2ce9da9dc97a6ea8cc00a81ebf3289e3acb1a73b3878f26f2",
+      "gcode_sha256": "7df1139ed4c5dea9b1e106d9bafe27bd4345db09bc6b0e41c546b1aa5cf1cab0",
+      "layers": 287,
+      "total_estimated_time": "5h 40m 46s",
+      "filament_g": 181.0,
+      "filament_g_by_material": [
+        181.0
+      ],
+      "exit_code": 0,
+      "support_settings": {
+        "enable_support": "1",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "1",
+        "support_critical_regions_only": "1",
+        "support_threshold_angle": "30",
+        "support_top_z_distance": "0.2"
+      },
+      "layer_height_mm": 0.2,
+      "first_layer_height_mm": 0.2,
+      "filament_colours": [
+        "#00AE42"
+      ],
+      "reused_audited_slice": true
+    },
+    "SmallParts": {
+      "file": "Discora-Retainers.3mf",
+      "parts": [
+        "ButtonRetainer",
+        "DisplayRetainer",
+        "DriveRetainer"
+      ],
+      "project_sha256": "530675fe8e19522b2e2b14bce778c5c950d2304ee235dc19d9413c3b73854d36",
+      "gcode_sha256": "800ad333874470d7e05510d84acf301e270d7bc25b233dd37f55c5fb49eea8c6",
+      "layers": 32,
+      "total_estimated_time": "26m 9s",
+      "filament_g": 6.61,
+      "filament_g_by_material": [
+        6.61
+      ],
+      "exit_code": 0,
+      "support_settings": {
+        "enable_support": "1",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "1",
+        "support_critical_regions_only": "1",
+        "support_threshold_angle": "30",
+        "support_top_z_distance": "0.2"
+      },
+      "layer_height_mm": 0.2,
+      "first_layer_height_mm": 0.2,
+      "filament_colours": [
+        "#00AE42"
+      ]
+    },
+    "Keys": {
+      "file": "Discora-Keys-Orange-White.3mf",
+      "parts": [
+        "PlayPauseKey",
+        "EjectKey",
+        "PrevKey",
+        "NextKey"
+      ],
+      "project_sha256": "e5585173a4f6ad420ce554cce4dd78f74d91a30829eab5c556aa757f5ab2c73e",
+      "gcode_sha256": "bdcfdc996942a3e2da28b2fde8258a4d5d863805fa9f60ec7ce42356e53dbbbc",
+      "layers": 60,
+      "total_estimated_time": "34m 44s",
+      "filament_g": 7.54,
+      "filament_g_by_material": [
+        5.05,
+        2.49
+      ],
+      "exit_code": 0,
+      "support_settings": {
+        "enable_support": "1",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "1",
+        "support_critical_regions_only": "0",
+        "support_threshold_angle": "30",
+        "support_top_z_distance": "0.2"
+      },
+      "layer_height_mm": 0.12,
+      "first_layer_height_mm": 0.12,
+      "filament_colours": [
+        "#FF671F",
+        "#FFFFFF"
+      ],
+      "white_toolpaths_by_height": {
+        "PlayPauseKey": {
+          "6.72": {
+            "extrusion_moves": 23,
+            "xy_bounds_mm": [
+              [
+                143.415,
+                149.325
+              ],
+              [
+                144.144,
+                148.468
+              ]
+            ]
+          },
+          "6.84": {
+            "extrusion_moves": 23,
+            "xy_bounds_mm": [
+              [
+                143.415,
+                149.325
+              ],
+              [
+                144.144,
+                148.468
+              ]
+            ]
+          },
+          "6.96": {
+            "extrusion_moves": 23,
+            "xy_bounds_mm": [
+              [
+                143.415,
+                149.325
+              ],
+              [
+                144.132,
+                148.468
+              ]
+            ]
+          },
+          "7.08": {
+            "extrusion_moves": 23,
+            "xy_bounds_mm": [
+              [
+                143.415,
+                149.325
+              ],
+              [
+                144.132,
+                148.468
+              ]
+            ]
+          },
+          "7.2": {
+            "extrusion_moves": 24,
+            "xy_bounds_mm": [
+              [
+                143.415,
+                149.325
+              ],
+              [
+                144.132,
+                148.468
+              ]
+            ]
+          }
+        },
+        "EjectKey": {
+          "6.72": {
+            "extrusion_moves": 17,
+            "xy_bounds_mm": [
+              [
+                106.802,
+                111.785
+              ],
+              [
+                144.096,
+                148.72
+              ]
+            ]
+          },
+          "6.84": {
+            "extrusion_moves": 17,
+            "xy_bounds_mm": [
+              [
+                106.802,
+                111.785
+              ],
+              [
+                144.096,
+                148.72
+              ]
+            ]
+          },
+          "6.96": {
+            "extrusion_moves": 17,
+            "xy_bounds_mm": [
+              [
+                106.802,
+                111.785
+              ],
+              [
+                144.096,
+                148.72
+              ]
+            ]
+          },
+          "7.08": {
+            "extrusion_moves": 17,
+            "xy_bounds_mm": [
+              [
+                106.802,
+                111.785
+              ],
+              [
+                144.096,
+                148.72
+              ]
+            ]
+          },
+          "7.2": {
+            "extrusion_moves": 26,
+            "xy_bounds_mm": [
+              [
+                106.802,
+                111.785
+              ],
+              [
+                144.096,
+                148.72
+              ]
+            ]
+          }
+        },
+        "PrevKey": {
+          "6.72": {
+            "extrusion_moves": 17,
+            "xy_bounds_mm": [
+              [
+                144.33,
+                149.474
+              ],
+              [
+                107.648,
+                111.886
+              ]
+            ]
+          },
+          "6.84": {
+            "extrusion_moves": 17,
+            "xy_bounds_mm": [
+              [
+                144.33,
+                149.474
+              ],
+              [
+                107.648,
+                111.886
+              ]
+            ]
+          },
+          "6.96": {
+            "extrusion_moves": 17,
+            "xy_bounds_mm": [
+              [
+                144.33,
+                149.474
+              ],
+              [
+                107.648,
+                111.886
+              ]
+            ]
+          },
+          "7.08": {
+            "extrusion_moves": 17,
+            "xy_bounds_mm": [
+              [
+                144.33,
+                149.474
+              ],
+              [
+                107.648,
+                111.886
+              ]
+            ]
+          },
+          "7.2": {
+            "extrusion_moves": 14,
+            "xy_bounds_mm": [
+              [
+                144.33,
+                149.474
+              ],
+              [
+                107.648,
+                111.886
+              ]
+            ]
+          }
+        },
+        "NextKey": {
+          "6.72": {
+            "extrusion_moves": 17,
+            "xy_bounds_mm": [
+              [
+                106.526,
+                111.67
+              ],
+              [
+                107.323,
+                111.561
+              ]
+            ]
+          },
+          "6.84": {
+            "extrusion_moves": 17,
+            "xy_bounds_mm": [
+              [
+                106.526,
+                111.67
+              ],
+              [
+                107.334,
+                111.561
+              ]
+            ]
+          },
+          "6.96": {
+            "extrusion_moves": 17,
+            "xy_bounds_mm": [
+              [
+                106.526,
+                111.659
+              ],
+              [
+                107.334,
+                111.561
+              ]
+            ]
+          },
+          "7.08": {
+            "extrusion_moves": 17,
+            "xy_bounds_mm": [
+              [
+                106.526,
+                111.659
+              ],
+              [
+                107.334,
+                111.561
+              ]
+            ]
+          },
+          "7.2": {
+            "extrusion_moves": 14,
+            "xy_bounds_mm": [
+              [
+                106.526,
+                111.659
+              ],
+              [
+                107.334,
+                111.561
+              ]
+            ]
+          }
+        }
+      }
+    },
+    "Knob": {
+      "file": "Discora-Knob-Black-White.3mf",
+      "parts": [
+        "Knob"
+      ],
+      "project_sha256": "4ed1aa8cf02d94c318af2c6f77bb6dcfcf172fdbb7c1e1ebdc572398affd61d6",
+      "gcode_sha256": "657f7753225d074bdfe0d75e97103c815edaf34fdebde8adfb2c545b936dec73",
+      "layers": 116,
+      "total_estimated_time": "48m 44s",
+      "filament_g": 9.5,
+      "filament_g_by_material": [
+        6.58,
+        2.92
+      ],
+      "exit_code": 0,
+      "support_settings": {
+        "enable_support": "1",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "1",
+        "support_critical_regions_only": "0",
+        "support_threshold_angle": "30",
+        "support_top_z_distance": "0.2"
+      },
+      "layer_height_mm": 0.12,
+      "first_layer_height_mm": 0.12,
+      "filament_colours": [
+        "#000000",
+        "#FFFFFF"
+      ],
+      "white_toolpaths_by_height": {
+        "13.44": {
+          "extrusion_moves": 5,
+          "xy_bounds_mm": [
+            [
+              131.281,
+              132.41
+            ],
+            [
+              119.859,
+              121.641
+            ]
+          ]
+        },
+        "13.56": {
+          "extrusion_moves": 5,
+          "xy_bounds_mm": [
+            [
+              131.281,
+              132.41
+            ],
+            [
+              119.859,
+              121.641
+            ]
+          ]
+        },
+        "13.68": {
+          "extrusion_moves": 5,
+          "xy_bounds_mm": [
+            [
+              131.281,
+              132.41
+            ],
+            [
+              119.859,
+              121.641
+            ]
+          ]
+        },
+        "13.8": {
+          "extrusion_moves": 5,
+          "xy_bounds_mm": [
+            [
+              131.281,
+              132.41
+            ],
+            [
+              119.859,
+              121.641
+            ]
+          ]
+        },
+        "13.92": {
+          "extrusion_moves": 5,
+          "xy_bounds_mm": [
+            [
+              131.281,
+              132.41
+            ],
+            [
+              119.859,
+              121.641
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "total_filament_g": 648.14,
+  "evidence": {
+    "p2": "../p2-trapezoid-outlet-checks.json",
+    "p3": "../p3-terminal-mouth-checks.json",
+    "assembly": "../assembly-paths.json",
+    "static": "../validation.json",
+    "perfboard": "../current-perfboard-checks.json"
+  },
+  "all_pass": true,
+  "printer_contacted": false,
+  "physical_full_assembly_verified": false,
+  "limits": [
+    "11 rigid PLA parts; soft feet, hardware and electronics are purchased parts.",
+    "Speaker mount coupon passed; full-part fit, support removal, sealing, strength and acoustics are not physically verified.",
+    "STL keys and knob are monochrome envelopes; use the two-material 3MF projects."
+  ]
+}
