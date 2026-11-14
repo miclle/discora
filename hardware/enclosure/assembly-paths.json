@@ -18,7 +18,20 @@
         "Amp",
         "AmpChip",
         "MCU",
-        "MCUChip"
+        "MCUChip",
+        "DAC",
+        "DACChip",
+        "Perfboard",
+        "MCUSockets",
+        "DACSockets",
+        "BuckA",
+        "BuckB",
+        "XHButtons",
+        "XHOLED",
+        "XHVolumeSwitch",
+        "PerfboardScrew1",
+        "PerfboardScrew2",
+        "PerfboardScrew3"
       ],
       "fixed": [
         "RearShell",
@@ -26,8 +39,6 @@
         "DriveRetainer",
         "Drive",
         "Bridge",
-        "DAC",
-        "DACChip",
         "Battery"
       ],
       "prerequisites": [
@@ -51,8 +62,6 @@
         "Feet",
         "Drive",
         "Bridge",
-        "DAC",
-        "DACChip",
         "Battery"
       ],
       "prerequisites": [
@@ -86,8 +95,6 @@
       ],
       "fixed": [
         "RearShell",
-        "DAC",
-        "DACChip",
         "Feet"
       ],
       "prerequisites": [
@@ -132,8 +139,6 @@
       ],
       "fixed": [
         "RearShell",
-        "DAC",
-        "DACChip",
         "Feet",
         "Drive at service position"
       ],
@@ -180,8 +185,6 @@
       ],
       "fixed": [
         "RearShell",
-        "DAC",
-        "DACChip",
         "Feet"
       ],
       "prerequisites": [
@@ -208,8 +211,6 @@
         "RDriver",
         "Drive",
         "Bridge",
-        "DAC",
-        "DACChip",
         "Feet"
       ],
       "prerequisites": [
@@ -263,10 +264,21 @@
         "Bridge",
         "Amp",
         "AmpChip",
+        "Perfboard",
         "MCU",
         "MCUChip",
+        "MCUSockets",
         "DAC",
         "DACChip",
+        "DACSockets",
+        "BuckA",
+        "BuckB",
+        "XHButtons",
+        "XHOLED",
+        "XHVolumeSwitch",
+        "PerfboardScrew1",
+        "PerfboardScrew2",
+        "PerfboardScrew3",
         "Battery"
       ],
       "prerequisites": [
@@ -278,11 +290,5 @@
   },
   "drive_service_envelope": "Filled maximum 128 x 10.8 x 130 mm box; connector retains modeled housing and strain relief",
   "all_pass": true,
-  "model_sha256": "42ffc95778377ab470bfe3daa6ca2fa57693b16db6c63bb1e4dbcf4d8d993e30",
-  "material_only_save": {
-    "geometry_checked_model_sha256": "ddb7753d095e3c49db93ec9f1dfd570dee1fbd0f55e17bc0ec93d6f19b1eeee9",
-    "geometry_resources_unchanged": true,
-    "changed_resource": "ShapeAppearance39",
-    "gui_readback": false
-  }
+  "model_sha256": "9ef433e8437eef3b3aa45558a329a66d8422e0c9014894b763a873c1162eee05"
 }

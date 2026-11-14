@@ -1,7 +1,7 @@
 {
-  "sha256": "42ffc95778377ab470bfe3daa6ca2fa57693b16db6c63bb1e4dbcf4d8d993e30",
-  "build_sha256": "3156db65720c042eb9196b5bf932a4331a201632867c7b9ec6cac952e3f9a38c",
-  "geometry_sha256": "0ced225b60f30fe0ba432d95dcdeeec484268863dddaccfbdf61dabfe68df533",
+  "sha256": "9ef433e8437eef3b3aa45558a329a66d8422e0c9014894b763a873c1162eee05",
+  "build_sha256": "dacd726df201feccd0a01b67ec18b43518682ba9ecd80fb1971636f7208d8776",
+  "geometry_sha256": "9ce6254428433125c067784c7a287ede50a22e40220fa705fadae60931612060",
   "palette": {
     "ORANGE": [
       1.0,
@@ -140,12 +140,22 @@
       0.08,
       0.09
     ],
-    "AmpChip": [
+    "MCUChip": [
       0.07,
       0.08,
       0.09
     ],
     "DACChip": [
+      0.07,
+      0.08,
+      0.09
+    ],
+    "MCUSockets": [
+      0.07,
+      0.08,
+      0.09
+    ],
+    "DACSockets": [
       0.07,
       0.08,
       0.09
@@ -195,7 +205,22 @@
       0.73,
       0.75
     ],
-    "MCUChip": [
+    "AmpChip": [
+      0.7,
+      0.73,
+      0.75
+    ],
+    "PerfboardScrew1": [
+      0.7,
+      0.73,
+      0.75
+    ],
+    "PerfboardScrew2": [
+      0.7,
+      0.73,
+      0.75
+    ],
+    "PerfboardScrew3": [
       0.7,
       0.73,
       0.75
@@ -220,10 +245,70 @@
       0.4,
       0.32
     ],
+    "Perfboard": [
+      0.14,
+      0.4,
+      0.32
+    ],
+    "BuckA": [
+      0.14,
+      0.4,
+      0.32
+    ],
+    "BuckB": [
+      0.14,
+      0.4,
+      0.32
+    ],
     "Battery": [
       0.12,
       0.33,
       0.62
+    ],
+    "XHButtons": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "XHOLED": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "XHVolumeSwitch": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "ButtonsHarnessClosed": [
+      0.12,
+      0.33,
+      0.82
+    ],
+    "ButtonsHarnessOpen": [
+      0.12,
+      0.33,
+      0.82
+    ],
+    "OLEDHarnessClosed": [
+      0.6,
+      0.2,
+      0.72
+    ],
+    "OLEDHarnessOpen": [
+      0.6,
+      0.2,
+      0.72
+    ],
+    "VolumeSwitchHarnessClosed": [
+      1,
+      0.4,
+      0.04
+    ],
+    "VolumeSwitchHarnessOpen": [
+      1,
+      0.4,
+      0.04
     ]
   },
   "white_mark_faces_zero_based": {
@@ -331,6 +416,27 @@
       "size_px": [
         1117,
         2920
+      ]
+    },
+    "perfboard-layout": {
+      "file": "perfboard-layout-color.png",
+      "size_px": [
+        1332,
+        660
+      ]
+    },
+    "harness-closed": {
+      "file": "harness-closed-color.png",
+      "size_px": [
+        2041,
+        910
+      ]
+    },
+    "harness-open": {
+      "file": "harness-open-color.png",
+      "size_px": [
+        2041,
+        1620
       ]
     },
     "exploded-shell": {

@@ -171,6 +171,35 @@ def main():
         'pcb_unturned_size_mm':[35,26.2,1.5],'shaft_center_exterior_xyz_mm':list(volume_pose.Base),
         'rotation_about_shaft_deg':90,'local_frame':'X right; Y inward normal along shaft; Z up slope',
         'detail_section':'Keep local X <= 0; excludes unmeasured mounting holes and connector details'}
+    data['volume_module']['clearances_mm']={n:doc.VolumePot.Shape.distToShape(doc.getObject(n).Shape)[0]
+        for n in ('SpeakerCarrier','MCUChip','RearShell','Drive','Perfboard')}
+
+    board_parts=['Perfboard','MCU','MCUChip','MCUSockets','DAC','DACChip','DACSockets',
+                 'BuckA','BuckB','XHButtons','XHOLED','XHVolumeSwitch',
+                 'PerfboardScrew1','PerfboardScrew2','PerfboardScrew3']
+    projection('perfboard-outline',shapes['Perfboard'],'top')
+    projection('perfboard-layout',compound(board_parts),'top')
+    data['views']['perfboard-layout']['parts']=[dict(objects=board_parts,offset_mm=[0,0,0])]
+    front_parts=['FrontShell','Window','DisplayPCB','DisplayHeader','VolumePot','Encoder','Knob',
+                 'PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch','ButtonRetainer']
+    for suffix,opening in [('Closed',0),('Open',60)]:
+        pieces=[compound(board_parts)]
+        defs=[dict(objects=board_parts,offset_mm=[0,0,0])]
+        for name in front_parts:
+            shape=shapes[name].copy()
+            if name=='FrontShell':shape=shape.common(Part.makeBox(170,100,100,V(-85,-1,140)))
+            shape.translate(V(0,-opening,0));pieces.append(shape)
+        defs.append(dict(objects=front_parts,offset_mm=[0,-opening,0],clip_front_above_z=140))
+        wires=[n+'Harness'+suffix for n in ('Buttons','OLED','VolumeSwitch')]
+        pieces.extend(doc.getObject(n).Shape for n in wires)
+        defs.append(dict(objects=wires,offset_mm=[0,0,0]))
+        name='harness-'+suffix.lower()
+        projection(name,Part.makeCompound(pieces),'top')
+        data['views'][name]['parts']=defs
+    data['perfboard']={'bounds':bounds(shapes['Perfboard']),
+        'holes':[{ 'center_xy_mm':[e.CenterOfMass.x,e.CenterOfMass.y], 'radius_mm':e.Curve.Radius}
+                 for e in shapes['Perfboard'].Edges if hasattr(e.Curve,'Radius')],
+        'board_parts':board_parts,'service_translation_xyz_mm':[0,-60,0]}
 
     def exploded(name, definitions, expected):
         seen, pieces, anchors = [], [], {}
@@ -202,13 +231,15 @@ def main():
         ('C','右喇叭包络',['RDriver'],(50,-55,0)),
         ('D','光驱与可拆压条',['Drive','DriveRetainer'],(0,110,0)),
         ('E','功放 PCB 与元件预留',['Amp','AmpChip'],(0,0,70)),
-        ('F','主控 PCB 与元件预留',['MCU','MCUChip'],(0,25,100)),
-        ('G','DAC PCB 与元件预留',['DAC','DACChip'],(-100,0,65)),
+        ('F','主控 PCB／元件／排母',['MCU','MCUChip','MCUSockets'],(0,25,100)),
+        ('G','DAC PCB／元件／排母',['DAC','DACChip','DACSockets'],(-100,0,65)),
         ('H','屏幕 PCB 与接头',['DisplayPCB','DisplayHeader'],(-60,-40,130)),
         ('I','PCB 音量模块与轴',['VolumePot','Encoder'],(70,-30,90)),
         ('J','5600 mAh 平排电池',['Battery'],(0,-10,-50)),
         ('K','SATA 接头及护线环',['Bridge'],(180,-30,-140)),
         ('L','四个轻触按键包络',['PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch'],(-110,0,150)),
+        ('M','洞洞板／双降压／接插件／螺钉',
+         [n for n in board_parts if n not in ('MCU','MCUChip','MCUSockets','DAC','DACChip','DACSockets')],(100,-55,55)),
     ],core)
     # Validate critical annotations against the saved B-rep snapshot.
     checks = {
@@ -226,7 +257,8 @@ def main():
         'grille_recess_2_5':abs(doc.FrontGrille.Shape.BoundBox.YMin-2.5)<1e-5,
         'circular_mouth_clear':doc.FrontShell.Shape.common(Part.makeCylinder(65,2.49998,A.Vector(0,.00001,76),A.Vector(0,1,0))).Volume<.001,
         'side_ports_rear_outline_y49':all(abs(doc.getObject(n).Shape.BoundBox.Center.y-49)<1e-5 for n in ('LPort','RPort','LPanelTool')),
-        '33_finished_objects':len(objects)==33,
+        '44_finished_objects':len(objects)==44,
+        'perfboard_bounds_111_55_1_6':all(abs(x-y)<1e-6 for x,y in zip(bounds(shapes['Perfboard'])['size'],(111,55,1.6))),
         'pcb_module_local_15_26_2_35':all(abs(x-y)<1e-6 for x,y in zip(bounds(volume)['size'],(15,26.2,35))),
         'pcb_module_unturned_35_26_2_15':all(abs(x-y)<1e-6 for x,y in zip(bounds(unturned)['size'],(35,26.2,15))),
         'three_connected_main_parts':all(len(doc.getObject(n).Shape.Solids)==1 for n in ('FrontShell','RearShell','SpeakerCarrier')),

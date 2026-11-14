@@ -1,13 +1,13 @@
 {
   "date": "2026-11-14",
   "model": "Discora.FCStd",
-  "sha256": "42ffc95778377ab470bfe3daa6ca2fa57693b16db6c63bb1e4dbcf4d8d993e30",
+  "sha256": "9ef433e8437eef3b3aa45558a329a66d8422e0c9014894b763a873c1162eee05",
   "version": [
     "1",
     "1",
     "4"
   ],
-  "items": 33,
+  "items": 44,
   "objects": [
     "FrontShell",
     "RearShell",
@@ -37,10 +37,21 @@
     "DisplayHeader",
     "Amp",
     "AmpChip",
+    "Perfboard",
     "MCU",
     "MCUChip",
+    "MCUSockets",
     "DAC",
     "DACChip",
+    "DACSockets",
+    "BuckA",
+    "BuckB",
+    "XHButtons",
+    "XHOLED",
+    "XHVolumeSwitch",
+    "PerfboardScrew1",
+    "PerfboardScrew2",
+    "PerfboardScrew3",
     "Battery"
   ],
   "main_pla_parts": {
@@ -178,9 +189,9 @@
     "LChamber / RChamber": 0.0,
     "LDriverFrame / RDriverFrame": 0.0,
     "Window / Window": 0.0,
-    "RearShell (internal DAC pads excepted)": 0.0,
+    "RearShell": 0.0,
     "SpeakerCarrier below Z=120.5": 0.0,
-    "FrontShell (control cutouts and button mounts excepted)": 0.0
+    "FrontShell (control details and checked grille excepted)": 0.0
   },
   "native_mirror_links": {
     "RPort": true,
@@ -301,58 +312,6 @@
       ],
       "clashes": []
     },
-    "mcu_left": {
-      "origin_mm": [
-        -36.695,
-        33.56,
-        148.7
-      ],
-      "size_mm": [
-        5,
-        27.94,
-        8.6
-      ],
-      "clashes": []
-    },
-    "mcu_right": {
-      "origin_mm": [
-        31.695,
-        33.56,
-        148.7
-      ],
-      "size_mm": [
-        5,
-        27.94,
-        8.6
-      ],
-      "clashes": []
-    },
-    "dac_input": {
-      "origin_mm": [
-        -79,
-        33,
-        122
-      ],
-      "size_mm": [
-        8.6,
-        17,
-        5
-      ],
-      "clashes": []
-    },
-    "dac_output": {
-      "origin_mm": [
-        -79,
-        33,
-        158
-      ],
-      "size_mm": [
-        8.6,
-        17,
-        10
-      ],
-      "clashes": []
-    },
     "volume_harness": {
       "radius_mm": 1,
       "origin_mm": [
@@ -367,9 +326,9 @@
   "key_clearances_mm": {
     "Battery / FrontShell": 0.999999999999992,
     "Battery / SpeakerCarrier": 3.5,
-    "MCUChip / FrontShell": 9.482541138474271,
-    "Bridge / DAC": 146.64686324637154,
-    "Drive / MCUChip": 14.700000000000003
+    "MCUChip / FrontShell": 9.039302411403131,
+    "Drive / Perfboard": 1.2000000000000028,
+    "VolumePot / Perfboard": 1.25
   },
   "battery_fit": {
     "supplier_size_xyz_mm": [
@@ -418,21 +377,21 @@
     "vertical_-67_80": 4.999999999999998,
     "vertical_67_80": 4.999999999999998,
     "vertical_0_6": 5.000000000000007,
-    "slope_-30_8": 5.000000000000008,
-    "slope_30_8": 5.000000000000006,
-    "slope_-25_30": 5.00000000000003,
-    "slope_25_30": 5.00000000000003,
+    "slope_-30_8": 5.000000000000001,
+    "slope_30_8": 4.999999999999999,
+    "slope_-25_30": 5.000000000000003,
+    "slope_25_30": 5.000000000000003,
     "slope_50_32": 3.6000000000000005,
-    "slope_side_-84_5": 5.000000000000037,
-    "slope_side_-84_12": 4.999999999999998,
-    "slope_side_-84_24": 5.000000000000006,
+    "slope_side_-84_5": 5.000000000000009,
+    "slope_side_-84_12": 5.000000000000005,
+    "slope_side_-84_24": 5.000000000000003,
     "slope_side_-84_32": 5.000000000000003,
-    "slope_side_-84_37": 5.000000000000003,
-    "slope_side_84_5": 5.00000000000003,
-    "slope_side_84_12": 4.999999999999998,
-    "slope_side_84_24": 4.99999999999998,
+    "slope_side_-84_37": 4.999999999999998,
+    "slope_side_84_5": 5.000000000000002,
+    "slope_side_84_12": 5.000000000000005,
+    "slope_side_84_24": 4.999999999999976,
     "slope_side_84_32": 5.000000000000003,
-    "slope_side_84_37": 5.000000000000003,
+    "slope_side_84_37": 4.999999999999998,
     "grille": 2.5,
     "handle": 5.000000000000014
   },
@@ -471,11 +430,5 @@
     "Separate assembly-path report distinguishes continuous conservative sweeps from sampled cover motion.",
     "Battery leads, straps, connectors, bridge cables and power modules are not validated.",
     "Side passages remain untuned; geometric continuity is not acoustic validation."
-  ],
-  "material_only_save": {
-    "geometry_checked_model_sha256": "ddb7753d095e3c49db93ec9f1dfd570dee1fbd0f55e17bc0ec93d6f19b1eeee9",
-    "geometry_resources_unchanged": true,
-    "changed_resource": "ShapeAppearance39",
-    "gui_readback": false
-  }
+  ]
 }

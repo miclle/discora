@@ -1,7 +1,7 @@
 {
   "model": "Discora.FCStd",
-  "sha256": "42ffc95778377ab470bfe3daa6ca2fa57693b16db6c63bb1e4dbcf4d8d993e30",
-  "build_sha256": "3156db65720c042eb9196b5bf932a4331a201632867c7b9ec6cac952e3f9a38c",
+  "sha256": "9ef433e8437eef3b3aa45558a329a66d8422e0c9014894b763a873c1162eee05",
+  "build_sha256": "dacd726df201feccd0a01b67ec18b43518682ba9ecd80fb1971636f7208d8776",
   "freecad_version": [
     "1",
     "1",
@@ -244,7 +244,7 @@
       ]
     },
     "SpeakerCarrier": {
-      "label": "P3 · 双声腔／前障板／功放桥接托板",
+      "label": "P3 · 双声腔／功放托板／洞洞板支架",
       "min": [
         -67.0,
         5.0,
@@ -252,13 +252,13 @@
       ],
       "max": [
         67.0,
-        62.5,
-        148.7
+        65.0,
+        142.8
       ],
       "size": [
         134.0,
-        57.5,
-        125.69999999999999
+        60.0,
+        119.80000000000001
       ]
     },
     "LDriver": {
@@ -496,7 +496,7 @@
       ]
     },
     "AmpChip": {
-      "label": "TPA3118D2 · PCB 标称 66×53 · 全板元件高度预留（未测）",
+      "label": "功放元件高度 15 mm 预留",
       "min": [
         -33.0,
         6.0,
@@ -513,76 +513,274 @@
         15.0
       ]
     },
-    "MCU": {
-      "label": "ESP32-S3 N16R8 · PCB 63.39×27.94",
+    "Perfboard": {
+      "label": "洞洞板 · 转 180°／右前缺口／左耳",
       "min": [
-        -31.695,
-        33.56,
-        148.7
+        -54.0,
+        20.0,
+        142.8
       ],
       "max": [
-        31.695,
-        61.5,
-        150.29999999999998
+        57.0,
+        75.0,
+        144.4
+      ],
+      "size": [
+        111.0,
+        55.0,
+        1.5999999999999943
+      ]
+    },
+    "MCU": {
+      "label": "ESP32-S3 N16R8 · PCB／USB 与 COM 插座留空",
+      "min": [
+        -24.1,
+        21.73,
+        152.9
+      ],
+      "max": [
+        39.29,
+        49.67,
+        154.5
       ],
       "size": [
         63.39,
-        27.939999999999998,
+        27.94,
         1.5999999999999943
       ]
     },
     "MCUChip": {
-      "label": "ESP32-S3 N16R8 · PCB 63.39×27.94 · 全板元件高度预留（未测）",
+      "label": "ESP32-S3 元件高度预留",
       "min": [
-        -31.695,
-        33.56,
-        150.29999999999998
+        -24.1,
+        21.73,
+        154.5
       ],
       "max": [
-        31.695,
-        61.5,
-        157.29999999999998
+        39.29,
+        49.67,
+        161.5
       ],
       "size": [
         63.39,
-        27.939999999999998,
+        27.94,
         7.0
       ]
     },
-    "DAC": {
-      "label": "PCM5102 · 侧置 PCB 标称 31×17",
+    "MCUSockets": {
+      "label": "ESP32-S3 排母高度预留",
       "min": [
-        -79.0,
-        33.0,
-        127.0
+        -24.1,
+        21.73,
+        144.4
       ],
       "max": [
-        -77.4,
-        50.0,
-        158.0
+        39.29,
+        49.67,
+        152.9
       ],
       "size": [
-        1.5999999999999943,
-        17.0,
-        31.0
+        63.39,
+        27.94,
+        8.5
+      ]
+    },
+    "DAC": {
+      "label": "PCM5102 · PCB",
+      "min": [
+        19.71,
+        53.87,
+        152.9
+      ],
+      "max": [
+        50.71,
+        70.87,
+        154.5
+      ],
+      "size": [
+        31.0,
+        17.000000000000007,
+        1.5999999999999943
       ]
     },
     "DACChip": {
-      "label": "PCM5102 · 元件高度 7 mm 预留",
+      "label": "PCM5102 元件高度预留",
       "min": [
-        -77.4,
-        33.0,
-        127.0
+        19.71,
+        53.87,
+        154.5
       ],
       "max": [
-        -70.4,
-        50.0,
-        158.0
+        50.71,
+        70.87,
+        161.5
       ],
       "size": [
-        7.0,
-        17.0,
-        31.0
+        31.0,
+        17.000000000000007,
+        7.0
+      ]
+    },
+    "DACSockets": {
+      "label": "PCM5102 排母高度预留",
+      "min": [
+        19.71,
+        53.87,
+        144.4
+      ],
+      "max": [
+        50.71,
+        70.87,
+        152.9
+      ],
+      "size": [
+        31.0,
+        17.000000000000007,
+        8.5
+      ]
+    },
+    "BuckA": {
+      "label": "DCE001 A · 主控 5Vin",
+      "min": [
+        -13.5,
+        55.0,
+        144.4
+      ],
+      "max": [
+        4.0,
+        67.0,
+        151.9
+      ],
+      "size": [
+        17.5,
+        12.0,
+        7.5
+      ]
+    },
+    "BuckB": {
+      "label": "DCE001 B · 光驱／桥接器 VBUS",
+      "min": [
+        -38.0,
+        55.0,
+        144.4
+      ],
+      "max": [
+        -20.5,
+        67.0,
+        151.9
+      ],
+      "size": [
+        17.5,
+        12.0,
+        7.5
+      ]
+    },
+    "XHButtons": {
+      "label": "XH2.54 · 四键 5 芯侧插／插合包络",
+      "min": [
+        -48.9,
+        22.62,
+        144.4
+      ],
+      "max": [
+        -30.9,
+        38.620000000000005,
+        152.4
+      ],
+      "size": [
+        18.0,
+        16.000000000000004,
+        8.0
+      ]
+    },
+    "XHOLED": {
+      "label": "XH2.54 · OLED 4 芯直插／插合包络",
+      "min": [
+        -40.38,
+        41.86,
+        144.4
+      ],
+      "max": [
+        -26.880000000000003,
+        49.86,
+        155.4
+      ],
+      "size": [
+        13.5,
+        8.0,
+        11.0
+      ]
+    },
+    "XHVolumeSwitch": {
+      "label": "XH2.54 · 音量开关 2 芯直插／插合包络",
+      "min": [
+        -53.12,
+        41.86,
+        144.4
+      ],
+      "max": [
+        -44.62,
+        49.86,
+        155.4
+      ],
+      "size": [
+        8.5,
+        8.0,
+        11.0
+      ]
+    },
+    "PerfboardScrew1": {
+      "label": "洞洞板 M2×4 螺钉 1 · 名义包络",
+      "min": [
+        -29.43,
+        20.85,
+        140.4
+      ],
+      "max": [
+        -25.130000000000003,
+        25.15,
+        145.95000000000002
+      ],
+      "size": [
+        4.299999999999997,
+        4.299999999999997,
+        5.550000000000011
+      ]
+    },
+    "PerfboardScrew2": {
+      "label": "洞洞板 M2×4 螺钉 2 · 名义包络",
+      "min": [
+        11.209999999999999,
+        53.870000000000005,
+        140.4
+      ],
+      "max": [
+        15.51,
+        58.17,
+        145.95000000000002
+      ],
+      "size": [
+        4.300000000000001,
+        4.299999999999997,
+        5.550000000000011
+      ]
+    },
+    "PerfboardScrew3": {
+      "label": "洞洞板 M2×4 螺钉 3 · 名义包络",
+      "min": [
+        51.85,
+        58.95,
+        140.4
+      ],
+      "max": [
+        56.15,
+        63.25,
+        145.95000000000002
+      ],
+      "size": [
+        4.299999999999997,
+        4.299999999999997,
+        5.550000000000011
       ]
     },
     "Battery": {
@@ -640,10 +838,21 @@
       "DisplayHeader",
       "Amp",
       "AmpChip",
+      "Perfboard",
       "MCU",
       "MCUChip",
+      "MCUSockets",
       "DAC",
       "DACChip",
+      "DACSockets",
+      "BuckA",
+      "BuckB",
+      "XHButtons",
+      "XHOLED",
+      "XHVolumeSwitch",
+      "PerfboardScrew1",
+      "PerfboardScrew2",
+      "PerfboardScrew3",
       "Battery"
     ]
   },
@@ -858,6 +1067,236 @@
       },
       "direction": "right"
     },
+    "perfboard-outline": {
+      "file": "perfboard-outline.svg",
+      "bounds": {
+        "min": [
+          -54.0,
+          20.0,
+          142.8
+        ],
+        "max": [
+          57.0,
+          75.0,
+          144.4
+        ],
+        "size": [
+          111.0,
+          55.0,
+          1.5999999999999943
+        ]
+      },
+      "direction": "top"
+    },
+    "perfboard-layout": {
+      "file": "perfboard-layout.svg",
+      "bounds": {
+        "min": [
+          -54.0,
+          20.0,
+          140.4
+        ],
+        "max": [
+          57.0,
+          75.0,
+          161.5
+        ],
+        "size": [
+          111.0,
+          55.0,
+          21.099999999999994
+        ]
+      },
+      "direction": "top",
+      "parts": [
+        {
+          "objects": [
+            "Perfboard",
+            "MCU",
+            "MCUChip",
+            "MCUSockets",
+            "DAC",
+            "DACChip",
+            "DACSockets",
+            "BuckA",
+            "BuckB",
+            "XHButtons",
+            "XHOLED",
+            "XHVolumeSwitch",
+            "PerfboardScrew1",
+            "PerfboardScrew2",
+            "PerfboardScrew3"
+          ],
+          "offset_mm": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "harness-closed": {
+      "file": "harness-closed.svg",
+      "bounds": {
+        "min": [
+          -85.00000000000003,
+          8.43769498715119e-15,
+          140.0
+        ],
+        "max": [
+          85.0,
+          75.80614735197366,
+          240.0
+        ],
+        "size": [
+          170.00000000000003,
+          75.80614735197365,
+          100.0
+        ]
+      },
+      "direction": "top",
+      "parts": [
+        {
+          "objects": [
+            "Perfboard",
+            "MCU",
+            "MCUChip",
+            "MCUSockets",
+            "DAC",
+            "DACChip",
+            "DACSockets",
+            "BuckA",
+            "BuckB",
+            "XHButtons",
+            "XHOLED",
+            "XHVolumeSwitch",
+            "PerfboardScrew1",
+            "PerfboardScrew2",
+            "PerfboardScrew3"
+          ],
+          "offset_mm": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "objects": [
+            "FrontShell",
+            "Window",
+            "DisplayPCB",
+            "DisplayHeader",
+            "VolumePot",
+            "Encoder",
+            "Knob",
+            "PlayPauseSwitch",
+            "EjectSwitch",
+            "PrevSwitch",
+            "NextSwitch",
+            "ButtonRetainer"
+          ],
+          "offset_mm": [
+            0,
+            0,
+            0
+          ],
+          "clip_front_above_z": 140
+        },
+        {
+          "objects": [
+            "ButtonsHarnessClosed",
+            "OLEDHarnessClosed",
+            "VolumeSwitchHarnessClosed"
+          ],
+          "offset_mm": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "harness-open": {
+      "file": "harness-open.svg",
+      "bounds": {
+        "min": [
+          -85.00000000000003,
+          -59.99999999999999,
+          140.0
+        ],
+        "max": [
+          85.0,
+          75.0,
+          240.0
+        ],
+        "size": [
+          170.00000000000003,
+          135.0,
+          100.0
+        ]
+      },
+      "direction": "top",
+      "parts": [
+        {
+          "objects": [
+            "Perfboard",
+            "MCU",
+            "MCUChip",
+            "MCUSockets",
+            "DAC",
+            "DACChip",
+            "DACSockets",
+            "BuckA",
+            "BuckB",
+            "XHButtons",
+            "XHOLED",
+            "XHVolumeSwitch",
+            "PerfboardScrew1",
+            "PerfboardScrew2",
+            "PerfboardScrew3"
+          ],
+          "offset_mm": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "objects": [
+            "FrontShell",
+            "Window",
+            "DisplayPCB",
+            "DisplayHeader",
+            "VolumePot",
+            "Encoder",
+            "Knob",
+            "PlayPauseSwitch",
+            "EjectSwitch",
+            "PrevSwitch",
+            "NextSwitch",
+            "ButtonRetainer"
+          ],
+          "offset_mm": [
+            0,
+            -60,
+            0
+          ],
+          "clip_front_above_z": 140
+        },
+        {
+          "objects": [
+            "ButtonsHarnessOpen",
+            "OLEDHarnessOpen",
+            "VolumeSwitchHarnessOpen"
+          ],
+          "offset_mm": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
     "exploded-shell": {
       "file": "exploded-shell.svg",
       "bounds": {
@@ -888,8 +1327,8 @@
           174.79951055119366
         ],
         "03": [
-          16.875,
-          88.96245960375644
+          17.5,
+          86.94895053995764
         ],
         "04": [
           72.35,
@@ -904,8 +1343,8 @@
           217.4663830558613
         ],
         "08": [
-          18.436049341539835,
-          106.16663236028525
+          24.49822716803091,
+          104.41663236028525
         ]
       },
       "parts": [
@@ -1007,10 +1446,21 @@
             "DisplayHeader",
             "Amp",
             "AmpChip",
+            "Perfboard",
             "MCU",
             "MCUChip",
+            "MCUSockets",
             "DAC",
             "DACChip",
+            "DACSockets",
+            "BuckA",
+            "BuckB",
+            "XHButtons",
+            "XHOLED",
+            "XHVolumeSwitch",
+            "PerfboardScrew1",
+            "PerfboardScrew2",
+            "PerfboardScrew3",
             "Battery"
           ],
           "offset_mm": [
@@ -1043,8 +1493,8 @@
       "direction": "iso",
       "anchors": {
         "A": [
-          16.875,
-          88.96245960375644
+          17.5,
+          86.94895053995764
         ],
         "B": [
           -78.81793068761733,
@@ -1063,12 +1513,12 @@
           188.40382659330464
         ],
         "F": [
-          36.265,
-          250.5108384257056
+          36.92746294174281,
+          243.44624689213146
         ],
         "G": [
-          -130.5446380411414,
-          241.3452984137981
+          -24.924785911193766,
+          231.9547389718361
         ],
         "H": [
           -61.81726835925255,
@@ -1089,6 +1539,10 @@
         "L": [
           -127.20763251065878,
           327.04760059435205
+        ],
+        "M": [
+          84.15157848412052,
+          147.09395916367095
         ]
       },
       "parts": [
@@ -1156,10 +1610,11 @@
         },
         {
           "number": "F",
-          "label": "主控 PCB 与元件预留",
+          "label": "主控 PCB／元件／排母",
           "objects": [
             "MCU",
-            "MCUChip"
+            "MCUChip",
+            "MCUSockets"
           ],
           "offset_mm": [
             0,
@@ -1169,10 +1624,11 @@
         },
         {
           "number": "G",
-          "label": "DAC PCB 与元件预留",
+          "label": "DAC PCB／元件／排母",
           "objects": [
             "DAC",
-            "DACChip"
+            "DACChip",
+            "DACSockets"
           ],
           "offset_mm": [
             -100,
@@ -1243,6 +1699,26 @@
             -110,
             0,
             150
+          ]
+        },
+        {
+          "number": "M",
+          "label": "洞洞板／双降压／接插件／螺钉",
+          "objects": [
+            "Perfboard",
+            "BuckA",
+            "BuckB",
+            "XHButtons",
+            "XHOLED",
+            "XHVolumeSwitch",
+            "PerfboardScrew1",
+            "PerfboardScrew2",
+            "PerfboardScrew3"
+          ],
+          "offset_mm": [
+            100,
+            -55,
+            55
           ]
         }
       ]
@@ -1336,18 +1812,15 @@
       ]
     },
     "controls_radii": [
-      12.800000000000004,
       5.25,
       5.25,
       5.25,
-      5.25
+      5.25,
+      3.6,
+      12.800000000000004
     ],
     "knob_radius": 12.000000000000004,
     "control_cut_centers_xz": [
-      [
-        48.92699761014929,
-        117.6501785348508
-      ],
       [
         -59.0,
         106.60967767303394
@@ -1363,6 +1836,18 @@
       [
         -41.0,
         127.46395707868797
+      ],
+      [
+        47.99999999999999,
+        117.65017853485078
+      ],
+      [
+        49.0,
+        117.6501785348508
+      ],
+      [
+        48.0,
+        117.65017853485078
       ]
     ]
   },
@@ -1455,7 +1940,99 @@
     ],
     "rotation_about_shaft_deg": 90,
     "local_frame": "X right; Y inward normal along shaft; Z up slope",
-    "detail_section": "Keep local X <= 0; excludes unmeasured mounting holes and connector details"
+    "detail_section": "Keep local X <= 0; excludes unmeasured mounting holes and connector details",
+    "clearances_mm": {
+      "SpeakerCarrier": 19.75653318778733,
+      "MCUChip": 2.210000000000001,
+      "RearShell": 9.0,
+      "Drive": 26.99229925855372,
+      "Perfboard": 1.25
+    }
+  },
+  "perfboard": {
+    "bounds": {
+      "min": [
+        -54.0,
+        20.0,
+        142.8
+      ],
+      "max": [
+        57.0,
+        75.0,
+        144.4
+      ],
+      "size": [
+        111.0,
+        55.0,
+        1.5999999999999943
+      ]
+    },
+    "holes": [
+      {
+        "center_xy_mm": [
+          -27.279999999999994,
+          23.0
+        ],
+        "radius_mm": 1.1
+      },
+      {
+        "center_xy_mm": [
+          13.360000000000005,
+          56.02000000000001
+        ],
+        "radius_mm": 1.1
+      },
+      {
+        "center_xy_mm": [
+          54.0,
+          61.099999999999994
+        ],
+        "radius_mm": 1.1
+      },
+      {
+        "center_xy_mm": [
+          -27.279999999999994,
+          23.0
+        ],
+        "radius_mm": 1.1
+      },
+      {
+        "center_xy_mm": [
+          54.0,
+          61.099999999999994
+        ],
+        "radius_mm": 1.1
+      },
+      {
+        "center_xy_mm": [
+          13.360000000000005,
+          56.02000000000001
+        ],
+        "radius_mm": 1.1
+      }
+    ],
+    "board_parts": [
+      "Perfboard",
+      "MCU",
+      "MCUChip",
+      "MCUSockets",
+      "DAC",
+      "DACChip",
+      "DACSockets",
+      "BuckA",
+      "BuckB",
+      "XHButtons",
+      "XHOLED",
+      "XHVolumeSwitch",
+      "PerfboardScrew1",
+      "PerfboardScrew2",
+      "PerfboardScrew3"
+    ],
+    "service_translation_xyz_mm": [
+      0,
+      -60,
+      0
+    ]
   },
   "checks": {
     "overall_170_93_243_263": true,
@@ -1472,7 +2049,8 @@
     "grille_recess_2_5": true,
     "circular_mouth_clear": true,
     "side_ports_rear_outline_y49": true,
-    "33_finished_objects": true,
+    "44_finished_objects": true,
+    "perfboard_bounds_111_55_1_6": true,
     "pcb_module_local_15_26_2_35": true,
     "pcb_module_unturned_35_26_2_15": true,
     "three_connected_main_parts": true,

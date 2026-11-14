@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="111.0mm" height="55.0mm" viewBox="-54.0 -75.0 111.0 55.0">
+<g   fill="none"
+   stroke="rgb(0, 0, 0)"
+   stroke-linecap="butt"
+   stroke-linejoin="miter"
+   stroke-width="0.18"
+   transform="scale(1, -1)"
+  >
+<path id= "1" d=" M -43 20 L -43 40.86 " />
+<path id= "2" d=" M -43 75 L 57 75 " />
+<path id= "3" d=" M 57 52 L 57 75 " />
+<path id= "4" d=" M -43 50.86 L -43 75 " />
+<path id= "5" d=" M 57 52 L 40.25 52 " />
+<path id= "6" d=" M -54 50.86 L -43 50.86 " />
+<path id= "7" d=" M 40.25 20 L 40.25 52 " />
+<path id= "8" d=" M -54 40.86 L -54 50.86 " />
+<path id= "9" d=" M -43 20 L 40.25 20 " />
+<path id= "10" d=" M -54 40.86 L -43 40.86 " />
+<circle cx ="-27.28" cy ="23" r ="1.1" /><circle cx ="13.36" cy ="56.02" r ="1.1" /><circle cx ="54" cy ="61.1" r ="1.1" /></g>
+</svg>

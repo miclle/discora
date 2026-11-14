@@ -57,11 +57,14 @@ def main():
             return 0.0
         return a.cut(b).Volume + b.cut(a).Volume
     port_difference = difference(reflected(doc.LPort.Shape), doc.RPort.Shape)
-    exception = doc.DACPads.Shape.fuse(reflected(doc.DACPads.Shape))
-    rear_difference = difference(rear.cut(exception), reflected(rear).cut(exception))
+    old_pads = doc.getObject('DACPads')
+    if old_pads:
+        exception = old_pads.Shape.fuse(reflected(old_pads.Shape))
+        rear = rear.cut(exception)
+    rear_difference = difference(rear, reflected(rear))
     assert max(port_difference, rear_difference) < .001
-    report['mirror_difference_mm3'] = dict(ports=port_difference,
-                                          rear_except_existing_dac_pads=rear_difference)
+    rear_key = 'rear_except_existing_dac_pads' if old_pads else 'rear'
+    report['mirror_difference_mm3'] = {'ports': port_difference, rear_key: rear_difference}
     if args.baseline:
         baseline = A.openDocument(str(args.baseline.resolve()))
         differences = {}
