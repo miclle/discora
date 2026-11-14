@@ -18,12 +18,12 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = 'fb24c86b81e000e9f2db58d3b2802ead2c5aad04e26171616b4c4fc6266ced1e'
+ANNOTATED_MODEL_SHA256 = '42ffc95778377ab470bfe3daa6ca2fa57693b16db6c63bb1e4dbcf4d8d993e30'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
 LIGHT = HexColor('#d5e1e4')
-TOTAL_PAGES = 6
+TOTAL_PAGES = 7
 
 
 def main():
@@ -45,7 +45,10 @@ def main():
     bottom_check=json.loads((ROOT/'bottom-corner-checks.json').read_text())
     rear=json.loads((ROOT/'rear-thickness-checks.json').read_text())
     mount=json.loads((ROOT/'drive-mount-checks.json').read_text())
-    assert mount['model_sha256']==data['sha256'] and mount['all_pass']
+    pcb_volume=json.loads((ROOT/'volume-pcb-checks.json').read_text())
+    assert pcb_volume['model_sha256']==data['sha256'] and pcb_volume['all_pass']
+    assert pcb_volume['checker_sha256']==hashlib.sha256((ROOT/'check-volume.py').read_bytes()).hexdigest()
+    assert mount['model_sha256']==pcb_volume['baseline_sha256'] and mount['all_pass']
     assert rear['model_sha256']==mount['baseline_sha256'] and rear['all_pass']
     assert bottom_check['model_sha256']==rear['baseline_sha256'] and bottom_check['all_pass']
     assert seam['model_sha256']==bottom_check['baseline_sha256'] and seam['all_pass']
@@ -54,6 +57,8 @@ def main():
     assert integration['model_sha256']==handle['baseline_sha256']
     def evidence_matches_geometry(report,owners):
         if report['model_sha256']==data['sha256']:return True
+        if any(pcb_volume['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
+        if report['model_sha256']==pcb_volume['baseline_sha256']:return True
         if any(mount['unchanged_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
         if report['model_sha256']==mount['baseline_sha256']:return True
         if any(rear['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
@@ -109,7 +114,7 @@ def main():
         line(12,16,408,16,LIGHT)
         text(12,10,'概念设计 / CAD 静态几何 · 未经实物装配、声学或生产验收',8,MUTED)
         text(245,10,'单位 mm  |  '+scale,8,MUTED)
-        text(408,10,f'DC-V4-GA-{num:02d}  ·  2026-11-12  ·  {num}/{TOTAL_PAGES}',8,MUTED,'right')
+        text(408,10,f'DC-V4-GA-{num:02d}  ·  2026-11-14  ·  {num}/{TOTAL_PAGES}',8,MUTED,'right')
 
     def view(name,x,y,scale=1,clip_bottom=0):
         info=data['views'][name]
@@ -169,7 +174,7 @@ def main():
             y-=height
         return y
 
-    page(1,'整机外观尺寸','光驱实测适配 · 底面贴靠后壁，碟口居中；名义尺寸不代表实物验收','主视图 0.9:1')
+    page(1,'整机外观尺寸','PCB 音量模块版 · 外部操控位置保持；模块安装详见第 7 页','主视图 0.9:1')
     shoulder_z=side['outer_profile_yz'][2][1]
     handle_top=side['outer_profile_yz'][3][1]
     rear_peak_z=side['outer_profile_yz'][5][1]
@@ -328,7 +333,7 @@ def main():
         '喇叭未建盆架、磁铁和安装孔；显示内容为示意，电子板元件与接头高度含设计预留。',
         '剖图使用实际实体裁切、隐藏线消除；未施加材料剖面线，不能由线型判断材质。',
         '三个主体及拆装路径已做 CAD 检查、PLA 切片；仍需配合试片、螺钉试装、强度和走线实测。',
-        '侧饰片已加厚为 2 mm，四处 2×3 连接筋；净通流面积约 384 mm²，尚未完成声学调谐。',
+        '侧饰片厚 2 mm，四处 2×3 连接筋；通流几何来自当前 CAD，尚未完成声学调谐。',
     ],gap=8,size=9)
     c.showPage()
 
@@ -348,7 +353,7 @@ def main():
         'FrontBaffle':'双开口前障板','RearTopMount':'上固定耳（2 个）','DriveCarrier':'光驱底托 / 导轨','SlotGuide':'碟口导向框',
         'DisplayCarrier':'屏幕安装座','AmpShelf':'功放 / 桥接器托板','ElectronicsSled':'主控托板','AmpPads':'功放支撑复合件',
         'MCUPads':'主控支撑复合件','DACPads':'DAC 支撑复合件','BatteryCradle':'平排电池托盘',
-        'LDriver':'左喇叭总包络','RDriver':'右喇叭总包络','Encoder':'B50K 轴／六角螺母','VolumePot':'B50K 双联带开关主体',
+        'LDriver':'左喇叭总包络','RDriver':'右喇叭总包络','Encoder':'B50K 轴／六角螺母','VolumePot':'B50K PCB 插接模块 / 含插头包络',
         'Drive':'UJ-898 包络','Bridge':'SATA 接头 / 护线环','DisplayPCB':'OLED PCB／四孔与缺口','DisplayHeader':'OLED 弯针接头预留',
         'Amp':'功放 PCB','AmpChip':'功放元件预留','MCU':'主控 PCB','MCUChip':'主控元件预留','DAC':'DAC PCB',
         'DACChip':'DAC 元件预留','Battery':'5600 mAh 平排电池',
@@ -369,8 +374,14 @@ def main():
             text(x+1,y-4.8,labels[name],7,MUTED)
             text(x+193,y-3.5,' × '.join(fmt(n) for n in obj['size']),7.5,INK,'right')
     text(12,127,'PLA 打印：3 主体 + 4 键帽 + 焊线支架 + 旋钮 + OLED 压框 + 光驱压条 = 11 件',11,TEAL)
-    printing=json.loads((ROOT/'print-checks.json').read_text())
+    printing=json.loads((ROOT/'volume-pcb-print-checks.json').read_text())
     assert evidence_matches_geometry(printing,['FrontShell','RearShell','SpeakerCarrier']),'Main-body print geometry differs'
+    reused=printing['reused_slicing']
+    assert reused['source_model_sha256']==pcb_volume['baseline_sha256']
+    for name in ('RearShell','SpeakerCarrier'):
+        assert pcb_volume['unchanged_finished_parts_difference_mm3'][name]<.001
+        assert printing['parts'][name]['stl_sha256']==reused['unchanged_mesh_sha256'][name]
+    printing['plates']={**reused['plates'],**printing['plates']}
     keys=json.loads((ROOT/'dual-color-key-checks.json').read_text())
     assert evidence_matches_geometry(keys,['PlayPauseKey','EjectKey','PrevKey','NextKey']) and keys['slicing']['exit_code']==0
     text(12,118,'用户设备 P2SC · 按 P2S 配置 / 256³ 空间 / 0.4 喷嘴 / 0.20 层高 / 3 壁 / 15% 填充 / 树状支撑',9)
@@ -386,7 +397,7 @@ def main():
         'SATA 向下脱离、向内取出；光驱再前移 13，侧转 -30°并同步前移 20，最后抽出；安装逆序。',
         '光驱最大包络：抬升 31 姿态、侧转 61 姿态；前壳按 1 mm 抽样，其余直线段连续保守扫掠，实物未验收。',
         '四键双色：0.4 喷嘴 / 0.12 层高；白色 0.6 深；使用双色 3MF。实际色彩、配合与按压行程待测。',
-        '音量旋钮：凹位内先锁螺母，再直接压入；六筋 Ø5.6 配 Ø5.8 花轴；标记白色 0.6 深，使用黑白双色 3MF。',
+        '音量模块：绕轴转 90°；拆卸先取下整个前壳，再拆旋钮和螺母，按第 7 页退出；旋钮保持原黑白双色 3MF。',
     ],gap=7,size=8.5)
     text(12,27,'FCStd SHA-256: '+data['sha256'],8,MUTED)
     text(408,27,'来源：Discora.FCStd / build.FCMacro / drawings/geometry.json',8,MUTED,'right')
@@ -394,7 +405,11 @@ def main():
 
     page(6,'OLED 沉槽与可拆压框','依据供应商结构图；玻璃面向外移 4.4；沉槽、倒角与压框来自保存 CAD；有效区虚线标注','模组正视 4:1；安装中剖 3:1')
     oled=json.loads((ROOT/'oled-checks.json').read_text())
-    assert evidence_matches_geometry(oled,['FrontShell','Window','DisplayPCB','DisplayHeader','DisplayRetainer']) and oled['all_pass']
+    assert evidence_matches_geometry(oled,['Window','DisplayPCB','DisplayHeader','DisplayRetainer']) and oled['all_pass']
+    # FrontShell changed only inside the checked shaft-centred X=35..61 zone.
+    # The OLED mount is outside it; don't claim the entire shell is unchanged.
+    assert pcb_volume['front_change_outside_mount_mm3']<.001
+    assert data['oled']['mount_world_bounds']['max'][0]<35
     p=view('oled-module',38,86,4)
     text(109,243,'模组正面 · 排针朝斜面上方',11,TEAL,'center')
     lo,hi=p(-17.7,-18.8),p(17.7,14.7)
@@ -442,6 +457,40 @@ def main():
         '接头塑壳截面、插线和工具包络是设计预留；线材弯折、实际螺钉、打印孔补偿及装配配合仍须实测。',
         'Window 表示 OLED 自带玻璃面板；本版没有另设透明保护窗片。正前方及选定斜视方向无遮挡；不代表面板光学、密封或实物验收。',
     ],gap=7,size=8.5)
+    c.showPage()
+
+    page(7,'PCB 音量模块与安装槽','用户确认板尺寸及插接总厚度；插头 / 引脚为保守包络，未做实物验收','板面投影 3:1；安装剖视 2.6:1')
+    text(100,258,'板面投影 · 转向前的尺寸基准',11,TEAL,'center')
+    p=view('volume-module',42,153,3)
+    a0,a1=p(-17.5,3.6),p(17.5,29.8)
+    dh(a0[0],a1[0],a1[1],244,'35 PCB 宽')
+    dv(a0[1],a1[1],a0[0],28,'26.2 沿轴深度')
+    text(95,143,'板厚 1.5；轴线沿板宽居中；前边与安装面齐平',8.5,MUTED,'center')
+    text(310,258,'安装局部剖视 · 保留轴线左半体',11,TEAL,'center')
+    q=view('volume-installation',230,135,2.6)
+    b0,b1=q(3.6,17.5),q(29.8,17.5)
+    dh(b0[0],b1[0],b1[1],252,'26.2 伸入机内')
+    table(12,130,190,[
+        ('PCB 宽 / 深 / 板厚','35 / 26.2 / 1.5'),
+        ('完整插接总厚度','15，已含引脚及插好的插头'),
+        ('组件安装朝向','绕轴 90°，板宽沿斜面上下展开'),
+        ('局部包络 X / Y / Z','15 / 26.2 / 35'),
+        ('内槽 X / Y / Z','15.6 / 26.5 / 35.6'),
+        ('夹持面 / 内槽底厚','2 / 3.6；横向与后端余量0.3'),
+        ('轴总长 / 花轴长','15 / 10；轴径与螺纹沿用名义值'),
+    ],split=66,height=10)
+    table(218,120,190,[
+        ('完整包络至支架',f"{pcb_volume['module_clearances_mm']['SpeakerCarrier']:.3f}"),
+        ('至主控元件预留',f"{pcb_volume['module_clearances_mm']['MCUChip']:.3f}"),
+        ('至后壳',f"{pcb_volume['module_clearances_mm']['RearShell']:.3f}"),
+        ('至光驱',f"{pcb_volume['module_clearances_mm']['Drive']:.3f}"),
+        ('外部旋钮与轴心','保持；其余31个成品几何不变'),
+    ],split=75,height=10)
+    notes(14,48,[
+        '拆卸：先断线并向前取下整个前壳，再拆旋钮、螺母，沿轴退出模块；机内直接后拔约6 mm会碰支架。',
+        '安装：先锁螺母，再按实物关断止挡对准指示条并压入旋钮；插拔线束时托住 PCB。',
+        '原主体、轴径、齿形、螺纹和 PCB 相对轴的高度仍为名义假设；远端走线、拔插行程与开关额定值待确认。',
+    ],gap=8,size=9)
     c.showPage()
 
     c.save()

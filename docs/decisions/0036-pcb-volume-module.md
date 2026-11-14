@@ -30,7 +30,7 @@
 - [volume-pcb-print-checks.json](../../hardware/enclosure/volume-pcb-print-checks.json)：前壳重新切片；其它打印件通过不变几何及旧报告复用验证。打印文件在被忽略的 `tmp/cad-volume-pcb/print/`，未发送打印。
 - [volume-pcb-mount.png](../../hardware/enclosure/volume-pcb-mount.png)：当前保存模型的内侧近景；白色为插接预留、银色板底区为引脚预留，不是真实连接器细节。
 
-`check-volume.py --baseline <PCB替换前.FCStd>` 默认写入本次 `volume-pcb-checks.json`，裸电位器阶段的 `volume-checks.json` 保留历史。前壳安装试片更新为32×44×5，覆盖完整新槽；其它压配试片和双色旋钮几何不变。六页图册保留此前光驱适配版，音量内部槽位以当前FCStd及本记录为准。
+`check-volume.py --baseline <PCB替换前.FCStd>` 默认写入本次 `volume-pcb-checks.json`，裸电位器阶段的 `volume-checks.json` 保留历史。前壳安装试片更新为32×44×5，覆盖完整新槽；其它压配试片和双色旋钮几何不变。图册已同步为七页，第7页为当前PCB模块板面投影与安装局部剖视，爆炸图、对象清单及前壳切片数据一并更新。
 
 FreeCAD GUI接口未连接；使用本机FreeCAD几何内核保存和检查，保留无关GUI资源并更新模块材料。外部渲染及资源校验不替代GUI关闭重开的颜色读回。
 

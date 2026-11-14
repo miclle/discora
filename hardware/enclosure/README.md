@@ -2,9 +2,9 @@
 
 整机宽 **170 × 深 93 × 高 243.263 mm**（含脚垫和提手），不含脚垫为 **240.263 mm**。5600 mAh 电池按用户选定的平排 **112 × 70 × 20 mm** 商品标称包络放在底部；保留顶部进碟、前斜面操控、中央双喇叭和左右对称的外轮廓。
 
-打开 [Discora.FCStd](Discora.FCStd) 查看模型；唯一的[彩色尺寸与装配图册（6 页 A3）](drawings/Discora-V4-drawing-book-color.pdf)包含双基准高度、侧面斜肩尺寸、彩色爆炸图、侧剖、对象清单和 OLED 安装详图。分件取舍见 [ADR-0016](../../docs/decisions/0016-three-part-pla-enclosure.md)，打印姿态、切片与拆装检查见[打印与装配说明](../../docs/enclosure-printing.md)。这是已完成 CAD 和本地切片检查的原型设计，尚未做实物打印、装配或声学验收。
+打开 [Discora.FCStd](Discora.FCStd) 查看模型；唯一的[彩色尺寸与装配图册（7 页 A3）](drawings/Discora-V4-drawing-book-color.pdf)包含双基准高度、侧面斜肩尺寸、彩色爆炸图、侧剖、对象清单、OLED 和 PCB 音量模块安装详图。分件取舍见 [ADR-0016](../../docs/decisions/0016-three-part-pla-enclosure.md)，打印姿态、切片与拆装检查见[打印与装配说明](../../docs/enclosure-printing.md)。这是已完成 CAD 和本地切片检查的原型设计，尚未做实物打印、装配或声学验收。
 
-**2026-11-14 PCB 音量模块：**采用用户确认的 PCB 35×26.2×1.5、含插头／引脚总厚 15 mm 的 B50K 模块，板前边与安装面齐平。保持旋钮轴心、轴和十字旋钮，组件绕轴转 90° 避开主控元件预留。前壳内侧改为完整包络避让槽，横向各留 0.3 mm，螺母夹持面仍厚 2 mm。其余 31 个成品几何保持。当前结果见 [ADR-0036](../../docs/decisions/0036-pcb-volume-module.md)和 [PCB 模块检查](volume-pcb-checks.json)；旧 `volume-checks.json` 保留裸电位器阶段证据。总览外观仍适用；六页图册及旧安装近景保留 2026-11-12／裸电位器阶段，当前槽位与组件以 FCStd 和下图为准。
+**2026-11-14 PCB 音量模块：**采用用户确认的 PCB 35×26.2×1.5、含插头／引脚总厚 15 mm 的 B50K 模块，板前边与安装面齐平。保持旋钮轴心、轴和十字旋钮，组件绕轴转 90° 避开主控元件预留。前壳内侧改为完整包络避让槽，横向各留 0.3 mm，螺母夹持面仍厚 2 mm。其余 31 个成品几何保持。当前结果见 [ADR-0036](../../docs/decisions/0036-pcb-volume-module.md)和 [PCB 模块检查](volume-pcb-checks.json)；旧 `volume-checks.json` 保留裸电位器阶段证据。总览外观仍适用；七页图册已同步当前 FCStd，第 7 页给出 PCB 模块安装详图；旧 `volume-mount.png` 保留裸电位器阶段。
 
 ![PCB 音量模块内侧安装包络；白色为插头预留，银色板底区为引脚预留，非真实接口细节](volume-pcb-mount.png)
 

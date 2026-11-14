@@ -149,8 +149,28 @@ def main():
     installed.Placement=pose.inverse().multiply(installed.Placement)
     section=installed.common(Part.makeBox(.2,20,40,V(-.1,-1,-20)))
     projection('oled-side',section,'right')
-    data['oled']={'pcb':bounds(doc.DisplayPCB.Shape),'active_center_exterior_xyz_mm':list(pose.Base),
+    data['oled']={'pcb':bounds(doc.DisplayPCB.Shape),'mount_world_bounds':bounds(doc.DisplayCarrier.Shape),
+                 'active_center_exterior_xyz_mm':list(pose.Base),
                  'local_frame':'X right; Y inward normal; Z up slope toward header'}
+
+    # PCB module details use its own shaft datum, not its world-aligned bounds.
+    volume_pose=A.Placement(V(48,18,a.y+18*slope),A.Rotation(V(0,1,0),V(0,slope,-1)))
+    volume=doc.VolumePot.Shape.copy()
+    volume.Placement=volume_pose.inverse().multiply(volume.Placement)
+    unturned=volume.copy();unturned.rotate(V(),V(0,1,0),-90)
+    projection('volume-module',unturned,'top')
+    volume_parts=[]
+    for name in ('FrontShell','VolumePot','Encoder','Knob'):
+        shape=doc.getObject(name).Shape.copy()
+        shape.Placement=volume_pose.inverse().multiply(shape.Placement)
+        if name=='FrontShell':shape=shape.common(Part.makeBox(46,7,44,V(-23,-1,-22)))
+        volume_parts.append(shape)
+    installed=Part.makeCompound(volume_parts).common(Part.makeBox(30,60,50,V(-30,-16,-25)))
+    projection('volume-installation',installed,'right')
+    data['volume_module']={'installed_local_bounds':bounds(volume),'unturned_bounds':bounds(unturned),
+        'pcb_unturned_size_mm':[35,26.2,1.5],'shaft_center_exterior_xyz_mm':list(volume_pose.Base),
+        'rotation_about_shaft_deg':90,'local_frame':'X right; Y inward normal along shaft; Z up slope',
+        'detail_section':'Keep local X <= 0; excludes unmeasured mounting holes and connector details'}
 
     def exploded(name, definitions, expected):
         seen, pieces, anchors = [], [], {}
@@ -185,7 +205,7 @@ def main():
         ('F','主控 PCB 与元件预留',['MCU','MCUChip'],(0,25,100)),
         ('G','DAC PCB 与元件预留',['DAC','DACChip'],(-100,0,65)),
         ('H','屏幕 PCB 与接头',['DisplayPCB','DisplayHeader'],(-60,-40,130)),
-        ('I','电位器与轴',['VolumePot','Encoder'],(70,-30,90)),
+        ('I','PCB 音量模块与轴',['VolumePot','Encoder'],(70,-30,90)),
         ('J','5600 mAh 平排电池',['Battery'],(0,-10,-50)),
         ('K','SATA 接头及护线环',['Bridge'],(180,-30,-140)),
         ('L','四个轻触按键包络',['PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch'],(-110,0,150)),
@@ -207,6 +227,8 @@ def main():
         'circular_mouth_clear':doc.FrontShell.Shape.common(Part.makeCylinder(65,2.49998,A.Vector(0,.00001,76),A.Vector(0,1,0))).Volume<.001,
         'side_ports_rear_outline_y49':all(abs(doc.getObject(n).Shape.BoundBox.Center.y-49)<1e-5 for n in ('LPort','RPort','LPanelTool')),
         '33_finished_objects':len(objects)==33,
+        'pcb_module_local_15_26_2_35':all(abs(x-y)<1e-6 for x,y in zip(bounds(volume)['size'],(15,26.2,35))),
+        'pcb_module_unturned_35_26_2_15':all(abs(x-y)<1e-6 for x,y in zip(bounds(unturned)['size'],(35,26.2,15))),
         'three_connected_main_parts':all(len(doc.getObject(n).Shape.Solids)==1 for n in ('FrontShell','RearShell','SpeakerCarrier')),
         'source_unchanged':hashlib.sha256(source.read_bytes()).hexdigest()==source_hash,
     }
