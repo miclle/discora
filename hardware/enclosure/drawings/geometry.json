@@ -1,7 +1,7 @@
 {
   "model": "Discora.FCStd",
-  "sha256": "ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d",
-  "build_sha256": "a591fe80ecf4bfaf8784f7434c1cab9353c5fcbd96570da070d4bbad6a49d396",
+  "sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee",
+  "build_sha256": "e3c5fce1f96d93bb1ddeed9d7d8dbe057f4573d551986eeaa837b44016853e1e",
   "freecad_version": [
     "1",
     "1",
@@ -36,12 +36,12 @@
       ],
       "max": [
         85.0,
-        93.00000000000001,
+        94.70000000000002,
         193.68217788378598
       ],
       "size": [
         170.00000000000003,
-        88.00000000000001,
+        89.70000000000002,
         192.68217788378598
       ]
     },
@@ -54,12 +54,12 @@
       ],
       "max": [
         59.0,
-        73.0,
+        74.7,
         1.0
       ],
       "size": [
         118.0,
-        66.0,
+        67.7,
         3.0
       ]
     },
@@ -229,12 +229,12 @@
       "label": "光驱可拆压条 · 两枚名义M2×10／薄垫接触",
       "min": [
         -68.0,
-        73.2,
+        74.9,
         110.0
       ],
       "max": [
         68.0,
-        76.2,
+        77.9,
         120.0
       ],
       "size": [
@@ -247,12 +247,12 @@
       "label": "P3 · 双声腔／功放托板／洞洞板支架",
       "min": [
         -79.30000000000166,
-        4.9999999999999964,
+        6.699999999999999,
         23.0
       ],
       "max": [
         79.30000000000166,
-        62.5,
+        64.2,
         142.8
       ],
       "size": [
@@ -262,20 +262,20 @@
       ]
     },
     "LDriver": {
-      "label": "左声道 · 实测喇叭试装包络",
+      "label": "左声道 · 修正振膜静态包络",
       "min": [
         -48.5,
-        8.0,
+        5.7,
         36.0
       ],
       "max": [
         -3.5,
-        49.0,
+        50.7,
         116.0
       ],
       "size": [
         45.0,
-        41.0,
+        45.0,
         80.0
       ]
     },
@@ -283,17 +283,17 @@
       "label": "右声道 · 喇叭试装包络关联镜像",
       "min": [
         3.5,
-        8.0,
+        5.7,
         36.0
       ],
       "max": [
         48.5,
-        49.0,
+        50.7,
         116.0
       ],
       "size": [
         45.0,
-        41.0,
+        45.0,
         80.0
       ]
     },
@@ -409,12 +409,12 @@
       "label": "UJ-898 · 底面朝后／竖装向上退碟",
       "min": [
         -64.0,
-        76.2,
+        77.9,
         29.5
       ],
       "max": [
         64.0,
-        87.0,
+        88.7,
         159.5
       ],
       "size": [
@@ -427,12 +427,12 @@
       "label": "Slimline SATA · 37.7×7／后伸20.4／根部Ø6.5×3",
       "min": [
         28.3,
-        78.75,
+        80.45,
         9.100000000000001
       ],
       "max": [
         69.0,
-        85.75,
+        87.45,
         29.5
       ],
       "size": [
@@ -481,12 +481,12 @@
       "label": "TPA3118D2 · PCB 标称 66×53",
       "min": [
         -33.0,
-        6.0,
+        7.7,
         123.0
       ],
       "max": [
         33.0,
-        59.0,
+        60.7,
         124.6
       ],
       "size": [
@@ -499,12 +499,12 @@
       "label": "功放元件高度 15 mm 预留",
       "min": [
         -33.0,
-        6.0,
+        7.7,
         124.6
       ],
       "max": [
         33.0,
-        59.0,
+        60.7,
         139.6
       ],
       "size": [
@@ -517,12 +517,12 @@
       "label": "洞洞板 · 转 180°／右前缺口／左耳",
       "min": [
         -54.0,
-        20.0,
+        21.7,
         142.8
       ],
       "max": [
         57.0,
-        75.0,
+        76.7,
         144.4
       ],
       "size": [
@@ -535,17 +535,17 @@
       "label": "ESP32-S3 N16R8 · PCB／USB 与 COM 插座留空",
       "min": [
         -24.1,
-        21.73,
+        23.43,
         152.9
       ],
       "max": [
         39.29,
-        49.67,
+        51.370000000000005,
         154.5
       ],
       "size": [
         63.39,
-        27.94,
+        27.940000000000005,
         1.5999999999999943
       ]
     },
@@ -553,17 +553,17 @@
       "label": "ESP32-S3 元件高度预留",
       "min": [
         -24.1,
-        21.73,
+        23.43,
         154.5
       ],
       "max": [
         39.29,
-        49.67,
+        51.370000000000005,
         161.5
       ],
       "size": [
         63.39,
-        27.94,
+        27.940000000000005,
         7.0
       ]
     },
@@ -571,17 +571,17 @@
       "label": "ESP32-S3 排母高度预留",
       "min": [
         -24.1,
-        21.73,
+        23.43,
         144.4
       ],
       "max": [
         39.29,
-        49.67,
+        51.370000000000005,
         152.9
       ],
       "size": [
         63.39,
-        27.94,
+        27.940000000000005,
         8.5
       ]
     },
@@ -589,12 +589,12 @@
       "label": "PCM5102 · PCB",
       "min": [
         19.71,
-        53.87,
+        55.57,
         152.9
       ],
       "max": [
         50.71,
-        70.87,
+        72.57000000000001,
         154.5
       ],
       "size": [
@@ -607,12 +607,12 @@
       "label": "PCM5102 元件高度预留",
       "min": [
         19.71,
-        53.87,
+        55.57,
         154.5
       ],
       "max": [
         50.71,
-        70.87,
+        72.57000000000001,
         161.5
       ],
       "size": [
@@ -625,12 +625,12 @@
       "label": "PCM5102 排母高度预留",
       "min": [
         19.71,
-        53.87,
+        55.57,
         144.4
       ],
       "max": [
         50.71,
-        70.87,
+        72.57000000000001,
         152.9
       ],
       "size": [
@@ -643,12 +643,12 @@
       "label": "DCE001 A · 主控 5Vin",
       "min": [
         -13.5,
-        55.0,
+        56.7,
         144.4
       ],
       "max": [
         4.0,
-        67.0,
+        68.7,
         151.9
       ],
       "size": [
@@ -661,12 +661,12 @@
       "label": "DCE001 B · 光驱／桥接器 VBUS",
       "min": [
         -38.0,
-        55.0,
+        56.7,
         144.4
       ],
       "max": [
         -20.5,
-        67.0,
+        68.7,
         151.9
       ],
       "size": [
@@ -679,17 +679,17 @@
       "label": "XH2.54 · 四键 5 芯侧插／插合包络",
       "min": [
         -48.9,
-        22.62,
+        24.32,
         144.4
       ],
       "max": [
         -30.9,
-        38.620000000000005,
+        40.32000000000001,
         152.4
       ],
       "size": [
         18.0,
-        16.000000000000004,
+        16.000000000000007,
         8.0
       ]
     },
@@ -697,12 +697,12 @@
       "label": "XH2.54 · OLED 4 芯直插／插合包络",
       "min": [
         -40.38,
-        41.86,
+        43.56,
         144.4
       ],
       "max": [
         -26.880000000000003,
-        49.86,
+        51.56,
         155.4
       ],
       "size": [
@@ -715,12 +715,12 @@
       "label": "XH2.54 · 音量开关 2 芯直插／插合包络",
       "min": [
         -53.12,
-        41.86,
+        43.56,
         144.4
       ],
       "max": [
         -44.62,
-        49.86,
+        51.56,
         155.4
       ],
       "size": [
@@ -733,12 +733,12 @@
       "label": "洞洞板 M2×4 螺钉 1 · 名义包络",
       "min": [
         -29.43,
-        20.85,
+        22.55,
         140.4
       ],
       "max": [
         -25.130000000000003,
-        25.15,
+        26.849999999999998,
         145.95000000000002
       ],
       "size": [
@@ -751,12 +751,12 @@
       "label": "洞洞板 M2×4 螺钉 2 · 名义包络",
       "min": [
         11.209999999999999,
-        53.870000000000005,
+        55.57000000000001,
         140.4
       ],
       "max": [
         15.51,
-        58.17,
+        59.870000000000005,
         145.95000000000002
       ],
       "size": [
@@ -769,12 +769,12 @@
       "label": "洞洞板 M2×4 螺钉 3 · 名义包络",
       "min": [
         51.85,
-        56.410000000000004,
+        58.11000000000001,
         140.4
       ],
       "max": [
         56.15,
-        60.71,
+        62.410000000000004,
         145.95000000000002
       ],
       "size": [
@@ -788,12 +788,12 @@
       "min": [
         -56.0,
         6.0,
-        8.0
+        6.0
       ],
       "max": [
         56.0,
         76.0,
-        28.0
+        26.0
       ],
       "size": [
         112.0,
@@ -863,7 +863,7 @@
         "min": [
           -85.00000000000003,
           -2.0,
-          -93.00000000000001
+          -94.70000000000002
         ],
         "max": [
           85.0,
@@ -873,7 +873,7 @@
         "size": [
           170.00000000000003,
           243.26315789473685,
-          93.00000000000001
+          94.70000000000002
         ]
       },
       "direction": "front"
@@ -887,12 +887,12 @@
           -85.00000000000003
         ],
         "max": [
-          93.00000000000001,
+          94.70000000000002,
           241.26315789473685,
           85.0
         ],
         "size": [
-          93.00000000000001,
+          94.70000000000002,
           243.26315789473685,
           170.00000000000003
         ]
@@ -909,12 +909,12 @@
         ],
         "max": [
           85.0,
-          93.00000000000001,
+          94.70000000000002,
           241.26315789473685
         ],
         "size": [
           170.00000000000003,
-          93.00000000000001,
+          94.70000000000002,
           243.26315789473685
         ]
       },
@@ -931,12 +931,54 @@
         "max": [
           85.00000000000003,
           241.26315789473685,
-          93.00000000000001
+          94.70000000000002
         ],
         "size": [
           170.00000000000003,
           243.26315789473685,
-          93.00000000000001
+          94.70000000000002
+        ]
+      },
+      "direction": "rear"
+    },
+    "grille-clearance-section": {
+      "file": "grille-clearance-section.svg",
+      "bounds": {
+        "min": [
+          1.4999999999999996,
+          31.0,
+          -26.05
+        ],
+        "max": [
+          62.9,
+          121.0,
+          -25.949999999999996
+        ],
+        "size": [
+          61.4,
+          90.0,
+          0.10000000000000497
+        ]
+      },
+      "direction": "right"
+    },
+    "grille-back-relief": {
+      "file": "grille-back-relief.svg",
+      "bounds": {
+        "min": [
+          -68.0,
+          8.0,
+          1.5
+        ],
+        "max": [
+          68.0,
+          144.0,
+          4.0
+        ],
+        "size": [
+          136.0,
+          136.0,
+          2.5
         ]
       },
       "direction": "rear"
@@ -950,12 +992,12 @@
           -70.05
         ],
         "max": [
-          93.0,
+          94.70000000000002,
           21.150000000000006,
           -69.95
         ],
         "size": [
-          41.0,
+          42.70000000000002,
           18.650000000000006,
           0.09999999999999432
         ]
@@ -966,17 +1008,17 @@
       "file": "charging-usb-section.svg",
       "bounds": {
         "min": [
-          83.0,
+          84.7,
           17.399768513556854,
           -70.05
         ],
         "max": [
-          93.0,
+          94.70000000000002,
           33.5,
           -69.95
         ],
         "size": [
-          10.0,
+          10.000000000000014,
           16.100231486443146,
           0.09999999999999432
         ]
@@ -987,17 +1029,17 @@
       "file": "charging-ports-section.svg",
       "bounds": {
         "min": [
-          82.9,
+          84.6,
           4.0,
           -70.05
         ],
         "max": [
-          93.0,
+          94.70000000000002,
           31.0,
           -69.95
         ],
         "size": [
-          10.099999999999994,
+          10.100000000000023,
           27.0,
           0.09999999999999432
         ]
@@ -1010,7 +1052,7 @@
         "min": [
           -85.00000000000003,
           0.9999999999999991,
-          -93.00000000000001
+          -94.70000000000002
         ],
         "max": [
           85.0,
@@ -1020,7 +1062,7 @@
         "size": [
           170.00000000000003,
           192.68217788378598,
-          88.00000000000001
+          89.70000000000002
         ]
       },
       "direction": "front",
@@ -1042,12 +1084,12 @@
       "bounds": {
         "min": [
           62.0,
-          5.0,
+          6.699999999999999,
           123.95
         ],
         "max": [
           85.0,
-          26.0,
+          27.7,
           124.05
         ],
         "size": [
@@ -1063,18 +1105,18 @@
       "bounds": {
         "min": [
           36.4,
-          169.07488208336142,
-          28.989999999998698
+          169.87707483335674,
+          28.98999999999883
         ],
         "max": [
           75.0,
           193.0,
-          29.01000000000186
+          29.01000000000185
         ],
         "size": [
           38.6,
-          23.925117916638584,
-          0.02000000000316149
+          23.122925166643256,
+          0.02000000000301938
         ]
       },
       "direction": "right"
@@ -1088,14 +1130,14 @@
           -85.00000000000003
         ],
         "max": [
-          93.00000000000001,
+          94.70000000000003,
           241.26315789473688,
-          -25.99999999998771
+          -25.999999999996
         ],
         "size": [
-          93.00000000000001,
+          94.70000000000003,
           243.26315789473688,
-          59.00000000001232
+          59.00000000000403
         ]
       },
       "direction": "right"
@@ -1210,12 +1252,12 @@
       "bounds": {
         "min": [
           -54.0,
-          20.0,
+          21.7,
           142.8
         ],
         "max": [
           57.0,
-          75.0,
+          76.7,
           144.4
         ],
         "size": [
@@ -1231,12 +1273,12 @@
       "bounds": {
         "min": [
           -54.0,
-          20.0,
+          21.7,
           140.4
         ],
         "max": [
           57.0,
-          75.0,
+          76.7,
           161.5
         ],
         "size": [
@@ -1283,12 +1325,12 @@
         ],
         "max": [
           85.0,
-          75.80614735197366,
+          77.50614735197367,
           240.0
         ],
         "size": [
           170.00000000000003,
-          75.80614735197365,
+          77.50614735197365,
           100.0
         ]
       },
@@ -1364,12 +1406,12 @@
         ],
         "max": [
           85.0,
-          75.0,
+          76.7,
           240.0
         ],
         "size": [
           170.00000000000003,
-          135.0,
+          136.7,
           100.0
         ]
       },
@@ -1441,17 +1483,17 @@
         "min": [
           -148.6121593216773,
           -84.47732954037471,
-          -224.96978016433437
+          -226.24478016433437
         ],
         "max": [
-          200.1121593216773,
+          200.96215932167732,
           279.4833410031291,
           235.85135911170275
         ],
         "size": [
-          348.7243186433546,
+          349.5743186433546,
           363.96067054350385,
-          460.8211392760371
+          462.0961392760371
         ]
       },
       "direction": "iso",
@@ -1461,28 +1503,28 @@
           50.55993048146783
         ],
         "02": [
-          104.49999999999999,
-          174.79951055119366
+          104.925,
+          175.16757134780204
         ],
         "03": [
-          16.875,
-          86.40768466259236
+          17.725,
+          87.14380625580914
         ],
         "04": [
-          72.35,
-          162.24985939901455
+          73.2,
+          162.98598099223136
         ],
         "06": [
-          20.0,
-          -39.40415587219196
+          20.425,
+          -39.036095075583574
         ],
         "07": [
           -27.13974421654612,
           218.41335421670055
         ],
         "08": [
-          22.76617636046203,
-          105.5319661998163
+          23.19117636046203,
+          105.03400159264025
         ]
       },
       "parts": [
@@ -1614,49 +1656,49 @@
       "bounds": {
         "min": [
           -150.41557712058088,
-          -153.75335613813735,
-          -149.80089283341812
+          -153.0172345449206,
+          -151.07589283341812
         ],
         "max": [
-          243.39032554232523,
+          244.24032554232522,
           345.92712814569387,
           206.0960670453569
         ],
         "size": [
-          393.8059026629061,
-          499.6804842838312,
-          355.896959878775
+          394.6559026629061,
+          498.94436269061447,
+          357.17195987877506
         ]
       },
       "direction": "iso",
       "anchors": {
         "A": [
-          16.875,
-          86.40768466259236
+          17.725,
+          87.14380625580914
         ],
         "B": [
-          -79.06793068761733,
-          73.34309408747352
+          -79.21793068761733,
+          73.21319027690586
         ],
         "C": [
-          52.567930687617334,
-          35.343094087473524
+          52.417930687617336,
+          35.21319027690586
         ],
         "D": [
-          95.05,
-          164.15511528734032
+          95.9,
+          164.89123688055713
         ],
         "E": [
-          16.25,
-          188.40382659330464
+          17.1,
+          189.13994818652142
         ],
         "F": [
-          36.92746294174281,
-          243.44624689213146
+          37.77746294174281,
+          244.1823684853482
         ],
         "G": [
-          -24.924785911193766,
-          231.9547389718361
+          -24.074785911193764,
+          232.69086056505287
         ],
         "H": [
           -61.81726835925255,
@@ -1668,19 +1710,19 @@
         ],
         "J": [
           15.5,
-          -14.289419162443236
+          -16.021469970012113
         ],
         "K": [
-          224.1417085753119,
-          -139.06685256291328
+          224.9917085753119,
+          -138.3307309696965
         ],
         "L": [
           -130.67173412579655,
           328.04760059435205
         ],
         "M": [
-          84.15157848412052,
-          147.09395916367095
+          85.00157848412053,
+          147.83008075688772
         ]
       },
       "parts": [
@@ -1865,17 +1907,17 @@
       "file": "duct-section.svg",
       "bounds": {
         "min": [
-          14.9,
+          16.6,
           37.99999999999999,
           -78.0
         ],
         "max": [
-          62.50000000000001,
+          64.2,
           118.0,
           -65.5
         ],
         "size": [
-          47.60000000000001,
+          47.6,
           80.0,
           12.5
         ]
@@ -1903,12 +1945,12 @@
           -85.00000000000003
         ],
         "max": [
-          93.00000000000001,
+          94.70000000000002,
           193.68217788378598,
           85.0
         ],
         "size": [
-          88.00000000000001,
+          89.70000000000002,
           192.68217788378598,
           170.00000000000003
         ]
@@ -1937,12 +1979,12 @@
     ],
     "max": [
       85.0,
-      93.00000000000001,
+      94.70000000000002,
       241.26315789473685
     ],
     "size": [
       170.00000000000003,
-      93.00000000000001,
+      94.70000000000002,
       243.26315789473685
     ]
   },
@@ -2122,18 +2164,567 @@
       "Type-C charger board not selected or placed; no electrical charging claim."
     ]
   },
+  "grille_clearance": {
+    "model_sha256": "db3c92e282f9df48fe26a6434266dfd8539833afb579133805e6219439b3ead3",
+    "baseline_sha256": "ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d",
+    "unchanged_shapes_difference_mm3": {
+      "CowlTool": 0.0,
+      "Window": 0.0,
+      "StatusArt": 0.0,
+      "PlayPauseKey": 0.0,
+      "PlayPauseSwitch": 0.0,
+      "EjectKey": 0.0,
+      "EjectSwitch": 0.0,
+      "PrevKey": 0.0,
+      "PrevSwitch": 0.0,
+      "NextKey": 0.0,
+      "NextSwitch": 0.0,
+      "ButtonRetainer": 0.0,
+      "ButtonMounts": 0.0,
+      "Knob": 0.0,
+      "Encoder": 0.0,
+      "VolumePot": 0.0,
+      "DisplayPCB": 0.0,
+      "DisplayHeader": 0.0,
+      "DisplayRetainer": 0.0,
+      "DisplayMountLeft": 0.0,
+      "DisplayMountRight": 0.0,
+      "DisplayCarrier": 0.0,
+      "Battery": 0.0,
+      "BatteryCradle": 0.0,
+      "FrontFastenerPosts": 0.0,
+      "DisplayMountPilots": 0.0,
+      "DisplayPocket": 0.0
+    },
+    "preserved_shape_difference_mm3": {
+      "CowlTool": 0.0,
+      "LPanelTool": 0.0,
+      "LPort": 0.0,
+      "RPort": 0.0,
+      "LChamber": 0.0,
+      "RChamber": 0.0,
+      "LDriverFrame": 0.0,
+      "RDriverFrame": 0.0,
+      "FrontBaffle": 0.0,
+      "Back": 0.0,
+      "Window": 0.0,
+      "StatusArt": 0.0,
+      "PlayPauseKey": 0.0,
+      "PlayPauseSwitch": 0.0,
+      "EjectKey": 0.0,
+      "EjectSwitch": 0.0,
+      "PrevKey": 0.0,
+      "PrevSwitch": 0.0,
+      "NextKey": 0.0,
+      "NextSwitch": 0.0,
+      "ButtonRetainer": 0.0,
+      "ButtonMounts": 0.0,
+      "Knob": 0.0,
+      "Encoder": 0.0,
+      "VolumePot": 0.0,
+      "DriveBlank": 0.0,
+      "DriveTool": 0.0,
+      "Drive": 0.0,
+      "Bridge": 0.0,
+      "DriveCarrier": 0.0,
+      "DriveRetainer": 0.0,
+      "SlotGuide": 0.0,
+      "DisplayPCB": 0.0,
+      "DisplayHeader": 0.0,
+      "DisplayRetainer": 0.0,
+      "DisplayMountLeft": 0.0,
+      "DisplayMountRight": 0.0,
+      "DisplayCarrier": 0.0,
+      "AmpShelf": 0.0,
+      "Amp": 0.0,
+      "AmpChip": 0.0,
+      "AmpPads": 0.0,
+      "Perfboard": 0.0,
+      "MCU": 0.0,
+      "MCUChip": 0.0,
+      "MCUSockets": 0.0,
+      "DAC": 0.0,
+      "DACChip": 0.0,
+      "DACSockets": 0.0,
+      "BuckA": 0.0,
+      "BuckB": 0.0,
+      "XHButtons": 0.0,
+      "XHOLED": 0.0,
+      "XHVolumeSwitch": 0.0,
+      "PerfboardScrew1": 0.0,
+      "PerfboardScrew2": 0.0,
+      "PerfboardScrew3": 0.0,
+      "Battery": 0.0,
+      "BatteryCradle": 0.0,
+      "CarrierTab0": 0.0,
+      "CarrierTab1": 0.0,
+      "CarrierTab2": 0.0,
+      "CarrierTab3": 0.0,
+      "FrontFastenerPosts": 0.0,
+      "PerfboardFrontRib": 0.0,
+      "PerfboardLeftRib": 0.0,
+      "PerfboardRightRib": 0.0,
+      "PerfboardRearRail": 0.0,
+      "PerfboardSeats": 0.0,
+      "PerfboardEdgePad": 0.0,
+      "DisplayMountPilots": 0.0,
+      "DisplayPocket": 0.0,
+      "SpeakerCarrier": 0.0,
+      "PerfboardUnderWiring": 0.0,
+      "BuckAService": 0.0,
+      "BuckBService": 0.0,
+      "DACPowerConnector": 0.0,
+      "ButtonsLeadBend": 0.0,
+      "ButtonsUnplug": 0.0,
+      "OLEDLeadBend": 0.0,
+      "OLEDUnplug": 0.0,
+      "VolumeSwitchLeadBend": 0.0,
+      "VolumeSwitchUnplug": 0.0,
+      "DriveDataWire": 0.0,
+      "DACAudioWire": 0.0,
+      "SataPlugClearance": 0.0,
+      "SataCableClearance": 0.0,
+      "DiscReference": 0.0,
+      "ChargingSleeveBlanks": 0.0,
+      "ChargingPortBores": 0.0,
+      "DCChargeSocket": 0.0,
+      "USBChargeSocket": 0.0,
+      "DCChargeLead": 0.0,
+      "USBChargeLead": 0.0
+    },
+    "rigidly_relocated_shapes_difference_mm3": {
+      "LPanelTool": 0.0,
+      "LPort": 0.0,
+      "RPort": 0.0,
+      "LChamber": 0.0,
+      "RChamber": 0.0,
+      "LDriverFrame": 0.0,
+      "RDriverFrame": 0.0,
+      "FrontBaffle": 0.0,
+      "Back": 0.0,
+      "DriveBlank": 0.0,
+      "DriveTool": 0.0,
+      "Drive": 0.0,
+      "Bridge": 0.0,
+      "DriveCarrier": 0.0,
+      "DriveRetainer": 0.0,
+      "SlotGuide": 0.0,
+      "AmpShelf": 0.0,
+      "Amp": 0.0,
+      "AmpChip": 0.0,
+      "AmpPads": 0.0,
+      "Perfboard": 0.0,
+      "MCU": 0.0,
+      "MCUChip": 0.0,
+      "MCUSockets": 0.0,
+      "DAC": 0.0,
+      "DACChip": 0.0,
+      "DACSockets": 0.0,
+      "BuckA": 0.0,
+      "BuckB": 0.0,
+      "XHButtons": 0.0,
+      "XHOLED": 0.0,
+      "XHVolumeSwitch": 0.0,
+      "PerfboardScrew1": 0.0,
+      "PerfboardScrew2": 0.0,
+      "PerfboardScrew3": 0.0,
+      "CarrierTab0": 0.0,
+      "CarrierTab1": 0.0,
+      "CarrierTab2": 0.0,
+      "CarrierTab3": 0.0,
+      "PerfboardFrontRib": 0.0,
+      "PerfboardLeftRib": 0.0,
+      "PerfboardRightRib": 0.0,
+      "PerfboardRearRail": 0.0,
+      "PerfboardSeats": 0.0,
+      "PerfboardEdgePad": 0.0,
+      "SpeakerCarrier": 0.0,
+      "PerfboardUnderWiring": 0.0,
+      "BuckAService": 0.0,
+      "BuckBService": 0.0,
+      "DACPowerConnector": 0.0,
+      "ButtonsLeadBend": 0.0,
+      "ButtonsUnplug": 0.0,
+      "OLEDLeadBend": 0.0,
+      "OLEDUnplug": 0.0,
+      "VolumeSwitchLeadBend": 0.0,
+      "VolumeSwitchUnplug": 0.0,
+      "DriveDataWire": 0.0,
+      "DACAudioWire": 0.0,
+      "SataPlugClearance": 0.0,
+      "SataCableClearance": 0.0,
+      "DiscReference": 0.0,
+      "ChargingSleeveBlanks": 0.0,
+      "ChargingPortBores": 0.0,
+      "DCChargeSocket": 0.0,
+      "USBChargeSocket": 0.0,
+      "DCChargeLead": 0.0,
+      "USBChargeLead": 0.0
+    },
+    "installed_setback_mm": 1.7,
+    "p2_depth_mm": 94.7,
+    "unchanged_finished_parts": [
+      "Window",
+      "StatusArt",
+      "PlayPauseKey",
+      "EjectKey",
+      "PrevKey",
+      "NextKey",
+      "ButtonRetainer",
+      "Knob",
+      "DisplayRetainer",
+      "PlayPauseSwitch",
+      "EjectSwitch",
+      "PrevSwitch",
+      "NextSwitch",
+      "Encoder",
+      "VolumePot",
+      "DisplayPCB",
+      "DisplayHeader",
+      "Battery"
+    ],
+    "changed_finished_parts": [
+      "FrontShell",
+      "RearShell",
+      "LDriver",
+      "RDriver"
+    ],
+    "p3_entire_shape_difference_mm3": 0.0,
+    "p1_outside_grille_zone_difference_mm3": 0.0,
+    "grille_expected_local_relief_difference_mm3": 0.0,
+    "driver_at_and_behind_flange_difference_mm3": {
+      "LDriver": 0.0,
+      "RDriver": 0.0
+    },
+    "seat_y_mm": 11.7,
+    "front_envelope_depth_mm": 6,
+    "grille_front_y_mm": 1.5,
+    "grille_local_back_y_mm": 2.7,
+    "grille_back_y_mm": 4,
+    "grille_thickness_mm": 2.5,
+    "grille_local_thickness_mm": 1.2,
+    "grille_forward_shift_mm": 1,
+    "visible_aperture_diameter_mm": 130,
+    "connection_outer_diameter_mm": 136.5,
+    "local_relief": {
+      "size_xz_mm": [
+        47,
+        82
+      ],
+      "corner_radius_mm": 2,
+      "driver_projection_margin_mm": 1,
+      "centers_xz_mm": [
+        [
+          -26,
+          76
+        ],
+        [
+          26,
+          76
+        ]
+      ],
+      "center_full_thickness_web_mm": 5,
+      "added_ribs": false,
+      "physical_stiffness_verified": false
+    },
+    "clearances": {
+      "LDriver": {
+        "grille_static_mm": 3.0,
+        "rear_wall_mm": 11.0,
+        "full_flange_footprint_air_obstruction_mm3": 0,
+        "grille_negative_control_mm3": 24.25437985722435
+      },
+      "RDriver": {
+        "grille_static_mm": 3.0,
+        "rear_wall_mm": 11.0,
+        "full_flange_footprint_air_obstruction_mm3": 0,
+        "grille_negative_control_mm3": 24.254379857224468
+      }
+    },
+    "wire_corridor": {
+      "pair_envelope_mm": [
+        3.6,
+        1.8
+      ],
+      "right_waypoints_xyz_mm": [
+        [
+          26,
+          25.7,
+          114
+        ],
+        [
+          26,
+          56.7,
+          114
+        ],
+        [
+          59,
+          56.7,
+          114
+        ],
+        [
+          59,
+          48.7,
+          114
+        ],
+        [
+          59,
+          48.7,
+          118
+        ]
+      ],
+      "left_mirrored": true,
+      "collision_mm3": 0,
+      "terminal_and_bend_radius_verified": false
+    },
+    "symmetry_difference_mm3": {
+      "FrontGrille": 0.0,
+      "FrontBezel": 0.0,
+      "LDriver": 0.0
+    },
+    "color_face_order_preserved": {
+      "PlayPauseKey": true,
+      "EjectKey": true,
+      "PrevKey": true,
+      "NextKey": true,
+      "Knob": true
+    },
+    "gui_resources": {
+      "count": 362,
+      "unique": true,
+      "registered_order": true,
+      "all_bytes_preserved": true
+    },
+    "p3_printed_user_confirmed": true,
+    "p1_printed_user_confirmed": false,
+    "physical_full_assembly_verified": false,
+    "physical_excursion_verified": false,
+    "all_pass": true
+  },
+  "battery_floor": {
+    "model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee",
+    "baseline_sha256": "db3c92e282f9df48fe26a6434266dfd8539833afb579133805e6219439b3ead3",
+    "unchanged_shapes_difference_mm3": {
+      "FoldSection": 0.0,
+      "FoldedSkin": 0.0,
+      "CowlEdges": 0.0,
+      "SymmetricCowlTool": 0.0,
+      "SymmetricCowl": 0.0,
+      "CowlTool": 0.0,
+      "Cowl": 0.0,
+      "LPanelBlank": 0.0,
+      "LPanelTool": 0.0,
+      "LPanel": 0.0,
+      "RPanel": 0.0,
+      "LPort": 0.0,
+      "RPort": 0.0,
+      "LChamber": 0.0,
+      "RChamber": 0.0,
+      "FrontBezel": 0.0,
+      "FrontGrille": 0.0,
+      "LDriver": 0.0,
+      "RDriver": 0.0,
+      "LDriverFrame": 0.0,
+      "RDriverFrame": 0.0,
+      "FrontBaffle": 0.0,
+      "Back": 0.0,
+      "Base": 0.0,
+      "Feet": 0.0,
+      "Window": 0.0,
+      "StatusArt": 0.0,
+      "PlayPauseKey": 0.0,
+      "PlayPauseSwitch": 0.0,
+      "EjectKey": 0.0,
+      "EjectSwitch": 0.0,
+      "PrevKey": 0.0,
+      "PrevSwitch": 0.0,
+      "NextKey": 0.0,
+      "NextSwitch": 0.0,
+      "ButtonRetainer": 0.0,
+      "ButtonMounts": 0.0,
+      "Knob": 0.0,
+      "Encoder": 0.0,
+      "VolumePot": 0.0,
+      "DriveBlank": 0.0,
+      "DriveTool": 0.0,
+      "Drive": 0.0,
+      "Bridge": 0.0,
+      "DriveCarrier": 0.0,
+      "DriveRetainer": 0.0,
+      "SlotGuide": 0.0,
+      "DisplayPCB": 0.0,
+      "DisplayHeader": 0.0,
+      "DisplayRetainer": 0.0,
+      "DisplayMountLeft": 0.0,
+      "DisplayMountRight": 0.0,
+      "DisplayCarrier": 0.0,
+      "AmpShelf": 0.0,
+      "Amp": 0.0,
+      "AmpChip": 0.0,
+      "AmpPads": 0.0,
+      "Perfboard": 0.0,
+      "MCU": 0.0,
+      "MCUChip": 0.0,
+      "MCUSockets": 0.0,
+      "DAC": 0.0,
+      "DACChip": 0.0,
+      "DACSockets": 0.0,
+      "BuckA": 0.0,
+      "BuckB": 0.0,
+      "XHButtons": 0.0,
+      "XHOLED": 0.0,
+      "XHVolumeSwitch": 0.0,
+      "PerfboardScrew1": 0.0,
+      "PerfboardScrew2": 0.0,
+      "PerfboardScrew3": 0.0,
+      "CarrierTab0": 0.0,
+      "CarrierTab1": 0.0,
+      "CarrierTab2": 0.0,
+      "CarrierTab3": 0.0,
+      "FrontFastenerPosts": 0.0,
+      "RearFastenerCuts": 0.0,
+      "PerfboardFrontRib": 0.0,
+      "PerfboardLeftRib": 0.0,
+      "PerfboardRightRib": 0.0,
+      "PerfboardRearRail": 0.0,
+      "PerfboardSeats": 0.0,
+      "PerfboardEdgePad": 0.0,
+      "DisplayMountPilots": 0.0,
+      "DisplayPocket": 0.0,
+      "RearRoofRegion": 0.0,
+      "FrontCowl": 0.0,
+      "RearRoof": 0.0,
+      "FrontShell": 0.0,
+      "SpeakerCarrier": 0.0,
+      "PerfboardUnderWiring": 0.0,
+      "BuckAService": 0.0,
+      "BuckBService": 0.0,
+      "DACPowerConnector": 0.0,
+      "ButtonsLeadBend": 0.0,
+      "ButtonsUnplug": 0.0,
+      "OLEDLeadBend": 0.0,
+      "OLEDUnplug": 0.0,
+      "VolumeSwitchLeadBend": 0.0,
+      "VolumeSwitchUnplug": 0.0,
+      "ButtonsHarnessClosed": 0.0,
+      "ButtonsHarnessOpen": 0.0,
+      "OLEDHarnessClosed": 0.0,
+      "OLEDHarnessOpen": 0.0,
+      "VolumeSwitchHarnessClosed": 0.0,
+      "VolumeSwitchHarnessOpen": 0.0,
+      "DriveDataWire": 0.0,
+      "DACAudioWire": 0.0,
+      "SataPlugClearance": 0.0,
+      "SataCableClearance": 0.0,
+      "DiscReference": 0.0,
+      "ChargingSleeveBlanks": 0.0,
+      "ChargingPortBores": 0.0,
+      "DCChargeSocket": 0.0,
+      "USBChargeSocket": 0.0,
+      "DCChargeLead": 0.0,
+      "USBChargeLead": 0.0
+    },
+    "changed_objects": [
+      "RearShell",
+      "BatteryCradle",
+      "Battery"
+    ],
+    "removed_plinth_volume_mm3": 16120.000000000005,
+    "added_rear_material_mm3": 0,
+    "overall_depth_mm": 94.7,
+    "battery_bounds_xyz_mm": [
+      -56.0,
+      6.0,
+      6.0,
+      56.0,
+      76.0,
+      26.0
+    ],
+    "battery_down_mm": 2,
+    "floor_thickness_mm": 5,
+    "floor_contact_area_mm2": 7840,
+    "side_stop_thickness_mm": 2,
+    "side_clearance_mm": 1,
+    "side_stop_top_z_mm": 20,
+    "strap_slots": [
+      {
+        "origin_xyz_mm": [
+          -61,
+          24,
+          0.5
+        ],
+        "size_xyz_mm": [
+          3,
+          8,
+          20
+        ],
+        "obstruction_mm3": 0.0
+      },
+      {
+        "origin_xyz_mm": [
+          -61,
+          44,
+          0.5
+        ],
+        "size_xyz_mm": [
+          3,
+          8,
+          20
+        ],
+        "obstruction_mm3": 0.0
+      },
+      {
+        "origin_xyz_mm": [
+          58,
+          24,
+          0.5
+        ],
+        "size_xyz_mm": [
+          3,
+          8,
+          20
+        ],
+        "obstruction_mm3": 0.0
+      },
+      {
+        "origin_xyz_mm": [
+          58,
+          44,
+          0.5
+        ],
+        "size_xyz_mm": [
+          3,
+          8,
+          20
+        ],
+        "obstruction_mm3": 0.0
+      }
+    ],
+    "clearances_mm": {
+      "SpeakerCarrier": 4.0,
+      "Drive": 3.982461550347978,
+      "Bridge": 4.450000000000003,
+      "SataPlugClearance": 3.200000000000003,
+      "SataCableClearance": 8.0,
+      "FrontShell": 0.9999999999999911
+    },
+    "gui_resources_preserved": 362,
+    "p3_world_geometry_unchanged": true,
+    "physical_fit_verified": false,
+    "all_pass": true
+  },
   "p3_seat_ribs": [
     {
       "location": "左下",
       "bounds": {
         "min": [
           -80.0,
-          14.0,
+          15.7,
           25.0
         ],
         "max": [
           -72.0,
-          21.99999999999999,
+          23.69999999999999,
           29.0
         ],
         "size": [
@@ -2145,15 +2736,15 @@
       "plan_vertices": [
         [
           -80.0,
-          14.0
+          15.7
         ],
         [
           -80.0,
-          22.0
+          23.7
         ],
         [
           -72.0,
-          14.0
+          15.7
         ]
       ]
     },
@@ -2162,12 +2753,12 @@
       "bounds": {
         "min": [
           72.0,
-          14.0,
+          15.7,
           25.0
         ],
         "max": [
           80.0,
-          21.99999999999999,
+          23.69999999999999,
           29.0
         ],
         "size": [
@@ -2179,15 +2770,15 @@
       "plan_vertices": [
         [
           72.0,
-          14.0
+          15.7
         ],
         [
           80.0,
-          14.0
+          15.7
         ],
         [
           80.0,
-          22.0
+          23.7
         ]
       ]
     },
@@ -2196,12 +2787,12 @@
       "bounds": {
         "min": [
           -80.0,
-          14.0,
+          15.7,
           122.0
         ],
         "max": [
           -72.0,
-          21.99999999999999,
+          23.69999999999999,
           126.0
         ],
         "size": [
@@ -2213,15 +2804,15 @@
       "plan_vertices": [
         [
           -80.0,
-          14.0
+          15.7
         ],
         [
           -80.0,
-          22.0
+          23.7
         ],
         [
           -72.0,
-          14.0
+          15.7
         ]
       ]
     },
@@ -2230,12 +2821,12 @@
       "bounds": {
         "min": [
           72.0,
-          14.0,
+          15.7,
           122.0
         ],
         "max": [
           80.0,
-          21.99999999999999,
+          23.69999999999999,
           126.0
         ],
         "size": [
@@ -2247,15 +2838,15 @@
       "plan_vertices": [
         [
           72.0,
-          14.0
+          15.7
         ],
         [
           80.0,
-          14.0
+          15.7
         ],
         [
           80.0,
-          22.0
+          23.7
         ]
       ]
     }
@@ -2263,20 +2854,44 @@
   "upper_backlock_rib_section_yz": [
     [
       56.0,
-      182.57488208336144
-    ],
-    [
-      51.575163101716626,
-      185.71884514266804
-    ],
-    [
-      46.05711836729697,
       182.49998571425655
     ],
     [
       56.0,
+      182.85269811566366
+    ],
+    [
+      51.69812035260465,
+      185.79057020568604
+    ],
+    [
+      46.05711836729697,
       182.49998571425655
     ]
+  ],
+  "current_upper_backlock_ribs": [
+    {
+      "bounds_xyz_mm": [
+        -31.000000000000004,
+        44.98105369703446,
+        181.87228132326902,
+        -27.0,
+        56.0,
+        185.79057020568607
+      ],
+      "minimum_distance_to_driver_mm": 1.4999999999999736
+    },
+    {
+      "bounds_xyz_mm": [
+        27.0,
+        44.98105369703446,
+        181.87228132326902,
+        31.0,
+        56.0,
+        185.79057020568607
+      ],
+      "minimum_distance_to_driver_mm": 1.4999999999999736
+    }
   ],
   "features": {
     "handle_cut": {
@@ -2316,12 +2931,12 @@
     "slot_cut": {
       "min": [
         -62.0,
-        76.3,
+        78.0,
         145.0
       ],
       "max": [
         62.0,
-        81.8,
+        83.5,
         241.26315789473685
       ],
       "size": [
@@ -2479,10 +3094,10 @@
     "local_frame": "X right; Y inward normal along shaft; Z up slope",
     "detail_section": "Keep local X <= 0; excludes unmeasured mounting holes and connector details",
     "clearances_mm": {
-      "SpeakerCarrier": 19.756533187787333,
+      "SpeakerCarrier": 20.741185312508954,
       "MCUChip": 6.210000000000001,
-      "RearShell": 10.9696840635151,
-      "Drive": 25.291397381756017,
+      "RearShell": 11.018699241182484,
+      "Drive": 26.952481900497453,
       "Perfboard": 5.263881016650701
     }
   },
@@ -2490,12 +3105,12 @@
     "bounds": {
       "min": [
         -54.0,
-        20.0,
+        21.7,
         142.8
       ],
       "max": [
         57.0,
-        75.0,
+        76.7,
         144.4
       ],
       "size": [
@@ -2508,42 +3123,42 @@
       {
         "center_xy_mm": [
           -27.279999999999994,
-          23.0
+          24.7
         ],
         "radius_mm": 1.1
       },
       {
         "center_xy_mm": [
           13.360000000000005,
-          56.02000000000001
+          57.72000000000001
         ],
         "radius_mm": 1.1
       },
       {
         "center_xy_mm": [
           54.0,
-          58.56
+          60.260000000000005
         ],
         "radius_mm": 1.1
       },
       {
         "center_xy_mm": [
           -27.279999999999994,
-          23.0
+          24.7
         ],
         "radius_mm": 1.1
       },
       {
         "center_xy_mm": [
           54.0,
-          58.56
+          60.260000000000005
         ],
         "radius_mm": 1.1
       },
       {
         "center_xy_mm": [
           13.360000000000005,
-          56.02000000000001
+          57.72000000000001
         ],
         "radius_mm": 1.1
       }
@@ -2575,12 +3190,12 @@
     "chamber_bounds": {
       "min": [
         -79.30000000000166,
-        4.9999999999999964,
+        6.699999999999999,
         31.5
       ],
       "max": [
         0.0,
-        62.5,
+        64.2,
         120.5
       ],
       "size": [
@@ -2594,12 +3209,12 @@
     "p2_outer_bounds": {
       "min": [
         -85.0,
-        25.62213595499958,
+        27.322135954999585,
         50.9
       ],
       "max": [
         -85.0,
-        64.1,
+        65.8,
         79.1
       ],
       "size": [
@@ -2613,19 +3228,19 @@
     "interface_gap_mm": 0.7
   },
   "checks": {
-    "overall_170_93_243_263": true,
+    "overall_170_94_7_243_263": true,
     "handle_opening_90_24": true,
     "hidden_grille_cut_130": true,
     "slot_124_5_5": true,
     "screen_mouth_32_82_18_1": true,
     "battery_112_70_20": true,
-    "drive_y76_2_z29_5": true,
-    "slot_center_y79_05": true,
-    "hidden_bezel_outer_136_5": true,
+    "drive_y77_9_z29_5": true,
+    "slot_center_y80_75": true,
+    "flush_bezel_outer_136_5": true,
     "oversized_grille_136": true,
-    "grille_thickness_2_5": true,
-    "grille_recess_2_5": true,
-    "circular_mouth_clear": true,
+    "grille_main_thickness_2_5": true,
+    "grille_front_y1_5": true,
+    "no_front_protrusion": true,
     "current_outlet_outer_size": true,
     "current_terminal_area": true,
     "44_finished_objects": true,

@@ -1,0 +1,79 @@
+{
+  "model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee",
+  "rear_access": [
+    {
+      "rear_center_xyz_mm": [
+        -79.4,
+        94.7,
+        33
+      ],
+      "seat_y_mm": 14.2,
+      "well_depth_mm": 80.5,
+      "tool_diameter_mm": 4,
+      "clashes": []
+    },
+    {
+      "rear_center_xyz_mm": [
+        79.4,
+        94.7,
+        33
+      ],
+      "seat_y_mm": 14.2,
+      "well_depth_mm": 80.5,
+      "tool_diameter_mm": 4,
+      "clashes": []
+    },
+    {
+      "rear_center_xyz_mm": [
+        -29,
+        70.46218022978344,
+        179
+      ],
+      "seat_y_mm": 39.2,
+      "well_depth_mm": 31.26218022978344,
+      "tool_diameter_mm": 4,
+      "clashes": []
+    },
+    {
+      "rear_center_xyz_mm": [
+        29,
+        70.46218022978344,
+        179
+      ],
+      "seat_y_mm": 39.2,
+      "well_depth_mm": 31.26218022978344,
+      "tool_diameter_mm": 4,
+      "clashes": []
+    }
+  ],
+  "rear_shoulder_normal_thickness": [
+    {
+      "fraction": 0.1,
+      "normal_thickness_mm": 4.990852074616808
+    },
+    {
+      "fraction": 0.25,
+      "normal_thickness_mm": 4.9842412162361125
+    },
+    {
+      "fraction": 0.5,
+      "normal_thickness_mm": 4.9732231189349765
+    },
+    {
+      "fraction": 0.75,
+      "normal_thickness_mm": 4.9622050216338645
+    },
+    {
+      "fraction": 0.9,
+      "normal_thickness_mm": 4.955594163253192
+    }
+  ],
+  "minimum_sampled_normal_thickness_mm": 4.955594163253192,
+  "front_horizontal_run_mm": 44,
+  "rear_horizontal_run_mm": 45.7,
+  "front_angle_deg": 35.39479584498706,
+  "rear_angle_deg": 34.37584995384972,
+  "side_outlet_axial_gap_mm": 0.7,
+  "physical_fit_verified": false,
+  "all_pass": true
+}

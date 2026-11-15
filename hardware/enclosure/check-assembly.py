@@ -136,10 +136,11 @@ def check(doc):
     print('PATH battery_front',hits,flush=True)
     moving=['FrontShell','Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch','Knob','Encoder','VolumePot','DisplayPCB','DisplayHeader','DisplayRetainer']
     fixed=[n for n in objects if n not in moving]
-    # Fixed objects all start at Y>=5. The exterior slab at Y<=5 moves
-    # monotonically away and cannot intersect them; retain all inward posts.
-    assert all(objects[n].Shape.BoundBox.YMin>=5-1e-7 for n in fixed)
-    clip=Part.makeBox(400,300,500,V(-200,5.00001,-100))
+    # The corrected diaphragm extends 1 mm ahead of the printed P3 rim.
+    # Only discard the exterior slab ahead of every fixed object: it moves
+    # monotonically away. Retain all geometry behind that measured bound.
+    fixed_front=min(objects[n].Shape.BoundBox.YMin for n in fixed)
+    clip=Part.makeBox(400,300,500,V(-200,fixed_front+.00001,-100))
     # Clip and test each part separately. The assembled OLED frame bears on
     # the PCB; a compound boolean needlessly resolves these internal contacts.
     # Collision against fixed objects distributes over the moving parts.
@@ -153,6 +154,7 @@ def check(doc):
             found=collisions(shape,fixed)
             if found:hits.append({'front_y_mm':dy,'moving_object':name,'hits':found})
     report['paths']['front_cover']={'method':'exact per-part B-rep samples; 1 mm forward steps',
+        'frontmost_fixed_y_mm':fixed_front,
         'waypoints_xyz_mm':[[0,0,0],[0,-140,0]],'moving':moving,'fixed':fixed,
         'prerequisites':['Four recessed rear-access front-cover screws removed','Control/display cables disconnected'],
         'clashes':hits}

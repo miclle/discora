@@ -1,7 +1,7 @@
 {
-  "sha256": "ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d",
-  "build_sha256": "a591fe80ecf4bfaf8784f7434c1cab9353c5fcbd96570da070d4bbad6a49d396",
-  "geometry_sha256": "c8ed3ac04b0a7bcde998bc9ece60f4b6e3296e293536fdc76fbb725a38d74bbd",
+  "sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee",
+  "build_sha256": "e3c5fce1f96d93bb1ddeed9d7d8dbe057f4573d551986eeaa837b44016853e1e",
+  "geometry_sha256": "34a56b72fb17eb077d0065f8bbaf65eccd8b3a3065ef8926f85261081028dfb6",
   "palette": {
     "ORANGE": [
       1.0,
@@ -393,7 +393,7 @@
     "right": {
       "file": "right-color.png",
       "size_px": [
-        1117,
+        1137,
         2920
       ]
     },
@@ -401,7 +401,7 @@
       "file": "top-color.png",
       "size_px": [
         2041,
-        1117
+        1137
       ]
     },
     "rear": {
@@ -421,7 +421,7 @@
     "section": {
       "file": "section-color.png",
       "size_px": [
-        1117,
+        1137,
         2920
       ]
     },
@@ -436,34 +436,34 @@
       "file": "harness-closed-color.png",
       "size_px": [
         2041,
-        910
+        931
       ]
     },
     "harness-open": {
       "file": "harness-open-color.png",
       "size_px": [
         2041,
-        1620
+        1641
       ]
     },
     "exploded-shell": {
       "file": "exploded-shell-color.png",
       "size_px": [
-        4185,
+        4195,
         4368
       ]
     },
     "exploded-core": {
       "file": "exploded-core-color.png",
       "size_px": [
-        4726,
-        5997
+        4736,
+        5988
       ]
     },
     "port-assembly": {
       "file": "port-assembly-color.png",
       "size_px": [
-        1057,
+        1077,
         2313
       ]
     }

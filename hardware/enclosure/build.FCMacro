@@ -16,6 +16,7 @@ import speaker_wire_geometry as speaker_wires
 import speaker_print_geometry as speaker_print
 import speaker_duct_geometry as speaker_duct
 import charging_port_geometry as charging_ports
+import rear_setback_geometry as rear_setback
 
 V = A.Vector
 X, Y, Z = V(1, 0, 0), V(0, 1, 0), V(0, 0, 1)
@@ -30,7 +31,8 @@ DRIVE = (128.0, 10.8, 130.0)  # measured maximum envelope; front lip is thicker 
 # The flange keeps the original nominal outside width/height as an envelope.
 SPEAKER_FLANGE = (45.0, 80.0)
 SPEAKER_BASKET = (38.3, 70.5)  # width, height of the measured maximum section
-SPEAKER_FRONT_DEPTH, SPEAKER_REAR_DEPTH = 2.0, 39.0
+SPEAKER_FRONT_DEPTH, SPEAKER_REAR_DEPTH = 6.0, 39.0
+SPEAKER_FLANGE_THICKNESS = 2.0  # nominal fixed flange, distinct from moving-front envelope
 SPEAKER_SEAT_Y = 10.0
 SPEAKER_CORNER_RADIUS = 12.0  # trial radius; the basket outline is unmeasured
 SPEAKER_FIT_CLEARANCE = 0.5  # per side at the straight edges
@@ -76,8 +78,11 @@ PORT_CENTER_Y, PORT_CENTER_Z = 47.5, speaker_duct.ELBOW_Z
 CHAMBER_DEPTH = 52.0 + (CASE_DEPTH - 82.0) / 2
 CHAMBER_SIDE_X = INNER_HALF_WIDTH - 0.7
 FRONT_GRILLE_RADIUS = 65.0
-# A true circular mouth precedes the grille; +Y is inward from the front face.
-FRONT_GRILLE_RECESS = 2.5
+# Printed P3 retains its local Y=10 seat and installs 1.7 mm rearwards.
+# Apex Y=5.7 minus locally relieved grille back Y=2.7 gives 3 mm.
+FRONT_GRILLE_RECESS = 1.5  # front surface relative to the original face Y=0
+FRONT_GRILLE_THICKNESS = 2.5
+FRONT_GRILLE_LOCAL_THICKNESS = 1.2  # only behind each complete driver footprint
 GRILLE_HOLE_RADIUS, GRILLE_PITCH = .94, 2.9
 GRILLE_UNDERLAP = 3.0
 # Supplier image: selected flat 5600 mAh pack, excluding leads/connectors.
@@ -470,10 +475,12 @@ def build(folder):
     zc=SPEAKER_CENTER_Z
     radius=FRONT_GRILLE_RADIUS
     mesh_radius=radius+GRILLE_UNDERLAP
-    bezel=cylinder(mesh_radius+.25,FRONT_THICKNESS-FRONT_GRILLE_RECESS,
-                   (0,FRONT_GRILLE_RECESS,zc),Y).cut(cylinder(mesh_radius-.1,7,(0,-.1,zc),Y))
-    feature("FrontBezel","面板下方 · 隐藏护网连接环",bezel,TEAL,shell)
-    grille=cylinder(mesh_radius,FRONT_THICKNESS-FRONT_GRILLE_RECESS,(0,FRONT_GRILLE_RECESS,zc),Y)
+    # Keep the front pattern flush and the original thickness around it.
+    # Backside pockets alone provide diaphragm clearance; no added ribs.
+    bezel=cylinder(mesh_radius+.25,FRONT_THICKNESS-FRONT_GRILLE_RECESS,(0,FRONT_GRILLE_RECESS,zc),Y).cut(
+        cylinder(radius,FRONT_THICKNESS+.2,(0,-.1,zc),Y))
+    feature("FrontBezel","内凹护网 · 周边连接环",bezel,TEAL,shell)
+    grille=cylinder(mesh_radius,FRONT_GRILLE_THICKNESS,(0,FRONT_GRILLE_RECESS,zc),Y)
     vents=[]
     grid_extent = int(mesh_radius / GRILLE_PITCH) + 1
     for row in range(-grid_extent,grid_extent+1):
@@ -484,7 +491,16 @@ def build(folder):
             # masks perimeter holes naturally; its visible aperture has no lip.
             if math.hypot(dx,dz)+GRILLE_HOLE_RADIUS<=mesh_radius-1:
                 vents.append(cylinder(GRILLE_HOLE_RADIUS,FRONT_THICKNESS+1,(dx,FRONT_GRILLE_RECESS-.1,zc+dz),Y))
-    feature("FrontGrille","中央双喇叭 · 内凹 2.5 mm 通孔护网",grille.cut(Part.makeCompound(vents)),TEAL,shell)
+    grille=grille.cut(Part.makeCompound(vents))
+    reliefs=[]
+    for x in (-SPEAKER_CENTER_X,SPEAKER_CENTER_X):
+        # 1 mm margin around the whole 45x80 flange projection also covers
+        # an unmeasured moving contour; R2 corners remain outside it.
+        relief=box(x-23.5,FRONT_GRILLE_RECESS+FRONT_GRILLE_LOCAL_THICKNESS,zc-41,47,1.5,82)
+        relief=relief.makeFillet(2,[e for e in relief.Edges if e.BoundBox.YLength>1.4])
+        reliefs.append(relief)
+    grille=grille.cut(Part.makeCompound(reliefs)).removeSplitter()
+    feature("FrontGrille","中央双喇叭 · 内凹 1.5 mm 护网，背面双局部减薄",grille,TEAL,shell)
     width,height=SPEAKER_FLANGE
     cx=-SPEAKER_CENTER_X
     sx,sz=cx-width/2,zc-height/2
@@ -499,11 +515,12 @@ def build(folder):
 
     pitch_x,pitch_z=SPEAKER_HOLE_PITCH
     screw_axes=[(cx+dx,zc+dz) for dx in (-pitch_x/2,pitch_x/2) for dz in (-pitch_z/2,pitch_z/2)]
-    flange=box(sx,seat-SPEAKER_FRONT_DEPTH,sz,width,SPEAKER_FRONT_DEPTH,height)
-    flange=flange.cut([cylinder(SPEAKER_HOLE_DIAMETER/2,SPEAKER_FRONT_DEPTH+2,(x,seat-SPEAKER_FRONT_DEPTH-1,z),Y)
+    flange=box(sx,seat-SPEAKER_FLANGE_THICKNESS,sz,width,SPEAKER_FLANGE_THICKNESS,height)
+    flange=flange.cut([cylinder(SPEAKER_HOLE_DIAMETER/2,SPEAKER_FLANGE_THICKNESS+2,(x,seat-SPEAKER_FLANGE_THICKNESS-1,z),Y)
                        for x,z in screw_axes])
-    driver=flange.fuse(basket_prism(0,seat,SPEAKER_REAR_DEPTH)).removeSplitter()
-    left_driver=feature("LDriver","左声道 · 实测喇叭试装包络",driver,RUBBER,hardware)
+    moving_front=basket_prism(0,seat-SPEAKER_FRONT_DEPTH,SPEAKER_FRONT_DEPTH-SPEAKER_FLANGE_THICKNESS)
+    driver=flange.fuse([moving_front,basket_prism(0,seat,SPEAKER_REAR_DEPTH)]).removeSplitter()
+    left_driver=feature("LDriver","左声道 · 修正振膜静态包络",driver,RUBBER,hardware)
     mirrored("RDriver","右声道 · 喇叭试装包络关联镜像",left_driver,RUBBER,hardware)
 
     # Front loading: a full flange entry leads to a 3 mm seat plate.
@@ -708,12 +725,11 @@ def build(folder):
         feature(f"PerfboardScrew{i}",f"洞洞板 M2×{length} 螺钉 {i} · 名义包络",
                 perfboard.screw_shape(x,y,length),SILVER,hardware)
     bx,by,_=BATTERY
-    block("Battery","5600 mAh 平排电池包 · 商品标称 112×70×20",(-bx/2,6,8),BATTERY,BLUE,hardware)
-    # A centered open-ended tray leaves 1 mm at each side of the pack.
-    # Lead routing and final retention require the physical pack; no invented holes.
-    cradle=box(-bx/2-3,6,6,bx+6,by,2)
-    cradle=cradle.multiFuse([box(x,6,8,2,50,12) for x in (-bx/2-3,bx/2+1)])
-    feature("BatteryCradle","底部平排电池托盘 · 线材与固定方式待实测",cradle.removeSplitter(),TEAL,supports)
+    block("Battery","5600 mAh 平排电池包 · 商品标称 112×70×20",(-bx/2,6,6),BATTERY,BLUE,hardware)
+    # The pack rests on the existing 5 mm floor; retain the two side stops.
+    # Separate stops join through P2, with 1 mm clearance on either side.
+    cradle=Part.makeCompound([box(x,6,6,2,50,14) for x in (-bx/2-3,bx/2+1)])
+    feature("BatteryCradle","电池左右挡板 · 直接落底／保留绑带槽",cradle,TEAL,supports)
 
     # Move the complete display stack together, including the native PCB boxes.
     for name in ('Window','StatusArt','DisplayPCB','DisplayHeader','DisplayRetainer'):
@@ -875,6 +891,7 @@ def build(folder):
     disc.ViewObject.DisplayMode="Shaded"
     disc.Visibility=False
 
+    rear_setback.apply(doc)
     doc.recompute()
     for o in visible:
         o.Visibility = True

@@ -1,22 +1,22 @@
 {
-  "model_sha256": "ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d",
-  "manifest_sha256": "2db4587871901e099f5c85ffbd874ea38e2337ad8deb029b06500f24f3686cc8",
+  "model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee",
+  "manifest_sha256": "9720c4fb10a316ea9d685abd4deeb09eba0cdbaa48ba3ed8e337a7f62451e3d5",
   "meshes": {
     "FrontShell": {
       "closed": true,
-      "relative_cad_volume_error": 0.0005974092652522473,
+      "relative_cad_volume_error": 0.0005288112408543281,
       "on_bed": true,
       "fits_bed": true
     },
     "RearShell": {
       "closed": true,
-      "relative_cad_volume_error": 1.2558959304739884e-06,
+      "relative_cad_volume_error": 9.343978051423767e-07,
       "on_bed": true,
       "fits_bed": true
     },
     "SpeakerCarrier": {
       "closed": true,
-      "relative_cad_volume_error": 9.946772690335542e-05,
+      "relative_cad_volume_error": 9.946772690396919e-05,
       "on_bed": true,
       "fits_bed": true
     },
@@ -58,7 +58,7 @@
     },
     "DriveRetainer": {
       "closed": true,
-      "relative_cad_volume_error": 2.7851445737167572e-05,
+      "relative_cad_volume_error": 2.785144573705136e-05,
       "on_bed": true,
       "fits_bed": true
     },
@@ -72,14 +72,14 @@
   "plates": {
     "FrontShell": {
       "layers": 245,
-      "extrusion_moves": 2859169,
+      "extrusion_moves": 2223141,
       "mesh_repairs": 0,
       "settings_persisted": true,
       "archive_valid": true
     },
     "RearShell": {
-      "layers": 440,
-      "extrusion_moves": 1328814,
+      "layers": 448,
+      "extrusion_moves": 1302005,
       "mesh_repairs": 0,
       "settings_persisted": true,
       "archive_valid": true

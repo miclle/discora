@@ -1,7 +1,7 @@
 {
   "date": "2026-11-15",
   "model": "Discora.FCStd",
-  "sha256": "ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d",
+  "sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee",
   "version": [
     "1",
     "1",
@@ -179,7 +179,7 @@
   ],
   "assembly_size_xyz_mm": [
     170.00000000000003,
-    93.00000000000001,
+    94.70000000000002,
     243.26315789473685
   ],
   "mirror_plane": "X=0",
@@ -203,7 +203,7 @@
   "disc_sweep_mm": {
     "origin": [
       -60,
-      78.45,
+      80.15,
       31.5
     ],
     "size": [
@@ -214,44 +214,44 @@
   },
   "side_port_handle_alignment": {
     "handle_center_y_mm": 46.5,
-    "rear_outline_center_y_mm": 49.00000000000001,
+    "rear_outline_center_y_mm": 49.85000000000001,
     "port_center_y_mm": {
-      "LPort": 44.861067977499786,
-      "RPort": 44.861067977499786
+      "LPort": 46.56106797749979,
+      "RPort": 46.56106797749979
     },
-    "shell_opening_center_y_mm": 44.86106797749979
+    "shell_opening_center_y_mm": 46.56106797749979
   },
   "side_air_paths": {
     "L": {
       "points_mm": [
         [
           -26,
-          55,
+          56.7,
           76
         ],
         [
           -52,
-          55,
+          56.7,
           76
         ],
         [
           -52,
-          55,
+          56.7,
           103
         ],
         [
           -65.5,
-          55,
+          56.7,
           103
         ],
         [
           -65.5,
-          55,
+          56.7,
           65
         ],
         [
           -87,
-          55,
+          56.7,
           65
         ]
       ],
@@ -262,32 +262,32 @@
       "points_mm": [
         [
           26,
-          55,
+          56.7,
           76
         ],
         [
           52,
-          55,
+          56.7,
           76
         ],
         [
           52,
-          55,
+          56.7,
           103
         ],
         [
           65.5,
-          55,
+          56.7,
           103
         ],
         [
           65.5,
-          55,
+          56.7,
           65
         ],
         [
           87,
-          55,
+          56.7,
           65
         ]
       ],
@@ -299,7 +299,7 @@
     "amp_input": {
       "origin_mm": [
         -48,
-        6,
+        7.7,
         123
       ],
       "size_mm": [
@@ -312,7 +312,7 @@
     "amp_output": {
       "origin_mm": [
         33,
-        6,
+        7.7,
         123
       ],
       "size_mm": [
@@ -334,9 +334,9 @@
     }
   },
   "key_clearances_mm": {
-    "Battery / FrontShell": 0.9999999999999956,
-    "Battery / SpeakerCarrier": 3.5,
-    "MCUChip / FrontShell": 9.039302411403133,
+    "Battery / FrontShell": 0.9999999999999911,
+    "Battery / SpeakerCarrier": 4.0,
+    "MCUChip / FrontShell": 10.023954536124775,
     "Drive / Perfboard": 1.2000000000000028,
     "VolumePot / Perfboard": 5.263881016650701
   },
@@ -354,10 +354,10 @@
     "origin_xyz_mm": [
       -56.0,
       6.0,
-      8.0
+      6.0
     ],
     "front_inner_wall_gap_mm": 1.0,
-    "rear_inner_wall_gap_mm": 12.0,
+    "rear_inner_wall_gap_mm": 13.700000000000003,
     "cradle_side_gap_mm": 1,
     "lead_and_connector_envelope_verified": false,
     "retention_verified": false
@@ -375,18 +375,18 @@
       "angle_deg": 35.39479584498706
     },
     "rear": {
-      "horizontal_width_mm": 44.0,
+      "horizontal_width_mm": 45.7,
       "rise_mm": 31.26315789473685,
-      "surface_width_mm": 53.975781991104554,
-      "angle_deg": 35.39479584498706
+      "surface_width_mm": 55.37034442326729,
+      "angle_deg": 34.37584995384972
     }
   },
   "front_panel_thickness_samples_mm": {
     "vertical_-60_150": 4.999999999999995,
     "vertical_60_150": 4.999999999999995,
-    "vertical_-67_80": 4.999999999999995,
-    "vertical_67_80": 4.999999999999995,
-    "vertical_0_6": 4.999999999999995,
+    "vertical_-75_80": 4.999999999999995,
+    "vertical_75_80": 4.999999999999995,
+    "vertical_0_3": 4.999999999999995,
     "slope_-30_8": 5.000000000000003,
     "slope_30_8": 5.000000000000001,
     "slope_-25_30": 5.000000000000006,
@@ -407,13 +407,10 @@
   },
   "recessed_grille": {
     "opening_diameter_mm": 130,
-    "recess_mm": 2.5,
+    "recess_mm": 1.5,
     "grille_thickness_mm": 2.5,
-    "mouth_obstruction_mm3": 0.0,
-    "complete_front_circle_radii_mm": [
-      65.0
-    ],
-    "grille_back_y_mm": 5.0,
+    "grille_back_y_mm": 4.0,
+    "local_thickness_mm": 1.2,
     "driver_front_gap_mm": 3.0,
     "sheet_diameter_mm": 136,
     "panel_underlap_mm": 3,
@@ -423,10 +420,14 @@
     "partially_masked_edge_holes": 92,
     "fully_masked_holes": 4,
     "continuous_visible_rim": false,
+    "recessed_face": true,
+    "local_relief_47x82_r2_mm": true,
     "minimum_hole_web_mm": 1.02
   },
   "speaker_mount": {
-    "seat_y_mm": 10,
+    "seat_y_mm": 11.7,
+    "front_envelope_depth_mm": 6,
+    "static_diaphragm_clearance_mm": 3,
     "trial_opening_zx_mm": [
       71.5,
       39.3

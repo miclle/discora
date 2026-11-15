@@ -1,5 +1,5 @@
 {
-  "sha256": "ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d",
+  "sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee",
   "units": "mm",
   "outer_profile_yz": [
     [
@@ -27,7 +27,7 @@
       193.68217788378598
     ],
     [
-      93.0,
+      94.7,
       162.41901998904913
     ]
   ],
@@ -35,9 +35,9 @@
   "shell_bottom_z": 0.9999999999999991,
   "foot_height": 3.0,
   "front_horizontal_width_mm": 44.0,
-  "rear_horizontal_width_mm": 44.0,
+  "rear_horizontal_width_mm": 45.7,
   "front_surface_width_mm": 53.975781991104554,
-  "rear_surface_width_mm": 53.975781991104554,
+  "rear_surface_width_mm": 55.37034442326729,
   "front_angle_deg": 35.39479584498706,
-  "rear_angle_deg": 35.39479584498706
+  "rear_angle_deg": 34.37584995384972
 }

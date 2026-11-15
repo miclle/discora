@@ -1,0 +1,59 @@
+{
+  "model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee",
+  "geometry_sha256": "34a56b72fb17eb077d0065f8bbaf65eccd8b3a3065ef8926f85261081028dfb6",
+  "color_render_sha256": "86c6fb07c4e4845cb968ba0ebda9ae3adb1527aa6f1e084e341ad3c63c22ed62",
+  "drawing_script_sha256": "c28b78612f5bcc0c8274cdc43c75b32be825127cbe0feece3a6ab591a56eecfd",
+  "pdf_sha256": "4ff1294b59e5238a0e4b08f2be97ae3140af88b41f796f43c3c1d09af945c393",
+  "pages": 14,
+  "rendered_pages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "reviewed_pages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "full_size_reviewed_pages": [
+    4,
+    10,
+    11,
+    13
+  ],
+  "review": "All 14 pages rendered at 1800 px and inspected in contact sheets. Battery side section, P2 interior and charging-port pages also inspected at full size. Battery now meets the existing floor; height annotations and Z=6..26 match saved CAD. P3 and depth remain unchanged. No clipping or overlapping labels observed.",
+  "previews": {
+    "dimensions-color-preview.png": "e9030a440173be09d41e0f9dd8ea70f707a51fd7060c68358b999d9e63ac9e38",
+    "exploded-color-preview.png": "cf9acf95394e1f9be1074e25dee26233e5d094136d7b96356f8fd7be11bab79f",
+    "oled-dimensions-preview.png": "6d6cd30b2871bea21be709d457c7061848c43b5c1029c28d42e89752a48e0611",
+    "volume-module-preview.png": "0b07626f029e7024130b799c63b3696f3507e3f77c6ef29a20a5fefff9ccd039",
+    "perfboard-layout-preview.png": "7a9dfc3fbbe20b6f6ee98c1935f8e6f7f94392285d3e1ab999ee49ffb4f164fa",
+    "front-harness-preview.png": "56d8188574634d8875428a5b64d584136c01af1fec75160b61b769ce71eea424",
+    "acoustic-outlet-preview.png": "522a81ee056a0f2e217342857b7ba2661e82fb578890988ed4e4493724ce6a36",
+    "charging-ports-preview.png": "ef36a7b93669319af9decd3da821385b13cae6d55586411c250076606123af80",
+    "grille-clearance-preview.png": "eeb14f917a73e0bd139b7cbb4edce7d29e8209c2163cb0bbb0b2e22d1979a54d"
+  },
+  "all_pass": true
+}

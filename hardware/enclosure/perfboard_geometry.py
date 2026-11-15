@@ -148,17 +148,17 @@ HARNESS_ROUTES = {
 }
 
 
-def harness_segments(name, opening=0):
+def harness_segments(name, opening=0, board_setback=0):
     """Build an envelope with a swept semicircle and straight routing segments."""
     radius, loop_y, (left, right, z), board_end, cover_end = HARNESS_ROUTES[name]
-    loop_y -= opening / 2
+    loop_y += board_setback - opening / 2
     start, finish = V(left, loop_y, z), V(right, loop_y, z)
     bend_radius = (right-left) / 2
     crown = V((left+right)/2, loop_y+bend_radius, z)
     bend = Part.Wire([Part.Arc(start, crown, finish).toShape()])
     profile = Part.Wire([Part.makeCircle(radius, start, V(0, 1, 0))])
     loop = bend.makePipeShell([profile], True, False)
-    before = [V(*point) for point in board_end] + [start]
+    before = [V(x, y+board_setback, z) for x, y, z in board_end] + [start]
     after = [finish] + [V(x, y-opening, z) for x, y, z in cover_end]
     segments = [loop]
     length = bend.Length
@@ -174,8 +174,8 @@ def harness_segments(name, opening=0):
     return segments, length
 
 
-def harness_shape(name, opening=0):
-    segments, _ = harness_segments(name, opening)
+def harness_shape(name, opening=0, board_setback=0):
+    segments, _ = harness_segments(name, opening, board_setback)
     return Part.makeCompound(segments)
 
 FIXED_WIRE_ROUTES = {

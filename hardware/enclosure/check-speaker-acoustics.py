@@ -32,7 +32,8 @@ def check_wire_corridor(doc):
              Part.makeBox(36.6, 1.8, 1.8, V(24.2, 54.1, 113.1)),
              Part.makeBox(3.6, 9.8, 1.8, V(57.2, 46.1, 113.1)),
              Part.makeBox(3.6, 1.8, 4.9, V(57.2, 46.1, 113.1))]
-    right = Part.makeCompound(parts)
+    setback=float(getattr(doc.SpeakerCarrier, "InstalledSetback", 0))
+    right = Part.makeCompound(parts).translated(V(0,setback,0))
     matrix = App.Matrix(); matrix.A11 = -1
     left = right.copy(); left.transformShape(matrix, True)
     for shape in (left, right):
@@ -40,8 +41,8 @@ def check_wire_corridor(doc):
             assert shape.common(doc.getObject(name).Shape).Volume < TOL
     return {
         'pair_envelope_mm': [3.6, 1.8],
-        'right_waypoints_xyz_mm': [[26, 24, 114], [26, 55, 114],
-                                   [59, 55, 114], [59, 47, 114], [59, 47, 118]],
+        'right_waypoints_xyz_mm': [[26, 24+setback, 114], [26, 55+setback, 114],
+                                   [59, 55+setback, 114], [59, 47+setback, 114], [59, 47+setback, 118]],
         'left_mirrored': True, 'collision_mm3': 0,
         'terminal_and_bend_radius_verified': False,
     }

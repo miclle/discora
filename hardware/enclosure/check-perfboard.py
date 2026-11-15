@@ -46,6 +46,7 @@ def grip_corridor(unplug):
 def check(path, baseline=None):
     doc = App.openDocument(str(path))
     before = App.openDocument(str(baseline)) if baseline else None
+    setback=float(getattr(doc.SpeakerCarrier,"InstalledSetback",0))
     finished = {
         obj.Name: obj.Shape for group in ("Shell", "Controls", "Carrier", "Hardware")
         for obj in doc.getObject(group).Group
@@ -89,6 +90,7 @@ def check(path, baseline=None):
 
     mount_checks = []
     for index, (x, y, length, hole) in enumerate(geometry.MOUNTS, 1):
+        y += setback
         screw = "PerfboardScrew" + str(index)
         shaft = geometry.bore(x, y, 144.4-length, .78, length)
         head_and_tool = geometry.bore(x, y, 144.4, 2.25, 30)
@@ -129,7 +131,7 @@ def check(path, baseline=None):
         moved = {name: shape.translated(V(0, -opening, 0)) for name, shape in front.items()}
         occupied = {}
         for name in geometry.HARNESS_ROUTES:
-            parts, length = geometry.harness_segments(name, opening)
+            parts, length = geometry.harness_segments(name, opening, setback)
             lengths[name].append(length)
             obstacles = fixed | moved | occupied
             for part in parts:
@@ -182,6 +184,7 @@ def check(path, baseline=None):
         "clearances_mm": {name: round(gap, 3) for name, gap in gaps.items()},
         "lead_reservation_clashes": allowance_hits,
         "front_cover_opening_mm": open_at,
+        "carrier_setback_mm": setback,
         "front_cover_harness_samples_mm": steps,
         "harness_path_clashes": path_hits,
         "harness_centerline_mm": {name: round(values[0], 1) for name, values in lengths.items()},

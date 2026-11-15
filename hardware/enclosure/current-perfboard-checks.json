@@ -1,5 +1,5 @@
 {
-  "model_sha256": "ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d",
+  "model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee",
   "baseline_sha256": null,
   "freecad_version": [
     "1",
@@ -12,7 +12,7 @@
       "hole": "G₂ / A",
       "center_xy_mm": [
         -27.28,
-        23.0
+        24.7
       ],
       "screw": "M2x4"
     },
@@ -20,7 +20,7 @@
       "hole": "Q / N",
       "center_xy_mm": [
         13.36,
-        56.02
+        57.720000000000006
       ],
       "screw": "M2x4"
     },
@@ -28,7 +28,7 @@
       "hole": "A / O",
       "center_xy_mm": [
         54.0,
-        58.56
+        60.260000000000005
       ],
       "screw": "M2x4"
     }
@@ -40,6 +40,7 @@
   },
   "lead_reservation_clashes": {},
   "front_cover_opening_mm": 60,
+  "carrier_setback_mm": 1.7,
   "front_cover_harness_samples_mm": [
     0,
     2,
@@ -75,9 +76,9 @@
   ],
   "harness_path_clashes": [],
   "harness_centerline_mm": {
-    "Buttons": 122.0,
-    "OLED": 114.8,
-    "VolumeSwitch": 205.7
+    "Buttons": 123.7,
+    "OLED": 116.5,
+    "VolumeSwitch": 207.4
   },
   "unplug_order": [
     "VolumeSwitch",

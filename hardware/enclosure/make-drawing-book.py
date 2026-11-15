@@ -18,12 +18,12 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = 'ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d'
+ANNOTATED_MODEL_SHA256 = '8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
 LIGHT = HexColor('#d5e1e4')
-TOTAL_PAGES = 13
+TOTAL_PAGES = 14
 
 
 def main():
@@ -56,7 +56,12 @@ def main():
     drawing_baseline=json.loads((ROOT/'drawing-baseline-checks.json').read_text())
     controls=json.loads((ROOT/'control-layout-checks.json').read_text())
     charging=json.loads((ROOT/'charging-port-checks.json').read_text())
-    assert charging['all_pass'] and charging['model_sha256']==data['sha256']
+    grille_report=json.loads((ROOT/'grille-clearance-checks.json').read_text())
+    battery_floor=json.loads((ROOT/'battery-floor-checks.json').read_text())
+    assert battery_floor['all_pass'] and battery_floor['model_sha256']==data['sha256']
+    assert grille_report['all_pass'] and grille_report['model_sha256']==battery_floor['baseline_sha256']
+    assert all(battery_floor['unchanged_shapes_difference_mm3'][n]<.001 for n in ('FrontShell','SpeakerCarrier','FrontGrille','LDriver','RDriver'))
+    assert charging['all_pass'] and charging['model_sha256']==grille_report['baseline_sha256']
     assert controls['all_pass'] and controls['model_sha256']==charging['baseline_sha256']
     assert controls['baseline_sha256']==drawing_baseline['model_sha256'] and drawing_baseline['all_pass']
     assert current_perfboard['model_sha256']==data['sha256']
@@ -88,6 +93,9 @@ def main():
     assert integration['model_sha256']==handle['baseline_sha256']
     def evidence_matches_geometry(report,owners):
         if report['model_sha256']==data['sha256']:return True
+        if any(battery_floor['unchanged_shapes_difference_mm3'].get(n,1)>=.001 for n in owners):return False
+        if any(grille_report['preserved_shape_difference_mm3'].get(n,1)>=.001 for n in owners):return False
+        if report['model_sha256']==grille_report['baseline_sha256']:return True
         if any(charging['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
         if report['model_sha256']==charging['baseline_sha256']:return True
         if any(controls['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
@@ -235,13 +243,13 @@ def main():
     text(247,260,'右视 · 沿 -X 观察',10,MUTED,'center')
     dh(25,178,30,23,'170')
     dv(30,30+.9*(handle_top+2),25,17,f'{handle_top+2:.3f} 含脚垫和提手')
-    dh(205,288.7,30,23,'93')
+    dh(205,290.23,30,23,'94.7')
     x1,y1=pf(-45,shoulder_z+34.5);x2,_=pf(45,shoulder_z+34.5)
     dh(x1,x2,y1,252,'90 净开口')
     _,y0=pf(45,shoulder_z+10.5)
     dv(y0,y1,x2,x2+8,'24')
     x,y=pf(0,76)
-    text(x,y,'Ø130 · 护网内凹 2.5',9,TEAL,'center',background=True)
+    text(x,y,'Ø130 · 下沉 1.5',9,TEAL,'center',background=True)
     line(x,34,x,246,LIGHT,.15,[5,2,1,2])
     port=data['acoustics']['p2_outer_bounds']
     xa,ya=pr(port['min'][1],port['min'][2]);xb,yb=pr(port['max'][1],port['max'][2])
@@ -250,15 +258,15 @@ def main():
     axis,_=pr(49,0);line(axis,34,axis,235,TEAL,.15,[4,2])
     text(306,258,'主要尺寸 / mm',12,TEAL)
     table(304,249,104,[
-        ('整机宽 / 深','170 / 93'),
+        ('整机宽 / 最大深','170 / 94.7'),
         ('含脚垫总高',f'{handle_top+2:.3f}'),
         ('不含脚垫总高',f'{handle_top-1:.3f}'),
         ('提手净口 / 厚','90 × 24 / 5'),
         ('前 / 后壳主体','5 / 5'),
-        ('侧口包络中心 Y / Z','44.861 / 65'),
-        ('前后斜肩水平宽','44 / 44'),
+        ('侧口包络中心 Y / Z','46.561 / 65'),
+        ('前后斜肩水平宽','44 / 45.7'),
         ('斜肩高差',f'{44*27/38:.3f}'),
-        ('前 / 后斜角',f"{side['front_angle_deg']:.3f}°"),
+        ('前 / 后斜角',f"{side['front_angle_deg']:.3f}° / {side['rear_angle_deg']:.3f}°"),
         ('提手顶 Z',f'{handle_top:.3f}'),
         ('前斜肩顶 Z',f'{shoulder_z:.3f}'),
         ('后斜肩顶 Z',f'{rear_peak_z:.3f}'),
@@ -269,9 +277,9 @@ def main():
         'X 向右，Y 向后，Z 向上。',
         '机身左右对称面 X=0。',
         '脚垫底 Z=-2；外壳底 Z=1。',
-        '后壳侧轮廓以 Y=49 对称。',
+        '后斜肩加深 1.7，前斜肩不变。',
         '提手厚度中线 Y=46.5。',
-        '壁厚以面法向测量。',
+        '整体深 94.7；孔网下沉 1.5。',
         '线缆侧向实测外伸 14.5。',
         '内宽 160，光驱宽 128。',
         '两侧各留 16，余量各 1.5。',
@@ -280,15 +288,15 @@ def main():
     c.showPage()
 
     page(2,'顶面、背面与操控开孔','碟口按水平投影；操控开孔按前斜面真形','顶视 0.95:1；背视 0.85:1；开孔 1:1')
-    pt=view('top',26,160,.95)
+    pt=view('top',26,157,.95)
     text(107,259,'顶视 · 沿 -Z 观察',10,MUTED,'center')
-    dh(26,187.5,248.35,253,'170')
-    dv(160,248.35,187.5,197,'93')
-    xa,ya=pt(-62,79.05);xb,_=pt(62,79.05)
+    dh(26,187.5,245.35,253,'170')
+    dv(157,246.965,187.5,197,'94.7')
+    xa,ya=pt(-62,80.75);xb,_=pt(62,80.75)
     dh(xa,xb,ya,220,'124 碟口水平长度')
     line(xb,ya,204,241,TEAL,.16);text(204,243,'宽 5.5',9,TEAL)
-    text(26,151,'碟口中心 X=0、Y=79.05；提手后表面 Y=49。',9)
-    text(26,143,'120 × 1.2 光盘扫掠，至提手后表面净距 29.45。',8,MUTED)
+    text(26,151,'碟口中心 X=0、Y=80.75；提手后表面 Y=49。',9)
+    text(26,143,'120 × 1.2 光盘扫掠，至提手后表面净距 31.15。',8,MUTED)
     view('rear',245,22,.85)
     text(317,259,'背视 · 沿 -Y 观察',10,MUTED,'center')
     text(317,247,'左下双充电口 X=-70；Type-C 上 / DC 下，见第 13 页。',8,TEAL,'center')
@@ -311,7 +319,7 @@ def main():
         '前壳背锁：后壁 X=±79.4、Z=33；后斜面 X=±29、Z=179。',
         'P3 支架：4 孔，X=±64、Z=27 / 124；Ø2.8，沉头 Ø4.8。',
         'P2 圆角梯形开放侧口；P3 独立导管末端留隙 0.7，详见第 12 页。',
-        '背锁孔 Ø4.4／通孔 Ø2.2／盲底孔 Ø1.6；下孔深 78.8，名义螺钉 2×8。',
+        '背锁孔 Ø4.4／通孔 Ø2.2／盲底孔 Ø1.6；下孔深 80.5，名义螺钉 2×8。',
     ],gap=6.5,size=8.5)
     c.showPage()
 
@@ -355,36 +363,36 @@ def main():
     page(4,'侧剖与内部空间','截面 X=-26：穿过左喇叭中心，保留 -X 半体，沿 -X 观察','剖视 1:1；表格为模型读数')
     view('section',26,20)
     text(63,263,'A-A 侧剖',11,TEAL,'center')
-    dh(34,75,98,131,'41 喇叭总深度')
-    dh(102.2,113,156,208,'10.8 光驱最大厚度')
+    dh(31.7,76.7,98,131,'45 喇叭总包络')
+    dh(103.9,114.7,156,208,'10.8 光驱最大厚度')
     dv(58,138,26,13,'80 单元高度')
-    dh(32,102,30,18,'70 电池深度')
-    dv(30,50,32,20,'20')
-    text(65,38,'5600 mAh',8,white,'center')
+    dh(32,102,28,18,'70 电池深度')
+    dv(28,48,32,20,'20')
+    text(68,36,'5600 mAh',8,white,'center')
     text(138,253,'主要包络 / 关键净距',12,TEAL)
     table(136,246,272,[
-        ('单只喇叭 X × Y × Z','45 × 41 × 80 试装包络；中心 X=±26，Z=76；贴合面 Y=10'),
+        ('单只喇叭 X × Y × Z','45 × 45 × 80 修正包络；中心 X=±26，Z=76；贴合面 Y=11.7'),
         ('P3 喇叭座','开口 71.5 × 39.3 / R12.5；每只四孔距 70 × 36，Ø2.3 底孔深 10.5'),
         ('单侧后腔外包络',' × '.join(f'{v:.1f}' for v in data['acoustics']['chamber_bounds']['size'])+'；含一体导管；净容积和调谐待实测'),
-        ('喇叭前 / 后净距','格栅后面至喇叭 3，喇叭至后腔内壁 11；端子、走线及行程待试'),
-        ('UJ-898 光驱','128 × 10.8 × 130；Y=76.2…87，Z=29.5…159.5'),
+        ('喇叭前 / 后净距','振膜至孔网内面 3，后包络至腔壁 11；已打印 P3 保持不变'),
+        ('UJ-898 光驱','128 × 10.8 × 130；Y=77.9…88.7，Z=29.5…159.5'),
         ('光驱贴靠 / 固定','背面留 1 mm 保护垫；中央底托 + 可拆压条，两枚 M2×10'),
         ('SATA 接头 / 线缆','37.7 × 7，后伸 20.4；护线环 Ø6.5 × 3；侧伸 14.5'),
         ('功放 PCB / 元件预留','66 × 53 × 1.6 / 15；组件最高 Z=139.6'),
         ('主控 PCB / 元件预留','63.39 × 27.94 × 1.6 / 7；排母高8.5，组件最高Z=161.5'),
         ('DAC / 双路降压','DAC 水平装载板；两块 DCE001，载板底 Z=142.8，见第8页'),
         ('OLED PCB 局部尺寸','35.4 × 33.5 × 1.2；四孔 Ø3，孔距 30.4 × 28.5；图纸值'),
-        ('5600 mAh 平排电池','112 × 70 × 20；X=±56，Y=6…76，Z=8…28'),
-        ('电池周围名义净距','距后腔底 3.5；前 / 后内壁 1 / 12；托盘侧壁各 1'),
-        ('脚垫中心','X=±55；Y=11 / 69；4 个脚垫为一个 CAD 复合对象'),
+        ('5600 mAh 平排电池','112 × 70 × 20；X=±56，Y=6…76，Z=6…26'),
+        ('电池周围名义净距','电池顶至声腔底 5.5；前 / 后内壁 1 / 13.7；左右挡板各 1'),
+        ('脚垫中心','X=±55；Y=11 / 70.7；4 个脚垫为一个 CAD 复合对象'),
     ],split=69,height=9.5)
     notes(138,99,[
         '当前模型边界',
-        '平排电池按商品标称包络；托盘并入后壳，预留 4 个绑带槽，绑带、线材及插头需实测。',
+        '电池直接落在原 5 mm 底板上；取消 2 mm 托台，保留左右挡板和 4 个绑带槽。',
         '两块 DCE001 已纳入载板；充电电路未建模，整机电气与实物装配仍未验收。',
-        '喇叭采用圆角盆架试装包络；喇叭静态前 / 后深 2 / 39；角部、螺丝及密封需实物试装。',
+        '前 / 后包络深 6 / 39；金属边厚 2 为名义值；振膜轮廓与动态行程未测。',
         '剖图使用实际实体裁切、隐藏线消除；未施加材料剖面线，不能由线型判断材质。',
-        '喇叭安装座试片已通过；直接验证完整件的装配、支撑清理、强度和走线。',
+        'P3 完整件已打印，原安装座试片已通过；整机装配、走线及动态净距待验证。',
         'P3 主通路 400 mm²，末端 4 mm 渐扩至约 587 mm²；气密和声学待实测。',
     ],gap=8,size=9)
     c.showPage()
@@ -404,7 +412,7 @@ def main():
         'LChamber':'左后腔','RChamber':'右后腔','LDriverFrame':'左喇叭试装座','RDriverFrame':'右喇叭试装座',
         'FrontBaffle':'双开口前障板','RearTopMount':'上固定耳（2 个）','DriveCarrier':'光驱底托 / 导轨','SlotGuide':'碟口导向框',
         'DisplayCarrier':'屏幕安装座','AmpShelf':'功放 / 桥接器托板','ElectronicsSled':'主控托板','AmpPads':'功放支撑复合件',
-        'MCUPads':'主控支撑复合件','DACPads':'DAC 支撑复合件','BatteryCradle':'平排电池托盘',
+        'MCUPads':'主控支撑复合件','DACPads':'DAC 支撑复合件','BatteryCradle':'电池左右挡板',
         'LDriver':'左喇叭总包络','RDriver':'右喇叭总包络','Encoder':'B50K 轴／六角螺母','VolumePot':'B50K PCB 插接模块 / 含插头包络',
         'Drive':'UJ-898 包络','Bridge':'SATA 接头 / 护线环','DisplayPCB':'OLED PCB／四孔与缺口','DisplayHeader':'OLED 弯针接头预留',
         'Amp':'功放 PCB','AmpChip':'功放元件预留','MCU':'主控 PCB','MCUChip':'主控元件预留','DAC':'DAC PCB',
@@ -435,7 +443,7 @@ def main():
     assert printing['model_sha256']==data['sha256'] and printing['all_pass']
     text(12,118,'P2SC / P2S配置 · 0.4喷嘴 / 0.20层高 / 3壁 / 15%填充 / 树状支撑；P3 双声腔背面直接贴板',8.5)
     for i,(name,label,pose) in enumerate([
-        ('FrontShell','P1 前壳','正面朝下 / 板内转 90°'),('RearShell','P2 后壳','背面朝下'),
+        ('FrontShell','P1 前壳','孔网朝下 / 板内转 90°'),('RearShell','P2 后壳','背面朝下'),
         ('SpeakerCarrier','P3 支架','声腔背面朝下')]):
         part=printing['parts'][name];plate=printing['plates'][name]
         size=' × '.join(fmt(n) for n in part['size_xyz_mm'])
@@ -546,9 +554,9 @@ def main():
     page(8,'洞洞板板形、布局与固定','从保存 CAD 读取 · 顶视沿 -Z；上方为机身后方 +Y，右方为 +X','板形与布局 1.5:1')
     text(105,258,'载板轮廓与三个固定孔',11,TEAL,'center')
     p=view('perfboard-outline',24,165,1.5)
-    a0,a1=p(-43,75),p(57,75)
+    a0,a1=p(-43,76.7),p(57,76.7)
     dh(a0[0],a1[0],a0[1],253,'100 基准板宽；左耳另加11')
-    lo,hi=p(-54,20),p(-54,75)
+    lo,hi=p(-54,21.7),p(-54,76.7)
     dv(lo[1],hi[1],lo[0],16,'55 基准深度')
     for i,mount_info in enumerate(current_perfboard['mounts'],1):
         x,y=p(*mount_info['center_xy_mm'])
@@ -562,11 +570,11 @@ def main():
         text(x,y-1,label,8,TEAL,'center',True)
     table(12,150,190,[
         ('载板底面 / 厚度','Z=142.8 / 1.6'),
-        ('右前避让缺口','X40.25…57，Y20…52；16.75×32'),
-        ('左侧延伸耳','X-54…-43，Y40.86…50.86；11×10'),
-        ('1 · G₂ / A','X=-27.28，Y=23.00'),
-        ('2 · Q / N','X=13.36，Y=56.02'),
-        ('3 · A / O','X=54.00，Y=58.56'),
+        ('右前避让缺口','X40.25…57，Y21.7…53.7；16.75×32'),
+        ('左侧延伸耳','X-54…-43，Y42.56…52.56；11×10'),
+        ('1 · G₂ / A','X=-27.28，Y=24.70'),
+        ('2 · Q / N','X=13.36，Y=57.72'),
+        ('3 · A / O','X=54.00，Y=60.26'),
         ('固定孔与螺钉','板Ø2.2／托架导孔Ø1.6；3枚M2×4'),
     ],split=53,height=10)
     table(218,150,190,[
@@ -580,7 +588,7 @@ def main():
     ],split=64,height=10)
     notes(14,68,[
         '孔名为原板元件面丝印：X向右A至Z再A至P，图中第二段加(2)；Y向下A至Z再1至4。',
-        '布局水平转180°；原板毫米坐标换算 X=57-u、Y=20+v。三处支承留Ø5承压环，扩孔前核对铜皮与焊点。',
+        '布局水平转180°；原板毫米坐标换算 X=57-u、Y=21.7+v。三处支承留Ø5承压环，扩孔前核对铜皮与焊点。',
         '5P候选孔：J₂ / B…F；4P：H₂…K₂ / J；2P：O₂…P₂ / J。不是原板切割模板。',
         'XH类接插件按2.54孔位排布；实际针距、锁扣、脚位和插合尺寸须核对。DCE001绝缘固定、散热与短线待试装。',
         '主控USB／COM插座留空；桥接数据与供电按接线文档连接。板上孔位与电气线序见 docs/perfboard-layout.md。',
@@ -602,7 +610,7 @@ def main():
         '1  断电、卸4枚背锁螺钉；托住前壳向前平移60 mm，三组回环释放余量。',
         '2  先向上拔音量开关2P并移开线，再向上拔OLED 4P，最后向机身左侧拔四键5P；开关余线经过OLED入口。',
         '3  断开其余前壳线束后移走前壳。拆载板先断数据、供电及DAC音频，再卸3枚M2螺钉；也可随P3整体拆出。',
-        '中心线路径：四键122.0、OLED 114.8、音量开关205.7 mm。制线另加端子压接、实际出口及固定余量。',
+        '中心线路径：四键123.7、OLED 116.5、音量开关207.4 mm。制线另加端子压接、实际出口及固定余量。',
         '验证范围：0…60 mm每2 mm采样；按上述次序校核拔出包络及12×10 mm入口，不代表手指操作或弯曲应力验收。',
         'B50K双声道模拟线束、最终电源线与端子短尾未完整建模；同样须留服务余量，并检查合壳压线与实物卡扣。',
         '图中的圆柱／球形转角是占位包络，不表示实际线束弯曲半径；接口线序仍以接线文档和实物丝印为准。',
@@ -675,7 +683,7 @@ def main():
     c.showPage()
 
     page(11,'后斜面背锁深孔座加强筋','P2 内侧正视与右侧孔座轴向剖面 · 两条筋关于 X=0 镜像','内侧正视 1:1 · 轴向剖面 3:1')
-    ribs=backlock['ribs']
+    ribs=data['current_upper_backlock_ribs']
     text(117,253,'P2 内侧正视  /  沿 +Y 观察',11,TEAL,'center')
     inside=view('p2-interior',32,51,1)
     axis_x,_=inside(0,0)
@@ -692,7 +700,7 @@ def main():
         badge(badge_x,center_y,str(i))
 
     line(228,37,228,250,LIGHT,.15)
-    access=[item for item in fasteners['rear_access'] if item['rear_center_xyz_mm'][2]==179]
+    access=[item for item in json.loads((ROOT/'rear-depth-checks.json').read_text())['rear_access'] if item['rear_center_xyz_mm'][2]==179]
     assert len(access)==2 and all(not item['clashes'] for item in access)
     right=access[1]
     axis_x,entry,axis_z=right['rear_center_xyz_mm']
@@ -729,13 +737,11 @@ def main():
         text(350,row,f'Z {fmt(z0)} 至 {fmt(z1)}',9)
     text(242,92,f'每条 X 向宽 {fmt(x1-x0)}，融合后新增材料的 Z 向包络高 {fmt(z1-z0)}。',9)
     driver_gap=min(r['minimum_distance_to_driver_mm'] for r in ribs)
-    sampled_gap=min(r['minimum_sampled_front_clearance_mm'] for r in ribs)
-    continuous_gap=min(r['continuous_front_clearance_lower_bound_mm'] for r in ribs)
     text(242,77,'螺丝刀通路',10,TEAL)
     text(242,69,f"Ø{fmt(right['tool_diameter_mm'])} 刀杆通过 Ø{fmt(fasteners['head_well_diameter_mm'])} 工具孔，距新增筋最近 {driver_gap:.2f} mm。",9)
     text(242,54,'前壳抽出净空',10,TEAL)
     text(242,46,f"断线并卸除四颗背锁螺钉后，沿 -Y 抽出 {backlock['front_cover_travel_mm']:g} mm。",9)
-    text(242,38,f'距新增筋最小采样净距 {sampled_gap:.3f} mm，连续净距下界 {continuous_gap:.3f} mm。',9)
+    text(242,38,'当前保存模型的前壳抽出路径无干涉；详见装配路径报告。',9)
     text(12,23,'净空采用 CAD 刚体包络。实际批头配合、打印精度和锁紧强度待实物验证。',8.5,MUTED)
     c.showPage()
 
@@ -771,7 +777,7 @@ def main():
     page(13,'后背双充电口 / 胶接套座','ADR-0048 · 用户母座尺寸；DC 保留完整长度，无需裁剪','背视 0.8:1；共同剖视 2:1')
     rear_ports=view('rear',20,48,.8)
     text(88,251,'背视：右下角，Type-C 上 / DC 下',10,TEAL,'center')
-    text(20,36,'从正面看为左下角；两孔 X=-70，口面 Y=93 齐平。',8.5)
+    text(20,36,'从正面看为左下角；两孔 X=-70，口面 Y=94.7 齐平。',8.5)
     text(20,27,'中心距侧边 15；底边 Z=1，孔中心距底边 11 / 23。',8.5)
     dcx,dcy=rear_ports(70,12)
     usbx,usby=rear_ports(70,24)
@@ -790,10 +796,10 @@ def main():
     ],split=48,height=9)
     text(197,187,'两孔共同剖面 · X=-70',10,TEAL)
     q=view('charging-ports-section',243,119,2)
-    x1,y1=q(83,24);x2,y2=q(93,24)
-    dh(x1,x2,q(93,31)[1],179,'总支撑 10')
+    x1,y1=q(84.7,24);x2,y2=q(94.7,24)
+    dh(x1,x2,q(94.7,31)[1],179,'总支撑 10')
     for z,label in [(24,'Type-C'),(12,'DC')]:
-        px,py=q(93,z)
+        px,py=q(94.7,z)
         line(px,py,284,py,TEAL,.2)
         text(286,py-1,label,9,TEAL)
     text(197,108,'内侧 ← Y → 后外表面；下方为壳底局部',8,MUTED)
@@ -806,6 +812,49 @@ def main():
         'Type-C 充电模块尚未选定和布置；本图不构成电气接线方案。',
         '打印配合、胶层保持力、尾线弯折和实际充电仍待验证。',
     ],gap=10,size=8.5)
+    c.showPage()
+
+    page(14,'P1 下沉孔网 / P2 加深 1.7','ADR-0049 · P3 原件整体后移 1.7；P2 出口及安装座同步后移','中心实际截片 2:1；非振膜曲面测绘')
+    q=view('grille-clearance-section',24,48,2)
+    text(90,262,'X=-26 中心剖面',11,TEAL,'center')
+    text(*q(27,76),'喇叭保守包络',11,MUTED,'center')
+    text(*q(27,70),'非内部结构剖面',9,MUTED,'center')
+    a,b=q(5.7,76),q(50.7,76)
+    dh(a[0],b[0],a[1],238,'总包络 45')
+    a,b=q(2.7,106),q(5.7,106)
+    dh(a[0],b[0],a[1],222,'静态净距 3')
+    a,b=q(50.7,60),q(61.7,60)
+    dh(a[0],b[0],a[1],32,'后方余量 11 · 保留')
+    a,b=q(1.5,36),q(2.7,36)
+    dh(a[0],b[0],a[1],19,'网厚 1.2')
+    text(195,250,'固定基准与局部改动',12,TEAL)
+    table(193,242,214,[
+        ('P3 前框 / 安装面','Y=6.7 / Y=11.7；原件仅平移 1.7'),
+        ('振膜静态最高点','Y=5.7；相对安装面前向 6'),
+        ('孔网前面 / 主体厚度','Y=1.5 下沉；主体厚 2.5'),
+        ('孔网外观 / 静态净距','下沉 1.5；局部内面 Y=2.7；净距 3'),
+        ('可见网面 / 孔型','Ø130；原孔径 Ø1.88、孔距 2.9 保留'),
+        ('背面双局部减薄','47×82、R2；局部厚 1.2，X/Z 各外扩 1 mm'),
+        ('后部包络 / 腔壁','Y=50.7 / Y=61.7；后腔余量仍为 11'),
+        ('其他接口','前部操控不变；后部组件同步后移 1.7'),
+    ],split=48,height=10)
+    notes(195,146,[
+        'P3 已打印：保留实体，整体后移；P1、P2 更新。',
+        '新测量纠正旧前向 2 mm 包络，原 3 mm 间隙结论失效。',
+        '3 是静态名义净距，不是已验证的安全振幅。',
+        '前端用盆架投影占位，不代表实际振膜曲面。',
+        '仅两只喇叭投影区减薄；周边及中间 5 mm 宽区保留厚度。',
+        '无新增背筋；下沉网面及上部支撑需清理，刚度待实测。',
+        '装配后复量净距，由低音量逐步验证无碰网及异响。',
+    ],gap=8,size=8.5)
+    view('grille-back-relief',195,23,.5)
+    text(229,17,'护网底片背视 · 1:2',8,TEAL,'center')
+    notes(280,73,[
+        '两个背面凹区：47×82，R2。',
+        '凹区厚1.2；周边及中间厚2.5。',
+        '所有网孔贯通，无新增背筋。',
+        '正面下沉 1.5，保留原孔径和孔距。',
+    ],gap=9,size=8.5)
     c.showPage()
 
     c.save()

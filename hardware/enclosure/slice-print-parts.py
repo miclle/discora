@@ -54,6 +54,10 @@ def main():
         process=json.loads(settings['process'].read_text())
         if name=='RearShell':
             process.update(support_on_build_plate_only='0',support_critical_regions_only='0')
+        if name=='FrontShell':
+            # The handle's wide underside needs support even when the slicer
+            # classifies it as a bridge. Keep support rooted on the build plate.
+            process.update(support_critical_regions_only='0')
         process_path=target/'process.json'
         process_path.write_text(json.dumps(process,indent=2)+'\n')
         # Two-material keys and knob use their dedicated 3MF, not monochrome STL.

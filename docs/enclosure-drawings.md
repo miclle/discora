@@ -1,6 +1,8 @@
 # 外壳尺寸与装配图纸
 
-唯一正式图册为 [Discora 彩色尺寸与装配图册](../hardware/enclosure/drawings/Discora-V4-drawing-book-color.pdf)，共 **13 页 A3 横向**。本轮以当前保存 CAD 重新生成几何投影和彩色图，将 P2 后背双充电口移至从正面看过去的左下角（上 Type-C、下 DC），DC 圆筒与 Type-C 矮矩形套座均内伸 5 mm，连同后壁总支撑长度 10 mm；两孔中心距收紧至 12 mm、中心距底边 11／23 mm；同步第 13 页共同安装剖面，保留 P2/P3 声道标注。
+本轮取消电池下方 2 mm 托台，电池直接落在原 5 mm 底板上，Z=6…26；左右挡板及四处绑带槽保留。P3 的实体和位置、整机 94.7 mm 深度保持。只更新 P2 打印文件，其余 10 个 STL／5 盘 3MF 保留，见 [ADR-0050](decisions/0050-battery-direct-floor.md)。
+
+唯一正式图册为 [Discora 彩色尺寸与装配图册](../hardware/enclosure/drawings/Discora-V4-drawing-book-color.pdf)，共 **14 页 A3 横向**。沿用上一版孔网下沉 1.5 mm、整机深度 94.7 mm、P3 原件整体后移 1.7 mm 的布局，前侧静态净距为 3 mm。本轮更新电池落底后的侧剖和后壳内部视图。P3 已打印，其安装座、磁铁后方空间、导管和出线均保持；此前操控布局与充电接口保留。
 
 配套 [11 件打印套件](../hardware/enclosure/print/README.md)。图册与打印文件属于完整件试打版本，喇叭安装座试片已通过，整机实装、强度、拆撑、气密和声学尚待实测。
 
@@ -19,6 +21,9 @@
 | 11 | 后斜面两个背锁深孔座加强筋与工具通道 |
 | 12 | 当前 P2/P3 装配侧视、P3 实体导管剖面、出口尺寸与支撑设置 |
 | 13 | 后背 DC／Type-C 孔位、胶接套座剖面及母座安装要求 |
+| 14 | P1 下沉孔网、3 mm 振膜静态净距与已打印 P3 基准 |
+
+![P1 下沉孔网与振膜净距](../hardware/enclosure/drawings/grille-clearance-preview.png)
 
 ![后背双充电口与胶接套座](../hardware/enclosure/drawings/charging-ports-preview.png)
 
@@ -32,14 +37,15 @@
 
 ## 版本与证据
 
-本次操控布局见 [ADR-0047](decisions/0047-control-spacing-and-knob.md)。本轮双充电口见 [ADR-0048](decisions/0048-rear-charging-ports.md)。旧图册证据经 charging-port-checks.json、control-layout-checks.json 衔接，操控投影与线束图从当前模型重读。
+此前操控布局见 [ADR-0047](decisions/0047-control-spacing-and-knob.md)。此前双充电口见 [ADR-0048](decisions/0048-rear-charging-ports.md)。孔网更新见 [ADR-0049](decisions/0049-speaker-diaphragm-clearance.md)。旧图册证据经 battery-floor-checks.json、grille-clearance-checks.json、charging-port-checks.json、control-layout-checks.json 衔接，操控投影与线束图从当前模型重读。
 
-本轮调整孔位和套座后，保留此前已修复的全部 GUI XML 与材料资源字节及注册顺序；见 [配色保留证据](../hardware/enclosure/gui-color-preservation-checks.json)。投影和彩色图从新模型重新生成。
+本轮取消电池托台后，保留全部 GUI XML 与材料资源字节及注册顺序；见 [配色保留证据](../hardware/enclosure/battery-floor-checks.json)。投影和彩色图从新模型重新生成。
 
-CAD SHA-256：`ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d`。
+CAD SHA-256：`8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee`。
 
 - [geometry.json](../hardware/enclosure/drawings/geometry.json) 与 [color-render.json](../hardware/enclosure/drawings/color-render.json) 记录当前模型／建模脚本摘要、尺寸、真实投影、配色和输出分辨率。
-- [drawing-baseline-checks.json](../hardware/enclosure/drawing-baseline-checks.json) 保留 ADR-0046 阶段的42件不变证据；本轮变更由 [charging-port-checks.json](../hardware/enclosure/charging-port-checks.json)与 [control-layout-checks.json](../hardware/enclosure/control-layout-checks.json) 衔接。P2/P3 重新测量、剖切、渲染，旧侧孔标注不复用。
+- [drawing-baseline-checks.json](../hardware/enclosure/drawing-baseline-checks.json) 保留 ADR-0046 阶段的42件不变证据；本轮电池改动由 [battery-floor-checks.json](../hardware/enclosure/battery-floor-checks.json)衔接，上一版孔网由 [grille-clearance-checks.json](../hardware/enclosure/grille-clearance-checks.json)衔接；此前变更由 [charging-port-checks.json](../hardware/enclosure/charging-port-checks.json)与 [control-layout-checks.json](../hardware/enclosure/control-layout-checks.json) 衔接。P2/P3 重新测量、剖切、渲染，旧侧孔标注不复用。
+- [本轮 14 页渲染与版面复核](../hardware/enclosure/drawings/grille-clearance-review.json)记录 PDF、绘图脚本、几何与预览摘要。
 - [正式套件清单](../hardware/enclosure/print/manifest.json)提供本次六盘的真实切片估计；[正式包读回](../hardware/enclosure/print-release-checks.json)核对所有导出文件。
 - [validation.json](../hardware/enclosure/validation.json)、[assembly-paths.json](../hardware/enclosure/assembly-paths.json)及[current-perfboard-checks.json](../hardware/enclosure/current-perfboard-checks.json)对应当前模型。线束 0…60 mm 每 2 mm 采样；抬升、旋转和前壳离散采样不是连续运动证明。
 - 旧 OLED、背锁、音量模块等局部尺寸以历史报告和逐件不变证据衔接；P2 加强筋在当前后壳中重新截取并核对体积与尺寸。历史报告保留其原模型摘要。
@@ -61,7 +67,7 @@ CAD SHA-256：`ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d`
    python3 hardware/enclosure/make-drawing-book.py --font "$DISCORA_DRAWING_FONT"
    ```
 
-3. 用 Poppler 渲染全部 13 页并逐页检查尺寸引线、文字、遮挡和版面：
+3. 用 Poppler 渲染全部 14 页并逐页检查尺寸引线、文字、遮挡和版面：
 
    ```sh
    mkdir -p tmp/drawings

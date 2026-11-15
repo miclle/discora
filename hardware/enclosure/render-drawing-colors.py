@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256 = 'ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d'
+MODEL_SHA256 = '8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee'
 
 
 def palette_from_build():
@@ -165,9 +165,15 @@ def main():
     current=json.loads((ROOT/'drawing-baseline-checks.json').read_text())
     controls=json.loads((ROOT/'control-layout-checks.json').read_text())
     charging=json.loads((ROOT/'charging-port-checks.json').read_text())
-    assert charging['all_pass'] and charging['model_sha256']==MODEL_SHA256
+    grille_report=json.loads((ROOT/'grille-clearance-checks.json').read_text())
+    battery_floor=json.loads((ROOT/'battery-floor-checks.json').read_text())
+    assert battery_floor['all_pass'] and battery_floor['model_sha256']==MODEL_SHA256
+    assert grille_report['all_pass'] and grille_report['model_sha256']==battery_floor['baseline_sha256']
+    assert all(battery_floor['unchanged_shapes_difference_mm3'][n]<.001 for n in ('FrontShell','SpeakerCarrier','FrontGrille','LDriver','RDriver'))
+    assert charging['all_pass'] and charging['model_sha256']==grille_report['baseline_sha256']
     assert controls['all_pass'] and controls['model_sha256']==charging['baseline_sha256']
     assert all(charging['color_face_order_preserved'].values())
+    assert all(grille_report['color_face_order_preserved'].values())
     assert controls['baseline_sha256']==current['model_sha256'] and current['all_pass']
     assert all(current['color_face_order_preserved'].values())
     assert current['baseline_sha256']==flat_back['model_sha256']
@@ -224,7 +230,7 @@ def main():
         print('SURFACES',name,len(meshes[name]),flush=True)
     outputs={}
     for name,view in data['views'].items():
-        if name in ('control-cutouts','perfboard-outline','p3-seat-section','upper-backlock-section','duct-section') or name.startswith(('oled-','volume-','charging-')):continue
+        if name in ('control-cutouts','perfboard-outline','p3-seat-section','upper-backlock-section','duct-section','grille-clearance-section','grille-back-relief') or name.startswith(('oled-','volume-','charging-')):continue
         parts=[]
         if 'parts' in view:
             parts=[(n,p['offset_mm']) for p in view['parts'] for n in p['objects']]

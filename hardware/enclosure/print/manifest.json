@@ -1,7 +1,7 @@
 {
   "model": "../Discora.FCStd",
-  "model_sha256": "ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d",
-  "release": "ADR-0048 compact lower-left charging ports, 12 mm center spacing, 10 mm total support",
+  "model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee",
+  "release": "ADR-0050 battery directly on 5 mm floor; retained side stops and strap slots; P3 and 94.7 mm depth unchanged",
   "slicer_version": "02.09.01.70",
   "profile_names": {
     "machine": "Bambu Lab P2S 0.4 nozzle",
@@ -20,7 +20,7 @@
       ],
       "linear_deflection_mm": 0.1,
       "angular_deflection_rad": 0.35,
-      "facets": 241872,
+      "facets": 244024,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -29,18 +29,18 @@
         0.5,
         0.5000000000000001
       ],
-      "stl_sha256": "5a6018bde20a2aad0772668a2e2e8226d9779d79251b804301b198c688612232"
+      "stl_sha256": "26953b7463f2f091ba3085adea317dede1706545edd045c2dae0f550040d4fe5"
     },
     "RearShell": {
       "file": "RearShell.stl",
       "size_xyz_mm": [
         170.0,
         192.682177883786,
-        88.00000000000006
+        89.70000000000006
       ],
       "linear_deflection_mm": 0.05,
       "angular_deflection_rad": 0.2,
-      "facets": 7516,
+      "facets": 7614,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -49,7 +49,7 @@
         0.0,
         -0.7071067811865475
       ],
-      "stl_sha256": "83940379fcbec36b632885756b51177245cc658d67d6476fd608ed6952a1cf2b"
+      "stl_sha256": "1109edef328d9d1272fde44e8e04b9052f216f68e825be7337618d160cf76b7d"
     },
     "SpeakerCarrier": {
       "file": "SpeakerCarrier.stl",
@@ -243,20 +243,20 @@
       "parts": [
         "FrontShell"
       ],
-      "project_sha256": "2a5c8b8eb135d8e3479fb26f1cde3b817a1752af5bccf86e7f43841d721fb98b",
-      "gcode_sha256": "82c5dc7fa8b7ca829472c4cee6d0c32c76f585b93a9eeacf3f1ebefc55046316",
+      "project_sha256": "f3eb301f6f0eeb2a1088e5dcaa90ef4e77c3a5bdecb0e6ecdd2ee348a5483334",
+      "gcode_sha256": "a9e9220de9f9e424d65b632ced793dfff4618dcbde5a77a346a21ce47d62b397",
       "layers": 245,
-      "total_estimated_time": "14h 7m 9s",
-      "filament_g": 156.65,
+      "total_estimated_time": "11h 39m 17s",
+      "filament_g": 145.33,
       "filament_g_by_material": [
-        156.65
+        145.33
       ],
       "exit_code": 0,
       "support_settings": {
         "enable_support": "1",
         "support_type": "tree(auto)",
         "support_on_build_plate_only": "1",
-        "support_critical_regions_only": "1",
+        "support_critical_regions_only": "0",
         "support_threshold_angle": "30",
         "support_top_z_distance": "0.2"
       },
@@ -265,20 +265,22 @@
       "filament_colours": [
         "#00AE42"
       ],
-      "reused_from_model_sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003"
+      "vendor_T65535_parser_notice": true,
+      "reused_audited_slice": true,
+      "reused_from_model_sha256": "db3c92e282f9df48fe26a6434266dfd8539833afb579133805e6219439b3ead3"
     },
     "RearShell": {
       "file": "Discora-P2-RearShell.3mf",
       "parts": [
         "RearShell"
       ],
-      "project_sha256": "d4455ac99b1a91384f2f82d517d905a966b9dcbd06b1f20de7569a22a5cf9973",
-      "gcode_sha256": "106a68508ec86a94c33c80582d18723b62424a2066a3b6023c687f969e716e1e",
-      "layers": 440,
-      "total_estimated_time": "9h 15m 55s",
-      "filament_g": 287.94,
+      "project_sha256": "085e0550ed6e4e22de9b24be4b5d9120dc68d06ff089f8da1ae71b4d25b87e2c",
+      "gcode_sha256": "6d7367d260324e4d1a835e3f2991f0b980d26ea7b82db8447724b2e03af6a4d1",
+      "layers": 448,
+      "total_estimated_time": "9h 16m 12s",
+      "filament_g": 290.32,
       "filament_g_by_material": [
-        287.94
+        290.32
       ],
       "exit_code": 0,
       "support_settings": {
@@ -294,7 +296,8 @@
       "filament_colours": [
         "#00AE42"
       ],
-      "vendor_T65535_parser_notice": true
+      "vendor_T65535_parser_notice": true,
+      "reused_audited_slice": false
     },
     "SpeakerCarrier": {
       "file": "Discora-P3-SpeakerCarrier.3mf",
@@ -324,7 +327,7 @@
         "#00AE42"
       ],
       "reused_audited_slice": true,
-      "reused_from_model_sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003"
+      "reused_from_model_sha256": "db3c92e282f9df48fe26a6434266dfd8539833afb579133805e6219439b3ead3"
     },
     "SmallParts": {
       "file": "Discora-Retainers.3mf",
@@ -355,7 +358,8 @@
       "filament_colours": [
         "#00AE42"
       ],
-      "reused_from_model_sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003"
+      "reused_from_model_sha256": "db3c92e282f9df48fe26a6434266dfd8539833afb579133805e6219439b3ead3",
+      "reused_audited_slice": true
     },
     "Keys": {
       "file": "Discora-Keys-Orange-White.3mf",
@@ -659,7 +663,8 @@
           }
         }
       },
-      "reused_from_model_sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003"
+      "reused_from_model_sha256": "db3c92e282f9df48fe26a6434266dfd8539833afb579133805e6219439b3ead3",
+      "reused_audited_slice": true
     },
     "Knob": {
       "file": "Discora-Knob-Black-White.3mf",
@@ -757,19 +762,25 @@
           ]
         }
       },
-      "reused_from_model_sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003"
+      "reused_from_model_sha256": "db3c92e282f9df48fe26a6434266dfd8539833afb579133805e6219439b3ead3",
+      "reused_audited_slice": true
     }
   },
-  "total_filament_g": 649.56,
+  "total_filament_g": 640.62,
   "evidence": {
-    "p2": "../charging-port-print-checks.json",
+    "p2": "../p2-depth-print-checks.json",
     "p3": "../p3-terminal-mouth-checks.json",
     "assembly": "../assembly-paths.json",
     "static": "../validation.json",
     "perfboard": "../current-perfboard-checks.json",
     "controls": "../control-layout-checks.json",
     "charging": "../charging-port-checks.json",
-    "gui_color_preservation": "../gui-color-preservation-checks.json"
+    "gui_color_preservation": "../battery-floor-checks.json",
+    "grille": "../grille-clearance-checks.json",
+    "grille_print": "../grille-print-checks.json",
+    "rear_depth": "../rear-depth-checks.json",
+    "rear_depth_print": "../p2-depth-print-checks.json",
+    "battery_floor": "../battery-floor-checks.json"
   },
   "all_pass": true,
   "printer_contacted": false,
@@ -778,6 +789,8 @@
     "11 rigid PLA parts; soft feet, hardware and electronics are purchased parts.",
     "Speaker mount coupon passed; full-part fit, support removal, sealing, strength and acoustics are not physically verified.",
     "STL keys and knob are monochrome envelopes; use the two-material 3MF projects.",
-    "The DC bore contains removable supports; Type-C has no bore support toolpaths. Check both 10 mm passages before bonding. Adhesive retention and charging electronics are unverified."
+    "The DC bore contains removable supports; Type-C has no bore support toolpaths. Check both 10 mm passages before bonding. Adhesive retention and charging electronics are unverified.",
+    "Printed P3 retained byte-for-byte; installed 1.7 mm rearward with P2 deepened to 94.7 mm. P1 recess 1.5 mm, local thickness 1.2 mm, nominal static gap 3 mm. Dynamic excursion, stiffness and full assembly remain unverified.",
+    "Battery lowered 2 mm onto existing floor; removable straps and actual battery leads require physical verification. P3 geometry and installed position unchanged from ADR-0049."
   ]
 }

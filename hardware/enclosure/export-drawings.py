@@ -32,7 +32,7 @@ def side_profile(doc, source_hash):
     rear_run=points[6][0]-points[5][0]
     front_rise=points[2][1]-points[1][1]
     rear_rise=points[5][1]-points[6][1]
-    assert abs(front_run-rear_run)<1e-7 and abs(front_rise-rear_rise)<1e-7
+    assert abs(rear_run-front_run-1.7)<1e-7 and abs(front_rise-rear_rise)<1e-7
     feet = doc.Feet.Shape.BoundBox
     shell_bottom = min(doc.getObject(n).Shape.BoundBox.ZMin
                        for n in ('FrontShell','RearShell'))
@@ -115,14 +115,24 @@ def main():
     current=json.loads((ROOT/'drawing-baseline-checks.json').read_text())
     controls=json.loads((ROOT/'control-layout-checks.json').read_text())
     charging=json.loads((ROOT/'charging-port-checks.json').read_text())
-    assert charging['all_pass'] and charging['model_sha256']==source_hash
+    grille_report=json.loads((ROOT/'grille-clearance-checks.json').read_text())
+    battery_floor=json.loads((ROOT/'battery-floor-checks.json').read_text())
+    assert battery_floor['all_pass'] and battery_floor['model_sha256']==source_hash
+    assert grille_report['all_pass'] and grille_report['model_sha256']==battery_floor['baseline_sha256']
+    assert all(battery_floor['unchanged_shapes_difference_mm3'][n]<.001 for n in ('FrontShell','SpeakerCarrier','FrontGrille','LDriver','RDriver'))
+    assert charging['all_pass'] and charging['model_sha256']==grille_report['baseline_sha256']
     assert controls['all_pass'] and controls['model_sha256']==charging['baseline_sha256']
     data['charging_ports']=charging
+    data['grille_clearance']=grille_report
+    data['battery_floor']=battery_floor
+    section=Part.makeCompound([doc.getObject(n).Shape for n in ('FrontShell','SpeakerCarrier','LDriver')]).common(Part.makeBox(.1,66,90,V(-26.05,-3.1,31)))
+    projection('grille-clearance-section',section,'right')
+    projection('grille-back-relief',doc.FrontGrille.Shape,'rear')
     # Exact solid sections across the socket centerlines; no invented connector internals.
     for name,x,z in [('dc',-70,12),('usb',-70,24)]:
         section=rear_shell.common(Part.makeBox(.1,43,19,V(x-.05,52,z-9.5)))
         projection('charging-'+name+'-section',section,'right')
-    section=rear_shell.common(Part.makeBox(.1,10.2,27,V(-70.05,82.9,4)))
+    section=rear_shell.common(Part.makeBox(.1,10.2,27,V(-70.05,84.6,4)))
     projection('charging-ports-section',section,'right')
     assert controls['baseline_sha256']==current['model_sha256'] and current['all_pass']
     assert current['baseline_sha256']==flat_back['model_sha256']
@@ -132,6 +142,7 @@ def main():
     ribs = []
     for entry, location in zip(rib_check['ribs'], ('左下', '右下', '左上', '右上'), strict=True):
         low, high = V(*entry['bounds_xyz_mm'][:3]), V(*entry['bounds_xyz_mm'][3:])
+        low.y+=1.7; high.y+=1.7
         size = high - low
         rib = rear_shell.common(Part.makeBox(*size, low))
         assert len(rib.Solids) == 1 and abs(rib.Volume - entry['added_volume_mm3']) < .001
@@ -146,7 +157,7 @@ def main():
     upper_right = ribs[-1]['bounds']
     rib_mid_z = (upper_right['min'][2] + upper_right['max'][2]) / 2
     # Cut through the upper-right pilot axis, with room to see the seat and side wall.
-    seat_section = rear_shell.common(Part.makeBox(25, 21, .1, V(60, 5, rib_mid_z - .05)))
+    seat_section = rear_shell.common(Part.makeBox(25, 21, .1, V(60, 6.7, rib_mid_z - .05)))
     projection('p3-seat-section', seat_section, 'top')
 
     # Cut on the right-hand tool axis. Undo the pre-existing slope and tube
@@ -158,13 +169,24 @@ def main():
     section_x = axis_x - .01
     section_box = Part.makeBox(.02, 44, 24, V(section_x, 31, 169))
     well_section = rear_shell.common(section_box)
-    rib_box = Part.makeBox(.02, high.y-low.y, high.z-low.z, V(section_x, low.y, low.z))
+    rib_box = Part.makeBox(.02,12,7,V(section_x,44,181.3))
     tube = Part.makeCylinder(3.5, 40, V(axis_x, 36.4, 179), V(0,1,0))
     rib_section = well_section.common(rib_box).cut([doc.RearRoof.Shape, tube]).removeSplitter()
     assert len(rib_section.Solids) == 1
     face = max(rib_section.Faces, key=lambda f: f.CenterOfMass.x)
     assert abs(face.CenterOfMass.x - (axis_x + .01)) < 1e-6
     data['upper_backlock_rib_section_yz'] = [[v.Point.y, v.Point.z] for v in face.OuterWire.OrderedVertexes]
+    current_upper_ribs=[]
+    for sign in (-1,1):
+        x=sign*29
+        points=[V(x-2,y,z) for y,z in ((44,181.3),(56,181.3),(56,188.3))]
+        prism=Part.Face(Part.makePolygon(points+points[:1])).extrude(V(4,0,0))
+        tube=Part.makeCylinder(3.5,60,V(x,36.4,179),V(0,1,0))
+        rib=rear_shell.common(prism).cut([doc.RearRoof.Shape,tube]).removeSplitter()
+        b=rib.BoundBox
+        tool=Part.makeCylinder(2,80,V(x,39.201,179),V(0,1,0))
+        current_upper_ribs.append(dict(bounds_xyz_mm=[b.XMin,b.YMin,b.ZMin,b.XMax,b.YMax,b.ZMax],minimum_distance_to_driver_mm=rib.distToShape(tool)[0]))
+    data['current_upper_backlock_ribs']=current_upper_ribs
     projection('upper-backlock-section', well_section, 'right')
 
     # A true section at X=-26, the left driver centre; keep the -X half.
@@ -311,23 +333,23 @@ def main():
     data['acoustics'] = dict(chamber_bounds=bounds(doc.LChamber.Shape),
         outlet_area_mm2=Part.Face(duct.trapezoid_outlet_wire(duct.EXIT_X,-1.8)).Area,
         p2_inner_area_mm2=Part.Face(duct.trapezoid_outlet_wire(-80)).Area,
-        p2_outer_bounds=bounds(Part.Face(duct.trapezoid_outlet_wire(-85,1.6))),
+        p2_outer_bounds=bounds(Part.Face(duct.trapezoid_outlet_wire(-85,1.6)).translated(V(0,1.7,0))),
         nominal_duct_area_mm2=400, terminal_length_mm=4, interface_gap_mm=.7)
     # Validate critical annotations against the saved B-rep snapshot.
     checks = {
-        'overall_170_93_243_263': all(abs(a-b)<1e-5 for a,b in zip(data['overall']['size'],(170,93,165+44*27/38+45+2))),
+        'overall_170_94_7_243_263': all(abs(a-b)<1e-5 for a,b in zip(data['overall']['size'],(170,94.7,165+44*27/38+45+2))),
         'handle_opening_90_24': abs(handle.BoundBox.XLength-90)<1e-5 and abs(handle.BoundBox.ZLength-24)<1e-5,
         'hidden_grille_cut_130': abs(grille.BoundBox.XLength-130)<1e-5,
         'slot_124_5_5': abs(slot.BoundBox.XLength-124)<1e-5 and abs(slot.BoundBox.YLength-5.5)<1e-5,
         'screen_mouth_32_82_18_1': abs(local.BoundBox.XLength-32.82)<1e-5 and abs(local.BoundBox.ZLength-18.1)<1e-5,
         'battery_112_70_20': all(abs(a-b)<1e-5 for a,b in zip(data['objects']['Battery']['size'],(112,70,20))),
-        'drive_y76_2_z29_5': abs(doc.Drive.Shape.BoundBox.YMin-76.2)<1e-5 and abs(doc.Drive.Shape.BoundBox.ZMin-29.5)<1e-5,
-        'slot_center_y79_05': abs(slot.BoundBox.Center.y-79.05)<1e-5,
-        'hidden_bezel_outer_136_5':abs(doc.FrontBezel.Shape.BoundBox.XLength-136.5)<1e-5,
+        'drive_y77_9_z29_5': abs(doc.Drive.Shape.BoundBox.YMin-77.9)<1e-5 and abs(doc.Drive.Shape.BoundBox.ZMin-29.5)<1e-5,
+        'slot_center_y80_75': abs(slot.BoundBox.Center.y-80.75)<1e-5,
+        'flush_bezel_outer_136_5':abs(doc.FrontBezel.Shape.BoundBox.XLength-136.5)<1e-5,
         'oversized_grille_136':abs(doc.FrontGrille.Shape.BoundBox.XLength-136)<1e-5,
-        'grille_thickness_2_5':abs(doc.FrontGrille.Shape.BoundBox.YLength-2.5)<1e-5,
-        'grille_recess_2_5':abs(doc.FrontGrille.Shape.BoundBox.YMin-2.5)<1e-5,
-        'circular_mouth_clear':doc.FrontShell.Shape.common(Part.makeCylinder(65,2.49998,A.Vector(0,.00001,76),A.Vector(0,1,0))).Volume<.001,
+        'grille_main_thickness_2_5':abs(doc.FrontGrille.Shape.BoundBox.YLength-2.5)<1e-5,
+        'grille_front_y1_5':abs(doc.FrontGrille.Shape.BoundBox.YMin-1.5)<1e-5,
+        'no_front_protrusion':abs(doc.FrontShell.Shape.BoundBox.YMin)<1e-5,
         'current_outlet_outer_size':all(abs(a-b)<1e-4 for a,b in zip(data['acoustics']['p2_outer_bounds']['size'][1:],(38.477864,28.2))),
         'current_terminal_area':abs(data['acoustics']['outlet_area_mm2']-587.216)<.01,
         '44_finished_objects':len(objects)==44,

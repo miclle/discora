@@ -93,7 +93,17 @@ def main():
     controls=json.loads((ROOT/'control-layout-checks.json').read_text())
     charging=json.loads((ROOT/'charging-port-checks.json').read_text())
     charging_print=json.loads((ROOT/'charging-port-print-checks.json').read_text())
-    assert charging['model_sha256']==charging_print['model_sha256']==manifest['model_sha256']
+    grille=json.loads((ROOT/'grille-clearance-checks.json').read_text())
+    grille_print=json.loads((ROOT/'grille-print-checks.json').read_text())
+    battery=json.loads((ROOT/'battery-floor-checks.json').read_text())
+    assert battery['all_pass'] and battery['model_sha256']==manifest['model_sha256']
+    assert grille['model_sha256']==grille_print['model_sha256']==battery['baseline_sha256']
+    assert all(battery['unchanged_shapes_difference_mm3'][n]<.001 for n in manifest['parts'] if n!='RearShell')
+    assert grille['all_pass'] and grille_print['all_pass']
+    assert all(grille['preserved_shape_difference_mm3'][n]<.001 for n in manifest['parts'] if n not in ('FrontShell','RearShell'))
+    depth_print=json.loads((ROOT/'p2-depth-print-checks.json').read_text())
+    assert depth_print['all_pass'] and depth_print['model_sha256']==manifest['model_sha256']
+    assert charging['model_sha256']==charging_print['model_sha256']==grille['baseline_sha256']
     assert charging['all_pass'] and charging_print['all_pass']
     assert controls['model_sha256']==charging['baseline_sha256'] and controls['all_pass']
     assert all(charging['unchanged_finished_parts_difference_mm3'][name]<.001
@@ -103,7 +113,7 @@ def main():
                for name in ('RearShell','SpeakerCarrier'))
     assert p3['geometry']['baseline_sha256']==p2['model_sha256']
     assert p3['geometry']['p2_entire_shape_difference_mm3']<.001
-    for name, audit in [('RearShell',charging_print),('SpeakerCarrier',p3['slice'])]:
+    for name, audit in [('FrontShell',grille_print),('RearShell',depth_print),('SpeakerCarrier',p3['slice'])]:
         assert manifest['plates'][name]['gcode_sha256']==audit['gcode_sha256']
         assert manifest['parts'][name]['stl_sha256']==audit['stl_sha256']
     report=dict(model_sha256=manifest['model_sha256'],manifest_sha256=digest(folder/'manifest.json'),

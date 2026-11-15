@@ -175,7 +175,7 @@
       "yaw_step_deg": 0.5,
       "yaw_pivot_xyz_mm": [
         0.0,
-        53.599999999999994,
+        55.30000000000001,
         104.0
       ],
       "translation_during_yaw_xyz_mm": [
@@ -233,6 +233,7 @@
     },
     "front_cover": {
       "method": "exact per-part B-rep samples; 1 mm forward steps",
+      "frontmost_fixed_y_mm": 4.999999999999995,
       "waypoints_xyz_mm": [
         [
           0,
@@ -304,5 +305,5 @@
   },
   "drive_service_envelope": "Filled maximum 128 x 10.8 x 130 mm box; connector retains modeled housing and strain relief",
   "all_pass": true,
-  "model_sha256": "ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d"
+  "model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee"
 }
