@@ -1,6 +1,6 @@
 # 外壳尺寸与装配图纸
 
-唯一正式图册为 [Discora 彩色尺寸与装配图册](../hardware/enclosure/drawings/Discora-V4-drawing-book-color.pdf)，共 **12 页 A3 横向**。本轮以当前保存 CAD 重新生成几何投影和彩色图，更新 P2 梯形侧口、P3 独立导管与短渐扩口，替换旧饰片／短管标注。
+唯一正式图册为 [Discora 彩色尺寸与装配图册](../hardware/enclosure/drawings/Discora-V4-drawing-book-color.pdf)，共 **13 页 A3 横向**。本轮以当前保存 CAD 重新生成几何投影和彩色图，将 P2 后背双充电口移至从正面看过去的左下角（上 Type-C、下 DC），DC 圆筒与 Type-C 矮矩形套座均内伸 5 mm，连同后壁总支撑长度 10 mm；两孔中心距收紧至 12 mm、中心距底边 11／23 mm；同步第 13 页共同安装剖面，保留 P2/P3 声道标注。
 
 配套 [11 件打印套件](../hardware/enclosure/print/README.md)。图册与打印文件属于完整件试打版本，喇叭安装座试片已通过，整机实装、强度、拆撑、气密和声学尚待实测。
 
@@ -18,6 +18,9 @@
 | 10 | P2 四处 P3 螺丝座三角加强筋 |
 | 11 | 后斜面两个背锁深孔座加强筋与工具通道 |
 | 12 | 当前 P2/P3 装配侧视、P3 实体导管剖面、出口尺寸与支撑设置 |
+| 13 | 后背 DC／Type-C 孔位、胶接套座剖面及母座安装要求 |
+
+![后背双充电口与胶接套座](../hardware/enclosure/drawings/charging-ports-preview.png)
 
 ![当前声道与侧口详图](../hardware/enclosure/drawings/acoustic-outlet-preview.png)
 
@@ -29,12 +32,14 @@
 
 ## 版本与证据
 
-本次操控布局见 [ADR-0047](decisions/0047-control-spacing-and-knob.md)。旧图册证据经 control-layout-checks.json 衔接，操控投影与线束图从当前模型重读。
+本次操控布局见 [ADR-0047](decisions/0047-control-spacing-and-knob.md)。本轮双充电口见 [ADR-0048](decisions/0048-rear-charging-ports.md)。旧图册证据经 charging-port-checks.json、control-layout-checks.json 衔接，操控投影与线束图从当前模型重读。
 
-CAD SHA-256：`2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003`。
+本轮调整孔位和套座后，保留此前已修复的全部 GUI XML 与材料资源字节及注册顺序；见 [配色保留证据](../hardware/enclosure/gui-color-preservation-checks.json)。投影和彩色图从新模型重新生成。
+
+CAD SHA-256：`ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d`。
 
 - [geometry.json](../hardware/enclosure/drawings/geometry.json) 与 [color-render.json](../hardware/enclosure/drawings/color-render.json) 记录当前模型／建模脚本摘要、尺寸、真实投影、配色和输出分辨率。
-- [drawing-baseline-checks.json](../hardware/enclosure/drawing-baseline-checks.json) 保留 ADR-0046 阶段的42件不变证据；本轮变更由 [control-layout-checks.json](../hardware/enclosure/control-layout-checks.json) 衔接。P2/P3 重新测量、剖切、渲染，旧侧孔标注不复用。
+- [drawing-baseline-checks.json](../hardware/enclosure/drawing-baseline-checks.json) 保留 ADR-0046 阶段的42件不变证据；本轮变更由 [charging-port-checks.json](../hardware/enclosure/charging-port-checks.json)与 [control-layout-checks.json](../hardware/enclosure/control-layout-checks.json) 衔接。P2/P3 重新测量、剖切、渲染，旧侧孔标注不复用。
 - [正式套件清单](../hardware/enclosure/print/manifest.json)提供本次六盘的真实切片估计；[正式包读回](../hardware/enclosure/print-release-checks.json)核对所有导出文件。
 - [validation.json](../hardware/enclosure/validation.json)、[assembly-paths.json](../hardware/enclosure/assembly-paths.json)及[current-perfboard-checks.json](../hardware/enclosure/current-perfboard-checks.json)对应当前模型。线束 0…60 mm 每 2 mm 采样；抬升、旋转和前壳离散采样不是连续运动证明。
 - 旧 OLED、背锁、音量模块等局部尺寸以历史报告和逐件不变证据衔接；P2 加强筋在当前后壳中重新截取并核对体积与尺寸。历史报告保留其原模型摘要。
@@ -56,7 +61,7 @@ CAD SHA-256：`2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003`
    python3 hardware/enclosure/make-drawing-book.py --font "$DISCORA_DRAWING_FONT"
    ```
 
-3. 用 Poppler 渲染全部 12 页并逐页检查尺寸引线、文字、遮挡和版面：
+3. 用 Poppler 渲染全部 13 页并逐页检查尺寸引线、文字、遮挡和版面：
 
    ```sh
    mkdir -p tmp/drawings

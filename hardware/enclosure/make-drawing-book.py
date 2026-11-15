@@ -18,12 +18,12 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = '2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003'
+ANNOTATED_MODEL_SHA256 = 'ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
 LIGHT = HexColor('#d5e1e4')
-TOTAL_PAGES = 12
+TOTAL_PAGES = 13
 
 
 def main():
@@ -55,7 +55,9 @@ def main():
     current_perfboard=json.loads((ROOT/'current-perfboard-checks.json').read_text())
     drawing_baseline=json.loads((ROOT/'drawing-baseline-checks.json').read_text())
     controls=json.loads((ROOT/'control-layout-checks.json').read_text())
-    assert controls['all_pass'] and controls['model_sha256']==data['sha256']
+    charging=json.loads((ROOT/'charging-port-checks.json').read_text())
+    assert charging['all_pass'] and charging['model_sha256']==data['sha256']
+    assert controls['all_pass'] and controls['model_sha256']==charging['baseline_sha256']
     assert controls['baseline_sha256']==drawing_baseline['model_sha256'] and drawing_baseline['all_pass']
     assert current_perfboard['model_sha256']==data['sha256']
     assert drawing_baseline['baseline_sha256']==flat_back['model_sha256']
@@ -86,6 +88,8 @@ def main():
     assert integration['model_sha256']==handle['baseline_sha256']
     def evidence_matches_geometry(report,owners):
         if report['model_sha256']==data['sha256']:return True
+        if any(charging['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
+        if report['model_sha256']==charging['baseline_sha256']:return True
         if any(controls['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
         if any(drawing_baseline['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
         if report['model_sha256']==drawing_baseline['baseline_sha256']:return True
@@ -287,6 +291,7 @@ def main():
     text(26,143,'120 × 1.2 光盘扫掠，至提手后表面净距 29.45。',8,MUTED)
     view('rear',245,22,.85)
     text(317,259,'背视 · 沿 -Y 观察',10,MUTED,'center')
+    text(317,247,'左下双充电口 X=-70；Type-C 上 / DC 下，见第 13 页。',8,TEAL,'center')
     # Drawing cutouts share the actual inclined-plane frame.
     p=view('control-cutouts',40,97)
     centers=data['features']['control_cut_centers_xz']
@@ -761,6 +766,46 @@ def main():
     ],gap=10,size=8.5)
     text(14,30,'左图保留真实遮挡；中图仅按标注剖切真实 P3 实体。没有为图示移动导管或扩大通道。',8.5,MUTED)
     text(14,22,'当前为完整件试打版本；喇叭安装座试片已通过。整机装配、拆撑、气密、承载与声学仍待实测。',8.5,MUTED)
+    c.showPage()
+
+    page(13,'后背双充电口 / 胶接套座','ADR-0048 · 用户母座尺寸；DC 保留完整长度，无需裁剪','背视 0.8:1；共同剖视 2:1')
+    rear_ports=view('rear',20,48,.8)
+    text(88,251,'背视：右下角，Type-C 上 / DC 下',10,TEAL,'center')
+    text(20,36,'从正面看为左下角；两孔 X=-70，口面 Y=93 齐平。',8.5)
+    text(20,27,'中心距侧边 15；底边 Z=1，孔中心距底边 11 / 23。',8.5)
+    dcx,dcy=rear_ports(70,12)
+    usbx,usby=rear_ports(70,24)
+    line(116,usby+8,usbx,usby,TEAL,.2)
+    text(115,usby+9,'Type-C · Z=24',8.5,TEAL,'right',background=True)
+    line(116,dcy+3,dcx,dcy,TEAL,.2)
+    text(115,dcy+4,'DC · Z=12',8.5,TEAL,'right',background=True)
+    dv(dcy,usby,dcx+5,170,'12')
+    table(187,252,215,[
+        ('DC 母座','Ø10.4 × 31.5；外口 Ø10.8'),
+        ('Type-C 母座','10.9 × 5.3 × 15.9；外口 11.3 × 5.7'),
+        ('孔位 / 中心距','X=-70；DC Z=12 / Type-C Z=24；距 12'),
+        ('两处胶接套座','DC 外径 14.8；Type-C 外形 14.8 × 9.7'),
+        ('胶接通道','后壁 5 + 内伸 5 = 总支撑 10；每边名义间隙 0.2'),
+        ('接线预留','母座尾端各留 8；不等于实测弯折半径'),
+    ],split=48,height=9)
+    text(197,187,'两孔共同剖面 · X=-70',10,TEAL)
+    q=view('charging-ports-section',243,119,2)
+    x1,y1=q(83,24);x2,y2=q(93,24)
+    dh(x1,x2,q(93,31)[1],179,'总支撑 10')
+    for z,label in [(24,'Type-C'),(12,'DC')]:
+        px,py=q(93,z)
+        line(px,py,284,py,TEAL,.2)
+        text(286,py-1,label,9,TEAL)
+    text(197,108,'内侧 ← Y → 后外表面；下方为壳底局部',8,MUTED)
+    notes(187,91,[
+        'DC 孔内有可拆支撑；Type-C 无孔内支撑，均检查 10 mm 通道。',
+        '套座与 P2 一体打印，内侧胶接；胶不得进入接口接触区。',
+        '固化时从外侧定位齐平；套座不提供独立轴向卡扣。',
+        '先装母座再装内部总成；保持左下背锁通道畅通，线束可断开。',
+        '母座及尾线包络无静态干涉；胶固定母座保留时七条拆装路径通过。',
+        'Type-C 充电模块尚未选定和布置；本图不构成电气接线方案。',
+        '打印配合、胶层保持力、尾线弯折和实际充电仍待验证。',
+    ],gap=10,size=8.5)
     c.showPage()
 
     c.save()

@@ -199,7 +199,14 @@ def validate(folder):
     for left,right in [('LPort','RPort'),('LDriver','RDriver'),('LChamber','RChamber'),('LDriverFrame','RDriverFrame'),('Window','Window')]:
         symmetry[left+' / '+right]=difference(reflected(doc.getObject(left).Shape),doc.getObject(right).Shape)
     rear=doc.RearShell.Shape
-    symmetry['RearShell']=difference(rear,reflected(rear))
+    # User-selected lower-left ports and sleeves are local asymmetric details.
+    # Remove only the added sleeve volumes and fill only the exact bores;
+    # mirror those exceptions so all remaining rear geometry is still checked.
+    charging_bores=doc.ChargingPortBores.Shape
+    charging_sleeves=doc.ChargingSleeveBlanks.Shape
+    sleeve_exceptions=charging_sleeves.fuse(reflected(charging_sleeves))
+    rear_symmetric=rear.fuse(charging_bores).fuse(reflected(charging_bores)).cut(sleeve_exceptions)
+    symmetry['RearShell (lower-left charging bores and sleeves excepted)']=difference(rear_symmetric,reflected(rear_symmetric))
     # The lower speaker structure, including baffle and mounting tabs, is symmetric.
     low=doc.SpeakerCarrier.Shape.common(Part.makeBox(300,200,220.5,A.Vector(-150,-50,-100)))
     symmetry['SpeakerCarrier below Z=120.5']=difference(low,reflected(low))
@@ -277,7 +284,7 @@ def validate(folder):
         A.closeDocument(baseline.Name)
     bb=Part.makeCompound([o.Shape for o in objects]).BoundBox
     handle=collisions(Part.makeBox(50,10,22,A.Vector(-25,handle_y-5,shoulder_z+11.5)),objects)
-    report={'date':'2026-11-14','model':model.name,'sha256':hashlib.sha256(model.read_bytes()).hexdigest(),
+    report={'date':'2026-11-15','model':model.name,'sha256':hashlib.sha256(model.read_bytes()).hexdigest(),
         'version':A.Version()[:3],'items':len(objects),'objects':[o.Name for o in objects],
         'main_pla_parts':connected,'rigid_pla_pieces':['FrontShell','RearShell','SpeakerCarrier','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','DisplayRetainer','DriveRetainer','Knob'],
         'rear_roof_ownership':roof_ownership,'shell_split_y_mm':49.0,

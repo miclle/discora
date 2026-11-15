@@ -1,0 +1,53 @@
+{
+  "before_sha256": "972a1e8a1ad1305677b18826096211e873007460aacb0724672f2caf2bd3ae58",
+  "model_sha256": "ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d",
+  "all_gui_xml_and_resource_bytes_identical": true,
+  "unique_gui_resources": 362,
+  "gui_resources_in_registration_order": true,
+  "gui_reopen_verified": true,
+  "all_resource_checks_pass": true,
+  "gui_version": "FreeCAD 1.1.4",
+  "gui_verification_method": "Fresh native GUI open of official CAD; queried colors and port centers, visually checked orange shell, dark rear, teal duct, white key glyphs and knob mark.",
+  "gui_observed_colors_rgba": {
+    "FrontShell": [
+      1,
+      0.404,
+      0.122,
+      1
+    ],
+    "RearShell": [
+      0.145,
+      0.157,
+      0.169,
+      1
+    ],
+    "SpeakerCarrier": [
+      0.024,
+      0.749,
+      0.722,
+      1
+    ],
+    "Battery": [
+      0.122,
+      0.329,
+      0.62,
+      1
+    ],
+    "Perfboard": [
+      0.141,
+      0.4,
+      0.322,
+      1
+    ]
+  },
+  "gui_observed_centers_xz_mm": {
+    "DC": [
+      -70,
+      12
+    ],
+    "TypeC": [
+      -70,
+      24
+    ]
+  }
+}

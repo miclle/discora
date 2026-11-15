@@ -114,7 +114,16 @@ def main():
     flat_back = json.loads((ROOT/'p3-flat-back-checks.json').read_text())
     current=json.loads((ROOT/'drawing-baseline-checks.json').read_text())
     controls=json.loads((ROOT/'control-layout-checks.json').read_text())
-    assert controls['all_pass'] and controls['model_sha256']==source_hash
+    charging=json.loads((ROOT/'charging-port-checks.json').read_text())
+    assert charging['all_pass'] and charging['model_sha256']==source_hash
+    assert controls['all_pass'] and controls['model_sha256']==charging['baseline_sha256']
+    data['charging_ports']=charging
+    # Exact solid sections across the socket centerlines; no invented connector internals.
+    for name,x,z in [('dc',-70,12),('usb',-70,24)]:
+        section=rear_shell.common(Part.makeBox(.1,43,19,V(x-.05,52,z-9.5)))
+        projection('charging-'+name+'-section',section,'right')
+    section=rear_shell.common(Part.makeBox(.1,10.2,27,V(-70.05,82.9,4)))
+    projection('charging-ports-section',section,'right')
     assert controls['baseline_sha256']==current['model_sha256'] and current['all_pass']
     assert current['baseline_sha256']==flat_back['model_sha256']
     assert flat_back['baseline_sha256'] == backlock['model_sha256']

@@ -1,0 +1,48 @@
+{
+  "model_sha256": "ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d",
+  "pdf_sha256": "8dcf24ea529313208c196b4f78acf6428f8f98f4feda10429682ccc6730aac21",
+  "pages_reviewed": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+  ],
+  "layout": "compact front-left lower corner, Type-C above DC",
+  "center_xz_mm": {
+    "DC": [
+      -70,
+      12
+    ],
+    "TypeC": [
+      -70,
+      24
+    ]
+  },
+  "center_spacing_mm": 12,
+  "center_above_shell_bottom_mm": {
+    "DC": 11,
+    "TypeC": 23
+  },
+  "opening_edge_gap_mm": 3.75,
+  "support_length_mm": {
+    "rear_wall": 5,
+    "internal_extension": 5,
+    "total": 10
+  },
+  "sleeve_shapes": {
+    "DC": "cylinder, outer diameter 14.8 mm",
+    "TypeC": "rectangle, 14.8 x 9.7 mm"
+  },
+  "all_pages_rendered": true,
+  "visual_layout_review_pass": true,
+  "gui_colors_verified": true
+}

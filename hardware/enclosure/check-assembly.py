@@ -15,6 +15,9 @@ V=A.Vector
 
 def check(doc):
     objects={o.Name:o for g in ('Shell','Controls','Carrier','Hardware') for o in doc.getObject(g).Group}
+    charging_sockets=['DCChargeSocket','USBChargeSocket']
+    for name in charging_sockets:
+        objects[name]=doc.getObject(name)
     def collisions(shape,names):
         hits=[]
         a=shape.BoundBox
@@ -58,7 +61,7 @@ def check(doc):
         'prerequisites':['Front cover removed and its cables disconnected','Four carrier screws removed'],
         'clashes':hits}
     print('PATH speaker_carrier_front',hits,flush=True)
-    fixed=[n for n in objects if n in ['RearShell','Battery','Drive','Bridge','Feet']+stationary_dac]
+    fixed=[n for n in objects if n in ['RearShell','Battery','Drive','Bridge','Feet']+stationary_dac+charging_sockets]
     hits=[]
     for x,width in [(-68,4),(-64,128),(64,4)]:
         piece=doc.DriveRetainer.Shape.common(Part.makeBox(width,200,300,V(x,-10,0)))
@@ -69,7 +72,7 @@ def check(doc):
     print('PATH drive_retainer_front',hits,flush=True)
     # Remove the battery before moving the drive/adapter into the rear service
     # channel. The last 20 mm of both cradle side rails are open for this path.
-    fixed=['RearShell','Feet']+stationary_dac
+    fixed=['RearShell','Feet']+stationary_dac+charging_sockets
     db=doc.Drive.Shape.BoundBox
     # Do not depend on the approximate notch or underside recess during service.
     drive=Part.makeBox(db.XLength,db.YLength,db.ZLength,V(db.XMin,db.YMin,db.ZMin))
@@ -125,7 +128,7 @@ def check(doc):
         'final_translation_xyz_mm':[0,-140,0],'moving':['Drive'],'fixed':fixed,
         'prerequisites':['Drive at service position','SATA adapter removed','Speaker carrier, battery and drive retainer removed'], 'clashes':hits}
     print('PATH drive_front',hits,flush=True)
-    fixed=['RearShell','SpeakerCarrier','LDriver','RDriver','Drive','Bridge','Feet']+stationary_dac
+    fixed=['RearShell','SpeakerCarrier','LDriver','RDriver','Drive','Bridge','Feet']+stationary_dac+charging_sockets
     hits=collisions(box_sweep(doc.Battery.Shape,1,-150),fixed)
     report['paths']['battery_front']={'method':'continuous conservative bounding-box sweep',
         'translation_xyz_mm':[0,-150,0],'moving':['Battery'],'fixed':fixed,

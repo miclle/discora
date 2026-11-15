@@ -16,6 +16,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--model',type=Path,default=ROOT/'Discora.FCStd')
     parser.add_argument('--output',type=Path,default=ROOT.parent.parent/'tmp'/'pla-print')
+    parser.add_argument('--parts',nargs='+',help='Export only these named rigid parts; default exports all eleven')
     args=parser.parse_args();args.output.mkdir(parents=True,exist_ok=True)
     doc=A.openDocument(str(args.model.resolve()))
     normal=A.Vector(0,-27,38);normal.normalize()
@@ -39,7 +40,11 @@ def main():
             'alternate_nozzle_mm':.2, 'brim_allowance_mm':5,
             'linear_deflection_mm':.1,'angular_deflection_rad':.35,
             'physical_print_test':False,'parts':{}}
+    if args.parts:
+        unknown=set(args.parts)-set(rotations)
+        if unknown:parser.error('Unknown parts: '+', '.join(sorted(unknown)))
     for name,rotation in rotations.items():
+        if args.parts and name not in args.parts:continue
         shape=doc.getObject(name).Shape.copy()
         if name in ('PlayPauseKey','EjectKey','PrevKey','NextKey','Knob'):
             # STL loses material assignments; the dedicated 3MF retains them.

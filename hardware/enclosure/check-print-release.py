@@ -91,13 +91,19 @@ def main():
     p3=json.loads((ROOT/'p3-terminal-mouth-checks.json').read_text())
     p2=json.loads((ROOT/'p2-trapezoid-outlet-checks.json').read_text())
     controls=json.loads((ROOT/'control-layout-checks.json').read_text())
-    assert controls['model_sha256']==manifest['model_sha256'] and controls['all_pass']
+    charging=json.loads((ROOT/'charging-port-checks.json').read_text())
+    charging_print=json.loads((ROOT/'charging-port-print-checks.json').read_text())
+    assert charging['model_sha256']==charging_print['model_sha256']==manifest['model_sha256']
+    assert charging['all_pass'] and charging_print['all_pass']
+    assert controls['model_sha256']==charging['baseline_sha256'] and controls['all_pass']
+    assert all(charging['unchanged_finished_parts_difference_mm3'][name]<.001
+               for name in manifest['parts'] if name!='RearShell')
     assert controls['baseline_sha256']==p3['model_sha256'] and p3['all_pass'] and p2['all_pass']
     assert all(controls['unchanged_finished_parts_difference_mm3'][name]<.001
                for name in ('RearShell','SpeakerCarrier'))
     assert p3['geometry']['baseline_sha256']==p2['model_sha256']
     assert p3['geometry']['p2_entire_shape_difference_mm3']<.001
-    for name, audit in [('RearShell',p2['layers']),('SpeakerCarrier',p3['slice'])]:
+    for name, audit in [('RearShell',charging_print),('SpeakerCarrier',p3['slice'])]:
         assert manifest['plates'][name]['gcode_sha256']==audit['gcode_sha256']
         assert manifest['parts'][name]['stl_sha256']==audit['stl_sha256']
     report=dict(model_sha256=manifest['model_sha256'],manifest_sha256=digest(folder/'manifest.json'),

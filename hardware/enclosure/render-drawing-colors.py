@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256 = '2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003'
+MODEL_SHA256 = 'ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d'
 
 
 def palette_from_build():
@@ -164,7 +164,10 @@ def main():
     flat_back=json.loads((ROOT/'p3-flat-back-checks.json').read_text())
     current=json.loads((ROOT/'drawing-baseline-checks.json').read_text())
     controls=json.loads((ROOT/'control-layout-checks.json').read_text())
-    assert controls['all_pass'] and controls['model_sha256']==MODEL_SHA256
+    charging=json.loads((ROOT/'charging-port-checks.json').read_text())
+    assert charging['all_pass'] and charging['model_sha256']==MODEL_SHA256
+    assert controls['all_pass'] and controls['model_sha256']==charging['baseline_sha256']
+    assert all(charging['color_face_order_preserved'].values())
     assert controls['baseline_sha256']==current['model_sha256'] and current['all_pass']
     assert all(current['color_face_order_preserved'].values())
     assert current['baseline_sha256']==flat_back['model_sha256']
@@ -202,7 +205,7 @@ def main():
                for n in ('PlayPauseKey','EjectKey','PrevKey','NextKey'))
     white_marks=dict(appearance['color_update']['white_mark_faces_zero_based'])
     knob=json.loads((ROOT/'dual-color-knob-checks.json').read_text())
-    assert knob['model_sha256']==MODEL_SHA256 and knob['all_pass']
+    assert knob['model_sha256']==charging['baseline_sha256'] and knob['all_pass']
     white_marks['Knob']=knob['white_faces_zero_based']
     rows={
         'front':((1,0,0),(0,0,1),(0,-1,0)),
@@ -221,7 +224,7 @@ def main():
         print('SURFACES',name,len(meshes[name]),flush=True)
     outputs={}
     for name,view in data['views'].items():
-        if name in ('control-cutouts','perfboard-outline','p3-seat-section','upper-backlock-section','duct-section') or name.startswith(('oled-','volume-')):continue
+        if name in ('control-cutouts','perfboard-outline','p3-seat-section','upper-backlock-section','duct-section') or name.startswith(('oled-','volume-','charging-')):continue
         parts=[]
         if 'parts' in view:
             parts=[(n,p['offset_mm']) for p in view['parts'] for n in p['objects']]

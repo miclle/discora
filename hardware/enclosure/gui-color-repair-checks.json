@@ -1,0 +1,30 @@
+{
+  "before_sha256": "211fbf363994ac1858a29040c47d5e7ae2310f476599dfb907aa4c591e037287",
+  "model_sha256": "a547d2f4aaa65aefba2019a5e151b46ca28ec8188487d2c5deaaef22f4b7512a",
+  "document_and_geometry_bytes_identical": true,
+  "all_original_color_resources_identical": true,
+  "gui_resources_in_registration_order": true,
+  "gui_resource_references_unique": true,
+  "renamed_reference_objects": [
+    "ChargingSleeveBlanks",
+    "ChargingPortBores",
+    "DCChargeSocket",
+    "USBChargeSocket",
+    "DCChargeLead",
+    "USBChargeLead"
+  ],
+  "all_pass": true,
+  "gui_reopen_verified": true,
+  "gui_verification": {
+    "application": "FreeCAD 1.1.4",
+    "method": "Native GUI openDocument and axonometric screenshot inspection",
+    "observed_colors": [
+      "orange front shell and handle",
+      "dark rear shell and knob",
+      "white button symbols",
+      "dark display with light graphics",
+      "cyan side duct"
+    ],
+    "model_saved_during_verification": false
+  }
+}

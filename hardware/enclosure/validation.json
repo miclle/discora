@@ -1,7 +1,7 @@
 {
   "date": "2026-11-15",
   "model": "Discora.FCStd",
-  "sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003",
+  "sha256": "ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d",
   "version": [
     "1",
     "1",
@@ -189,7 +189,7 @@
     "LChamber / RChamber": 0.0,
     "LDriverFrame / RDriverFrame": 0.0,
     "Window / Window": 0.0,
-    "RearShell": 0.0,
+    "RearShell (lower-left charging bores and sleeves excepted)": 0.0,
     "SpeakerCarrier below Z=120.5": 0.0,
     "FrontShell (control details and checked grille excepted)": 0.0
   },
@@ -579,7 +579,5 @@
     "Separate assembly-path report distinguishes continuous conservative sweeps from sampled cover motion.",
     "Battery leads, straps, connectors, bridge cables and power modules are not validated.",
     "Side passages remain untuned; geometric continuity is not acoustic validation."
-  ],
-  "validated_candidate_sha256": "463e2832e75caf80000fa912373440799039c4cf30f89ede09fe02b0806092c6",
-  "geometry_reuse_evidence": "control-layout-checks.json"
+  ]
 }

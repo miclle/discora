@@ -15,6 +15,7 @@ import perfboard_geometry as perfboard
 import speaker_wire_geometry as speaker_wires
 import speaker_print_geometry as speaker_print
 import speaker_duct_geometry as speaker_duct
+import charging_port_geometry as charging_ports
 
 V = A.Vector
 X, Y, Z = V(1, 0, 0), V(0, 1, 0), V(0, 0, 1)
@@ -815,12 +816,19 @@ def build(folder):
                      ['LChamber','RChamber','LDriverFrame','RDriverFrame','FrontBaffle','AmpShelf','AmpPads']
                      +core_tab_names+perfboard_sources,
                      [],TEAL,supports)
-    rear=consolidate("RearShell","P2 · 一体后壳／左右圆角梯形开放出口",
+    rear=consolidate("RearShell","P2 · 一体后壳／左下双充电口／左右开放侧口",
                      ['RearRoof','SlotGuide','LPanel','RPanel','Back','Base','BatteryCradle','DriveCarrier','LPort','RPort'],rear_bosses,BLACK,shell)
     rear.Shape=rear.Shape.cut(doc.getObject(rear_fastener_cuts).Shape).removeSplitter()
     # Strap slots are outside the 112 mm pack. Straps are removed before sliding the pack out.
     strap_slots=[box(x,y,BASE_Z-.5,3,8,20) for x in (-61,58) for y in (24,44)]
     rear.Shape=rear.Shape.cut(Part.makeCompound(strap_slots)).removeSplitter()
+    rear.Shape=charging_ports.apply(rear.Shape)
+    source_part('ChargingSleeveBlanks',charging_ports.sleeve_blanks())
+    source_part('ChargingPortBores',charging_ports.bores())
+    charging=group('ChargingInterfaces','06 · 充电母座包络与接线预留（非打印件）')
+    for name,shape in {**charging_ports.socket_shapes(),**charging_ports.wire_shapes()}.items():
+        item=raw(name,shape);charging.addObject(item);item.Visibility=False
+        item.Label=name+' · 用户尺寸／胶固定／待实装'
     bottom_envelope = bottom_corner_envelope()
     for obj in (front, rear):
         obj.Shape = obj.Shape.common(bottom_envelope).removeSplitter()

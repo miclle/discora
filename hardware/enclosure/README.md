@@ -1,9 +1,9 @@
 # Discora V4 · 三主体 PLA 外壳
 
-当前操控布局采用 [ADR-0047](../../docs/decisions/0047-control-spacing-and-knob.md)，四键左移4 mm、旋钮右移4 mm并向提手移2 mm，十字增至28 mm。主体配套版本为 **ADR-0046 P3 短渐扩口 + ADR-0045 P2 圆角梯形开放侧口**。三主体、声道连通、左右镜像、装配路径和切片已检查；完整件的打印、支撑清理、装配、强度、温升、密封及声学仍待实测。P3 喇叭安装座试片已打印并确认装配无问题。
+当前操控布局采用 [ADR-0047](../../docs/decisions/0047-control-spacing-and-knob.md)，四键左移4 mm、旋钮右移4 mm并向提手移2 mm，十字增至28 mm。主体配套版本为 **ADR-0046 P3 短渐扩口 + ADR-0048 P2 双充电口（保留圆角梯形开放侧口）**。三主体、声道连通、左右镜像、装配路径和切片已检查；完整件的打印、支撑清理、装配、强度、温升、密封及声学仍待实测。P3 喇叭安装座试片已打印并确认装配无问题。
 
 - [正式打印套件：11 件 STL、6 盘 3MF](print/README.md)
-- [唯一彩色尺寸与装配图册：12 页 A3](drawings/Discora-V4-drawing-book-color.pdf)
+- [唯一彩色尺寸与装配图册：13 页 A3](drawings/Discora-V4-drawing-book-color.pdf)
 - [可编辑 FreeCAD 模型](Discora.FCStd)
 - [打印设置、装配顺序与验收](../../docs/enclosure-printing.md)
 - [图册内容与生成方式](../../docs/enclosure-drawings.md)
@@ -17,6 +17,8 @@ P3 双声腔背面齐平，可直接贴打印板。后侧洞洞板固定点为�
 主通路名义面积 400 mm²、中心线路径约 46.8 mm，末端最后 4 mm 渐扩至约 587.22 mm²；圆角 R2.2，横截面口沿名义厚 1.8 mm。P2 外口为圆角梯形，外口包络约 38.48×28.20 mm、R5.6；P2/P3 保持 0.7 mm 滑配间隙。原内凹饰片、连接筋及 P2 长短管已经取消。结构尺寸不代表已完成声学调谐。见 [ADR-0043](../../docs/decisions/0043-independent-speaker-ducts-and-open-outlets.md)、[ADR-0045](../../docs/decisions/0045-trapezoid-exterior-outlets.md)、[ADR-0046](../../docs/decisions/0046-p3-terminal-mouth.md)。
 
 P2 四处 P3 固定座保留 8×8×4 mm 三角筋，后斜面两处背锁座保留短加强筋；图册第 10、11 页给出尺寸与工具通路。下方背锁通道深 78.8 mm，需细长螺丝刀，螺钉头径不超过 4 mm。实际扭矩和反复拆装寿命待验。
+
+后背新增 DC 与 Type-C 充电口，位于从正面看过去的左下角，两孔 X=-70，DC Z=12、Type-C Z=24（上 Type-C、下 DC），中心距 12 mm、距底边 11／23 mm，孔径 Ø10.8／11.3×5.7 mm。内侧各延伸 5 mm 胶接套座，加 5 mm 后壁后总支撑长度 10 mm；DC 为圆筒，Type-C 为矮矩形套座；DC 保留 31.5 mm 原长，Type-C 长 15.9 mm，口面与 Y=93 齐平。DC 孔内打印支撑需先清理，Type-C 孔仍须检查贯通，母座和胶接保持力待实装；见 [ADR-0048](../../docs/decisions/0048-rear-charging-ports.md)。
 
 ## 打印件清单
 
@@ -35,7 +37,7 @@ P2 四处 P3 固定座保留 8×8×4 mm 三角筋，后斜面两处背锁座保�
 
 ## 尺寸与布局
 
-单位 mm；X 向右、Y 向后、Z 向上，中心面 X=0。除既有操控布局外，外壳、提手、格栅和声学结构按左右镜像设计；内部 SATA 和电子接口按实际位置避让。
+单位 mm；X 向右、Y 向后、Z 向上，中心面 X=0。除既有操控布局及用户指定的左下充电孔／套座外，外壳、提手、格栅和声学结构按左右镜像设计；内部 SATA 和电子接口按实际位置避让。
 
 | 对象 | 当前名义尺寸或位置 |
 | --- | --- |
@@ -59,15 +61,19 @@ P2 四处 P3 固定座保留 8×8×4 mm 三角筋，后斜面两处背锁座保�
 
 ## 验证与重现
 
-当前 CAD SHA-256：`2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003`。
+2026-11-15 修复 headless 保存后的 GUI 资源顺序及新增对象共用资源引用：几何与原配色数据逐字节保持，修复证据见 [gui-color-repair-checks.json](gui-color-repair-checks.json)。`check-charging-ports.py` 增加资源唯一性和封装顺序检查；不能仅凭颜色数据文件存在判定 GUI 配色可读。
+
+本轮左下孔位调整保留全部 GUI XML 和 362 个独立显示资源，见 [配色保留检查](gui-color-preservation-checks.json)。
+
+当前 CAD SHA-256：`ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d`。
 
 - [正式打印包检查](print-release-checks.json)：11 个闭合网格、六盘 1180 层、材料与支撑参数、文件摘要、零网格修复。
-- [整机检查](validation.json)：44 个成品对象、有效实体、已定义干涉及左右对称检查。
+- [整机检查](validation.json)：44 个成品对象、有效实体、已定义干涉及左右对称检查（左下两处充电孔和套座为局部例外）。
 - [七条拆装路径](assembly-paths.json)：断线、卸紧固件及对应前置拆卸条件下通过；抬升和旋转采样不等于连续运动证明。
 - [当前洞洞板与线束检查](current-perfboard-checks.json)：三点固定、导线预留、60 mm 维护位及按序拔插；实际线束应力和手指握持未测。
 - [P3 声道及末端](p3-terminal-mouth-checks.json)：有效连通气路、独立声腔、完整出口投影、座面保持和原 18 处悬空复核。
-- [P2 开放侧口](p2-trapezoid-outlet-checks.json)：侧口收口支撑审核；通过 P3 报告的 P2 零差集衔接至当前版本。
+- [双充电口](charging-port-checks.json)与[P2 新切片](charging-port-print-checks.json)：43 个原成品对象不变，P2 改动限定于两处胶接套座；440 层及侧口支撑重新检查，充电孔内可拆支撑须清理。
 
-历次 ADR 与检查报告保留设计取舍和对应版本的证据，不作为当前打印文件入口。图册以当前保存实体重新投影，通过 [操控布局检查](control-layout-checks.json) 衔接历史图册证据；旋钮的材料面序由当前双色导出检查记录。
+历次 ADR 与检查报告保留设计取舍和对应版本的证据，不作为当前打印文件入口。图册以当前保存实体重新投影，通过 [充电口检查](charging-port-checks.json)及[操控布局检查](control-layout-checks.json) 衔接历史图册证据；旋钮的材料面序由当前双色导出检查记录。
 
 整机生成入口为 [build.FCMacro](build.FCMacro)，保存模型后用 [validate.FCMacro](validate.FCMacro) 及相关检查脚本验证。导出、切片命令见[打印说明](../../docs/enclosure-printing.md#重现)，出图命令见[图纸说明](../../docs/enclosure-drawings.md#更新图册)。日常复查输出到 `tmp/`，不要覆盖含调整前基线的历史报告。所有切片脚本仅在本机运行，不连接打印机。

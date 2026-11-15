@@ -1,0 +1,176 @@
+{
+  "model_sha256": "ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d",
+  "baseline_sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003",
+  "unchanged_finished_parts_difference_mm3": {
+    "FrontShell": 0.0,
+    "Feet": 0.0,
+    "Window": 0.0,
+    "StatusArt": 0.0,
+    "PlayPauseKey": 0.0,
+    "EjectKey": 0.0,
+    "PrevKey": 0.0,
+    "NextKey": 0.0,
+    "ButtonRetainer": 0.0,
+    "Knob": 0.0,
+    "DisplayRetainer": 0.0,
+    "DriveRetainer": 0.0,
+    "SpeakerCarrier": 0.0,
+    "LDriver": 0.0,
+    "RDriver": 0.0,
+    "PlayPauseSwitch": 0.0,
+    "EjectSwitch": 0.0,
+    "PrevSwitch": 0.0,
+    "NextSwitch": 0.0,
+    "Encoder": 0.0,
+    "VolumePot": 0.0,
+    "Drive": 0.0,
+    "Bridge": 0.0,
+    "DisplayPCB": 0.0,
+    "DisplayHeader": 0.0,
+    "Amp": 0.0,
+    "AmpChip": 0.0,
+    "Perfboard": 0.0,
+    "MCU": 0.0,
+    "MCUChip": 0.0,
+    "MCUSockets": 0.0,
+    "DAC": 0.0,
+    "DACChip": 0.0,
+    "DACSockets": 0.0,
+    "BuckA": 0.0,
+    "BuckB": 0.0,
+    "XHButtons": 0.0,
+    "XHOLED": 0.0,
+    "XHVolumeSwitch": 0.0,
+    "PerfboardScrew1": 0.0,
+    "PerfboardScrew2": 0.0,
+    "PerfboardScrew3": 0.0,
+    "Battery": 0.0
+  },
+  "rear_outside_mount_zones_difference_mm3": 0.0,
+  "centers_xyz_mm": {
+    "DC": [
+      -70,
+      93,
+      12
+    ],
+    "TypeC": [
+      -70,
+      93,
+      24
+    ]
+  },
+  "openings_mm": {
+    "DC_diameter": 10.8,
+    "TypeC_width": 11.3,
+    "TypeC_height": 5.7
+  },
+  "sleeve_outer_mm": {
+    "DC_diameter": 14.8,
+    "TypeC_xz": [
+      14.8,
+      9.7
+    ]
+  },
+  "sleeve_internal_depth_mm": 5,
+  "total_support_length_mm": 10,
+  "face_flush_y_mm": 93,
+  "dc_trim_required": false,
+  "ports": {
+    "DCChargeSocket": {
+      "clashes": {},
+      "body_depth_mm": 31.5,
+      "drive_clearance_mm": 30.197405997492968,
+      "rear_insertion_clear": true
+    },
+    "USBChargeSocket": {
+      "clashes": {},
+      "body_depth_mm": 15.900000000000006,
+      "drive_clearance_mm": 22.447419041431502,
+      "rear_insertion_clear": true
+    },
+    "DCChargeLead": {
+      "clashes": {},
+      "body_depth_mm": 8.0,
+      "drive_clearance_mm": 31.7513715387949
+    },
+    "USBChargeLead": {
+      "clashes": {},
+      "body_depth_mm": 8.0,
+      "drive_clearance_mm": 22.447419041431502
+    }
+  },
+  "bore_sections": [
+    {
+      "port": "DC",
+      "y_mm": 83.01,
+      "obstruction_mm3": 0.0
+    },
+    {
+      "port": "TypeC",
+      "y_mm": 83.01,
+      "obstruction_mm3": 0.0
+    },
+    {
+      "port": "DC",
+      "y_mm": 85.5,
+      "obstruction_mm3": 0.0
+    },
+    {
+      "port": "TypeC",
+      "y_mm": 85.5,
+      "obstruction_mm3": 0.0
+    },
+    {
+      "port": "DC",
+      "y_mm": 88.01,
+      "obstruction_mm3": 0.0
+    },
+    {
+      "port": "TypeC",
+      "y_mm": 88.01,
+      "obstruction_mm3": 0.0
+    },
+    {
+      "port": "DC",
+      "y_mm": 92.99,
+      "obstruction_mm3": 0.0
+    },
+    {
+      "port": "TypeC",
+      "y_mm": 92.99,
+      "obstruction_mm3": 0.0
+    }
+  ],
+  "saved_sleeve_sections": {
+    "combined_cross_section_difference_mm3": 0.0,
+    "inner_end_y_mm": 83
+  },
+  "rear_screw_access_obstruction_mm3": 0.0,
+  "center_spacing_mm": 12,
+  "center_to_left_edge_mm": 15,
+  "opening_edge_gap_mm": 3.75,
+  "center_above_shell_bottom_mm": {
+    "DC": 11,
+    "TypeC": 23
+  },
+  "layout": "Front-left lower corner; USB above DC; rear view lower right",
+  "color_face_order_preserved": {
+    "PlayPauseKey": true,
+    "EjectKey": true,
+    "PrevKey": true,
+    "NextKey": true,
+    "Knob": true
+  },
+  "gui_resource_order_verified": true,
+  "gui_resource_references_unique": true,
+  "all_original_viewproviders_preserved": true,
+  "all_pass": true,
+  "physical_fit_verified": false,
+  "adhesive_retention_verified": false,
+  "electrical_charging_verified": false,
+  "limits": [
+    "Socket housings use user maximum dimensions; terminal and cable shapes not measured.",
+    "8 mm tail reservation is not a verified wire bend radius.",
+    "Type-C charger board not selected or placed; no electrical charging claim."
+  ]
+}

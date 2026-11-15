@@ -1,6 +1,6 @@
 {
-  "model_sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003",
-  "manifest_sha256": "d113ebecd56b6266dc2458af96eaa968c7f4994b96fca2d58f19b9e396eb2626",
+  "model_sha256": "ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d",
+  "manifest_sha256": "2db4587871901e099f5c85ffbd874ea38e2337ad8deb029b06500f24f3686cc8",
   "meshes": {
     "FrontShell": {
       "closed": true,
@@ -10,7 +10,7 @@
     },
     "RearShell": {
       "closed": true,
-      "relative_cad_volume_error": 5.306357306673178e-07,
+      "relative_cad_volume_error": 1.2558959304739884e-06,
       "on_bed": true,
       "fits_bed": true
     },
@@ -79,7 +79,7 @@
     },
     "RearShell": {
       "layers": 440,
-      "extrusion_moves": 1308961,
+      "extrusion_moves": 1328814,
       "mesh_repairs": 0,
       "settings_persisted": true,
       "archive_valid": true

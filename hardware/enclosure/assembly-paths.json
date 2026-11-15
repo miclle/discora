@@ -39,7 +39,9 @@
         "DriveRetainer",
         "Drive",
         "Bridge",
-        "Battery"
+        "Battery",
+        "DCChargeSocket",
+        "USBChargeSocket"
       ],
       "prerequisites": [
         "Front cover removed and its cables disconnected",
@@ -62,7 +64,9 @@
         "Feet",
         "Drive",
         "Bridge",
-        "Battery"
+        "Battery",
+        "DCChargeSocket",
+        "USBChargeSocket"
       ],
       "prerequisites": [
         "Front cover and speaker carrier removed",
@@ -95,7 +99,9 @@
       ],
       "fixed": [
         "RearShell",
-        "Feet"
+        "Feet",
+        "DCChargeSocket",
+        "USBChargeSocket"
       ],
       "prerequisites": [
         "Front cover and speaker carrier removed",
@@ -140,6 +146,8 @@
       "fixed": [
         "RearShell",
         "Feet",
+        "DCChargeSocket",
+        "USBChargeSocket",
         "Drive at service position"
       ],
       "prerequisites": [
@@ -185,7 +193,9 @@
       ],
       "fixed": [
         "RearShell",
-        "Feet"
+        "Feet",
+        "DCChargeSocket",
+        "USBChargeSocket"
       ],
       "prerequisites": [
         "Drive at service position",
@@ -211,7 +221,9 @@
         "RDriver",
         "Drive",
         "Bridge",
-        "Feet"
+        "Feet",
+        "DCChargeSocket",
+        "USBChargeSocket"
       ],
       "prerequisites": [
         "Front cover removed",
@@ -279,7 +291,9 @@
         "PerfboardScrew1",
         "PerfboardScrew2",
         "PerfboardScrew3",
-        "Battery"
+        "Battery",
+        "DCChargeSocket",
+        "USBChargeSocket"
       ],
       "prerequisites": [
         "Four recessed rear-access front-cover screws removed",
@@ -290,7 +304,5 @@
   },
   "drive_service_envelope": "Filled maximum 128 x 10.8 x 130 mm box; connector retains modeled housing and strain relief",
   "all_pass": true,
-  "model_sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003",
-  "validated_candidate_sha256": "01dc8f7849a6040cea1f1da26552f5e96c524a34f5b4749820fe3c19869ea0a7",
-  "geometry_reuse_evidence": "control-layout-checks.json"
+  "model_sha256": "ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d"
 }

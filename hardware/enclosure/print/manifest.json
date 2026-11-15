@@ -1,7 +1,7 @@
 {
   "model": "../Discora.FCStd",
-  "model_sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003",
-  "release": "ADR-0047",
+  "model_sha256": "ecfa09fc43b62238fd874a2d6f5dee0a315cdba10f846dceb0559b454c68fb1d",
+  "release": "ADR-0048 compact lower-left charging ports, 12 mm center spacing, 10 mm total support",
   "slicer_version": "02.09.01.70",
   "profile_names": {
     "machine": "Bambu Lab P2S 0.4 nozzle",
@@ -40,7 +40,7 @@
       ],
       "linear_deflection_mm": 0.05,
       "angular_deflection_rad": 0.2,
-      "facets": 7032,
+      "facets": 7516,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -49,7 +49,7 @@
         0.0,
         -0.7071067811865475
       ],
-      "stl_sha256": "b0735c1a5c74dfdd745df7b90a38965c253bf400d36a118d5465b5c6fb972edf"
+      "stl_sha256": "83940379fcbec36b632885756b51177245cc658d67d6476fd608ed6952a1cf2b"
     },
     "SpeakerCarrier": {
       "file": "SpeakerCarrier.stl",
@@ -264,20 +264,21 @@
       "first_layer_height_mm": 0.2,
       "filament_colours": [
         "#00AE42"
-      ]
+      ],
+      "reused_from_model_sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003"
     },
     "RearShell": {
       "file": "Discora-P2-RearShell.3mf",
       "parts": [
         "RearShell"
       ],
-      "project_sha256": "a254d0cd5713b742481667dbab85bcaf1a811ca57402d1c7de3895d0c8cbe27e",
-      "gcode_sha256": "0d3539481fbd8806eccee7a2306d15c663488bbd059cfc503339ca495da163b8",
+      "project_sha256": "d4455ac99b1a91384f2f82d517d905a966b9dcbd06b1f20de7569a22a5cf9973",
+      "gcode_sha256": "106a68508ec86a94c33c80582d18723b62424a2066a3b6023c687f969e716e1e",
       "layers": 440,
-      "total_estimated_time": "9h 12m 0s",
-      "filament_g": 286.84,
+      "total_estimated_time": "9h 15m 55s",
+      "filament_g": 287.94,
       "filament_g_by_material": [
-        286.84
+        287.94
       ],
       "exit_code": 0,
       "support_settings": {
@@ -293,8 +294,7 @@
       "filament_colours": [
         "#00AE42"
       ],
-      "reused_audited_slice": true,
-      "reused_from_model_sha256": "80eede1e85eafe8aca6ba6702cb2e169b6f7b4d1c368eeca10f1e6647bacebe0"
+      "vendor_T65535_parser_notice": true
     },
     "SpeakerCarrier": {
       "file": "Discora-P3-SpeakerCarrier.3mf",
@@ -324,7 +324,7 @@
         "#00AE42"
       ],
       "reused_audited_slice": true,
-      "reused_from_model_sha256": "80eede1e85eafe8aca6ba6702cb2e169b6f7b4d1c368eeca10f1e6647bacebe0"
+      "reused_from_model_sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003"
     },
     "SmallParts": {
       "file": "Discora-Retainers.3mf",
@@ -355,7 +355,7 @@
       "filament_colours": [
         "#00AE42"
       ],
-      "reused_from_model_sha256": "80eede1e85eafe8aca6ba6702cb2e169b6f7b4d1c368eeca10f1e6647bacebe0"
+      "reused_from_model_sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003"
     },
     "Keys": {
       "file": "Discora-Keys-Orange-White.3mf",
@@ -659,7 +659,7 @@
           }
         }
       },
-      "reused_from_model_sha256": "80eede1e85eafe8aca6ba6702cb2e169b6f7b4d1c368eeca10f1e6647bacebe0"
+      "reused_from_model_sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003"
     },
     "Knob": {
       "file": "Discora-Knob-Black-White.3mf",
@@ -756,17 +756,20 @@
             ]
           ]
         }
-      }
+      },
+      "reused_from_model_sha256": "2d704f403a48870832338c8d0ac6c0f71b357f08b3bdcb7c0f777cb0e19f9003"
     }
   },
-  "total_filament_g": 648.46,
+  "total_filament_g": 649.56,
   "evidence": {
-    "p2": "../p2-trapezoid-outlet-checks.json",
+    "p2": "../charging-port-print-checks.json",
     "p3": "../p3-terminal-mouth-checks.json",
     "assembly": "../assembly-paths.json",
     "static": "../validation.json",
     "perfboard": "../current-perfboard-checks.json",
-    "controls": "../control-layout-checks.json"
+    "controls": "../control-layout-checks.json",
+    "charging": "../charging-port-checks.json",
+    "gui_color_preservation": "../gui-color-preservation-checks.json"
   },
   "all_pass": true,
   "printer_contacted": false,
@@ -774,6 +777,7 @@
   "limits": [
     "11 rigid PLA parts; soft feet, hardware and electronics are purchased parts.",
     "Speaker mount coupon passed; full-part fit, support removal, sealing, strength and acoustics are not physically verified.",
-    "STL keys and knob are monochrome envelopes; use the two-material 3MF projects."
+    "STL keys and knob are monochrome envelopes; use the two-material 3MF projects.",
+    "The DC bore contains removable supports; Type-C has no bore support toolpaths. Check both 10 mm passages before bonding. Adhesive retention and charging electronics are unverified."
   ]
 }

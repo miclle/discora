@@ -17,9 +17,10 @@ def repair(model, output):
         payload = {item.filename: archive.read(item) for item in entries}
         assert len(payload) == len(entries), 'Duplicate archive entries'
         gui = ET.fromstring(payload['GuiDocument.xml'])
-        resources = list(dict.fromkeys(
+        resources = list(
             value for element in gui.iter() for key, value in element.attrib.items()
-            if key.lower() == 'file' and value))
+            if key.lower() == 'file' and value)
+        assert len(resources)==len(set(resources)), 'Copy shared GUI resources to unique filenames before repairing order'
         assert all(name in payload for name in resources), 'Missing GUI resource'
         gui_names = {'GuiDocument.xml', *resources}
         order = [item.filename for item in entries if item.filename not in gui_names]
