@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256 = '8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee'
+MODEL_SHA256 = 'd21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6'
 
 
 def palette_from_build():
@@ -167,7 +167,11 @@ def main():
     charging=json.loads((ROOT/'charging-port-checks.json').read_text())
     grille_report=json.loads((ROOT/'grille-clearance-checks.json').read_text())
     battery_floor=json.loads((ROOT/'battery-floor-checks.json').read_text())
-    assert battery_floor['all_pass'] and battery_floor['model_sha256']==MODEL_SHA256
+    bare_volume=json.loads((ROOT/'control-volume-checks.json').read_text())
+    assert bare_volume['all_pass'] and bare_volume['model_sha256']==MODEL_SHA256
+    assert battery_floor['all_pass'] and battery_floor['model_sha256']==bare_volume['baseline_sha256']
+    assert all(bare_volume['unchanged_finished_parts_difference_mm3'][n]<.001 for n in ('RearShell','SpeakerCarrier','Knob'))
+    assert all(bare_volume['color_face_order_preserved'].values())
     assert grille_report['all_pass'] and grille_report['model_sha256']==battery_floor['baseline_sha256']
     assert all(battery_floor['unchanged_shapes_difference_mm3'][n]<.001 for n in ('FrontShell','SpeakerCarrier','FrontGrille','LDriver','RDriver'))
     assert charging['all_pass'] and charging['model_sha256']==grille_report['baseline_sha256']
@@ -246,7 +250,7 @@ def main():
                 if shape.isNull() or not shape.Faces:continue
                 mesh=surface_polygons(shape)
             if obj=='VolumePot' and name!='section':
-                for solid,key in zip(doc.VolumePot.Shape.Solids,('RUBBER','PCB','WHITE','SILVER')):
+                for solid,key in zip(doc.VolumePot.Shape.Solids,('RUBBER','SILVER')):
                     render_parts.append((surface_polygons(solid),palette[key],np.array(offset)))
             elif obj in white_marks and name!='section':
                 shape=doc.getObject(obj).Shape

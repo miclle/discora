@@ -1,5 +1,9 @@
-"""Check saved PCB B50K envelope, mounting and assembly with FreeCAD Python."""
+"""Check saved bare B50K, solder and lead envelopes, mounting and assembly with FreeCAD Python."""
 import argparse
+import ast
+import zipfile
+import struct
+import xml.etree.ElementTree as ET
 import hashlib
 import json
 import math
@@ -21,7 +25,7 @@ def local(shape):
     s=shape.copy();s.Placement=pose.inverse().multiply(s.Placement);return s
 def world(shape):
     s=shape.copy();s.Placement=pose.multiply(s.Placement);return s
-def delta(a,b):return a.cut(b).Volume+b.cut(a).Volume
+def delta(a,b):return 0.0 if a.exportBrepToString()==b.exportBrepToString() else a.cut(b).Volume+b.cut(a).Volume
 def equal(a,b):assert abs(a-b)<1e-6,(a,b)
 objects={o.Name:o for g in ('Shell','Controls','Carrier','Hardware') for o in doc.getObject(g).Group}
 def clashes(shape,excluded=()):
@@ -36,29 +40,56 @@ report=dict(model_sha256=hashlib.sha256(args.model.read_bytes()).hexdigest(),
             unchanged_finished_parts_difference_mm3={},physical_assembly_test=False)
 for n,o in objects.items():
     assert o.Shape.isValid() and o.Shape.Solids,n
-    if n in ('FrontShell','VolumePot','Knob','Encoder','ButtonRetainer') or n.endswith(('Key','Switch')):continue
+    if n in ('FrontShell','VolumePot'):continue
     d=delta(o.Shape,old.getObject(n).Shape)
     assert d<.001,(n,d)
     report['unchanged_finished_parts_difference_mm3'][n]=d
 print('UNCHANGED_PARTS',len(report['unchanged_finished_parts_difference_mm3']),flush=True)
+# Rebuild only the local component function and compare with saved geometry.
+node=next(n for n in ast.parse((ROOT/'build.FCMacro').read_text()).body
+          if isinstance(n,ast.FunctionDef) and n.name=='volume_shapes')
+scope=dict(Part=Part,math=math,V=V,X=V(1,0,0),Y=V(0,1,0),Z=V(0,0,1))
+exec(compile(ast.Module(body=[node],type_ignores=[]),'volume_shapes','exec'),scope)
+expected=scope['volume_shapes']()
+report['build_source_difference_mm3']={}
+for key,name in [('body','VolumePot'),('shaft','Encoder'),('knob','Knob'),
+                 ('solder','VolumeSolderClearance'),('audio_lead','VolumeAudioLeadClearance')]:
+ value=delta(world(expected[key]),doc.getObject(name).Shape)
+ assert value<.001,(name,value)
+ report['build_source_difference_mm3'][name]=value
+assert sum(delta(world(expected['pocket']),solid)<.001 for solid in doc.CowlTool.Shape.Solids)==1
+report['source_sha256']={name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in
+                       ('build.FCMacro','perfboard_geometry.py','rear_setback_geometry.py')}
+with zipfile.ZipFile(args.model) as archive:
+ xml=ET.fromstring(archive.read('GuiDocument.xml'))
+ vp=next(el for el in xml.iter('ViewProvider') if el.get('name')=='VolumePot')
+ ref=next(iter(next(el for el in vp.iter('Property') if el.get('name')=='ShapeAppearance'))).get('file')
+ raw=archive.read(ref);count=struct.unpack('<I',raw[:4])[0]
+ assert count==len(doc.VolumePot.Shape.Faces) and len(raw)==4+count*36
+ for name in ('VolumeSolderClearance','VolumeAudioLeadClearance'):
+  vp=next(el for el in xml.iter('ViewProvider') if el.get('name')==name)
+  visibility=next(el for el in vp.iter('Property') if el.get('name')=='Visibility')
+  assert next(iter(visibility)).get('value')=='false'
+report['gui_payload']=dict(volume_face_material_count=count,new_allowances_hidden=True,gui_reopen_verified=False)
+print('BUILD_SOURCE_AND_GUI_PAYLOAD_OK',flush=True)
+
 front=doc.FrontShell.Shape;before=old.FrontShell.Shape
-clip=Part.makeBox(174,150,100,V(-87,-25,150))
-changes=[front.common(clip).cut(before.common(clip)),before.common(clip).cut(front.common(clip))]
-zone=Part.makeCompound([Part.makeBox(45,45,44,V(-75,0,151)),Part.makeBox(40,62,52,V(31,0,140))])
-# OCCT can return a non-null, empty compound for the no-added-material case.
-outside=[s.cut(zone) for s in changes if s.Solids]
-report['front_change_outside_mount_mm3']=sum(s.Volume for s in outside if s.Solids)
+# Changes are confined to the previous/new volume pockets, not the grille.
+zone=world(Part.makeBox(30,35,40,V(-15,0,-20)))
+changes=[front.common(zone).cut(before.common(zone)),before.common(zone).cut(front.common(zone))]
+report['front_change_outside_mount_mm3']=delta(front.cut(zone),before.cut(zone))
 assert report['front_change_outside_mount_mm3']<.001
 shell=local(front).common(Part.makeBox(30,35,40,V(-15,-1,-20)))
 body=local(doc.VolumePot.Shape);b=body.BoundBox
-for actual,expected in zip((b.XLength,b.YLength,b.ZLength,b.XMin,b.YMin,b.ZMin),(15,26.2,35,-6.5,3.6,-17.5)):equal(actual,expected)
-assert len(body.Solids)==4
-pcb=body.Solids[1].BoundBox
-for actual,expected in zip((pcb.XLength,pcb.YLength,pcb.ZLength),(1.5,26.2,35)):equal(actual,expected)
+for actual,expected in zip((b.XLength,b.YLength,b.ZLength,b.XMin,b.YMin,b.ZMin),(9.5,14.5,14.7,-4.75,3.6,-6.2)):equal(actual,expected)
+assert len(body.Solids)==2
+for solid,expected in zip(body.Solids,((9.5,14.5,11.2),(9.5,14.5,3.5))):
+ bb=solid.BoundBox
+ for actual,value in zip((bb.XLength,bb.YLength,bb.ZLength),expected):equal(actual,value)
 report.update(module_local_size_xyz_mm=[b.XLength,b.YLength,b.ZLength],
-              pcb_size_width_depth_thickness_mm=[pcb.ZLength,pcb.YLength,pcb.XLength],
-              module_rotation_about_shaft_deg=90,pcb_front_edge_flush_with_mount=True,
-              original_body_and_shaft_cross_section_retained_as_nominal=True)
+              bare_body_size_xyz_mm=[9.5,14.5,11.2],pin_projection_mm=3.5,
+              solder_insulation_allowance_mm=3.8,module_rotation_about_shaft_deg=0,
+              dimensions_user_confirmed=True)
 # Measure the saved shell web and outside thickness independently of build constants.
 web=Part.makeLine(V(4.5,-1,0),V(4.5,8,0)).common(shell)
 equal(sum(e.Length for e in web.Edges),2)
@@ -112,14 +143,35 @@ assert len(press.Solids)==6,len(press.Solids)
 report['press_fit']=dict(rib_count=6,radial_interference_max_mm=.1,
     intended_overlap_mm3=press.Volume,unintended_overlap_mm3=press.cut(band).Volume,
     printed_fit_verified=False)
-# Fill every gap in the simplified module; don't rely on invented connector voids.
-envelope=Part.makeBox(15,26.2,35,V(-6.5,3.6,-17.5))
+# Continuous rectangular pin envelope fills unknown pin spacing.
+envelope=Part.makeBox(9.5,14.5,14.7,V(-4.75,3.6,-6.2))
 hits=clashes(world(envelope),('VolumePot','Encoder'))
 assert not hits,hits
-report['complete_module_envelope']={'clashes':hits,'plugged_connectors_included':True,
-    'extra_connector_thickness_mm':0,'exact_connector_footprint_verified':False}
+report['complete_module_envelope']={'clashes':hits,'pcb_present':False,'pin_spacing_verified':False}
 report['module_clearances_mm']={n:world(envelope).distToShape(o.Shape)[0] for n,o in objects.items()
                                if n not in ('VolumePot','Encoder','Knob')}
+# Read saved construction allowances; test them against all finished parts,
+# existing service loops, board underside wires and connector service zones.
+report['wiring_clearances']={}
+extras={n:doc.getObject(n).Shape for n in ('PerfboardUnderWiring','DriveDataWire','DACAudioWire',
+         'ButtonsHarnessClosed','OLEDHarnessClosed','VolumeSwitchHarnessClosed',
+         'ButtonsLeadBend','OLEDLeadBend','VolumeSwitchLeadBend')}
+for name in ('VolumeSolderClearance','VolumeAudioLeadClearance'):
+ shape=doc.getObject(name).Shape
+ hits=clashes(shape)
+ for n,other in extras.items():
+  overlap=shape.common(other).Volume
+  if overlap>.001:hits.append(dict(object=n,volume_mm3=overlap))
+ assert not hits,(name,hits)
+ report['wiring_clearances'][name]=dict(clashes=hits,clearances_mm={n:shape.distToShape(doc.getObject(n).Shape)[0] for n in
+     ('Perfboard','MCUChip','SpeakerCarrier','ButtonRetainer','RearShell','Drive')})
+# Body pocket side walls assist anti-rotation at its installation face.
+for x in (-5.05,5.05):
+ probe=Part.makeBox(.05,.5,1,V(x-(.05 if x<0 else 0),4,0))
+ assert probe.common(shell).Volume>.024
+report['body_side_clearance_mm']=.3
+report['analog_exit_allowance']=dict(bundle_diameter_mm=3,length_mm=12,
+    scope='local exit only; actual amplifier pads and remote analogue harness remain unverified')
 # Exact translational sweep of the filled convex box with the detached cover.
 # A global axis-aligned box would falsely occupy the space below the slope.
 moving=world(envelope);travel=V(0,-140,0)
@@ -135,9 +187,6 @@ assert all(v<.001 for v in intersections.values()),intersections
 report['module_front_cover_sweep']=dict(
     method='continuous exact translation sweep of the filled box, formed by extruding its leading faces',
     translation_xyz_mm=[0,-140,0],fixed=fixed,intersections_mm3=intersections,cables_disconnected=True)
-original=world(Part.makeBox(35,26.2,15,V(-17.5,3.6,-6.5)))
-report['original_orientation_baseline_clashes_mm3']={n:original.common(old.getObject(n).Shape).Volume
-    for n in ('FrontShell','MCUChip')}
 # Cylinder bounds every angular pose outside the shaft/nut. Remove the shared
 # axis hole and nut relief to avoid mistaking mating hardware for obstruction.
 sweep=Part.makeCylinder(14,12.5,V(0,-12.9,0),V(0,1,0)).fuse(Part.makeCylinder(12,1.4,V(0,-.4,0),V(0,1,0)))
@@ -174,13 +223,23 @@ for n in ('PlayPauseKey','EjectKey','PrevKey','NextKey'):
     same=len(a)==len(b) and all(abs(x.Area-y.Area)<1e-7 and (x.CenterOfMass-y.CenterOfMass-offset).Length<1e-7 for x,y in zip(a,b))
     assert same,n
     report['key_face_order_preserved'][n]=same
-report['limits']=['PCB dimensions, flush front edge and total 15 mm plugged thickness are user-confirmed; connector/pin shapes are rectangular envelopes.',
-                  'Original bare-B50K body, shaft diameter, bushing and body-to-PCB contact datum are retained as nominal assumptions; physical fit remains unverified.',
-                  'The module is rotated 90 degrees about its shaft axis; knob index must be aligned to the actual switch-off stop during assembly.',
-                  'Remote wire routing and service unplugging stroke are not included in the static plugged envelope.',
-                  'Six sacrificial grip ribs intentionally enter the spline envelope by up to 0.1 mm radially; insertion force, torque and pull-out retention need a printed sample.',
-                  'Nut threads and spline teeth are envelopes; switch electrical ratings/pinout are unverified.',
-                  'Black and white volume/material checks are recorded separately by export-dual-color-knob.py.']
+report['limits']=['User reconfirmed the original bare B50K dimensions; pin envelope does not encode pin numbers or spacing.',
+                  'Pins project 3.5 mm; another 3.8 mm is reserved for solder, insulation and exit. Local analogue bundle allowance is diameter 3 x length 12 mm; actual wire size/bend radius need assembly confirmation.',
+                  'Latest perfboard, P3 geometry and placement are preserved; the switch harness cover-end route follows the new solder zone.',
+                  'Remote analogue harness to the amplifier, electrical pinout and switch ratings remain unverified.',
+                  'Six sacrificial grip ribs retain their 0.1 mm radial nominal interference; torque and retention need physical validation.',
+                  'Nut threads and spline teeth are envelopes; printed fit is unverified.']
+report['preserved_construction_difference_mm3']={}
+for n in ('FrontGrille','FrontBezel','PerfboardUnderWiring','ButtonsHarnessClosed','ButtonsHarnessOpen','OLEDHarnessClosed','OLEDHarnessOpen','DriveDataWire','DACAudioWire'):
+ value=delta(doc.getObject(n).Shape,old.getObject(n).Shape)
+ assert value<.001,(n,value)
+ report['preserved_construction_difference_mm3'][n]=value
+report['color_face_order_preserved']={}
+for n in ('Knob','PlayPauseKey','EjectKey','PrevKey','NextKey'):
+ aa=doc.getObject(n).Shape.Faces;bb=old.getObject(n).Shape.Faces
+ equal_faces=len(aa)==len(bb) and all(abs(a.Area-b.Area)<1e-7 and (a.CenterOfMass-b.CenterOfMass).Length<1e-7 for a,b in zip(aa,bb))
+ assert equal_faces,n
+ report['color_face_order_preserved'][n]=equal_faces
 report['all_pass']=True
 args.output.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
 print('VOLUME_CHECKS_OK',flush=True)

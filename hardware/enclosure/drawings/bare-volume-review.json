@@ -1,0 +1,65 @@
+{
+  "model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6",
+  "geometry_sha256": "9fe2816f76f0f2abff4e4ba30e1a2348b9d32fb1d8c37c554464ab184d523941",
+  "color_render_sha256": "44f6edf077b103b147f0eb4cec315a109d32340e81ece14e8f41fd330fe03a76",
+  "drawing_script_sha256": "7564b0c383774c913b05047161c1705f30f48c174058fd56a97e4292c6a34270",
+  "pdf_sha256": "91ecab1a95ef0b7552d77dbcb35d01738e792f618094950cb6e8c74a4d5cd4ac",
+  "pages": 14,
+  "rendered_pages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "reviewed_pages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "full_size_reviewed_pages": [
+    7,
+    8,
+    9
+  ],
+  "review": "All 14 final pages rendered at 1800 px and inspected in contact sheets. Bare B50K installation, pin/solder allowance dimensions, unchanged perfboard and revised service-harness pages inspected at full size. Page 8 B50K clearance now comes from the current report. No clipped or overlapping labels observed.",
+  "previews": {
+    "dimensions-color-preview.png": "88aa0f98a4cc108a52bbb1c2817e5ded4cfc8b070733b267f704ca41f2383b15",
+    "exploded-color-preview.png": "2e6fb52ebca60294fb64f743303794c1ba9dfa09e75cf8be94eb96baf79121ea",
+    "oled-dimensions-preview.png": "a053c5539cdc502394d639eab36e13b4af1845a0b392aa9970a6cef94b0d3bb5",
+    "volume-module-preview.png": "ad425a12300c5b785290c73678dd210f77fda8d03f4c69cf06fed1fb024673db",
+    "perfboard-layout-preview.png": "4d5ffcb102662e47e771f66b0d715a7230e47d1a4fea623395cba66102e8bea7",
+    "front-harness-preview.png": "8d283d4045748f99f2397faed1777071e5e1d9df99e2b50949a990dda57f7aad",
+    "acoustic-outlet-preview.png": "c056cc1e59ded81ed4dcb11b21fa54876e1be7a7d73ab963967d13689ebb6f7f",
+    "charging-ports-preview.png": "471f63e2607cda5426e4455dcad3b3c93feceb5fc5c84048bb612292c03ada3f",
+    "grille-clearance-preview.png": "2382171bc64be103ffa79b69550fc306ade2d550d561c1e6f780034b5a43eb28"
+  },
+  "checks": {
+    "bare_b50k_on_page7": true,
+    "board_b50k_clearance_mm": 17.891,
+    "switch_harness_centerline_mm": 232.8,
+    "source_reports_match_current_model": true,
+    "printed_p3_preserved": true
+  },
+  "all_pass": true
+}

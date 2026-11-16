@@ -118,26 +118,20 @@ def bottom_corner_envelope():
 
 
 def volume_shapes(grip_tip_diameter=5.6):
-    """PCB B50K module; local +Y is inward, +Z up the slope.
+    """Bare switched B50K; +Y inward, +Z up the slope, pins toward -Z.
 
-    PCB 35 x 26.2 x 1.5; complete thickness including plugged connectors
-    and pins is 15. Front PCB edge is flush with the body mounting face.
-    Rotate the module 90 degrees about its shaft to clear MCU components.
-    Original body, bushing and spline geometry remain nominal assumptions.
-    Connector/pin blocks are envelopes, not a measured connector footprint.
+    User-confirmed body 9.5 x 14.5 x 11.2, pins 3.5 mm. Reserve a further
+    3.8 mm for solder/insulation and lead exit, without inventing pin spacing.
     """
     body=Part.makeBox(9.5,14.5,11.2,V(-4.75,3.6,-2.7))
-    pcb=Part.makeBox(35,26.2,1.5,V(-17.5,3.6,-4.2))
-    connectors=Part.makeBox(35,11.7,11.2,V(-17.5,18.1,-2.7))
-    pins=Part.makeBox(35,26.2,2.3,V(-17.5,3.6,-6.5))
-    module=Part.makeCompound([body,pcb,connectors,pins])
-    module.rotate(V(),Y,90)
+    pins=Part.makeBox(9.5,14.5,3.5,V(-4.75,3.6,-6.2))
+    module=Part.makeCompound([body,pins])
+    solder=Part.makeBox(10.1,14.8,3.8,V(-5.05,3.6,-10))
+    audio_lead=Part.makeCylinder(1.5,12,V(0,18.4,-8.1),Y)
     shaft=Part.makeCylinder(3.4,5,V(0,3.6,0),-Y).fuse(
         Part.makeCylinder(2.9,10,V(0,-1.4,0),-Y))
-    # Reserve the entire module envelope, with 0.3 mm transverse clearance.
-    # Keep the mounting face at 3.6: the recessed nut still clamps a 2 mm web.
-    pocket=Part.makeBox(35.6,26.5,15.6,V(-17.8,3.6,-6.8))
-    pocket.rotate(V(),Y,90)
+    # 0.3 mm body side clearance, 2 mm clamping web at the mounting face.
+    pocket=Part.makeBox(10.1,14.8,19.1,V(-5.05,3.6,-10.3))
     # Exterior recess: 0.4 mm mouth bevel; bottom at 1.6 leaves the web 2 mm.
     recess=Part.makeCylinder(12.8,.2,V(0,-.2,0),Y).fuse(
         Part.makeCone(12.8,12.4,.4,V(),Y)).fuse(
@@ -188,7 +182,7 @@ def volume_shapes(grip_tip_diameter=5.6):
     mark=Part.makeBox(.7,.6,2.2,V(-.35,-12.9,7.1))
     body_black=knob.cut(mark).removeSplitter()
     knob=Part.makeCompound([body_black,mark])
-    return dict(body=module,shaft=shaft,pocket=pocket,recess=recess,knob=knob)
+    return dict(body=module,shaft=shaft,pocket=pocket,recess=recess,knob=knob,solder=solder,audio_lead=audio_lead)
 
 
 def oled_shapes():
@@ -613,7 +607,7 @@ def build(folder):
     for key,name,label,color,parent in (
         ('knob','Knob','音量旋钮 · 黑白双色／下沉细十字／压配',KNOB_BLACK,ui),
         ('shaft','Encoder','B50K · Ø6.8 螺纹／Ø5.8 花轴／9.8 六角螺母',SILVER,hardware),
-        ('body','VolumePot','B50K 插接模块 · PCB35×26.2×1.5／总厚15／绕轴90°',RUBBER,hardware)):
+        ('body','VolumePot','裸 B50K · 主体9.5×14.5×11.2／引脚3.5',RUBBER,hardware)):
         shape=volume[key].copy();shape.Placement=volume_pose.multiply(shape.Placement)
         obj=feature(name,label,shape,color,parent)
         if name=='Knob':
@@ -621,13 +615,13 @@ def build(folder):
             obj.ViewObject.DiffuseColor=[WHITE if any(face.isSame(f) for f in mark.Faces) else KNOB_BLACK
                                         for face in shape.Faces]
         if name=='VolumePot':
-            obj.ViewObject.DiffuseColor=[color for solid,color in zip(shape.Solids,(RUBBER,PCB,WHITE,SILVER))
+            obj.ViewObject.DiffuseColor=[color for solid,color in zip(shape.Solids,(RUBBER,SILVER))
                                          for face in solid.Faces]
-            for prop,value in [('PCBWidth',35),('PCBDepth',26.2),('PCBThickness',1.5),('ModuleThickness',15)]:
+            for prop,value in [('BodyWidth',9.5),('BodyDepth',14.5),('BodyHeight',11.2),('PinProjection',3.5),('SolderAllowance',3.8)]:
                 obj.addProperty('App::PropertyLength',prop,'Volume control');setattr(obj,prop,value)
-            obj.addProperty('App::PropertyAngle','ModuleRotation','Volume control');obj.ModuleRotation=90
+            obj.addProperty('App::PropertyAngle','ModuleRotation','Volume control');obj.ModuleRotation=0
         obj.addProperty('App::PropertyString','FitStatus','Volume control')
-        obj.FitStatus='PCB module dimensions user-confirmed; body/shaft cross-section inherited from bare B50K. Connector and pin shapes are conservative blocks; exact footprints and printed fit unverified.'
+        obj.FitStatus='Bare B50K dimensions user-confirmed; pins are conservative blocks, not pin numbering. Solder/insulation allowance 3.8 mm; physical fit and wiring unverified.'
 
     # Measured optical-drive envelope. Local front becomes +Z and underside +Y;
     # this mounting orientation reverses the user's left/right along machine X.
@@ -890,6 +884,20 @@ def build(folder):
     disc.ViewObject.ShapeColor=SILVER
     disc.ViewObject.DisplayMode="Shaded"
     disc.Visibility=False
+
+    solder_shape=volume['solder'].copy()
+    solder_shape.Placement=volume_pose.multiply(solder_shape.Placement)
+    solder_obj=raw('VolumeSolderClearance',solder_shape)
+    solder_obj.Label='裸 B50K 焊点／绝缘／出线预留 · 引脚外3.8 mm'
+    cable_clearances.addObject(solder_obj)
+    solder_obj.Visibility=False
+
+    lead_shape=volume['audio_lead'].copy()
+    lead_shape.Placement=volume_pose.multiply(lead_shape.Placement)
+    lead_obj=raw('VolumeAudioLeadClearance',lead_shape)
+    lead_obj.Label='裸 B50K 模拟线束出线预留 · Ø3／长12，不代表功放脚位'
+    cable_clearances.addObject(lead_obj)
+    lead_obj.Visibility=False
 
     rear_setback.apply(doc)
     doc.recompute()

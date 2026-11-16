@@ -55,6 +55,8 @@ def check(path, baseline=None):
     # endpoints throughout the checked travel. Retain all internal posts.
     front = {name: finished.pop(name) for name in FRONT_PARTS}
     front["FrontShell"] = front["FrontShell"].common(geometry.box(-85, 4, 141, 170, 80, 70))
+    for name in ('VolumeSolderClearance','VolumeAudioLeadClearance'):
+        front[name]=doc.getObject(name).Shape
     fixed = finished | {
         name: doc.getObject(name).Shape for name in ("BuckAService", "BuckBService", "DACPowerConnector")
     }

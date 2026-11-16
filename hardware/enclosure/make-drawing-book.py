@@ -18,7 +18,7 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = '8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee'
+ANNOTATED_MODEL_SHA256 = 'd21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
@@ -58,7 +58,11 @@ def main():
     charging=json.loads((ROOT/'charging-port-checks.json').read_text())
     grille_report=json.loads((ROOT/'grille-clearance-checks.json').read_text())
     battery_floor=json.loads((ROOT/'battery-floor-checks.json').read_text())
-    assert battery_floor['all_pass'] and battery_floor['model_sha256']==data['sha256']
+    bare_volume=json.loads((ROOT/'control-volume-checks.json').read_text())
+    assert bare_volume['all_pass'] and bare_volume['model_sha256']==data['sha256']
+    assert battery_floor['all_pass'] and battery_floor['model_sha256']==bare_volume['baseline_sha256']
+    assert all(bare_volume['unchanged_finished_parts_difference_mm3'][n]<.001 for n in ('RearShell','SpeakerCarrier','Knob'))
+    assert all(bare_volume['color_face_order_preserved'].values())
     assert grille_report['all_pass'] and grille_report['model_sha256']==battery_floor['baseline_sha256']
     assert all(battery_floor['unchanged_shapes_difference_mm3'][n]<.001 for n in ('FrontShell','SpeakerCarrier','FrontGrille','LDriver','RDriver'))
     assert charging['all_pass'] and charging['model_sha256']==grille_report['baseline_sha256']
@@ -93,6 +97,8 @@ def main():
     assert integration['model_sha256']==handle['baseline_sha256']
     def evidence_matches_geometry(report,owners):
         if report['model_sha256']==data['sha256']:return True
+        if any(bare_volume['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
+        if report['model_sha256']==bare_volume['baseline_sha256']:return True
         if any(battery_floor['unchanged_shapes_difference_mm3'].get(n,1)>=.001 for n in owners):return False
         if any(grille_report['preserved_shape_difference_mm3'].get(n,1)>=.001 for n in owners):return False
         if report['model_sha256']==grille_report['baseline_sha256']:return True
@@ -172,7 +178,7 @@ def main():
         line(12,16,408,16,LIGHT)
         text(12,10,'完整件试打 / CAD 静态几何 · 整机装配、声学与强度待实测',8,MUTED)
         text(245,10,'单位 mm  |  '+scale,8,MUTED)
-        text(408,10,f'DC-V4-GA-{num:02d}  ·  2026-11-15  ·  {num}/{TOTAL_PAGES}',8,MUTED,'right')
+        text(408,10,f'DC-V4-GA-{num:02d}  ·  2026-11-16  ·  {num}/{TOTAL_PAGES}',8,MUTED,'right')
 
     def view(name,x,y,scale=1,clip_bottom=0):
         info=data['views'][name]
@@ -413,7 +419,7 @@ def main():
         'FrontBaffle':'双开口前障板','RearTopMount':'上固定耳（2 个）','DriveCarrier':'光驱底托 / 导轨','SlotGuide':'碟口导向框',
         'DisplayCarrier':'屏幕安装座','AmpShelf':'功放 / 桥接器托板','ElectronicsSled':'主控托板','AmpPads':'功放支撑复合件',
         'MCUPads':'主控支撑复合件','DACPads':'DAC 支撑复合件','BatteryCradle':'电池左右挡板',
-        'LDriver':'左喇叭总包络','RDriver':'右喇叭总包络','Encoder':'B50K 轴／六角螺母','VolumePot':'B50K PCB 插接模块 / 含插头包络',
+        'LDriver':'左喇叭总包络','RDriver':'右喇叭总包络','Encoder':'B50K 轴／六角螺母','VolumePot':'裸 B50K / 主体与引脚包络',
         'Drive':'UJ-898 包络','Bridge':'SATA 接头 / 护线环','DisplayPCB':'OLED PCB／四孔与缺口','DisplayHeader':'OLED 弯针接头预留',
         'Amp':'功放 PCB','AmpChip':'功放元件预留','MCU':'主控 PCB','MCUChip':'主控元件预留','DAC':'DAC PCB',
         'DACChip':'DAC 元件预留','Battery':'5600 mAh 平排电池',
@@ -454,7 +460,7 @@ def main():
         'SATA 向下脱离、向内取出；光驱再前移 13，侧转 -30°并同步前移 20，最后抽出；安装逆序。',
         '光驱最大包络：抬升 31 姿态、侧转 61 姿态；前壳按 1 mm 抽样，其余直线段连续保守扫掠，实物未验收。',
         '四键双色：0.4 喷嘴 / 0.12 层高；白色 0.6 深；使用双色 3MF。实际色彩、配合与按压行程待测。',
-        '音量模块：绕轴转 90°；拆卸先取下整个前壳，再拆旋钮和螺母，按第 7 页退出；旋钮保持原黑白双色 3MF。',
+        '裸 B50K：引脚朝斜面下方；拆卸先取下整个前壳，再拆旋钮和螺母，按第 7 页退出；旋钮保持原黑白双色 3MF。',
     ],gap=7,size=8.5)
     text(12,27,'FCStd SHA-256: '+data['sha256'],8,MUTED)
     text(408,27,'来源：Discora.FCStd / build.FCMacro / drawings/geometry.json',8,MUTED,'right')
@@ -516,37 +522,45 @@ def main():
     ],gap=7,size=8.5)
     c.showPage()
 
-    page(7,'PCB 音量模块与安装槽','用户确认板尺寸及插接总厚度；插头 / 引脚为保守包络，未做实物验收','板面投影 3:1；安装剖视 2.6:1')
-    text(100,258,'板面投影 · 转向前的尺寸基准',11,TEAL,'center')
-    p=view('volume-module',42,153,3)
-    a0,a1=p(-17.5,3.6),p(17.5,29.8)
-    dh(a0[0],a1[0],a1[1],244,'35 PCB 宽')
-    dv(a0[1],a1[1],a0[0],28,'26.2 沿轴深度')
-    text(95,143,'板厚 1.5；轴线沿板宽居中；前边与安装面齐平',8.5,MUTED,'center')
-    text(310,258,'安装局部剖视 · 保留轴线左半体',11,TEAL,'center')
+    page(7,'裸 B50K、安装槽与焊线空间','用户确认原裸件尺寸；引脚 / 焊点为包络，孔位与接线须按实物核对','主体投影 5:1；安装剖视 2.6:1')
+    text(103,258,'裸电位器 · 引脚朝斜面下方',11,TEAL,'center')
+    p=view('volume-module',76,156,5)
+    a0,a1=p(-4.75,3.6),p(4.75,18.1)
+    dh(a0[0],a1[0],a1[1],244,'9.5 主体宽')
+    dv(a0[1],a1[1],a0[0],61,'14.5 沿轴深度')
+    text(103,145,'主体高11.2；引脚伸出3.5；无 PCB / 插座',8.5,MUTED,'center')
+    text(310,258,'安装局部剖视 · 含焊线与出线包络',11,TEAL,'center')
     q=view('volume-installation',230,135,2.6)
-    b0,b1=q(3.6,17.5),q(29.8,17.5)
-    dh(b0[0],b1[0],b1[1],252,'26.2 伸入机内')
+    pin0,pin1=q(18.1,-6.2),q(18.1,-2.7)
+    dv(pin0[1],pin1[1],pin0[0],351,'3.5')
+    weld0,weld1=q(18.4,-10),q(18.4,-6.2)
+    dv(weld0[1],weld1[1],weld0[0],365,'3.8')
+    ex,ey=q(27,-8.1)
+    line(ex,ey,376,150,TEAL,.2)
+    text(378,150,'模拟束出口',8,TEAL)
+    text(310,128,'引脚外3.8焊点 / 绝缘区；模拟束出线 Ø3×12',8.5,MUTED,'center')
     table(12,130,190,[
-        ('PCB 宽 / 深 / 板厚','35 / 26.2 / 1.5'),
-        ('完整插接总厚度','15，已含引脚及插好的插头'),
-        ('组件安装朝向','绕轴 90°，板宽沿斜面上下展开'),
-        ('局部包络 X / Y / Z','15 / 26.2 / 35'),
-        ('内槽 X / Y / Z','15.6 / 26.5 / 35.6'),
-        ('夹持面 / 内槽底厚','2 / 3.6；横向与后端余量0.3'),
-        ('轴总长 / 花轴长','15 / 10；轴径与螺纹沿用名义值'),
+        ('主体 X / Y / Z','9.5 / 14.5 / 11.2'),
+        ('引脚 / 外侧焊线预留','3.5 / 3.8；不指定未知脚距'),
+        ('内槽 X / Y / Z','10.1 / 14.8 / 19.1'),
+        ('辅助防转 / 夹持面','主体侧隙0.3 / 夹持厚2'),
+        ('轴总长 / 花轴长','15 / 10；花轴 Ø5.8'),
+        ('螺纹 / 螺母','Ø6.8×5 / 对边9.8、厚1.9'),
+        ('保持现有操控布局','十字28；轴心X52 / Y20'),
     ],split=66,height=10)
+    solder_clear=current_volume['wiring_clearances']['VolumeSolderClearance']['clearances_mm']
+    lead_clear=current_volume['wiring_clearances']['VolumeAudioLeadClearance']['clearances_mm']
     table(218,120,190,[
-        ('完整包络至支架',f"{data['volume_module']['clearances_mm']['SpeakerCarrier']:.3f}"),
-        ('至主控元件预留',f"{data['volume_module']['clearances_mm']['MCUChip']:.3f}"),
-        ('至后壳',f"{data['volume_module']['clearances_mm']['RearShell']:.3f}"),
-        ('至光驱',f"{data['volume_module']['clearances_mm']['Drive']:.3f}"),
-        ('至洞洞板',f"{data['volume_module']['clearances_mm']['Perfboard']:.3f}；十字28，轴心X52/Y20"),
+        ('主体及引脚至洞洞板',f"{data['volume_module']['clearances_mm']['Perfboard']:.3f}"),
+        ('焊线区至洞洞板',f"{solder_clear['Perfboard']:.3f}"),
+        ('焊线区至主控元件',f"{solder_clear['MCUChip']:.3f}"),
+        ('模拟出线至洞洞板',f"{lead_clear['Perfboard']:.3f}"),
+        ('焊线区至 P3',f"{solder_clear['SpeakerCarrier']:.3f}；P3 / 洞洞板保持"),
     ],split=75,height=10)
     notes(14,48,[
-        '拆卸：按第9页拉开60并断开前壳线束，取下整个前壳；再拆旋钮、螺母，沿轴退出模块。',
-        '安装：先锁螺母，再按实物关断止挡对准指示条并压入旋钮；插拔线束时托住 PCB。',
-        '原主体、轴径、齿形、螺纹和 PCB 相对轴的高度仍为名义假设；模拟音量线束与开关额定值待确认。',
+        '拆卸：按第9页拉开60并断开前壳线束，取下前壳；再拆旋钮、螺母，沿轴退出裸电位器。',
+        '安装：先焊线并绝缘，再锁螺母；按实际关断止挡对准指示条，支撑主体压入旋钮。',
+        '检查覆盖局部焊线空间及开关维护路径；模拟束到功放的远端路径、线径弯折及电气脚位仍待实物确认。',
     ],gap=8,size=9)
     c.showPage()
 
@@ -583,7 +597,7 @@ def main():
         ('四键 5P','18×16×8；向机身左侧拔'),
         ('OLED 4P','13.5×8×11；向上拔'),
         ('开关 2P','8.5×8×11；向上拔'),
-        ('板至光驱 / B50K','1.200 / 5.264'),
+        ('板至光驱 / B50K',f"{current_perfboard['clearances_mm']['board_to_drive']:.3f} / {current_perfboard['clearances_mm']['board_to_B50K']:.3f}"),
         ('板下走线至功放元件','1.200；板底走线深度预留2'),
     ],split=64,height=10)
     notes(14,68,[
@@ -610,7 +624,7 @@ def main():
         '1  断电、卸4枚背锁螺钉；托住前壳向前平移60 mm，三组回环释放余量。',
         '2  先向上拔音量开关2P并移开线，再向上拔OLED 4P，最后向机身左侧拔四键5P；开关余线经过OLED入口。',
         '3  断开其余前壳线束后移走前壳。拆载板先断数据、供电及DAC音频，再卸3枚M2螺钉；也可随P3整体拆出。',
-        '中心线路径：四键123.7、OLED 116.5、音量开关207.4 mm。制线另加端子压接、实际出口及固定余量。',
+        '中心线路径：四键123.7、OLED 116.5、音量开关232.8 mm。制线另加端子压接、实际出口及固定余量。',
         '验证范围：0…60 mm每2 mm采样；按上述次序校核拔出包络及12×10 mm入口，不代表手指操作或弯曲应力验收。',
         'B50K双声道模拟线束、最终电源线与端子短尾未完整建模；同样须留服务余量，并检查合壳压线与实物卡扣。',
         '图中的圆柱／球形转角是占位包络，不表示实际线束弯曲半径；接口线序仍以接线文档和实物丝印为准。',

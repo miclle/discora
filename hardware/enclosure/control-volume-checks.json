@@ -1,16 +1,27 @@
 {
-  "model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee",
+  "model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6",
   "baseline_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee",
   "unchanged_finished_parts_difference_mm3": {
     "RearShell": 0.0,
     "Feet": 0.0,
     "Window": 0.0,
     "StatusArt": 0.0,
+    "PlayPauseKey": 0.0,
+    "EjectKey": 0.0,
+    "PrevKey": 0.0,
+    "NextKey": 0.0,
+    "ButtonRetainer": 0.0,
+    "Knob": 0.0,
     "DisplayRetainer": 0.0,
     "DriveRetainer": 0.0,
     "SpeakerCarrier": 0.0,
     "LDriver": 0.0,
     "RDriver": 0.0,
+    "PlayPauseSwitch": 0.0,
+    "EjectSwitch": 0.0,
+    "PrevSwitch": 0.0,
+    "NextSwitch": 0.0,
+    "Encoder": 0.0,
     "Drive": 0.0,
     "Bridge": 0.0,
     "DisplayPCB": 0.0,
@@ -28,26 +39,45 @@
     "BuckB": 0.0,
     "XHButtons": 0.0,
     "XHOLED": 0.0,
+    "XHVolumeSwitch": 0.0,
     "PerfboardScrew1": 0.0,
     "PerfboardScrew2": 0.0,
     "PerfboardScrew3": 0.0,
     "Battery": 0.0
   },
   "physical_assembly_test": false,
-  "front_change_outside_mount_mm3": 0,
+  "build_source_difference_mm3": {
+    "VolumePot": 0.0,
+    "Encoder": 0.0,
+    "Knob": 0.0,
+    "VolumeSolderClearance": 0.0,
+    "VolumeAudioLeadClearance": 0.0
+  },
+  "source_sha256": {
+    "build.FCMacro": "fd1c86d2f6bb5d8b7852d0741288d213d9ac8b3ca3077a9545858c1071f28478",
+    "perfboard_geometry.py": "f02a4887182ce84e6dc4f0e8771a28e25838e2de5da03545288a759a286c5fc2",
+    "rear_setback_geometry.py": "8bb3399e4f8d9e9b9991dc63335643170980becb70152f6554883aa68e893862"
+  },
+  "gui_payload": {
+    "volume_face_material_count": 12,
+    "new_allowances_hidden": true,
+    "gui_reopen_verified": false
+  },
+  "front_change_outside_mount_mm3": 0.0,
   "module_local_size_xyz_mm": [
-    15.00000000000001,
-    26.20000000000002,
-    35.000000000000014
+    9.5,
+    14.500000000000014,
+    14.70000000000001
   ],
-  "pcb_size_width_depth_thickness_mm": [
-    35.000000000000014,
-    26.20000000000002,
-    1.5000000000000089
+  "bare_body_size_xyz_mm": [
+    9.5,
+    14.5,
+    11.2
   ],
-  "module_rotation_about_shaft_deg": 90,
-  "pcb_front_edge_flush_with_mount": true,
-  "original_body_and_shaft_cross_section_retained_as_nominal": true,
+  "pin_projection_mm": 3.5,
+  "solder_insulation_allowance_mm": 3.8,
+  "module_rotation_about_shaft_deg": 0,
+  "dimensions_user_confirmed": true,
   "panel_hole_mm": 7.2,
   "local_web_mm": 2,
   "remaining_panel_mm": 5,
@@ -76,52 +106,81 @@
   },
   "complete_module_envelope": {
     "clashes": [],
-    "plugged_connectors_included": true,
-    "extra_connector_thickness_mm": 0,
-    "exact_connector_footprint_verified": false
+    "pcb_present": false,
+    "pin_spacing_verified": false
   },
   "module_clearances_mm": {
-    "FrontShell": 0.0,
-    "RearShell": 11.018699241182489,
-    "Feet": 144.00411898276988,
-    "Window": 28.275475239153803,
-    "StatusArt": 31.90611226708763,
-    "PlayPauseKey": 102.1,
-    "EjectKey": 84.1,
-    "PrevKey": 102.1,
-    "NextKey": 84.1,
-    "ButtonRetainer": 82.5,
-    "DisplayRetainer": 21.999999999999996,
-    "DriveRetainer": 50.26573257295297,
-    "SpeakerCarrier": 20.74118531250897,
-    "LDriver": 57.93941299577459,
-    "RDriver": 30.91885473776371,
-    "PlayPauseSwitch": 102.5,
-    "EjectSwitch": 84.5,
-    "PrevSwitch": 102.5,
-    "NextSwitch": 84.5,
-    "Drive": 26.952481900497467,
-    "Bridge": 128.80626962494205,
-    "DisplayPCB": 27.799999999999997,
-    "DisplayHeader": 40.42,
-    "Amp": 23.739506032534504,
-    "AmpChip": 13.531569997026736,
-    "Perfboard": 5.263881016650701,
-    "MCU": 6.210000000000001,
-    "MCUChip": 6.210000000000001,
-    "MCUSockets": 6.210000000000001,
-    "DAC": 10.945934622549405,
-    "DACChip": 5.383917386852898,
-    "DACSockets": 12.250223275775424,
-    "BuckA": 43.709105098226765,
-    "BuckB": 67.4109476901774,
-    "XHButtons": 76.4,
-    "XHOLED": 72.45319800270423,
-    "XHVolumeSwitch": 90.17879961952845,
-    "PerfboardScrew1": 70.63000888259727,
-    "PerfboardScrew2": 35.47107931834433,
-    "PerfboardScrew3": 19.386913228986582,
-    "Battery": 118.78202533614359
+    "FrontShell": 3.552713678800501e-15,
+    "RearShell": 15.441795551431833,
+    "Feet": 160.20452542370762,
+    "Window": 30.023990407672322,
+    "StatusArt": 33.65059434839152,
+    "PlayPauseKey": 104.09101384693929,
+    "EjectKey": 86.1379065082225,
+    "PrevKey": 103.85,
+    "NextKey": 85.85,
+    "ButtonRetainer": 84.25,
+    "DisplayRetainer": 23.947122332435647,
+    "DriveRetainer": 61.99666715109988,
+    "SpeakerCarrier": 32.441185312508985,
+    "LDriver": 69.11513383784444,
+    "RDriver": 46.918431617256246,
+    "PlayPauseSwitch": 104.25802988236069,
+    "EjectSwitch": 86.25970551161889,
+    "PrevSwitch": 104.25,
+    "NextSwitch": 86.25,
+    "Drive": 41.675147750601596,
+    "Bridge": 142.42166388395958,
+    "DisplayPCB": 29.549999999999997,
+    "DisplayHeader": 42.17269264601202,
+    "Amp": 38.96394842202204,
+    "AmpChip": 25.59783145963904,
+    "Perfboard": 17.89093566733599,
+    "MCU": 10.191698071445087,
+    "MCUChip": 7.960000000000001,
+    "MCUSockets": 11.260447373022421,
+    "DAC": 23.474953861313985,
+    "DACChip": 19.79310882842631,
+    "DACSockets": 24.520324788838135,
+    "BuckA": 50.478503427276245,
+    "BuckB": 72.57809110370388,
+    "XHButtons": 78.60708143511756,
+    "XHOLED": 75.6236647776407,
+    "XHVolumeSwitch": 93.07942132609644,
+    "PerfboardScrew1": 73.90418691408652,
+    "PerfboardScrew2": 44.097328367015876,
+    "PerfboardScrew3": 31.261765783022476,
+    "Battery": 134.86467670659692
+  },
+  "wiring_clearances": {
+    "VolumeSolderClearance": {
+      "clashes": [],
+      "clearances_mm": {
+        "Perfboard": 15.537894312197201,
+        "MCUChip": 7.660000000000004,
+        "SpeakerCarrier": 33.53537076326402,
+        "ButtonRetainer": 83.95320168845451,
+        "RearShell": 22.94999999999999,
+        "Drive": 52.30870165581978
+      }
+    },
+    "VolumeAudioLeadClearance": {
+      "clashes": [],
+      "clearances_mm": {
+        "Perfboard": 11.499850184079406,
+        "MCUChip": 11.21,
+        "SpeakerCarrier": 23.151676753599837,
+        "ButtonRetainer": 87.53894491581487,
+        "RearShell": 26.499999999999986,
+        "Drive": 45.67229387600592
+      }
+    }
+  },
+  "body_side_clearance_mm": 0.3,
+  "analog_exit_allowance": {
+    "bundle_diameter_mm": 3,
+    "length_mm": 12,
+    "scope": "local exit only; actual amplifier pads and remote analogue harness remain unverified"
   },
   "module_front_cover_sweep": {
     "method": "continuous exact translation sweep of the filled box, formed by extruding its leading faces",
@@ -188,10 +247,6 @@
     },
     "cables_disconnected": true
   },
-  "original_orientation_baseline_clashes_mm3": {
-    "FrontShell": 407.400000000007,
-    "MCUChip": 472.2595614725186
-  },
   "continuous_360_degree_knob_envelope_clashes": [],
   "pot_removal": {
     "method": "31 exact B-rep samples at 0.5 mm relative to the detached front-cover assembly",
@@ -234,13 +289,30 @@
     "NextKey": true
   },
   "limits": [
-    "PCB dimensions, flush front edge and total 15 mm plugged thickness are user-confirmed; connector/pin shapes are rectangular envelopes.",
-    "Original bare-B50K body, shaft diameter, bushing and body-to-PCB contact datum are retained as nominal assumptions; physical fit remains unverified.",
-    "The module is rotated 90 degrees about its shaft axis; knob index must be aligned to the actual switch-off stop during assembly.",
-    "Remote wire routing and service unplugging stroke are not included in the static plugged envelope.",
-    "Six sacrificial grip ribs intentionally enter the spline envelope by up to 0.1 mm radially; insertion force, torque and pull-out retention need a printed sample.",
-    "Nut threads and spline teeth are envelopes; switch electrical ratings/pinout are unverified.",
-    "Black and white volume/material checks are recorded separately by export-dual-color-knob.py."
+    "User reconfirmed the original bare B50K dimensions; pin envelope does not encode pin numbers or spacing.",
+    "Pins project 3.5 mm; another 3.8 mm is reserved for solder, insulation and exit. Local analogue bundle allowance is diameter 3 x length 12 mm; actual wire size/bend radius need assembly confirmation.",
+    "Latest perfboard, P3 geometry and placement are preserved; the switch harness cover-end route follows the new solder zone.",
+    "Remote analogue harness to the amplifier, electrical pinout and switch ratings remain unverified.",
+    "Six sacrificial grip ribs retain their 0.1 mm radial nominal interference; torque and retention need physical validation.",
+    "Nut threads and spline teeth are envelopes; printed fit is unverified."
   ],
+  "preserved_construction_difference_mm3": {
+    "FrontGrille": 0.0,
+    "FrontBezel": 0.0,
+    "PerfboardUnderWiring": 0.0,
+    "ButtonsHarnessClosed": 0.0,
+    "ButtonsHarnessOpen": 0.0,
+    "OLEDHarnessClosed": 0.0,
+    "OLEDHarnessOpen": 0.0,
+    "DriveDataWire": 0.0,
+    "DACAudioWire": 0.0
+  },
+  "color_face_order_preserved": {
+    "Knob": true,
+    "PlayPauseKey": true,
+    "EjectKey": true,
+    "PrevKey": true,
+    "NextKey": true
+  },
   "all_pass": true
 }

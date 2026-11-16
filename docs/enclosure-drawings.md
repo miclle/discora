@@ -1,8 +1,8 @@
 # 外壳尺寸与装配图纸
 
-本轮取消电池下方 2 mm 托台，电池直接落在原 5 mm 底板上，Z=6…26；左右挡板及四处绑带槽保留。P3 的实体和位置、整机 94.7 mm 深度保持。只更新 P2 打印文件，其余 10 个 STL／5 盘 3MF 保留，见 [ADR-0050](decisions/0050-battery-direct-floor.md)。
+本轮恢复用户已购、尺寸已确认的裸 B50K 带开关电位器，更新 P1 内侧辅助防转槽及引脚、焊点和出线预留。最新洞洞板布局、已打印 P3 的实体和位置、P2、电池落底及整机 94.7 mm 深度保持。只有 P3 已打印；本轮只更新 P1 STL／3MF，其余 10 件 STL、5 盘 3MF 保持。见 [ADR-0051](decisions/0051-bare-b50k-solder-clearance.md)。
 
-唯一正式图册为 [Discora 彩色尺寸与装配图册](../hardware/enclosure/drawings/Discora-V4-drawing-book-color.pdf)，共 **14 页 A3 横向**。沿用上一版孔网下沉 1.5 mm、整机深度 94.7 mm、P3 原件整体后移 1.7 mm 的布局，前侧静态净距为 3 mm。本轮更新电池落底后的侧剖和后壳内部视图。P3 已打印，其安装座、磁铁后方空间、导管和出线均保持；此前操控布局与充电接口保留。
+唯一正式图册为 [Discora 彩色尺寸与装配图册](../hardware/enclosure/drawings/Discora-V4-drawing-book-color.pdf)，共 **14 页 A3 横向**。沿用上一版孔网下沉 1.5 mm、整机深度 94.7 mm、P3 原件整体后移 1.7 mm 的布局，前侧静态净距为 3 mm。本轮更新裸电位器安装详图、爆炸图及开关线束路径。P3 已打印，其安装座、磁铁后方空间、导管和出线均保持；此前操控布局与充电接口保留。
 
 配套 [11 件打印套件](../hardware/enclosure/print/README.md)。图册与打印文件属于完整件试打版本，喇叭安装座试片已通过，整机实装、强度、拆撑、气密和声学尚待实测。
 
@@ -14,7 +14,7 @@
 | 4 | 穿过左喇叭的实际侧剖与关键包络 |
 | 5 | 成品清单、三主体打印包络、当前耗材估算及拆装顺序 |
 | 6 | OLED 沉槽、四孔定位与可拆压框 |
-| 7 | PCB 音量模块、旋钮、螺母与维护路径 |
+| 7 | 裸 B50K、安装槽、焊点／绝缘和模拟出线预留 |
 | 8 | 洞洞板板形、三点固定、板卡布局；后侧孔为（A，O） |
 | 9 | 前壳线束闭合与拉开 60 mm 的维护位 |
 | 10 | P2 四处 P3 螺丝座三角加强筋 |
@@ -37,15 +37,15 @@
 
 ## 版本与证据
 
-此前操控布局见 [ADR-0047](decisions/0047-control-spacing-and-knob.md)。此前双充电口见 [ADR-0048](decisions/0048-rear-charging-ports.md)。孔网更新见 [ADR-0049](decisions/0049-speaker-diaphragm-clearance.md)。旧图册证据经 battery-floor-checks.json、grille-clearance-checks.json、charging-port-checks.json、control-layout-checks.json 衔接，操控投影与线束图从当前模型重读。
+此前操控布局见 [ADR-0047](decisions/0047-control-spacing-and-knob.md)。此前双充电口见 [ADR-0048](decisions/0048-rear-charging-ports.md)。孔网更新见 [ADR-0049](decisions/0049-speaker-diaphragm-clearance.md)。旧图册证据先经 control-volume-checks.json（本轮裸 B50K）再经 battery-floor-checks.json、grille-clearance-checks.json、charging-port-checks.json、control-layout-checks.json 衔接，操控投影与线束图从当前模型重读。
 
-本轮取消电池托台后，保留全部 GUI XML 与材料资源字节及注册顺序；见 [配色保留证据](../hardware/enclosure/battery-floor-checks.json)。投影和彩色图从新模型重新生成。
+本轮保留无关 GUI 材料，更新裸电位器主体／引脚配色，并隐藏焊线构造预留。投影和彩色图从新模型重新生成；插件未连接，尚未完成 GUI 关闭重开的显示确认。
 
-CAD SHA-256：`8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee`。
+CAD SHA-256：`d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6`。
 
 - [geometry.json](../hardware/enclosure/drawings/geometry.json) 与 [color-render.json](../hardware/enclosure/drawings/color-render.json) 记录当前模型／建模脚本摘要、尺寸、真实投影、配色和输出分辨率。
-- [drawing-baseline-checks.json](../hardware/enclosure/drawing-baseline-checks.json) 保留 ADR-0046 阶段的42件不变证据；本轮电池改动由 [battery-floor-checks.json](../hardware/enclosure/battery-floor-checks.json)衔接，上一版孔网由 [grille-clearance-checks.json](../hardware/enclosure/grille-clearance-checks.json)衔接；此前变更由 [charging-port-checks.json](../hardware/enclosure/charging-port-checks.json)与 [control-layout-checks.json](../hardware/enclosure/control-layout-checks.json) 衔接。P2/P3 重新测量、剖切、渲染，旧侧孔标注不复用。
-- [本轮 14 页渲染与版面复核](../hardware/enclosure/drawings/grille-clearance-review.json)记录 PDF、绘图脚本、几何与预览摘要。
+- [drawing-baseline-checks.json](../hardware/enclosure/drawing-baseline-checks.json) 保留 ADR-0046 阶段的42件不变证据；本轮裸电位器由 [control-volume-checks.json](../hardware/enclosure/control-volume-checks.json)衔接，此前电池改动由 [battery-floor-checks.json](../hardware/enclosure/battery-floor-checks.json)衔接，上一版孔网由 [grille-clearance-checks.json](../hardware/enclosure/grille-clearance-checks.json)衔接；此前变更由 [charging-port-checks.json](../hardware/enclosure/charging-port-checks.json)与 [control-layout-checks.json](../hardware/enclosure/control-layout-checks.json) 衔接。P2/P3 重新测量、剖切、渲染，旧侧孔标注不复用。
+- [本轮 14 页渲染与版面复核](../hardware/enclosure/drawings/bare-volume-review.json)记录 PDF、绘图脚本、几何与预览摘要。
 - [正式套件清单](../hardware/enclosure/print/manifest.json)提供本次六盘的真实切片估计；[正式包读回](../hardware/enclosure/print-release-checks.json)核对所有导出文件。
 - [validation.json](../hardware/enclosure/validation.json)、[assembly-paths.json](../hardware/enclosure/assembly-paths.json)及[current-perfboard-checks.json](../hardware/enclosure/current-perfboard-checks.json)对应当前模型。线束 0…60 mm 每 2 mm 采样；抬升、旋转和前壳离散采样不是连续运动证明。
 - 旧 OLED、背锁、音量模块等局部尺寸以历史报告和逐件不变证据衔接；P2 加强筋在当前后壳中重新截取并核对体积与尺寸。历史报告保留其原模型摘要。

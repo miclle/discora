@@ -57,6 +57,15 @@
     ],
     "physical_fit_verified": false,
     "image": "pcb-module-reference.jpg",
-    "image_sha256": "c2ed63686783ef519cd3496402ba693b9736a8c093f02b826f8a0fc588ba952b"
+    "image_sha256": "c2ed63686783ef519cd3496402ba693b9736a8c093f02b826f8a0fc588ba952b",
+    "status": "historical, superseded by bare B50K on 2026-11-16"
+  },
+  "current_selection": {
+    "date": "2026-11-16",
+    "part": "bare switched dual-gang B50K",
+    "source": "User reconfirmed the originally supplied bare-part dimensions and possession of this part",
+    "dimensions_reconfirmed": true,
+    "cad_rotation_about_shaft_deg": 0,
+    "physical_fit_verified": false
   }
 }

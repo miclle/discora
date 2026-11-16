@@ -96,13 +96,18 @@ def main():
     grille=json.loads((ROOT/'grille-clearance-checks.json').read_text())
     grille_print=json.loads((ROOT/'grille-print-checks.json').read_text())
     battery=json.loads((ROOT/'battery-floor-checks.json').read_text())
-    assert battery['all_pass'] and battery['model_sha256']==manifest['model_sha256']
+    bare=json.loads((ROOT/'control-volume-checks.json').read_text())
+    bare_print=json.loads((ROOT/'bare-volume-print-checks.json').read_text())
+    assert bare['all_pass'] and bare['model_sha256']==manifest['model_sha256']
+    assert bare_print['all_pass'] and bare_print['model_sha256']==manifest['model_sha256']
+    assert all(bare['unchanged_finished_parts_difference_mm3'][n]<.001 for n in manifest['parts'] if n!='FrontShell')
+    assert battery['all_pass'] and battery['model_sha256']==bare['baseline_sha256']
     assert grille['model_sha256']==grille_print['model_sha256']==battery['baseline_sha256']
     assert all(battery['unchanged_shapes_difference_mm3'][n]<.001 for n in manifest['parts'] if n!='RearShell')
     assert grille['all_pass'] and grille_print['all_pass']
     assert all(grille['preserved_shape_difference_mm3'][n]<.001 for n in manifest['parts'] if n not in ('FrontShell','RearShell'))
     depth_print=json.loads((ROOT/'p2-depth-print-checks.json').read_text())
-    assert depth_print['all_pass'] and depth_print['model_sha256']==manifest['model_sha256']
+    assert depth_print['all_pass'] and depth_print['model_sha256']==bare['baseline_sha256']
     assert charging['model_sha256']==charging_print['model_sha256']==grille['baseline_sha256']
     assert charging['all_pass'] and charging_print['all_pass']
     assert controls['model_sha256']==charging['baseline_sha256'] and controls['all_pass']
@@ -113,10 +118,13 @@ def main():
                for name in ('RearShell','SpeakerCarrier'))
     assert p3['geometry']['baseline_sha256']==p2['model_sha256']
     assert p3['geometry']['p2_entire_shape_difference_mm3']<.001
-    for name, audit in [('FrontShell',grille_print),('RearShell',depth_print),('SpeakerCarrier',p3['slice'])]:
+    for name, audit in [('FrontShell',bare_print),('RearShell',depth_print),('SpeakerCarrier',p3['slice'])]:
         assert manifest['plates'][name]['gcode_sha256']==audit['gcode_sha256']
         assert manifest['parts'][name]['stl_sha256']==audit['stl_sha256']
-    report=dict(model_sha256=manifest['model_sha256'],manifest_sha256=digest(folder/'manifest.json'),
+    retained=manifest['retained_files_sha256']
+    assert len(retained)==15
+    assert all(digest(folder/name)==sha for name,sha in retained.items())
+    report=dict(retained_files_sha256=retained,model_sha256=manifest['model_sha256'],manifest_sha256=digest(folder/'manifest.json'),
                 meshes=meshes, plates=plates, all_pass=True, printer_contacted=False)
     (ROOT/'print-release-checks.json').write_text(json.dumps(report,indent=2)+'\n')
     A.closeDocument(doc.Name)

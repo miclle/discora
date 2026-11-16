@@ -1,6 +1,6 @@
 # 当前工程状态
 
-本轮取消电池下方 2 mm 托台，电池直接落在原 5 mm 底板上，Z=6…26；左右挡板及四处绑带槽保留。P3 的实体和位置、整机 94.7 mm 深度保持。只更新 P2 打印文件，其余 10 个 STL／5 盘 3MF 保留，见 [ADR-0050](decisions/0050-battery-direct-floor.md)。
+本轮恢复用户已购、尺寸已确认的裸 B50K 带开关电位器，更新 P1 内侧辅助防转槽及引脚、焊点和出线预留。最新洞洞板布局、已打印 P3 的实体和位置、P2、电池落底及整机 94.7 mm 深度保持。只有 P3 已打印；本轮只更新 P1 STL／3MF，其余 10 件 STL、5 盘 3MF 保持。见 [ADR-0051](decisions/0051-bare-b50k-solder-clearance.md)。
 
 孔网沿用上一版下沉 1.5 mm 设计，仅两个喇叭投影区减薄至 1.2 mm，其余保留 2.5 mm，无新增背筋。已打印 P3 的实体及打印文件保持，此前整件后移 1.7 mm，P2 加深至 94.7 mm，安装座、出口、光驱和后壁接口同步后移，使振膜名义静态净距达到 3 mm。P1、P2 需要使用本轮配套文件，整机竖直高度和前部操控保持。见 [ADR-0049](decisions/0049-speaker-diaphragm-clearance.md)。
 
@@ -8,9 +8,9 @@
 
 2026-11-15：P2 胶固定的双充电孔按用户确认移至从正面看过去的左下角，上 Type-C、下 DC；中心 X=-70，Z=24／12 mm，DC 保留 31.5 mm 原长；DC 圆筒与 Type-C 矮矩形套座均内伸 5 mm，连同 5 mm 后壁总支撑长度为 10 mm；几何、固定母座保留时的七条拆装路径、440 层新切片和侧口支撑检查通过，孔内可拆支撑需清理。胶接保持力、实物配合和双入口充电未验证，见 [ADR-0048](decisions/0048-rear-charging-ports.md)。
 
-2026-11-14 声道配套基线（P2 后续增加上述充电口）：P3 最后 4 mm 更新为圆角梯形短渐扩口，出口约 587.22 mm²，原 400 mm² 主通路、已试装安装座及双背板贴板面保留；P2 沿用圆角梯形外口。新口投影无遮挡、0.7 mm 间隙保持，气路连通、左右镜像、静态碰撞及七条拆装路径通过。P3 287 层重新核对，无声腔／导管内支撑，原 18 处悬空位置复查通过；P2 当时的 440 层基线已由 ADR-0048 新切片衔接。当前 CAD、配套文件与证据见 [ADR-0046](decisions/0046-p3-terminal-mouth.md)，P2 沿用 [ADR-0045](decisions/0045-trapezoid-exterior-outlets.md)。完整件打印、支撑拆除、气密和声学仍待实测，不再打印试片。
+2026-11-14 声道配套基线（P2 后续增加上述充电口）：P3 最后 4 mm 更新为圆角梯形短渐扩口，出口约 587.22 mm²，原 400 mm² 主通路、已试装安装座及双背板贴板面保留；P2 沿用圆角梯形外口。新口投影无遮挡、0.7 mm 间隙保持，气路连通、左右镜像、静态碰撞及七条拆装路径通过。P3 287 层重新核对，无声腔／导管内支撑，原 18 处悬空位置复查通过；P2 当时的 440 层基线已由 ADR-0048 新切片衔接。当前 CAD、配套文件与证据见 [ADR-0046](decisions/0046-p3-terminal-mouth.md)，P2 沿用 [ADR-0045](decisions/0045-trapezoid-exterior-outlets.md)。P1/P2 打印、完整件支撑拆除、气密和声学仍待实测，不再打印试片。
 
-更新时间：2026-11-15。本文只维护当前结论；完整经过与失败窗口见[实验记录索引](records/README.md)，未完成工作见[路线图](roadmap.md)。
+更新时间：2026-11-16。本文只维护当前结论；完整经过与失败窗口见[实验记录索引](records/README.md)，未完成工作见[路线图](roadmap.md)。
 
 `planned` 表示计划，`implemented` 表示源码已实现，`bench-tested` 表示指定条件下有实验或用户反馈，`verified` 表示满足相应完整验收条件。编译、日志计数、用户听感和实物验收分别记录，不互相替代。
 
@@ -39,7 +39,7 @@
 | 四键基本操作 | 0.12.5 播放／暂停／上一曲／下一曲／退碟获用户确认 | 长按、上电按住、组合键、无盘／重插盘及暂停中首尾循环的实体键场景待专项验收；见[验收反馈](records/2026-11-09-usb-offline-recovery.md#四键基本操作验收2026-11-09用户实测反馈) |
 | 盘尾复位与循环选曲 | 0.12.3 的 UART 共用核心已验证首尾循环、暂停保持、末轨完整 EOF 后回首曲停止、再次 toggle 从首曲播放；用户确认尾音完整 | UART 证据不替代实体键手势或整盘稳定性；见[盘尾验证](records/2026-11-09-disc-rewind-reconnect.md) |
 | OLED | 0.12.6 中文显示及进度条获用户实屏确认；历史无介质与盘尾英文画面也有用户反馈 | 各异常状态、计时精度及长时间有声并行未完整验收；见[中文进度验收](records/2026-11-09-oled-progress.md)、[盘尾验证](records/2026-11-09-disc-rewind-reconnect.md) |
-| 外壳及供电集成 | 三主体 PLA 外壳、四键及背锁已有 CAD／网格／切片检查；提手高出斜肩已由 25 增至 45 mm，开口收至 90×24 mm、上下横梁各 10.5 mm，见 [ADR-0031](decisions/0031-taller-handle.md)；P2 采用开放梯形侧口、P3 采用独立导管，见 [ADR-0046](decisions/0046-p3-terminal-mouth.md)；后壳左右镜像保持，前后斜肩水平宽改为 44/45.7 mm；前壳以 5 mm 等厚贴合并取消顶部台阶，见 [ADR-0033](decisions/0033-uniform-front-side-seam.md)；后壳主体厚 5 mm，按光驱实测更新为 170×94.7×243.263 mm；光驱底面靠后壁，采用中央底托及两螺钉压条，实测线缆侧伸 14.5 并留 1.5 余量，见 [ADR-0035](decisions/0035-measured-drive-rear-wall-mount.md)；双路固定 5V 降压方案已记录；B50K 已改用 PCB 插接模块，完整包络绕轴90°并扩大内槽；四键左移4 mm、旋钮右移4 mm并向提手移2 mm，十字扩大至28 mm，见 [ADR-0047](decisions/0047-control-spacing-and-knob.md)，见 [ADR-0036](decisions/0036-pcb-volume-module.md) | 洞洞板托架与 XH2.54 线束维护空间已纳入 CAD；P3 按喇叭实测增加安装开口和每只四处盲底孔，几何与切片通过。用户已打印喇叭试片并确认装配无问题（`bench-tested`），见 [ADR-0038](decisions/0038-measured-speaker-trial-mount.md#2026-11-14-试片结果)。P3 后横梁收齐后，Bambu Studio 首层检查确认双声腔背面直接贴板，见 [ADR-0039](decisions/0039-p3-flat-back-printing.md)。完整 P3 与整机的实物配合、承载、散热和负载供电待验证；见[外壳](../hardware/enclosure/README.md)、[布局](perfboard-layout.md)、[供电决策](decisions/0018-dual-5v-buck.md) |
+| 外壳及供电集成 | 三主体 PLA 外壳、四键及背锁已有 CAD／网格／切片检查；提手高出斜肩已由 25 增至 45 mm，开口收至 90×24 mm、上下横梁各 10.5 mm，见 [ADR-0031](decisions/0031-taller-handle.md)；P2 采用开放梯形侧口、P3 采用独立导管，见 [ADR-0046](decisions/0046-p3-terminal-mouth.md)；后壳左右镜像保持，前后斜肩水平宽改为 44/45.7 mm；前壳以 5 mm 等厚贴合并取消顶部台阶，见 [ADR-0033](decisions/0033-uniform-front-side-seam.md)；后壳主体厚 5 mm，按光驱实测更新为 170×94.7×243.263 mm；光驱底面靠后壁，采用中央底托及两螺钉压条，实测线缆侧伸 14.5 并留 1.5 余量，见 [ADR-0035](decisions/0035-measured-drive-rear-wall-mount.md)；双路固定 5V 降压方案已记录；B50K 已恢复裸电位器，内槽辅助防转，增加焊点及出线预留；四键左移4 mm、旋钮右移4 mm并向提手移2 mm，十字扩大至28 mm，见 [ADR-0047](decisions/0047-control-spacing-and-knob.md)，见 [ADR-0051](decisions/0051-bare-b50k-solder-clearance.md) | 洞洞板托架与 XH2.54 线束维护空间已纳入 CAD；P3 按喇叭实测增加安装开口和每只四处盲底孔，几何与切片通过。用户已打印喇叭试片并确认装配无问题（`bench-tested`），见 [ADR-0038](decisions/0038-measured-speaker-trial-mount.md#2026-11-14-试片结果)。P3 后横梁收齐后，Bambu Studio 首层检查确认双声腔背面直接贴板，见 [ADR-0039](decisions/0039-p3-flat-back-printing.md)。完整 P3 与整机的实物配合、承载、散热和负载供电待验证；见[外壳](../hardware/enclosure/README.md)、[布局](perfboard-layout.md)、[供电决策](decisions/0018-dual-5v-buck.md) |
 | CD-R／CD-RW 刻录 | 研究目标，未实现 | 须先通过桥接兼容性、最低写速与实测吞吐门槛 |
 
 ## 仍然有效的失败证据

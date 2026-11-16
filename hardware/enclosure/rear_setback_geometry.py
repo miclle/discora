@@ -89,7 +89,7 @@ def apply(doc):
         obj.Shape=shifted(obj.Shape)
     for obj in doc.ChargingInterfaces.Group:obj.Shape=shifted(obj.Shape)
     for obj in doc.CableClearances.Group:
-        if 'Harness' in obj.Name:continue
+        if 'Harness' in obj.Name or obj.Name in ('VolumeSolderClearance','VolumeAudioLeadClearance'):continue
         obj.Shape=shifted(obj.Shape)
     for name in perfboard.HARNESS_ROUTES:
         for suffix,opening in (('Closed',0),('Open',perfboard.SERVICE_OPENING)):

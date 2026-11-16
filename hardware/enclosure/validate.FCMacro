@@ -86,9 +86,9 @@ def validate(folder):
             thickness[f'slope_side_{x}_{y}']=section_length('FrontShell',A.Vector(x,y,165+slope*y),normal)
     thickness['grille']=section_length('FrontGrille',A.Vector(1.45,0,76),A.Vector(0,1,0))
     thickness['handle']=section_length('FrontShell',A.Vector(60,46.5,211),A.Vector(0,1,0))
-    # The PCB-module pocket extends beneath this shoulder sample; its local
-    # floor is 3.6 mm, while the recessed nut clamps 2 mm (check-volume.py).
-    expected_thickness={'grille':2.5,'slope_50_32':3.6}
+    # The smaller bare-pot pocket restores this shoulder sample to 5 mm.
+    # The recessed nut still clamps 2 mm (check-volume.py).
+    expected_thickness={'grille':2.5}
     assert all(abs(value-expected_thickness.get(name,5))<1e-6 for name,value in thickness.items()),thickness
     print('PANEL_THICKNESS',thickness,flush=True)
     # Check the finished front shell, not just its hidden circular cutter.

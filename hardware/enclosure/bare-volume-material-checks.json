@@ -1,0 +1,12 @@
+{
+  "before_sha256": "ef95b84ad257bebe35c707c6c82a6b25702b0edeb2a6aefc41b4d998b5b021ef",
+  "model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6",
+  "changed_entries": [
+    "Document.xml (FitStatus strings only)",
+    "ShapeAppearance28"
+  ],
+  "all_geometry_resources_identical": true,
+  "face_material_count": 12,
+  "gui_resources_in_registration_order": true,
+  "gui_reopen_verified": false
+}

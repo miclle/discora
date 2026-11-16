@@ -117,7 +117,11 @@ def main():
     charging=json.loads((ROOT/'charging-port-checks.json').read_text())
     grille_report=json.loads((ROOT/'grille-clearance-checks.json').read_text())
     battery_floor=json.loads((ROOT/'battery-floor-checks.json').read_text())
-    assert battery_floor['all_pass'] and battery_floor['model_sha256']==source_hash
+    bare_volume=json.loads((ROOT/'control-volume-checks.json').read_text())
+    assert bare_volume['all_pass'] and bare_volume['model_sha256']==source_hash
+    assert battery_floor['all_pass'] and battery_floor['model_sha256']==bare_volume['baseline_sha256']
+    assert all(bare_volume['unchanged_finished_parts_difference_mm3'][n]<.001 for n in ('RearShell','SpeakerCarrier','Knob'))
+    assert all(bare_volume['color_face_order_preserved'].values())
     assert grille_report['all_pass'] and grille_report['model_sha256']==battery_floor['baseline_sha256']
     assert all(battery_floor['unchanged_shapes_difference_mm3'][n]<.001 for n in ('FrontShell','SpeakerCarrier','FrontGrille','LDriver','RDriver'))
     assert charging['all_pass'] and charging['model_sha256']==grille_report['baseline_sha256']
@@ -235,14 +239,14 @@ def main():
                  'active_center_exterior_xyz_mm':list(pose.Base),
                  'local_frame':'X right; Y inward normal; Z up slope toward header'}
 
-    # PCB module details use its own shaft datum, not its world-aligned bounds.
+    # Bare-pot details use the current shaft datum, not world-aligned bounds.
     volume_pose=A.Placement(V(52,20,a.y+20*slope),A.Rotation(V(0,1,0),V(0,slope,-1)))
     volume=doc.VolumePot.Shape.copy()
     volume.Placement=volume_pose.inverse().multiply(volume.Placement)
-    unturned=volume.copy();unturned.rotate(V(),V(0,1,0),-90)
+    unturned=volume.copy()
     projection('volume-module',unturned,'top')
     volume_parts=[]
-    for name in ('FrontShell','VolumePot','Encoder','Knob'):
+    for name in ('FrontShell','VolumePot','Encoder','Knob','VolumeSolderClearance','VolumeAudioLeadClearance'):
         shape=doc.getObject(name).Shape.copy()
         shape.Placement=volume_pose.inverse().multiply(shape.Placement)
         if name=='FrontShell':shape=shape.common(Part.makeBox(46,7,44,V(-23,-1,-22)))
@@ -250,9 +254,9 @@ def main():
     installed=Part.makeCompound(volume_parts).common(Part.makeBox(30,60,50,V(-30,-16,-25)))
     projection('volume-installation',installed,'right')
     data['volume_module']={'installed_local_bounds':bounds(volume),'unturned_bounds':bounds(unturned),
-        'pcb_unturned_size_mm':[35,26.2,1.5],'shaft_center_exterior_xyz_mm':list(volume_pose.Base),
-        'rotation_about_shaft_deg':90,'local_frame':'X right; Y inward normal along shaft; Z up slope',
-        'detail_section':'Keep local X <= 0; excludes unmeasured mounting holes and connector details'}
+        'bare_body_size_mm':[9.5,14.5,11.2],'pin_projection_mm':3.5,'solder_allowance_mm':3.8,'shaft_center_exterior_xyz_mm':list(volume_pose.Base),
+        'rotation_about_shaft_deg':0,'local_frame':'X right; Y inward normal along shaft; Z up slope',
+        'detail_section':'Keep local X <= 0; includes conservative solder and local analogue lead allowances; pin spacing unmeasured'}
     data['volume_module']['clearances_mm']={n:doc.VolumePot.Shape.distToShape(doc.getObject(n).Shape)[0]
         for n in ('SpeakerCarrier','MCUChip','RearShell','Drive','Perfboard')}
 
@@ -316,7 +320,7 @@ def main():
         ('F','主控 PCB／元件／排母',['MCU','MCUChip','MCUSockets'],(0,25,100)),
         ('G','DAC PCB／元件／排母',['DAC','DACChip','DACSockets'],(-100,0,65)),
         ('H','屏幕 PCB 与接头',['DisplayPCB','DisplayHeader'],(-60,-40,130)),
-        ('I','PCB 音量模块与轴',['VolumePot','Encoder'],(70,-30,90)),
+        ('I','裸 B50K 电位器与轴',['VolumePot','Encoder'],(70,-30,90)),
         ('J','5600 mAh 平排电池',['Battery'],(0,-10,-50)),
         ('K','SATA 接头及护线环',['Bridge'],(180,-30,-140)),
         ('L','四个轻触按键包络',['PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch'],(-110,0,150)),
@@ -354,8 +358,8 @@ def main():
         'current_terminal_area':abs(data['acoustics']['outlet_area_mm2']-587.216)<.01,
         '44_finished_objects':len(objects)==44,
         'perfboard_bounds_111_55_1_6':all(abs(x-y)<1e-6 for x,y in zip(bounds(shapes['Perfboard'])['size'],(111,55,1.6))),
-        'pcb_module_local_15_26_2_35':all(abs(x-y)<1e-6 for x,y in zip(bounds(volume)['size'],(15,26.2,35))),
-        'pcb_module_unturned_35_26_2_15':all(abs(x-y)<1e-6 for x,y in zip(bounds(unturned)['size'],(35,26.2,15))),
+        'bare_pot_local_9_5_14_5_14_7':all(abs(x-y)<1e-6 for x,y in zip(bounds(volume)['size'],(9.5,14.5,14.7))),
+        'bare_pot_two_solids':len(volume.Solids)==2,
         'three_connected_main_parts':all(len(doc.getObject(n).Shape.Solids)==1 for n in ('FrontShell','RearShell','SpeakerCarrier')),
         'four_p3_seat_ribs':len(ribs)==4,
         'source_unchanged':hashlib.sha256(source.read_bytes()).hexdigest()==source_hash,
