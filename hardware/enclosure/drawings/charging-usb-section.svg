@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="10.000000000000014mm" height="16.100231486443146mm" viewBox="84.69999999999999 -33.5 10.000000000000014 16.100231486443146">
+<g   fill="none"
+   stroke="rgb(0, 0, 0)"
+   stroke-linecap="butt"
+   stroke-linejoin="miter"
+   stroke-width="0.18"
+   transform="scale(1, -1)"
+  >
+<path id= "1" d=" M 94.7 21.15 L 94.7 17.3998 " />
+<path id= "2" d=" M 84.7 17.3998 L 94.7 17.3998 " />
+<path id= "3" d=" M 84.7 17.3998 L 84.7 21.15 " />
+<path id= "4" d=" M 84.7 21.15 L 94.7 21.15 " />
+<path id= "5" d=" M 94.7 33.5 L 94.7 26.85 " />
+<path id= "6" d=" M 89.7 33.5 L 94.7 33.5 " />
+<path id= "7" d=" M 84.7 26.85 L 94.7 26.85 " />
+<path id= "8" d=" M 84.7 26.85 L 84.7 28.85 " />
+<path id= "9" d=" M 84.7 28.85 L 89.7 28.85 " />
+<path id= "10" d=" M 89.7 33.5 L 89.7 28.85 " />
+</g>
+</svg>

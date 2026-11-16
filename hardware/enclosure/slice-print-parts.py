@@ -61,7 +61,7 @@ def main():
         process_path=target/'process.json'
         process_path.write_text(json.dumps(process,indent=2)+'\n')
         # Two-material keys and knob use their dedicated 3MF, not monochrome STL.
-        names=[name] if name!='SmallParts' else ['ButtonRetainer','DisplayRetainer','DriveRetainer']
+        names=[name] if name!='SmallParts' else ['ButtonRetainer','DisplayRetainer','DriveRetainer','CarrierWashers']
         for n in names:assert digest(meshes/(n+'.stl'))==report['parts'][n]['stl_sha256']
         command=[str(args.bambu.resolve()),'--datadir',str(out/('userdata-'+name)),
                  '--load-settings',str(settings['machine'])+';'+str(process_path),

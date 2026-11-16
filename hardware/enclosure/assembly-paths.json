@@ -46,7 +46,7 @@
       ],
       "prerequisites": [
         "Front cover removed and its cables disconnected",
-        "Four carrier screws removed"
+        "Four carrier screws and four flat washers removed"
       ],
       "clashes": []
     },
@@ -306,5 +306,7 @@
   },
   "drive_service_envelope": "Filled maximum 128 x 10.8 x 130 mm box; connector retains modeled housing and strain relief",
   "all_pass": true,
-  "model_sha256": "baf82e4b8cf14850fa24f275c234a58eb07a738980d71c1076bf7319f7182c9f"
+  "model_sha256": "39c745a443f341767aa4a219102fdb1477acd508da073d469f57701f85173ab2",
+  "gui_only_revision_evidence": "stock-gui-checks.json",
+  "geometry_checked_model_sha256": "45f07b2207515d0f618010616b41cffb0fae2768fee83d1ab433bea2097fd31b"
 }

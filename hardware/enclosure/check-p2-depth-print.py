@@ -43,11 +43,24 @@ def check(w):
         assert abs(layers[0]['h']-float(settings['initial_layer_print_height']))<1e-6
         assert all(abs(l['h']-float(settings['layer_height']))<1e-5 for l in layers[1:])
         assert len(polys)==len(layers)
+    tool_well_support=[];tool_well_obstructions=[]
+    if hasattr(doc.FrontShell,'StockFasteners'):
+        from stock_fastener_geometry import LOCKS
+        for sign in (-1,1):
+            for x,z,root,end,bottom,head in LOCKS:
+                roi=Point(sign*x+128,z+128-cz).buffer(3.2)
+                for i,l in enumerate(layers):
+                    if l['z']>94.7-head:break
+                    for seg in l['segments']:
+                        if LineString((seg['a'],seg['b'])).intersection(roi).length<.05:continue
+                        if seg['feature'].startswith('Support'):tool_well_support.append(dict(axis=[sign*x,z],layer=i+1))
+                        elif seg['feature'] not in ('Brim','Skirt','Custom'):tool_well_obstructions.append(dict(axis=[sign*x,z],layer=i+1))
     warnings=json.loads((plate/'result.json').read_text())['sliced_plates'][0]['warning_message']
     r=dict(model_sha256=hashlib.sha256((w/'Discora.FCStd').read_bytes()).hexdigest(),stl_sha256=hashlib.sha256(mesh.read_bytes()).hexdigest(),gcode_sha256=hashlib.sha256(gcode.read_bytes()).hexdigest(),layers=len(layers),new_islands=audit['new_islands'],remaining_spans_after_model_and_support=sorted(residual,key=lambda p:p['max_free_mm'],reverse=True),bore_support_layers={k:sorted(set(v)) for k,v in bore_support.items()},bore_toolpath_obstructions=obstructions,warnings=warnings,support_access='Open front cavity and open side mouths; straight 10 mm charging bores accessible from both ends. P3 chamber/duct geometry and its original sliced project are unchanged.',physical_print_verified=False)
     r['acceptance']={'maximum_local_distance_to_backing_mm':2,'sample_spacing_mm':.2,'lateral_edge_allowance_mm':.35,'scope':'Screens local unsupported width; long paths alongside a backed edge are not their full length in bridging span. Physical print quality and removal remain unverified.'}
     r.update(layer_height_mm=float(settings['layer_height']),first_layer_height_mm=float(settings['initial_layer_print_height']),nozzle_mm=.4,project_sha256=hashlib.sha256((plate/'Discora-RearShell.3mf').read_bytes()).hexdigest(),all_layer_sections_checked=len(polys))
-    r['all_pass']=not warnings and not obstructions and not audit['new_islands'] and all(p['maximum_distance_to_backing_mm']<=2 for p in residual)
+    r['tool_well_support']=tool_well_support;r['tool_well_obstructions']=tool_well_obstructions
+    r['all_pass']=not tool_well_support and not tool_well_obstructions and not warnings and not obstructions and not audit['new_islands'] and all(p['maximum_distance_to_backing_mm']<=2 for p in residual)
     (w/'p2-depth-print-checks.json').write_text(json.dumps(r,indent=2)+'\n');print('P2_SUPPORT',r['all_pass'],r['remaining_spans_after_model_and_support'][:12],len(obstructions),flush=True)
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--work',type=Path,required=True);check(p.parse_args().work)

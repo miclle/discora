@@ -1,6 +1,6 @@
 {
-  "model_sha256": "baf82e4b8cf14850fa24f275c234a58eb07a738980d71c1076bf7319f7182c9f",
-  "baseline_sha256": "baf82e4b8cf14850fa24f275c234a58eb07a738980d71c1076bf7319f7182c9f",
+  "model_sha256": "39c745a443f341767aa4a219102fdb1477acd508da073d469f57701f85173ab2",
+  "baseline_sha256": "45f07b2207515d0f618010616b41cffb0fae2768fee83d1ab433bea2097fd31b",
   "unchanged_finished_parts_difference_mm3": {
     "RearShell": 0.0,
     "Feet": 0.0,
@@ -15,6 +15,7 @@
     "DisplayRetainer": 0.0,
     "DriveRetainer": 0.0,
     "SpeakerCarrier": 0.0,
+    "CarrierWashers": 0.0,
     "LDriver": 0.0,
     "RDriver": 0.0,
     "PlayPauseSwitch": 0.0,
@@ -54,7 +55,7 @@
     "VolumeAudioLeadClearance": 0.0
   },
   "source_sha256": {
-    "build.FCMacro": "96d4272d49e10de5b1598dc409b6023a1336950b6a1bc12b9c3b0043dbaedab7",
+    "build.FCMacro": "61b6d51eec20427acb4a731330991fd9e2bf89596447c3754e940c2432545a88",
     "perfboard_geometry.py": "f02a4887182ce84e6dc4f0e8771a28e25838e2de5da03545288a759a286c5fc2",
     "rear_setback_geometry.py": "fb121acf760bcae01fd92216aac7d61e9111090d475159c5220db0a5acab1e14"
   },
@@ -111,7 +112,7 @@
   },
   "module_clearances_mm": {
     "FrontShell": 3.552713678800501e-15,
-    "RearShell": 15.441795551431833,
+    "RearShell": 15.798007768496191,
     "Feet": 160.20452542370762,
     "Window": 30.023990407672322,
     "StatusArt": 33.65059434839152,
@@ -119,10 +120,11 @@
     "EjectKey": 86.1379065082225,
     "PrevKey": 103.85,
     "NextKey": 85.85,
-    "ButtonRetainer": 84.25,
-    "DisplayRetainer": 23.947122332435647,
+    "ButtonRetainer": 83.75,
+    "DisplayRetainer": 23.447122332435654,
     "DriveRetainer": 61.99666715109988,
     "SpeakerCarrier": 32.441185312508985,
+    "CarrierWashers": 39.40636267056634,
     "LDriver": 69.11513383784444,
     "RDriver": 46.918431617256246,
     "PlayPauseSwitch": 104.25802988236069,
@@ -159,8 +161,8 @@
         "Perfboard": 15.537894312197201,
         "MCUChip": 7.660000000000004,
         "SpeakerCarrier": 33.53537076326402,
-        "ButtonRetainer": 83.95320168845451,
-        "RearShell": 22.94999999999999,
+        "ButtonRetainer": 83.50643312954834,
+        "RearShell": 22.950000000000003,
         "Drive": 52.30870165581978
       }
     },
@@ -170,8 +172,8 @@
         "Perfboard": 11.499850184079406,
         "MCUChip": 11.21,
         "SpeakerCarrier": 23.151676753599837,
-        "ButtonRetainer": 87.53894491581487,
-        "RearShell": 26.499999999999986,
+        "ButtonRetainer": 87.13757672039003,
+        "RearShell": 26.5,
         "Drive": 45.67229387600592
       }
     }
@@ -205,6 +207,7 @@
       "Bridge",
       "Battery",
       "Feet",
+      "CarrierWashers",
       "Perfboard",
       "MCUSockets",
       "DACSockets",
@@ -233,6 +236,7 @@
       "Bridge": 0.0,
       "Battery": 0.0,
       "Feet": 0.0,
+      "CarrierWashers": 0.0,
       "Perfboard": 0.0,
       "MCUSockets": 0.0,
       "DACSockets": 0.0,
@@ -267,6 +271,7 @@
       "Bridge",
       "Battery",
       "Feet",
+      "CarrierWashers",
       "Perfboard",
       "MCUSockets",
       "DACSockets",
@@ -314,5 +319,7 @@
     "PrevKey": true,
     "NextKey": true
   },
-  "all_pass": true
+  "all_pass": true,
+  "gui_only_revision_evidence": "stock-gui-checks.json",
+  "geometry_checked_model_sha256": "45f07b2207515d0f618010616b41cffb0fae2768fee83d1ab433bea2097fd31b"
 }

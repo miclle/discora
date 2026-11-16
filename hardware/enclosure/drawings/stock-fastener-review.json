@@ -1,0 +1,70 @@
+{
+  "model_sha256": "39c745a443f341767aa4a219102fdb1477acd508da073d469f57701f85173ab2",
+  "geometry_sha256": "7ebe1a56a44a185bba7d97ef1a6babc8c631392c18ebc0364cb4e5ffa7a290d5",
+  "color_render_sha256": "13c46a85810393ebd076bcca14b44beed08da8ea80df03f01a083a0a1043abb2",
+  "drawing_script_sha256": "f4f58ff25f18f48bbf6b4acd12e4ebffe990d357d3f330ebbb231271618d13ae",
+  "pdf_sha256": "4e340b371ea0c26128ab0aad9c367ea355d261dfd7ec8e99719ebff7f5073e42",
+  "previous_pdf_sha256": "f47107a3bc2e018d950637d7698afb4d0b5d8ce2b9ab7e29c90e8d1610fde29b",
+  "pages": 14,
+  "rendered_pages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "reviewed_pages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "full_size_reviewed_pages": [
+    2,
+    5,
+    6,
+    11
+  ],
+  "review": "All 14 pages rendered and inspected in contact sheets; pages 2, 5, 6 and 11 inspected full size. New screw axes, flat-head pads, washer quantities, current slicing mass, countersink assumption and tool access text match current evidence. Existing speaker gap, battery adhesive and acoustic paths remain. Final wording edits retained layout; all pages rerendered. No clipped or overlapping labels observed.",
+  "previews": {
+    "dimensions-color-preview.png": "285653d012b5bd27b6d6b1b024e62fcb3b5e09f23e5d65f6f4e2ebb7069c5d26",
+    "exploded-color-preview.png": "b20faa93451361ba2e363c6fcadd76cfc0deef1f97fee584c2d1cacd7993fb32",
+    "oled-dimensions-preview.png": "1bab2b5302373dd813c9526b94bdaef09328c069e71b2a1bb7ef908889d99656",
+    "volume-module-preview.png": "4b309b39c910f10c7d4b306cbf5a7c22d693301a62e7d4866427f8fb1b12a253",
+    "perfboard-layout-preview.png": "b645e54b960387e2e08439dc0283b1bd1ea8fd4338a5cb1125ef2d7050fb5615",
+    "front-harness-preview.png": "108943366667ba233e23584bbf7e8771cfe41842e702f4d64681dabb651d1107",
+    "acoustic-outlet-preview.png": "5e44c0422cdf487dfe3920d39207f3b315684e2457c1c1dce3a1cfbe1e553de7",
+    "charging-ports-preview.png": "2eb2fc75795e4454412319649382f80fd70f644683acdf88f59bb0043f0161b4",
+    "grille-clearance-preview.png": "097da31e461edee82f75bc88742cce3722b576591356e77cd32250860d1c9edf"
+  },
+  "checks": {
+    "stock_screw_allocation": true,
+    "printed_p3_preserved": true,
+    "washer_quantity": 4,
+    "nominal_p3_head_p1_gap_mm": 1,
+    "case_screw_total_length_mm": 30,
+    "case_countersink_assumed_degrees": 90,
+    "additional_perfboard_m2x4_quantity": 3,
+    "overall_depth_mm": 94.7
+  },
+  "all_pass": true
+}

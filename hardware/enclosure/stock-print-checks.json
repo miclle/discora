@@ -1,0 +1,247 @@
+{
+  "model_sha256": "39c745a443f341767aa4a219102fdb1477acd508da073d469f57701f85173ab2",
+  "freecad_version": [
+    "1",
+    "1",
+    "4"
+  ],
+  "printer_user_description": "Bambu P2SC",
+  "build_volume_mm": [
+    256,
+    256,
+    256
+  ],
+  "primary_nozzle_mm": 0.4,
+  "alternate_nozzle_mm": 0.2,
+  "brim_allowance_mm": 5,
+  "linear_deflection_mm": 0.1,
+  "angular_deflection_rad": 0.35,
+  "physical_print_test": false,
+  "parts": {
+    "FrontShell": {
+      "file": "FrontShell.stl",
+      "size_xyz_mm": [
+        240.26315789473685,
+        170.0000000000001,
+        49.000000000000085
+      ],
+      "linear_deflection_mm": 0.1,
+      "angular_deflection_rad": 0.35,
+      "physical_quantity": 1,
+      "facets": 244604,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        0.5,
+        0.4999999999999999,
+        0.5,
+        0.5000000000000001
+      ],
+      "stl_sha256": "c754cb7b5f9de1d7a1526084ab8793c75384418df697b2428e57ce5092692b71"
+    },
+    "RearShell": {
+      "file": "RearShell.stl",
+      "size_xyz_mm": [
+        170.0,
+        192.682177883786,
+        89.70000000000007
+      ],
+      "linear_deflection_mm": 0.05,
+      "angular_deflection_rad": 0.2,
+      "physical_quantity": 1,
+      "facets": 7882,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        0.7071067811865476,
+        0.0,
+        0.0,
+        -0.7071067811865475
+      ],
+      "stl_sha256": "0320675bc9e6f10134bd11a4d60a26ae59afb9bb2c3a1f70b48aec0b45cb28e1"
+    },
+    "ButtonRetainer": {
+      "file": "ButtonRetainer.stl",
+      "size_xyz_mm": [
+        34.97909693322619,
+        23.854279405654083,
+        6.50000000000005
+      ],
+      "linear_deflection_mm": 0.1,
+      "angular_deflection_rad": 0.35,
+      "physical_quantity": 1,
+      "facets": 748,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "be236abd4da532079ac630b78c2e551b63fc1d2109232f7e6ef80ab00df29dd0"
+    },
+    "DisplayRetainer": {
+      "file": "DisplayRetainer.stl",
+      "size_xyz_mm": [
+        48.0,
+        37.750000000000085,
+        6.600000000000001
+      ],
+      "linear_deflection_mm": 0.1,
+      "angular_deflection_rad": 0.35,
+      "physical_quantity": 1,
+      "facets": 1852,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        -0.3039897956623923,
+        0.0,
+        0.0,
+        0.952675287877846
+      ],
+      "stl_sha256": "99a3747e6175f173b6e108b32f9edc606d274f096bbafd6fd054a00817b86bb3"
+    },
+    "DriveRetainer": {
+      "file": "DriveRetainer.stl",
+      "size_xyz_mm": [
+        140.0,
+        10.0,
+        3.0
+      ],
+      "linear_deflection_mm": 0.1,
+      "angular_deflection_rad": 0.35,
+      "physical_quantity": 1,
+      "facets": 340,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        0.7071067811865475,
+        0.0,
+        0.0,
+        0.7071067811865476
+      ],
+      "stl_sha256": "cdce5137f516cfee6b0234ff26bb86982c795a3d9ca64904b01da716057e9dfe"
+    },
+    "CarrierWashers": {
+      "file": "CarrierWashers.stl",
+      "size_xyz_mm": [
+        133.8,
+        102.80000000000001,
+        1.2000000000000242
+      ],
+      "linear_deflection_mm": 0.1,
+      "angular_deflection_rad": 0.35,
+      "physical_quantity": 4,
+      "facets": 1152,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        0.7071067811865475,
+        0.0,
+        0.0,
+        0.7071067811865476
+      ],
+      "stl_sha256": "4a4732956b6e749a9887c13a443de4eb234c559507025f735ad3b1e1b02cd32c"
+    }
+  },
+  "profile_names": {
+    "machine": "Bambu Lab P2S 0.4 nozzle",
+    "process": "0.20mm Standard @BBL P2S",
+    "filament": "Generic PLA @BBL P2S"
+  },
+  "process_overrides": {
+    "enable_support": "1",
+    "support_type": "tree(auto)",
+    "support_on_build_plate_only": "1",
+    "support_critical_regions_only": "1",
+    "support_threshold_angle": "30",
+    "support_top_z_distance": "0.2",
+    "wall_loops": "3",
+    "sparse_infill_density": "15%",
+    "sparse_infill_pattern": "gyroid",
+    "brim_type": "outer_only",
+    "brim_width": "5"
+  },
+  "profile_sha256": {
+    "machine": "b7058cfe1a3d4cd505589443bc5b55d297f07bb973777a7fc67de96f8fe35a9b",
+    "process": "5a6b7b710d304f7c02560055e9b0579b1236c8d49fc5d6383958a4e6ccb0d27b",
+    "filament": "2c3746b6f61717d3023b58e846b10106f61534607644378063ac2a69db103355"
+  },
+  "plates": {
+    "FrontShell": {
+      "parts": [
+        "FrontShell"
+      ],
+      "exit_code": 0,
+      "gcode_sha256": "90664fed200981cd9cccb20728be4b4fcc317d1cabab9f3b8fa65c52c20edb0c",
+      "project_file": "Discora-FrontShell.3mf",
+      "project_sha256": "be43eebe34c0e781c4f5f6a3d460c9063da7275ea7abc0ba7336c186e4def7f2",
+      "support_settings": {
+        "enable_support": "1",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "1",
+        "support_critical_regions_only": "0",
+        "support_threshold_angle": "30",
+        "support_top_z_distance": "0.2"
+      },
+      "total_estimated_time": "11h 45m 30s",
+      "filament_g": 147.36,
+      "layers": 245,
+      "vendor_T65535_parser_notice": true
+    },
+    "RearShell": {
+      "parts": [
+        "RearShell"
+      ],
+      "exit_code": 0,
+      "gcode_sha256": "362cf6b4c26f0c4466aea753c21675d991db0ff2920398434ca0703a109fd4d4",
+      "project_file": "Discora-RearShell.3mf",
+      "project_sha256": "2396f757ad58d65bbc5db5de77fa2c23e394690bf6f2e9dc48ffbb13371a6214",
+      "support_settings": {
+        "enable_support": "1",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0",
+        "support_critical_regions_only": "0",
+        "support_threshold_angle": "30",
+        "support_top_z_distance": "0.2"
+      },
+      "total_estimated_time": "10h 3m 57s",
+      "filament_g": 290.77,
+      "layers": 560,
+      "vendor_T65535_parser_notice": true
+    },
+    "SmallParts": {
+      "parts": [
+        "ButtonRetainer",
+        "DisplayRetainer",
+        "DriveRetainer",
+        "CarrierWashers"
+      ],
+      "exit_code": 0,
+      "gcode_sha256": "4cd66195b0409bba327cc32137eba54317f357454f438782f6b2af1b0e4e609e",
+      "project_file": "Discora-SmallParts.3mf",
+      "project_sha256": "5a21ca6ebdb5ab5dd7120a7198e48c3155a458d42aa39c0c313de852116b0914",
+      "support_settings": {
+        "enable_support": "1",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "1",
+        "support_critical_regions_only": "1",
+        "support_threshold_angle": "30",
+        "support_top_z_distance": "0.2"
+      },
+      "total_estimated_time": "31m 38s",
+      "filament_g": 7.37,
+      "layers": 33,
+      "vendor_T65535_parser_notice": true
+    }
+  },
+  "printer_profile_mapping": "User P2SC; installed Bambu P2S profile used for local slicing only",
+  "printer_contacted": false,
+  "gcode_execution_validated": false,
+  "slicer_version": "02.09.01.70",
+  "dual_color_keys": "Excluded here; see dual-color-key-checks.json and export-dual-color-keys.py",
+  "dual_color_knob": "Excluded here; see dual-color-knob-checks.json and export-dual-color-knob.py",
+  "gui_only_revision_evidence": "stock-gui-checks.json",
+  "geometry_checked_model_sha256": "45f07b2207515d0f618010616b41cffb0fae2768fee83d1ab433bea2097fd31b"
+}

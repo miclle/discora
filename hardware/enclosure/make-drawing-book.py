@@ -18,7 +18,7 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = 'baf82e4b8cf14850fa24f275c234a58eb07a738980d71c1076bf7319f7182c9f'
+ANNOTATED_MODEL_SHA256 = '39c745a443f341767aa4a219102fdb1477acd508da073d469f57701f85173ab2'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
@@ -60,7 +60,10 @@ def main():
     battery_floor=json.loads((ROOT/'battery-floor-checks.json').read_text())
     bare_volume=json.loads((ROOT/'control-volume-checks.json').read_text())
     adhesive=json.loads((ROOT/'battery-adhesive-checks.json').read_text())
-    assert adhesive['all_pass'] and adhesive['model_sha256']==data['sha256']
+    stock=json.loads((ROOT/'stock-fastener-checks.json').read_text())
+    assert stock['all_pass'] and stock['model_sha256']==data['sha256']
+    assert stock['printed_p3_unchanged'] and all(stock['color_face_order_preserved'].values())
+    assert adhesive['all_pass'] and adhesive['model_sha256']==stock['baseline_sha256']
     assert all(adhesive['unchanged_shapes_difference_mm3'][n]<.001 for n in ('FrontShell','SpeakerCarrier','Knob'))
     assert all(adhesive['color_face_order_preserved'].values())
     assert bare_volume['all_pass'] and bare_volume['model_sha256']==adhesive['baseline_sha256']
@@ -87,7 +90,7 @@ def main():
     validation=json.loads((ROOT/'validation.json').read_text())
     assembly=json.loads((ROOT/'assembly-paths.json').read_text())
     assert validation['sha256']==assembly['model_sha256']==data['sha256']
-    assert validation['items']==44 and not validation['invalid'] and not validation['clashes']
+    assert validation['items']==45 and not validation['invalid'] and not validation['clashes']
     assert all(v<.001 for v in validation['mirror_difference_mm3'].values()) and assembly['all_pass']
     assert pcb_volume['model_sha256']==perfboard['baseline_sha256'] and pcb_volume['all_pass']
     current_volume=json.loads((ROOT/'current-volume-checks.json').read_text())
@@ -101,6 +104,8 @@ def main():
     assert integration['model_sha256']==handle['baseline_sha256']
     def evidence_matches_geometry(report,owners):
         if report['model_sha256']==data['sha256']:return True
+        if any(stock['unchanged_shapes_difference_mm3'].get(n,1)>=.001 for n in owners):return False
+        if report['model_sha256']==stock['baseline_sha256']:return True
         if any(adhesive['unchanged_shapes_difference_mm3'].get(n,1)>=.001 for n in owners):return False
         if report['model_sha256']==adhesive['baseline_sha256']:return True
         if any(bare_volume['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
@@ -328,10 +333,10 @@ def main():
         'OLED 外口 32.82 × 18.1，倒角深 0.8；玻璃内退 1.0，详见第 6 页。',
         'B50K 壳孔 Ø7.2／局部壁厚 2；底盘 Ø24 下沉 1，十字 28×6.8，顶面高 12.9。',
         '键中心 X=-63 / -45、Y=9 / 26；屏 X=0、Y=18；旋钮 X=52、Y=20。',
-        '前壳背锁：后壁 X=±79.4、Z=33；后斜面 X=±29、Z=179。',
+        '前壳背锁：后壁 X=±79.4、Z=31.5；后斜面 X=±29、Z=181.5。',
         'P3 支架：4 孔，X=±64、Z=27 / 124；Ø2.8，沉头 Ø4.8。',
         'P2 圆角梯形开放侧口；P3 独立导管末端留隙 0.7，详见第 12 页。',
-        '背锁孔 Ø4.4／通孔 Ø2.2／盲底孔 Ø1.6；下孔深 80.5，名义螺钉 2×8。',
+        '背锁井 Ø7.4／通孔 Ø3.9／盲孔 Ø2.8；M3.5总长30含头，下井深58。',
     ],gap=6.5,size=8.5)
     c.showPage()
 
@@ -367,7 +372,7 @@ def main():
             x=panel+4+col*96;y=89-row*8
             badge(x,y+1,part['number']);text(x+5,y,part['label'].replace('见下一页','见右图'),8)
     notes(12,31,[
-        '左图覆盖 44 个成品对象，08 为硬件总成；右图展开 P3、光驱压条和 30 个硬件对象，共 13 组。三个主体均为单一连续实体。',
+        '左图覆盖 45 个成品对象，08 为硬件总成；右图展开 P3、光驱压条和 30 个硬件对象，共 13 组。三个主体均为单一连续实体。',
         '引线端点为组包络中心；展示位移不是拆装路径。侧孔已并入后壳，拆装顺序及检查边界见第 5 页；颜色不代表实物材料。',
     ],gap=7,size=8)
     c.showPage()
@@ -389,7 +394,7 @@ def main():
         ('单侧后腔外包络',' × '.join(f'{v:.1f}' for v in data['acoustics']['chamber_bounds']['size'])+'；含一体导管；净容积和调谐待实测'),
         ('喇叭前 / 后净距','振膜至孔网内面 3，后包络至腔壁 11；已打印 P3 保持不变'),
         ('UJ-898 光驱','128 × 10.8 × 130；Y=77.9…88.7，Z=29.5…159.5'),
-        ('光驱贴靠 / 固定','背面留 1 mm 保护垫；中央底托 + 可拆压条，两枚 M2×10'),
+        ('光驱贴靠 / 固定','背面留 1 mm 保护垫；中央底托 + 可拆压条，两枚 Ø2.5×10'),
         ('SATA 接头 / 线缆','37.7 × 7，后伸 20.4；护线环 Ø6.5 × 3；侧伸 14.5'),
         ('功放 PCB / 元件预留','66 × 53 × 1.6 / 15；组件最高 Z=139.6'),
         ('主控 PCB / 元件预留','63.39 × 27.94 × 1.6 / 7；排母高8.5，组件最高Z=161.5'),
@@ -410,7 +415,7 @@ def main():
     ],gap=8,size=9)
     c.showPage()
 
-    page(5,'对象清单、打印与拆装','44 个成品对象 · 尺寸为装配坐标系 X × Y × Z 的轴对齐包络，非展开尺寸','清单尺寸 mm；无制造数量承诺')
+    page(5,'对象清单、打印与拆装','45 个成品对象 · 尺寸为装配坐标系 X × Y × Z 的轴对齐包络，非展开尺寸','清单尺寸 mm；垫圈按 4 片计')
     labels={
         'FrontShell':'P1 前壳 / 提手 / 格栅 / 屏幕座',
         'RearShell':'P2 一体后壳 / 碟口 / 开放侧口 / 底架',
@@ -420,7 +425,8 @@ def main():
         'Window':'OLED 玻璃面板','StatusArt':'显示内容示意','PlayPauseKey':'播放／暂停键帽','EjectKey':'退碟键帽','PrevKey':'上一曲键帽','NextKey':'下一曲键帽',
         'ButtonRetainer':'四键焊线支架（两侧敞开／双点支承）',
         'DisplayRetainer':'OLED 可拆压框（四点承压／两侧锁紧）',
-        'DriveRetainer':'光驱可拆压条（两枚名义 M2×10）',
+        'CarrierWashers':'P3 平底头垫圈（4片）',
+        'DriveRetainer':'光驱可拆压条（两枚 Ø2.5×10）',
         'PlayPauseSwitch':'播放／暂停开关包络','EjectSwitch':'退碟开关包络','PrevSwitch':'上一曲开关包络','NextSwitch':'下一曲开关包络','Knob':'音量旋钮 · 黑白双色',
         'LChamber':'左后腔','RChamber':'右后腔','LDriverFrame':'左喇叭试装座','RDriverFrame':'右喇叭试装座',
         'FrontBaffle':'双开口前障板','RearTopMount':'上固定耳（2 个）','DriveCarrier':'光驱底托 / 导轨','SlotGuide':'碟口导向框',
@@ -444,14 +450,14 @@ def main():
         x=12+201*col
         text(x,257,'图号 · 对象 ID / 名称',10,TEAL)
         text(x+195,257,'X × Y × Z',10,TEAL,'right')
-        for i,(name,obj) in enumerate(items[col*22:(col+1)*22]):
-            y=250-i*5.3
+        for i,(name,obj) in enumerate(items[col*23:(col+1)*23]):
+            y=250-i*5.0
             if i%2==0:
-                c.setFillColor(HexColor('#f1f6f6'));c.rect(x*mm,(y-5.0)*mm,195*mm,5.3*mm,fill=1,stroke=0)
+                c.setFillColor(HexColor('#f1f6f6'));c.rect(x*mm,(y-4.8)*mm,195*mm,5.0*mm,fill=1,stroke=0)
             text(x+1,y-1.8,f'{membership[name]}  {name}',7)
             text(x+1,y-4.2,labels[name],6.3,MUTED)
             text(x+193,y-3.5,' × '.join(fmt(n) for n in obj['size']),7.5,INK,'right')
-    text(12,127,'PLA 打印：3 主体 + 4 键帽 + 焊线支架 + 旋钮 + OLED 压框 + 光驱压条 = 11 件',11,TEAL)
+    text(12,127,'PLA 打印：原 11 件 + P3 平垫圈 4 片 = 15 件 / 12 个 STL / 6 盘',11,TEAL)
     printing=json.loads((ROOT/'print'/'manifest.json').read_text())
     assert printing['model_sha256']==data['sha256'] and printing['all_pass']
     text(12,118,'P2SC / P2S配置 · 0.4喷嘴 / P2层高0.16（首层0.20），P1/P3层高0.20 / 3壁 / 15%填充 / 树状支撑',8.5)
@@ -462,11 +468,11 @@ def main():
         size=' × '.join(fmt(n) for n in part['size_xyz_mm'])
         text(14,106-i*9,f"{label}  ·  {pose}  ·  打印包络 {size} mm  ·  切片估重 {plate['filament_g']:.1f} g（含支撑）",9)
     notes(14,72,[
-        '前壳：断电卸4枚背锁螺钉，托住并前移60；按开关、OLED、四键次序拔线后移走，见第9页。',
+        '螺丝：合壳4×M3.5总长30；P3及光驱共6×Ø2.5×10；四键及OLED共4×Ø2.8×7.8。',
         '光驱维护：拆 P3、压条；电池断线并解除粘接后前抽。光驱先前移 12，再前移 3 并抬高 9.5。',
         'SATA 向下脱离、向内取出；光驱再前移 13，侧转 -30°并同步前移 20，最后抽出；安装逆序。',
         '光驱最大包络：抬升 31 姿态、侧转 61 姿态；前壳按 1 mm 抽样，其余直线段连续保守扫掠，实物未验收。',
-        '四键双色：0.4 喷嘴 / 0.12 层高；白色 0.6 深；使用双色 3MF。实际色彩、配合与按压行程待测。',
+        'P3四耳加Ø5.8×Ø2.8×1.2平垫圈；前壳局部避让后螺帽净距1.0。洞洞板仍另需3×M2×4。',
         '裸 B50K：引脚朝斜面下方；拆卸先取下整个前壳，再拆旋钮和螺母，按第 7 页退出；旋钮保持原黑白双色 3MF。',
     ],gap=7,size=8.5)
     text(12,27,'FCStd SHA-256: '+data['sha256'],8,MUTED)
@@ -474,7 +480,7 @@ def main():
     c.showPage()
 
     page(6,'OLED 沉槽与可拆压框','依据供应商结构图；玻璃面向外移 4.4；沉槽、倒角与压框来自保存 CAD；有效区虚线标注','模组正视 4:1；安装中剖 3:1')
-    oled=json.loads((ROOT/'oled-checks.json').read_text())
+    oled=json.loads((ROOT/'current-oled-checks.json').read_text())
     assert evidence_matches_geometry(oled,['Window','DisplayPCB','DisplayHeader','DisplayRetainer']) and oled['all_pass']
     # FrontShell changed only inside the checked shaft-centred X=35..61 zone.
     # The OLED mount is outside it; don't claim the entire shell is unchanged.
@@ -510,11 +516,11 @@ def main():
         ('玻璃前面 / PCB 前面','法向向内 1.0 / 2.4'),
         ('PCB 背面 / 针尖','法向向内 3.6 / 12.3'),
         ('四孔定位柱','Ø2.6；PCB 孔 Ø3'),
-        ('可拆压框','四点承压；背梁深6.4…8.4'),
+        ('可拆压框','四点承压；锁紧垫深6.4…10.2'),
         ('压框双侧固定','X=±20.5、局部Z=-7'),
-        ('盲孔 / 名义螺钉','Ø1.6深4.4 / 2枚M2×6'),
+        ('盲孔 / 名义螺钉','Ø2.3深4.4 / 2枚Ø2.8×7.8'),
         ('针尖后的插线预留','12.16 × 6 × 4.54'),
-        ('工具通路预留','Ø4 × 20；两处无交叠'),
+        ('工具通路预留','前壳拉开60后；Ø4×20'),
     ],split=51,height=10)
     notes(274,122,[
         '深度从外斜面沿内法向量取。',
@@ -699,71 +705,38 @@ def main():
         text(365,y,f'Z {fmt(lo[2])} 至 {fmt(hi[2])}',9)
     carrier=assembly['paths']['speaker_carrier_front']
     assert not carrier['clashes'] and carrier['translation_xyz_mm']==[0,-140,0]
-    text(12,29,'拆下前壳、断线并卸除四颗 P3 固定螺钉后，当前 P3 总成沿 -Y 前移 140 mm 连续保守扫掠无干涉。',9)
+    text(12,29,'拆下前壳、断线并卸除四颗 P3 固定螺钉及垫圈后，当前 P3 总成沿 -Y 前移 140 mm 连续保守扫掠无干涉。',9)
     text(12,21,'尺寸为 CAD 名义值。打印配合与锁紧强度待实物验证。',8.5,MUTED)
     c.showPage()
 
-    page(11,'后斜面背锁深孔座加强筋','P2 内侧正视与右侧孔座轴向剖面 · 两条筋关于 X=0 镜像','内侧正视 1:1 · 轴向剖面 3:1')
-    ribs=data['current_upper_backlock_ribs']
-    text(117,253,'P2 内侧正视  /  沿 +Y 观察',11,TEAL,'center')
-    inside=view('p2-interior',32,51,1)
-    axis_x,_=inside(0,0)
-    line(axis_x,46,axis_x,246,LIGHT,.2,[5,2,1,2])
-    text(axis_x,42,'X=0 镜像基准',9,TEAL,'center')
-    for i,rib in enumerate(ribs,1):
-        x0,_,z0,x1,_,z1=rib['bounds_xyz_mm']
-        x,y=inside(x0,z0)
-        c.setFillColor(TEAL); c.setStrokeColor(white); c.setLineWidth(.25*mm)
-        c.rect(x*mm,y*mm,(x1-x0)*mm,(z1-z0)*mm,stroke=1,fill=1)
-        badge_x=20 if x0<0 else 214
-        center_y=y+(z1-z0)/2
-        line(badge_x,center_y,x+(x1-x0)/2,center_y,TEAL,.16)
-        badge(badge_x,center_y,str(i))
-
+    page(11,'后斜面背锁座与工具通道','M3.5 含头总长30；孔座轴向截面与工具通道来自当前保存几何','内侧视图 1:1；孔座截面 3:1')
+    text(117,253,'P2 内侧正视 / 沿 +Y 观察',11,TEAL,'center')
+    inside=view('p2-interior',32,46,1)
+    for i,entry in enumerate(stock['locks'],1):
+        x,z=entry['center_xz_mm'];px,py=inside(x,z)
+        badge(px,py,str(i))
     line(228,37,228,250,LIGHT,.15)
-    access=[item for item in json.loads((ROOT/'rear-depth-checks.json').read_text())['rear_access'] if item['rear_center_xyz_mm'][2]==179]
-    assert len(access)==2 and all(not item['clashes'] for item in access)
-    right=access[1]
-    axis_x,entry,axis_z=right['rear_center_xyz_mm']
-    seat=right['seat_y_mm']
-    text(321,253,f'右侧孔座轴向剖面  /  X={fmt(axis_x)}',11,TEAL,'center')
-    section=view('upper-backlock-section',255,152,3)
-    tri=c.beginPath()
-    for i,(y,z) in enumerate(data['upper_backlock_rib_section_yz']):
-        sx,sy=section(y,z)
-        (tri.moveTo if i==0 else tri.lineTo)(sx*mm,sy*mm)
-    tri.close()
-    c.setFillColor(HexColor('#c7e4e6')); c.setStrokeColor(TEAL); c.setLineWidth(.25*mm)
-    c.drawPath(tri,stroke=1,fill=1)
-    x0,y0,z0,x1,y1,z1=ribs[1]['bounds_xyz_mm']
-    rib_start,rib_z=section(y0,z1)
-    rib_end,_=section(y1,z1)
-    dh(rib_start,rib_end,rib_z,234,fmt(y1-y0))
-    text((rib_start+rib_end)/2,241,'新增材料 Y 向范围',8.5,MUTED,'center')
-    seat_x,bore_y=section(seat,axis_z)
-    entry_x,_=section(entry,axis_z)
-    line(seat_x,bore_y,392,bore_y,TEAL,.2,[4,2])
-    arrow(entry_x+3,bore_y,1,0)
-    text(391,bore_y+4,'后方进刀',8.5,TEAL,'right')
-    dh(seat_x,entry_x,bore_y,145,f"{right['well_depth_mm']:.2f}")
-    text((seat_x+entry_x)/2,134,'螺钉承压面至斜面外表面轴心',8.5,MUTED,'center')
-
-    text(242,123,'两条加强筋坐标与尺寸',10,TEAL)
-    for i,rib in enumerate(ribs,1):
-        x0,y0,z0,x1,y1,z1=rib['bounds_xyz_mm']
-        row=111-(i-1)*8
-        badge(246,row+1,str(i))
-        text(254,row,f'X {fmt(x0)} 至 {fmt(x1)}',9)
-        text(298,row,f'Y {fmt(y0)} 至 {fmt(y1)}',9)
-        text(350,row,f'Z {fmt(z0)} 至 {fmt(z1)}',9)
-    text(242,92,f'每条 X 向宽 {fmt(x1-x0)}，融合后新增材料的 Z 向包络高 {fmt(z1-z0)}。',9)
-    driver_gap=min(r['minimum_distance_to_driver_mm'] for r in ribs)
-    text(242,77,'螺丝刀通路',10,TEAL)
-    text(242,69,f"Ø{fmt(right['tool_diameter_mm'])} 刀杆通过 Ø{fmt(fasteners['head_well_diameter_mm'])} 工具孔，距新增筋最近 {driver_gap:.2f} mm。",9)
-    text(242,54,'前壳抽出净空',10,TEAL)
-    text(242,46,f"断线并卸除四颗背锁螺钉后，沿 -Y 抽出 {backlock['front_cover_travel_mm']:g} mm。",9)
-    text(242,38,'当前保存模型的前壳抽出路径无干涉；详见装配路径报告。',9)
-    text(12,23,'净空采用 CAD 刚体包络。实际批头配合、打印精度和锁紧强度待实物验证。',8.5,MUTED)
+    right=next(v for v in stock['locks'] if v['center_xz_mm']==[29,181.5])
+    axis_x,entry,axis_z=right['rear_center_xyz_mm'];seat=right['seat_y_mm']
+    text(321,253,'右上孔座轴向剖面 / X=29',11,TEAL,'center')
+    section=view('upper-backlock-section',246,168,3)
+    seat_x,bore_y=section(seat,axis_z);entry_x,_=section(entry,axis_z)
+    line(seat_x,bore_y,398,bore_y,TEAL,.2,[4,2]);arrow(entry_x+3,bore_y,1,0)
+    text(397,bore_y+4,'后方进刀',8.5,TEAL,'right')
+    dh(seat_x,entry_x,bore_y,159,f"工具井 {right['well_depth_mm']:.2f}")
+    table(242,143,166,[
+        ('螺丝','M3.5；含头总长30；螺纹段27'),
+        ('螺帽 / 沉头','头Ø6.8；90°锥角暂定'),
+        ('工具井 / 通孔','Ø7.4 / Ø3.9'),
+        ('P1 盲孔','Ø2.8；上入柱9.8／下入柱8.3'),
+        ('盲底余量','上、下均0.7'),
+        ('上轴 / 下轴','X±29 Z181.5 / X±79.4 Z31.5'),
+        ('工具包络','Ø6；从后侧进入，无几何干涉'),
+    ],split=42,height=10)
+    text(242,58,'原短筋与加大的孔座融合，剖面显示最终实体。',9)
+    text(242,49,'断线并卸四颗合壳螺丝后，前壳沿 -Y 拉开60 mm。',9)
+    text(242,40,'孔座、螺帽、螺杆及工具通路来自本轮保存模型检查。',8.5)
+    text(12,23,'90°为名义沉头角，实际锥角尚未测量；打印配合、锁紧强度和反复拆装待实测。',8.5,MUTED)
     c.showPage()
 
     page(12,'P2 开放侧口与 P3 独立导管','ADR-0045 / ADR-0046 · 左右按 X=0 镜像 · 已试装的喇叭安装座保留','侧视 1:1 · 导管剖视 2:1')

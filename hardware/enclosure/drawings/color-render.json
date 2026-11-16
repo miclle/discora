@@ -1,7 +1,7 @@
 {
-  "sha256": "baf82e4b8cf14850fa24f275c234a58eb07a738980d71c1076bf7319f7182c9f",
-  "build_sha256": "96d4272d49e10de5b1598dc409b6023a1336950b6a1bc12b9c3b0043dbaedab7",
-  "geometry_sha256": "733700f6636cc8e02406710f201df0886e8c8a8c72f544ff7dda6f36d3ade818",
+  "sha256": "39c745a443f341767aa4a219102fdb1477acd508da073d469f57701f85173ab2",
+  "build_sha256": "61b6d51eec20427acb4a731330991fd9e2bf89596447c3754e940c2432545a88",
+  "geometry_sha256": "7ebe1a56a44a185bba7d97ef1a6babc8c631392c18ebc0364cb4e5ffa7a290d5",
   "palette": {
     "ORANGE": [
       1.0,
@@ -101,6 +101,11 @@
       0.72
     ],
     "DriveRetainer": [
+      0.025,
+      0.75,
+      0.72
+    ],
+    "CarrierWashers": [
       0.025,
       0.75,
       0.72

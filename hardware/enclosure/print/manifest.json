@@ -1,7 +1,7 @@
 {
   "model": "../Discora.FCStd",
-  "model_sha256": "baf82e4b8cf14850fa24f275c234a58eb07a738980d71c1076bf7319f7182c9f",
-  "release": "ADR-0050 adhesive battery / ADR-0051 controls",
+  "model_sha256": "39c745a443f341767aa4a219102fdb1477acd508da073d469f57701f85173ab2",
+  "release": "ADR-0052 stock screws; printed P3 preserved",
   "slicer_version": "02.09.01.70",
   "profile_names": {
     "machine": "Bambu Lab P2S 0.4 nozzle",
@@ -20,7 +20,8 @@
       ],
       "linear_deflection_mm": 0.1,
       "angular_deflection_rad": 0.35,
-      "facets": 244024,
+      "physical_quantity": 1,
+      "facets": 244604,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -29,19 +30,19 @@
         0.5,
         0.5000000000000001
       ],
-      "stl_sha256": "dec36519326d35872639e71088bffd93f90b4543c284f2e551277eb899a41182",
-      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6"
+      "stl_sha256": "c754cb7b5f9de1d7a1526084ab8793c75384418df697b2428e57ce5092692b71"
     },
     "RearShell": {
       "file": "RearShell.stl",
       "size_xyz_mm": [
         170.0,
         192.682177883786,
-        89.70000000000006
+        89.70000000000007
       ],
       "linear_deflection_mm": 0.05,
       "angular_deflection_rad": 0.2,
-      "facets": 7502,
+      "physical_quantity": 1,
+      "facets": 7882,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -50,7 +51,7 @@
         0.0,
         -0.7071067811865475
       ],
-      "stl_sha256": "52c5c1dba145ecda1a26e3f68089af505ad0b08729a14b89338cd6c8220e4381"
+      "stl_sha256": "0320675bc9e6f10134bd11a4d60a26ae59afb9bb2c3a1f70b48aec0b45cb28e1"
     },
     "SpeakerCarrier": {
       "file": "SpeakerCarrier.stl",
@@ -164,13 +165,14 @@
     "ButtonRetainer": {
       "file": "ButtonRetainer.stl",
       "size_xyz_mm": [
-        34.0,
-        23.85427940565407,
+        34.97909693322619,
+        23.854279405654083,
         6.50000000000005
       ],
       "linear_deflection_mm": 0.1,
       "angular_deflection_rad": 0.35,
-      "facets": 724,
+      "physical_quantity": 1,
+      "facets": 748,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -179,19 +181,19 @@
         0.0,
         0.952675287877846
       ],
-      "stl_sha256": "17ee4f08323f8878f428092fc2ee6b63ead09915fa8c8baaa53f1bf010339011",
-      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6"
+      "stl_sha256": "be236abd4da532079ac630b78c2e551b63fc1d2109232f7e6ef80ab00df29dd0"
     },
     "DisplayRetainer": {
       "file": "DisplayRetainer.stl",
       "size_xyz_mm": [
-        46.977733291070834,
-        37.75000000000003,
-        4.800000000000038
+        48.0,
+        37.750000000000085,
+        6.600000000000001
       ],
       "linear_deflection_mm": 0.1,
       "angular_deflection_rad": 0.35,
-      "facets": 1740,
+      "physical_quantity": 1,
+      "facets": 1852,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -200,18 +202,18 @@
         0.0,
         0.952675287877846
       ],
-      "stl_sha256": "699b7962e736a43e40bf747c1254eb4b3a82e903334593d7c1832f5d60d9703f",
-      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6"
+      "stl_sha256": "99a3747e6175f173b6e108b32f9edc606d274f096bbafd6fd054a00817b86bb3"
     },
     "DriveRetainer": {
       "file": "DriveRetainer.stl",
       "size_xyz_mm": [
-        136.0,
+        140.0,
         10.0,
         3.0
       ],
       "linear_deflection_mm": 0.1,
       "angular_deflection_rad": 0.35,
+      "physical_quantity": 1,
       "facets": 340,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
@@ -221,8 +223,7 @@
         0.0,
         0.7071067811865476
       ],
-      "stl_sha256": "1f807f99f6d98fa38614df28a997d6b686dc144ed879951b953959d0824a6760",
-      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6"
+      "stl_sha256": "cdce5137f516cfee6b0234ff26bb86982c795a3d9ca64904b01da716057e9dfe"
     },
     "Knob": {
       "file": "Knob.stl",
@@ -245,6 +246,27 @@
       "stl_sha256": "af785841449d19e7fae3f683efd6e23b1b75e9af0cea938867868281e449725d",
       "color_print_source": "export-dual-color-knob.py; STL is a single-material envelope",
       "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6"
+    },
+    "CarrierWashers": {
+      "file": "CarrierWashers.stl",
+      "size_xyz_mm": [
+        133.8,
+        102.80000000000001,
+        1.2000000000000242
+      ],
+      "linear_deflection_mm": 0.1,
+      "angular_deflection_rad": 0.35,
+      "physical_quantity": 4,
+      "facets": 1152,
+      "closed_mesh": true,
+      "fits_with_5mm_brim": true,
+      "rotation_quaternion_xyzw": [
+        0.7071067811865475,
+        0.0,
+        0.0,
+        0.7071067811865476
+      ],
+      "stl_sha256": "4a4732956b6e749a9887c13a443de4eb234c559507025f735ad3b1e1b02cd32c"
     }
   },
   "plates": {
@@ -253,8 +275,8 @@
         "FrontShell"
       ],
       "exit_code": 0,
-      "gcode_sha256": "f43c2eb8e25b95735f97f43d787f45e6680c6be0fcdf6341eb6063af0c69d78e",
-      "project_sha256": "0bc8e9749ed553cdf17deb446571a8c0f8c8aba98795d40f494948fac04d6e02",
+      "gcode_sha256": "90664fed200981cd9cccb20728be4b4fcc317d1cabab9f3b8fa65c52c20edb0c",
+      "project_sha256": "b5d8bf8855328623db3694c477cb088b30887dbe8d406bd27c9c9892f6756fe6",
       "support_settings": {
         "enable_support": "1",
         "support_type": "tree(auto)",
@@ -263,8 +285,8 @@
         "support_threshold_angle": "30",
         "support_top_z_distance": "0.2"
       },
-      "total_estimated_time": "11h 38m 48s",
-      "filament_g": 145.53,
+      "total_estimated_time": "11h 45m 30s",
+      "filament_g": 147.36,
       "layers": 245,
       "file": "Discora-P1-FrontShell.3mf",
       "layer_height_mm": 0.2,
@@ -273,17 +295,16 @@
         "#00AE42"
       ],
       "filament_g_by_material": [
-        145.53
-      ],
-      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6"
+        147.36
+      ]
     },
     "RearShell": {
       "parts": [
         "RearShell"
       ],
       "exit_code": 0,
-      "gcode_sha256": "12b8b4b709323272f5e68a57f08d5d1bc30cfb001f42bd3b7a751b55cd02306a",
-      "project_sha256": "93e1892f8739de531fe8c1729edc8d76e2d762bc654dfff98ad5bc6a7324a947",
+      "gcode_sha256": "362cf6b4c26f0c4466aea753c21675d991db0ff2920398434ca0703a109fd4d4",
+      "project_sha256": "3098726503ed438c5b9e128d6da901d2627baca20e4796ec24a911f989a9b656",
       "support_settings": {
         "enable_support": "1",
         "support_type": "tree(auto)",
@@ -292,8 +313,8 @@
         "support_threshold_angle": "30",
         "support_top_z_distance": "0.2"
       },
-      "total_estimated_time": "9h 58m 36s",
-      "filament_g": 288.18,
+      "total_estimated_time": "10h 3m 57s",
+      "filament_g": 290.77,
       "layers": 560,
       "file": "Discora-P2-RearShell.3mf",
       "layer_height_mm": 0.16,
@@ -302,11 +323,8 @@
         "#00AE42"
       ],
       "filament_g_by_material": [
-        288.18
-      ],
-      "process_overrides": {
-        "layer_height": "0.16"
-      }
+        290.77
+      ]
     },
     "SpeakerCarrier": {
       "file": "Discora-P3-SpeakerCarrier.3mf",
@@ -339,21 +357,15 @@
       "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6"
     },
     "SmallParts": {
-      "file": "Discora-Retainers.3mf",
       "parts": [
         "ButtonRetainer",
         "DisplayRetainer",
-        "DriveRetainer"
-      ],
-      "project_sha256": "530675fe8e19522b2e2b14bce778c5c950d2304ee235dc19d9413c3b73854d36",
-      "gcode_sha256": "800ad333874470d7e05510d84acf301e270d7bc25b233dd37f55c5fb49eea8c6",
-      "layers": 32,
-      "total_estimated_time": "26m 9s",
-      "filament_g": 6.61,
-      "filament_g_by_material": [
-        6.61
+        "DriveRetainer",
+        "CarrierWashers"
       ],
       "exit_code": 0,
+      "gcode_sha256": "4cd66195b0409bba327cc32137eba54317f357454f438782f6b2af1b0e4e609e",
+      "project_sha256": "07215b07db828ab44cf118c81d486320ddbe0aa6ff71602c93875b3936f09c0c",
       "support_settings": {
         "enable_support": "1",
         "support_type": "tree(auto)",
@@ -362,13 +374,18 @@
         "support_threshold_angle": "30",
         "support_top_z_distance": "0.2"
       },
+      "total_estimated_time": "31m 38s",
+      "filament_g": 7.37,
+      "layers": 33,
+      "file": "Discora-Retainers.3mf",
       "layer_height_mm": 0.2,
       "first_layer_height_mm": 0.2,
       "filament_colours": [
         "#00AE42"
       ],
-      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6",
-      "reused_audited_slice": true
+      "filament_g_by_material": [
+        7.37
+      ]
     },
     "Keys": {
       "file": "Discora-Keys-Orange-White.3mf",
@@ -775,7 +792,7 @@
       "reused_audited_slice": true
     }
   },
-  "total_filament_g": 638.68,
+  "total_filament_g": 643.86,
   "evidence": {
     "p2": "../p2-depth-print-checks.json",
     "p3": "../p3-terminal-mouth-checks.json",
@@ -792,35 +809,36 @@
     "battery_floor": "../battery-floor-checks.json",
     "bare_volume": "../control-volume-checks.json",
     "bare_volume_print": "../bare-volume-print-checks.json",
-    "battery_adhesive": "../battery-adhesive-checks.json"
+    "battery_adhesive": "../battery-adhesive-checks.json",
+    "stock_fasteners": "../stock-fastener-checks.json",
+    "stock_slices": "../stock-print-checks.json",
+    "stock_front_support": "../stock-front-print-checks.json",
+    "retainer_support": "../retainer-print-checks.json",
+    "stock_gui": "../stock-gui-checks.json"
   },
   "all_pass": true,
   "printer_contacted": false,
   "physical_full_assembly_verified": false,
   "limits": [
-    "11 rigid PLA parts; soft feet, hardware and electronics are purchased parts.",
+    "15 rigid PLA pieces in 12 STL files; soft feet, hardware and electronics are purchased parts.",
     "Speaker mount coupon passed; full-part fit, support removal, sealing, strength and acoustics are not physically verified.",
     "STL keys and knob are monochrome envelopes; use the two-material 3MF projects.",
     "The DC bore contains removable supports; Type-C has no bore support toolpaths. Check both 10 mm passages before bonding. Adhesive retention and charging electronics are unverified.",
     "Printed P3 retained byte-for-byte; installed 1.7 mm rearward with P2 deepened to 94.7 mm. P1 recess 1.5 mm, local thickness 1.2 mm, nominal static gap 3 mm. Dynamic excursion, stiffness and full assembly remain unverified.",
     "Only P3 has been physically printed. Bare B50K solder/insulation and local analogue exit are design allowances; remote analogue wiring and electrical pinout remain unverified.",
-    "Battery raised 1.5 mm for adhesive; four strap slots sealed. P3 geometry and placement preserved. Only P2 STL and 3MF regenerated; 15 other print files retained. Adhesive retention/release and physical support removal unverified."
+    "P3, keys and knob: 9 original print files retained. Four functional washers included in SmallParts. Stock screw envelope checks are nominal; M3.5 90-degree countersink angle is assumed, not measured; actual printed fit and thread holding strength remain unverified. Three M2x4 perfboard screws are still required separately."
   ],
   "retained_files_sha256": {
-    "FrontShell.stl": "dec36519326d35872639e71088bffd93f90b4543c284f2e551277eb899a41182",
     "SpeakerCarrier.stl": "b94d6c6b871114425b83d9b182fd1e3fc972605c357245eaeac170e9564c7ede",
     "PlayPauseKey.stl": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
     "EjectKey.stl": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
     "PrevKey.stl": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
     "NextKey.stl": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
-    "ButtonRetainer.stl": "17ee4f08323f8878f428092fc2ee6b63ead09915fa8c8baaa53f1bf010339011",
-    "DisplayRetainer.stl": "699b7962e736a43e40bf747c1254eb4b3a82e903334593d7c1832f5d60d9703f",
-    "DriveRetainer.stl": "1f807f99f6d98fa38614df28a997d6b686dc144ed879951b953959d0824a6760",
     "Knob.stl": "af785841449d19e7fae3f683efd6e23b1b75e9af0cea938867868281e449725d",
-    "Discora-P1-FrontShell.3mf": "0bc8e9749ed553cdf17deb446571a8c0f8c8aba98795d40f494948fac04d6e02",
     "Discora-P3-SpeakerCarrier.3mf": "0f662b2b4f390ae2ce9da9dc97a6ea8cc00a81ebf3289e3acb1a73b3878f26f2",
-    "Discora-Retainers.3mf": "530675fe8e19522b2e2b14bce778c5c950d2304ee235dc19d9413c3b73854d36",
     "Discora-Keys-Orange-White.3mf": "e5585173a4f6ad420ce554cce4dd78f74d91a30829eab5c556aa757f5ab2c73e",
     "Discora-Knob-Black-White.3mf": "4bd33a8d3822c27018d22b2556faac42867f3ff0f3510ca7b5f55814a0fd956e"
-  }
+  },
+  "physical_printed_piece_count": 15,
+  "stl_file_count": 12
 }

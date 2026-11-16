@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256 = 'baf82e4b8cf14850fa24f275c234a58eb07a738980d71c1076bf7319f7182c9f'
+MODEL_SHA256 = '39c745a443f341767aa4a219102fdb1477acd508da073d469f57701f85173ab2'
 
 
 def palette_from_build():
@@ -138,7 +138,7 @@ def main():
     palette=palette_from_build()
     assignments={
         'ORANGE':'FrontShell PlayPauseKey EjectKey PrevKey NextKey',
-        'TEAL':'SpeakerCarrier ButtonRetainer DisplayRetainer DriveRetainer',
+        'TEAL':'SpeakerCarrier ButtonRetainer DisplayRetainer DriveRetainer CarrierWashers',
         'BLACK':'RearShell',
         'RUBBER':'Bridge Feet LDriver RDriver VolumePot DisplayHeader MCUChip DACChip MCUSockets DACSockets PlayPauseSwitch EjectSwitch PrevSwitch NextSwitch',
         'GLASS':'Window','PIXEL':'StatusArt','KNOB_BLACK':'Knob',
@@ -169,7 +169,10 @@ def main():
     battery_floor=json.loads((ROOT/'battery-floor-checks.json').read_text())
     bare_volume=json.loads((ROOT/'control-volume-checks.json').read_text())
     adhesive=json.loads((ROOT/'battery-adhesive-checks.json').read_text())
-    assert adhesive['all_pass'] and adhesive['model_sha256']==MODEL_SHA256
+    stock=json.loads((ROOT/'stock-fastener-checks.json').read_text())
+    assert stock['all_pass'] and stock['model_sha256']==MODEL_SHA256
+    assert stock['printed_p3_unchanged'] and all(stock['color_face_order_preserved'].values())
+    assert adhesive['all_pass'] and adhesive['model_sha256']==stock['baseline_sha256']
     assert all(adhesive['unchanged_shapes_difference_mm3'][n]<.001 for n in ('FrontShell','SpeakerCarrier','Knob'))
     assert all(adhesive['color_face_order_preserved'].values())
     assert bare_volume['all_pass'] and bare_volume['model_sha256']==adhesive['baseline_sha256']

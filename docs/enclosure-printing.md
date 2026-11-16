@@ -1,6 +1,6 @@
 # 正式打印文件与装配
 
-2026-11-16：P2 四个绑带孔已封闭，保留左右挡板，电池下预留 1.5 mm 双面胶；P3 和 94.7 mm 整机深度不变。正式 P2 STL／3MF 已更新，沿用 0.16 mm 层高、首层 0.20 mm、0.4 mm 喷嘴，其余五盘保持。
+本轮按现有螺丝更新 P1、P2、四键压板、OLED 压框和光驱压条，新增 4 片 P3 平垫圈。已打印 P3 及其喇叭、整机 94.7 mm 深度、3 mm 振膜静态净距、电池下 1.5 mm 双面胶和封闭底板保持。见 [ADR-0052](decisions/0052-stock-fasteners.md)。
 
 此前恢复用户已购、尺寸已确认的裸 B50K 带开关电位器，更新 P1 内侧辅助防转槽及引脚、焊点和出线预留。最新洞洞板布局、已打印 P3 的实体和位置、P2、电池落底及整机 94.7 mm 深度保持。只有 P3 已打印；该次只更新 P1 STL／3MF，其余 10 件 STL、5 盘 3MF 保持。见 [ADR-0051](decisions/0051-bare-b50k-solder-clearance.md)。
 
@@ -8,22 +8,22 @@
 
 当前操控布局为 [ADR-0047](decisions/0047-control-spacing-and-knob.md)，前壳与28 mm旋钮已更新。主体版本：ADR-0046 P3 短渐扩口，配套 ADR-0048 P2 双充电口，保留圆角梯形开放侧口。正式文件统一在 [hardware/enclosure/print](../hardware/enclosure/print/README.md)，不再从历次 `tmp/` 目录选择零件。
 
-这里的“正式版本”指本轮唯一配套交付版本，P1/P2 打印、完整件支撑拆除、装配、强度、气密和声学仍待实测。**P3 喇叭安装座试片已打印并确认装配无问题**，保留已通过的座面和孔位，不再要求打印试片。
+这里的“正式版本”指本轮唯一配套交付版本，P1/P2 打印、完整件支撑拆除、装配、强度、气密和声学仍待实测。**P3 已打印，喇叭已使用 Ø2.8×9.5 螺丝安装**，保留已通过的座面和孔位，不再要求打印试片。
 
 ## 六个打印盘
 
 | 打印盘 | 3MF | 预计时间 | 耗材 / g | 层数 |
 | --- | --- | --- | --- | --- |
-| P1 前壳 | [Discora-P1-FrontShell.3mf](../hardware/enclosure/print/Discora-P1-FrontShell.3mf) | 11h 38m 48s | 145.53 | 245 |
-| P2 后壳 | [Discora-P2-RearShell.3mf](../hardware/enclosure/print/Discora-P2-RearShell.3mf) | 9h 58m 36s | 288.18 | 560 |
+| P1 前壳 | [Discora-P1-FrontShell.3mf](../hardware/enclosure/print/Discora-P1-FrontShell.3mf) | 11h 45m 30s | 147.36 | 245 |
+| P2 后壳 | [Discora-P2-RearShell.3mf](../hardware/enclosure/print/Discora-P2-RearShell.3mf) | 10h 3m 57s | 290.77 | 560 |
 | P3 喇叭支架 | [Discora-P3-SpeakerCarrier.3mf](../hardware/enclosure/print/Discora-P3-SpeakerCarrier.3mf) | 5h 40m 46s | 181.00 | 287 |
-| 三个压框／支架 | [Discora-Retainers.3mf](../hardware/enclosure/print/Discora-Retainers.3mf) | 26m 9s | 6.61 | 32 |
+| 三件压框／压条及四片垫圈 | [Discora-Retainers.3mf](../hardware/enclosure/print/Discora-Retainers.3mf) | 31m 38s | 7.37 | 33 |
 | 四个橙白双色按键 | [Discora-Keys-Orange-White.3mf](../hardware/enclosure/print/Discora-Keys-Orange-White.3mf) | 34m 44s | 7.54 | 60 |
 | 黑白双色旋钮 | [Discora-Knob-Black-White.3mf](../hardware/enclosure/print/Discora-Knob-Black-White.3mf) | 49m 28s | 9.82 | 116 |
 
-合计约 **638.68 g**，包含支撑、brim 和双色换料耗材。时间和用量来自 Bambu Studio 2.9.1.70 本地切片，不是实际打印记录。配置为 P2S / 0.4 mm，按用户提供的 P2SC、256³ mm 空间映射；0.2 mm 喷嘴未验证。
+合计约 **643.86 g**，包含支撑、brim 和双色换料耗材。时间和用量来自 Bambu Studio 2.9.1.70 本地切片，不是实际打印记录。配置为 P2S / 0.4 mm，按用户提供的 P2SC、256³ mm 空间映射；0.2 mm 喷嘴未验证。
 
-11 件刚性 PLA 零件均有 STL。四键和旋钮的 STL 仅为单色包络，双色打印优先打开上述 3MF，保留同一对象内的两个材料区域。软脚垫、OLED 玻璃、电子模块、螺钉、双面胶和导线另购，不计入打印件。
+15 件刚性 PLA 零件共用 12 个 STL，四片垫圈合在一个 STL 中。四键和旋钮的 STL 仅为单色包络，双色打印优先打开上述 3MF，保留同一对象内的两个材料区域。软脚垫、OLED 玻璃、电子模块、螺钉、双面胶和导线另购，不计入打印件。
 
 ## 摆放与支撑
 
@@ -32,14 +32,14 @@
 | P1 | 孔网朝下，长边沿板 X；0.20 mm | 开 | 关 |
 | P2 | 后壁朝下；0.16 mm，首层 0.20 mm | **关** | **关** |
 | P3 | 双声腔背面朝下；0.20 mm | **开** | **开** |
-| 三个小件 | 保持项目中各件姿态；0.20 mm | 开 | 开 |
+| 三件压框／压条及四片垫圈 | 保持项目中各件姿态；0.20 mm | 开 | 开 |
 | 四键／旋钮 | 符号面朝上；0.12 mm | 开 | 以各自 3MF 保存设置为准 |
 
 单色盘使用 Generic PLA、3 层壁、15% gyroid、30° 自动树状支撑、顶部接触间隙 0.20 mm、5 mm 外侧 brim。P1 包络 240.263×170×49 mm，孔网朝下，已保留检查过的摆放；不要使用自动定向重新翻转。P1/P2/P3 的支撑限制不同，不要互相套用。
 
-P3 双背板首层直接贴板；287 层审核未发现声腔、导管或渐扩口内支撑，原 18 条悬空告警对应位置已核对。P2 560 层侧口及开放结构需要支撑，从敞开的正面与侧口清理，实际拆除力待验证。P2 封闭四个绑带孔后重新导出 STL，以 0.16 mm 层高审核全部 560 层；P3 保留不变实体对应的已审核文件。DC 充电孔内存在可拆树状支撑，Type-C 孔内未检测到支撑走线，须从后侧孔口和敞开内侧清理，10 mm 通道全部贯通后再安装母座。
+P3 双背板首层直接贴板；287 层审核未发现声腔、导管或渐扩口内支撑，原 18 条悬空告警对应位置已核对。P2 560 层侧口及开放结构需要支撑，从敞开的正面与侧口清理，实际拆除力待验证。P2 合壳孔座和光驱座适配后重新导出 STL，以 0.16 mm 层高审核全部 560 层；四条合壳工具井内无支撑走线；P3 保留不变实体对应的已审核文件。DC 充电孔内存在可拆树状支撑，Type-C 孔内未检测到支撑走线，须从后侧孔口和敞开内侧清理，10 mm 通道全部贯通后再安装母座。
 
-本轮仅 P2 封孔后重新导出、切片；其余 10 个 STL 和 5 盘 3MF 保持原文件，含 P3 与已更新的 28 mm 旋钮。四键每键及旋钮标记各有 5 层白色走线，3MF 对象数、材料分配、网格修复计数和完整走线摘要已读回检查。官方结束代码仍有历史 `T65535` 解析提示，切片成功不代表已验证打印机执行。
+本轮更新 P1、P2 和三件压框／压条，新增四片垫圈；重新切片 P1、P2、小件三盘。P3、四键和旋钮的 6 个 STL、3 个 3MF 保持原文件。四键每键及旋钮标记各有 5 层白色走线，3MF 对象数、材料分配、网格修复计数和完整走线摘要已读回检查。官方结束代码仍有历史 `T65535` 解析提示，切片成功不代表已验证打印机执行。
 
 四键材料 1 为 PLA Lite 橙色，材料 2 为 PLA Lite 白色；旋钮材料 1 为 PLA Basic 黑色，材料 2 为 PLA Lite 白色。打印前按实际耗材映射 AMS 槽位。单色盘的绿色预览是 Generic PLA 默认显示色，不是零件配色要求。
 
@@ -53,11 +53,13 @@ P1 周围面板贴板，孔网下沉 1.5 mm，其下支撑从正面清理，两�
 4. 连接线束，确认没有压线，保留前壳拆卸所需的可断开连接和维护余量。
 5. 裸 B50K 先焊线并做独立绝缘，放入 P1 辅助防转槽并锁螺母，再按关断止挡对准旋钮指示条并支撑主体压入；检查焊点及出线不受压。P1 预装 OLED 模组和操控件（玻璃朝沉槽，四孔套入定位柱，再装可拆压框并锁紧两侧螺钉）；从内侧装入四个键帽、开关，固定可拆压板，确认回弹和引脚／焊点／线缆不受压后，向后合拢前壳，从后壁下方和后斜面四个深孔固定连接。实际线束必须另行检查。
 
-拆卸按相反顺序。从背面深孔取出前壳四个螺钉；托住前壳向前拉开 60 mm，拔开三组 XH2.54 及其它连接后移走前壳；拆 P3 前断线并卸支架四螺钉，再向前抽出。光驱维护需取出 P3、压条和电池：先前移 12 mm，再前移 3 mm 并抬高 9.5 mm；接头向下退出 10 mm、向内移 14 mm 后从前方取出。光驱再前移 13 mm，绕 Z 旋转 -30°并同步前移 20 mm，最后向前抽出。压条使用两枚名义 M2×10；后壁留 1 mm 垫片空间，压条处软垫厚度按实际厚差试配，避免挤压薄盖。安装按反向顺序。电池断线并解除胶层粘接后，可以保留 P3、光驱和接头直接向前取出；胶层拆除操作和保持力尚未实测。上述位移是检查用脱离行程，不是所有动作都必须移动完整 140 / 150 mm。
+拆卸按相反顺序。从背面深孔取出前壳四个螺钉；托住前壳向前拉开 60 mm，拔开三组 XH2.54 及其它连接后移走前壳；拆 P3 前断线并卸支架四螺钉，再向前抽出。光驱维护需取出 P3、压条和电池：先前移 12 mm，再前移 3 mm 并抬高 9.5 mm；接头向下退出 10 mm、向内移 14 mm 后从前方取出。光驱再前移 13 mm，绕 Z 旋转 -30°并同步前移 20 mm，最后向前抽出。压条使用两枚 Ø2.5×10 平底头螺丝；后壁留 1 mm 垫片空间，压条处软垫厚度按实际厚差试配，避免挤压薄盖。安装按反向顺序。电池断线并解除胶层粘接后，可以保留 P3、光驱和接头直接向前取出；胶层拆除操作和保持力尚未实测。上述位移是检查用脱离行程，不是所有动作都必须移动完整 140 / 150 mm。
 
-连接孔见图册第 2 页：前壳改为背面 Ø4.4 深孔内的 Ø2.2 通孔配 Ø1.6 盲底孔，名义 2×8 mm 螺钉、头径不超过 4；下方工具井深 80.5 mm，需相应长度的细杆螺丝刀；支架仍为 Ø2.8 通孔配 Ø2.0 底孔；侧孔独立固定孔已取消。此处只是名义的螺杆、沉头和底孔预留，具体螺纹类型、螺钉长度、孔径补偿和扭矩未验收；不要把它当成已定型的紧固件 BOM。反复拆装寿命需试样；如后续改为嵌件，应另行增加足够安装柱体积并重新检查干涉。
+当前螺丝分配：合壳 4 枚 M3.5（含头总长 30 mm）；P3 4 枚、光驱压条 2 枚 Ø2.5×10；四键 2 枚、OLED 2 枚 Ø2.8×7.8，后两类都是平底头。洞洞板仍另需 3 枚 M2×4，不能以现有粗长螺丝代替。已装喇叭和 6 枚备用 Ø2.8×9.5 保持。
 
-OLED 玻璃前面内退 1.0 mm，沉槽前缘名义厚 0.8；外口经倒角收至内喉口。四个 Ø2.6 定位柱配 PCB Ø3 孔；可拆压框四点接触孔周，使用两枚名义 M2×6，Ø1.6 盲底孔深 4.4，头径不超过 4、高不超过 1.6。完整件装配时核对薄边强度、PCB 厚度、孔补偿和螺钉扭矩。针尖后 6 mm 为插线预留；拆屏前先拆 P1、断线、卸两枚压框螺钉并取下压框，再沿内法向取出模组。详见 [ADR-0028](decisions/0028-oled-mechanical-mount.md)。
+合壳工具井 Ø7.4、通孔 Ø3.9、P1 盲孔 Ø2.8；下方工具井约 58 mm，预留 Ø6 刀杆。M3.5 头径 6.8，沉头暂按 90°设计，实际锥角尚未测量。P3 原孔不改，每耳放一片 Ø5.8×Ø2.8×1.2 平垫圈，螺帽朝 P1；P1 内避让后净距 1 mm。拆 P3 时一并取下四片垫圈。螺丝入柱、盲底余量及库存详见 [ADR-0052](decisions/0052-stock-fasteners.md)。
+
+OLED 玻璃前面内退 1.0 mm，沉槽前缘名义厚 0.8；外口经倒角收至内喉口。四个 Ø2.6 定位柱配 PCB Ø3 孔；可拆压框四点接触孔周，使用两枚 Ø2.8×7.8 平底头螺丝，Ø2.3 盲底孔深 4.4，头径 5.9、高 2；压框锁紧垫厚 3.8，名义入柱 4 mm、距盲底 0.4 mm。完整件装配时核对薄边强度、PCB 厚度、孔补偿和螺钉扭矩。针尖后 6 mm 为插线预留；拆屏前先拆 P1、断线、卸两枚压框螺钉并取下压框，再沿内法向取出模组。详见 [ADR-0028](decisions/0028-oled-mechanical-mount.md)。
 
 ## 完整件验收
 
@@ -70,9 +72,9 @@ OLED 玻璃前面内退 1.0 mm，沉槽前缘名义厚 0.8；外口经倒角收�
 
 ## 版本与验证
 
-模型 SHA-256：`d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6`。详见 [孔网净距](../hardware/enclosure/grille-clearance-checks.json)、[P1 当前逐层检查](../hardware/enclosure/bare-volume-print-checks.json)、[P2 当前逐层检查](../hardware/enclosure/p2-depth-print-checks.json)、[后壳深度与工具通道](../hardware/enclosure/rear-depth-checks.json)、[文件清单与摘要](../hardware/enclosure/print/manifest.json)、[正式包检查](../hardware/enclosure/print-release-checks.json)、[P3 声道检查](../hardware/enclosure/p3-terminal-mouth-checks.json)、[P2 侧口检查](../hardware/enclosure/p2-trapezoid-outlet-checks.json)、[整机静态检查](../hardware/enclosure/validation.json)、[拆装路径](../hardware/enclosure/assembly-paths.json)和[当前线束检查](../hardware/enclosure/current-perfboard-checks.json)。
+模型 SHA-256：`39c745a443f341767aa4a219102fdb1477acd508da073d469f57701f85173ab2`。详见 [孔网净距](../hardware/enclosure/grille-clearance-checks.json)、[P1 当前逐层检查](../hardware/enclosure/stock-front-print-checks.json)、[P2 当前逐层检查](../hardware/enclosure/p2-depth-print-checks.json)、[当前螺丝与工具通道](../hardware/enclosure/stock-fastener-checks.json)、[文件清单与摘要](../hardware/enclosure/print/manifest.json)、[正式包检查](../hardware/enclosure/print-release-checks.json)、[P3 声道检查](../hardware/enclosure/p3-terminal-mouth-checks.json)、[P2 侧口检查](../hardware/enclosure/p2-trapezoid-outlet-checks.json)、[整机静态检查](../hardware/enclosure/validation.json)、[拆装路径](../hardware/enclosure/assembly-paths.json)和[当前线束检查](../hardware/enclosure/current-perfboard-checks.json)。
 
-历史阶段的 `*-checks.json` 和 ADR 只证明其对应模型。当前 P1 由 control-volume-checks.json 和 bare-volume-print-checks.json 记录裸电位器改动及新切片；P2、P3 经本轮 42 件不变实体检查衔接，沿用各自已有切片；不把旧模型摘要改写成新版本。图册见[尺寸与装配图纸](enclosure-drawings.md)。
+历史阶段的 `*-checks.json` 和 ADR 只证明其对应模型。本轮由 stock-fastener-checks.json 记录五件改动、四片垫圈及其余成品不变，三盘新切片分别记录在 stock-front-print-checks.json、p2-depth-print-checks.json、retainer-print-checks.json。最终 GUI 资源独立化只改变显示封装，全部几何存档逐字节相同；证据传递记录在 stock-gui-checks.json。P3 等原打印文件摘要保持。图册见[尺寸与装配图纸](enclosure-drawings.md)。
 
 ## 重现
 

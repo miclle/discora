@@ -1,5 +1,5 @@
 {
-  "model_sha256": "baf82e4b8cf14850fa24f275c234a58eb07a738980d71c1076bf7319f7182c9f",
+  "model_sha256": "39c745a443f341767aa4a219102fdb1477acd508da073d469f57701f85173ab2",
   "baseline_sha256": null,
   "freecad_version": [
     "1",
@@ -105,5 +105,7 @@
     "The forward path assumes all four rear screws are removed and the front cover is supported during service.",
     "Flexible routes sampled at 2 mm; hand access is a 12x10 mm solid corridor, not an ergonomic or pinch test.",
     "Terminal stubs, the B50K stereo harness, and final power harness beyond local envelopes are not included."
-  ]
+  ],
+  "gui_only_revision_evidence": "stock-gui-checks.json",
+  "geometry_checked_model_sha256": "45f07b2207515d0f618010616b41cffb0fae2768fee83d1ab433bea2097fd31b"
 }

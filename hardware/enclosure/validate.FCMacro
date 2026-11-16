@@ -288,7 +288,7 @@ def validate(folder):
     handle=collisions(Part.makeBox(50,10,22,A.Vector(-25,handle_y-5,shoulder_z+11.5)),objects)
     report={'date':'2026-11-15','model':model.name,'sha256':hashlib.sha256(model.read_bytes()).hexdigest(),
         'version':A.Version()[:3],'items':len(objects),'objects':[o.Name for o in objects],
-        'main_pla_parts':connected,'rigid_pla_pieces':['FrontShell','RearShell','SpeakerCarrier','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','DisplayRetainer','DriveRetainer','Knob'],
+        'main_pla_parts':connected,'rigid_pla_pieces':['FrontShell','RearShell','SpeakerCarrier','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','DisplayRetainer','DriveRetainer','Knob','CarrierWashers'],
         'rear_roof_ownership':roof_ownership,'shell_split_y_mm':49.0,
         'straight_side_seam_yz_mm':[[seam_start.x,seam_start.y],[seam_end.x,seam_end.y]],
         'side_seam_ownership_samples_xyz_mm':seam_points,

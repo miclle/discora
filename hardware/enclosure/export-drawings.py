@@ -119,7 +119,10 @@ def main():
     battery_floor=json.loads((ROOT/'battery-floor-checks.json').read_text())
     bare_volume=json.loads((ROOT/'control-volume-checks.json').read_text())
     adhesive=json.loads((ROOT/'battery-adhesive-checks.json').read_text())
-    assert adhesive['all_pass'] and adhesive['model_sha256']==source_hash
+    stock=json.loads((ROOT/'stock-fastener-checks.json').read_text())
+    assert stock['all_pass'] and stock['model_sha256']==source_hash
+    assert stock['printed_p3_unchanged'] and all(stock['color_face_order_preserved'].values())
+    assert adhesive['all_pass'] and adhesive['model_sha256']==stock['baseline_sha256']
     assert all(adhesive['unchanged_shapes_difference_mm3'][n]<.001 for n in ('FrontShell','SpeakerCarrier','Knob'))
     assert bare_volume['all_pass'] and bare_volume['model_sha256']==adhesive['baseline_sha256']
     assert battery_floor['all_pass'] and battery_floor['model_sha256']==bare_volume['baseline_sha256']
@@ -151,11 +154,12 @@ def main():
         low, high = V(*entry['bounds_xyz_mm'][:3]), V(*entry['bounds_xyz_mm'][3:])
         low.y+=1.7; high.y+=1.7
         size = high - low
-        rib = rear_shell.common(Part.makeBox(*size, low))
-        assert len(rib.Solids) == 1 and abs(rib.Volume - entry['added_volume_mm3']) < .001
-        assert all(abs(a - b) < 1e-6 for a,b in zip(bounds(rib)['size'], (8, 8, 4)))
-        vertices = sorted({(round(v.Point.x, 6), round(v.Point.y, 6)) for v in rib.Vertexes})
-        assert len(vertices) == 3 and len(rib.Vertexes) == 6
+        sign=-1 if low.x<0 else 1
+        points=[V(sign*xx,y,low.z) for xx,y in ((80,15.7),(72,15.7),(80,23.7))]
+        designed=Part.Face(Part.makePolygon(points+points[:1])).extrude(V(0,0,4))
+        rib=rear_shell.common(designed)
+        assert designed.cut(rear_shell).Volume<.001
+        vertices=sorted({(round(v.Point.x,6),round(v.Point.y,6)) for v in rib.Vertexes})
         ribs.append(dict(location=location, bounds=bounds(rib), plan_vertices=vertices))
     assert len(ribs) == 4
     data['p3_seat_ribs'] = ribs
@@ -167,34 +171,18 @@ def main():
     seat_section = rear_shell.common(Part.makeBox(25, 21, .1, V(60, 6.7, rib_mid_z - .05)))
     projection('p3-seat-section', seat_section, 'top')
 
-    # Cut on the right-hand tool axis. Undo the pre-existing slope and tube
-    # locally to highlight only the material added by the triangular prism.
-    upper_ribs = backlock['ribs']
-    assert len(upper_ribs) == 2
-    low, high = V(*upper_ribs[1]['bounds_xyz_mm'][:3]), V(*upper_ribs[1]['bounds_xyz_mm'][3:])
-    axis_x = (low.x + high.x) / 2
-    section_x = axis_x - .01
-    section_box = Part.makeBox(.02, 44, 24, V(section_x, 31, 169))
-    well_section = rear_shell.common(section_box)
-    rib_box = Part.makeBox(.02,12,7,V(section_x,44,181.3))
-    tube = Part.makeCylinder(3.5, 40, V(axis_x, 36.4, 179), V(0,1,0))
-    rib_section = well_section.common(rib_box).cut([doc.RearRoof.Shape, tube]).removeSplitter()
-    assert len(rib_section.Solids) == 1
-    face = max(rib_section.Faces, key=lambda f: f.CenterOfMass.x)
-    assert abs(face.CenterOfMass.x - (axis_x + .01)) < 1e-6
-    data['upper_backlock_rib_section_yz'] = [[v.Point.y, v.Point.z] for v in face.OuterWire.OrderedVertexes]
-    current_upper_ribs=[]
+    # Section the current enlarged upper well; the old rib is largely merged
+    # into it, so do not reuse a historical "added rib" highlight.
+    section_x=29-.01
+    well_section=rear_shell.common(Part.makeBox(.02,55,26,V(section_x,35,168.5)))
+    current_wells=[]
     for sign in (-1,1):
         x=sign*29
-        points=[V(x-2,y,z) for y,z in ((44,181.3),(56,181.3),(56,188.3))]
-        prism=Part.Face(Part.makePolygon(points+points[:1])).extrude(V(4,0,0))
-        tube=Part.makeCylinder(3.5,60,V(x,36.4,179),V(0,1,0))
-        rib=rear_shell.common(prism).cut([doc.RearRoof.Shape,tube]).removeSplitter()
-        b=rib.BoundBox
-        tool=Part.makeCylinder(2,80,V(x,39.201,179),V(0,1,0))
-        current_upper_ribs.append(dict(bounds_xyz_mm=[b.XMin,b.YMin,b.ZMin,b.XMax,b.YMax,b.ZMax],minimum_distance_to_driver_mm=rib.distToShape(tool)[0]))
-    data['current_upper_backlock_ribs']=current_upper_ribs
-    projection('upper-backlock-section', well_section, 'right')
+        well=rear_shell.common(Part.makeCylinder(5.2,60,V(x,40.4,181.5),V(0,1,0)))
+        tool=Part.makeCylinder(3,80,V(x,60.201,181.5),V(0,1,0))
+        current_wells.append(dict(bounds=bounds(well),axis_xz_mm=[x,181.5],minimum_distance_to_driver_mm=well.distToShape(tool)[0]))
+    data['current_upper_backlock_wells']=current_wells
+    projection('upper-backlock-section',well_section,'right')
 
     # A true section at X=-26, the left driver centre; keep the -X half.
     clip = Part.makeBox(174,400,500,V(-200,-100,-100))
@@ -308,14 +296,14 @@ def main():
     exploded('exploded-shell',[
         ('01','P1 一体前壳／提手／护网',['FrontShell'],(0,-150,0)),
         ('02','P2 一体后壳／圆角梯形开放侧口',['RearShell'],(0,160,0)),
-        ('03','P3 双喇叭与电路板支架',['SpeakerCarrier'],(0,0,0)),
+        ('03','P3 双喇叭与电路板支架',['SpeakerCarrier','CarrierWashers'],(0,0,0)),
         ('04','光驱可拆压条',['DriveRetainer'],(0,70,0)),
         ('06','四个软质脚垫',['Feet'],(0,0,-65)),
         ('07','屏窗与操控件',['Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','DisplayRetainer','Knob'],(0,-70,100)),
         ('08','硬件包络（见右图）',groups['Hardware'],(0,0,0)),
     ],shapes)
     exploded('exploded-core',[
-        ('A','P3 一体支架／前障板',['SpeakerCarrier'],(0,0,0)),
+        ('A','P3 一体支架／前障板',['SpeakerCarrier','CarrierWashers'],(0,0,0)),
         ('B','左喇叭包络',['LDriver'],(-50,-55,0)),
         ('C','右喇叭包络',['RDriver'],(50,-55,0)),
         ('D','光驱与可拆压条',['Drive','DriveRetainer'],(0,110,0)),
@@ -359,7 +347,7 @@ def main():
         'no_front_protrusion':abs(doc.FrontShell.Shape.BoundBox.YMin)<1e-5,
         'current_outlet_outer_size':all(abs(a-b)<1e-4 for a,b in zip(data['acoustics']['p2_outer_bounds']['size'][1:],(38.477864,28.2))),
         'current_terminal_area':abs(data['acoustics']['outlet_area_mm2']-587.216)<.01,
-        '44_finished_objects':len(objects)==44,
+        '45_finished_objects':len(objects)==45,
         'perfboard_bounds_111_55_1_6':all(abs(x-y)<1e-6 for x,y in zip(bounds(shapes['Perfboard'])['size'],(111,55,1.6))),
         'bare_pot_local_9_5_14_5_14_7':all(abs(x-y)<1e-6 for x,y in zip(bounds(volume)['size'],(9.5,14.5,14.7))),
         'bare_pot_two_solids':len(volume.Solids)==2,

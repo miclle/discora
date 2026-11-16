@@ -24,11 +24,19 @@ def main():
     manifest = json.loads((folder/'manifest.json').read_text())
     model = ROOT/'Discora.FCStd'
     assert digest(model) == manifest['model_sha256']
+    gui=json.loads((ROOT/'stock-gui-checks.json').read_text())
+    assert gui['all_pass'] and gui['model_sha256']==digest(model)
+    with zipfile.ZipFile(model) as archive:
+        tree=ET.fromstring(archive.read('GuiDocument.xml'))
+        refs=[v for e in tree.iter() for k,v in e.attrib.items() if k.lower()=='file' and v]
+        assert len(refs)==len(set(refs))
+        assert archive.namelist()[-len(refs)-1:]==['GuiDocument.xml',*refs]
+        assert all(hashlib.sha256(archive.read(n)).hexdigest()==h for n,h in gui['document_and_geometry_entry_sha256'].items())
     doc = A.openDocument(str(model))
     meshes, plates = {}, {}
-    assert len(manifest['parts']) == 11 and len(manifest['plates']) == 6
+    assert len(manifest['parts']) == 12 and len(manifest['plates']) == 6
     assigned = [part for plate in manifest['plates'].values() for part in plate['parts']]
-    assert len(assigned) == len(set(assigned)) == 11
+    assert len(assigned) == len(set(assigned)) == 12
     assert set(assigned) == set(manifest['parts'])
     for name, item in manifest['parts'].items():
         path = folder/item['file']
@@ -101,16 +109,25 @@ def main():
     bare=json.loads((ROOT/'control-volume-checks.json').read_text())
     bare_print=json.loads((ROOT/'bare-volume-print-checks.json').read_text())
     adhesive=json.loads((ROOT/'battery-adhesive-checks.json').read_text())
-    assert adhesive['all_pass'] and adhesive['model_sha256']==manifest['model_sha256']
-    assert all(adhesive['unchanged_shapes_difference_mm3'][n]<.001 for n in manifest['parts'] if n!='RearShell')
+    stock=json.loads((ROOT/'stock-fastener-checks.json').read_text())
+    front_print=json.loads((ROOT/'stock-front-print-checks.json').read_text())
+    small_print=json.loads((ROOT/'retainer-print-checks.json').read_text())
+    assert stock['all_pass'] and stock['model_sha256']==manifest['model_sha256']
+    assert all(stock['unchanged_shapes_difference_mm3'][n]<.001 for n in ('SpeakerCarrier','PlayPauseKey','EjectKey','PrevKey','NextKey','Knob'))
+    assert front_print['all_pass'] and small_print['all_pass']
+    assert front_print['model_sha256']==small_print['model_sha256']==manifest['model_sha256']
+    assert small_print['gcode_sha256']==manifest['plates']['SmallParts']['gcode_sha256']
+    assert small_print['project_sha256']==manifest['plates']['SmallParts']['project_sha256']
+    assert adhesive['all_pass'] and adhesive['model_sha256']==stock['baseline_sha256']
+    assert all(adhesive['unchanged_shapes_difference_mm3'][n]<.001 for n in manifest['parts'] if n not in ('RearShell','CarrierWashers'))
     assert bare['all_pass'] and bare['model_sha256']==adhesive['baseline_sha256']
     assert bare_print['all_pass'] and bare_print['model_sha256']==adhesive['baseline_sha256']
-    assert all(bare['unchanged_finished_parts_difference_mm3'][n]<.001 for n in manifest['parts'] if n!='FrontShell')
+    assert all(bare['unchanged_finished_parts_difference_mm3'][n]<.001 for n in manifest['parts'] if n not in ('FrontShell','CarrierWashers'))
     assert battery['all_pass'] and battery['model_sha256']==bare['baseline_sha256']
     assert grille['model_sha256']==grille_print['model_sha256']==battery['baseline_sha256']
-    assert all(battery['unchanged_shapes_difference_mm3'][n]<.001 for n in manifest['parts'] if n!='RearShell')
+    assert all(battery['unchanged_shapes_difference_mm3'][n]<.001 for n in manifest['parts'] if n not in ('RearShell','CarrierWashers'))
     assert grille['all_pass'] and grille_print['all_pass']
-    assert all(grille['preserved_shape_difference_mm3'][n]<.001 for n in manifest['parts'] if n not in ('FrontShell','RearShell'))
+    assert all(grille['preserved_shape_difference_mm3'][n]<.001 for n in manifest['parts'] if n not in ('FrontShell','RearShell','CarrierWashers'))
     depth_print=json.loads((ROOT/'p2-depth-print-checks.json').read_text())
     assert depth_print['all_pass'] and depth_print['model_sha256']==manifest['model_sha256']
     assert depth_print['layer_height_mm']==manifest['plates']['RearShell']['layer_height_mm']==.16
@@ -120,17 +137,17 @@ def main():
     assert charging['all_pass'] and charging_print['all_pass']
     assert controls['model_sha256']==charging['baseline_sha256'] and controls['all_pass']
     assert all(charging['unchanged_finished_parts_difference_mm3'][name]<.001
-               for name in manifest['parts'] if name!='RearShell')
+               for name in manifest['parts'] if name not in ('RearShell','CarrierWashers'))
     assert controls['baseline_sha256']==p3['model_sha256'] and p3['all_pass'] and p2['all_pass']
     assert all(controls['unchanged_finished_parts_difference_mm3'][name]<.001
                for name in ('RearShell','SpeakerCarrier'))
     assert p3['geometry']['baseline_sha256']==p2['model_sha256']
     assert p3['geometry']['p2_entire_shape_difference_mm3']<.001
-    for name, audit in [('FrontShell',bare_print),('RearShell',depth_print),('SpeakerCarrier',p3['slice'])]:
+    for name, audit in [('FrontShell',front_print),('RearShell',depth_print),('SpeakerCarrier',p3['slice'])]:
         assert manifest['plates'][name]['gcode_sha256']==audit['gcode_sha256']
         assert manifest['parts'][name]['stl_sha256']==audit['stl_sha256']
     retained=manifest['retained_files_sha256']
-    assert len(retained)==15
+    assert len(retained)==9
     assert all(digest(folder/name)==sha for name,sha in retained.items())
     report=dict(retained_files_sha256=retained,model_sha256=manifest['model_sha256'],manifest_sha256=digest(folder/'manifest.json'),
                 meshes=meshes, plates=plates, all_pass=True, printer_contacted=False)

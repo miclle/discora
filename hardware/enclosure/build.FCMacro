@@ -17,6 +17,7 @@ import speaker_print_geometry as speaker_print
 import speaker_duct_geometry as speaker_duct
 import charging_port_geometry as charging_ports
 import rear_setback_geometry as rear_setback
+import stock_fastener_geometry as stock_fasteners
 
 V = A.Vector
 X, Y, Z = V(1, 0, 0), V(0, 1, 0), V(0, 0, 1)
@@ -900,6 +901,9 @@ def build(folder):
     lead_obj.Visibility=False
 
     rear_setback.apply(doc)
+    stock_fasteners.apply(doc)
+    doc.CarrierWashers.ViewObject.ShapeColor=TEAL
+    visible.append(doc.CarrierWashers)
     doc.recompute()
     for o in visible:
         o.Visibility = True

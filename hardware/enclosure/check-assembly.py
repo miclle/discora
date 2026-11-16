@@ -15,6 +15,8 @@ V=A.Vector
 
 def check(doc):
     objects={o.Name:o for g in ('Shell','Controls','Carrier','Hardware') for o in doc.getObject(g).Group}
+    # Washers leave with the four P3 screws before the carrier is withdrawn.
+    objects.pop('CarrierWashers',None)
     charging_sockets=['DCChargeSocket','USBChargeSocket']
     for name in charging_sockets:
         objects[name]=doc.getObject(name)
@@ -58,12 +60,12 @@ def check(doc):
             if hit:hits.append({'moving_source':name,'hits':hit})
     report['paths']['speaker_carrier_front']={'method':'continuous conservative bounding-box sweep per construction component',
         'translation_xyz_mm':[0,-140,0],'moving':['SpeakerCarrier']+core_hw,'fixed':fixed,
-        'prerequisites':['Front cover removed and its cables disconnected','Four carrier screws removed'],
+        'prerequisites':['Front cover removed and its cables disconnected','Four carrier screws and four flat washers removed'],
         'clashes':hits}
     print('PATH speaker_carrier_front',hits,flush=True)
     fixed=[n for n in objects if n in ['RearShell','Battery','Drive','Bridge','Feet']+stationary_dac+charging_sockets]
     hits=[]
-    for x,width in [(-68,4),(-64,128),(64,4)]:
+    for x,width in [(-70,6),(-64,128),(64,6)]:
         piece=doc.DriveRetainer.Shape.common(Part.makeBox(width,200,300,V(x,-10,0)))
         hits.extend(collisions(box_sweep(piece,1,-140),fixed))
     report['paths']['drive_retainer_front']={'method':'continuous conservative bounding-box sweeps of waist and two ears',

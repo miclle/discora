@@ -1,33 +1,27 @@
 {
   "retained_files_sha256": {
-    "FrontShell.stl": "dec36519326d35872639e71088bffd93f90b4543c284f2e551277eb899a41182",
     "SpeakerCarrier.stl": "b94d6c6b871114425b83d9b182fd1e3fc972605c357245eaeac170e9564c7ede",
     "PlayPauseKey.stl": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
     "EjectKey.stl": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
     "PrevKey.stl": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
     "NextKey.stl": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
-    "ButtonRetainer.stl": "17ee4f08323f8878f428092fc2ee6b63ead09915fa8c8baaa53f1bf010339011",
-    "DisplayRetainer.stl": "699b7962e736a43e40bf747c1254eb4b3a82e903334593d7c1832f5d60d9703f",
-    "DriveRetainer.stl": "1f807f99f6d98fa38614df28a997d6b686dc144ed879951b953959d0824a6760",
     "Knob.stl": "af785841449d19e7fae3f683efd6e23b1b75e9af0cea938867868281e449725d",
-    "Discora-P1-FrontShell.3mf": "0bc8e9749ed553cdf17deb446571a8c0f8c8aba98795d40f494948fac04d6e02",
     "Discora-P3-SpeakerCarrier.3mf": "0f662b2b4f390ae2ce9da9dc97a6ea8cc00a81ebf3289e3acb1a73b3878f26f2",
-    "Discora-Retainers.3mf": "530675fe8e19522b2e2b14bce778c5c950d2304ee235dc19d9413c3b73854d36",
     "Discora-Keys-Orange-White.3mf": "e5585173a4f6ad420ce554cce4dd78f74d91a30829eab5c556aa757f5ab2c73e",
     "Discora-Knob-Black-White.3mf": "4bd33a8d3822c27018d22b2556faac42867f3ff0f3510ca7b5f55814a0fd956e"
   },
-  "model_sha256": "baf82e4b8cf14850fa24f275c234a58eb07a738980d71c1076bf7319f7182c9f",
-  "manifest_sha256": "195caaf6c9b414de16c3f1fd2ac752be1bd8f277b2cdfb6edb4de0f8ac19f25e",
+  "model_sha256": "39c745a443f341767aa4a219102fdb1477acd508da073d469f57701f85173ab2",
+  "manifest_sha256": "4bafecfc26c5953cdfaceac9cf2636e39a3d69aed6666d772ff12e91d902bf35",
   "meshes": {
     "FrontShell": {
       "closed": true,
-      "relative_cad_volume_error": 0.0004483662572583423,
+      "relative_cad_volume_error": 0.0009491336991149533,
       "on_bed": true,
       "fits_bed": true
     },
     "RearShell": {
       "closed": true,
-      "relative_cad_volume_error": 4.066826928650421e-06,
+      "relative_cad_volume_error": 1.5022042423891017e-06,
       "on_bed": true,
       "fits_bed": true
     },
@@ -63,19 +57,19 @@
     },
     "ButtonRetainer": {
       "closed": true,
-      "relative_cad_volume_error": 0.0002169916930988593,
+      "relative_cad_volume_error": 0.0003214067370693382,
       "on_bed": true,
       "fits_bed": true
     },
     "DisplayRetainer": {
       "closed": true,
-      "relative_cad_volume_error": 0.0007284975260227302,
+      "relative_cad_volume_error": 0.0012278277151899807,
       "on_bed": true,
       "fits_bed": true
     },
     "DriveRetainer": {
       "closed": true,
-      "relative_cad_volume_error": 2.785144573705136e-05,
+      "relative_cad_volume_error": 5.370467761447507e-05,
       "on_bed": true,
       "fits_bed": true
     },
@@ -84,19 +78,25 @@
       "relative_cad_volume_error": 0.0010717802088917208,
       "on_bed": true,
       "fits_bed": true
+    },
+    "CarrierWashers": {
+      "closed": true,
+      "relative_cad_volume_error": 0.005154453948469943,
+      "on_bed": true,
+      "fits_bed": true
     }
   },
   "plates": {
     "FrontShell": {
       "layers": 245,
-      "extrusion_moves": 2223083,
+      "extrusion_moves": 2255203,
       "mesh_repairs": 0,
       "settings_persisted": true,
       "archive_valid": true
     },
     "RearShell": {
       "layers": 560,
-      "extrusion_moves": 1579107,
+      "extrusion_moves": 1687685,
       "mesh_repairs": 0,
       "settings_persisted": true,
       "archive_valid": true
@@ -109,8 +109,8 @@
       "archive_valid": true
     },
     "SmallParts": {
-      "layers": 32,
-      "extrusion_moves": 32796,
+      "layers": 33,
+      "extrusion_moves": 53404,
       "mesh_repairs": 0,
       "settings_persisted": true,
       "archive_valid": true
