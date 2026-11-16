@@ -87,6 +87,7 @@ GRILLE_HOLE_RADIUS, GRILLE_PITCH = .94, 2.9
 GRILLE_UNDERLAP = 3.0
 # Supplier image: selected flat 5600 mAh pack, excluding leads/connectors.
 BATTERY = (112.0, 70.0, 20.0)
+BATTERY_ADHESIVE_THICKNESS = 1.5
 # The measured underside faces the rear wall; 1 mm is reserved for protective pads.
 DRIVE_DATUM_Y = CASE_DEPTH - REAR_THICKNESS - 1.0
 DRIVE_TOP = 159.5
@@ -719,11 +720,13 @@ def build(folder):
         feature(f"PerfboardScrew{i}",f"洞洞板 M2×{length} 螺钉 {i} · 名义包络",
                 perfboard.screw_shape(x,y,length),SILVER,hardware)
     bx,by,_=BATTERY
-    block("Battery","5600 mAh 平排电池包 · 商品标称 112×70×20",(-bx/2,6,6),BATTERY,BLUE,hardware)
-    # The pack rests on the existing 5 mm floor; retain the two side stops.
+    block("Battery","5600 mAh 平排电池包 · 商品标称 112×70×20",(-bx/2,6,6+BATTERY_ADHESIVE_THICKNESS),BATTERY,BLUE,hardware)
+    doc.Battery.addProperty('App::PropertyLength','AdhesiveThickness','Installation')
+    doc.Battery.AdhesiveThickness=BATTERY_ADHESIVE_THICKNESS
+    # Adhesive sits on the existing 5 mm floor; retain the two side stops.
     # Separate stops join through P2, with 1 mm clearance on either side.
     cradle=Part.makeCompound([box(x,6,6,2,50,14) for x in (-bx/2-3,bx/2+1)])
-    feature("BatteryCradle","电池左右挡板 · 直接落底／保留绑带槽",cradle,TEAL,supports)
+    feature("BatteryCradle","电池左右挡板 · 底板胶贴固定",cradle,TEAL,supports)
 
     # Move the complete display stack together, including the native PCB boxes.
     for name in ('Window','StatusArt','DisplayPCB','DisplayHeader','DisplayRetainer'):
@@ -829,9 +832,6 @@ def build(folder):
     rear=consolidate("RearShell","P2 · 一体后壳／左下双充电口／左右开放侧口",
                      ['RearRoof','SlotGuide','LPanel','RPanel','Back','Base','BatteryCradle','DriveCarrier','LPort','RPort'],rear_bosses,BLACK,shell)
     rear.Shape=rear.Shape.cut(doc.getObject(rear_fastener_cuts).Shape).removeSplitter()
-    # Strap slots are outside the 112 mm pack. Straps are removed before sliding the pack out.
-    strap_slots=[box(x,y,BASE_Z-.5,3,8,20) for x in (-61,58) for y in (24,44)]
-    rear.Shape=rear.Shape.cut(Part.makeCompound(strap_slots)).removeSplitter()
     rear.Shape=charging_ports.apply(rear.Shape)
     source_part('ChargingSleeveBlanks',charging_ports.sleeve_blanks())
     source_part('ChargingPortBores',charging_ports.bores())

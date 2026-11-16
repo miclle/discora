@@ -1,7 +1,7 @@
 """Saved-B-rep assembly checks; conservative continuous sweeps where possible.
 
 The front-cover path is explicitly sampled, not claimed to be a continuous proof.
-Fasteners, straps and cables are removed/disconnected as described in the report.
+Fasteners and cables are removed/disconnected; the battery adhesive is released.
 """
 import argparse
 import hashlib
@@ -32,7 +32,7 @@ def check(doc):
         lo=[b.XMin,b.YMin,b.ZMin];hi=[b.XMax,b.YMax,b.ZMax]
         lo[axis]+=min(distance,0);hi[axis]+=max(distance,0)
         return Part.makeBox(*[h-l for l,h in zip(lo,hi)],V(*lo))
-    report={'units':'mm','fasteners_and_straps_removed':True,'cables_disconnected':True,'physical_assembly_test':False,'paths':{}}
+    report={'units':'mm','fasteners_removed':True,'battery_adhesive_released':True,'cables_disconnected':True,'physical_assembly_test':False,'paths':{}}
     core_hw=['LDriver','RDriver','Amp','AmpChip','MCU','MCUChip','DAC','DACChip']
     if doc.getObject('Perfboard'):
         core_hw.extend(['Perfboard','MCUSockets','DACSockets','BuckA','BuckB','XHButtons','XHOLED',
@@ -132,7 +132,7 @@ def check(doc):
     hits=collisions(box_sweep(doc.Battery.Shape,1,-150),fixed)
     report['paths']['battery_front']={'method':'continuous conservative bounding-box sweep',
         'translation_xyz_mm':[0,-150,0],'moving':['Battery'],'fixed':fixed,
-        'prerequisites':['Front cover removed','Battery straps and cables removed'], 'clashes':hits}
+        'prerequisites':['Front cover removed','Battery adhesive bond released and cables disconnected'], 'clashes':hits}
     print('PATH battery_front',hits,flush=True)
     moving=['FrontShell','Window','StatusArt','PlayPauseKey','EjectKey','PrevKey','NextKey','ButtonRetainer','PlayPauseSwitch','EjectSwitch','PrevSwitch','NextSwitch','Knob','Encoder','VolumePot','DisplayPCB','DisplayHeader','DisplayRetainer']
     fixed=[n for n in objects if n not in moving]

@@ -307,7 +307,7 @@ def validate(folder):
                   'PCB sizes are documented; component heights and connector reservations are provisional.',
                   'Three main PLA solids and nominal screw/pilot bores do not validate printed strength or screw fit.',
                   'Separate assembly-path report distinguishes continuous conservative sweeps from sampled cover motion.',
-                  'Battery leads, straps, connectors, bridge cables and power modules are not validated.',
+                  'Battery adhesive retention/release, leads, connectors, bridge cables and power modules are not validated.',
                   'Side passages remain untuned; geometric continuity is not acoustic validation.']}
     (folder/'validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
     assert abs(handle_y-46.5)<1e-7

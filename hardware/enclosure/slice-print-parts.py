@@ -53,7 +53,7 @@ def main():
         target=out/name;target.mkdir(exist_ok=True)
         process=json.loads(settings['process'].read_text())
         if name=='RearShell':
-            process.update(support_on_build_plate_only='0',support_critical_regions_only='0')
+            process.update(support_on_build_plate_only='0',support_critical_regions_only='0',layer_height='0.16')
         if name=='FrontShell':
             # The handle's wide underside needs support even when the slicer
             # classifies it as a bridge. Keep support rooted on the build plate.
@@ -80,6 +80,7 @@ def main():
             members={n:z.read(n) for n in z.namelist()}
         config=json.loads(members['Metadata/project_settings.config'])
         fields=set(OVERRIDES)
+        if name=='RearShell':fields.add('layer_height')
         config['different_settings_to_system'][0]=';'.join(sorted(set(filter(None,config['different_settings_to_system'][0].split(';')))|fields))
         for key in fields:assert config[key]==process[key],(name,key)
         members['Metadata/project_settings.config']=json.dumps(config,indent=2).encode()

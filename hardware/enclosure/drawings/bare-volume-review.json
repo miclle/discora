@@ -1,9 +1,10 @@
 {
-  "model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6",
-  "geometry_sha256": "9fe2816f76f0f2abff4e4ba30e1a2348b9d32fb1d8c37c554464ab184d523941",
-  "color_render_sha256": "44f6edf077b103b147f0eb4cec315a109d32340e81ece14e8f41fd330fe03a76",
-  "drawing_script_sha256": "7564b0c383774c913b05047161c1705f30f48c174058fd56a97e4292c6a34270",
-  "pdf_sha256": "91ecab1a95ef0b7552d77dbcb35d01738e792f618094950cb6e8c74a4d5cd4ac",
+  "model_sha256": "baf82e4b8cf14850fa24f275c234a58eb07a738980d71c1076bf7319f7182c9f",
+  "geometry_sha256": "733700f6636cc8e02406710f201df0886e8c8a8c72f544ff7dda6f36d3ade818",
+  "color_render_sha256": "a5c0312050613af1368475aaa55296dd16b63121714dbe5e13802a2103314022",
+  "drawing_script_sha256": "d0531e479af4c37b7372ff2730c542449fdba7f0ccf0cc5ac024d2321a63014b",
+  "pdf_sha256": "f47107a3bc2e018d950637d7698afb4d0b5d8ce2b9ab7e29c90e8d1610fde29b",
+  "previous_pdf_sha256": "8a6fe9b35536d68e4bd6206cfbf6b0847374471579ba5cc2725fe6b80a4989b8",
   "pages": 14,
   "rendered_pages": [
     1,
@@ -38,28 +39,31 @@
     14
   ],
   "full_size_reviewed_pages": [
-    7,
-    8,
-    9
+    4,
+    5
   ],
-  "review": "All 14 final pages rendered at 1800 px and inspected in contact sheets. Bare B50K installation, pin/solder allowance dimensions, unchanged perfboard and revised service-harness pages inspected at full size. Page 8 B50K clearance now comes from the current report. No clipped or overlapping labels observed.",
+  "review": "All 14 pages rendered at 1800 px and inspected in contact sheets. Pages 4 and 5 inspected full size: battery at Z=7.5..27.5, dimension leaders moved with the battery, 1.5 mm adhesive allowance and 4 mm P3 gap, sealed floor slots, current slicing mass and adhesive-release prerequisite. No clipped or overlapping annotations observed. Existing B50K, perfboard, acoustic and charging dimensions retained.",
   "previews": {
-    "dimensions-color-preview.png": "88aa0f98a4cc108a52bbb1c2817e5ded4cfc8b070733b267f704ca41f2383b15",
-    "exploded-color-preview.png": "2e6fb52ebca60294fb64f743303794c1ba9dfa09e75cf8be94eb96baf79121ea",
-    "oled-dimensions-preview.png": "a053c5539cdc502394d639eab36e13b4af1845a0b392aa9970a6cef94b0d3bb5",
-    "volume-module-preview.png": "ad425a12300c5b785290c73678dd210f77fda8d03f4c69cf06fed1fb024673db",
-    "perfboard-layout-preview.png": "4d5ffcb102662e47e771f66b0d715a7230e47d1a4fea623395cba66102e8bea7",
-    "front-harness-preview.png": "8d283d4045748f99f2397faed1777071e5e1d9df99e2b50949a990dda57f7aad",
-    "acoustic-outlet-preview.png": "c056cc1e59ded81ed4dcb11b21fa54876e1be7a7d73ab963967d13689ebb6f7f",
-    "charging-ports-preview.png": "471f63e2607cda5426e4455dcad3b3c93feceb5fc5c84048bb612292c03ada3f",
-    "grille-clearance-preview.png": "2382171bc64be103ffa79b69550fc306ade2d550d561c1e6f780034b5a43eb28"
+    "dimensions-color-preview.png": "7c6fd8a999ce72a958e250d27aa06a8268eca0087ddc3f869eb030da04fdc082",
+    "exploded-color-preview.png": "702289d77a5c30e16ccf58b7587da5a2dffc4234301135df42c062e1f28b0b24",
+    "oled-dimensions-preview.png": "52f2517810c896d484caa18140af2cb402087e3a4d65b3834ee6289cd7e1a5d0",
+    "volume-module-preview.png": "f9347b2a4892fccee24d4d913ba7835ce2f902270c83ae692687c2bf8131daf5",
+    "perfboard-layout-preview.png": "b645e54b960387e2e08439dc0283b1bd1ea8fd4338a5cb1125ef2d7050fb5615",
+    "front-harness-preview.png": "e7d7397b6b2c72c5a9557c3ed02f25e9e0c69415bb80cfd00cd589d0dd2ff691",
+    "acoustic-outlet-preview.png": "322f9343b5c909b4fd8bcc39151d11a5033397f2a345d97988e74a7b207d6159",
+    "charging-ports-preview.png": "fb687cfc05c97fe4a297a654cac982318d8ab34b689ce8b8468e58f9b377744b",
+    "grille-clearance-preview.png": "097da31e461edee82f75bc88742cce3722b576591356e77cd32250860d1c9edf"
   },
   "checks": {
     "bare_b50k_on_page7": true,
     "board_b50k_clearance_mm": 17.891,
     "switch_harness_centerline_mm": 232.8,
     "source_reports_match_current_model": true,
-    "printed_p3_preserved": true
+    "printed_p3_preserved": true,
+    "battery_adhesive_thickness_mm": 1.5,
+    "closed_strap_slots": 4,
+    "battery_p3_clearance_mm": 4,
+    "overall_depth_mm": 94.7
   },
   "all_pass": true
 }

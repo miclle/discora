@@ -5,10 +5,11 @@ import Mesh
 from shapely.geometry import Polygon,LineString,Point
 from shapely import union_all,from_wkt
 def parse(path):
- layers=[];x=y=0.;feature='';width=.42;height=.2
+ layers=[];x=y=0.;feature='';width=.42
  for line in path.read_text().splitlines():
   if line.startswith('; Z_HEIGHT:'):layers.append({'z':float(line.split()[-1]),'segments':[]})
-  if line.startswith('; LAYER_HEIGHT:'):height=float(line.split()[-1]);layers[-1]['h']=height
+  # Later bridge annotations describe round extrusion height, not layer pitch.
+  if line.startswith('; LAYER_HEIGHT:'):layers[-1].setdefault('h',float(line.split()[-1]))
   if line.startswith('; FEATURE:'):feature=line.split(': ',1)[1].strip()
   if line.startswith('; LINE_WIDTH:'):width=float(line.split()[-1])
   if layers and line.startswith(('G0 ','G1 ','G2 ','G3 ')):
@@ -20,9 +21,10 @@ def parse(path):
 
 def sections(meshpath,layers,cache):
  sha=hashlib.sha256(meshpath.read_bytes()).hexdigest()
+ schedule=[[l['z'],l.get('h',.2)] for l in layers]
  if cache.exists():
   data=json.loads(cache.read_text())
-  if isinstance(data,dict) and data['sha256']==sha:return [from_wkt(x) for x in data['sections']]
+  if isinstance(data,dict) and data['sha256']==sha and data.get('layer_schedule')==schedule and len(data['sections'])==len(layers):return [from_wkt(x) for x in data['sections']]
  mesh=Mesh.Mesh(str(meshpath));res=[]
  for i,l in enumerate(layers):
   z=l['z']-l.get('h',.2)/2
@@ -39,7 +41,7 @@ def sections(meshpath,layers,cache):
   shape=Polygon()
   for p in shapes:shape=shape.symmetric_difference(p)
   res.append(shape)
- cache.write_text(json.dumps({'sha256':sha,'sections':[x.wkt for x in res]}));return res
+ cache.write_text(json.dumps({'sha256':sha,'layer_schedule':schedule,'sections':[x.wkt for x in res]}));return res
 
 def audit(name,mesh,gcode,output):
  layers=parse(gcode);polys=sections(mesh,layers,output/('sections-'+name+'.json'))

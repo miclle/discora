@@ -75,7 +75,6 @@ def apply(doc):
     names=('RearRoof','SlotGuide','LPanel','RPanel','Back','Base','BatteryCradle','DriveCarrier','LPort','RPort')
     rear=doc.getObject(names[0]).Shape.copy().multiFuse([doc.getObject(n).Shape for n in names[1:]]+bosses).removeSplitter()
     rear=rear.cut(doc.RearFastenerCuts.Shape)
-    rear=rear.cut(Part.makeCompound([box(x,y,.5,3,8,20) for x in (-61,58) for y in (24,44)]))
     rear=shifted(charging.apply(shifted(rear,-SETBACK)))
     # Preserve the original four bottom XZ radii across the extended depth.
     bottom=box(-85,0,1,170,DEPTH,profile[3][1])

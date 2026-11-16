@@ -1,7 +1,7 @@
 {
   "model": "../Discora.FCStd",
-  "model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6",
-  "release": "ADR-0051",
+  "model_sha256": "baf82e4b8cf14850fa24f275c234a58eb07a738980d71c1076bf7319f7182c9f",
+  "release": "ADR-0050 adhesive battery / ADR-0051 controls",
   "slicer_version": "02.09.01.70",
   "profile_names": {
     "machine": "Bambu Lab P2S 0.4 nozzle",
@@ -29,7 +29,8 @@
         0.5,
         0.5000000000000001
       ],
-      "stl_sha256": "dec36519326d35872639e71088bffd93f90b4543c284f2e551277eb899a41182"
+      "stl_sha256": "dec36519326d35872639e71088bffd93f90b4543c284f2e551277eb899a41182",
+      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6"
     },
     "RearShell": {
       "file": "RearShell.stl",
@@ -40,7 +41,7 @@
       ],
       "linear_deflection_mm": 0.05,
       "angular_deflection_rad": 0.2,
-      "facets": 7614,
+      "facets": 7502,
       "closed_mesh": true,
       "fits_with_5mm_brim": true,
       "rotation_quaternion_xyzw": [
@@ -49,8 +50,7 @@
         0.0,
         -0.7071067811865475
       ],
-      "stl_sha256": "1109edef328d9d1272fde44e8e04b9052f216f68e825be7337618d160cf76b7d",
-      "reused_from_model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee"
+      "stl_sha256": "52c5c1dba145ecda1a26e3f68089af505ad0b08729a14b89338cd6c8220e4381"
     },
     "SpeakerCarrier": {
       "file": "SpeakerCarrier.stl",
@@ -71,7 +71,7 @@
         -0.7071067811865475
       ],
       "stl_sha256": "b94d6c6b871114425b83d9b182fd1e3fc972605c357245eaeac170e9564c7ede",
-      "reused_from_model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee"
+      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6"
     },
     "PlayPauseKey": {
       "file": "PlayPauseKey.stl",
@@ -93,7 +93,7 @@
       ],
       "stl_sha256": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
       "color_print_source": "export-dual-color-keys.py; STL is a single-material envelope",
-      "reused_from_model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee"
+      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6"
     },
     "EjectKey": {
       "file": "EjectKey.stl",
@@ -115,7 +115,7 @@
       ],
       "stl_sha256": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
       "color_print_source": "export-dual-color-keys.py; STL is a single-material envelope",
-      "reused_from_model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee"
+      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6"
     },
     "PrevKey": {
       "file": "PrevKey.stl",
@@ -137,7 +137,7 @@
       ],
       "stl_sha256": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
       "color_print_source": "export-dual-color-keys.py; STL is a single-material envelope",
-      "reused_from_model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee"
+      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6"
     },
     "NextKey": {
       "file": "NextKey.stl",
@@ -159,7 +159,7 @@
       ],
       "stl_sha256": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
       "color_print_source": "export-dual-color-keys.py; STL is a single-material envelope",
-      "reused_from_model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee"
+      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6"
     },
     "ButtonRetainer": {
       "file": "ButtonRetainer.stl",
@@ -180,7 +180,7 @@
         0.952675287877846
       ],
       "stl_sha256": "17ee4f08323f8878f428092fc2ee6b63ead09915fa8c8baaa53f1bf010339011",
-      "reused_from_model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee"
+      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6"
     },
     "DisplayRetainer": {
       "file": "DisplayRetainer.stl",
@@ -201,7 +201,7 @@
         0.952675287877846
       ],
       "stl_sha256": "699b7962e736a43e40bf747c1254eb4b3a82e903334593d7c1832f5d60d9703f",
-      "reused_from_model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee"
+      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6"
     },
     "DriveRetainer": {
       "file": "DriveRetainer.stl",
@@ -222,7 +222,7 @@
         0.7071067811865476
       ],
       "stl_sha256": "1f807f99f6d98fa38614df28a997d6b686dc144ed879951b953959d0824a6760",
-      "reused_from_model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee"
+      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6"
     },
     "Knob": {
       "file": "Knob.stl",
@@ -244,7 +244,7 @@
       ],
       "stl_sha256": "af785841449d19e7fae3f683efd6e23b1b75e9af0cea938867868281e449725d",
       "color_print_source": "export-dual-color-knob.py; STL is a single-material envelope",
-      "reused_from_model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee"
+      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6"
     }
   },
   "plates": {
@@ -274,22 +274,16 @@
       ],
       "filament_g_by_material": [
         145.53
-      ]
+      ],
+      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6"
     },
     "RearShell": {
-      "file": "Discora-P2-RearShell.3mf",
       "parts": [
         "RearShell"
       ],
-      "project_sha256": "085e0550ed6e4e22de9b24be4b5d9120dc68d06ff089f8da1ae71b4d25b87e2c",
-      "gcode_sha256": "6d7367d260324e4d1a835e3f2991f0b980d26ea7b82db8447724b2e03af6a4d1",
-      "layers": 448,
-      "total_estimated_time": "9h 16m 12s",
-      "filament_g": 290.32,
-      "filament_g_by_material": [
-        290.32
-      ],
       "exit_code": 0,
+      "gcode_sha256": "12b8b4b709323272f5e68a57f08d5d1bc30cfb001f42bd3b7a751b55cd02306a",
+      "project_sha256": "93e1892f8739de531fe8c1729edc8d76e2d762bc654dfff98ad5bc6a7324a947",
       "support_settings": {
         "enable_support": "1",
         "support_type": "tree(auto)",
@@ -298,14 +292,21 @@
         "support_threshold_angle": "30",
         "support_top_z_distance": "0.2"
       },
-      "layer_height_mm": 0.2,
+      "total_estimated_time": "9h 58m 36s",
+      "filament_g": 288.18,
+      "layers": 560,
+      "file": "Discora-P2-RearShell.3mf",
+      "layer_height_mm": 0.16,
       "first_layer_height_mm": 0.2,
       "filament_colours": [
         "#00AE42"
       ],
-      "vendor_T65535_parser_notice": true,
-      "reused_audited_slice": false,
-      "reused_from_model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee"
+      "filament_g_by_material": [
+        288.18
+      ],
+      "process_overrides": {
+        "layer_height": "0.16"
+      }
     },
     "SpeakerCarrier": {
       "file": "Discora-P3-SpeakerCarrier.3mf",
@@ -335,7 +336,7 @@
         "#00AE42"
       ],
       "reused_audited_slice": true,
-      "reused_from_model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee"
+      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6"
     },
     "SmallParts": {
       "file": "Discora-Retainers.3mf",
@@ -366,7 +367,7 @@
       "filament_colours": [
         "#00AE42"
       ],
-      "reused_from_model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee",
+      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6",
       "reused_audited_slice": true
     },
     "Keys": {
@@ -671,7 +672,7 @@
           }
         }
       },
-      "reused_from_model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee",
+      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6",
       "reused_audited_slice": true
     },
     "Knob": {
@@ -770,11 +771,11 @@
           ]
         }
       },
-      "reused_from_model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee",
+      "reused_from_model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6",
       "reused_audited_slice": true
     }
   },
-  "total_filament_g": 640.82,
+  "total_filament_g": 638.68,
   "evidence": {
     "p2": "../p2-depth-print-checks.json",
     "p3": "../p3-terminal-mouth-checks.json",
@@ -790,7 +791,8 @@
     "rear_depth_print": "../p2-depth-print-checks.json",
     "battery_floor": "../battery-floor-checks.json",
     "bare_volume": "../control-volume-checks.json",
-    "bare_volume_print": "../bare-volume-print-checks.json"
+    "bare_volume_print": "../bare-volume-print-checks.json",
+    "battery_adhesive": "../battery-adhesive-checks.json"
   },
   "all_pass": true,
   "printer_contacted": false,
@@ -801,11 +803,11 @@
     "STL keys and knob are monochrome envelopes; use the two-material 3MF projects.",
     "The DC bore contains removable supports; Type-C has no bore support toolpaths. Check both 10 mm passages before bonding. Adhesive retention and charging electronics are unverified.",
     "Printed P3 retained byte-for-byte; installed 1.7 mm rearward with P2 deepened to 94.7 mm. P1 recess 1.5 mm, local thickness 1.2 mm, nominal static gap 3 mm. Dynamic excursion, stiffness and full assembly remain unverified.",
-    "Battery lowered 2 mm onto existing floor; removable straps and actual battery leads require physical verification. P3 geometry and installed position unchanged from ADR-0049.",
-    "Only P3 has been physically printed. Bare B50K solder/insulation and local analogue exit are design allowances; remote analogue wiring and electrical pinout remain unverified."
+    "Only P3 has been physically printed. Bare B50K solder/insulation and local analogue exit are design allowances; remote analogue wiring and electrical pinout remain unverified.",
+    "Battery raised 1.5 mm for adhesive; four strap slots sealed. P3 geometry and placement preserved. Only P2 STL and 3MF regenerated; 15 other print files retained. Adhesive retention/release and physical support removal unverified."
   ],
   "retained_files_sha256": {
-    "RearShell.stl": "1109edef328d9d1272fde44e8e04b9052f216f68e825be7337618d160cf76b7d",
+    "FrontShell.stl": "dec36519326d35872639e71088bffd93f90b4543c284f2e551277eb899a41182",
     "SpeakerCarrier.stl": "b94d6c6b871114425b83d9b182fd1e3fc972605c357245eaeac170e9564c7ede",
     "PlayPauseKey.stl": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
     "EjectKey.stl": "97817e9c5df5a2b43e1455a24fe8f48524860ba76d63adda4d1e43b6caa63bdb",
@@ -815,7 +817,7 @@
     "DisplayRetainer.stl": "699b7962e736a43e40bf747c1254eb4b3a82e903334593d7c1832f5d60d9703f",
     "DriveRetainer.stl": "1f807f99f6d98fa38614df28a997d6b686dc144ed879951b953959d0824a6760",
     "Knob.stl": "af785841449d19e7fae3f683efd6e23b1b75e9af0cea938867868281e449725d",
-    "Discora-P2-RearShell.3mf": "085e0550ed6e4e22de9b24be4b5d9120dc68d06ff089f8da1ae71b4d25b87e2c",
+    "Discora-P1-FrontShell.3mf": "0bc8e9749ed553cdf17deb446571a8c0f8c8aba98795d40f494948fac04d6e02",
     "Discora-P3-SpeakerCarrier.3mf": "0f662b2b4f390ae2ce9da9dc97a6ea8cc00a81ebf3289e3acb1a73b3878f26f2",
     "Discora-Retainers.3mf": "530675fe8e19522b2e2b14bce778c5c950d2304ee235dc19d9413c3b73854d36",
     "Discora-Keys-Orange-White.3mf": "e5585173a4f6ad420ce554cce4dd78f74d91a30829eab5c556aa757f5ab2c73e",

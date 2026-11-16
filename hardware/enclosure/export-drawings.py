@@ -118,7 +118,10 @@ def main():
     grille_report=json.loads((ROOT/'grille-clearance-checks.json').read_text())
     battery_floor=json.loads((ROOT/'battery-floor-checks.json').read_text())
     bare_volume=json.loads((ROOT/'control-volume-checks.json').read_text())
-    assert bare_volume['all_pass'] and bare_volume['model_sha256']==source_hash
+    adhesive=json.loads((ROOT/'battery-adhesive-checks.json').read_text())
+    assert adhesive['all_pass'] and adhesive['model_sha256']==source_hash
+    assert all(adhesive['unchanged_shapes_difference_mm3'][n]<.001 for n in ('FrontShell','SpeakerCarrier','Knob'))
+    assert bare_volume['all_pass'] and bare_volume['model_sha256']==adhesive['baseline_sha256']
     assert battery_floor['all_pass'] and battery_floor['model_sha256']==bare_volume['baseline_sha256']
     assert all(bare_volume['unchanged_finished_parts_difference_mm3'][n]<.001 for n in ('RearShell','SpeakerCarrier','Knob'))
     assert all(bare_volume['color_face_order_preserved'].values())

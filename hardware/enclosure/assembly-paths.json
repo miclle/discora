@@ -1,6 +1,7 @@
 {
   "units": "mm",
-  "fasteners_and_straps_removed": true,
+  "fasteners_removed": true,
+  "battery_adhesive_released": true,
   "cables_disconnected": true,
   "physical_assembly_test": false,
   "paths": {
@@ -227,7 +228,7 @@
       ],
       "prerequisites": [
         "Front cover removed",
-        "Battery straps and cables removed"
+        "Battery adhesive bond released and cables disconnected"
       ],
       "clashes": []
     },
@@ -305,5 +306,5 @@
   },
   "drive_service_envelope": "Filled maximum 128 x 10.8 x 130 mm box; connector retains modeled housing and strain relief",
   "all_pass": true,
-  "model_sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6"
+  "model_sha256": "baf82e4b8cf14850fa24f275c234a58eb07a738980d71c1076bf7319f7182c9f"
 }

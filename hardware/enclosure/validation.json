@@ -1,7 +1,7 @@
 {
   "date": "2026-11-15",
   "model": "Discora.FCStd",
-  "sha256": "d21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6",
+  "sha256": "baf82e4b8cf14850fa24f275c234a58eb07a738980d71c1076bf7319f7182c9f",
   "version": [
     "1",
     "1",
@@ -334,7 +334,7 @@
     }
   },
   "key_clearances_mm": {
-    "Battery / FrontShell": 0.9999999999999911,
+    "Battery / FrontShell": 0.9999999999999956,
     "Battery / SpeakerCarrier": 4.0,
     "MCUChip / FrontShell": 10.023954536124775,
     "Drive / Perfboard": 1.2000000000000028,
@@ -354,7 +354,7 @@
     "origin_xyz_mm": [
       -56.0,
       6.0,
-      6.0
+      7.5
     ],
     "front_inner_wall_gap_mm": 1.0,
     "rear_inner_wall_gap_mm": 13.700000000000003,
@@ -578,7 +578,7 @@
     "PCB sizes are documented; component heights and connector reservations are provisional.",
     "Three main PLA solids and nominal screw/pilot bores do not validate printed strength or screw fit.",
     "Separate assembly-path report distinguishes continuous conservative sweeps from sampled cover motion.",
-    "Battery leads, straps, connectors, bridge cables and power modules are not validated.",
+    "Battery adhesive retention/release, leads, connectors, bridge cables and power modules are not validated.",
     "Side passages remain untuned; geometric continuity is not acoustic validation."
   ]
 }

@@ -18,7 +18,7 @@ from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parent
 # Dimensions and annotation positions below are reviewed for this CAD revision.
-ANNOTATED_MODEL_SHA256 = 'd21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6'
+ANNOTATED_MODEL_SHA256 = 'baf82e4b8cf14850fa24f275c234a58eb07a738980d71c1076bf7319f7182c9f'
 INK = HexColor('#182c35')
 TEAL = HexColor('#087f82')
 MUTED = HexColor('#536972')
@@ -59,7 +59,11 @@ def main():
     grille_report=json.loads((ROOT/'grille-clearance-checks.json').read_text())
     battery_floor=json.loads((ROOT/'battery-floor-checks.json').read_text())
     bare_volume=json.loads((ROOT/'control-volume-checks.json').read_text())
-    assert bare_volume['all_pass'] and bare_volume['model_sha256']==data['sha256']
+    adhesive=json.loads((ROOT/'battery-adhesive-checks.json').read_text())
+    assert adhesive['all_pass'] and adhesive['model_sha256']==data['sha256']
+    assert all(adhesive['unchanged_shapes_difference_mm3'][n]<.001 for n in ('FrontShell','SpeakerCarrier','Knob'))
+    assert all(adhesive['color_face_order_preserved'].values())
+    assert bare_volume['all_pass'] and bare_volume['model_sha256']==adhesive['baseline_sha256']
     assert battery_floor['all_pass'] and battery_floor['model_sha256']==bare_volume['baseline_sha256']
     assert all(bare_volume['unchanged_finished_parts_difference_mm3'][n]<.001 for n in ('RearShell','SpeakerCarrier','Knob'))
     assert all(bare_volume['color_face_order_preserved'].values())
@@ -86,7 +90,7 @@ def main():
     assert validation['items']==44 and not validation['invalid'] and not validation['clashes']
     assert all(v<.001 for v in validation['mirror_difference_mm3'].values()) and assembly['all_pass']
     assert pcb_volume['model_sha256']==perfboard['baseline_sha256'] and pcb_volume['all_pass']
-    current_volume=json.loads((ROOT/'control-volume-checks.json').read_text())
+    current_volume=json.loads((ROOT/'current-volume-checks.json').read_text())
     assert current_volume['model_sha256']==data['sha256'] and current_volume['all_pass']
     assert mount['model_sha256']==pcb_volume['baseline_sha256'] and mount['all_pass']
     assert rear['model_sha256']==mount['baseline_sha256'] and rear['all_pass']
@@ -97,6 +101,8 @@ def main():
     assert integration['model_sha256']==handle['baseline_sha256']
     def evidence_matches_geometry(report,owners):
         if report['model_sha256']==data['sha256']:return True
+        if any(adhesive['unchanged_shapes_difference_mm3'].get(n,1)>=.001 for n in owners):return False
+        if report['model_sha256']==adhesive['baseline_sha256']:return True
         if any(bare_volume['unchanged_finished_parts_difference_mm3'].get(n,1)>=.001 for n in owners):return False
         if report['model_sha256']==bare_volume['baseline_sha256']:return True
         if any(battery_floor['unchanged_shapes_difference_mm3'].get(n,1)>=.001 for n in owners):return False
@@ -372,9 +378,10 @@ def main():
     dh(31.7,76.7,98,131,'45 喇叭总包络')
     dh(103.9,114.7,156,208,'10.8 光驱最大厚度')
     dv(58,138,26,13,'80 单元高度')
-    dh(32,102,28,18,'70 电池深度')
-    dv(28,48,32,20,'20')
-    text(68,36,'5600 mAh',8,white,'center')
+    battery_z=data['objects']['Battery']['min'][2]+22
+    dh(32,102,battery_z,18,'70 电池深度')
+    dv(battery_z,battery_z+20,32,20,'20')
+    text(68,battery_z+8,'5600 mAh',8,white,'center')
     text(138,253,'主要包络 / 关键净距',12,TEAL)
     table(136,246,272,[
         ('单只喇叭 X × Y × Z','45 × 45 × 80 修正包络；中心 X=±26，Z=76；贴合面 Y=11.7'),
@@ -388,13 +395,13 @@ def main():
         ('主控 PCB / 元件预留','63.39 × 27.94 × 1.6 / 7；排母高8.5，组件最高Z=161.5'),
         ('DAC / 双路降压','DAC 水平装载板；两块 DCE001，载板底 Z=142.8，见第8页'),
         ('OLED PCB 局部尺寸','35.4 × 33.5 × 1.2；四孔 Ø3，孔距 30.4 × 28.5；图纸值'),
-        ('5600 mAh 平排电池','112 × 70 × 20；X=±56，Y=6…76，Z=6…26'),
-        ('电池周围名义净距','电池顶至声腔底 5.5；前 / 后内壁 1 / 13.7；左右挡板各 1'),
+        ('5600 mAh 平排电池','112 × 70 × 20；X=±56，Y=6…76，Z=7.5…27.5'),
+        ('电池周围名义净距','电池顶至声腔底 4；前 / 后内壁 1 / 13.7；左右挡板各 1'),
         ('脚垫中心','X=±55；Y=11 / 70.7；4 个脚垫为一个 CAD 复合对象'),
     ],split=69,height=9.5)
     notes(138,99,[
         '当前模型边界',
-        '电池直接落在原 5 mm 底板上；取消 2 mm 托台，保留左右挡板和 4 个绑带槽。',
+        '电池下预留 1.5 mm 双面胶；保留左右挡板，封闭 4 个绑带孔，底板厚 5 mm。',
         '两块 DCE001 已纳入载板；充电电路未建模，整机电气与实物装配仍未验收。',
         '前 / 后包络深 6 / 39；金属边厚 2 为名义值；振膜轮廓与动态行程未测。',
         '剖图使用实际实体裁切、隐藏线消除；未施加材料剖面线，不能由线型判断材质。',
@@ -447,7 +454,7 @@ def main():
     text(12,127,'PLA 打印：3 主体 + 4 键帽 + 焊线支架 + 旋钮 + OLED 压框 + 光驱压条 = 11 件',11,TEAL)
     printing=json.loads((ROOT/'print'/'manifest.json').read_text())
     assert printing['model_sha256']==data['sha256'] and printing['all_pass']
-    text(12,118,'P2SC / P2S配置 · 0.4喷嘴 / 0.20层高 / 3壁 / 15%填充 / 树状支撑；P3 双声腔背面直接贴板',8.5)
+    text(12,118,'P2SC / P2S配置 · 0.4喷嘴 / P2层高0.16（首层0.20），P1/P3层高0.20 / 3壁 / 15%填充 / 树状支撑',8.5)
     for i,(name,label,pose) in enumerate([
         ('FrontShell','P1 前壳','孔网朝下 / 板内转 90°'),('RearShell','P2 后壳','背面朝下'),
         ('SpeakerCarrier','P3 支架','声腔背面朝下')]):
@@ -456,7 +463,7 @@ def main():
         text(14,106-i*9,f"{label}  ·  {pose}  ·  打印包络 {size} mm  ·  切片估重 {plate['filament_g']:.1f} g（含支撑）",9)
     notes(14,72,[
         '前壳：断电卸4枚背锁螺钉，托住并前移60；按开关、OLED、四键次序拔线后移走，见第9页。',
-        '光驱维护：拆 P3、两螺钉压条和电池；先前移 12，再前移 3 并抬高 9.5，进入接头拆卸位置。',
+        '光驱维护：拆 P3、压条；电池断线并解除粘接后前抽。光驱先前移 12，再前移 3 并抬高 9.5。',
         'SATA 向下脱离、向内取出；光驱再前移 13，侧转 -30°并同步前移 20，最后抽出；安装逆序。',
         '光驱最大包络：抬升 31 姿态、侧转 61 姿态；前壳按 1 mm 抽样，其余直线段连续保守扫掠，实物未验收。',
         '四键双色：0.4 喷嘴 / 0.12 层高；白色 0.6 深；使用双色 3MF。实际色彩、配合与按压行程待测。',

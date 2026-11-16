@@ -1,6 +1,10 @@
 # Discora 正式打印套件
 
-本轮恢复用户已购、尺寸已确认的裸 B50K 带开关电位器，更新 P1 内侧辅助防转槽及引脚、焊点和出线预留。最新洞洞板布局、已打印 P3 的实体和位置、P2、电池落底及整机 94.7 mm 深度保持。只有 P3 已打印；本轮只更新 P1 STL／3MF，其余 10 件 STL、5 盘 3MF 保持。见 [ADR-0051](../../../docs/decisions/0051-bare-b50k-solder-clearance.md)。
+本轮 P2 封闭四个绑带孔，底板补齐至原 5 mm 厚；保留左右挡板，电池下预留 1.5 mm 双面胶。P3 实体和位置、整机 94.7 mm 深度保持。
+
+P2 当前采用 **0.16 mm 层高／首层 0.20 mm／0.4 mm 喷嘴**，预计 **9h 58m 36s、288.18 g**，560 层支撑检查通过。其余打印盘保持原文件。
+
+此前恢复用户已购、尺寸已确认的裸 B50K 带开关电位器，更新 P1 内侧辅助防转槽及引脚、焊点和出线预留。最新洞洞板布局、已打印 P3 的实体和位置、P2、电池落底及整机 94.7 mm 深度保持。只有 P3 已打印；该次只更新 P1 STL／3MF，其余 10 件 STL、5 盘 3MF 保持。见 [ADR-0051](../../../docs/decisions/0051-bare-b50k-solder-clearance.md)。
 
 孔网沿用上一版下沉 1.5 mm 设计，仅两个喇叭投影区减薄至 1.2 mm，其余保留 2.5 mm，无新增背筋。已打印 P3 的实体及打印文件保持，此前整件后移 1.7 mm，P2 加深至 94.7 mm，安装座、出口、光驱和后壁接口同步后移，使振膜名义静态净距达到 3 mm。P1、P2 需要使用本轮配套文件，整机竖直高度和前部操控保持。见 [ADR-0049](../../../docs/decisions/0049-speaker-diaphragm-clearance.md)。
 
@@ -9,7 +13,7 @@
 | 打印盘 | 推荐打开的项目 | 预计耗材 |
 | --- | --- | --- |
 | P1 前壳 | [Discora-P1-FrontShell.3mf](Discora-P1-FrontShell.3mf) | 145.53 g |
-| P2 后壳 | [Discora-P2-RearShell.3mf](Discora-P2-RearShell.3mf) | 290.32 g |
+| P2 后壳 | [Discora-P2-RearShell.3mf](Discora-P2-RearShell.3mf) | 288.18 g |
 | P3 喇叭支架 | [Discora-P3-SpeakerCarrier.3mf](Discora-P3-SpeakerCarrier.3mf) | 181.00 g |
 | 三个压框／支架 | [Discora-Retainers.3mf](Discora-Retainers.3mf) | 6.61 g |
 | 四个橙白双色按键 | [Discora-Keys-Orange-White.3mf](Discora-Keys-Orange-White.3mf) | 7.54 g |

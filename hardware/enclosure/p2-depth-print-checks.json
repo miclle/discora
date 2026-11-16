@@ -1,361 +1,136 @@
 {
-  "model_sha256": "8d96cc25c55ec97fc56fb21443eb47ed24e87a8eb44f0407c64ca7c562e696ee",
-  "stl_sha256": "1109edef328d9d1272fde44e8e04b9052f216f68e825be7337618d160cf76b7d",
-  "gcode_sha256": "6d7367d260324e4d1a835e3f2991f0b980d26ea7b82db8447724b2e03af6a4d1",
-  "layers": 448,
+  "model_sha256": "baf82e4b8cf14850fa24f275c234a58eb07a738980d71c1076bf7319f7182c9f",
+  "stl_sha256": "52c5c1dba145ecda1a26e3f68089af505ad0b08729a14b89338cd6c8220e4381",
+  "gcode_sha256": "12b8b4b709323272f5e68a57f08d5d1bc30cfb001f42bd3b7a751b55cd02306a",
+  "layers": 560,
   "new_islands": [],
   "remaining_spans_after_model_and_support": [
     {
-      "layer": 53,
+      "layer": 66,
       "z": 10.6,
       "feature": "Bridge",
-      "max_free_mm": 123.31599999999999,
-      "maximum_distance_to_backing_mm": 0.200394042969462,
+      "max_free_mm": 123.266,
+      "maximum_distance_to_backing_mm": 0.19836389160226842,
       "a": [
-        66.342,
-        193.566
+        189.633,
+        193.609
       ],
       "b": [
-        189.658,
-        193.566
+        66.367,
+        193.609
       ]
     },
     {
-      "layer": 255,
-      "z": 51.0,
+      "layer": 495,
+      "z": 79.24,
       "feature": "Overhang wall",
-      "max_free_mm": 14.0,
-      "maximum_distance_to_backing_mm": 0.04800000000000182,
+      "max_free_mm": 8.043,
+      "maximum_distance_to_backing_mm": 0.1312084084681631,
       "a": [
-        69.602,
-        36.057
+        64.974,
+        152.185
       ],
       "b": [
-        69.602,
-        50.057
+        48.2,
+        152.185
       ]
     },
     {
-      "layer": 355,
-      "z": 71.0,
+      "layer": 495,
+      "z": 79.24,
       "feature": "Overhang wall",
-      "max_free_mm": 14.0,
-      "maximum_distance_to_backing_mm": 0.04800000000000182,
-      "a": [
-        69.602,
-        36.057
-      ],
-      "b": [
-        69.602,
-        50.057
-      ]
-    },
-    {
-      "layer": 355,
-      "z": 71.0,
-      "feature": "Overhang wall",
-      "max_free_mm": 13.936329418709718,
-      "maximum_distance_to_backing_mm": 0.04800000000000182,
-      "a": [
-        186.398,
-        50.057
-      ],
-      "b": [
-        186.398,
-        36.057
-      ]
-    },
-    {
-      "layer": 255,
-      "z": 51.0,
-      "feature": "Overhang wall",
-      "max_free_mm": 13.242654148362604,
-      "maximum_distance_to_backing_mm": 0.04800000000000182,
-      "a": [
-        186.398,
-        50.057
-      ],
-      "b": [
-        186.398,
-        36.057
-      ]
-    },
-    {
-      "layer": 396,
-      "z": 79.2,
-      "feature": "Overhang wall",
-      "max_free_mm": 7.954930757371699,
-      "maximum_distance_to_backing_mm": 0.14090502929687432,
+      "max_free_mm": 6.808915974934536,
+      "maximum_distance_to_backing_mm": 0.13172023491255,
       "a": [
         207.8,
-        152.168
+        152.185
       ],
       "b": [
-        191.009,
-        152.168
+        191.026,
+        152.185
       ]
     },
     {
-      "layer": 396,
-      "z": 79.2,
-      "feature": "Overhang wall",
-      "max_free_mm": 7.871593795664339,
-      "maximum_distance_to_backing_mm": 0.1409050292968743,
-      "a": [
-        64.991,
-        152.168
-      ],
-      "b": [
-        48.2,
-        152.168
-      ]
-    },
-    {
-      "layer": 84,
-      "z": 16.8,
-      "feature": "Overhang wall",
-      "max_free_mm": 5.594999999999999,
-      "maximum_distance_to_backing_mm": 0.4659540448165024,
-      "a": [
-        68.54,
-        204.292
-      ],
-      "b": [
-        68.54,
-        198.697
-      ]
-    },
-    {
-      "layer": 84,
-      "z": 16.8,
-      "feature": "Overhang wall",
-      "max_free_mm": 4.811000000000007,
-      "maximum_distance_to_backing_mm": 0.07393770971277204,
-      "a": [
-        68.148,
-        203.9
-      ],
-      "b": [
-        68.148,
-        199.089
-      ]
-    },
-    {
-      "layer": 396,
-      "z": 79.2,
+      "layer": 495,
+      "z": 79.24,
       "feature": "Bridge",
-      "max_free_mm": 2.061059503901788,
-      "maximum_distance_to_backing_mm": 0.17108734130859204,
+      "max_free_mm": 3.053190918135428,
+      "maximum_distance_to_backing_mm": 0.16310593702638468,
       "a": [
-        64.658,
-        60.18
+        46.764,
+        60.171
       ],
       "b": [
-        46.786,
-        60.18
+        63.069,
+        60.171
       ]
     },
     {
-      "layer": 396,
-      "z": 79.2,
+      "layer": 105,
+      "z": 16.84,
       "feature": "Bridge",
-      "max_free_mm": 1.9135937956643545,
-      "maximum_distance_to_backing_mm": 0.18197463486333545,
+      "max_free_mm": 2.185363707402047,
+      "maximum_distance_to_backing_mm": 0.1312851390876389,
       "a": [
-        209.214,
-        60.176
+        66.367,
+        197.999
       ],
       "b": [
-        191.342,
-        60.176
+        189.633,
+        197.999
       ]
     },
     {
-      "layer": 85,
-      "z": 17.0,
+      "layer": 495,
+      "z": 79.24,
       "feature": "Bridge",
-      "max_free_mm": 1.6864030237635461,
-      "maximum_distance_to_backing_mm": 0.29313684082032415,
+      "max_free_mm": 2.0233671022434407,
+      "maximum_distance_to_backing_mm": 0.15708734130858915,
       "a": [
-        189.658,
-        197.844
+        192.745,
+        60.166
       ],
       "b": [
-        66.342,
-        197.844
+        209.062,
+        60.166
       ]
     },
     {
-      "layer": 195,
-      "z": 39.0,
+      "layer": 495,
+      "z": 79.24,
       "feature": "Overhang wall",
-      "max_free_mm": 1.0933578538607378,
-      "maximum_distance_to_backing_mm": 0.4486684418776771,
+      "max_free_mm": 1.1629743565396922,
+      "maximum_distance_to_backing_mm": 0.33829664216841043,
       "a": [
-        70.79,
-        50.449
+        49.727,
+        60.633
       ],
       "b": [
-        70.79,
-        36.859
+        64.974,
+        60.633
       ]
     },
     {
-      "layer": 84,
-      "z": 16.8,
+      "layer": 495,
+      "z": 79.24,
       "feature": "Overhang wall",
-      "max_free_mm": 0.9493028475569645,
-      "maximum_distance_to_backing_mm": 0.07713764129226025,
+      "max_free_mm": 0.8865937956643677,
+      "maximum_distance_to_backing_mm": 0.3042713282397032,
       "a": [
-        187.852,
-        199.089
+        207.8,
+        54.685
       ],
       "b": [
-        187.852,
-        203.9
+        191.026,
+        54.685
       ]
     },
     {
-      "layer": 85,
-      "z": 17.0,
+      "layer": 105,
+      "z": 16.84,
       "feature": "Overhang wall",
-      "max_free_mm": 0.9354160198843715,
-      "maximum_distance_to_backing_mm": 0.33975218415750663,
-      "a": [
-        68.95,
-        204.429
-      ],
-      "b": [
-        187.05,
-        204.429
-      ]
-    },
-    {
-      "layer": 355,
-      "z": 71.0,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.925593795664355,
-      "maximum_distance_to_backing_mm": 0.17507525189397957,
-      "a": [
-        188.8,
-        32.668
-      ],
-      "b": [
-        186.2,
-        32.668
-      ]
-    },
-    {
-      "layer": 396,
-      "z": 79.2,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.9185937956643357,
-      "maximum_distance_to_backing_mm": 0.32646425793836176,
-      "a": [
-        64.991,
-        54.668
-      ],
-      "b": [
-        48.2,
-        54.668
-      ]
-    },
-    {
-      "layer": 355,
-      "z": 71.0,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.9105937956643402,
-      "maximum_distance_to_backing_mm": 0.3235676759431492,
-      "a": [
-        67.2,
-        36.449
-      ],
-      "b": [
-        69.21,
-        36.449
-      ]
-    },
-    {
-      "layer": 255,
-      "z": 51.0,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.8602053188062441,
-      "maximum_distance_to_backing_mm": 0.21356659848203857,
-      "a": [
-        188.8,
-        32.678
-      ],
-      "b": [
-        186.2,
-        32.677
-      ]
-    },
-    {
-      "layer": 53,
-      "z": 10.6,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.8561469499028647,
-      "maximum_distance_to_backing_mm": 0.27759063513743926,
-      "a": [
-        66.009,
-        193.916
-      ],
-      "b": [
-        66.009,
-        191.668
-      ]
-    },
-    {
-      "layer": 355,
-      "z": 71.0,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.8505937956643521,
-      "maximum_distance_to_backing_mm": 0.20300109468779412,
-      "a": [
-        69.8,
-        32.668
-      ],
-      "b": [
-        67.2,
-        32.668
-      ]
-    },
-    {
-      "layer": 255,
-      "z": 51.0,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.8305937956643419,
-      "maximum_distance_to_backing_mm": 0.16122002375573175,
-      "a": [
-        67.2,
-        36.057
-      ],
-      "b": [
-        69.602,
-        36.057
-      ]
-    },
-    {
-      "layer": 85,
-      "z": 17.0,
-      "feature": "Bridge",
-      "max_free_mm": 0.8295744773756155,
-      "maximum_distance_to_backing_mm": 0.1898498011151854,
-      "a": [
-        189.658,
-        197.065
-      ],
-      "b": [
-        66.342,
-        197.065
-      ]
-    },
-    {
-      "layer": 85,
-      "z": 17.0,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.822834943938318,
-      "maximum_distance_to_backing_mm": 0.26376596711841876,
+      "max_free_mm": 0.847593795664352,
+      "maximum_distance_to_backing_mm": 0.28114126907196585,
       "a": [
         66.2,
         190.869
@@ -366,603 +141,438 @@
       ]
     },
     {
-      "layer": 53,
+      "layer": 66,
       "z": 10.6,
       "feature": "Overhang wall",
-      "max_free_mm": 0.8017669862274772,
-      "maximum_distance_to_backing_mm": 0.2591213156967456,
+      "max_free_mm": 0.8392239067197806,
+      "maximum_distance_to_backing_mm": 0.2246428758846805,
       "a": [
-        189.991,
-        191.668
+        189.974,
+        191.685
       ],
       "b": [
-        189.991,
-        193.916
+        189.974,
+        193.957
       ]
     },
     {
-      "layer": 85,
-      "z": 17.0,
+      "layer": 495,
+      "z": 79.24,
       "feature": "Bridge",
-      "max_free_mm": 0.7942172087502826,
-      "maximum_distance_to_backing_mm": 0.12822305208741352,
+      "max_free_mm": 0.8206929777932572,
+      "maximum_distance_to_backing_mm": 0.1326959854748557,
       "a": [
-        66.957,
-        200.567
+        62.068,
+        153.301
       ],
       "b": [
-        189.043,
-        200.567
+        46.938,
+        153.301
       ]
     },
     {
-      "layer": 355,
-      "z": 71.0,
+      "layer": 105,
+      "z": 16.84,
       "feature": "Bridge",
-      "max_free_mm": 0.7934251837717918,
-      "maximum_distance_to_backing_mm": 0.20235125119866912,
+      "max_free_mm": 0.8006159949855771,
+      "maximum_distance_to_backing_mm": 0.1325793358258775,
       "a": [
-        71.045,
-        34.929
+        189.476,
+        202.375
       ],
       "b": [
-        65.955,
-        34.928
+        66.525,
+        202.375
       ]
     },
     {
-      "layer": 255,
-      "z": 51.0,
-      "feature": "Bridge",
-      "max_free_mm": 0.7919941959312808,
-      "maximum_distance_to_backing_mm": 0.23380000000000223,
-      "a": [
-        65.955,
-        33.775
-      ],
-      "b": [
-        71.045,
-        33.775
-      ]
-    },
-    {
-      "layer": 255,
-      "z": 51.0,
-      "feature": "Bridge",
-      "max_free_mm": 0.7916991130370432,
-      "maximum_distance_to_backing_mm": 0.23380000000000217,
-      "a": [
-        190.045,
-        34.931
-      ],
-      "b": [
-        184.955,
-        34.93
-      ]
-    },
-    {
-      "layer": 355,
-      "z": 71.0,
+      "layer": 105,
+      "z": 16.84,
       "feature": "Overhang wall",
-      "max_free_mm": 0.7886386490470016,
-      "maximum_distance_to_backing_mm": 0.44000000000001194,
+      "max_free_mm": 0.7927353935332349,
+      "maximum_distance_to_backing_mm": 0.13196305804406067,
       "a": [
-        69.21,
-        36.449
+        68.222,
+        203.933
       ],
       "b": [
-        69.21,
-        50.449
+        187.778,
+        203.933
       ]
     },
     {
-      "layer": 396,
-      "z": 79.2,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.7775937956643304,
-      "maximum_distance_to_backing_mm": 0.2543678160919569,
-      "a": [
-        207.8,
-        53.869
-      ],
-      "b": [
-        190.21,
-        53.869
-      ]
-    },
-    {
-      "layer": 396,
-      "z": 79.2,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.7368471639162522,
-      "maximum_distance_to_backing_mm": 0.1923380854453405,
-      "a": [
-        190.21,
-        61.449
-      ],
-      "b": [
-        205.376,
-        61.449
-      ]
-    },
-    {
-      "layer": 53,
-      "z": 10.6,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.7232952199934743,
-      "maximum_distance_to_backing_mm": 0.5112608726654269,
-      "a": [
-        65.21,
-        190.869
-      ],
-      "b": [
-        190.79,
-        190.869
-      ]
-    },
-    {
-      "layer": 53,
-      "z": 10.6,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.722769187106195,
-      "maximum_distance_to_backing_mm": 0.5112608726654269,
-      "a": [
-        65.21,
-        193.916
-      ],
-      "b": [
-        65.21,
-        190.869
-      ]
-    },
-    {
-      "layer": 85,
-      "z": 17.0,
+      "layer": 495,
+      "z": 79.24,
       "feature": "Bridge",
-      "max_free_mm": 0.7198724034492443,
-      "maximum_distance_to_backing_mm": 0.22850181590751228,
+      "max_free_mm": 0.7806853483987197,
+      "maximum_distance_to_backing_mm": 0.12543084593173742,
       "a": [
-        66.342,
-        192.786
+        209.062,
+        156.517
       ],
       "b": [
-        189.658,
-        192.786
+        193.467,
+        156.517
       ]
     },
     {
-      "layer": 355,
-      "z": 71.0,
-      "feature": "Bridge",
-      "max_free_mm": 0.7163547534947006,
-      "maximum_distance_to_backing_mm": 0.23380000000000226,
-      "a": [
-        184.955,
-        34.93
-      ],
-      "b": [
-        190.045,
-        34.931
-      ]
-    },
-    {
-      "layer": 85,
-      "z": 17.0,
-      "feature": "Bridge",
-      "max_free_mm": 0.7140471648049811,
-      "maximum_distance_to_backing_mm": 0.14710687519913945,
-      "a": [
-        189.658,
-        199.4
-      ],
-      "b": [
-        66.342,
-        199.4
-      ]
-    },
-    {
-      "layer": 195,
-      "z": 39.0,
+      "layer": 243,
+      "z": 38.92,
       "feature": "Overhang wall",
-      "max_free_mm": 0.7010489492113976,
-      "maximum_distance_to_backing_mm": 0.25617964900090584,
+      "max_free_mm": 0.7776811369729444,
+      "maximum_distance_to_backing_mm": 0.2557589830996392,
       "a": [
-        70.398,
-        50.057
-      ],
-      "b": [
-        70.398,
-        36.859
-      ]
-    },
-    {
-      "layer": 396,
-      "z": 79.2,
-      "feature": "Bridge",
-      "max_free_mm": 0.6896914519143351,
-      "maximum_distance_to_backing_mm": 0.17161570194848644,
-      "a": [
-        54.655,
-        57.378
-      ],
-      "b": [
-        61.669,
-        57.378
-      ]
-    },
-    {
-      "layer": 396,
-      "z": 79.2,
-      "feature": "Bridge",
-      "max_free_mm": 0.6876914519143185,
-      "maximum_distance_to_backing_mm": 0.17886226624388615,
-      "a": [
-        46.786,
-        152.884
-      ],
-      "b": [
-        62.477,
-        152.884
-      ]
-    },
-    {
-      "layer": 85,
-      "z": 17.0,
-      "feature": "Bridge",
-      "max_free_mm": 0.6815937956643552,
-      "maximum_distance_to_backing_mm": 0.20450742376024694,
-      "a": [
-        189.658,
-        194.731
-      ],
-      "b": [
-        66.342,
-        194.731
-      ]
-    },
-    {
-      "layer": 255,
-      "z": 51.0,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.6605184671997932,
-      "maximum_distance_to_backing_mm": 0.4399999999999977,
-      "a": [
-        186.79,
-        50.449
-      ],
-      "b": [
-        186.79,
-        36.449
-      ]
-    },
-    {
-      "layer": 53,
-      "z": 10.6,
-      "feature": "Bridge",
-      "max_free_mm": 0.6604056571210606,
-      "maximum_distance_to_backing_mm": 0.26614968699027913,
-      "a": [
-        189.658,
-        193.176
-      ],
-      "b": [
-        66.342,
-        193.176
-      ]
-    },
-    {
-      "layer": 85,
-      "z": 17.0,
-      "feature": "Bridge",
-      "max_free_mm": 0.6492172087502723,
-      "maximum_distance_to_backing_mm": 0.12838997565544932,
-      "a": [
-        66.957,
-        202.902
-      ],
-      "b": [
-        189.043,
-        202.902
-      ]
-    },
-    {
-      "layer": 195,
-      "z": 39.0,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.6465937956643586,
-      "maximum_distance_to_backing_mm": 0.45721085758741475,
-      "a": [
-        69.21,
-        36.859
-      ],
-      "b": [
-        69.21,
-        50.449
-      ]
-    },
-    {
-      "layer": 195,
-      "z": 39.0,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.6465937956643586,
-      "maximum_distance_to_backing_mm": 0.45721085758741475,
-      "a": [
-        69.21,
+        70.79,
         50.449
       ],
       "b": [
         70.79,
-        50.449
+        36.859
       ]
     },
     {
-      "layer": 396,
-      "z": 79.2,
+      "layer": 105,
+      "z": 16.84,
       "feature": "Bridge",
-      "max_free_mm": 0.6368222226551836,
-      "maximum_distance_to_backing_mm": 0.21802821330491665,
+      "max_free_mm": 0.7715937956643586,
+      "maximum_distance_to_backing_mm": 0.21710714285714514,
       "a": [
-        54.655,
-        155.314
+        189.633,
+        192.828
       ],
       "b": [
-        61.746,
-        155.314
+        66.367,
+        192.828
       ]
     },
     {
-      "layer": 396,
-      "z": 79.2,
+      "layer": 495,
+      "z": 79.24,
       "feature": "Bridge",
-      "max_free_mm": 0.6353039236057327,
-      "maximum_distance_to_backing_mm": 0.19812693296067077,
+      "max_free_mm": 0.7506929777932427,
+      "maximum_distance_to_backing_mm": 0.12801709568863717,
       "a": [
-        192.996,
-        59.776
+        61.694,
+        58.18
       ],
       "b": [
-        209.045,
-        59.776
+        54.778,
+        58.18
       ]
     },
     {
-      "layer": 396,
-      "z": 79.2,
-      "feature": "Bridge",
-      "max_free_mm": 0.6315784172995862,
-      "maximum_distance_to_backing_mm": 0.1908752854744244,
-      "a": [
-        46.955,
-        59.779
-      ],
-      "b": [
-        63.013,
-        59.779
-      ]
-    },
-    {
-      "layer": 85,
-      "z": 17.0,
-      "feature": "Bridge",
-      "max_free_mm": 0.6153637564835321,
-      "maximum_distance_to_backing_mm": 0.22147565332601205,
-      "a": [
-        66.342,
-        197.454
-      ],
-      "b": [
-        189.658,
-        197.454
-      ]
-    },
-    {
-      "layer": 396,
-      "z": 79.2,
-      "feature": "Bridge",
-      "max_free_mm": 0.6096914519143581,
-      "maximum_distance_to_backing_mm": 0.19840977567313073,
-      "a": [
-        193.406,
-        156.529
-      ],
-      "b": [
-        209.045,
-        156.529
-      ]
-    },
-    {
-      "layer": 85,
-      "z": 17.0,
-      "feature": "Bridge",
-      "max_free_mm": 0.5720807774734027,
-      "maximum_distance_to_backing_mm": 0.19067528252998142,
-      "a": [
-        66.342,
-        195.12
-      ],
-      "b": [
-        189.658,
-        195.12
-      ]
-    },
-    {
-      "layer": 396,
-      "z": 79.2,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.5699426431737962,
-      "maximum_distance_to_backing_mm": 0.14519564702979193,
-      "a": [
-        49.723,
-        60.65
-      ],
-      "b": [
-        64.991,
-        60.65
-      ]
-    },
-    {
-      "layer": 396,
-      "z": 79.2,
-      "feature": "Bridge",
-      "max_free_mm": 0.5588178208608667,
-      "maximum_distance_to_backing_mm": 0.224383370535719,
-      "a": [
-        194.27,
-        154.099
-      ],
-      "b": [
-        201.345,
-        154.099
-      ]
-    },
-    {
-      "layer": 255,
-      "z": 51.0,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.5460807906949299,
-      "maximum_distance_to_backing_mm": 0.25200000000000955,
-      "a": [
-        67.2,
-        36.449
-      ],
-      "b": [
-        69.21,
-        36.449
-      ]
-    },
-    {
-      "layer": 85,
-      "z": 17.0,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.5437391855892315,
-      "maximum_distance_to_backing_mm": 0.2042802132490178,
-      "a": [
-        68.95,
-        204.037
-      ],
-      "b": [
-        187.05,
-        204.037
-      ]
-    },
-    {
-      "layer": 85,
-      "z": 17.0,
-      "feature": "Bridge",
-      "max_free_mm": 0.5365937956643734,
-      "maximum_distance_to_backing_mm": 0.1921883116883407,
-      "a": [
-        189.658,
-        192.396
-      ],
-      "b": [
-        66.342,
-        192.396
-      ]
-    },
-    {
-      "layer": 396,
-      "z": 79.2,
-      "feature": "Bridge",
-      "max_free_mm": 0.5336914519143647,
-      "maximum_distance_to_backing_mm": 0.21152622767857565,
-      "a": [
-        194.32,
-        57.376
-      ],
-      "b": [
-        201.345,
-        57.376
-      ]
-    },
-    {
-      "layer": 53,
+      "layer": 66,
       "z": 10.6,
       "feature": "Overhang wall",
-      "max_free_mm": 0.5280782123060419,
-      "maximum_distance_to_backing_mm": 0.12166704917716432,
+      "max_free_mm": 0.7354227292126865,
+      "maximum_distance_to_backing_mm": 0.5198341554812014,
+      "a": [
+        65.21,
+        190.869
+      ],
+      "b": [
+        190.79,
+        190.869
+      ]
+    },
+    {
+      "layer": 66,
+      "z": 10.6,
+      "feature": "Overhang wall",
+      "max_free_mm": 0.7348905854144334,
+      "maximum_distance_to_backing_mm": 0.5198341554812014,
+      "a": [
+        65.21,
+        193.957
+      ],
+      "b": [
+        65.21,
+        190.869
+      ]
+    },
+    {
+      "layer": 495,
+      "z": 79.24,
+      "feature": "Overhang wall",
+      "max_free_mm": 0.7315937956643381,
+      "maximum_distance_to_backing_mm": 0.2543678160919498,
+      "a": [
+        65.79,
+        151.369
+      ],
+      "b": [
+        48.2,
+        151.369
+      ]
+    },
+    {
+      "layer": 495,
+      "z": 79.24,
+      "feature": "Overhang wall",
+      "max_free_mm": 0.7305937956643405,
+      "maximum_distance_to_backing_mm": 0.254192771084341,
+      "a": [
+        48.2,
+        157.633
+      ],
+      "b": [
+        64.974,
+        157.633
+      ]
+    },
+    {
+      "layer": 105,
+      "z": 16.84,
+      "feature": "Bridge",
+      "max_free_mm": 0.6996753990014781,
+      "maximum_distance_to_backing_mm": 0.2133004645668877,
+      "a": [
+        189.633,
+        196.01
+      ],
+      "b": [
+        66.367,
+        196.01
+      ]
+    },
+    {
+      "layer": 495,
+      "z": 79.24,
+      "feature": "Overhang wall",
+      "max_free_mm": 0.6920684943201536,
+      "maximum_distance_to_backing_mm": 0.2543678160919569,
+      "a": [
+        190.21,
+        158.449
+      ],
+      "b": [
+        207.8,
+        158.449
+      ]
+    },
+    {
+      "layer": 105,
+      "z": 16.84,
+      "feature": "Bridge",
+      "max_free_mm": 0.652549777834821,
+      "maximum_distance_to_backing_mm": 0.21710714285714514,
+      "a": [
+        189.633,
+        195.214
+      ],
+      "b": [
+        66.367,
+        195.214
+      ]
+    },
+    {
+      "layer": 105,
+      "z": 16.84,
+      "feature": "Bridge",
+      "max_free_mm": 0.64175625885089,
+      "maximum_distance_to_backing_mm": 0.20077479453719727,
+      "a": [
+        189.476,
+        201.579
+      ],
+      "b": [
+        66.526,
+        201.579
+      ]
+    },
+    {
+      "layer": 495,
+      "z": 79.24,
+      "feature": "Bridge",
+      "max_free_mm": 0.6346929777932502,
+      "maximum_distance_to_backing_mm": 0.1899453359750609,
+      "a": [
+        62.541,
+        55.791
+      ],
+      "b": [
+        46.938,
+        55.791
+      ]
+    },
+    {
+      "layer": 66,
+      "z": 10.6,
+      "feature": "Bridge",
+      "max_free_mm": 0.6003829768858111,
+      "maximum_distance_to_backing_mm": 0.24483755191438186,
+      "a": [
+        66.367,
+        193.215
+      ],
+      "b": [
+        189.633,
+        193.215
+      ]
+    },
+    {
+      "layer": 495,
+      "z": 79.24,
+      "feature": "Overhang wall",
+      "max_free_mm": 0.5956427160516142,
+      "maximum_distance_to_backing_mm": 0.2013384772033725,
+      "a": [
+        50.624,
+        61.449
+      ],
+      "b": [
+        65.79,
+        61.449
+      ]
+    },
+    {
+      "layer": 495,
+      "z": 79.24,
+      "feature": "Bridge",
+      "max_free_mm": 0.5926853483987315,
+      "maximum_distance_to_backing_mm": 0.2454531738803115,
+      "a": [
+        201.222,
+        57.381
+      ],
+      "b": [
+        194.356,
+        57.381
+      ]
+    },
+    {
+      "layer": 105,
+      "z": 16.84,
+      "feature": "Bridge",
+      "max_free_mm": 0.5864262941630329,
+      "maximum_distance_to_backing_mm": 0.13282563544473816,
+      "a": [
+        189.633,
+        198.397
+      ],
+      "b": [
+        66.367,
+        198.397
+      ]
+    },
+    {
+      "layer": 105,
+      "z": 16.84,
+      "feature": "Bridge",
+      "max_free_mm": 0.5815937956643609,
+      "maximum_distance_to_backing_mm": 0.21507009653465917,
+      "a": [
+        189.633,
+        193.623
+      ],
+      "b": [
+        66.367,
+        193.623
+      ]
+    },
+    {
+      "layer": 105,
+      "z": 16.84,
+      "feature": "Bridge",
+      "max_free_mm": 0.541587597729773,
+      "maximum_distance_to_backing_mm": 0.21710714285714514,
+      "a": [
+        189.633,
+        197.601
+      ],
+      "b": [
+        66.367,
+        197.601
+      ]
+    },
+    {
+      "layer": 495,
+      "z": 79.24,
+      "feature": "Overhang wall",
+      "max_free_mm": 0.5361730691745876,
+      "maximum_distance_to_backing_mm": 0.19940717994712337,
+      "a": [
+        65.79,
+        53.869
+      ],
+      "b": [
+        48.2,
+        53.869
+      ]
+    },
+    {
+      "layer": 105,
+      "z": 16.84,
+      "feature": "Bridge",
+      "max_free_mm": 0.5241125844766259,
+      "maximum_distance_to_backing_mm": 0.2017990716744189,
+      "a": [
+        66.367,
+        199.59
+      ],
+      "b": [
+        189.633,
+        199.59
+      ]
+    },
+    {
+      "layer": 105,
+      "z": 16.84,
+      "feature": "Bridge",
+      "max_free_mm": 0.522747022038601,
+      "maximum_distance_to_backing_mm": 0.19628833026941137,
+      "a": [
+        189.633,
+        199.192
+      ],
+      "b": [
+        66.367,
+        199.192
+      ]
+    },
+    {
+      "layer": 66,
+      "z": 10.6,
+      "feature": "Overhang wall",
+      "max_free_mm": 0.5178351564460684,
+      "maximum_distance_to_backing_mm": 0.13946187169140123,
       "a": [
         190.79,
         190.869
       ],
       "b": [
         190.79,
-        193.916
+        193.957
       ]
     },
     {
-      "layer": 396,
-      "z": 79.2,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.520080790694891,
-      "maximum_distance_to_backing_mm": 0.17599999999998772,
+      "layer": 495,
+      "z": 79.24,
+      "feature": "Bridge",
+      "max_free_mm": 0.510792523608238,
+      "maximum_distance_to_backing_mm": 0.14172910887416598,
       "a": [
-        207.8,
-        151.369
+        46.938,
+        156.115
       ],
       "b": [
-        190.21,
-        151.369
+        62.129,
+        156.115
       ]
     },
     {
-      "layer": 355,
-      "z": 71.0,
+      "layer": 105,
+      "z": 16.84,
       "feature": "Overhang wall",
-      "max_free_mm": 0.5185937956643443,
-      "maximum_distance_to_backing_mm": 0.18968879203849343,
+      "max_free_mm": 0.5038458969399784,
+      "maximum_distance_to_backing_mm": 0.2504875554155583,
       "a": [
-        67.2,
-        36.057
+        68.221,
+        204.333
       ],
       "b": [
-        69.602,
-        36.057
-      ]
-    },
-    {
-      "layer": 355,
-      "z": 71.0,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.5185937956643443,
-      "maximum_distance_to_backing_mm": 0.18992449429889677,
-      "a": [
-        188.8,
-        32.261
-      ],
-      "b": [
-        186.2,
-        32.261
-      ]
-    },
-    {
-      "layer": 396,
-      "z": 79.2,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.5115937956643393,
-      "maximum_distance_to_backing_mm": 0.1816804611205794,
-      "a": [
-        65.398,
-        54.261
-      ],
-      "b": [
-        48.2,
-        54.261
-      ]
-    },
-    {
-      "layer": 396,
-      "z": 79.2,
-      "feature": "Overhang wall",
-      "max_free_mm": 0.5085937956643534,
-      "maximum_distance_to_backing_mm": 0.19097005665187625,
-      "a": [
-        48.2,
-        158.449
-      ],
-      "b": [
-        65.79,
-        158.449
+        187.778,
+        204.333
       ]
     }
   ],
@@ -1017,7 +627,19 @@
       47,
       48,
       49,
-      50
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62
     ],
     "TypeC": []
   },
@@ -1031,5 +653,34 @@
     "lateral_edge_allowance_mm": 0.35,
     "scope": "Screens local unsupported width; long paths alongside a backed edge are not their full length in bridging span. Physical print quality and removal remain unverified."
   },
-  "all_pass": true
+  "layer_height_mm": 0.16,
+  "first_layer_height_mm": 0.2,
+  "nozzle_mm": 0.4,
+  "project_sha256": "93e1892f8739de531fe8c1729edc8d76e2d762bc654dfff98ad5bc6a7324a947",
+  "all_layer_sections_checked": 560,
+  "all_pass": true,
+  "visual_review_layers": [
+    1,
+    62,
+    66,
+    105,
+    118,
+    119,
+    243,
+    266,
+    267,
+    316,
+    317,
+    318,
+    366,
+    392,
+    393,
+    417,
+    442,
+    443,
+    495,
+    500,
+    560
+  ],
+  "visual_review": "Actual G-code paths and preceding mesh sections inspected, including all four former strap-slot endpoints; supports accessible from open shell and side mouths. Physical removal unverified."
 }

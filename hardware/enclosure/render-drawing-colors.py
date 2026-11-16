@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'drawings'
-MODEL_SHA256 = 'd21d9347354e0f042e887acc848df113e3cc1ecc6ddfe9bcc1dcc45fd79ccee6'
+MODEL_SHA256 = 'baf82e4b8cf14850fa24f275c234a58eb07a738980d71c1076bf7319f7182c9f'
 
 
 def palette_from_build():
@@ -168,7 +168,11 @@ def main():
     grille_report=json.loads((ROOT/'grille-clearance-checks.json').read_text())
     battery_floor=json.loads((ROOT/'battery-floor-checks.json').read_text())
     bare_volume=json.loads((ROOT/'control-volume-checks.json').read_text())
-    assert bare_volume['all_pass'] and bare_volume['model_sha256']==MODEL_SHA256
+    adhesive=json.loads((ROOT/'battery-adhesive-checks.json').read_text())
+    assert adhesive['all_pass'] and adhesive['model_sha256']==MODEL_SHA256
+    assert all(adhesive['unchanged_shapes_difference_mm3'][n]<.001 for n in ('FrontShell','SpeakerCarrier','Knob'))
+    assert all(adhesive['color_face_order_preserved'].values())
+    assert bare_volume['all_pass'] and bare_volume['model_sha256']==adhesive['baseline_sha256']
     assert battery_floor['all_pass'] and battery_floor['model_sha256']==bare_volume['baseline_sha256']
     assert all(bare_volume['unchanged_finished_parts_difference_mm3'][n]<.001 for n in ('RearShell','SpeakerCarrier','Knob'))
     assert all(bare_volume['color_face_order_preserved'].values())
