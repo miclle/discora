@@ -78,4 +78,4 @@ CAD SHA-256：`39c745a443f341767aa4a219102fdb1477acd508da073d469f57701f85173ab2`
    pdftoppm -scale-to 1800 -png hardware/enclosure/drawings/Discora-V4-drawing-book-color.pdf tmp/drawings/color-page
    ```
 
-出图脚本校验 FCStd、建模源、几何数据、当前检查和历史衔接。模型变化时必须重新核对标注及 `ANNOTATED_MODEL_SHA256`，不能仅替换摘要绕过检查。check-drawing-baseline.py 用于 ADR-0046 历史模型的图册衔接；复现时应检出该阶段代码和模型，并使用其真实保存基线（SHA-256 `95e0139136c838f9f605c6a08c3a86ba0b29bcd2245afc5258f446aa17f6b51d`）运行 `check-drawing-baseline.py --baseline <文件>`，不要以当前模型替代历史基线。
+出图脚本校验 FCStd、建模源、几何数据、当前检查和历史衔接。模型变化时必须重新核对标注及 `ANNOTATED_MODEL_SHA256`，不能仅替换摘要绕过检查。check-drawing-baseline.py 用于 ADR-0046 历史模型的图册衔接；复现时须取得该阶段代码和模型，并使用其真实保存基线（SHA-256 `95e0139136c838f9f605c6a08c3a86ba0b29bcd2245afc5258f446aa17f6b51d`）运行 `check-drawing-baseline.py --baseline <文件>`。生成文件历史清理后，旧模型须从摘要匹配的本地证据或独立恢复的重写前 bundle 取得，不能假定检出旧提交就包含模型；见[贡献约定](../CONTRIBUTING.md#git-中的生成文件历史)。不要以当前模型替代历史基线。

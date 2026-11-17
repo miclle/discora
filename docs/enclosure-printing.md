@@ -96,4 +96,4 @@ python3 hardware/enclosure/slice-dual-color-keys.py --meshes tmp/dual-color-keys
 python3 hardware/enclosure/slice-dual-color-knob.py --meshes tmp/dual-color-knob --output tmp/dual-color-knob/checks.json
 ```
 
-历史光驱适配比较仍可从 Git 的 `0c3a117:hardware/enclosure/Discora.FCStd` 恢复当时基准，其 SHA-256 为 `e507a10f55fc1f1f7340c7df5203a91666335190cf97bc31325e94052f30bc4b`。历史比较不得使用当前模型冒充调整前基准；日常复查输出到 `tmp/`，保留已有历史证据。
+历史光驱适配比较的基准 SHA-256 为 `e507a10f55fc1f1f7340c7df5203a91666335190cf97bc31325e94052f30bc4b`。生成文件历史清理后，当前 Git 不再保证包含旧 `0c3a117:hardware/enclosure/Discora.FCStd`；复查须使用摘要匹配的保留基线，或在独立目录恢复重写前 bundle 后提取。备份与恢复边界见[贡献约定](../CONTRIBUTING.md#git-中的生成文件历史)。历史比较不得使用当前模型冒充调整前基准；日常复查输出到 `tmp/`，保留已有历史证据。
