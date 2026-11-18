@@ -1,7 +1,7 @@
 {
   "model": "../Discora.FCStd",
   "model_sha256": "39c745a443f341767aa4a219102fdb1477acd508da073d469f57701f85173ab2",
-  "release": "ADR-0052 stock screws; printed P3 preserved",
+  "release": "ADR-0052 geometry; P1 0.16 mm orange PEI; sequential controls and P2 combined alternatives",
   "slicer_version": "02.09.01.70",
   "profile_names": {
     "machine": "Bambu Lab P2S 0.4 nozzle",
@@ -275,8 +275,8 @@
         "FrontShell"
       ],
       "exit_code": 0,
-      "gcode_sha256": "90664fed200981cd9cccb20728be4b4fcc317d1cabab9f3b8fa65c52c20edb0c",
-      "project_sha256": "b5d8bf8855328623db3694c477cb088b30887dbe8d406bd27c9c9892f6756fe6",
+      "gcode_sha256": "84ffd0ca3a2c3c902d09122ed03df56e4e2c46b47381ea710462417c6ee1ea51",
+      "project_sha256": "28d7cbe2fe88d4f1151ab7b83dadbb370b888b779cf3456ece52bb2f3a96257f",
       "support_settings": {
         "enable_support": "1",
         "support_type": "tree(auto)",
@@ -285,18 +285,21 @@
         "support_threshold_angle": "30",
         "support_top_z_distance": "0.2"
       },
-      "total_estimated_time": "11h 45m 30s",
-      "filament_g": 147.36,
-      "layers": 245,
+      "total_estimated_time": "14h 21m 45s",
+      "filament_g": 177.39,
+      "layers": 306,
       "file": "Discora-P1-FrontShell.3mf",
-      "layer_height_mm": 0.2,
+      "layer_height_mm": 0.16,
       "first_layer_height_mm": 0.2,
       "filament_colours": [
-        "#00AE42"
+        "#FF671F"
       ],
       "filament_g_by_material": [
-        147.36
-      ]
+        177.39
+      ],
+      "plate_type": "Textured PEI Plate",
+      "bed_temperature_c": 55,
+      "filament_profile": "Bambu PLA Lite @BBL P2S 0.4 nozzle"
     },
     "RearShell": {
       "parts": [
@@ -792,7 +795,7 @@
       "reused_audited_slice": true
     }
   },
-  "total_filament_g": 643.86,
+  "total_filament_g": 673.89,
   "evidence": {
     "p2": "../p2-depth-print-checks.json",
     "p3": "../p3-terminal-mouth-checks.json",
@@ -814,7 +817,9 @@
     "stock_slices": "../stock-print-checks.json",
     "stock_front_support": "../stock-front-print-checks.json",
     "retainer_support": "../retainer-print-checks.json",
-    "stock_gui": "../stock-gui-checks.json"
+    "stock_gui": "../stock-gui-checks.json",
+    "front_pei_print": "../front-pei-print-checks.json",
+    "remaining_prints": "../remaining-print-checks.json"
   },
   "all_pass": true,
   "printer_contacted": false,
@@ -840,5 +845,74 @@
     "Discora-Knob-Black-White.3mf": "4bd33a8d3822c27018d22b2556faac42867f3ff0f3510ca7b5f55814a0fd956e"
   },
   "physical_printed_piece_count": 15,
-  "stl_file_count": 12
+  "stl_file_count": 12,
+  "alternative_plates": {
+    "ControlsSequential": {
+      "file": "Discora-Controls-Sequential.3mf",
+      "project_sha256": "69284190304192b7390966e1ca8d7f831ff1c9a7361baf4e97af0412952861b7",
+      "gcode_sha256": "2260524dfbf38ddf9ef24f3f4932068a586ef7133f959d5ec38c0836dcdb1883",
+      "parts": [
+        "PlayPauseKey",
+        "EjectKey",
+        "PrevKey",
+        "NextKey",
+        "Knob"
+      ],
+      "replaces_plates": [
+        "Keys",
+        "Knob"
+      ],
+      "physical_quantity": 5,
+      "print_sequence": "by object",
+      "object_order": [
+        "Knob",
+        "FourKeys"
+      ],
+      "layer_height_mm": 0.12,
+      "first_layer_height_mm": 0.12,
+      "plate_type": "Textured PEI Plate",
+      "bed_temperature_c": 55,
+      "total_estimated_time": "1h 0m 26s",
+      "filament_g": 13.13,
+      "filament_changes": 11,
+      "evidence": "../remaining-print-checks.json"
+    },
+    "P2Combined": {
+      "file": "Discora-P2-Combined.3mf",
+      "project_sha256": "c0a271f916fddb454480fee1b5b6ac818089839506f102854efba42fbd36c5fd",
+      "gcode_sha256": "2b34a3baf18bfbed9d321488fe6ad4d395cce6ad62ef8f5010fe821badffed59",
+      "replaces_plates": [
+        "RearShell",
+        "SmallParts"
+      ],
+      "physical_quantity": 8,
+      "print_sequence": "by layer",
+      "layer_height_mm": 0.16,
+      "first_layer_height_mm": 0.2,
+      "plate_type": "Textured PEI Plate",
+      "bed_temperature_c": 55,
+      "total_estimated_time": "10h 30m 46s",
+      "filament_g": 298.24,
+      "evidence": "../p2-combined-print-checks.json"
+    }
+  },
+  "user_print_status": {
+    "confirmed_printed": [
+      "SpeakerCarrier",
+      "RearShell",
+      "ButtonRetainer",
+      "DisplayRetainer",
+      "DriveRetainer",
+      "CarrierWashers"
+    ],
+    "remaining": [
+      "FrontShell",
+      "PlayPauseKey",
+      "EjectKey",
+      "PrevKey",
+      "NextKey",
+      "Knob"
+    ],
+    "note": "User confirmed P3 and the 8-piece P2 combined plate printed. This does not assert assembly/support-removal acceptance."
+  }
 }

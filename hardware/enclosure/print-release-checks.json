@@ -11,7 +11,7 @@
     "Discora-Knob-Black-White.3mf": "4bd33a8d3822c27018d22b2556faac42867f3ff0f3510ca7b5f55814a0fd956e"
   },
   "model_sha256": "39c745a443f341767aa4a219102fdb1477acd508da073d469f57701f85173ab2",
-  "manifest_sha256": "4bafecfc26c5953cdfaceac9cf2636e39a3d69aed6666d772ff12e91d902bf35",
+  "manifest_sha256": "f450e572f2cabd473bf9cd2936722eeb3f5b2b2bd2b3b337eb31a039a3b2f429",
   "meshes": {
     "FrontShell": {
       "closed": true,
@@ -88,8 +88,8 @@
   },
   "plates": {
     "FrontShell": {
-      "layers": 245,
-      "extrusion_moves": 2255203,
+      "layers": 306,
+      "extrusion_moves": 2976518,
       "mesh_repairs": 0,
       "settings_persisted": true,
       "archive_valid": true
@@ -128,6 +128,16 @@
       "mesh_repairs": 0,
       "settings_persisted": true,
       "archive_valid": true
+    }
+  },
+  "alternatives": {
+    "ControlsSequential": {
+      "archive_valid": true,
+      "evidence_bound_to_project": true
+    },
+    "P2Combined": {
+      "archive_valid": true,
+      "evidence_bound_to_project": true
     }
   },
   "all_pass": true,

@@ -1,27 +1,48 @@
 # 正式打印文件与装配
 
+## 剩余两盘：P1 与逐件操控件
+
+用户已确认 **P3 和 P2 整合盘的 8 件零件打印完成**。剩余 6 件使用下列两盘，均为 **P2S、0.4 mm 喷嘴、纹理 PEI 板，首层与后续层热床 55°C**：
+
+| 打印盘 | 正式 3MF | 层高／首层 | 配色 | 预计时间／耗材 |
+| --- | --- | --- | --- | --- |
+| P1 前壳 | [Discora-P1-FrontShell.3mf](../hardware/enclosure/print/Discora-P1-FrontShell.3mf) | 0.16／0.20 mm | 橙色 | 14h 21m 45s／177.39 g |
+| 旋钮＋四键组 | [Discora-Controls-Sequential.3mf](../hardware/enclosure/print/Discora-Controls-Sequential.3mf) | 0.12／0.12 mm | 黑白旋钮、橙白按键 | 1h 0m 26s／13.13 g |
+
+两盘合计约 **15h 22m 11s、190.52 g**。预设采用橙／白 Bambu PLA Lite、黑 Bambu PLA Basic；AMS 按实际槽位对应橙、白、黑。P1 不换色；操控件盘共 11 次换色。小件盘**先打印旋钮，再打印四键组**，四键在同一组内按层一起打印；这只是切片分组，仍得到四个独立按键。保持保存的摆放、分组和“逐件打印”顺序，不要自动重排。
+
+P1 共 306 层，小件盘为旋钮 116 层＋四键组 60 层，已核对保存网格、孔网支撑、五处白色标记和实际低位轨迹。已完成旋钮及其底边到第二组低位轨迹约 119.8 mm，超过 72 mm 打印头包络约 47.8 mm。旋钮轴孔顶面保留原约 5.3 mm 的双端短桥接，不添加孔内支撑。P1 支撑从孔网正面开放侧清理；实物表面质量、支撑拆除和装配仍待确认。
+
+操控件盘替代下方的独立按键盘和独立旋钮盘，**不要重复打印**。CAD、零件几何及全部 STL 保持不变。
+
+[两盘读回与逐层检查](../hardware/enclosure/remaining-print-checks.json) · [P1 关键层](../hardware/enclosure/remaining-front-toolpaths.png) · [逐件顺序与实际配色走线](../hardware/enclosure/remaining-controls-toolpaths.png)
+
+复现：用 FreeCAD Python 执行 `slice-remaining-prints.py --work <工作目录>`，随后执行 `check-remaining-prints.py --work <工作目录>`；脚本位于 `hardware/enclosure/`，不发送打印任务。
+
+## 配套设计背景
+
 本轮按现有螺丝更新 P1、P2、四键压板、OLED 压框和光驱压条，新增 4 片 P3 平垫圈。已打印 P3 及其喇叭、整机 94.7 mm 深度、3 mm 振膜静态净距、电池下 1.5 mm 双面胶和封闭底板保持。见 [ADR-0052](decisions/0052-stock-fasteners.md)。
 
-此前恢复用户已购、尺寸已确认的裸 B50K 带开关电位器，更新 P1 内侧辅助防转槽及引脚、焊点和出线预留。最新洞洞板布局、已打印 P3 的实体和位置、P2、电池落底及整机 94.7 mm 深度保持。只有 P3 已打印；该次只更新 P1 STL／3MF，其余 10 件 STL、5 盘 3MF 保持。见 [ADR-0051](decisions/0051-bare-b50k-solder-clearance.md)。
+此前恢复用户已购、尺寸已确认的裸 B50K 带开关电位器，更新 P1 内侧辅助防转槽及引脚、焊点和出线预留。最新洞洞板布局、已打印 P3 的实体和位置、P2、电池落底及整机 94.7 mm 深度保持。当时只有 P3 已打印；该次只更新 P1 STL／3MF，其余 10 件 STL、5 盘 3MF 保持。见 [ADR-0051](decisions/0051-bare-b50k-solder-clearance.md)。
 
 孔网沿用上一版下沉 1.5 mm 设计，仅两个喇叭投影区减薄至 1.2 mm，其余保留 2.5 mm，无新增背筋。已打印 P3 的实体及打印文件保持，此前整件后移 1.7 mm，P2 加深至 94.7 mm，安装座、出口、光驱和后壁接口同步后移，使振膜名义静态净距达到 3 mm。P1、P2 需要使用本轮配套文件，整机竖直高度和前部操控保持。见 [ADR-0049](decisions/0049-speaker-diaphragm-clearance.md)。
 
 当前操控布局为 [ADR-0047](decisions/0047-control-spacing-and-knob.md)，前壳与28 mm旋钮已更新。主体版本：ADR-0046 P3 短渐扩口，配套 ADR-0048 P2 双充电口，保留圆角梯形开放侧口。正式文件统一在 [hardware/enclosure/print](../hardware/enclosure/print/README.md)，不再从历次 `tmp/` 目录选择零件。
 
-这里的“正式版本”指本轮唯一配套交付版本，P1/P2 打印、完整件支撑拆除、装配、强度、气密和声学仍待实测。**P3 已打印，喇叭已使用 Ø2.8×9.5 螺丝安装**，保留已通过的座面和孔位，不再要求打印试片。
+这里的“正式版本”指本轮唯一配套交付版本，P1 和操控件打印、完整件支撑拆除、装配、强度、气密和声学仍待实测。**P3 已打印，喇叭已使用 Ø2.8×9.5 螺丝安装**，保留已通过的座面和孔位，不再要求打印试片。
 
-## 六个打印盘
+## 六个独立打印盘（备用拆分方案）
 
 | 打印盘 | 3MF | 预计时间 | 耗材 / g | 层数 |
 | --- | --- | --- | --- | --- |
-| P1 前壳 | [Discora-P1-FrontShell.3mf](../hardware/enclosure/print/Discora-P1-FrontShell.3mf) | 11h 45m 30s | 147.36 | 245 |
+| P1 前壳 | [Discora-P1-FrontShell.3mf](../hardware/enclosure/print/Discora-P1-FrontShell.3mf) | 14h 21m 45s | 177.39 | 306 |
 | P2 后壳 | [Discora-P2-RearShell.3mf](../hardware/enclosure/print/Discora-P2-RearShell.3mf) | 10h 3m 57s | 290.77 | 560 |
 | P3 喇叭支架 | [Discora-P3-SpeakerCarrier.3mf](../hardware/enclosure/print/Discora-P3-SpeakerCarrier.3mf) | 5h 40m 46s | 181.00 | 287 |
 | 三件压框／压条及四片垫圈 | [Discora-Retainers.3mf](../hardware/enclosure/print/Discora-Retainers.3mf) | 31m 38s | 7.37 | 33 |
 | 四个橙白双色按键 | [Discora-Keys-Orange-White.3mf](../hardware/enclosure/print/Discora-Keys-Orange-White.3mf) | 34m 44s | 7.54 | 60 |
 | 黑白双色旋钮 | [Discora-Knob-Black-White.3mf](../hardware/enclosure/print/Discora-Knob-Black-White.3mf) | 49m 28s | 9.82 | 116 |
 
-合计约 **643.86 g**，包含支撑、brim 和双色换料耗材。时间和用量来自 Bambu Studio 2.9.1.70 本地切片，不是实际打印记录。配置为 P2S / 0.4 mm，按用户提供的 P2SC、256³ mm 空间映射；0.2 mm 喷嘴未验证。
+合计约 **673.89 g**，包含支撑、brim 和双色换料耗材。时间和用量来自 Bambu Studio 2.9.1.70 本地切片，不是实际打印记录。配置为 P2S / 0.4 mm，按用户提供的 P2SC、256³ mm 空间映射；0.2 mm 喷嘴未验证。
 
 15 件刚性 PLA 零件共用 12 个 STL，四片垫圈合在一个 STL 中。四键和旋钮的 STL 仅为单色包络，双色打印优先打开上述 3MF，保留同一对象内的两个材料区域。软脚垫、OLED 玻璃、电子模块、螺钉、双面胶和导线另购，不计入打印件。
 
@@ -29,13 +50,13 @@
 
 | 打印盘 | 姿态／层高 | 仅在打印板生成支撑 | 仅关键区域 |
 | --- | --- | --- | --- |
-| P1 | 孔网朝下，长边沿板 X；0.20 mm | 开 | 关 |
+| P1 | 孔网朝下，长边沿板 X；0.16 mm，首层 0.20 mm | 开 | 关 |
 | P2 | 后壁朝下；0.16 mm，首层 0.20 mm | **关** | **关** |
 | P3 | 双声腔背面朝下；0.20 mm | **开** | **开** |
 | 三件压框／压条及四片垫圈 | 保持项目中各件姿态；0.20 mm | 开 | 开 |
 | 四键／旋钮 | 符号面朝上；0.12 mm | 开 | 以各自 3MF 保存设置为准 |
 
-单色盘使用 Generic PLA、3 层壁、15% gyroid、30° 自动树状支撑、顶部接触间隙 0.20 mm、5 mm 外侧 brim。P1 包络 240.263×170×49 mm，孔网朝下，已保留检查过的摆放；不要使用自动定向重新翻转。P1/P2/P3 的支撑限制不同，不要互相套用。
+P1 使用橙色 Bambu PLA Lite，其余原单色盘使用 Generic PLA；主体采用 3 层壁、15% gyroid、30° 自动树状支撑、顶部接触间隙 0.20 mm、5 mm 外侧 brim。P1 包络 240.263×170×49 mm，孔网朝下，已保留检查过的摆放；不要使用自动定向重新翻转。P1/P2/P3 的支撑限制不同，不要互相套用。
 
 P3 双背板首层直接贴板；287 层审核未发现声腔、导管或渐扩口内支撑，原 18 条悬空告警对应位置已核对。P2 560 层侧口及开放结构需要支撑，从敞开的正面与侧口清理，实际拆除力待验证。P2 合壳孔座和光驱座适配后重新导出 STL，以 0.16 mm 层高审核全部 560 层；四条合壳工具井内无支撑走线；P3 保留不变实体对应的已审核文件。DC 充电孔内存在可拆树状支撑，Type-C 孔内未检测到支撑走线，须从后侧孔口和敞开内侧清理，10 mm 通道全部贯通后再安装母座。
 

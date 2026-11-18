@@ -110,7 +110,7 @@ def main():
     bare_print=json.loads((ROOT/'bare-volume-print-checks.json').read_text())
     adhesive=json.loads((ROOT/'battery-adhesive-checks.json').read_text())
     stock=json.loads((ROOT/'stock-fastener-checks.json').read_text())
-    front_print=json.loads((ROOT/'stock-front-print-checks.json').read_text())
+    front_print=json.loads((ROOT/'front-pei-print-checks.json').read_text())
     small_print=json.loads((ROOT/'retainer-print-checks.json').read_text())
     assert stock['all_pass'] and stock['model_sha256']==manifest['model_sha256']
     assert all(stock['unchanged_shapes_difference_mm3'][n]<.001 for n in ('SpeakerCarrier','PlayPauseKey','EjectKey','PrevKey','NextKey','Knob'))
@@ -149,8 +149,31 @@ def main():
     retained=manifest['retained_files_sha256']
     assert len(retained)==9
     assert all(digest(folder/name)==sha for name,sha in retained.items())
+    alternatives = {}
+    for name, item in manifest.get('alternative_plates', {}).items():
+        path = folder/item['file']
+        audit = json.loads((folder/item['evidence']).read_text())
+        assert audit['all_pass'] and audit['model_sha256']==manifest['model_sha256']
+        assert digest(path)==item['project_sha256']
+        with zipfile.ZipFile(path) as archive:
+            assert archive.testzip() is None
+            settings = json.loads(archive.read('Metadata/project_settings.config'))
+            assert settings['curr_bed_type']=='Textured PEI Plate'
+            assert float(settings['nozzle_diameter'][0])==.4
+            assert float(settings['layer_height'])==item['layer_height_mm']
+            assert settings['print_sequence']==item['print_sequence']
+            assert hashlib.sha256(archive.read('Metadata/plate_1.gcode')).hexdigest()==item['gcode_sha256']
+            if name=='ControlsSequential':
+                assert audit['projects']['Controls']['sha256']==item['project_sha256']
+                assert audit['projects']['Controls']['gcode_sha256']==item['gcode_sha256']
+                assert audit['collision']['head_radius_margin_mm']>0 and audit['filament_changes']==11
+                assert settings['filament_colour']==['#FF671F','#FFFFFF','#000000']
+                assert len(audit['white_layers'])==5 and all(len(v)==5 for v in audit['white_layers'].values())
+            elif name=='P2Combined':
+                assert audit['project_sha256']==item['project_sha256'] and audit['gcode_sha256']==item['gcode_sha256']
+        alternatives[name] = dict(archive_valid=True, evidence_bound_to_project=True)
     report=dict(retained_files_sha256=retained,model_sha256=manifest['model_sha256'],manifest_sha256=digest(folder/'manifest.json'),
-                meshes=meshes, plates=plates, all_pass=True, printer_contacted=False)
+                meshes=meshes, plates=plates, alternatives=alternatives, all_pass=True, printer_contacted=False)
     (ROOT/'print-release-checks.json').write_text(json.dumps(report,indent=2)+'\n')
     A.closeDocument(doc.Name)
     print('PRINT_RELEASE_OK',sum(p['layers'] for p in plates.values()),flush=True)
